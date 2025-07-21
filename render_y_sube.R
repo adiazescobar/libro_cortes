@@ -20,21 +20,35 @@ cat("📂 Archivos copiados a docs/\n")
 
 # PASO 4: Subir a GitHub --------------------------------------------------------------
 
-# Solo si .git no existe
+# Inicializar repo si no existe
 if (!dir.exists(".git")) {
   system("git init")
-  system("git remote add origin https://github.com/adiazescobar/libro_cortes.git")
+  cat("🚀 Git inicializado\n")
 }
 
-# Agregar todos los archivos nuevos o modificados
+# Verificar si remote origin existe
+remotes <- system("git remote", intern = TRUE)
+if ("origin" %in% remotes) {
+  current_url <- system("git remote get-url origin", intern = TRUE)
+  correct_url <- "https://github.com/adiazescobar/libro_cortes.git"
+  
+  if (current_url != correct_url) {
+    system("git remote remove origin")
+    system(paste("git remote add origin", correct_url))
+    cat("🔁 Remote origin corregido\n")
+  } else {
+    cat("🔍 Remote origin ya está correctamente configurado\n")
+  }
+} else {
+  system("git remote add origin https://github.com/adiazescobar/libro_cortes.git")
+  cat("🔗 Remote origin configurado\n")
+}
+
+# Agregar y subir cambios
 system("git add .")
-
-# Commit con mensaje
 system('git commit -m "Render y subida del libro completa"')
-
-# Subir a GitHub
 system("git branch -M main")
-system("git push origin main")
+system("git push -u origin main")
 
 # PASO 5: Confirmación final ----------------------------------------------------------
 cat("✅ ¡Listo! Libro actualizado y subido a GitHub Pages.\n")
