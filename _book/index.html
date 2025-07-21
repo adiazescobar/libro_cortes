@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Cortes Transversales</title>
+  <meta name="description" content="Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2025-07-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path=""><a href="#programa"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#libros-obligatorios"><i class="fa fa-check"></i>Libros Obligatorios</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#libros-recomendados"><i class="fa fa-check"></i>Libros Recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa---pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría - Política Pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa---teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría - Teoría Económica</a></li>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="#ejemplos-exitosos-1-progresa-oportunidades-m%C3%A9xico-1990"><i class="fa fa-check"></i><b>0.1</b> Ejemplos Exitosos 1: Progresa (Oportunidades México) 1990</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="#resultados-iniciales-2001"><i class="fa fa-check"></i><b>0.2</b> Resultados Iniciales 2001</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="#resultados-generales"><i class="fa fa-check"></i><b>0.3</b> Resultados Generales</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Cortes Transversales</h1>
+<h2 class="subtitle"><em>Curso Avanzado de Microeconometría Aplicada</em></h2>
+<p class="author"><em>Ana María Díaz</em></p>
+<p class="date"><em>2025-07-21</em></p>
+</div>
+<div id="programa" class="section level1 unnumbered hasAnchor">
+<h1>Programa<a href="#programa" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Este curso pretende que el estudiante obtenga un conocimiento básico de los métodos econométricos de corte transversal. El estudiante aprenderá las principales técnicas y metodologías econométricas para realizar inferencia causal, útiles para evaluar programas y políticas públicas o analizar problemas económicos complejos.</p>
+<p>También se busca familiarizar a los estudiantes con herramientas computacionales. Se utilizará el paquete estadístico <strong>Stata</strong>, y se realizará un proyecto de investigación empleando al menos dos técnicas aprendidas en el curso.</p>
+<div id="información-general" class="section level2 unnumbered hasAnchor">
+<h2>Información general<a href="#informaci%C3%B3n-general" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><p><strong>Docente:</strong> Ana María Díaz<br />
+</p></li>
+<li><p><strong>Correo:</strong> <a href="mailto:a.diaze@javeriana.edu.co" class="email">a.diaze@javeriana.edu.co</a><br />
+</p></li>
+<li><p><strong>Oficina:</strong> Séptimo Piso Edificio 20<br />
+</p></li>
+<li><p><strong>Atención:</strong> Lunes 9–11am (con cita previa o por Teams)<br />
+</p></li>
+<li><p><strong>Página web:</strong> <a href="http://adiazescobar.com">adiazescobar.com</a></p></li>
+<li><p><strong>Días de clase:</strong> Martes y Jueves<br />
+</p></li>
+<li><p><strong>Horario:</strong> 7–9 am<br />
+</p></li>
+<li><p><strong>Lugar:</strong> Por definir<br />
+</p></li>
+<li><p><strong>Monitoría:</strong> Por definir</p></li>
+</ul>
+</div>
+<div id="requisitos" class="section level2 unnumbered hasAnchor">
+<h2>Requisitos<a href="#requisitos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Econometría Avanzada</li>
+</ul>
+</div>
+<div id="evaluación" class="section level2 unnumbered hasAnchor">
+<h2>Evaluación<a href="#evaluaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<thead>
+<tr class="header">
+<th>Componente</th>
+<th>Porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Parcial 1</td>
+<td>25%</td>
+</tr>
+<tr class="even">
+<td>Parcial 2</td>
+<td>25%</td>
+</tr>
+<tr class="odd">
+<td>Examen Final</td>
+<td>25%</td>
+</tr>
+<tr class="even">
+<td>Talleres de Clase</td>
+<td>10%</td>
+</tr>
+<tr class="odd">
+<td>Trabajo Final</td>
+<td>15%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trabajo Final:</strong>
+- Primera entrega: 10% (Presentación de la idea)
+- Segunda entrega: 20% (Introducción + Descriptiva + Metodología)
+- Documento final: 30%
+- Sustentación: 40%</p>
+</div>
+<div id="bibliografía" class="section level2 unnumbered hasAnchor">
+<h2>Bibliografía<a href="#bibliograf%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="libros-obligatorios" class="section level3 unnumbered hasAnchor">
+<h3>Libros Obligatorios<a href="#libros-obligatorios" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Cunningham, Scott (2020). <em>Causal Inference: The Mixtape</em>. <a href="http://scunning.com/cunningham_mixtape.pdf">Enlace</a></li>
+<li>Bernal, R. y Peña, X. (2011). <em>Guía Práctica para la Evaluación de Impacto</em>. Universidad de los Andes.</li>
+</ul>
+</div>
+<div id="libros-recomendados" class="section level3 unnumbered hasAnchor">
+<h3>Libros Recomendados<a href="#libros-recomendados" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>Wooldridge (2002). <em>Econometric Analysis of Cross Section and Panel Data</em>. MIT Press.<br />
+</li>
+<li>Angrist &amp; Pischke (2009). <em>Mostly Harmless Econometrics</em>. Princeton.<br />
+</li>
+<li>Cameron &amp; Trivedi (2009). <em>Microeconometrics Using Stata</em>.<br />
+</li>
+<li>Baker (2000). <em>Evaluating the Impact of Development Projects on Poverty</em>. World Bank.<br />
+</li>
+<li>Heckman et al. (2000). <em>The Economics and Econometrics of Active Labor Market Programs</em>.</li>
+</ol>
+</div>
+</div>
+<div id="inclusión" class="section level2 unnumbered hasAnchor">
+<h2>Inclusión<a href="#inclusi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Este curso da la bienvenida a personas de todas las edades, géneros, orientaciones, etnias, creencias y capacidades. Se espera un ambiente respetuoso, acogedor e inclusivo.</p>
+</div>
+<div id="integridad-académica" class="section level2 unnumbered hasAnchor">
+<h2>Integridad Académica<a href="#integridad-acad%C3%A9mica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>No se permite el uso de inteligencia artificial, internet o ayudas externas en evaluaciones. El incumplimiento será sancionado conforme al reglamento de la Universidad.</p>
+</div>
+<div id="programa-del-curso" class="section level2 unnumbered hasAnchor">
+<h2>Programa del Curso<a href="#programa-del-curso" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+A continuación se presenta el programa semanal del curso, organizado por módulo.
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:programa_tabla)Programa del curso de microeconometría aplicada
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;">
+Semana
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;">
+Módulo
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;">
+Temas
+</th>
+<th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;">
+Lecturas
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+1
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+1: Introducción a la Inferencia Causal
+</td>
+<td style="text-align:center;width: 20em; ">
+• Inferencia causal<br />
+• Contrafactual<br />
+• Parámetros de impacto
+</td>
+<td style="text-align:center;width: 20em; ">
+Bernal y Peña (2011), Cap. 2-3<br />
+Heckman (2008)<br />
+Angrist y Pischke
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+2
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+1: Introducción a la Inferencia Causal
+</td>
+<td style="text-align:center;width: 20em; ">
+• Sesgo de selección
+</td>
+<td style="text-align:center;width: 20em; ">
+Angrist &amp; Krueger (2000)
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+3
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+2: Métodos Experimentales
+</td>
+<td style="text-align:center;width: 20em; ">
+• Aleatorización<br />
+• Contrafactual<br />
+• Sesgo de selección
+</td>
+<td style="text-align:center;width: 20em; ">
+Bernal y Peña (2011), Cap. 4<br />
+Duflo et al. (2008)<br />
+Heckman et al. (1997)
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+4
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+2: Métodos Experimentales
+</td>
+<td style="text-align:center;width: 20em; ">
+• Impacto con aleatorización<br />
+• Poder estadístico<br />
+• Problemas de aleatorización
+</td>
+<td style="text-align:center;width: 20em; ">
+Duflo et al. (2008)
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+5
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+3: Métodos Cuasi-Experimentales
+</td>
+<td style="text-align:center;width: 20em; ">
+• Regresión lineal<br />
+• Supuestos de independencia condicional<br />
+• Variable dependiente binaria
+</td>
+<td style="text-align:center;width: 20em; ">
+Angrist y Pischke (2009), Cap. 3<br />
+Cameron &amp; Trivedi (2005), Cap. 14<br />
+Heckman (1990)
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+6-7
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+4: Diferencias en Diferencias y Panel
+</td>
+<td style="text-align:center;width: 20em; ">
+• DID simple y de panel<br />
+• Efectos fijos<br />
+• Heterogeneidad en DID
+</td>
+<td style="text-align:center;width: 20em; ">
+Gertler et al. (2010), Cap. 6<br />
+Bertrand et al. (2004)
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+8
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+4: Diferencias en Diferencias y Panel
+</td>
+<td style="text-align:center;width: 20em; ">
+• Efectos fijos y aleatorios<br />
+• Ventajas y desventajas del panel
+</td>
+<td style="text-align:center;width: 20em; ">
+Bernal y Peña (2011), Cap. 5<br />
+Angrist y Pischke (2009)
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+9
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+5: Propensity Score Matching
+</td>
+<td style="text-align:center;width: 20em; ">
+• Estimación del PS<br />
+• Balanceo<br />
+• Soporte común
+</td>
+<td style="text-align:center;width: 20em; ">
+Bernal y Peña (2011), Cap. 6<br />
+Caliendo &amp; Kopeining (2008)
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+10
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+5: Propensity Score Matching
+</td>
+<td style="text-align:center;width: 20em; ">
+• Algoritmos de emparejamiento<br />
+• Errores estándar<br />
+• Falsificación
+</td>
+<td style="text-align:center;width: 20em; ">
+Bernal y Peña (2011), Cap. 6<br />
+Caliendo &amp; Kopeining (2008)
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+11
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+6: Variables Instrumentales
+</td>
+<td style="text-align:center;width: 20em; ">
+• Definición de IV<br />
+• LATE<br />
+• Estimación con variables continuas
+</td>
+<td style="text-align:center;width: 20em; ">
+Angrist y Pischke (2009), Cap. 4<br />
+Gertler et al. (2010), Cap. 7<br />
+Bernal y Peña (2011), Cap. 7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+12
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+6: Variables Instrumentales
+</td>
+<td style="text-align:center;width: 20em; ">
+• IV con variables discretas<br />
+• PSM con IV<br />
+• Problemas del IV
+</td>
+<td style="text-align:center;width: 20em; ">
+Khandker et al. (2010), Cap. 6-7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+13
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+7: Regresión Discontinua
+</td>
+<td style="text-align:center;width: 20em; ">
+• RDD lineal<br />
+• RDD no paramétrica<br />
+• Sharp y Fuzzy RDD
+</td>
+<td style="text-align:center;width: 20em; ">
+Gertler et al. (2010), Cap. 5<br />
+Bernal y Peña (2011), Cap. 8
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;">
+14
+</td>
+<td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;">
+8: Varios
+</td>
+<td style="text-align:center;width: 20em; ">
+• Función de control<br />
+• Machine Learning
+</td>
+<td style="text-align:center;width: 20em; ">
+Bernal y Peña (2011), Cap. 9-10
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>bookdown<span class="sc">::</span><span class="fu">serve_book</span>()</span></code></pre></div>
+
+</div>
+<div id="motivación-para-el-análisis-causal" class="section level2 unnumbered hasAnchor">
+<h2>Motivación para el análisis causal<a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="motivación-para-el-análisis-causal---por-qué-es-importante" class="section level2 unnumbered hasAnchor">
+<h2>Motivación para el análisis causal - ¿Por qué es importante?<a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="microeconometría---política-pública" class="section level2 unnumbered hasAnchor">
+<h2>Microeconometría - Política Pública<a href="#microeconometr%C3%ADa---pol%C3%ADtica-p%C3%BAblica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="microeconometría---teoría-económica" class="section level2 unnumbered hasAnchor">
+<h2>Microeconometría - Teoría Económica<a href="#microeconometr%C3%ADa---teor%C3%ADa-econ%C3%B3mica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="ejemplos-exitosos-1-progresa-oportunidades-méxico-1990" class="section level2 hasAnchor" number="0.1">
+<h2><span class="header-section-number">0.1</span> Ejemplos Exitosos 1: Progresa (Oportunidades México) 1990<a href="#ejemplos-exitosos-1-progresa-oportunidades-m%C3%A9xico-1990" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="resultados-iniciales-2001" class="section level2 hasAnchor" number="0.2">
+<h2><span class="header-section-number">0.2</span> Resultados Iniciales 2001<a href="#resultados-iniciales-2001" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="resultados-generales" class="section level2 hasAnchor" number="0.3">
+<h2><span class="header-section-number">0.3</span> Resultados Generales<a href="#resultados-generales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/index.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>

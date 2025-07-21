@@ -1,0 +1,205 @@
+---
+title: "Cortes Transversales"
+subtitle: " Curso Avanzado de Microeconometría Aplicada"
+author: "Ana María Díaz"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+output:
+  bookdown::gitbook:
+    css: style.css
+    split_by: chapter
+---
+
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(kableExtra)
+library(tibble)
+
+
+# Programa {-}
+
+Este curso pretende que el estudiante obtenga un conocimiento básico de los métodos econométricos de corte transversal. El estudiante aprenderá las principales técnicas y metodologías econométricas para realizar inferencia causal, útiles para evaluar programas y políticas públicas o analizar problemas económicos complejos.
+
+También se busca familiarizar a los estudiantes con herramientas computacionales. Se utilizará el paquete estadístico **Stata**, y se realizará un proyecto de investigación empleando al menos dos técnicas aprendidas en el curso.
+
+## Información general {-}
+
+- **Docente:** Ana María Díaz  
+- **Correo:** a.diaze@javeriana.edu.co  
+- **Oficina:** Séptimo Piso Edificio 20  
+- **Atención:** Lunes 9–11am (con cita previa o por Teams)  
+- **Página web:** [adiazescobar.com](http://adiazescobar.com)
+
+- **Días de clase:** Martes y Jueves  
+- **Horario:** 7–9 am  
+- **Lugar:** Por definir  
+- **Monitoría:** Por definir  
+
+## Requisitos {-}
+
+- Econometría Avanzada
+
+## Evaluación {-}
+
+| Componente           | Porcentaje |
+|----------------------|------------|
+| Parcial 1            | 25%        |
+| Parcial 2            | 25%        |
+| Examen Final         | 25%        |
+| Talleres de Clase    | 10%        |
+| Trabajo Final        | 15%        |
+
+**Trabajo Final:**
+- Primera entrega: 10% (Presentación de la idea)
+- Segunda entrega: 20% (Introducción + Descriptiva + Metodología)
+- Documento final: 30%
+- Sustentación: 40%
+
+## Bibliografía {-}
+
+### Libros Obligatorios {-}
+
+- Cunningham, Scott (2020). *Causal Inference: The Mixtape*. [Enlace](http://scunning.com/cunningham_mixtape.pdf)
+- Bernal, R. y Peña, X. (2011). *Guía Práctica para la Evaluación de Impacto*. Universidad de los Andes.
+
+### Libros Recomendados {-}
+
+1. Wooldridge (2002). *Econometric Analysis of Cross Section and Panel Data*. MIT Press.  
+2. Angrist & Pischke (2009). *Mostly Harmless Econometrics*. Princeton.  
+3. Cameron & Trivedi (2009). *Microeconometrics Using Stata*.  
+4. Baker (2000). *Evaluating the Impact of Development Projects on Poverty*. World Bank.  
+5. Heckman et al. (2000). *The Economics and Econometrics of Active Labor Market Programs*.  
+
+## Inclusión {-}
+
+Este curso da la bienvenida a personas de todas las edades, géneros, orientaciones, etnias, creencias y capacidades. Se espera un ambiente respetuoso, acogedor e inclusivo.
+
+## Integridad Académica {-}
+
+No se permite el uso de inteligencia artificial, internet o ayudas externas en evaluaciones. El incumplimiento será sancionado conforme al reglamento de la Universidad.
+
+## Programa del Curso {-}
+
+A continuación se presenta el programa semanal del curso, organizado por módulo.
+```{r programa_tabla, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(kableExtra)
+library(tibble)
+
+# Crear tabla
+programa <- tribble(
+  ~Semana, ~Módulo, ~Temas, ~Lecturas,
+
+  "1", "1: Introducción a la Inferencia Causal", 
+  "• Inferencia causal  
+   • Contrafactual  
+   • Parámetros de impacto",
+  "Bernal y Peña (2011), Cap. 2-3  
+   Heckman (2008)  
+   Angrist y Pischke",
+
+  "2", "1: Introducción a la Inferencia Causal", 
+  "• Sesgo de selección", 
+  "Angrist & Krueger (2000)",
+
+  "3", "2: Métodos Experimentales", 
+  "• Aleatorización  
+   • Contrafactual  
+   • Sesgo de selección",
+  "Bernal y Peña (2011), Cap. 4  
+   Duflo et al. (2008)  
+   Heckman et al. (1997)",
+
+  "4", "2: Métodos Experimentales", 
+  "• Impacto con aleatorización  
+   • Poder estadístico  
+   • Problemas de aleatorización",
+  "Duflo et al. (2008)",
+
+  "5", "3: Métodos Cuasi-Experimentales", 
+  "• Regresión lineal  
+   • Supuestos de independencia condicional  
+   • Variable dependiente binaria",
+  "Angrist y Pischke (2009), Cap. 3  
+   Cameron & Trivedi (2005), Cap. 14  
+   Heckman (1990)",
+
+  "6-7", "4: Diferencias en Diferencias y Panel", 
+  "• DID simple y de panel  
+   • Efectos fijos  
+   • Heterogeneidad en DID", 
+  "Gertler et al. (2010), Cap. 6  
+   Bertrand et al. (2004)",
+
+  "8", "4: Diferencias en Diferencias y Panel", 
+  "• Efectos fijos y aleatorios  
+   • Ventajas y desventajas del panel", 
+  "Bernal y Peña (2011), Cap. 5  
+   Angrist y Pischke (2009)",
+
+  "9", "5: Propensity Score Matching", 
+  "• Estimación del PS  
+   • Balanceo  
+   • Soporte común",
+  "Bernal y Peña (2011), Cap. 6  
+   Caliendo & Kopeining (2008)",
+
+  "10", "5: Propensity Score Matching", 
+  "• Algoritmos de emparejamiento  
+   • Errores estándar  
+   • Falsificación",
+  "Bernal y Peña (2011), Cap. 6  
+   Caliendo & Kopeining (2008)",
+
+  "11", "6: Variables Instrumentales", 
+  "• Definición de IV  
+   • LATE  
+   • Estimación con variables continuas", 
+  "Angrist y Pischke (2009), Cap. 4  
+   Gertler et al. (2010), Cap. 7  
+   Bernal y Peña (2011), Cap. 7",
+
+  "12", "6: Variables Instrumentales", 
+  "• IV con variables discretas  
+   • PSM con IV  
+   • Problemas del IV", 
+  "Khandker et al. (2010), Cap. 6-7",
+
+  "13", "7: Regresión Discontinua", 
+  "• RDD lineal  
+   • RDD no paramétrica  
+   • Sharp y Fuzzy RDD",
+  "Gertler et al. (2010), Cap. 5  
+   Bernal y Peña (2011), Cap. 8",
+
+  "14", "8: Varios", 
+  "• Función de control  
+   • Machine Learning",
+  "Bernal y Peña (2011), Cap. 9-10"
+)
+
+# Mostrar tabla bonita
+programa %>%
+  kbl(booktabs = TRUE, escape = FALSE, align = "c",
+      caption = "Programa del curso de microeconometría aplicada") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = FALSE, position = "center") %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#1F77B4") %>%
+  column_spec(1, bold = TRUE, color = "#444") %>%
+  column_spec(2, bold = TRUE, color = "#444", background = "#EAEAF2") %>%
+  column_spec(3, width = "20em") %>%
+  column_spec(4, width = "20em")
+```
+
+
+```{r eval=FALSE}
+bookdown::serve_book()
+```
+
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
