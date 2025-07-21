@@ -1,0 +1,22 @@
+p.caption {
+  color: #777;
+  margin-top: 10px;
+}
+p code {
+  white-space: inherit;
+}
+pre {
+  word-break: normal;
+  word-wrap: normal;
+}
+pre code {
+  white-space: inherit;
+}
+
+.video-box {
+  border: 2px solid #4A90E2;        /* Borde azul */
+  border-radius: 12px;              /* Bordes redondeados */
+  padding: 1em;                     /* Espaciado interno */
+  background-color: #EAF4FD;        /* Azul claro de fondo */
+  margin: 1.5em 0;                  /* Espacio arriba y abajo */
+}
