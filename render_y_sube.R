@@ -1,3 +1,4 @@
+system("git config --global http.postBuffer 524288000")  # Limpiar consola
 # PASO 0: Cargar paquete necesario
 if (!requireNamespace("bookdown", quietly = TRUE)) {
   stop("El paquete 'bookdown' no está instalado. Usa install.packages('bookdown')")
