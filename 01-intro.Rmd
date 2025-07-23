@@ -220,14 +220,14 @@ donde $D_i$ indica si el individuo fue tratado ($D_i=1$) o no ($D_i=0$).
 En el mundo ideal, podríamos clonar personas para observar ambos resultados. Como esto no es posible, buscamos estimaciones mediante grupos de comparación.
 
 Tratado
-```{r, ninas1a, out.width = "30%", echo = FALSE, fig.align='center'}
+```{r, ninas1a, out.width = "20%", echo = FALSE, fig.align='center'}
 knitr::include_graphics("img/ninas1.png")
 ```
 $Y_1 \Rightarrow$ Resultado observado
 
 
 Clon en Control
-```{r, ninas1b, out.width = "30%", echo = FALSE, fig.align='center'}
+```{r, ninas1b, out.width = "20%", echo = FALSE, fig.align='center'}
 knitr::include_graphics("img/ninas1.png")
 ```
 $Y_0 \Rightarrow$ Resultado contrafactual
@@ -268,7 +268,7 @@ Este principio es la piedra angular del análisis causal. Para estimar el efecto
 ### **Ceteris Paribus: ¿Perfecto?**
 
 **Tratada**  
-```{r, out.width = "30%", echo = FALSE}
+```{r, out.width = "20%", echo = FALSE}
 knitr::include_graphics("img/ninas1.png")
 ```
 
@@ -277,7 +277,7 @@ knitr::include_graphics("img/ninas1.png")
 
 
 **Control**  
-```{r, ninas3, out.width = "30%", echo = FALSE}
+```{r, ninas3, out.width = "20%", echo = FALSE}
 knitr::include_graphics("img/ninas3.png")
 ```
 
@@ -300,13 +300,13 @@ Pero si no podemos observar los dos resultados potenciales para un mismo individ
 ## Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección
 
 .pull-left[ **Tratados** 
-```{r,  out.width = "30%", echo = F}
+```{r,  out.width = "20%", echo = F}
 include_graphics("img/pegado3.png")
 ```
 ]
 
 .pull-right[ **Controles** 
-```{r,  out.width = "30%", echo = F}
+```{r,  out.width = "20%", echo = F}
 include_graphics("img/pegado4.png")
 ```
 ]
@@ -317,14 +317,14 @@ Una alternativa común para estimar efectos causales es comparar los promedios d
 
 .pull-left[
 **Tratados**  
-```{r, out.width = "30%", echo = FALSE}
+```{r, out.width = "20%", echo = FALSE}
 knitr::include_graphics("img/pegado3.png")
 ```
 ]
 
 .pull-right[
 **Controles**  
-```{r, out.width = "30%", echo = FALSE}
+```{r, out.width = "20%", echo = FALSE}
 knitr::include_graphics("img/pegado4.png")
 ```
 ]

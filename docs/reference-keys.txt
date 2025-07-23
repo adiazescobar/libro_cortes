@@ -4,3 +4,5 @@ objetivo
 video-recomendado-mastering-metrics
 ceteris-paribus-perfecto
 solución-2-diferencia-de-medias-efecto-causal-sesgo-de-selección
+stata-para-principiantes
+acceso-directo-a-los-docuemntos-do-o-scripts

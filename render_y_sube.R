@@ -1,3 +1,4 @@
+setwd("~/Dropbox/ClasesR/libro_cortes")
 system("git config --global http.postBuffer 524288000")  # Limpiar consola
 # PASO 0: Cargar paquete necesario
 if (!requireNamespace("bookdown", quietly = TRUE)) {

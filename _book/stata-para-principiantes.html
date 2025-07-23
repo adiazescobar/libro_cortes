@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 2 Stata para Principiantes | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 2 Stata para Principiantes | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 2 Stata para Principiantes | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 2 Stata para Principiantes | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2025-07-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-de-secciones-transversales.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-obligatorios"><i class="fa fa-check"></i>Libros Obligatorios</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-recomendados"><i class="fa fa-check"></i>Libros Recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="02-StataBasics.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-exitoso-progresa-oportunidades-m%C3%A9xico-1990"><i class="fa fa-check"></i>Ejemplo exitoso: Progresa (Oportunidades, México, 1990)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-contrafactual"><i class="fa fa-check"></i>El Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#visualizando-el-contrafactual"><i class="fa fa-check"></i>Visualizando el Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#la-banda-sonora"><i class="fa fa-check"></i>La Banda Sonora</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#problema-fundamental-de-la-inferencia-causal"><i class="fa fa-check"></i>Problema Fundamental de la Inferencia Causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n"><i class="fa fa-check"></i>Establecer Causalidad (Deseo de Clonación)</a></li>
+<li class="chapter" data-level="1.0.1" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#video-recomendado-mastering-metrics"><i class="fa fa-check"></i><b>1.0.1</b> 🎥 Video recomendado: <em>Mastering Metrics</em></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a>
+<ul>
+<li class="chapter" data-level="1.0.2" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto"><i class="fa fa-check"></i><b>1.0.2</b> <strong>Ceteris Paribus: ¿Perfecto?</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="02-StataBasics.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n"><i class="fa fa-check"></i>Macro local: definición y expansión</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros"><i class="fa fa-check"></i>Evaluar expresiones dentro de macros</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macro-con-texto"><i class="fa fa-check"></i>Macro con texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#macro-global-uso-y-precauci%C3%B3n"><i class="fa fa-check"></i>Macro global: uso y precaución</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#scalar-vs.-macro"><i class="fa fa-check"></i>Scalar vs. Macro</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-recomendado"><i class="fa fa-check"></i>🧩 Ejercicio recomendado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-foreach"><i class="fa fa-check"></i>Loop con <code>foreach</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-forvalues"><i class="fa fa-check"></i>Loop con <code>forvalues</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-while"><i class="fa fa-check"></i>Loop con <code>while</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados"><i class="fa fa-check"></i>🧠 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#estructura-b%C3%A1sica"><i class="fa fa-check"></i>Estructura básica</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-con-argumentos"><i class="fa fa-check"></i>Programas con argumentos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum"><i class="fa fa-check"></i>Tu programa original mejorado: <code>mysum</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#notas-importantes"><i class="fa fa-check"></i>Notas importantes</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados-1"><i class="fa fa-check"></i>🔧 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-postfile"><i class="fa fa-check"></i>¿Qué hace <code>postfile</code>?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize"><i class="fa fa-check"></i>Paso a paso: guardar medias con <code>summarize</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hicimos-aqu%C3%AD"><i class="fa fa-check"></i>¿Qué hicimos aquí?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-1"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-con-postfile"><i class="fa fa-check"></i>📦 Ejercicios con <code>postfile</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-al-programar-en-stata"><i class="fa fa-check"></i>Buenas prácticas al programar en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-de-repaso"><i class="fa fa-check"></i>🧠 Ejercicio de repaso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables"><i class="fa fa-check"></i>Iterar sobre lista de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="2.1" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#acceso-directo-a-los-docuemntos-do-o-scripts"><i class="fa fa-check"></i><b>2.1</b> Acceso directo a los docuemntos do o scripts</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="stata-para-principiantes" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Capitulo 2</span> Stata para Principiantes<a href="stata-para-principiantes.html#stata-para-principiantes" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="boxinfo">
+<p>Puedes consultar el <strong>Stata Cheat Sheet</strong> completo aquí: <a href="https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf">https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf</a></p>
+</div>
+<div id="macros-en-stata" class="section level2 unnumbered hasAnchor">
+<h2>Macros en Stata<a href="stata-para-principiantes.html#macros-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las <strong>macros</strong> en Stata son herramientas para almacenar texto que luego puede reutilizarse en comandos posteriores. No son variables, no almacenan datos numéricos como tal, sino texto que puede ser evaluado o invocado más adelante. Se usan con frecuencia para simplificar código, automatizar tareas repetitivas, o construir loops.</p>
+<p>Stata tiene dos tipos principales de macros:</p>
+<ul>
+<li><code>local</code>: válidas solo dentro del entorno donde se definieron (por ejemplo, dentro de un programa o loop).</li>
+<li><code>global</code>: válidas en todo el entorno de trabajo mientras dure la sesión (desaconsejadas para la mayoría de tareas por riesgo de sobreescritura accidental).</li>
+</ul>
+<div id="macro-local-definición-y-expansión" class="section level3 unnumbered hasAnchor">
+<h3>Macro local: definición y expansión<a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb3-1"><a href="stata-para-principiantes.html#cb3-1" tabindex="-1"></a><span class="kw">local</span> uno 1</span>
+<span id="cb3-2"><a href="stata-para-principiantes.html#cb3-2" tabindex="-1"></a><span class="kw">display</span> <span class="ot">`uno&#39;</span></span></code></pre></div>
+<p>Esto imprimirá <code>1</code> en la consola. La macro <code>uno</code> se expande y sustituye por su contenido (<code>1</code>) antes de ejecutar el comando.</p>
+</div>
+<div id="evaluar-expresiones-dentro-de-macros" class="section level3 unnumbered hasAnchor">
+<h3>Evaluar expresiones dentro de macros<a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Si queremos que Stata <strong>evalue una expresión</strong>, usamos el signo igual <code>=</code> luego del nombre del macro.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb4-1"><a href="stata-para-principiantes.html#cb4-1" tabindex="-1"></a><span class="kw">local</span> suma = 2 + 2</span>
+<span id="cb4-2"><a href="stata-para-principiantes.html#cb4-2" tabindex="-1"></a><span class="kw">display</span> <span class="ot">`suma&#39;</span></span></code></pre></div>
+<p>Stata calcula <code>2 + 2</code> y guarda el resultado <code>4</code> como texto dentro de <code>suma</code>. Al hacer <code>display</code>, se imprime el número 4.</p>
+</div>
+<div id="macro-con-texto" class="section level3 unnumbered hasAnchor">
+<h3>Macro con texto<a href="stata-para-principiantes.html#macro-con-texto" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb5-1"><a href="stata-para-principiantes.html#cb5-1" tabindex="-1"></a><span class="kw">local</span> saludo <span class="st">&quot;¡Hola, mundo!&quot;</span></span>
+<span id="cb5-2"><a href="stata-para-principiantes.html#cb5-2" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;`saludo&#39;&quot;</span></span></code></pre></div>
+<p>Esto mostrará:</p>
+<pre><code>¡Hola, mundo!</code></pre>
+<p>Ojo: cuando una macro contiene texto, siempre encierra su invocación entre comillas para evitar errores de interpretación.</p>
+</div>
+<div id="macro-global-uso-y-precaución" class="section level3 unnumbered hasAnchor">
+<h3>Macro global: uso y precaución<a href="#macro-global-uso-y-precauci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb7-1"><a href="stata-para-principiantes.html#cb7-1" tabindex="-1"></a><span class="kw">global</span> <span class="kw">pi</span> 3.1416</span>
+<span id="cb7-2"><a href="stata-para-principiantes.html#cb7-2" tabindex="-1"></a><span class="kw">display</span> <span class="ot">$pi</span></span></code></pre></div>
+<p>Al usar <code>global</code>, la invocación se hace con <strong>signo dólar</strong> (<code>$</code>). El contenido se mantiene accesible en toda la sesión.</p>
+<blockquote>
+<p>⚠️ Se recomienda evitar nombres obvios en <code>global</code> ya que puede generar conflictos si se reutilizan nombres con comandos establecidos.</p>
+</blockquote>
+</div>
+<div id="scalar-vs.-macro" class="section level3 unnumbered hasAnchor">
+<h3>Scalar vs. Macro<a href="stata-para-principiantes.html#scalar-vs.-macro" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un <strong>scalar</strong> almacena valores numéricos (reales), no texto. Se usa para cálculos matemáticos, estadísticas o comparaciones numéricas.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb8-1"><a href="stata-para-principiantes.html#cb8-1" tabindex="-1"></a><span class="fu">scalar</span> x = 2 + 3</span>
+<span id="cb8-2"><a href="stata-para-principiantes.html#cb8-2" tabindex="-1"></a><span class="kw">display</span> x</span></code></pre></div>
+<p>Esto imprime <code>5</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb9-1"><a href="stata-para-principiantes.html#cb9-1" tabindex="-1"></a><span class="fu">scalar</span> area = 3.1416 * (2^2)</span>
+<span id="cb9-2"><a href="stata-para-principiantes.html#cb9-2" tabindex="-1"></a><span class="kw">display</span> area</span></code></pre></div>
+<p>Resultado:</p>
+<pre><code>12.5664</code></pre>
+<p>Diferencia clave:</p>
+<ul>
+<li><code>macro</code>: almacena texto (puede ser número, pero como cadena).</li>
+<li><code>scalar</code>: almacena un número real que puede usarse en operaciones matemáticas.</li>
+</ul>
+</div>
+<div id="buenas-prácticas" class="section level3 unnumbered hasAnchor">
+<h3>Buenas prácticas<a href="#buenas-pr%C3%A1cticas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Usa <code>local</code> por defecto.</li>
+<li>Usa nombres descriptivos para evitar confusión.</li>
+<li>Cierra comillas cuando el contenido tiene espacios o texto.</li>
+<li>Borra scalars con <code>scalar drop nombre</code> si ya no los necesitas.</li>
+</ul>
+</div>
+<div id="ejercicio-recomendado" class="section level3 unnumbered hasAnchor boxejercicio">
+<h3>🧩 Ejercicio recomendado<a href="stata-para-principiantes.html#ejercicio-recomendado" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Crea una macro con tu nombre y otra con tu año de nacimiento. Luego muestra una frase concatenando ambas:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb11-1"><a href="stata-para-principiantes.html#cb11-1" tabindex="-1"></a><span class="kw">local</span> nombre <span class="st">&quot;Ana&quot;</span></span>
+<span id="cb11-2"><a href="stata-para-principiantes.html#cb11-2" tabindex="-1"></a><span class="kw">local</span> nacimiento 1980</span>
+<span id="cb11-3"><a href="stata-para-principiantes.html#cb11-3" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;Hola, mi nombre es `nombre&#39; y nací en `nacimiento&#39;&quot;</span></span></code></pre></div>
+</div>
+<div class="boxnote">
+<p>Las macros son esenciales para automatizar análisis en Stata. Úsalas para loops, programación y construcción flexible de comandos.</p>
+</div>
+</div>
+<div id="loops-en-stata" class="section level2 unnumbered hasAnchor">
+<h2>Loops en Stata<a href="stata-para-principiantes.html#loops-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los <strong>loops</strong> en Stata permiten automatizar tareas repetitivas, iterando sobre listas de elementos o rangos numéricos. Son muy útiles cuando necesitas aplicar un mismo comando a varias variables, realizar simulaciones o crear múltiples gráficos/tablas de forma eficiente.</p>
+<div id="loop-con-foreach" class="section level3 unnumbered hasAnchor">
+<h3>Loop con <code>foreach</code><a href="stata-para-principiantes.html#loop-con-foreach" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>foreach</code> itera sobre una lista de elementos, que pueden ser:</p>
+<ul>
+<li>nombres de variables</li>
+<li>palabras clave</li>
+<li>números, si se combinan con <code>of numlist</code></li>
+</ul>
+<div id="a-iterar-sobre-variables-específicas" class="section level4 unnumbered hasAnchor">
+<h4>a) Iterar sobre variables específicas<a href="#a-iterar-sobre-variables-espec%C3%ADficas" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb12"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb12-1"><a href="stata-para-principiantes.html#cb12-1" tabindex="-1"></a><span class="kw">foreach</span> <span class="kw">var</span> <span class="kw">in</span> mpg price displacement {</span>
+<span id="cb12-2"><a href="stata-para-principiantes.html#cb12-2" tabindex="-1"></a>    <span class="kw">regress</span> <span class="ot">`var&#39;</span> <span class="kw">weight</span></span>
+<span id="cb12-3"><a href="stata-para-principiantes.html#cb12-3" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="b-iterar-sobre-nombres-arbitrarios" class="section level4 unnumbered hasAnchor">
+<h4>b) Iterar sobre nombres arbitrarios<a href="stata-para-principiantes.html#b-iterar-sobre-nombres-arbitrarios" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb13"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb13-1"><a href="stata-para-principiantes.html#cb13-1" tabindex="-1"></a><span class="kw">foreach</span> <span class="kw">color</span> <span class="kw">in</span> rojo azul verde {</span>
+<span id="cb13-2"><a href="stata-para-principiantes.html#cb13-2" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;El color es `color&#39;&quot;</span></span>
+<span id="cb13-3"><a href="stata-para-principiantes.html#cb13-3" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="c-iterar-sobre-variables-en-la-base-usando-of-varlist" class="section level4 unnumbered hasAnchor">
+<h4>c) Iterar sobre variables en la base usando <code>of varlist</code><a href="stata-para-principiantes.html#c-iterar-sobre-variables-en-la-base-usando-of-varlist" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb14"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb14-1"><a href="stata-para-principiantes.html#cb14-1" tabindex="-1"></a><span class="kw">sysuse</span> auto, <span class="kw">clear</span></span>
+<span id="cb14-2"><a href="stata-para-principiantes.html#cb14-2" tabindex="-1"></a><span class="kw">foreach</span> v <span class="kw">of</span> <span class="kw">varlist</span> price <span class="kw">weight</span> <span class="fu">length</span> {</span>
+<span id="cb14-3"><a href="stata-para-principiantes.html#cb14-3" tabindex="-1"></a>    <span class="kw">summarize</span> <span class="ot">`v&#39;</span></span>
+<span id="cb14-4"><a href="stata-para-principiantes.html#cb14-4" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="d-iterar-sobre-subconjuntos-condición-y-resultado" class="section level4 unnumbered hasAnchor">
+<h4>d) Iterar sobre subconjuntos: condición y resultado<a href="#d-iterar-sobre-subconjuntos-condici%C3%B3n-y-resultado" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb15"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb15-1"><a href="stata-para-principiantes.html#cb15-1" tabindex="-1"></a><span class="kw">foreach</span> <span class="fu">s</span> <span class="kw">of</span> <span class="kw">varlist</span> price <span class="kw">weight</span> {</span>
+<span id="cb15-2"><a href="stata-para-principiantes.html#cb15-2" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`s&#39;</span> <span class="kw">if</span> foreign == 1</span>
+<span id="cb15-3"><a href="stata-para-principiantes.html#cb15-3" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;Promedio de `s&#39; para foreign = 1: &quot;</span> <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb15-4"><a href="stata-para-principiantes.html#cb15-4" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="loop-con-forvalues" class="section level3 unnumbered hasAnchor">
+<h3>Loop con <code>forvalues</code><a href="stata-para-principiantes.html#loop-con-forvalues" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>forvalues</code> itera sobre una <strong>secuencia numérica</strong> definida por un rango o paso.</p>
+<div id="a-secuencia-simple" class="section level4 unnumbered hasAnchor">
+<h4>a) Secuencia simple<a href="stata-para-principiantes.html#a-secuencia-simple" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb16-1"><a href="stata-para-principiantes.html#cb16-1" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/5 {</span>
+<span id="cb16-2"><a href="stata-para-principiantes.html#cb16-2" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;Iteración `i&#39;&quot;</span></span>
+<span id="cb16-3"><a href="stata-para-principiantes.html#cb16-3" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="b-incrementos-diferentes" class="section level4 unnumbered hasAnchor">
+<h4>b) Incrementos diferentes<a href="stata-para-principiantes.html#b-incrementos-diferentes" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb17"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb17-1"><a href="stata-para-principiantes.html#cb17-1" tabindex="-1"></a><span class="kw">forvalues</span> j = 10(2)20 {</span>
+<span id="cb17-2"><a href="stata-para-principiantes.html#cb17-2" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;`j&#39;&quot;</span></span>
+<span id="cb17-3"><a href="stata-para-principiantes.html#cb17-3" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="c-anidar-loops-con-forvalues" class="section level4 unnumbered hasAnchor">
+<h4>c) Anidar loops con <code>forvalues</code><a href="stata-para-principiantes.html#c-anidar-loops-con-forvalues" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb18"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb18-1"><a href="stata-para-principiantes.html#cb18-1" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/3 {</span>
+<span id="cb18-2"><a href="stata-para-principiantes.html#cb18-2" tabindex="-1"></a>    <span class="kw">forvalues</span> j = 1/3 {</span>
+<span id="cb18-3"><a href="stata-para-principiantes.html#cb18-3" tabindex="-1"></a>        <span class="kw">display</span> <span class="st">&quot;Fila: `i&#39;, Columna: `j&#39;&quot;</span></span>
+<span id="cb18-4"><a href="stata-para-principiantes.html#cb18-4" tabindex="-1"></a>    }</span>
+<span id="cb18-5"><a href="stata-para-principiantes.html#cb18-5" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="loop-con-while" class="section level3 unnumbered hasAnchor">
+<h3>Loop con <code>while</code><a href="stata-para-principiantes.html#loop-con-while" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>while</code> permite ejecutar código mientras una condición sea verdadera. Es útil para estructuras de control más manuales o condicionales más complejas.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb19-1"><a href="stata-para-principiantes.html#cb19-1" tabindex="-1"></a><span class="kw">local</span> i = 1</span>
+<span id="cb19-2"><a href="stata-para-principiantes.html#cb19-2" tabindex="-1"></a><span class="kw">while</span> <span class="ot">`i&#39;</span> &lt;= 5 {</span>
+<span id="cb19-3"><a href="stata-para-principiantes.html#cb19-3" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;`i&#39;&quot;</span></span>
+<span id="cb19-4"><a href="stata-para-principiantes.html#cb19-4" tabindex="-1"></a>    <span class="kw">local</span> ++i</span>
+<span id="cb19-5"><a href="stata-para-principiantes.html#cb19-5" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="ejercicios-recomendados" class="section level3 unnumbered hasAnchor boxejercicio">
+<h3>🧠 Ejercicios recomendados<a href="stata-para-principiantes.html#ejercicios-recomendados" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>Usa <code>foreach</code> para crear un gráfico <code>histogram</code> para cada una de las siguientes variables: <code>mpg</code>, <code>price</code>, y <code>weight</code>.</li>
+<li>Usa <code>forvalues</code> para crear 10 variables llamadas <code>x1</code>, <code>x2</code>, …, <code>x10</code> con valores aleatorios entre 0 y 100.</li>
+<li>Crea un loop anidado que calcule y muestre el producto de cada par <code>(i, j)</code> para <code>i</code> en 1 a 3 y <code>j</code> en 1 a 4.</li>
+<li>Usa <code>while</code> para contar hacia atrás desde 10 hasta 1.</li>
+<li>En un loop, calcula la media de cada variable numérica del conjunto de datos, pero <strong>solo si su desviación estándar es mayor que 5</strong>.</li>
+</ol>
+</div>
+</div>
+<div id="programas-definidos-por-el-usuario" class="section level2 unnumbered hasAnchor">
+<h2>Programas definidos por el usuario<a href="stata-para-principiantes.html#programas-definidos-por-el-usuario" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En Stata puedes definir tus propios programas usando el comando <code>program define</code>. Esto es especialmente útil para empaquetar comandos que usas con frecuencia o para crear rutinas más limpias dentro de proyectos complejos.</p>
+<div id="estructura-básica" class="section level3 unnumbered hasAnchor">
+<h3>Estructura básica<a href="#estructura-b%C3%A1sica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb20-1"><a href="stata-para-principiantes.html#cb20-1" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> saludo</span>
+<span id="cb20-2"><a href="stata-para-principiantes.html#cb20-2" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;Hola, FELIZ día&quot;</span></span>
+<span id="cb20-3"><a href="stata-para-principiantes.html#cb20-3" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb20-4"><a href="stata-para-principiantes.html#cb20-4" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="stata-para-principiantes.html#cb20-5" tabindex="-1"></a>saludo</span></code></pre></div>
+<p>Este programa se llama <code>saludo</code> y simplemente imprime un mensaje. Para ejecutarlo, basta con escribir su nombre.</p>
+</div>
+<div id="programas-con-argumentos" class="section level3 unnumbered hasAnchor">
+<h3>Programas con argumentos<a href="stata-para-principiantes.html#programas-con-argumentos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Puedes pasar información a un programa con <code>args</code> o con <code>syntax</code>.</p>
+<div id="a-con-args" class="section level4 unnumbered hasAnchor">
+<h4>a) Con <code>args</code><a href="stata-para-principiantes.html#a-con-args" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb21"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb21-1"><a href="stata-para-principiantes.html#cb21-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> cuadrado</span>
+<span id="cb21-2"><a href="stata-para-principiantes.html#cb21-2" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="stata-para-principiantes.html#cb21-3" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> cuadrado</span>
+<span id="cb21-4"><a href="stata-para-principiantes.html#cb21-4" tabindex="-1"></a>    <span class="kw">args</span> x</span>
+<span id="cb21-5"><a href="stata-para-principiantes.html#cb21-5" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;El cuadrado de `x&#39; es: &quot;</span> = <span class="ot">`x&#39;</span>^2</span>
+<span id="cb21-6"><a href="stata-para-principiantes.html#cb21-6" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb21-7"><a href="stata-para-principiantes.html#cb21-7" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="stata-para-principiantes.html#cb21-8" tabindex="-1"></a>cuadrado 4</span></code></pre></div>
+<blockquote>
+<p>Esto imprimirá: <code>El cuadrado de 4 es: 16</code></p>
+</blockquote>
+</div>
+<div id="b-con-syntax-más-power" class="section level4 unnumbered hasAnchor">
+<h4>b) Con <code>syntax</code> (más power)<a href="#b-con-syntax-m%C3%A1s-power" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb22"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb22-1"><a href="stata-para-principiantes.html#cb22-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> promedio</span>
+<span id="cb22-2"><a href="stata-para-principiantes.html#cb22-2" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="stata-para-principiantes.html#cb22-3" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> promedio</span>
+<span id="cb22-4"><a href="stata-para-principiantes.html#cb22-4" tabindex="-1"></a>    <span class="kw">syntax</span> <span class="kw">varlist</span>(<span class="fu">min</span>=1 <span class="fu">max</span>=1)</span>
+<span id="cb22-5"><a href="stata-para-principiantes.html#cb22-5" tabindex="-1"></a>    <span class="kw">summarize</span> <span class="ot">`varlist&#39;</span></span>
+<span id="cb22-6"><a href="stata-para-principiantes.html#cb22-6" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb22-7"><a href="stata-para-principiantes.html#cb22-7" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="stata-para-principiantes.html#cb22-8" tabindex="-1"></a>promedio mpg</span></code></pre></div>
+<blockquote>
+<p><code>syntax</code> verifica que se cumpla una estructura: aquí, exactamente una variable.</p>
+</blockquote>
+</div>
+</div>
+<div id="tu-programa-original-mejorado-mysum" class="section level3 unnumbered hasAnchor">
+<h3>Tu programa original mejorado: <code>mysum</code><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb23-1"><a href="stata-para-principiantes.html#cb23-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mysum</span>
+<span id="cb23-2"><a href="stata-para-principiantes.html#cb23-2" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="stata-para-principiantes.html#cb23-3" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mysum</span>
+<span id="cb23-4"><a href="stata-para-principiantes.html#cb23-4" tabindex="-1"></a>    <span class="kw">syntax</span> <span class="kw">varlist</span>(<span class="fu">min</span>=1 <span class="fu">max</span>=1)</span>
+<span id="cb23-5"><a href="stata-para-principiantes.html#cb23-5" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`varlist&#39;</span></span>
+<span id="cb23-6"><a href="stata-para-principiantes.html#cb23-6" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;Variable: `varlist&#39;&quot;</span></span>
+<span id="cb23-7"><a href="stata-para-principiantes.html#cb23-7" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;Promedio: &quot;</span> %6.2f <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb23-8"><a href="stata-para-principiantes.html#cb23-8" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;Desviación estándar: &quot;</span> %6.2f <span class="fu">r</span>(<span class="fu">sd</span>)</span>
+<span id="cb23-9"><a href="stata-para-principiantes.html#cb23-9" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb23-10"><a href="stata-para-principiantes.html#cb23-10" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="stata-para-principiantes.html#cb23-11" tabindex="-1"></a>mysum <span class="kw">weight</span></span></code></pre></div>
+</div>
+<div id="notas-importantes" class="section level3 unnumbered hasAnchor">
+<h3>Notas importantes<a href="stata-para-principiantes.html#notas-importantes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Siempre usar <code>capture program drop nombre</code> antes de definir uno nuevo.</li>
+<li>Usa <code>syntax</code> cuando quieras controlar argumentos y prevenir errores.</li>
+<li>Dentro del programa, puedes acceder a estadísticas almacenadas con <code>r()</code>, <code>e()</code>, etc.</li>
+<li>Usa <code>quietly</code> para ejecutar comandos sin mostrar su salida completa.</li>
+</ul>
+</div>
+<div id="ejercicios-recomendados-1" class="section level3 unnumbered hasAnchor boxejercicio">
+<h3>🔧 Ejercicios recomendados<a href="stata-para-principiantes.html#ejercicios-recomendados-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>Crea un programa llamado <code>saluda</code> que reciba un nombre y diga “Hola, [nombre]”.</li>
+<li>Crea un programa <code>promedio_si</code> que calcule el promedio de una variable solo para observaciones que cumplen una condición (por ejemplo, <code>foreign == 1</code>). Usa <code>args</code> para pasar la variable.</li>
+<li>Define un programa llamado <code>comparar</code> que reciba dos variables y calcule la diferencia de medias entre ambas (no un <code>ttest</code>, solo <code>mean(var1) - mean(var2)</code>).</li>
+<li>Intenta crear un programa con <code>syntax</code> que valide que el usuario haya pasado exactamente una variable, y que esta sea numérica. Si no, que dé un mensaje de error.</li>
+</ol>
+</div>
+</div>
+<div id="almacenamiento-de-resultados-con-postfile-y-loops" class="section level2 unnumbered hasAnchor">
+<h2>Almacenamiento de resultados con <code>postfile</code> y loops<a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cuando queremos guardar resultados generados dentro de un loop para analizarlos después (por ejemplo, coeficientes, medias, errores estándar), Stata nos ofrece una herramienta poderosa: <code>postfile</code>.</p>
+<div id="qué-hace-postfile" class="section level3 unnumbered hasAnchor">
+<h3>¿Qué hace <code>postfile</code>?<a href="#qu%C3%A9-hace-postfile" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Permite crear una tabla temporal (como una mini base de datos) en la que puedes ir guardando los resultados de cada iteración del loop. Al final, puedes abrirla como si fuera cualquier base.</p>
+</div>
+<div id="paso-a-paso-guardar-medias-con-summarize" class="section level3 unnumbered hasAnchor">
+<h3>Paso a paso: guardar medias con <code>summarize</code><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Supongamos que queremos guardar la media y la desviación estándar de varias variables numéricas de forma automatizada.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb24-1"><a href="stata-para-principiantes.html#cb24-1" tabindex="-1"></a><span class="kw">sysuse</span> auto, <span class="kw">clear</span></span>
+<span id="cb24-2"><a href="stata-para-principiantes.html#cb24-2" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="stata-para-principiantes.html#cb24-3" tabindex="-1"></a><span class="kw">tempname</span> resultados</span>
+<span id="cb24-4"><a href="stata-para-principiantes.html#cb24-4" tabindex="-1"></a><span class="kw">tempfile</span> archivo</span>
+<span id="cb24-5"><a href="stata-para-principiantes.html#cb24-5" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="stata-para-principiantes.html#cb24-6" tabindex="-1"></a><span class="kw">postfile</span> <span class="ot">`resultados&#39;</span> str15 <span class="kw">variable</span> media <span class="fu">sd</span> <span class="kw">using</span> <span class="ot">`archivo&#39;</span></span>
+<span id="cb24-7"><a href="stata-para-principiantes.html#cb24-7" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="stata-para-principiantes.html#cb24-8" tabindex="-1"></a><span class="kw">foreach</span> <span class="kw">var</span> <span class="kw">in</span> price <span class="kw">weight</span> <span class="fu">length</span> {</span>
+<span id="cb24-9"><a href="stata-para-principiantes.html#cb24-9" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`var&#39;</span></span>
+<span id="cb24-10"><a href="stata-para-principiantes.html#cb24-10" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`resultados&#39;</span> (<span class="st">&quot;`var&#39;&quot;</span>) (<span class="fu">r</span>(<span class="kw">mean</span>)) (<span class="fu">r</span>(<span class="fu">sd</span>))</span>
+<span id="cb24-11"><a href="stata-para-principiantes.html#cb24-11" tabindex="-1"></a>}</span>
+<span id="cb24-12"><a href="stata-para-principiantes.html#cb24-12" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="stata-para-principiantes.html#cb24-13" tabindex="-1"></a><span class="kw">postclose</span> <span class="ot">`resultados&#39;</span></span>
+<span id="cb24-14"><a href="stata-para-principiantes.html#cb24-14" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="stata-para-principiantes.html#cb24-15" tabindex="-1"></a><span class="kw">use</span> <span class="ot">`archivo&#39;</span>, <span class="kw">clear</span></span>
+<span id="cb24-16"><a href="stata-para-principiantes.html#cb24-16" tabindex="-1"></a><span class="ot">list</span></span></code></pre></div>
+</div>
+<div id="qué-hicimos-aquí" class="section level3 unnumbered hasAnchor">
+<h3>¿Qué hicimos aquí?<a href="#qu%C3%A9-hicimos-aqu%C3%AD" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><code>tempname</code> crea un alias para el objeto de <code>postfile</code>.</li>
+<li><code>tempfile</code> genera una ruta temporal para almacenar los resultados.</li>
+<li><code>postfile</code> define las variables a guardar (aquí: nombre, media y desviación estándar).</li>
+<li>Dentro del loop, usamos <code>post</code> para guardar cada fila.</li>
+<li>Cerramos con <code>postclose</code>.</li>
+<li>Cargamos el archivo resultante con <code>use</code> y lo exploramos.</li>
+</ol>
+</div>
+<div id="buenas-prácticas-1" class="section level3 unnumbered hasAnchor">
+<h3>Buenas prácticas<a href="#buenas-pr%C3%A1cticas-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Usa <code>tempfile</code> para evitar escribir archivos por accidente.</li>
+<li>Usa tipos de datos adecuados: <code>str</code> para nombres, <code>numeric</code> para estadísticas.</li>
+<li>Siempre cierra el objeto con <code>postclose</code> antes de usar el archivo.</li>
+</ul>
+</div>
+<div id="ejercicios-con-postfile" class="section level3 unnumbered hasAnchor boxejercicio">
+<h3>📦 Ejercicios con <code>postfile</code><a href="stata-para-principiantes.html#ejercicios-con-postfile" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>Modifica el ejemplo para guardar también el número de observaciones (<code>r(N)</code>).</li>
+<li>Aplica un <code>regress</code> en un loop sobre varias variables dependientes y guarda los coeficientes de <code>weight</code> en cada una.</li>
+<li>Crea una base de resultados que incluya, por cada variable, un indicador lógico que diga si su media es mayor a 500.</li>
+<li>Exporta la base final a Excel usando <code>export excel</code>.</li>
+</ol>
+</div>
+</div>
+<div id="resumen-y-buenas-prácticas" class="section level2 unnumbered hasAnchor">
+<h2>Resumen y buenas prácticas<a href="#resumen-y-buenas-pr%C3%A1cticas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A lo largo de este capítulo exploramos los componentes fundamentales para comenzar a trabajar eficientemente en Stata. Aprendimos a:</p>
+<ul>
+<li>Usar <strong>macros locales y globales</strong> para automatizar tareas y hacer código más flexible.</li>
+<li>Escribir <strong>loops (<code>foreach</code>, <code>forvalues</code>, <code>while</code>)</strong> para aplicar comandos de forma repetida sin redundancia.</li>
+<li>Definir <strong>programas personalizados</strong> usando <code>program define</code>, con argumentos simples (<code>args</code>) o controlados (<code>syntax</code>).</li>
+<li>Implementar un programa divertido con frases de reguetón, mostrando que también se puede aprender con humor.</li>
+<li>Utilizar <strong><code>postfile</code></strong> para almacenar resultados generados dentro de loops y analizarlos de manera estructurada.</li>
+</ul>
+<hr />
+<div id="buenas-prácticas-al-programar-en-stata" class="section level3 unnumbered hasAnchor">
+<h3>Buenas prácticas al programar en Stata<a href="#buenas-pr%C3%A1cticas-al-programar-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>✅ Usa <code>local</code> en lugar de <code>global</code> siempre que sea posible.<br />
+✅ Nombra tus macros y archivos temporales de forma clara y consistente.<br />
+✅ Usa <code>capture</code> para evitar errores si un programa ya existe.<br />
+✅ Cierra siempre <code>postfile</code> con <code>postclose</code> antes de usar el archivo.<br />
+✅ Usa <code>syntax</code> dentro de tus programas para validar entradas del usuario.<br />
+✅ No olvides comentar tu código. Facilita su mantenimiento y revisión.<br />
+✅ Cuando sea posible, <strong>grafica</strong> tus resultados. Visualizar patrones es clave.<br />
+✅ Prefiere loops bien documentados a copiar y pegar comandos.</p>
+<hr />
+</div>
+<div id="ejercicio-de-repaso" class="section level3 unnumbered hasAnchor boxejercicio">
+<h3>🧠 Ejercicio de repaso<a href="stata-para-principiantes.html#ejercicio-de-repaso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Imagina que estás analizando una base de datos de estudiantes. Quieres:</p>
+<ol style="list-style-type: decimal">
+<li>Crear un loop que recorra varias variables (como <code>math_score</code>, <code>reading_score</code>, <code>attendance</code>).</li>
+<li>Para cada variable:
+<ul>
+<li>Calcular la media y desviación estándar</li>
+<li>Guardar esos valores con <code>postfile</code></li>
+</ul></li>
+<li>Escribir un programa llamado <code>informe_var</code> que reciba una variable y muestre un mini informe con:
+<ul>
+<li>Nombre de la variable</li>
+<li>Media</li>
+<li>Desviación estándar</li>
+<li>Mensaje personalizado si la media es mayor a un umbral dado</li>
+</ul></li>
+<li>Ejecutar <code>informe_var</code> dentro del loop usando <code>syntax</code></li>
+</ol>
+</div>
+</div>
+<div id="y-si-quiero-hacerlo-en-r-o-python" class="section level2 unnumbered hasAnchor">
+<h2>¿Y si quiero hacerlo en R o Python?<a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Aquí les dejo cómo realizar tareas comunes de análisis de datos en <strong>Stata</strong>, <strong>R</strong> y <strong>Python</strong>. Puede servir como guía rápida para quienes están aprendiendo varios lenguajes a la vez o quieren migrar entre ellos.</p>
+</div>
+<div id="asignar-valores-y-mostrar-texto" class="section level2 unnumbered hasAnchor">
+<h2>1. Asignar valores y mostrar texto<a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="23%" />
+<col width="27%" />
+<col width="28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tarea</th>
+<th>Stata</th>
+<th>R</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Asignar un número</td>
+<td><code>scalar x = 5</code></td>
+<td><code>x &lt;- 5</code></td>
+<td><code>x = 5</code></td>
+</tr>
+<tr class="even">
+<td>Asignar texto</td>
+<td><code>local nombre "Ana"</code></td>
+<td><code>nombre &lt;- "Ana"</code></td>
+<td><code>nombre = "Ana"</code></td>
+</tr>
+<tr class="odd">
+<td>Mostrar texto + var</td>
+<td><code>display "Hola</code>nombre’”</td>
+<td><code>cat(paste("Hola", nombre))</code></td>
+<td><code>print(f"Hola {nombre}")</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="operaciones-básicas" class="section level2 unnumbered hasAnchor">
+<h2>2. Operaciones básicas<a href="#operaciones-b%C3%A1sicas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="30%" />
+<col width="25%" />
+<col width="21%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operación</th>
+<th>Stata</th>
+<th>R</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Suma</td>
+<td><code>display 2+2</code></td>
+<td><code>2 + 2</code></td>
+<td><code>2 + 2</code></td>
+</tr>
+<tr class="even">
+<td>Raíz cuadrada</td>
+<td><code>display sqrt(4)</code></td>
+<td><code>sqrt(4)</code></td>
+<td><code>math.sqrt(4)</code></td>
+</tr>
+<tr class="odd">
+<td>Valor absoluto</td>
+<td><code>abs(-2)</code></td>
+<td><code>abs(-2)</code></td>
+<td><code>abs(-2)</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>En R necesitas <code>library()</code> si usas <code>sqrt</code>. En Python, debes importar <code>import math</code>.</p>
+</blockquote>
+</div>
+<div id="loops-básicos" class="section level2 unnumbered hasAnchor">
+<h2>3. Loops básicos<a href="#loops-b%C3%A1sicos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="iterar-sobre-lista-de-variables" class="section level3 unnumbered hasAnchor">
+<h3>Iterar sobre lista de variables<a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Stata:</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb25-1"><a href="stata-para-principiantes.html#cb25-1" tabindex="-1"></a><span class="kw">foreach</span> <span class="kw">var</span> <span class="kw">in</span> var1 var2 var3 {</span>
+<span id="cb25-2"><a href="stata-para-principiantes.html#cb25-2" tabindex="-1"></a>    <span class="kw">summarize</span> <span class="ot">`var&#39;</span></span>
+<span id="cb25-3"><a href="stata-para-principiantes.html#cb25-3" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>R:</strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="stata-para-principiantes.html#cb26-1" tabindex="-1"></a><span class="cf">for</span> (var <span class="cf">in</span> <span class="fu">c</span>(<span class="st">&quot;var1&quot;</span>, <span class="st">&quot;var2&quot;</span>, <span class="st">&quot;var3&quot;</span>)) {</span>
+<span id="cb26-2"><a href="stata-para-principiantes.html#cb26-2" tabindex="-1"></a>    <span class="fu">summary</span>(df[[var]])</span>
+<span id="cb26-3"><a href="stata-para-principiantes.html#cb26-3" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Python:</strong></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="stata-para-principiantes.html#cb27-1" tabindex="-1"></a><span class="cf">for</span> var <span class="kw">in</span> [<span class="st">&quot;var1&quot;</span>, <span class="st">&quot;var2&quot;</span>, <span class="st">&quot;var3&quot;</span>]:</span>
+<span id="cb27-2"><a href="stata-para-principiantes.html#cb27-2" tabindex="-1"></a>    <span class="bu">print</span>(df[var].describe())</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="crear-funcionesprogramas" class="section level2 unnumbered hasAnchor">
+<h2>4. Crear funciones/programas<a href="stata-para-principiantes.html#crear-funcionesprogramas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Stata:</strong></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb28-1"><a href="stata-para-principiantes.html#cb28-1" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> cuadrado</span>
+<span id="cb28-2"><a href="stata-para-principiantes.html#cb28-2" tabindex="-1"></a>    <span class="kw">args</span> x</span>
+<span id="cb28-3"><a href="stata-para-principiantes.html#cb28-3" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;Resultado: &quot;</span> = <span class="ot">`x&#39;</span>^2</span>
+<span id="cb28-4"><a href="stata-para-principiantes.html#cb28-4" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb28-5"><a href="stata-para-principiantes.html#cb28-5" tabindex="-1"></a>cuadrado 4</span></code></pre></div>
+<p><strong>R:</strong></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="stata-para-principiantes.html#cb29-1" tabindex="-1"></a>cuadrado <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb29-2"><a href="stata-para-principiantes.html#cb29-2" tabindex="-1"></a>  <span class="fu">return</span>(x<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb29-3"><a href="stata-para-principiantes.html#cb29-3" tabindex="-1"></a>}</span>
+<span id="cb29-4"><a href="stata-para-principiantes.html#cb29-4" tabindex="-1"></a><span class="fu">cuadrado</span>(<span class="dv">4</span>)</span></code></pre></div>
+<p><strong>Python:</strong></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="stata-para-principiantes.html#cb30-1" tabindex="-1"></a><span class="kw">def</span> cuadrado(x):</span>
+<span id="cb30-2"><a href="stata-para-principiantes.html#cb30-2" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb30-3"><a href="stata-para-principiantes.html#cb30-3" tabindex="-1"></a>cuadrado(<span class="dv">4</span>)</span></code></pre></div>
+<hr />
+</div>
+<div id="guardar-resultados-dentro-de-un-loop" class="section level2 unnumbered hasAnchor">
+<h2>5. Guardar resultados dentro de un loop<a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Stata (con postfile):</strong></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb31-1"><a href="stata-para-principiantes.html#cb31-1" tabindex="-1"></a><span class="kw">tempname</span> resultados</span>
+<span id="cb31-2"><a href="stata-para-principiantes.html#cb31-2" tabindex="-1"></a><span class="kw">tempfile</span> archivo</span>
+<span id="cb31-3"><a href="stata-para-principiantes.html#cb31-3" tabindex="-1"></a><span class="kw">postfile</span> <span class="ot">`resultados&#39;</span> str10 <span class="kw">var</span> media <span class="kw">using</span> <span class="ot">`archivo&#39;</span></span>
+<span id="cb31-4"><a href="stata-para-principiantes.html#cb31-4" tabindex="-1"></a><span class="kw">foreach</span> v <span class="kw">of</span> <span class="kw">varlist</span> x1 <span class="kw">x2</span> x3 {</span>
+<span id="cb31-5"><a href="stata-para-principiantes.html#cb31-5" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`v&#39;</span></span>
+<span id="cb31-6"><a href="stata-para-principiantes.html#cb31-6" tabindex="-1"></a>    <span class="kw">post</span> <span class="ot">`resultados&#39;</span> (<span class="st">&quot;`v&#39;&quot;</span>) (<span class="fu">r</span>(<span class="kw">mean</span>))</span>
+<span id="cb31-7"><a href="stata-para-principiantes.html#cb31-7" tabindex="-1"></a>}</span>
+<span id="cb31-8"><a href="stata-para-principiantes.html#cb31-8" tabindex="-1"></a><span class="kw">postclose</span> <span class="ot">`resultados&#39;</span></span>
+<span id="cb31-9"><a href="stata-para-principiantes.html#cb31-9" tabindex="-1"></a><span class="kw">use</span> <span class="ot">`archivo&#39;</span>, <span class="kw">clear</span></span></code></pre></div>
+<p><strong>R:</strong></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="stata-para-principiantes.html#cb32-1" tabindex="-1"></a>resultados <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">var =</span> <span class="fu">character</span>(), <span class="at">media =</span> <span class="fu">numeric</span>())</span>
+<span id="cb32-2"><a href="stata-para-principiantes.html#cb32-2" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x3&quot;</span>)) {</span>
+<span id="cb32-3"><a href="stata-para-principiantes.html#cb32-3" tabindex="-1"></a>  media <span class="ot">&lt;-</span> <span class="fu">mean</span>(df[[v]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb32-4"><a href="stata-para-principiantes.html#cb32-4" tabindex="-1"></a>  resultados <span class="ot">&lt;-</span> <span class="fu">rbind</span>(resultados, <span class="fu">data.frame</span>(<span class="at">var =</span> v, <span class="at">media =</span> media))</span>
+<span id="cb32-5"><a href="stata-para-principiantes.html#cb32-5" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Python:</strong></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="stata-para-principiantes.html#cb33-1" tabindex="-1"></a>resultados <span class="op">=</span> []</span>
+<span id="cb33-2"><a href="stata-para-principiantes.html#cb33-2" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> [<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x3&quot;</span>]:</span>
+<span id="cb33-3"><a href="stata-para-principiantes.html#cb33-3" tabindex="-1"></a>    media <span class="op">=</span> df[v].mean()</span>
+<span id="cb33-4"><a href="stata-para-principiantes.html#cb33-4" tabindex="-1"></a>    resultados.append({<span class="st">&quot;var&quot;</span>: v, <span class="st">&quot;media&quot;</span>: media})</span>
+<span id="cb33-5"><a href="stata-para-principiantes.html#cb33-5" tabindex="-1"></a>resultados_df <span class="op">=</span> pd.DataFrame(resultados)</span></code></pre></div>
+</div>
+<div id="acceso-directo-a-los-docuemntos-do-o-scripts" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Acceso directo a los docuemntos do o scripts<a href="stata-para-principiantes.html#acceso-directo-a-los-docuemntos-do-o-scripts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://colab.research.google.com/github/USUARIO/REPO/blob/main/notebooks/intro_datos_python.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab" /></a></p>
+<p><a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab" /></a></p>
+<p><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb">Descargar clase0_phyton.ipynb</a></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-de-secciones-transversales.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-StataBasics.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

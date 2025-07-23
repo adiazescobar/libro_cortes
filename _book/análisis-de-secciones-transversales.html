@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2025-07-21" />
+<meta name="date" content="2025-07-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="index.html"/>
-
+<link rel="next" href="stata-para-principiantes.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -59,8 +59,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -70,7 +71,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -196,6 +197,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
 </ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n"><i class="fa fa-check"></i>Macro local: definición y expansión</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros"><i class="fa fa-check"></i>Evaluar expresiones dentro de macros</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macro-con-texto"><i class="fa fa-check"></i>Macro con texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#macro-global-uso-y-precauci%C3%B3n"><i class="fa fa-check"></i>Macro global: uso y precaución</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#scalar-vs.-macro"><i class="fa fa-check"></i>Scalar vs. Macro</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-recomendado"><i class="fa fa-check"></i>🧩 Ejercicio recomendado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-foreach"><i class="fa fa-check"></i>Loop con <code>foreach</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-forvalues"><i class="fa fa-check"></i>Loop con <code>forvalues</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-while"><i class="fa fa-check"></i>Loop con <code>while</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados"><i class="fa fa-check"></i>🧠 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#estructura-b%C3%A1sica"><i class="fa fa-check"></i>Estructura básica</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-con-argumentos"><i class="fa fa-check"></i>Programas con argumentos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum"><i class="fa fa-check"></i>Tu programa original mejorado: <code>mysum</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#notas-importantes"><i class="fa fa-check"></i>Notas importantes</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados-1"><i class="fa fa-check"></i>🔧 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-postfile"><i class="fa fa-check"></i>¿Qué hace <code>postfile</code>?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize"><i class="fa fa-check"></i>Paso a paso: guardar medias con <code>summarize</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hicimos-aqu%C3%AD"><i class="fa fa-check"></i>¿Qué hicimos aquí?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-1"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-con-postfile"><i class="fa fa-check"></i>📦 Ejercicios con <code>postfile</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-al-programar-en-stata"><i class="fa fa-check"></i>Buenas prácticas al programar en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-de-repaso"><i class="fa fa-check"></i>🧠 Ejercicio de repaso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables"><i class="fa fa-check"></i>Iterar sobre lista de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="2.1" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#acceso-directo-a-los-docuemntos-do-o-scripts"><i class="fa fa-check"></i><b>2.1</b> Acceso directo a los docuemntos do o scripts</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -313,6 +365,9 @@ El programa mostró una focalización efectiva, beneficiando principalmente a lo
 </div>
 <div id="checklist-para-una-buena-pregunta-de-investigación-causal" class="section level2 unnumbered hasAnchor">
 <h2>🧰 Checklist para una buena pregunta de investigación causal<a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre><code>## Warning: &#39;xfun::attr()&#39; is deprecated.
+## Use &#39;xfun::attr2()&#39; instead.
+## See help(&quot;Deprecated&quot;)</code></pre>
 <table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:checklist-pregunta-causal">Table 1.1: </span>Checklist para formular una buena pregunta de investigación causal
@@ -438,10 +493,10 @@ Y_i = \begin{cases}
 <h3>Establecer Causalidad (Deseo de Clonación)<a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>En el mundo ideal, podríamos clonar personas para observar ambos resultados. Como esto no es posible, buscamos estimaciones mediante grupos de comparación.</p>
 <p>Tratado
-<img src="img/ninas1.png" width="30%" style="display: block; margin: auto;" />
+<img src="img/ninas1.png" width="20%" style="display: block; margin: auto;" />
 <span class="math inline">\(Y_1 \Rightarrow\)</span> Resultado observado</p>
 <p>Clon en Control
-<img src="img/ninas1.png" width="30%" style="display: block; margin: auto;" />
+<img src="img/ninas1.png" width="20%" style="display: block; margin: auto;" />
 <span class="math inline">\(Y_0 \Rightarrow\)</span> Resultado contrafactual</p>
 <p><a href="https://youtu.be/iPBV3BlV7jk">Ver en YouTube</a></p>
 </div>
@@ -475,12 +530,12 @@ Y_i = \begin{cases}
 <div id="ceteris-paribus-perfecto" class="section level3 hasAnchor" number="1.0.2">
 <h3><span class="header-section-number">1.0.2</span> <strong>Ceteris Paribus: ¿Perfecto?</strong><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><strong>Tratada</strong><br />
-<img src="img/ninas1.png" width="30%" /></p>
+<img src="img/ninas1.png" width="20%" /></p>
 <ul>
 <li><span class="math inline">\(Y_1 \Rightarrow\)</span> resultado observado</li>
 </ul>
 <p><strong>Control</strong><br />
-<img src="img/ninas3.png" width="30%" /></p>
+<img src="img/ninas3.png" width="20%" /></p>
 <ul>
 <li><span class="math inline">\(Y_0 \Rightarrow\)</span> resultado del contrafactual</li>
 </ul>
@@ -498,19 +553,19 @@ ATE = E[\tau] = E[Y_i(D=1) - Y_i(D=0)]
 <div id="solución-2-diferencia-de-medias-efecto-causal-sesgo-de-selección" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección<a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>.pull-left[ <strong>Tratados</strong>
-<img src="img/pegado3.png" width="30%" />]</p>
+<img src="img/pegado3.png" width="20%" />]</p>
 <p>.pull-right[ <strong>Controles</strong>
-<img src="img/pegado4.png" width="30%" />]</p>
+<img src="img/pegado4.png" width="20%" />]</p>
 </div>
 <div id="solución-2-diferencia-de-medias-efecto-causal-sesgo-de-selección-1" class="section level2 unnumbered hasAnchor">
 <h2>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección<a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Una alternativa común para estimar efectos causales es comparar los promedios de los grupos tratados y no tratados. Sin embargo, esta estrategia suele estar contaminada por <strong>sesgo de selección</strong>: los grupos pueden diferir de manera sistemática en variables que también afectan el resultado.</p>
 <p>.pull-left[
 <strong>Tratados</strong><br />
-<img src="img/pegado3.png" width="30%" />]</p>
+<img src="img/pegado3.png" width="20%" />]</p>
 <p>.pull-right[
 <strong>Controles</strong><br />
-<img src="img/pegado4.png" width="30%" />]</p>
+<img src="img/pegado4.png" width="20%" />]</p>
 <hr />
 </div>
 <div id="sesgo-de-selección" class="section level2 unnumbered hasAnchor">
@@ -571,8 +626,8 @@ ATE = E[\tau] = E[Y_i(D=1) - Y_i(D=0)]
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="stata-para-principiantes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
