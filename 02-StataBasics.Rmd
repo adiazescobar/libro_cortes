@@ -532,14 +532,22 @@ for v in ["x1", "x2", "x3"]:
 resultados_df = pd.DataFrame(resultados)
 ```
 
-## Acceso directo a los docuemntos do o scripts
+## DESCARGA LOS DOCUMENTOS {-}
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/USUARIO/REPO/blob/main/notebooks/intro_datos_python.ipynb)
+**Descargar Stata do file**:
+[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_stata.do)
 
+**Descargar R script**:
+[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
+
+**Descargar Phyton Notebook**:
+[Descargar Phyton](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
 
-[Descargar clase0_phyton.ipynb](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
+**Descarga los Datos**
+[Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
+
 
 
 
