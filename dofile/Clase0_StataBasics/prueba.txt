@@ -1,0 +1,18 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/libro_cortes/dofile/Clase0_StataBasics/prueba.txt
+  log type:  text
+ opened on:  24 Jul 2025, 07:27:33
+
+. di "Hola hoy es un día muy bonito"
+Hola hoy es un día muy bonito
+
+. di 41701+ 947103
+988804
+
+. log close
+      name:  <unnamed>
+       log:  /Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/libro_cortes/dofile/Clase0_StataBasics/prueba.txt
+  log type:  text
+ closed on:  24 Jul 2025, 07:27:56
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

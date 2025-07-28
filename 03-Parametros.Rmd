@@ -1,0 +1,209 @@
+# 📘 Capítulo: Definición de estimadores, resultados potenciales e introducción al sesgo de selección
+
+---
+
+## 🎯 Metas de aprendizaje {-}
+
+- Entender qué es un **resultado potencial**  
+- Diferenciar entre **ATE**, **ATT**, **ATU** y el **estimador naïve**  
+- Comprender la lógica del **sesgo de selección** y su relación con los **contrafactuales**
+
+---
+
+## 📚 Lecturas recomendadas  {-}
+
+- **Lectura 1:** *The Credibility Revolution*  
+- **Lectura 2:** Bernal y Peña – Capítulo 2  
+- **Lectura 3:** Bernal y Peña – Capítulo 3  
+
+---
+
+## 🧠 Teoría clave  {-}
+
+### 🔹 Resultados potenciales  {-}
+
+Para cada unidad \( i \), existen dos posibles resultados:
+
+- \( Y_i(1) \): resultado si **recibe tratamiento**  
+- \( Y_i(0) \): resultado si **no recibe tratamiento**
+
+Pero solo observamos uno de ellos:
+
+\[
+Y_i = D_i \cdot Y_i(1) + (1 - D_i) \cdot Y_i(0)
+\]
+
+Donde:  
+- \( D_i = 1 \) si la unidad fue tratada  
+- \( D_i = 0 \) si no fue tratada
+
+---
+
+### 🔹 Parámetros de interés  {-}
+
+#### 📌 Efecto Promedio del Tratamiento (ATE)  {-}
+
+\[
+ATE = \mathbb{E}[Y_i(1) - Y_i(0)]
+\]
+
+#### 📌 Efecto Promedio del Tratamiento sobre los Tratados (ATT)  {-}
+
+\[
+ATT = \mathbb{E}[Y_i(1) - Y_i(0) \mid D_i = 1]
+\]
+
+#### 📌 Efecto Promedio del Tratamiento sobre los No Tratados (ATU)  {-}
+
+\[
+ATU = \mathbb{E}[Y_i(1) - Y_i(0) \mid D_i = 0]
+\]
+
+#### 📌 Estimador naïve (comparación directa de medias)  {-}
+
+\[
+\mathbb{E}[Y_i \mid D_i = 1] - \mathbb{E}[Y_i \mid D_i = 0]
+\]
+
+---
+
+### 🔹 ¿Por qué no es suficiente el estimador naïve?  {-}
+
+El estimador naïve asume implícitamente que:
+
+\[
+\mathbb{E}[Y_i(0) \mid D_i = 1] = \mathbb{E}[Y_i(0) \mid D_i = 0]
+\]
+
+Es decir, que los grupos tratados y no tratados son **comparables** en su resultado contrafactual.  
+Este supuesto es **poco realista** si la asignación al tratamiento está relacionada con factores que afectan el resultado, como motivación, ingresos o necesidad.
+
+---
+
+### 🔹 Sesgo de selección  {-}
+
+El **sesgo de selección** se define como la diferencia entre el estimador naïve y el verdadero ATT:
+
+\[
+\text{Sesgo} = \left( \mathbb{E}[Y_i(1) \mid D_i = 1] - \mathbb{E}[Y_i(0) \mid D_i = 1] \right)
+- \left( \mathbb{E}[Y_i(1) \mid D_i = 1] - \mathbb{E}[Y_i(0) \mid D_i = 0] \right)
+\]
+
+Lo que se reduce a:
+
+\[
+\text{Sesgo} = \mathbb{E}[Y_i(0) \mid D_i = 0] - \mathbb{E}[Y_i(0) \mid D_i = 1]
+\]
+
+> Si los no tratados (controles) tienen peores resultados potenciales que los tratados, el estimador naïve **sobreestima** el verdadero efecto del tratamiento.
+---
+
+::: {.boxejercicio .green title="🧠 Pausa activa: ¿Dónde está el contrafactual?"}
+
+## 🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección
+
+Supongamos que tenemos una muestra de 8 individuos. Algunos recibieron tratamiento (\(D = 1\)) y otros no (\(D = 0\)). Cada persona tiene dos resultados potenciales:
+
+- \(Y(1)\): lo que obtendría si recibe el tratamiento  
+- \(Y(0)\): lo que obtendría si no lo recibe
+
+Pero solo observamos **uno** de esos dos valores:  
+\[
+Y_i = D_i \cdot Y_i(1) + (1 - D_i) \cdot Y_i(0)
+\]
+
+### 🧮 Tabla de datos simulados
+
+| ID | \(D_i\) | \(Y_i(1)\) | \(Y_i(0)\) | \(Y_i\) observado |
+|----|--------|------------|------------|-------------------|
+| 1  | 1      | 10         | 8          | 10                |
+| 2  | 1      | 12         | 10         | 12                |
+| 3  | 1      | 9          | 7          | 9                 |
+| 4  | 1      | 11         | 10         | 11                |
+| 5  | 0      | 6          | 5          | 5                 |
+| 6  | 0      | 7          | 6          | 6                 |
+| 7  | 0      | 5          | 4          | 4                 |
+| 8  | 0      | 5          | 5          | 5                 |
+
+---
+
+### 🎯 Preguntas para discutir en grupo
+
+1. ¿Cuál es el **contrafactual** que NO podemos observar para cada individuo?
+2. Calcula el **efecto promedio del tratamiento sobre los tratados (ATT)**.
+3. Calcula el **estimador naïve**:  
+   \[
+   \mathbb{E}[Y \mid D = 1] - \mathbb{E}[Y \mid D = 0]
+   \]
+4. ¿Cuál es el **sesgo de selección** entre ambos estimadores?
+5. Reflexiona: ¿por qué hay sesgo en este ejemplo? ¿Qué suposición implícita está fallando?
+
+---
+
+### 📌 Pista:
+
+Los individuos tratados tienen mejores valores de \(Y(0)\) (lo que habrían obtenido sin tratamiento) que los no tratados.  
+¿Es válido entonces comparar directamente los promedios observados entre grupos?
+
+---
+
+### 💡 Objetivo del ejercicio
+
+Identificar cómo el **contrafactual no observado** es la clave para pensar en causalidad, y cómo las diferencias sistemáticas entre tratados y no tratados generan **sesgo** si no las controlamos.
+
+:::
+
+
+----
+
+
+### 🔹 Sesgo de selección en comparaciones antes-después {-}
+
+Una estrategia común es comparar el resultado antes y después del tratamiento en el mismo grupo:
+
+\[
+\text{Antes-Después} = \mathbb{E}[Y_{i,t=1} \mid D_i = 1] - \mathbb{E}[Y_{i,t=0} \mid D_i = 1]
+\]
+
+Este estimador es problemático si hay **cambios estructurales en el tiempo**, ya que no controla por lo que habría ocurrido sin el tratamiento.
+
+#### El contrafactual no observado: {-}
+
+\[
+\mathbb{E}[Y_{i,t=1}(0) \mid D_i = 1]
+\]
+
+#### Sesgo: {-}
+
+\[
+\text{Sesgo} = \mathbb{E}[Y_{i,t=1}(0)] - \mathbb{E}[Y_{i,t=0}(0)]
+\]
+
+Si los resultados habrían cambiado igualmente sin el tratamiento, el estimador antes-después **sobreestima o subestima** el verdadero efecto.
+
+#### 🧪 Ejemplo ilustrativo
+
+| Año | Resultado | Tratamiento |
+|-----|-----------|-------------|
+|2019 | 6         | 0           |
+|2020 | 9         | 1           |
+
+- Estimador antes-después: \( 9 - 6 = 3 \)  
+- Supuesto contrafactual: sin intervención, el resultado habría sido 8  
+- Entonces, el **efecto verdadero es \( 9 - 8 = 1 \)** y hay un **sesgo de 2 unidades** atribuido erróneamente al tratamiento.
+
+
+
+
+
+---
+
+## 🛠️ Recursos
+
+- **Notas de clase:** [`C2.pdf`](C2.pdf)  
+- **Slides:** *Angrist & Pischke*, _Mostly Harmless Econometrics_ (`.pptx`)  
+- **Ejemplo motivador:** Crítica de Heckman (1997):
+  > “Elegir a un millonario al azar para que participe en un programa de capacitación para trabajadores poco calificados no es una política relevante ni viable.”
+
+---
+
