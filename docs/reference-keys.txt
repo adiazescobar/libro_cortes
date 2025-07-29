@@ -6,11 +6,3 @@ ceteris-paribus-perfecto
 solución-2-diferencia-de-medias-efecto-causal-sesgo-de-selección
 stata-para-principiantes
 capítulo-definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección
-si-los-no-tratados-controles-tienen-peores-resultados-potenciales-que-los-tratados-el-estimador-naïve-sobreestima-el-verdadero-efecto-del-tratamiento.
-ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selección
-tabla-de-datos-simulados
-preguntas-para-discutir-en-grupo
-pista
-objetivo-del-ejercicio
-ejemplo-ilustrativo
-recursos
