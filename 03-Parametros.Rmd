@@ -110,17 +110,16 @@ Y_i = D_i \cdot Y_i(1) + (1 - D_i) \cdot Y_i(0)
 
 Datos
 
-| ID | \(D_i\) | \(Y_i(1)\) | \(Y_i(0)\) | \(Y_i\)  |
+| ID | \(D_i\) | \(Y_i(D=0)\) | \(Y_i(D=1)\) | \(Y_i\)  |
 |----|--------|------------|------------|-----|
-| 1  | 1      | 10         | 8          | 10  |
-| 2  | 1      | 12         | 10         | 12  |
-| 3  | 1      | 9          | 7          | 9   |
-| 4  | 1      | 11         | 10         | 11  |
-| 5  | 0      | 6          | 5          | 5   |
-| 6  | 0      | 7          | 6          | 6   |
-| 7  | 0      | 5          | 4          | 4   |
-| 8  | 0      | 5          | 5          | 5   |
-
+| 1  | 1      | 10         | 12          | 12  |
+| 2  | 0      | 4          | 5         | 4  |
+| 3  | 1      | 9          | 10          | 10   |
+| 4  | 1      | 10         | 11         | 11  |
+| 5  | 0      | 5          | 6          | 5   |
+| 6  | 0      | 3          | 2          | 3   |
+| 7  | 1      | 12         | 11          | 11   |
+| 8  | 0      | 5          | 7          | 5   |
 ---
 
 *🎯 Preguntas para discutir en grupo*
@@ -252,7 +251,6 @@ Quiero que me ayudes a pensar críticamente si esta estrategia identifica un efe
 5. Llévame a conectar este ejemplo con los conceptos de Y(D=1), Y(D=0), ATT, ATE y el estimador naïve.
 
 ⚠️ Importante: no me lo des todo resuelto. Quiero que me vayas preguntando cosas, como haría un buen profe. Quiero pensar, no solo escuchar. Hazlo interactivo.
-gina que estás escribiendo para un referee escéptico.
 :::
 
 

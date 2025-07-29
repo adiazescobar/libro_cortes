@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2025-07-28" />
+<meta name="date" content="2025-07-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,6 +54,8 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -391,8 +393,8 @@ Y_i = D_i \cdot Y_i(1) + (1 - D_i) \cdot Y_i(0)
 <tr class="header">
 <th>ID</th>
 <th><span class="math inline">\(D_i\)</span></th>
-<th><span class="math inline">\(Y_i(1)\)</span></th>
-<th><span class="math inline">\(Y_i(0)\)</span></th>
+<th><span class="math inline">\(Y_i(D=0)\)</span></th>
+<th><span class="math inline">\(Y_i(D=1)\)</span></th>
 <th><span class="math inline">\(Y_i\)</span></th>
 </tr>
 </thead>
@@ -401,56 +403,56 @@ Y_i = D_i \cdot Y_i(1) + (1 - D_i) \cdot Y_i(0)
 <td>1</td>
 <td>1</td>
 <td>10</td>
-<td>8</td>
-<td>10</td>
+<td>12</td>
+<td>12</td>
 </tr>
 <tr class="even">
 <td>2</td>
-<td>1</td>
-<td>12</td>
-<td>10</td>
-<td>12</td>
+<td>0</td>
+<td>4</td>
+<td>5</td>
+<td>4</td>
 </tr>
 <tr class="odd">
 <td>3</td>
 <td>1</td>
 <td>9</td>
-<td>7</td>
-<td>9</td>
+<td>10</td>
+<td>10</td>
 </tr>
 <tr class="even">
 <td>4</td>
 <td>1</td>
-<td>11</td>
 <td>10</td>
+<td>11</td>
 <td>11</td>
 </tr>
 <tr class="odd">
 <td>5</td>
 <td>0</td>
-<td>6</td>
 <td>5</td>
+<td>6</td>
 <td>5</td>
 </tr>
 <tr class="even">
 <td>6</td>
 <td>0</td>
-<td>7</td>
-<td>6</td>
-<td>6</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
 </tr>
 <tr class="odd">
 <td>7</td>
-<td>0</td>
-<td>5</td>
-<td>4</td>
-<td>4</td>
+<td>1</td>
+<td>12</td>
+<td>11</td>
+<td>11</td>
 </tr>
 <tr class="even">
 <td>8</td>
 <td>0</td>
 <td>5</td>
-<td>5</td>
+<td>7</td>
 <td>5</td>
 </tr>
 </tbody>
@@ -566,8 +568,7 @@ Y(d=1) - Y(d=0) \text{ en el mismo periodo } t=1
 <li>Hazme reflexionar sobre qué sesgos podrían surgir si los ingresos hubieran aumentado igual sin el programa.</li>
 <li>Llévame a conectar este ejemplo con los conceptos de Y(D=1), Y(D=0), ATT, ATE y el estimador naïve.</li>
 </ol>
-<p>⚠️ Importante: no me lo des todo resuelto. Quiero que me vayas preguntando cosas, como haría un buen profe. Quiero pensar, no solo escuchar. Hazlo interactivo.
-gina que estás escribiendo para un referee escéptico.</p>
+<p>⚠️ Importante: no me lo des todo resuelto. Quiero que me vayas preguntando cosas, como haría un buen profe. Quiero pensar, no solo escuchar. Hazlo interactivo.</p>
 </div>
 <hr />
 
