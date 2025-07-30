@@ -1,4 +1,4 @@
-# 📘 Capítulo: Definición de estimadores, resultados potenciales e introducción al sesgo de selección
+# 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección
 
 ---
 
@@ -131,7 +131,7 @@ Datos
    \mathbb{E}[Y \mid D = 1] - \mathbb{E}[Y \mid D = 0]
    \]
 4. ¿Cuál es el **sesgo de selección** entre ambos estimadores?
-5. Reflexiona: ¿por qué hay sesgo en este ejemplo? ¿Qué suposición implícita está fallando?
+5. Reflexiona: ¿por qué hay sesgo en este ejemplo? ¿Qué supuesto implícito está fallando?
 
 📌 Pista:
 

@@ -8,4 +8,4 @@ rmd_files:
   - 01-intro.Rmd
   - 02-StataBasics.Rmd
   - 03-Parametros.Rmd
-  
+  - 04-ParametrosStata.Rmd

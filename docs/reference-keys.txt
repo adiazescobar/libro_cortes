@@ -5,4 +5,5 @@ video-recomendado-mastering-metrics
 ceteris-paribus-perfecto
 solución-2-diferencia-de-medias-efecto-causal-sesgo-de-selección
 stata-para-principiantes
-capítulo-definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección
+definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección
+estimadores-causales-en-secciones-transversales
