@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2025-07-30" />
+<meta name="date" content="2025-07-31" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,15 +32,15 @@
   
 <link rel="prev" href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"/>
 
-<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -49,13 +49,13 @@
 
 
 
-<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections/anchor-sections.js"></script>
-<script src="libs/kePrint/kePrint.js"></script>
-<link href="libs/lightable/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable/bootstrapTable.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -462,209 +462,27 @@ Modelo:
 <span id="cb41-26"><a href="estimadores-causales-en-secciones-transversales.html#cb41-26" tabindex="-1"></a>* Llamamos <span class="fu">el</span> programa:</span>
 <span id="cb41-27"><a href="estimadores-causales-en-secciones-transversales.html#cb41-27" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span></code></pre></div>
 <p><em>🧪 Experimento 1: ¿Qué pasa si aumento el tamaño muestral? </em></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb42-1"><a href="estimadores-causales-en-secciones-transversales.html#cb42-1" tabindex="-1"></a># Estimadores Causales en Secciones Transversales </span>
-<span id="cb42-2"><a href="estimadores-causales-en-secciones-transversales.html#cb42-2" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="estimadores-causales-en-secciones-transversales.html#cb42-3" tabindex="-1"></a>::: {.boxinfo}</span>
-<span id="cb42-4"><a href="estimadores-causales-en-secciones-transversales.html#cb42-4" tabindex="-1"></a>## 📚 Lecturas obligatorias{-}</span>
-<span id="cb42-5"><a href="estimadores-causales-en-secciones-transversales.html#cb42-5" tabindex="-1"></a></span>
-<span id="cb42-6"><a href="estimadores-causales-en-secciones-transversales.html#cb42-6" tabindex="-1"></a>- Lectura 4 – Capítulo 4 del libro <span class="kw">de</span> Scott Cunningham:  </span>
-<span id="cb42-7"><a href="estimadores-causales-en-secciones-transversales.html#cb42-7" tabindex="-1"></a>  👉 [Mixtape: Potential Outcomes](https:<span class="co">//mixtape.scunning.com/04-potential_outcomes)</span></span>
-<span id="cb42-8"><a href="estimadores-causales-en-secciones-transversales.html#cb42-8" tabindex="-1"></a></span>
-<span id="cb42-9"><a href="estimadores-causales-en-secciones-transversales.html#cb42-9" tabindex="-1"></a>- Documento <span class="kw">de</span> referencia sobre RCT:  </span>
-<span id="cb42-10"><a href="estimadores-causales-en-secciones-transversales.html#cb42-10" tabindex="-1"></a>  📄 `RCT.pdf`</span>
-<span id="cb42-11"><a href="estimadores-causales-en-secciones-transversales.html#cb42-11" tabindex="-1"></a>:::</span>
-<span id="cb42-12"><a href="estimadores-causales-en-secciones-transversales.html#cb42-12" tabindex="-1"></a></span>
-<span id="cb42-13"><a href="estimadores-causales-en-secciones-transversales.html#cb42-13" tabindex="-1"></a>*🎯 Objetivo <span class="kw">de</span> la clase* </span>
-<span id="cb42-14"><a href="estimadores-causales-en-secciones-transversales.html#cb42-14" tabindex="-1"></a></span>
-<span id="cb42-15"><a href="estimadores-causales-en-secciones-transversales.html#cb42-15" tabindex="-1"></a>Aprenderemos a estimar <span class="fu">y</span> comparar distintos **estimadores del efecto causal**:</span>
-<span id="cb42-16"><a href="estimadores-causales-en-secciones-transversales.html#cb42-16" tabindex="-1"></a></span>
-<span id="cb42-17"><a href="estimadores-causales-en-secciones-transversales.html#cb42-17" tabindex="-1"></a>- ATE (Efecto Promedio en la Población)</span>
-<span id="cb42-18"><a href="estimadores-causales-en-secciones-transversales.html#cb42-18" tabindex="-1"></a>- ATT (Efecto Promedio en los Tratados)</span>
-<span id="cb42-19"><a href="estimadores-causales-en-secciones-transversales.html#cb42-19" tabindex="-1"></a>- ATU (Efecto Promedio en los No Tratados)</span>
-<span id="cb42-20"><a href="estimadores-causales-en-secciones-transversales.html#cb42-20" tabindex="-1"></a>- Estimador Naïve (diferencia observada entre grupos)</span>
-<span id="cb42-21"><a href="estimadores-causales-en-secciones-transversales.html#cb42-21" tabindex="-1"></a></span>
-<span id="cb42-22"><a href="estimadores-causales-en-secciones-transversales.html#cb42-22" tabindex="-1"></a>Repasamos conceptos <span class="kw">de</span> la clase anterior: resultados potenciales, estimadores <span class="kw">de</span> media <span class="fu">y</span> regresión simple.</span>
-<span id="cb42-23"><a href="estimadores-causales-en-secciones-transversales.html#cb42-23" tabindex="-1"></a></span>
-<span id="cb42-24"><a href="estimadores-causales-en-secciones-transversales.html#cb42-24" tabindex="-1"></a></span>
-<span id="cb42-25"><a href="estimadores-causales-en-secciones-transversales.html#cb42-25" tabindex="-1"></a>---</span>
-<span id="cb42-26"><a href="estimadores-causales-en-secciones-transversales.html#cb42-26" tabindex="-1"></a></span>
-<span id="cb42-27"><a href="estimadores-causales-en-secciones-transversales.html#cb42-27" tabindex="-1"></a>*📥 Cargar la base <span class="fu">y</span> generar la <span class="kw">variable</span> <span class="kw">de</span> resultado observado* </span>
-<span id="cb42-28"><a href="estimadores-causales-en-secciones-transversales.html#cb42-28" tabindex="-1"></a></span>
-<span id="cb42-29"><a href="estimadores-causales-en-secciones-transversales.html#cb42-29" tabindex="-1"></a>```stata</span>
-<span id="cb42-30"><a href="estimadores-causales-en-secciones-transversales.html#cb42-30" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;data.dta&quot;</span>, <span class="kw">clear</span></span>
-<span id="cb42-31"><a href="estimadores-causales-en-secciones-transversales.html#cb42-31" tabindex="-1"></a></span>
-<span id="cb42-32"><a href="estimadores-causales-en-secciones-transversales.html#cb42-32" tabindex="-1"></a>* Generamos <span class="fu">el</span> resultado observado según <span class="fu">el</span> tratamiento recibido</span>
-<span id="cb42-33"><a href="estimadores-causales-en-secciones-transversales.html#cb42-33" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb42-34"><a href="estimadores-causales-en-secciones-transversales.html#cb42-34" tabindex="-1"></a></span>
-<span id="cb42-35"><a href="estimadores-causales-en-secciones-transversales.html#cb42-35" tabindex="-1"></a><span class="kw">label</span> <span class="kw">var</span> <span class="fu">y</span> <span class="st">&quot;Salarios en millones de pesos&quot;</span></span>
-<span id="cb42-36"><a href="estimadores-causales-en-secciones-transversales.html#cb42-36" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> D 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratados&quot;</span></span>
-<span id="cb42-37"><a href="estimadores-causales-en-secciones-transversales.html#cb42-37" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> D D</span>
-<span id="cb42-38"><a href="estimadores-causales-en-secciones-transversales.html#cb42-38" tabindex="-1"></a><span class="kw">numlabel</span>, add</span></code></pre></div>
-<hr />
-<p><em>📊 Estadísticas descriptivas por grupo</em></p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb43-1"><a href="estimadores-causales-en-secciones-transversales.html#cb43-1" tabindex="-1"></a><span class="kw">tab</span> D</span>
-<span id="cb43-2"><a href="estimadores-causales-en-secciones-transversales.html#cb43-2" tabindex="-1"></a></span>
-<span id="cb43-3"><a href="estimadores-causales-en-secciones-transversales.html#cb43-3" tabindex="-1"></a>          D |      Freq.     Percent        Cum.</span>
-<span id="cb43-4"><a href="estimadores-causales-en-secciones-transversales.html#cb43-4" tabindex="-1"></a>------------+-----------------------------------</span>
-<span id="cb43-5"><a href="estimadores-causales-en-secciones-transversales.html#cb43-5" tabindex="-1"></a> 0. Control |          4       50.00       50.00</span>
-<span id="cb43-6"><a href="estimadores-causales-en-secciones-transversales.html#cb43-6" tabindex="-1"></a>1. Tratados |          4       50.00      100.00</span>
-<span id="cb43-7"><a href="estimadores-causales-en-secciones-transversales.html#cb43-7" tabindex="-1"></a>------------+-----------------------------------</span>
-<span id="cb43-8"><a href="estimadores-causales-en-secciones-transversales.html#cb43-8" tabindex="-1"></a>      Total |          8      100.00</span>
-<span id="cb43-9"><a href="estimadores-causales-en-secciones-transversales.html#cb43-9" tabindex="-1"></a>      </span>
-<span id="cb43-10"><a href="estimadores-causales-en-secciones-transversales.html#cb43-10" tabindex="-1"></a>      </span>
-<span id="cb43-11"><a href="estimadores-causales-en-secciones-transversales.html#cb43-11" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb43-12"><a href="estimadores-causales-en-secciones-transversales.html#cb43-12" tabindex="-1"></a></span>
-<span id="cb43-13"><a href="estimadores-causales-en-secciones-transversales.html#cb43-13" tabindex="-1"></a>    Variable |        Obs        Mean    Std. <span class="kw">dev</span>.       Min        Max</span>
-<span id="cb43-14"><a href="estimadores-causales-en-secciones-transversales.html#cb43-14" tabindex="-1"></a>-------------+---------------------------------------------------------</span>
-<span id="cb43-15"><a href="estimadores-causales-en-secciones-transversales.html#cb43-15" tabindex="-1"></a>           <span class="fu">y</span> |          8       7.625    3.700869          3         12</span>
-<span id="cb43-16"><a href="estimadores-causales-en-secciones-transversales.html#cb43-16" tabindex="-1"></a></span>
-<span id="cb43-17"><a href="estimadores-causales-en-secciones-transversales.html#cb43-17" tabindex="-1"></a></span>
-<span id="cb43-18"><a href="estimadores-causales-en-secciones-transversales.html#cb43-18" tabindex="-1"></a><span class="kw">bysort</span> D: <span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb43-19"><a href="estimadores-causales-en-secciones-transversales.html#cb43-19" tabindex="-1"></a>------------------------------------------------------------------------------------------</span>
-<span id="cb43-20"><a href="estimadores-causales-en-secciones-transversales.html#cb43-20" tabindex="-1"></a>-&gt; D = 0. Control</span>
-<span id="cb43-21"><a href="estimadores-causales-en-secciones-transversales.html#cb43-21" tabindex="-1"></a></span>
-<span id="cb43-22"><a href="estimadores-causales-en-secciones-transversales.html#cb43-22" tabindex="-1"></a>    Variable |        Obs        Mean    Std. <span class="kw">dev</span>.       Min        Max</span>
-<span id="cb43-23"><a href="estimadores-causales-en-secciones-transversales.html#cb43-23" tabindex="-1"></a>-------------+---------------------------------------------------------</span>
-<span id="cb43-24"><a href="estimadores-causales-en-secciones-transversales.html#cb43-24" tabindex="-1"></a>           <span class="fu">y</span> |          4        4.25    .9574271          3          5</span>
-<span id="cb43-25"><a href="estimadores-causales-en-secciones-transversales.html#cb43-25" tabindex="-1"></a></span>
-<span id="cb43-26"><a href="estimadores-causales-en-secciones-transversales.html#cb43-26" tabindex="-1"></a>------------------------------------------------------------------------------------------</span>
-<span id="cb43-27"><a href="estimadores-causales-en-secciones-transversales.html#cb43-27" tabindex="-1"></a>-&gt; D = 1. Tratados</span>
-<span id="cb43-28"><a href="estimadores-causales-en-secciones-transversales.html#cb43-28" tabindex="-1"></a></span>
-<span id="cb43-29"><a href="estimadores-causales-en-secciones-transversales.html#cb43-29" tabindex="-1"></a>    Variable |        Obs        Mean    Std. <span class="kw">dev</span>.       Min        Max</span>
-<span id="cb43-30"><a href="estimadores-causales-en-secciones-transversales.html#cb43-30" tabindex="-1"></a>-------------+---------------------------------------------------------</span>
-<span id="cb43-31"><a href="estimadores-causales-en-secciones-transversales.html#cb43-31" tabindex="-1"></a>           <span class="fu">y</span> |          4          11    .8164966         10         12</span>
-<span id="cb43-32"><a href="estimadores-causales-en-secciones-transversales.html#cb43-32" tabindex="-1"></a></span>
-<span id="cb43-33"><a href="estimadores-causales-en-secciones-transversales.html#cb43-33" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
-<span id="cb43-34"><a href="estimadores-causales-en-secciones-transversales.html#cb43-34" tabindex="-1"></a></span>
-<span id="cb43-35"><a href="estimadores-causales-en-secciones-transversales.html#cb43-35" tabindex="-1"></a>    Variable |        Obs        Mean    Std. <span class="kw">dev</span>.       Min        Max</span>
-<span id="cb43-36"><a href="estimadores-causales-en-secciones-transversales.html#cb43-36" tabindex="-1"></a>-------------+---------------------------------------------------------</span>
-<span id="cb43-37"><a href="estimadores-causales-en-secciones-transversales.html#cb43-37" tabindex="-1"></a>           <span class="fu">y</span> |          4        4.25    .9574271          3          5</span>
-<span id="cb43-38"><a href="estimadores-causales-en-secciones-transversales.html#cb43-38" tabindex="-1"></a></span>
-<span id="cb43-39"><a href="estimadores-causales-en-secciones-transversales.html#cb43-39" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
-<span id="cb43-40"><a href="estimadores-causales-en-secciones-transversales.html#cb43-40" tabindex="-1"></a></span>
-<span id="cb43-41"><a href="estimadores-causales-en-secciones-transversales.html#cb43-41" tabindex="-1"></a>    Variable |        Obs        Mean    Std. <span class="kw">dev</span>.       Min        Max</span>
-<span id="cb43-42"><a href="estimadores-causales-en-secciones-transversales.html#cb43-42" tabindex="-1"></a>-------------+---------------------------------------------------------</span>
-<span id="cb43-43"><a href="estimadores-causales-en-secciones-transversales.html#cb43-43" tabindex="-1"></a>           <span class="fu">y</span> |          4          11    .8164966         10         12</span></code></pre></div>
-<p>Nos permite observar las diferencias <strong>promedio</strong> entre grupos tratados y de control.</p>
-<hr />
-<p><em>📎 Diferencia de medias</em></p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb44-1"><a href="estimadores-causales-en-secciones-transversales.html#cb44-1" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span>, <span class="kw">by</span>(D)</span>
-<span id="cb44-2"><a href="estimadores-causales-en-secciones-transversales.html#cb44-2" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="estimadores-causales-en-secciones-transversales.html#cb44-3" tabindex="-1"></a>Two-<span class="kw">sample</span> t <span class="kw">test</span> with equal variances</span>
-<span id="cb44-4"><a href="estimadores-causales-en-secciones-transversales.html#cb44-4" tabindex="-1"></a>------------------------------------------------------------------------------</span>
-<span id="cb44-5"><a href="estimadores-causales-en-secciones-transversales.html#cb44-5" tabindex="-1"></a>   Group |     Obs        Mean    Std. err.   Std. <span class="kw">dev</span>.   [95% conf. interval]</span>
-<span id="cb44-6"><a href="estimadores-causales-en-secciones-transversales.html#cb44-6" tabindex="-1"></a>---------+--------------------------------------------------------------------</span>
-<span id="cb44-7"><a href="estimadores-causales-en-secciones-transversales.html#cb44-7" tabindex="-1"></a>0. Contr |       4        4.25    .4787136    .9574271     2.72652     5.77348</span>
-<span id="cb44-8"><a href="estimadores-causales-en-secciones-transversales.html#cb44-8" tabindex="-1"></a>1. Trata |       4          11    .4082483    .8164966    9.700772    12.29923</span>
-<span id="cb44-9"><a href="estimadores-causales-en-secciones-transversales.html#cb44-9" tabindex="-1"></a>---------+--------------------------------------------------------------------</span>
-<span id="cb44-10"><a href="estimadores-causales-en-secciones-transversales.html#cb44-10" tabindex="-1"></a>Combined |       8       7.625    1.308455    3.700869    4.530996      10.719</span>
-<span id="cb44-11"><a href="estimadores-causales-en-secciones-transversales.html#cb44-11" tabindex="-1"></a>---------+--------------------------------------------------------------------</span>
-<span id="cb44-12"><a href="estimadores-causales-en-secciones-transversales.html#cb44-12" tabindex="-1"></a>    <span class="fu">diff</span> |               -6.75    .6291529               -8.289482   -5.210518</span>
-<span id="cb44-13"><a href="estimadores-causales-en-secciones-transversales.html#cb44-13" tabindex="-1"></a>------------------------------------------------------------------------------</span>
-<span id="cb44-14"><a href="estimadores-causales-en-secciones-transversales.html#cb44-14" tabindex="-1"></a>    <span class="fu">diff</span> = <span class="kw">mean</span>(0. Contr) - <span class="kw">mean</span>(1. Trata)                        t = -10.7287</span>
-<span id="cb44-15"><a href="estimadores-causales-en-secciones-transversales.html#cb44-15" tabindex="-1"></a>H0: <span class="fu">diff</span> = 0                                     Degrees <span class="kw">of</span> freedom =        6</span>
-<span id="cb44-16"><a href="estimadores-causales-en-secciones-transversales.html#cb44-16" tabindex="-1"></a></span>
-<span id="cb44-17"><a href="estimadores-causales-en-secciones-transversales.html#cb44-17" tabindex="-1"></a>    Ha: <span class="fu">diff</span> &lt; 0                 Ha: <span class="fu">diff</span> != 0                 Ha: <span class="fu">diff</span> &gt; 0</span>
-<span id="cb44-18"><a href="estimadores-causales-en-secciones-transversales.html#cb44-18" tabindex="-1"></a> Pr(T &lt; t) = 0.0000         Pr(|T| &gt; |t|) = 0.0000          Pr(T &gt; t) = 1.0000</span>
-<span id="cb44-19"><a href="estimadores-causales-en-secciones-transversales.html#cb44-19" tabindex="-1"></a></span>
-<span id="cb44-20"><a href="estimadores-causales-en-secciones-transversales.html#cb44-20" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D, <span class="kw">robust</span></span></code></pre></div>
-<p><em>📎 Regresioón Simple</em>
-Modelo:
-<span class="math display">\[ Y = \alpha + \tau D + \varepsilon \]</span></p>
-<ul>
-<li><span class="math inline">\(\tau\)</span> representa el estimador naïve (diferencia de medias observada).</li>
-<li>No es causal si hay <strong>sesgo de selección</strong>.</li>
-</ul>
-<div class="sourceCode" id="cb45"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb45-1"><a href="estimadores-causales-en-secciones-transversales.html#cb45-1" tabindex="-1"></a>Linear regression                               Number <span class="kw">of</span> <span class="kw">obs</span>     =          8</span>
-<span id="cb45-2"><a href="estimadores-causales-en-secciones-transversales.html#cb45-2" tabindex="-1"></a>                                                <span class="fu">F</span>(1, 6)           =     115.11</span>
-<span id="cb45-3"><a href="estimadores-causales-en-secciones-transversales.html#cb45-3" tabindex="-1"></a>                                                Prob &gt; <span class="fu">F</span>          =     0.0000</span>
-<span id="cb45-4"><a href="estimadores-causales-en-secciones-transversales.html#cb45-4" tabindex="-1"></a>                                                R-squared         =     0.9505</span>
-<span id="cb45-5"><a href="estimadores-causales-en-secciones-transversales.html#cb45-5" tabindex="-1"></a>                                                Root MSE          =     .88976</span>
-<span id="cb45-6"><a href="estimadores-causales-en-secciones-transversales.html#cb45-6" tabindex="-1"></a></span>
-<span id="cb45-7"><a href="estimadores-causales-en-secciones-transversales.html#cb45-7" tabindex="-1"></a>------------------------------------------------------------------------------</span>
-<span id="cb45-8"><a href="estimadores-causales-en-secciones-transversales.html#cb45-8" tabindex="-1"></a>             |               Robust</span>
-<span id="cb45-9"><a href="estimadores-causales-en-secciones-transversales.html#cb45-9" tabindex="-1"></a>           <span class="fu">y</span> | Coefficient  <span class="fu">std</span>. err.      t    P&gt;|t|     [95% conf. interval]</span>
-<span id="cb45-10"><a href="estimadores-causales-en-secciones-transversales.html#cb45-10" tabindex="-1"></a>-------------+----------------------------------------------------------------</span>
-<span id="cb45-11"><a href="estimadores-causales-en-secciones-transversales.html#cb45-11" tabindex="-1"></a>           D |       6.75   .6291529    10.73   0.000     5.210518    8.289482</span>
-<span id="cb45-12"><a href="estimadores-causales-en-secciones-transversales.html#cb45-12" tabindex="-1"></a>       <span class="dt">_cons</span> |       4.25   .4787136     8.88   0.000      3.07863     5.42137</span>
-<span id="cb45-13"><a href="estimadores-causales-en-secciones-transversales.html#cb45-13" tabindex="-1"></a>------------------------------------------------------------------------------</span></code></pre></div>
-<hr />
-<p><em>🧮 Estimación de ATE, ATT y ATU</em></p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb46-1"><a href="estimadores-causales-en-secciones-transversales.html#cb46-1" tabindex="-1"></a><span class="kw">gen</span> tau = yd1 - yd0   <span class="co">// efecto individual</span></span>
-<span id="cb46-2"><a href="estimadores-causales-en-secciones-transversales.html#cb46-2" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;ATE: &quot;</span></span>
-<span id="cb46-3"><a href="estimadores-causales-en-secciones-transversales.html#cb46-3" tabindex="-1"></a><span class="kw">sum</span> tau</span>
-<span id="cb46-4"><a href="estimadores-causales-en-secciones-transversales.html#cb46-4" tabindex="-1"></a><span class="fu">scalar</span> ATE = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb46-5"><a href="estimadores-causales-en-secciones-transversales.html#cb46-5" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;ATE = &quot;</span> ATE</span>
-<span id="cb46-6"><a href="estimadores-causales-en-secciones-transversales.html#cb46-6" tabindex="-1"></a></span>
-<span id="cb46-7"><a href="estimadores-causales-en-secciones-transversales.html#cb46-7" tabindex="-1"></a><span class="kw">sum</span> tau <span class="kw">if</span> D == 1</span>
-<span id="cb46-8"><a href="estimadores-causales-en-secciones-transversales.html#cb46-8" tabindex="-1"></a><span class="fu">scalar</span> ATT = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb46-9"><a href="estimadores-causales-en-secciones-transversales.html#cb46-9" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;ATT = &quot;</span> ATT</span>
-<span id="cb46-10"><a href="estimadores-causales-en-secciones-transversales.html#cb46-10" tabindex="-1"></a></span>
-<span id="cb46-11"><a href="estimadores-causales-en-secciones-transversales.html#cb46-11" tabindex="-1"></a><span class="kw">sum</span> tau <span class="kw">if</span> D == 0</span>
-<span id="cb46-12"><a href="estimadores-causales-en-secciones-transversales.html#cb46-12" tabindex="-1"></a><span class="fu">scalar</span> ATU = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb46-13"><a href="estimadores-causales-en-secciones-transversales.html#cb46-13" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;ATU = &quot;</span> ATU</span></code></pre></div>
-<hr />
-<p><em>🧯 Comparación con el estimador naïve</em></p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb47-1"><a href="estimadores-causales-en-secciones-transversales.html#cb47-1" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D==1</span>
-<span id="cb47-2"><a href="estimadores-causales-en-secciones-transversales.html#cb47-2" tabindex="-1"></a><span class="fu">scalar</span> ybar_1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb47-3"><a href="estimadores-causales-en-secciones-transversales.html#cb47-3" tabindex="-1"></a></span>
-<span id="cb47-4"><a href="estimadores-causales-en-secciones-transversales.html#cb47-4" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D==0</span>
-<span id="cb47-5"><a href="estimadores-causales-en-secciones-transversales.html#cb47-5" tabindex="-1"></a><span class="fu">scalar</span> ybar_0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb47-6"><a href="estimadores-causales-en-secciones-transversales.html#cb47-6" tabindex="-1"></a></span>
-<span id="cb47-7"><a href="estimadores-causales-en-secciones-transversales.html#cb47-7" tabindex="-1"></a><span class="fu">scalar</span> NAIVE = ybar_1 - ybar_0</span>
-<span id="cb47-8"><a href="estimadores-causales-en-secciones-transversales.html#cb47-8" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Naive = &quot;</span> NAIVE</span>
-<span id="cb47-9"><a href="estimadores-causales-en-secciones-transversales.html#cb47-9" tabindex="-1"></a></span>
-<span id="cb47-10"><a href="estimadores-causales-en-secciones-transversales.html#cb47-10" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Sesgo de selección = &quot;</span> NAIVE - ATT</span></code></pre></div>
-<p><em>⚙️ Programa para estimadores</em></p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb48-1"><a href="estimadores-causales-en-secciones-transversales.html#cb48-1" tabindex="-1"></a>cap prog <span class="kw">drop</span> estimadores</span>
-<span id="cb48-2"><a href="estimadores-causales-en-secciones-transversales.html#cb48-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> estimadores</span>
-<span id="cb48-3"><a href="estimadores-causales-en-secciones-transversales.html#cb48-3" tabindex="-1"></a>    <span class="kw">args</span> tau <span class="fu">y</span> D</span>
-<span id="cb48-4"><a href="estimadores-causales-en-secciones-transversales.html#cb48-4" tabindex="-1"></a></span>
-<span id="cb48-5"><a href="estimadores-causales-en-secciones-transversales.html#cb48-5" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">&quot;--- Calculando estimadores ---&quot;</span></span>
-<span id="cb48-6"><a href="estimadores-causales-en-secciones-transversales.html#cb48-6" tabindex="-1"></a>    <span class="kw">quietly</span> {</span>
-<span id="cb48-7"><a href="estimadores-causales-en-secciones-transversales.html#cb48-7" tabindex="-1"></a>        <span class="kw">sum</span> <span class="ot">`tau&#39;</span></span>
-<span id="cb48-8"><a href="estimadores-causales-en-secciones-transversales.html#cb48-8" tabindex="-1"></a>        <span class="fu">scalar</span> ATE = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb48-9"><a href="estimadores-causales-en-secciones-transversales.html#cb48-9" tabindex="-1"></a>        <span class="kw">sum</span> <span class="ot">`tau&#39;</span> <span class="kw">if</span> <span class="ot">`D&#39;</span> == 1</span>
-<span id="cb48-10"><a href="estimadores-causales-en-secciones-transversales.html#cb48-10" tabindex="-1"></a>        <span class="fu">scalar</span> ATT = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb48-11"><a href="estimadores-causales-en-secciones-transversales.html#cb48-11" tabindex="-1"></a>        <span class="kw">sum</span> <span class="ot">`tau&#39;</span> <span class="kw">if</span> <span class="ot">`D&#39;</span> == 0</span>
-<span id="cb48-12"><a href="estimadores-causales-en-secciones-transversales.html#cb48-12" tabindex="-1"></a>        <span class="fu">scalar</span> ATU = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb48-13"><a href="estimadores-causales-en-secciones-transversales.html#cb48-13" tabindex="-1"></a>        <span class="kw">sum</span> <span class="ot">`y&#39;</span> <span class="kw">if</span> <span class="ot">`D&#39;</span> == 1</span>
-<span id="cb48-14"><a href="estimadores-causales-en-secciones-transversales.html#cb48-14" tabindex="-1"></a>        <span class="fu">scalar</span> ybar_1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb48-15"><a href="estimadores-causales-en-secciones-transversales.html#cb48-15" tabindex="-1"></a>        <span class="kw">sum</span> <span class="ot">`y&#39;</span> <span class="kw">if</span> <span class="ot">`D&#39;</span> == 0</span>
-<span id="cb48-16"><a href="estimadores-causales-en-secciones-transversales.html#cb48-16" tabindex="-1"></a>        <span class="fu">scalar</span> ybar_0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb48-17"><a href="estimadores-causales-en-secciones-transversales.html#cb48-17" tabindex="-1"></a>        <span class="fu">scalar</span> NAIVE = ybar_1 - ybar_0</span>
-<span id="cb48-18"><a href="estimadores-causales-en-secciones-transversales.html#cb48-18" tabindex="-1"></a>    }</span>
-<span id="cb48-19"><a href="estimadores-causales-en-secciones-transversales.html#cb48-19" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">&quot;ATE = &quot;</span> ATE</span>
-<span id="cb48-20"><a href="estimadores-causales-en-secciones-transversales.html#cb48-20" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">&quot;ATT = &quot;</span> ATT</span>
-<span id="cb48-21"><a href="estimadores-causales-en-secciones-transversales.html#cb48-21" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">&quot;ATU = &quot;</span> ATU</span>
-<span id="cb48-22"><a href="estimadores-causales-en-secciones-transversales.html#cb48-22" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">&quot;Naive = &quot;</span> NAIVE</span>
-<span id="cb48-23"><a href="estimadores-causales-en-secciones-transversales.html#cb48-23" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">&quot;Sesgo de Selección = &quot;</span> NAIVE - ATT</span>
-<span id="cb48-24"><a href="estimadores-causales-en-secciones-transversales.html#cb48-24" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb48-25"><a href="estimadores-causales-en-secciones-transversales.html#cb48-25" tabindex="-1"></a></span>
-<span id="cb48-26"><a href="estimadores-causales-en-secciones-transversales.html#cb48-26" tabindex="-1"></a>* Llamamos <span class="fu">el</span> programa:</span>
-<span id="cb48-27"><a href="estimadores-causales-en-secciones-transversales.html#cb48-27" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span></code></pre></div>
-<p><em>🧪 Experimento 1: ¿Qué pasa si aumento el tamaño muestral? </em></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb49-1"><a href="estimadores-causales-en-secciones-transversales.html#cb49-1" tabindex="-1"></a><span class="kw">drop</span> <span class="fu">y</span> tau</span>
-<span id="cb49-2"><a href="estimadores-causales-en-secciones-transversales.html#cb49-2" tabindex="-1"></a>expand 10000</span>
-<span id="cb49-3"><a href="estimadores-causales-en-secciones-transversales.html#cb49-3" tabindex="-1"></a></span>
-<span id="cb49-4"><a href="estimadores-causales-en-secciones-transversales.html#cb49-4" tabindex="-1"></a>* Generar nuevamente <span class="fu">el</span> resultado</span>
-<span id="cb49-5"><a href="estimadores-causales-en-secciones-transversales.html#cb49-5" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb49-6"><a href="estimadores-causales-en-secciones-transversales.html#cb49-6" tabindex="-1"></a><span class="kw">gen</span> tau = yd1 - yd0</span>
-<span id="cb49-7"><a href="estimadores-causales-en-secciones-transversales.html#cb49-7" tabindex="-1"></a></span>
-<span id="cb49-8"><a href="estimadores-causales-en-secciones-transversales.html#cb49-8" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb42-1"><a href="estimadores-causales-en-secciones-transversales.html#cb42-1" tabindex="-1"></a><span class="kw">drop</span> <span class="fu">y</span> tau</span>
+<span id="cb42-2"><a href="estimadores-causales-en-secciones-transversales.html#cb42-2" tabindex="-1"></a>expand 10000</span>
+<span id="cb42-3"><a href="estimadores-causales-en-secciones-transversales.html#cb42-3" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="estimadores-causales-en-secciones-transversales.html#cb42-4" tabindex="-1"></a>* Generar nuevamente <span class="fu">el</span> resultado</span>
+<span id="cb42-5"><a href="estimadores-causales-en-secciones-transversales.html#cb42-5" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
+<span id="cb42-6"><a href="estimadores-causales-en-secciones-transversales.html#cb42-6" tabindex="-1"></a><span class="kw">gen</span> tau = yd1 - yd0</span>
+<span id="cb42-7"><a href="estimadores-causales-en-secciones-transversales.html#cb42-7" tabindex="-1"></a></span>
+<span id="cb42-8"><a href="estimadores-causales-en-secciones-transversales.html#cb42-8" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span></code></pre></div>
 <p>🔍 <strong>Moraleja:</strong> Aumentar el tamaño no elimina el sesgo si hay selección.</p>
 <hr />
 <p><em>🧪 Experimento 2: Asignación aleatoria </em></p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb50-1"><a href="estimadores-causales-en-secciones-transversales.html#cb50-1" tabindex="-1"></a><span class="kw">drop</span> <span class="fu">y</span> D tau</span>
-<span id="cb50-2"><a href="estimadores-causales-en-secciones-transversales.html#cb50-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 87634</span>
-<span id="cb50-3"><a href="estimadores-causales-en-secciones-transversales.html#cb50-3" tabindex="-1"></a><span class="kw">gen</span> D = (uniform() &gt; 0.5)</span>
-<span id="cb50-4"><a href="estimadores-causales-en-secciones-transversales.html#cb50-4" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb50-5"><a href="estimadores-causales-en-secciones-transversales.html#cb50-5" tabindex="-1"></a></span>
-<span id="cb50-6"><a href="estimadores-causales-en-secciones-transversales.html#cb50-6" tabindex="-1"></a>* Repetimos estimadores</span>
-<span id="cb50-7"><a href="estimadores-causales-en-secciones-transversales.html#cb50-7" tabindex="-1"></a><span class="kw">gen</span> tau = yd1 - yd0</span>
-<span id="cb50-8"><a href="estimadores-causales-en-secciones-transversales.html#cb50-8" tabindex="-1"></a></span>
-<span id="cb50-9"><a href="estimadores-causales-en-secciones-transversales.html#cb50-9" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span>
-<span id="cb50-10"><a href="estimadores-causales-en-secciones-transversales.html#cb50-10" tabindex="-1"></a>...</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb43-1"><a href="estimadores-causales-en-secciones-transversales.html#cb43-1" tabindex="-1"></a><span class="kw">drop</span> <span class="fu">y</span> D tau</span>
+<span id="cb43-2"><a href="estimadores-causales-en-secciones-transversales.html#cb43-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 87634</span>
+<span id="cb43-3"><a href="estimadores-causales-en-secciones-transversales.html#cb43-3" tabindex="-1"></a><span class="kw">gen</span> D = (uniform() &gt; 0.5)</span>
+<span id="cb43-4"><a href="estimadores-causales-en-secciones-transversales.html#cb43-4" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
+<span id="cb43-5"><a href="estimadores-causales-en-secciones-transversales.html#cb43-5" tabindex="-1"></a></span>
+<span id="cb43-6"><a href="estimadores-causales-en-secciones-transversales.html#cb43-6" tabindex="-1"></a>* Repetimos estimadores</span>
+<span id="cb43-7"><a href="estimadores-causales-en-secciones-transversales.html#cb43-7" tabindex="-1"></a><span class="kw">gen</span> tau = yd1 - yd0</span>
+<span id="cb43-8"><a href="estimadores-causales-en-secciones-transversales.html#cb43-8" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="estimadores-causales-en-secciones-transversales.html#cb43-9" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span>
+<span id="cb43-10"><a href="estimadores-causales-en-secciones-transversales.html#cb43-10" tabindex="-1"></a>...</span></code></pre></div>
 <p>🎯 Con asignación aleatoria:
 <span class="math display">\[ ATE \approx ATT \approx ATU \approx Naïve \]</span></p>
 <hr />
@@ -740,14 +558,14 @@ scalar ATE = r(mean)
 
     </div>
   </div>
-<script src="libs/gitbook/js/app.min.js"></script>
-<script src="libs/gitbook/js/clipboard.min.js"></script>
-<script src="libs/gitbook/js/plugin-search.js"></script>
-<script src="libs/gitbook/js/plugin-sharing.js"></script>
-<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook/js/jquery.highlight.js"></script>
-<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
