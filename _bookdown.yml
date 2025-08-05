@@ -9,3 +9,4 @@ rmd_files:
   - 02-StataBasics.Rmd
   - 03-Parametros.Rmd
   - 04-ParametrosStata.Rmd
+  - 05-RCT.Rmd
