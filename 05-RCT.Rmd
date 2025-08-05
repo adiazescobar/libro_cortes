@@ -113,7 +113,7 @@ Interpretación
 - Solo si la **motivación no está correlacionada con el tratamiento**, aunque no la observemos, **no hay sesgo**.
 
 
-## ¿Qué hace la aleatorización^?
+## ¿Qué hace la aleatorización?{-}
 📌 La **aleatorización** garantiza \( \text{Cov}(D, M) = 0 \), eliminando el sesgo de selección sin necesidad de observar \( M \).
 
  *Visualización: motivación, selección y aleatorización*
@@ -161,7 +161,7 @@ p1 + p2
 
 ---
 
-## 4.2 Densidad de la motivación por grupo
+## Densidad de la motivación por grupo {-}
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Gráfico 3: densidad de motivación según tratamiento sesgado

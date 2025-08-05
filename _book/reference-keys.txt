@@ -8,5 +8,3 @@ stata-para-principiantes
 definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección
 estimadores-causales-en-secciones-transversales
 por-qué-la-asignación-aleatoria-elimina-el-sesgo
-qué-hace-la-aleatorización
-densidad-de-la-motivación-por-grupo
