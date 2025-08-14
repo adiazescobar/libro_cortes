@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 3 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 3 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 3 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 3 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2025-08-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="stata-para-principiantes.html"/>
+<link rel="next" href="estimadores-causales-en-secciones-transversales.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-obligatorios"><i class="fa fa-check"></i>Libros Obligatorios</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-recomendados"><i class="fa fa-check"></i>Libros Recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="03-Parametros.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-exitoso-progresa-oportunidades-m%C3%A9xico-1990"><i class="fa fa-check"></i>Ejemplo exitoso: Progresa (Oportunidades, México, 1990)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-contrafactual"><i class="fa fa-check"></i>El Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#visualizando-el-contrafactual"><i class="fa fa-check"></i>Visualizando el Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#la-banda-sonora"><i class="fa fa-check"></i>La Banda Sonora</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#problema-fundamental-de-la-inferencia-causal"><i class="fa fa-check"></i>Problema Fundamental de la Inferencia Causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n"><i class="fa fa-check"></i>Establecer Causalidad (Deseo de Clonación)</a></li>
+<li class="chapter" data-level="1.0.1" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#video-recomendado-mastering-metrics"><i class="fa fa-check"></i><b>1.0.1</b> 🎥 Video recomendado: <em>Mastering Metrics</em></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a>
+<ul>
+<li class="chapter" data-level="1.0.2" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto"><i class="fa fa-check"></i><b>1.0.2</b> <strong>Ceteris Paribus: ¿Perfecto?</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="03-Parametros.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n"><i class="fa fa-check"></i>Macro local: definición y expansión</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros"><i class="fa fa-check"></i>Evaluar expresiones dentro de macros</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macro-con-texto"><i class="fa fa-check"></i>Macro con texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#macro-global-uso-y-precauci%C3%B3n"><i class="fa fa-check"></i>Macro global: uso y precaución</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#scalar-vs.-macro"><i class="fa fa-check"></i>Scalar vs. Macro</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-recomendado"><i class="fa fa-check"></i>🧩 Ejercicio recomendado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-foreach"><i class="fa fa-check"></i>Loop con <code>foreach</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-forvalues"><i class="fa fa-check"></i>Loop con <code>forvalues</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-while"><i class="fa fa-check"></i>Loop con <code>while</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados"><i class="fa fa-check"></i>🧠 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#estructura-b%C3%A1sica"><i class="fa fa-check"></i>Estructura básica</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-con-argumentos"><i class="fa fa-check"></i>Programas con argumentos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum"><i class="fa fa-check"></i>Tu programa original mejorado: <code>mysum</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#notas-importantes"><i class="fa fa-check"></i>Notas importantes</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados-1"><i class="fa fa-check"></i>🔧 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-postfile"><i class="fa fa-check"></i>¿Qué hace <code>postfile</code>?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize"><i class="fa fa-check"></i>Paso a paso: guardar medias con <code>summarize</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hicimos-aqu%C3%AD"><i class="fa fa-check"></i>¿Qué hicimos aquí?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-1"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-con-postfile"><i class="fa fa-check"></i>📦 Ejercicios con <code>postfile</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-al-programar-en-stata"><i class="fa fa-check"></i>Buenas prácticas al programar en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-de-repaso"><i class="fa fa-check"></i>🧠 Ejercicio de repaso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables"><i class="fa fa-check"></i>Iterar sobre lista de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="03-Parametros.html"><a href="#definici%C3%B3n-de-estimadores-resultados-potenciales-e-introducci%C3%B3n-al-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>3</b> 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección</a>
+<ul>
+<li class="chapter" data-level="" data-path="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><i class="fa fa-check"></i>🔹 Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>🔹 Parámetros de interés</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>🔹 ¿Por qué no es suficiente el estimador naïve?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>🔹 Sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>🔹 Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html"><i class="fa fa-check"></i><b>4</b> Estimadores Causales en Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas"><i class="fa fa-check"></i>📎 Descargas</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas-1"><i class="fa fa-check"></i>📎 Descargas</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="03-Parametros.html"><a href="#por-qu%C3%A9-la-asignaci%C3%B3n-aleatoria-elimina-el-sesgo"><i class="fa fa-check"></i><b>5</b> ¿Por qué la asignación aleatoria elimina el sesgo?</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>¿Qué hace la aleatorización?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#densidad-de-la-motivaci%C3%B3n-por-grupo"><i class="fa fa-check"></i>Densidad de la motivación por grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html"><i class="fa fa-check"></i><b>6</b> Experimentos Controlados RECETA</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#paso-1-dise%C3%B1ar-el-experimento"><i class="fa fa-check"></i>PASO 1) Diseñar el experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#paso-2-aleatorizar-la-asignaci%C3%B3n-stata"><i class="fa fa-check"></i>Paso 2) Aleatorizar la asignación (Stata)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-3-verificar-el-balance-de-covariables"><i class="fa fa-check"></i>PASO 3) Verificar el balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-4-estimar-el-efecto-del-tratamiento"><i class="fa fa-check"></i>PASO 4) Estimar el efecto del tratamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes"><i class="fa fa-check"></i>Asignación a nivel individual (dos muestras independientes)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#pruebas"><i class="fa fa-check"></i>Pruebas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Capitulo 3</span> 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección<a href="#definici%C3%B3n-de-estimadores-resultados-potenciales-e-introducci%C3%B3n-al-sesgo-de-selecci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="boxinfo">
+<div id="metas-de-aprendizaje" class="section level2 unnumbered hasAnchor">
+<h2>🎯 Metas de aprendizaje<a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html#metas-de-aprendizaje" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Entender qué es un <strong>resultado potencial</strong><br />
+</li>
+<li>Diferenciar entre <strong>ATE</strong>, <strong>ATT</strong>, <strong>ATU</strong> y el <strong>estimador naïve</strong><br />
+</li>
+<li>Comprender la lógica del <strong>sesgo de selección</strong> y su relación con los <strong>contrafactuales</strong></li>
+</ul>
+</div>
+<div id="lecturas-recomendadas" class="section level2 unnumbered hasAnchor">
+<h2>📚 Lecturas recomendadas<a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html#lecturas-recomendadas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Lectura 1:</strong> <em>The Credibility Revolution</em> - Angrist y Pischke (2010)<br />
+<a href="https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3">Enlace al artículo</a><br />
+</li>
+<li><strong>Lectura 2:</strong> Bernal y Peña – Capítulo 2<br />
+</li>
+<li><strong>Lectura 3:</strong> Bernal y Peña – Capítulo 3<br />
+</li>
+</ul>
+</div>
+</div>
+<div id="resultados-potenciales-1" class="section level3 unnumbered hasAnchor">
+<h3>🔹 Resultados potenciales<a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html#resultados-potenciales-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para cada unidad <span class="math inline">\(i\)</span>, existen dos posibles resultados:</p>
+<ul>
+<li><span class="math inline">\(Y_i(D=1)\)</span>: resultado si <strong>recibe tratamiento</strong><br />
+</li>
+<li><span class="math inline">\(Y_i(D=0)\)</span>: resultado si <strong>no recibe tratamiento</strong></li>
+</ul>
+<p>Pero solo observamos uno de ellos:</p>
+<p><span class="math display">\[
+Y_i = D_i \cdot Y_i(D=1) + (1 - D_i) \cdot Y_i(D=0)
+\]</span></p>
+<p>Donde:<br />
+- <span class="math inline">\(D_i = 1\)</span> si la unidad fue tratada<br />
+- <span class="math inline">\(D_i = 0\)</span> si no fue tratada</p>
+<hr />
+</div>
+<div id="parámetros-de-interés" class="section level3 unnumbered hasAnchor">
+<h3>🔹 Parámetros de interés<a href="#par%C3%A1metros-de-inter%C3%A9s" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="efecto-promedio-del-tratamiento-ate-1" class="section level4 unnumbered hasAnchor">
+<h4>📌 Efecto Promedio del Tratamiento (ATE)<a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html#efecto-promedio-del-tratamiento-ate-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[
+ATE = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
+\]</span></p>
+</div>
+<div id="efecto-promedio-del-tratamiento-sobre-los-tratados-att" class="section level4 unnumbered hasAnchor">
+<h4>📌 Efecto Promedio del Tratamiento sobre los Tratados (ATT)<a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html#efecto-promedio-del-tratamiento-sobre-los-tratados-att" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[
+ATT = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 1]
+\]</span></p>
+</div>
+<div id="efecto-promedio-del-tratamiento-sobre-los-no-tratados-atu" class="section level4 unnumbered hasAnchor">
+<h4>📌 Efecto Promedio del Tratamiento sobre los No Tratados (ATU)<a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html#efecto-promedio-del-tratamiento-sobre-los-no-tratados-atu" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[
+ATU = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 0]
+\]</span></p>
+</div>
+<div id="estimador-naïve-comparación-directa-de-medias" class="section level4 unnumbered hasAnchor">
+<h4>📌 Estimador naïve (comparación directa de medias)<a href="#estimador-na%C3%AFve-comparaci%C3%B3n-directa-de-medias" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[
+\mathbb{E}[Y_i \mid D_i = 1] - \mathbb{E}[Y_i \mid D_i = 0]
+\]</span></p>
+<hr />
+</div>
+</div>
+<div id="por-qué-no-es-suficiente-el-estimador-naïve" class="section level3 unnumbered hasAnchor">
+<h3>🔹 ¿Por qué no es suficiente el estimador naïve?<a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El estimador naïve asume implícitamente que:</p>
+<p><span class="math display">\[
+\mathbb{E}[Y_i(D=0) \mid D_i = 1] = \mathbb{E}[Y_i(D=0) \mid D_i = 0]
+\]</span></p>
+<p>Es decir, que los grupos tratados y no tratados son <strong>comparables</strong> en su resultado contrafactual.<br />
+Este supuesto es <strong>poco realista</strong> si la asignación al tratamiento está relacionada con factores que afectan el resultado, como motivación, ingresos o necesidad.</p>
+<hr />
+</div>
+<div id="sesgo-de-selección-1" class="section level3 unnumbered hasAnchor">
+<h3>🔹 Sesgo de selección<a href="#sesgo-de-selecci%C3%B3n-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El <strong>sesgo de selección</strong> se define como la diferencia entre el estimador naïve y el verdadero ATT:</p>
+<p><span class="math display">\[
+\text{Sesgo} = \left( \mathbb{E}[Y_i(D=1) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 1] \right)
+- \left( \mathbb{E}[Y_i(D=1) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 0] \right)
+\]</span></p>
+<p>Lo que se reduce a:</p>
+<p><span class="math display">\[
+\text{Sesgo} = \mathbb{E}[Y_i(D=0) \mid D_i = 0] - \mathbb{E}[Y_i(D=0) \mid D_i = 1]
+\]</span></p>
+<blockquote>
+<p>Si los no tratados (controles) tienen peores resultados potenciales que los tratados, el estimador naïve <strong>sobreestima</strong> el verdadero efecto del tratamiento. {-}</p>
+</blockquote>
+</div>
+<div id="ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selección" class="section level2 unnumbered hasAnchor boxejercicio green" title="🧠 Pausa activa: ¿Dónde está el contrafactual?">
+<h2>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección<a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Supongamos que tenemos una muestra de 8 individuos. Algunos recibieron tratamiento (<span class="math inline">\(D = 1\)</span>) y otros no (<span class="math inline">\(D = 0\)</span>). Cada persona tiene dos resultados potenciales:</p>
+<ul>
+<li><span class="math inline">\(Y(1)\)</span>: lo que obtendría si recibe el tratamiento<br />
+</li>
+<li><span class="math inline">\(Y(0)\)</span>: lo que obtendría si no lo recibe</li>
+</ul>
+<p>Pero solo observamos <strong>uno</strong> de esos dos valores:<br />
+<span class="math display">\[
+Y_i = D_i \cdot Y_i(1) + (1 - D_i) \cdot Y_i(0)
+\]</span></p>
+<p>Datos</p>
+<table>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th><span class="math inline">\(D_i\)</span></th>
+<th><span class="math inline">\(Y_i(D=0)\)</span></th>
+<th><span class="math inline">\(Y_i(D=1)\)</span></th>
+<th><span class="math inline">\(Y_i\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>10</td>
+<td>12</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>0</td>
+<td>4</td>
+<td>5</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>1</td>
+<td>9</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>1</td>
+<td>10</td>
+<td>11</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>0</td>
+<td>5</td>
+<td>6</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>0</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>1</td>
+<td>12</td>
+<td>11</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>0</td>
+<td>5</td>
+<td>7</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>🎯 Preguntas para discutir en grupo</em></p>
+<ol style="list-style-type: decimal">
+<li>¿Cuál es el <strong>contrafactual</strong> que NO podemos observar para cada individuo?</li>
+<li>Calcula el <strong>efecto promedio del tratamiento sobre los tratados (ATT)</strong>.</li>
+<li>Calcula el <strong>estimador naïve</strong>:<br />
+<span class="math display">\[
+\mathbb{E}[Y \mid D = 1] - \mathbb{E}[Y \mid D = 0]
+\]</span></li>
+<li>¿Cuál es el <strong>sesgo de selección</strong> entre ambos estimadores?</li>
+<li>Reflexiona: ¿por qué hay sesgo en este ejemplo? ¿Qué supuesto implícito está fallando?</li>
+</ol>
+<p>📌 Pista:</p>
+<p>Los individuos tratados tienen mejores valores de <span class="math inline">\(Y(0)\)</span> (lo que habrían obtenido sin tratamiento) que los no tratados.<br />
+¿Es válido entonces comparar directamente los promedios observados entre grupos?</p>
+</div>
+<div id="sesgo-en-comparaciones-antes-después-sin-grupo-de-control" class="section level3 unnumbered hasAnchor">
+<h3>🔹 Sesgo en comparaciones antes-después (sin grupo de control)<a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Una estrategia común es comparar el <strong>resultado promedio antes y después del tratamiento</strong> en el mismo grupo de individuos tratados:</p>
+<p><span class="math display">\[
+\text{Estimador Antes-Después} = \mathbb{E}[Y_{t=1} \mid D = 1] - \mathbb{E}[Y_{t=0} \mid D = 1]
+\]</span></p>
+<p>Este estimador es observable, pero <strong>no necesariamente causal</strong>, porque no tenemos el contrafactual de lo que habría pasado en <span class="math inline">\(t = 1\)</span> sin tratamiento.</p>
+<p>¿Qué observamos?</p>
+<ul>
+<li>En <span class="math inline">\(t = 1\)</span>, observamos <span class="math inline">\(Y(d=1)\)</span>: el resultado <strong>con tratamiento</strong><br />
+</li>
+<li>En <span class="math inline">\(t = 0\)</span>, observamos <span class="math inline">\(Y(d=0)\)</span>: el resultado <strong>sin tratamiento</strong></li>
+</ul>
+<p>Para identificar el efecto del tratamiento, lo que quisiéramos conocer es:</p>
+<p><span class="math display">\[
+Y(d=0) \text{ en } t = 1
+\]</span></p>
+<p>Es decir, <strong>¿qué habría pasado en el periodo <span class="math inline">\(t=1\)</span> si no hubiéramos tratado a nadie?</strong> 💡 El efecto causal real para una unidad sería:</p>
+<p><span class="math display">\[
+Y(d=1) - Y(d=0) \text{ en el mismo periodo } t=1
+\]</span></p>
+<p>Pero en el diseño antes-después usamos <span class="math inline">\(Y(d=0)\)</span> del periodo anterior como sustituto de ese contrafactual. Entonces, el sesgo es:</p>
+<p><span class="math display">\[
+\text{Sesgo} = \underbrace{\mathbb{E}[Y(d=0) \text{ en } t = 1]}_{\text{contrafactual deseado}} - \underbrace{\mathbb{E}[Y(d=0) \text{ en } t = 0]}_{\text{valor observado como &quot;antes&quot;}}
+\]</span></p>
+<p>Este sesgo aparece si el resultado habría cambiado con el tiempo incluso sin el tratamiento.</p>
+<p>🧪 Ejemplo ilustrativo</p>
+<table>
+<thead>
+<tr class="header">
+<th>Año</th>
+<th>Resultado observado</th>
+<th>Tratamiento</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2019</td>
+<td>6</td>
+<td>0 (antes)</td>
+</tr>
+<tr class="even">
+<td>2020</td>
+<td>9</td>
+<td>1 (después)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Estimador antes-después:<br />
+<span class="math display">\[
+9 - 6 = 3
+\]</span></li>
+<li>Pero supongamos que, sin tratamiento, el resultado en 2020 habría sido 8<br />
+<span class="math display">\[
+\Rightarrow Y(d=0) \text{ en } 2020 = 8
+\]</span></li>
+<li>Entonces el efecto causal verdadero es:<br />
+<span class="math display">\[
+9 - 8 = 1
+\]</span></li>
+<li>Y el sesgo de selección por tiempo es:
+<span class="math display">\[
+3 - 1 = 2
+\]</span></li>
+</ul>
+<p>El diseño antes-después asume que no habría cambio en el tiempo sin tratamiento. Este supuesto es <strong>muy fuerte</strong> y raramente cierto. Por eso, necesitamos un grupo de control que nos ayude a estimar <span class="math inline">\(\mathbb{E}[Y(d=0) \text{ en } t=1]\)</span>.</p>
+<blockquote>
+<p>En otras palabras, sin grupo de control <strong>no podemos saber si el cambio fue por el tratamiento o por el tiempo</strong>.</p>
+</blockquote>
+<div class="boxvideo green" title="🎥 Videos recomendados:">
+<p>Estos videos ayudan a reforzar visualmente los conceptos de <strong>resultados potenciales</strong>, <strong>contrafactuales</strong> y <strong>sesgo en el diseño antes-después</strong>.</p>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/ln5LBKiF8hE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/iPBV3BlV7jk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</div>
+<hr />
+<div class="boxnote">
+<p>🛠️ 💬 <strong>PROMPT DE CHATGPT PARA REFLEXIÓN PROFUNDA</strong></p>
+<p>Estás escribiendo el apartado metodológico de un artículo donde se implementa un programa de formación técnica para jóvenes. Tu grupo de tratamiento incluye individuos que aplicaron y fueron aceptados. No tienes grupo de control explícito, pero tienes datos de resultados antes y después.</p>
+<p>📌 Instrucciones:</p>
+<p>Escribe a ChatGPT usando el siguiente mensaje:</p>
+<p>Actúa como mi tutor metodológico. No quiero que simplemente expliques los conceptos, sino que me hagas preguntas, desafíes mis supuestos, y me ayudes a razonar paso a paso como si estuviéramos en una asesoría.</p>
+<p>🧪 Contexto: Quiero evaluar el efecto de un programa de formación técnica para jóvenes. Tengo datos de ingreso mensual antes y después del programa, pero solo para quienes participaron. Estoy pensando en calcular:</p>
+<pre><code>Ȳ_despues - Ȳ_antes</code></pre>
+<p>para reportar el efecto del programa.</p>
+<p>Quiero que me ayudes a pensar críticamente si esta estrategia identifica un efecto causal. Por favor:</p>
+<ol style="list-style-type: decimal">
+<li>Guíame para identificar cuál es el verdadero contrafactual que estoy ignorando.</li>
+<li>Pregúntame qué estoy asumiendo implícitamente.</li>
+<li>Explórame en qué condiciones este estimador funcionaría bien.</li>
+<li>Hazme reflexionar sobre qué sesgos podrían surgir si los ingresos hubieran aumentado igual sin el programa.</li>
+<li>Llévame a conectar este ejemplo con los conceptos de Y(D=1), Y(D=0), ATT, ATE y el estimador naïve.</li>
+</ol>
+<p>⚠️ Importante: no me lo des todo resuelto. Quiero que me vayas preguntando cosas, como haría un buen profe. Quiero pensar, no solo escuchar. Hazlo interactivo.</p>
+</div>
+<hr />
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="stata-para-principiantes.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="estimadores-causales-en-secciones-transversales.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-Parametros.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

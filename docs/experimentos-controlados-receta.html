@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 6 Experimentos Controlados RECETA | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 6 Experimentos Controlados RECETA | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 6 Experimentos Controlados RECETA | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 6 Experimentos Controlados RECETA | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2025-08-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="por-qué-la-asignación-aleatoria-elimina-el-sesgo.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-obligatorios"><i class="fa fa-check"></i>Libros Obligatorios</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-recomendados"><i class="fa fa-check"></i>Libros Recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="06-RCT2.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-exitoso-progresa-oportunidades-m%C3%A9xico-1990"><i class="fa fa-check"></i>Ejemplo exitoso: Progresa (Oportunidades, México, 1990)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-contrafactual"><i class="fa fa-check"></i>El Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#visualizando-el-contrafactual"><i class="fa fa-check"></i>Visualizando el Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#la-banda-sonora"><i class="fa fa-check"></i>La Banda Sonora</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#problema-fundamental-de-la-inferencia-causal"><i class="fa fa-check"></i>Problema Fundamental de la Inferencia Causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n"><i class="fa fa-check"></i>Establecer Causalidad (Deseo de Clonación)</a></li>
+<li class="chapter" data-level="1.0.1" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#video-recomendado-mastering-metrics"><i class="fa fa-check"></i><b>1.0.1</b> 🎥 Video recomendado: <em>Mastering Metrics</em></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a>
+<ul>
+<li class="chapter" data-level="1.0.2" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto"><i class="fa fa-check"></i><b>1.0.2</b> <strong>Ceteris Paribus: ¿Perfecto?</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="06-RCT2.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n"><i class="fa fa-check"></i>Macro local: definición y expansión</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros"><i class="fa fa-check"></i>Evaluar expresiones dentro de macros</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macro-con-texto"><i class="fa fa-check"></i>Macro con texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#macro-global-uso-y-precauci%C3%B3n"><i class="fa fa-check"></i>Macro global: uso y precaución</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#scalar-vs.-macro"><i class="fa fa-check"></i>Scalar vs. Macro</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-recomendado"><i class="fa fa-check"></i>🧩 Ejercicio recomendado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-foreach"><i class="fa fa-check"></i>Loop con <code>foreach</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-forvalues"><i class="fa fa-check"></i>Loop con <code>forvalues</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-while"><i class="fa fa-check"></i>Loop con <code>while</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados"><i class="fa fa-check"></i>🧠 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#estructura-b%C3%A1sica"><i class="fa fa-check"></i>Estructura básica</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-con-argumentos"><i class="fa fa-check"></i>Programas con argumentos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum"><i class="fa fa-check"></i>Tu programa original mejorado: <code>mysum</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#notas-importantes"><i class="fa fa-check"></i>Notas importantes</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados-1"><i class="fa fa-check"></i>🔧 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-postfile"><i class="fa fa-check"></i>¿Qué hace <code>postfile</code>?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize"><i class="fa fa-check"></i>Paso a paso: guardar medias con <code>summarize</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hicimos-aqu%C3%AD"><i class="fa fa-check"></i>¿Qué hicimos aquí?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-1"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-con-postfile"><i class="fa fa-check"></i>📦 Ejercicios con <code>postfile</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-al-programar-en-stata"><i class="fa fa-check"></i>Buenas prácticas al programar en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-de-repaso"><i class="fa fa-check"></i>🧠 Ejercicio de repaso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables"><i class="fa fa-check"></i>Iterar sobre lista de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="06-RCT2.html"><a href="#definici%C3%B3n-de-estimadores-resultados-potenciales-e-introducci%C3%B3n-al-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>3</b> 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección</a>
+<ul>
+<li class="chapter" data-level="" data-path="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><i class="fa fa-check"></i>🔹 Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>🔹 Parámetros de interés</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>🔹 ¿Por qué no es suficiente el estimador naïve?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>🔹 Sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>🔹 Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html"><i class="fa fa-check"></i><b>4</b> Estimadores Causales en Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas"><i class="fa fa-check"></i>📎 Descargas</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas-1"><i class="fa fa-check"></i>📎 Descargas</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="06-RCT2.html"><a href="#por-qu%C3%A9-la-asignaci%C3%B3n-aleatoria-elimina-el-sesgo"><i class="fa fa-check"></i><b>5</b> ¿Por qué la asignación aleatoria elimina el sesgo?</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>¿Qué hace la aleatorización?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#densidad-de-la-motivaci%C3%B3n-por-grupo"><i class="fa fa-check"></i>Densidad de la motivación por grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html"><i class="fa fa-check"></i><b>6</b> Experimentos Controlados RECETA</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#paso-1-dise%C3%B1ar-el-experimento"><i class="fa fa-check"></i>PASO 1) Diseñar el experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#paso-2-aleatorizar-la-asignaci%C3%B3n-stata"><i class="fa fa-check"></i>Paso 2) Aleatorizar la asignación (Stata)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-3-verificar-el-balance-de-covariables"><i class="fa fa-check"></i>PASO 3) Verificar el balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-4-estimar-el-efecto-del-tratamiento"><i class="fa fa-check"></i>PASO 4) Estimar el efecto del tratamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes"><i class="fa fa-check"></i>Asignación a nivel individual (dos muestras independientes)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#pruebas"><i class="fa fa-check"></i>Pruebas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="experimentos-controlados-receta" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Capitulo 6</span> Experimentos Controlados RECETA<a href="experimentos-controlados-receta.html#experimentos-controlados-receta" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="boxinfo">
+<p><strong>🎯 Metas de aprendizaje</strong></p>
+<ul>
+<li>Entender cómo hacer <strong>inferencia estadística</strong> con asignación aleatoria.<br />
+</li>
+<li>Discutir <strong>cuándo</strong> incluir controles y <strong>qué ocurre</strong> con la varianza/SE al incluirlos.<br />
+</li>
+<li>Traducir <strong>resultados potenciales</strong> a una <strong>regresión lineal</strong>.<br />
+</li>
+<li>Implementar <strong>diagnósticos de balance</strong>, <strong>efectos heterogéneos</strong> y <strong>reporte reproducible</strong>.</li>
+</ul>
+<div id="lecturas-1" class="section level2 unnumbered hasAnchor">
+<h2>📚 Lecturas<a href="experimentos-controlados-receta.html#lecturas-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Paper Alert:</strong> <a href="https://www.nber.org/papers/w24003">When Should You Adjust Standard Errors for Clustering? (NBER w24003)</a><br />
+</li>
+<li><strong>Teoría:</strong> <a href="http://economics.ozier.com/econ626/lec/econ626-L07-handout-2019.pdf">Jakiela &amp; Ozier — Handout</a><br />
+</li>
+<li><strong>Herramienta:</strong> <a href="https://www.povertyactionlab.org/resource/power-calculations">J-PAL — Power calculations</a></li>
+</ul>
+</div>
+</div>
+<p><em>1) Setup</em></p>
+<ul>
+<li>Unidades: <span class="math inline">\(N\)</span>.</li>
+<li>Tratamiento: <span class="math inline">\(D_i \in \{0,1\}\)</span>. Asignado de manera aleatoria.</li>
+<li>Resultados potenciales: <span class="math inline">\(Y_i(D=1),\, Y_i(D=0)\)</span>.</li>
+<li>Resultado observado:
+<span class="math display">\[
+Y_i \;=\; D_i\,Y_i(D=1) \;+\; (1-D_i)\,Y_i(D=0).
+\]</span></li>
+<li>Tamaños de muestra:
+<ul>
+<li>Tratados: <span class="math inline">\(N_1 = \sum_i \mathbb{1}\{D_i=1\}\)</span>.</li>
+<li>Control: <span class="math inline">\(N_0 = \sum_i \mathbb{1}\{D_i=0\}\)</span>.</li>
+</ul></li>
+</ul>
+<p><em>2) Supuestos</em></p>
+<ol style="list-style-type: decimal">
+<li><strong>Asignación aleatoria:</strong> cada unidad <span class="math inline">\(i\)</span> es asignada de manera independiente al tratamiento con probabilidad <span class="math inline">\(p\)</span>.
+<span class="math display">\[
+D_i \;\perp\; \{Y_i(1), Y_i(0)\}.
+\]</span></li>
+<li><strong>SUTVA</strong> (Stable Unit Treatment Value Assumption): no hay interferencia entre unidades ni versiones del tratamiento.<br />
+En español: no hay externalidades ni efectos de equilibrio general que cambien los resultados potenciales de otros individuos.</li>
+</ol>
+<p><em>3) Implicaciones y parámetros</em></p>
+<ul>
+<li><strong>ATE (efecto promedio):</strong>
+<span class="math display">\[
+\tau \;=\; \mathbb{E}\!\left[\,Y(D=1)-Y(D=0)\,\right].
+\]</span></li>
+<li><strong>Identificación con aleatorización:</strong>
+<span class="math display">\[
+\mathbb{E}[\,Y \mid D=1\,] - \mathbb{E}[\,Y \mid D=0\,] \;=\; \tau.
+\]</span></li>
+<li><strong>Estimador por diferencia de medias:</strong>
+<span class="math display">\[
+\hat{\tau} \;=\; \bar{Y}_{D=1}-\bar{Y}_{D=0}.
+\]</span></li>
+<li><strong>Estimador “naïve” sin aleatorización (descomposición):</strong>
+<span class="math display">\[
+\underbrace{\mathbb{E}[Y \mid D=1] - \mathbb{E}[Y \mid D=0]}_{\text{naïve}}
+\;=\;
+\underbrace{\tau}_{\text{efecto causal}}
+\;+\;
+\underbrace{\mathbb{E}[Y(0)\mid D=1] - \mathbb{E}[Y(0)\mid D=0]}_{\text{sesgo de selección}}.
+\]</span></li>
+</ul>
+<div id="paso-a-paso-para-un-rct" class="section level2 unnumbered hasAnchor">
+<h2>Paso a Paso para un RCT<a href="experimentos-controlados-receta.html#paso-a-paso-para-un-rct" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="paso-1-diseñar-el-experimento" class="section level3 unnumbered hasAnchor">
+<h3>PASO 1) Diseñar el experimento<a href="#paso-1-dise%C3%B1ar-el-experimento" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Definir la <strong>población objetivo</strong> y el <strong>tratamiento</strong>.</li>
+<li>Determinar el <strong>tamaño de muestra</strong> necesario para detectar un efecto significativo (usando <code>power</code> en Stata/R).</li>
+</ul>
+</div>
+<div id="paso-2-aleatorizar-la-asignación-stata" class="section level3 unnumbered hasAnchor">
+<h3>Paso 2) Aleatorizar la asignación (Stata)<a href="#paso-2-aleatorizar-la-asignaci%C3%B3n-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Abajo tienes varias formas de asignar tratamiento en Stata. Incluyo opciones con <code>runiform()</code> (base) y con el comando de SSC <code>randtreat</code> (estratificado, proporciones desiguales, clusters y manejo de <em>misfits</em>).</p>
+<blockquote>
+<p><strong>Regla de oro:</strong> fija una semilla reproducible y <em>guárdala</em> en el log/notas del proyecto.</p>
+</blockquote>
+<div class="sourceCode" id="cb45"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb45-1"><a href="experimentos-controlados-receta.html#cb45-1" tabindex="-1"></a>* Reproducibilidad</span>
+<span id="cb45-2"><a href="experimentos-controlados-receta.html#cb45-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20250813</span>
+<span id="cb45-3"><a href="experimentos-controlados-receta.html#cb45-3" tabindex="-1"></a><span class="kw">local</span> RNGSTATE = c(rngstate)   <span class="co">// guardar estado; opcionalmente escríbelo en tu log</span></span>
+<span id="cb45-4"><a href="experimentos-controlados-receta.html#cb45-4" tabindex="-1"></a><span class="kw">display</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;Seed guardada: `RNGSTATE&#39;&quot;</span></span></code></pre></div>
+<p><em>Bernoulli simple (50/50) con <code>runiform()</code></em></p>
+<p>Asigna tratamiento con probabilidad 0.5 a cada unidad.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb46-1"><a href="experimentos-controlados-receta.html#cb46-1" tabindex="-1"></a>* Supón que tienes un id por fila</span>
+<span id="cb46-2"><a href="experimentos-controlados-receta.html#cb46-2" tabindex="-1"></a><span class="kw">sort</span> id</span>
+<span id="cb46-3"><a href="experimentos-controlados-receta.html#cb46-3" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> u = runiform()</span>
+<span id="cb46-4"><a href="experimentos-controlados-receta.html#cb46-4" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D = (u &lt; 0.5)           <span class="co">// 1=tratado, 0=control</span></span>
+<span id="cb46-5"><a href="experimentos-controlados-receta.html#cb46-5" tabindex="-1"></a><span class="kw">tab</span> D</span>
+<span id="cb46-6"><a href="experimentos-controlados-receta.html#cb46-6" tabindex="-1"></a><span class="kw">drop</span> u</span></code></pre></div>
+<p><strong>Cambio de proporción (p=0.30):</strong></p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb47-1"><a href="experimentos-controlados-receta.html#cb47-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> u = runiform()</span>
+<span id="cb47-2"><a href="experimentos-controlados-receta.html#cb47-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D = (u &lt; 0.30)</span>
+<span id="cb47-3"><a href="experimentos-controlados-receta.html#cb47-3" tabindex="-1"></a><span class="kw">tab</span> D</span>
+<span id="cb47-4"><a href="experimentos-controlados-receta.html#cb47-4" tabindex="-1"></a><span class="kw">drop</span> u</span></code></pre></div>
+<p><strong>Asignación con conteo exacto de tratados (p.ej., 40% exacto)</strong></p>
+<p>Asegura exactamente <code>round(N*0.40)</code> tratados.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb48-1"><a href="experimentos-controlados-receta.html#cb48-1" tabindex="-1"></a><span class="fu">count</span></span>
+<span id="cb48-2"><a href="experimentos-controlados-receta.html#cb48-2" tabindex="-1"></a><span class="kw">local</span> <span class="kw">N</span>      = <span class="fu">r</span>(<span class="kw">N</span>)</span>
+<span id="cb48-3"><a href="experimentos-controlados-receta.html#cb48-3" tabindex="-1"></a><span class="kw">local</span> Ntr    = <span class="fu">round</span>(<span class="ot">`N&#39;</span>*0.40)   <span class="co">// número exacto de tratados</span></span>
+<span id="cb48-4"><a href="experimentos-controlados-receta.html#cb48-4" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> u = runiform()</span>
+<span id="cb48-5"><a href="experimentos-controlados-receta.html#cb48-5" tabindex="-1"></a><span class="kw">sort</span> u</span>
+<span id="cb48-6"><a href="experimentos-controlados-receta.html#cb48-6" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D   = (<span class="dt">_n</span> &lt;= <span class="ot">`Ntr&#39;</span>)</span>
+<span id="cb48-7"><a href="experimentos-controlados-receta.html#cb48-7" tabindex="-1"></a><span class="kw">tab</span> D</span>
+<span id="cb48-8"><a href="experimentos-controlados-receta.html#cb48-8" tabindex="-1"></a><span class="kw">drop</span> u</span></code></pre></div>
+<p><strong>Estratificada</strong> (bloques) con <code>runiform()</code></p>
+<p>Mantén la proporción deseada <strong>dentro de cada estrato</strong> (ej., por <code>mujer</code> × <code>programa</code>).</p>
+<blockquote>
+<p>Con <code>round()</code> obtienes conteo <strong>exacto por estrato</strong>; globalmente puede variar levemente si los tamaños de estrato son impares.</p>
+</blockquote>
+<div class="sourceCode" id="cb49"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb49-1"><a href="experimentos-controlados-receta.html#cb49-1" tabindex="-1"></a><span class="kw">egen</span> <span class="kw">long</span> <span class="kw">strata</span> = <span class="fu">group</span>(mujer programa), <span class="kw">label</span></span>
+<span id="cb49-2"><a href="experimentos-controlados-receta.html#cb49-2" tabindex="-1"></a><span class="kw">bys</span> <span class="kw">strata</span>: <span class="kw">gen</span> <span class="kw">double</span> u = runiform()</span>
+<span id="cb49-3"><a href="experimentos-controlados-receta.html#cb49-3" tabindex="-1"></a><span class="kw">bys</span> <span class="kw">strata</span> (u): <span class="kw">gen</span> <span class="kw">byte</span> D = (<span class="dt">_n</span> &lt;= <span class="fu">round</span>(_N*0.50))   <span class="co">// 50/50 exacto en cada estrato</span></span>
+<span id="cb49-4"><a href="experimentos-controlados-receta.html#cb49-4" tabindex="-1"></a><span class="kw">tab</span> D</span>
+<span id="cb49-5"><a href="experimentos-controlados-receta.html#cb49-5" tabindex="-1"></a><span class="kw">by</span> <span class="kw">strata</span>: <span class="kw">tab</span> D</span>
+<span id="cb49-6"><a href="experimentos-controlados-receta.html#cb49-6" tabindex="-1"></a><span class="kw">drop</span> u</span></code></pre></div>
+<p><strong>Proporción distinta por estrato (p.ej., 40%):</strong></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb50-1"><a href="experimentos-controlados-receta.html#cb50-1" tabindex="-1"></a><span class="kw">bys</span> <span class="kw">strata</span>: <span class="kw">gen</span> <span class="kw">double</span> u = runiform()</span>
+<span id="cb50-2"><a href="experimentos-controlados-receta.html#cb50-2" tabindex="-1"></a><span class="kw">bys</span> <span class="kw">strata</span> (u): <span class="kw">gen</span> <span class="kw">byte</span> D = (<span class="dt">_n</span> &lt;= <span class="fu">round</span>(_N*0.40))</span>
+<span id="cb50-3"><a href="experimentos-controlados-receta.html#cb50-3" tabindex="-1"></a><span class="kw">by</span> <span class="kw">strata</span>: <span class="kw">tab</span> D</span>
+<span id="cb50-4"><a href="experimentos-controlados-receta.html#cb50-4" tabindex="-1"></a><span class="kw">drop</span> u</span></code></pre></div>
+<p><strong>Cluster</strong> (aleatoriza a nivel del cluster y la pasa a individuos)</p>
+<p>Ej.: clusters en <code>escuela</code>.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb51-1"><a href="experimentos-controlados-receta.html#cb51-1" tabindex="-1"></a>* Una fila por <span class="kw">cluster</span></span>
+<span id="cb51-2"><a href="experimentos-controlados-receta.html#cb51-2" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb51-3"><a href="experimentos-controlados-receta.html#cb51-3" tabindex="-1"></a><span class="kw">keep</span> escuela</span>
+<span id="cb51-4"><a href="experimentos-controlados-receta.html#cb51-4" tabindex="-1"></a><span class="kw">duplicates</span> <span class="kw">drop</span></span>
+<span id="cb51-5"><a href="experimentos-controlados-receta.html#cb51-5" tabindex="-1"></a></span>
+<span id="cb51-6"><a href="experimentos-controlados-receta.html#cb51-6" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> u = runiform()</span>
+<span id="cb51-7"><a href="experimentos-controlados-receta.html#cb51-7" tabindex="-1"></a><span class="kw">sort</span> u</span>
+<span id="cb51-8"><a href="experimentos-controlados-receta.html#cb51-8" tabindex="-1"></a>* 50% <span class="kw">de</span> escuelas tratadas</span>
+<span id="cb51-9"><a href="experimentos-controlados-receta.html#cb51-9" tabindex="-1"></a><span class="fu">count</span></span>
+<span id="cb51-10"><a href="experimentos-controlados-receta.html#cb51-10" tabindex="-1"></a><span class="kw">local</span> C = <span class="fu">r</span>(<span class="kw">N</span>)</span>
+<span id="cb51-11"><a href="experimentos-controlados-receta.html#cb51-11" tabindex="-1"></a><span class="kw">local</span> Ctr = <span class="fu">round</span>(<span class="ot">`C&#39;</span>*0.50)</span>
+<span id="cb51-12"><a href="experimentos-controlados-receta.html#cb51-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D_cluster = (<span class="dt">_n</span> &lt;= <span class="ot">`Ctr&#39;</span>)</span>
+<span id="cb51-13"><a href="experimentos-controlados-receta.html#cb51-13" tabindex="-1"></a><span class="kw">tempfile</span> cl</span>
+<span id="cb51-14"><a href="experimentos-controlados-receta.html#cb51-14" tabindex="-1"></a><span class="kw">save</span> <span class="ot">`cl&#39;</span>, <span class="kw">replace</span></span>
+<span id="cb51-15"><a href="experimentos-controlados-receta.html#cb51-15" tabindex="-1"></a><span class="kw">restore</span></span>
+<span id="cb51-16"><a href="experimentos-controlados-receta.html#cb51-16" tabindex="-1"></a></span>
+<span id="cb51-17"><a href="experimentos-controlados-receta.html#cb51-17" tabindex="-1"></a>* Trae la asignación al nivel individual</span>
+<span id="cb51-18"><a href="experimentos-controlados-receta.html#cb51-18" tabindex="-1"></a><span class="kw">merge</span> <span class="fu">m</span>:1 escuela <span class="kw">using</span> <span class="ot">`cl&#39;</span>, <span class="kw">keep</span>(<span class="fu">match</span> master) nogen</span>
+<span id="cb51-19"><a href="experimentos-controlados-receta.html#cb51-19" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D = D_cluster</span>
+<span id="cb51-20"><a href="experimentos-controlados-receta.html#cb51-20" tabindex="-1"></a><span class="kw">tab</span> D</span></code></pre></div>
+<p>Usando <strong><code>randtreat</code></strong> (SSC): multi-brazos, proporciones desiguales, estratos y <em>misfits</em></p>
+<p><strong>Instalación</strong></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb52-1"><a href="experimentos-controlados-receta.html#cb52-1" tabindex="-1"></a><span class="kw">ssc</span> install randtreat, <span class="kw">replace</span></span></code></pre></div>
+<p><strong>Binario 50/50 (sin estratos)</strong></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb53-1"><a href="experimentos-controlados-receta.html#cb53-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(D) multiple(2) setseed(20250813)</span>
+<span id="cb53-2"><a href="experimentos-controlados-receta.html#cb53-2" tabindex="-1"></a><span class="kw">tab</span> D</span></code></pre></div>
+<p><strong>Binario 50/50 dentro de estratos (<code>mujer</code> × <code>programa</code>)</strong></p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb54-1"><a href="experimentos-controlados-receta.html#cb54-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(D) multiple(2) <span class="kw">strata</span>(mujer programa) setseed(20250813)</span>
+<span id="cb54-2"><a href="experimentos-controlados-receta.html#cb54-2" tabindex="-1"></a><span class="kw">by</span> mujer programa: <span class="kw">tab</span> D</span></code></pre></div>
+<p>** Proporciones desiguales (30% tratado, 70% control)**</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb55-1"><a href="experimentos-controlados-receta.html#cb55-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(D) multiple(2) unequal(0.30 0.70) setseed(20250813)</span>
+<span id="cb55-2"><a href="experimentos-controlados-receta.html#cb55-2" tabindex="-1"></a><span class="kw">tab</span> D</span></code></pre></div>
+<p>** Multi-brazo (T1/T2/C = 0.4/0.4/0.2) con estratos**</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb56-1"><a href="experimentos-controlados-receta.html#cb56-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(arm) multiple(3) unequal(0.40 0.40 0.20) <span class="co">///</span></span>
+<span id="cb56-2"><a href="experimentos-controlados-receta.html#cb56-2" tabindex="-1"></a>    <span class="kw">strata</span>(mujer programa) setseed(20250813)</span>
+<span id="cb56-3"><a href="experimentos-controlados-receta.html#cb56-3" tabindex="-1"></a><span class="kw">tab</span> arm</span>
+<span id="cb56-4"><a href="experimentos-controlados-receta.html#cb56-4" tabindex="-1"></a><span class="kw">by</span> mujer programa: <span class="kw">tab</span> arm</span></code></pre></div>
+<p><strong>Manejo de <em>misfits</em></strong>
+Cuando el tamaño de estrato no es divisible por los brazos/proporciones, usa <code>misfits()</code>:</p>
+<ul>
+<li><code>misfits(strata)</code> o <code>misfits(wstrata)</code>: resuelve dentro de cada estrato (ponderado o no).</li>
+<li><code>misfits(global)</code> o <code>misfits(wglobal)</code>: resuelve a nivel global priorizando las proporciones totales.</li>
+<li><code>misfits(missing)</code>: deja <em>misfits</em> sin asignar para que los decidas manualmente.</li>
+</ul>
+<div class="sourceCode" id="cb57"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb57-1"><a href="experimentos-controlados-receta.html#cb57-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(arm) multiple(3) unequal(0.40 0.40 0.20) <span class="co">///</span></span>
+<span id="cb57-2"><a href="experimentos-controlados-receta.html#cb57-2" tabindex="-1"></a>    <span class="kw">strata</span>(mujer programa) misfits(wstrata) setseed(20250813)</span></code></pre></div>
+<p><strong>Forzar número exacto de tratados totales</strong> (binario)</p>
+<blockquote>
+<p>Útil si necesitas exactamente <code>N_t</code> tratados (no solo proporción).</p>
+</blockquote>
+<div class="sourceCode" id="cb58"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb58-1"><a href="experimentos-controlados-receta.html#cb58-1" tabindex="-1"></a>* Por ejemplo, exactamente 50 tratados en <span class="kw">total</span>:</span>
+<span id="cb58-2"><a href="experimentos-controlados-receta.html#cb58-2" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(D) multiple(2) ntreated(50) setseed(20250813)</span>
+<span id="cb58-3"><a href="experimentos-controlados-receta.html#cb58-3" tabindex="-1"></a><span class="kw">tab</span> D</span></code></pre></div>
+<p><strong>Cluster + <code>randtreat</code></strong>
+Ejecuta <code>randtreat</code> sobre los <strong>clusters únicos</strong> y luego une a individuos.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb59-1"><a href="experimentos-controlados-receta.html#cb59-1" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb59-2"><a href="experimentos-controlados-receta.html#cb59-2" tabindex="-1"></a><span class="kw">keep</span> escuela mujer programa</span>
+<span id="cb59-3"><a href="experimentos-controlados-receta.html#cb59-3" tabindex="-1"></a><span class="kw">duplicates</span> <span class="kw">drop</span></span>
+<span id="cb59-4"><a href="experimentos-controlados-receta.html#cb59-4" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="experimentos-controlados-receta.html#cb59-5" tabindex="-1"></a>* 2 brazos 50/50 por estratos <span class="kw">de</span> escuela (<span class="fu">y</span> opcionalmente otras):</span>
+<span id="cb59-6"><a href="experimentos-controlados-receta.html#cb59-6" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(Dcl) multiple(2) <span class="kw">strata</span>(mujer programa) setseed(20250813)</span>
+<span id="cb59-7"><a href="experimentos-controlados-receta.html#cb59-7" tabindex="-1"></a><span class="kw">tempfile</span> cl</span>
+<span id="cb59-8"><a href="experimentos-controlados-receta.html#cb59-8" tabindex="-1"></a><span class="kw">save</span> <span class="ot">`cl&#39;</span>, <span class="kw">replace</span></span>
+<span id="cb59-9"><a href="experimentos-controlados-receta.html#cb59-9" tabindex="-1"></a><span class="kw">restore</span></span>
+<span id="cb59-10"><a href="experimentos-controlados-receta.html#cb59-10" tabindex="-1"></a></span>
+<span id="cb59-11"><a href="experimentos-controlados-receta.html#cb59-11" tabindex="-1"></a><span class="kw">merge</span> <span class="fu">m</span>:1 escuela <span class="kw">using</span> <span class="ot">`cl&#39;</span>, nogen</span>
+<span id="cb59-12"><a href="experimentos-controlados-receta.html#cb59-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D = Dcl</span>
+<span id="cb59-13"><a href="experimentos-controlados-receta.html#cb59-13" tabindex="-1"></a><span class="kw">tab</span> D</span></code></pre></div>
+</div>
+<div id="paso-3-verificar-el-balance-de-covariables" class="section level3 unnumbered hasAnchor">
+<h3>PASO 3) Verificar el balance de covariables<a href="experimentos-controlados-receta.html#paso-3-verificar-el-balance-de-covariables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb60"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb60-1"><a href="experimentos-controlados-receta.html#cb60-1" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;data.dta&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb60-2"><a href="experimentos-controlados-receta.html#cb60-2" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="experimentos-controlados-receta.html#cb60-3" tabindex="-1"></a>* Tratamiento 1=B, 0=A</span>
+<span id="cb60-4"><a href="experimentos-controlados-receta.html#cb60-4" tabindex="-1"></a><span class="kw">gen</span> D = (grupo == <span class="st">&quot;B&quot;</span>)</span>
+<span id="cb60-5"><a href="experimentos-controlados-receta.html#cb60-5" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> Dlbl 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratado&quot;</span></span>
+<span id="cb60-6"><a href="experimentos-controlados-receta.html#cb60-6" tabindex="-1"></a><span class="kw">label</span> <span class="kw">values</span> D Dlbl</span>
+<span id="cb60-7"><a href="experimentos-controlados-receta.html#cb60-7" tabindex="-1"></a></span>
+<span id="cb60-8"><a href="experimentos-controlados-receta.html#cb60-8" tabindex="-1"></a>* Outcome <span class="fu">y</span> <span class="fu">y</span> controles</span>
+<span id="cb60-9"><a href="experimentos-controlados-receta.html#cb60-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>        = resultado</span>
+<span id="cb60-10"><a href="experimentos-controlados-receta.html#cb60-10" tabindex="-1"></a><span class="kw">gen</span> mujer    = (genero == <span class="st">&quot;Mujer&quot;</span>)</span>
+<span id="cb60-11"><a href="experimentos-controlados-receta.html#cb60-11" tabindex="-1"></a><span class="kw">gen</span> pregrado = (programa == <span class="st">&quot;Pregrado&quot;</span>)</span>
+<span id="cb60-12"><a href="experimentos-controlados-receta.html#cb60-12" tabindex="-1"></a><span class="kw">gen</span> maestria = (programa == <span class="st">&quot;Maestría&quot;</span>)</span>
+<span id="cb60-13"><a href="experimentos-controlados-receta.html#cb60-13" tabindex="-1"></a></span>
+<span id="cb60-14"><a href="experimentos-controlados-receta.html#cb60-14" tabindex="-1"></a><span class="kw">global</span> X edad mujer libros pregrado maestria</span></code></pre></div>
+<ul>
+<li>Programa de diferencia de medias con t-test y opción de guardar resultados en un archivo .dta**</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><strong>Pruebas univariadas (t‐tests):</strong> comparar medias de cada covariable <span class="math inline">\(X\)</span> entre <span class="math inline">\(D=1\)</span> y <span class="math inline">\(D=0\)</span>.<br />
+Objetivo: <strong>no rechazar</strong> que las medias son iguales.</li>
+<li><strong>Prueba conjunta (F‐test):</strong> regresión de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(X\)</span> (LPM) y test conjunto de significancia de <span class="math inline">\(X\)</span>.</li>
+<li><strong>Modelos binarios:</strong> <code>logit/probit</code> de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(X\)</span>; evaluar razón de verosimilitud o <span class="math inline">\(\chi^2\)</span> conjunta.</li>
+<li><strong>Si se rechaza balance:</strong> revisar procedimiento (bloqueos/estratos, reasignación, control por <span class="math inline">\(X\)</span> pretratamiento en la estimación).</li>
+</ol>
+<div class="sourceCode" id="cb61"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb61-1"><a href="experimentos-controlados-receta.html#cb61-1" tabindex="-1"></a>cap <span class="kw">program</span> <span class="kw">drop</span> difmedias</span>
+<span id="cb61-2"><a href="experimentos-controlados-receta.html#cb61-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> difmedias, rclass</span>
+<span id="cb61-3"><a href="experimentos-controlados-receta.html#cb61-3" tabindex="-1"></a>    <span class="kw">version</span> 18</span>
+<span id="cb61-4"><a href="experimentos-controlados-receta.html#cb61-4" tabindex="-1"></a>    <span class="kw">syntax</span> <span class="kw">varlist</span>(<span class="fu">min</span>=1) [, BY(varname) SAVEPOST(<span class="fu">string</span> asis)]</span>
+<span id="cb61-5"><a href="experimentos-controlados-receta.html#cb61-5" tabindex="-1"></a>    <span class="kw">if</span> (<span class="st">&quot;`by&#39;&quot;</span>==<span class="st">&quot;&quot;</span>) {</span>
+<span id="cb61-6"><a href="experimentos-controlados-receta.html#cb61-6" tabindex="-1"></a>        <span class="kw">di</span> <span class="kw">as</span> err <span class="st">&quot;Necesitas especificar , by(varname).&quot;</span></span>
+<span id="cb61-7"><a href="experimentos-controlados-receta.html#cb61-7" tabindex="-1"></a>        <span class="kw">exit</span> 198</span>
+<span id="cb61-8"><a href="experimentos-controlados-receta.html#cb61-8" tabindex="-1"></a>    }</span>
+<span id="cb61-9"><a href="experimentos-controlados-receta.html#cb61-9" tabindex="-1"></a>    <span class="kw">local</span> vars <span class="ot">`varlist&#39;</span></span>
+<span id="cb61-10"><a href="experimentos-controlados-receta.html#cb61-10" tabindex="-1"></a></span>
+<span id="cb61-11"><a href="experimentos-controlados-receta.html#cb61-11" tabindex="-1"></a>    <span class="kw">local</span> do_post = 0</span>
+<span id="cb61-12"><a href="experimentos-controlados-receta.html#cb61-12" tabindex="-1"></a>    <span class="kw">if</span> (<span class="st">&quot;`savepost&#39;&quot;</span>!=<span class="st">&quot;&quot;</span>) <span class="kw">local</span> do_post = 1</span>
+<span id="cb61-13"><a href="experimentos-controlados-receta.html#cb61-13" tabindex="-1"></a>    <span class="kw">tempname</span> posth</span>
+<span id="cb61-14"><a href="experimentos-controlados-receta.html#cb61-14" tabindex="-1"></a>    <span class="kw">if</span> <span class="ot">`do_post&#39;</span> {</span>
+<span id="cb61-15"><a href="experimentos-controlados-receta.html#cb61-15" tabindex="-1"></a>        <span class="kw">postfile</span> <span class="ot">`posth&#39;</span> str32 <span class="kw">variable</span> <span class="co">///</span></span>
+<span id="cb61-16"><a href="experimentos-controlados-receta.html#cb61-16" tabindex="-1"></a>            <span class="kw">double</span> mean_T mean_C <span class="fu">diff</span> tstat pval se sd_T sd_C N_T N_C <span class="co">///</span></span>
+<span id="cb61-17"><a href="experimentos-controlados-receta.html#cb61-17" tabindex="-1"></a>            <span class="kw">using</span> <span class="st">&quot;`savepost&#39;&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb61-18"><a href="experimentos-controlados-receta.html#cb61-18" tabindex="-1"></a>    }</span>
+<span id="cb61-19"><a href="experimentos-controlados-receta.html#cb61-19" tabindex="-1"></a></span>
+<span id="cb61-20"><a href="experimentos-controlados-receta.html#cb61-20" tabindex="-1"></a>    <span class="kw">di</span> <span class="kw">as</span> txt <span class="st">&quot;Var{col 22}Mean_T{col 33}Mean_C{col 44}Diff{col 55}t{col 66}p&quot;</span></span>
+<span id="cb61-21"><a href="experimentos-controlados-receta.html#cb61-21" tabindex="-1"></a>    <span class="kw">foreach</span> v <span class="kw">of</span> <span class="kw">local</span> vars {</span>
+<span id="cb61-22"><a href="experimentos-controlados-receta.html#cb61-22" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">ttest</span> <span class="ot">`v&#39;</span>, <span class="kw">by</span>(<span class="ot">`by&#39;</span>)</span>
+<span id="cb61-23"><a href="experimentos-controlados-receta.html#cb61-23" tabindex="-1"></a></span>
+<span id="cb61-24"><a href="experimentos-controlados-receta.html#cb61-24" tabindex="-1"></a>        <span class="kw">local</span> mu1 = <span class="fu">r</span>(mu_1)</span>
+<span id="cb61-25"><a href="experimentos-controlados-receta.html#cb61-25" tabindex="-1"></a>        <span class="kw">local</span> mu2 = <span class="fu">r</span>(mu_2)</span>
+<span id="cb61-26"><a href="experimentos-controlados-receta.html#cb61-26" tabindex="-1"></a>        <span class="kw">local</span> sd1 = <span class="fu">r</span>(sd_1)</span>
+<span id="cb61-27"><a href="experimentos-controlados-receta.html#cb61-27" tabindex="-1"></a>        <span class="kw">local</span> sd2 = <span class="fu">r</span>(sd_2)</span>
+<span id="cb61-28"><a href="experimentos-controlados-receta.html#cb61-28" tabindex="-1"></a>        <span class="kw">local</span> N1  = <span class="fu">r</span>(N_1)</span>
+<span id="cb61-29"><a href="experimentos-controlados-receta.html#cb61-29" tabindex="-1"></a>        <span class="kw">local</span> N2  = <span class="fu">r</span>(N_2)</span>
+<span id="cb61-30"><a href="experimentos-controlados-receta.html#cb61-30" tabindex="-1"></a>        <span class="kw">local</span> t   = <span class="fu">r</span>(t)</span>
+<span id="cb61-31"><a href="experimentos-controlados-receta.html#cb61-31" tabindex="-1"></a>        <span class="kw">local</span> se  = <span class="fu">r</span>(se)</span>
+<span id="cb61-32"><a href="experimentos-controlados-receta.html#cb61-32" tabindex="-1"></a>        <span class="kw">local</span> <span class="kw">p</span>   = <span class="fu">r</span>(<span class="kw">p</span>)</span>
+<span id="cb61-33"><a href="experimentos-controlados-receta.html#cb61-33" tabindex="-1"></a></span>
+<span id="cb61-34"><a href="experimentos-controlados-receta.html#cb61-34" tabindex="-1"></a>        <span class="kw">local</span> mean_T = <span class="ot">`mu2&#39;</span></span>
+<span id="cb61-35"><a href="experimentos-controlados-receta.html#cb61-35" tabindex="-1"></a>        <span class="kw">local</span> mean_C = <span class="ot">`mu1&#39;</span></span>
+<span id="cb61-36"><a href="experimentos-controlados-receta.html#cb61-36" tabindex="-1"></a>        <span class="kw">local</span> <span class="fu">diff</span>   = <span class="ot">`mu2&#39;</span> - <span class="ot">`mu1&#39;</span></span>
+<span id="cb61-37"><a href="experimentos-controlados-receta.html#cb61-37" tabindex="-1"></a></span>
+<span id="cb61-38"><a href="experimentos-controlados-receta.html#cb61-38" tabindex="-1"></a>        <span class="kw">di</span> <span class="kw">as</span> res <span class="st">&quot;`v&#39;&quot;</span> <span class="st">&quot;{col 22}&quot;</span> %9.3f <span class="ot">`mean_T&#39;</span> <span class="st">&quot;{col 33}&quot;</span> %9.3f <span class="ot">`mean_C&#39;</span> <span class="st">&quot;{col 44}&quot;</span> %9.3f <span class="ot">`diff&#39;</span> <span class="st">&quot;{col 55}&quot;</span> %9.3f <span class="ot">`t&#39;</span> <span class="st">&quot;{col 66}&quot;</span> %9.3f <span class="ot">`p&#39;</span></span>
+<span id="cb61-39"><a href="experimentos-controlados-receta.html#cb61-39" tabindex="-1"></a></span>
+<span id="cb61-40"><a href="experimentos-controlados-receta.html#cb61-40" tabindex="-1"></a>        <span class="kw">if</span> <span class="ot">`do_post&#39;</span> {</span>
+<span id="cb61-41"><a href="experimentos-controlados-receta.html#cb61-41" tabindex="-1"></a>            <span class="kw">post</span> <span class="ot">`posth&#39;</span> (<span class="st">&quot;`v&#39;&quot;</span>) (<span class="ot">`mean_T&#39;</span>) (<span class="ot">`mean_C&#39;</span>) (<span class="ot">`diff&#39;</span>) (<span class="ot">`t&#39;</span>) (<span class="ot">`p&#39;</span>) (<span class="ot">`se&#39;</span>) (<span class="ot">`sd2&#39;</span>) (<span class="ot">`sd1&#39;</span>) (<span class="ot">`N2&#39;</span>) (<span class="ot">`N1&#39;</span>)</span>
+<span id="cb61-42"><a href="experimentos-controlados-receta.html#cb61-42" tabindex="-1"></a>        }</span>
+<span id="cb61-43"><a href="experimentos-controlados-receta.html#cb61-43" tabindex="-1"></a>    }</span>
+<span id="cb61-44"><a href="experimentos-controlados-receta.html#cb61-44" tabindex="-1"></a>    <span class="kw">if</span> <span class="ot">`do_post&#39;</span> <span class="kw">postclose</span> <span class="ot">`posth&#39;</span></span>
+<span id="cb61-45"><a href="experimentos-controlados-receta.html#cb61-45" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb61-46"><a href="experimentos-controlados-receta.html#cb61-46" tabindex="-1"></a></span>
+<span id="cb61-47"><a href="experimentos-controlados-receta.html#cb61-47" tabindex="-1"></a></span>
+<span id="cb61-48"><a href="experimentos-controlados-receta.html#cb61-48" tabindex="-1"></a>* Balance <span class="kw">de</span> X</span>
+<span id="cb61-49"><a href="experimentos-controlados-receta.html#cb61-49" tabindex="-1"></a>difmedias <span class="ot">$X</span>, <span class="kw">by</span>(D) savepost(<span class="st">&quot;Table_Balance_raw.dta&quot;</span>)</span>
+<span id="cb61-50"><a href="experimentos-controlados-receta.html#cb61-50" tabindex="-1"></a></span>
+<span id="cb61-51"><a href="experimentos-controlados-receta.html#cb61-51" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;Table_Balance_raw.dta&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb61-52"><a href="experimentos-controlados-receta.html#cb61-52" tabindex="-1"></a><span class="kw">order</span> <span class="kw">variable</span> mean_T mean_C <span class="fu">diff</span> tstat pval se sd_T sd_C N_T N_C</span>
+<span id="cb61-53"><a href="experimentos-controlados-receta.html#cb61-53" tabindex="-1"></a><span class="kw">export</span> excel <span class="kw">using</span> <span class="st">&quot;Table_Balance_raw.xlsx&quot;</span>, firstrow(variables) <span class="kw">replace</span></span>
+<span id="cb61-54"><a href="experimentos-controlados-receta.html#cb61-54" tabindex="-1"></a></span>
+<span id="cb61-55"><a href="experimentos-controlados-receta.html#cb61-55" tabindex="-1"></a>* ALTERNATIVAS </span>
+<span id="cb61-56"><a href="experimentos-controlados-receta.html#cb61-56" tabindex="-1"></a>cap which iebaltab</span>
+<span id="cb61-57"><a href="experimentos-controlados-receta.html#cb61-57" tabindex="-1"></a><span class="kw">if</span> <span class="dt">_rc</span> <span class="kw">ssc</span> install ietoolkit, <span class="kw">replace</span></span>
+<span id="cb61-58"><a href="experimentos-controlados-receta.html#cb61-58" tabindex="-1"></a></span>
+<span id="cb61-59"><a href="experimentos-controlados-receta.html#cb61-59" tabindex="-1"></a>iebaltab <span class="ot">$X</span>, grpvar(D) control(0) rowvarlabels ftest <span class="co">///</span></span>
+<span id="cb61-60"><a href="experimentos-controlados-receta.html#cb61-60" tabindex="-1"></a>     savexlsx(<span class="st">&quot;Table_Balance.xlsx&quot;</span>) <span class="kw">replace</span> <span class="kw">format</span>(%9.3f)</span>
+<span id="cb61-61"><a href="experimentos-controlados-receta.html#cb61-61" tabindex="-1"></a></span>
+<span id="cb61-62"><a href="experimentos-controlados-receta.html#cb61-62" tabindex="-1"></a>eststo <span class="kw">clear</span></span>
+<span id="cb61-63"><a href="experimentos-controlados-receta.html#cb61-63" tabindex="-1"></a>eststo: <span class="kw">reg</span>   D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb61-64"><a href="experimentos-controlados-receta.html#cb61-64" tabindex="-1"></a><span class="kw">test</span> <span class="ot">$X</span></span>
+<span id="cb61-65"><a href="experimentos-controlados-receta.html#cb61-65" tabindex="-1"></a>eststo: <span class="kw">logit</span> D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb61-66"><a href="experimentos-controlados-receta.html#cb61-66" tabindex="-1"></a>eststo: <span class="kw">probit</span> D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb61-67"><a href="experimentos-controlados-receta.html#cb61-67" tabindex="-1"></a></span>
+<span id="cb61-68"><a href="experimentos-controlados-receta.html#cb61-68" tabindex="-1"></a>esttab, se <span class="kw">star</span>(* 0.10 ** 0.05 *** 0.01) <span class="co">///</span></span>
+<span id="cb61-69"><a href="experimentos-controlados-receta.html#cb61-69" tabindex="-1"></a>    <span class="kw">stats</span>(<span class="kw">N</span> r2, fmt(%9.0g %9.3f) labels(<span class="st">&quot;N&quot;</span> <span class="st">&quot;R2&quot;</span>)) <span class="co">///</span></span>
+<span id="cb61-70"><a href="experimentos-controlados-receta.html#cb61-70" tabindex="-1"></a>    nomtitle <span class="kw">compress</span></span></code></pre></div>
+</div>
+<div id="paso-4-estimar-el-efecto-del-tratamiento" class="section level3 unnumbered hasAnchor">
+<h3>PASO 4) Estimar el efecto del tratamiento<a href="experimentos-controlados-receta.html#paso-4-estimar-el-efecto-del-tratamiento" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[
+Y_i \;=\; \alpha \;+\; \tau D_i \;+\; \varepsilon_i.
+\]</span>
+- Bajo aleatorización, <span class="math inline">\(\hat{\tau}_{OLS}\)</span> es insesgado y coincide con la diferencia de medias.</p>
+<p>Sea <span class="math inline">\(D\)</span> la columna binaria (0/1) y <span class="math inline">\(\iota\)</span> el vector de unos. Entonces, en <span class="math inline">\(Y = \alpha \iota + \tau D + \varepsilon\)</span>, se tiene:
+<span class="math display">\[
+\hat{\tau}
+\;=\;
+\bar{Y}_1 - \bar{Y}_0.
+\]</span></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb62-1"><a href="experimentos-controlados-receta.html#cb62-1" tabindex="-1"></a>eststo <span class="kw">clear</span></span>
+<span id="cb62-2"><a href="experimentos-controlados-receta.html#cb62-2" tabindex="-1"></a>eststo m1: <span class="kw">reg</span> <span class="fu">y</span> D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb62-3"><a href="experimentos-controlados-receta.html#cb62-3" tabindex="-1"></a>eststo m2: <span class="kw">reg</span> <span class="fu">y</span> D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb62-4"><a href="experimentos-controlados-receta.html#cb62-4" tabindex="-1"></a></span>
+<span id="cb62-5"><a href="experimentos-controlados-receta.html#cb62-5" tabindex="-1"></a>esttab m1 m2, se <span class="kw">star</span>(* 0.10 ** 0.05 *** 0.01) <span class="co">///</span></span>
+<span id="cb62-6"><a href="experimentos-controlados-receta.html#cb62-6" tabindex="-1"></a>    <span class="kw">stats</span>(<span class="kw">N</span> r2, fmt(%9.0g %9.3f) labels(<span class="st">&quot;N&quot;</span> <span class="st">&quot;R2&quot;</span>)) <span class="co">///</span></span>
+<span id="cb62-7"><a href="experimentos-controlados-receta.html#cb62-7" tabindex="-1"></a>    b(%9.4f) <span class="kw">compress</span> nonote <span class="co">///</span></span>
+<span id="cb62-8"><a href="experimentos-controlados-receta.html#cb62-8" tabindex="-1"></a>    <span class="bn">title</span>(<span class="st">&quot;Efecto del tratamiento con y sin controles&quot;</span>)</span></code></pre></div>
+<div class="boxnote">
+<p>Interpretación según escala de <span class="math inline">\(Y\)</span></p>
+<ol style="list-style-type: decimal">
+<li><strong><span class="math inline">\(Y\)</span> en niveles (continuo):</strong> <span class="math inline">\(\hat{\tau}\)</span> es diferencia de unidades de <span class="math inline">\(Y\)</span> entre tratados y control.</li>
+<li><strong><span class="math inline">\(Y\)</span> en logaritmos:</strong> <span class="math inline">\(\hat{\tau}\)</span> es una <strong>semi-elasticidad</strong>; el efecto porcentual aproximado es <span class="math inline">\(100\times \hat{\tau}\%\)</span>.<br />
+Efecto exacto: <span class="math inline">\(100\times(\exp(\hat{\tau})-1)\%\)</span>.<br />
+<em>Ejemplo:</em> <span class="math inline">\(\hat{\tau}=0.13 \Rightarrow \exp(0.13)-1 \approx 0.139\)</span> → <strong>13.9%</strong>.</li>
+<li><strong><span class="math inline">\(Y\)</span> estandarizado:</strong> media 0 y varianza 1; <span class="math inline">\(\hat{\tau}\)</span> se interpreta en <strong>desviaciones estándar</strong>.</li>
+<li><strong><span class="math inline">\(Y\)</span> binario:</strong> <span class="math inline">\(\hat{\tau}\)</span> es <strong>diferencia de probabilidades</strong> (puntos porcentuales).<br />
+<em>Ejemplo:</em> <span class="math inline">\(p_1=0.30\)</span>, <span class="math inline">\(p_0=0.25\)</span> ⇒ <span class="math inline">\(\hat{\tau}=0.05 = 5\)</span> pp.</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="inferencia-estadística" class="section level2 unnumbered hasAnchor">
+<h2>Inferencia estadística<a href="#inferencia-estad%C3%ADstica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="asignación-a-nivel-individual-dos-muestras-independientes" class="section level3 unnumbered hasAnchor">
+<h3>Asignación a nivel individual (dos muestras independientes)<a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Varianza del estimador (clásica):</strong>
+<span class="math display">\[
+\operatorname{Var}(\hat{\tau})
+\;\approx\;
+\frac{S_1^2}{N_1} \;+\; \frac{S_0^2}{N_0},
+\]</span>
+donde <span class="math inline">\(S_1^2\)</span> y <span class="math inline">\(S_0^2\)</span> son las varianzas muestrales por grupo.</li>
+<li><strong>Heterocedasticidad:</strong> usar <strong>SE robustas</strong> (HC).<br />
+</li>
+<li><strong>Asignación por clusters:</strong> usar <strong>SE cluster</strong> al nivel de asignación. Con pocos clusters, considerar <strong>wild cluster bootstrap</strong>.</li>
+</ul>
+</div>
+<div id="pruebas" class="section level3 unnumbered hasAnchor">
+<h3>Pruebas<a href="experimentos-controlados-receta.html#pruebas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Significancia individual:</strong> <span class="math inline">\(H_0:\,\tau=0\)</span> (t‐test).<br />
+</li>
+<li><strong>Significancia conjunta de <span class="math inline">\(X\)</span>:</strong> en <span class="math inline">\(D \sim X\)</span>, <span class="math inline">\(H_0:\,\beta_X=0\)</span> (F/<span class="math inline">\(\chi^2\)</span>). Queremos <strong>no rechazar</strong>.</li>
+</ul>
+</div>
+</div>
+<div id="cuándo-incluir-controles" class="section level2 unnumbered hasAnchor">
+<h2>¿Cuándo incluir controles?<a href="#cu%C3%A1ndo-incluir-controles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Identificación:</strong> con aleatorización correcta, <strong>no necesitas</strong> <span class="math inline">\(X\)</span> para identificar <span class="math inline">\(\tau\)</span>.</li>
+<li><strong>Precisión:</strong> incluir <span class="math inline">\(X\)</span> <strong>pretratamiento</strong> que <strong>expliquen <span class="math inline">\(Y\)</span></strong> puede <strong>reducir</strong> <span class="math inline">\(\operatorname{Var}(\hat{\tau})\)</span> (menor varianza residual).<br />
+Si <span class="math inline">\(X\)</span> es irrelevante o colineal, puede <strong>aumentar</strong> la SE de <span class="math inline">\(\hat{\tau}\)</span>.</li>
+<li><strong>Modelo con controles:</strong>
+<span class="math display">\[
+Y_i \;=\; \alpha + \tau D_i + X_i&#39;\beta + u_i.
+\]</span>
+Si <span class="math inline">\(X \perp D\)</span> (por diseño) y <span class="math inline">\(X\)</span> explica <span class="math inline">\(Y\)</span>, esperar <strong>SE(D)</strong> más pequeñas.</li>
+</ul>
+</div>
+<div id="efectos-heterogéneos-het" class="section level2 unnumbered hasAnchor">
+<h2>Efectos heterogéneos (HET)<a href="#efectos-heterog%C3%A9neos-het" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Especificación general:</strong>
+<span class="math display">\[
+Y_i \;=\; \alpha \;+\; \tau D_i \;+\; \gamma W_i \;+\; \delta\, (D_i \times W_i) \;+\; X_i&#39;\beta \;+\; u_i,
+\]</span>
+donde <span class="math inline">\(W\)</span> es el moderador (p. ej., <strong>mujer</strong>, <strong>libros</strong>, <strong>cuartiles de edad</strong>).</li>
+<li><strong>Interpretación:</strong> <span class="math inline">\(\delta\)</span> es el <strong>cambio en el efecto de <span class="math inline">\(D\)</span></strong> al pasar de un nivel de <span class="math inline">\(W\)</span> a otro.<br />
+Usar <code>margins</code>/<code>marginsplot</code> para reportar efectos marginales y perfiles por subgrupo.</li>
+</ul>
+<div class="sourceCode" id="cb63"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb63-1"><a href="experimentos-controlados-receta.html#cb63-1" tabindex="-1"></a>* Por mujer (binaria)</span>
+<span id="cb63-2"><a href="experimentos-controlados-receta.html#cb63-2" tabindex="-1"></a>eststo <span class="kw">clear</span></span>
+<span id="cb63-3"><a href="experimentos-controlados-receta.html#cb63-3" tabindex="-1"></a>eststo: <span class="kw">reg</span> <span class="fu">y</span> D##i.mujer, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb63-4"><a href="experimentos-controlados-receta.html#cb63-4" tabindex="-1"></a>margins, <span class="kw">dydx</span>(D)</span>
+<span id="cb63-5"><a href="experimentos-controlados-receta.html#cb63-5" tabindex="-1"></a>margins D, <span class="fu">at</span>(mujer=(0 1))</span>
+<span id="cb63-6"><a href="experimentos-controlados-receta.html#cb63-6" tabindex="-1"></a></span>
+<span id="cb63-7"><a href="experimentos-controlados-receta.html#cb63-7" tabindex="-1"></a>* Por libros (continua)</span>
+<span id="cb63-8"><a href="experimentos-controlados-receta.html#cb63-8" tabindex="-1"></a>eststo: <span class="kw">reg</span> <span class="fu">y</span> D##c.libros, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb63-9"><a href="experimentos-controlados-receta.html#cb63-9" tabindex="-1"></a>margins, <span class="kw">dydx</span>(D) <span class="fu">at</span>(libros=(0(1)8))</span>
+<span id="cb63-10"><a href="experimentos-controlados-receta.html#cb63-10" tabindex="-1"></a>marginsplot, <span class="bn">title</span>(<span class="st">&quot;Efecto marginal de D según libros&quot;</span>)</span>
+<span id="cb63-11"><a href="experimentos-controlados-receta.html#cb63-11" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">&quot;margins_libros.pdf&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb63-12"><a href="experimentos-controlados-receta.html#cb63-12" tabindex="-1"></a></span>
+<span id="cb63-13"><a href="experimentos-controlados-receta.html#cb63-13" tabindex="-1"></a>* Por cuartiles <span class="kw">de</span> edad</span>
+<span id="cb63-14"><a href="experimentos-controlados-receta.html#cb63-14" tabindex="-1"></a><span class="kw">xtile</span> q_edad = edad, nq(4)</span>
+<span id="cb63-15"><a href="experimentos-controlados-receta.html#cb63-15" tabindex="-1"></a>eststo: <span class="kw">reg</span> <span class="fu">y</span> D##i.q_edad, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb63-16"><a href="experimentos-controlados-receta.html#cb63-16" tabindex="-1"></a>margins D#q_edad</span>
+<span id="cb63-17"><a href="experimentos-controlados-receta.html#cb63-17" tabindex="-1"></a>marginsplot, <span class="bn">title</span>(<span class="st">&quot;Heterogeneidad por cuartiles de edad&quot;</span>)</span>
+<span id="cb63-18"><a href="experimentos-controlados-receta.html#cb63-18" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">&quot;margins_qedad.pdf&quot;</span>, <span class="kw">replace</span></span></code></pre></div>
+<div class="boxejercicio">
+<p><strong>🧪 Ejercicios</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Aleatorización (Bernoulli y estratos)</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Con tu <code>data.dta</code>, genera <code>D</code> con p=0.5 usando <code>runiform()</code>.</li>
+<li>Repite p=0.3.</li>
+<li>Crea estratos por <code>mujer × programa</code> y asigna 50/50 exacto por estrato.</li>
+</ol></li>
+<li><strong><code>randtreat</code> avanzado</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Asigna 3 brazos (T1/T2/C) con proporciones 0.4/0.4/0.2 y estratos <code>mujer × programa</code>.</li>
+<li>Resuelve <em>misfits</em> con <code>misfits(wstrata)</code> y reporta conteos por estrato.</li>
+</ol></li>
+<li><strong>Balance</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Corre <code>difmedias $X, by(D)</code> y exporta a <code>Table_Balance_raw.xlsx</code>.</li>
+<li>Estima <code>D ~ X</code> (LPM/logit/probit) y reporta el test conjunto.</li>
+<li>Interpreta: ¿hay evidencia de desbalance?</li>
+</ol></li>
+<li><strong>Efecto del tratamiento</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Estima <span class="math inline">\(Y\sim D\)</span> y <span class="math inline">\(Y\sim D+X\)</span> con SE robustas.</li>
+<li>Compara <span class="math inline">\(\hat\tau\)</span> y sus SE entre modelos; discute precisión.</li>
+<li>Si <code>resultado</code> es binario, interpreta en puntos porcentuales.</li>
+</ol></li>
+<li><strong>Heterogeneidad</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Estima <span class="math inline">\(Y\sim D\times \text{mujer}\)</span> y reporta <code>margins</code>.</li>
+<li>Estima <span class="math inline">\(Y\sim D\times \text{libros}\)</span>, grafica <code>marginsplot</code> y comenta el perfil.</li>
+</ol></li>
+</ol>
+<p><strong>Bonus (opcional):</strong>
+6. Repite la estimación con <strong>SE cluster</strong> suponiendo que la asignación fue por <code>escuela</code>. Discute diferencias con SE robustas.<br />
+</p>
+</div>
+</div>
+<div id="descarga-los-documentos-1" class="section level2 unnumbered hasAnchor">
+<h2>DESCARGA LOS DOCUMENTOS<a href="experimentos-controlados-receta.html#descarga-los-documentos-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Descargar Stata do file</strong>:<br />
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_stata.do">Descargar Stata</a></p>
+<p><strong>Descargar R script</strong>:<br />
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_R.R">Descargar R</a></p>
+<p><strong>Descargar Phyton Notebook</strong>:<br />
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_phyton.ipynb">Descargar Phyton</a></p>
+<p><a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase1_Experimentos/clase1_phyton.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab" /></a></p>
+<p><strong>Descarga los Datos</strong><br />
+<em>(En esta clase usamos la base real <code>data.dta</code> con columnas: <code>id, resultado, grupo, edad, genero, programa, libros</code>.)</em></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="por-qué-la-asignación-aleatoria-elimina-el-sesgo.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-RCT2.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

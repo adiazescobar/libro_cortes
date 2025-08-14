@@ -1,6 +1,5 @@
 # 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección
 
----
 ::: {.boxinfo}
 ## 🎯 Metas de aprendizaje {-}
 

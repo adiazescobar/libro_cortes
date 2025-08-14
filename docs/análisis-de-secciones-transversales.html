@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 1 Análisis de Secciones Transversales | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 1 Análisis de Secciones Transversales | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 1 Análisis de Secciones Transversales | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 1 Análisis de Secciones Transversales | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2025-08-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="stata-para-principiantes.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-obligatorios"><i class="fa fa-check"></i>Libros Obligatorios</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-recomendados"><i class="fa fa-check"></i>Libros Recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="01-intro.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-exitoso-progresa-oportunidades-m%C3%A9xico-1990"><i class="fa fa-check"></i>Ejemplo exitoso: Progresa (Oportunidades, México, 1990)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-contrafactual"><i class="fa fa-check"></i>El Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#visualizando-el-contrafactual"><i class="fa fa-check"></i>Visualizando el Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#la-banda-sonora"><i class="fa fa-check"></i>La Banda Sonora</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#problema-fundamental-de-la-inferencia-causal"><i class="fa fa-check"></i>Problema Fundamental de la Inferencia Causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n"><i class="fa fa-check"></i>Establecer Causalidad (Deseo de Clonación)</a></li>
+<li class="chapter" data-level="1.0.1" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#video-recomendado-mastering-metrics"><i class="fa fa-check"></i><b>1.0.1</b> 🎥 Video recomendado: <em>Mastering Metrics</em></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a>
+<ul>
+<li class="chapter" data-level="1.0.2" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto"><i class="fa fa-check"></i><b>1.0.2</b> <strong>Ceteris Paribus: ¿Perfecto?</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="01-intro.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n"><i class="fa fa-check"></i>Macro local: definición y expansión</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros"><i class="fa fa-check"></i>Evaluar expresiones dentro de macros</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macro-con-texto"><i class="fa fa-check"></i>Macro con texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#macro-global-uso-y-precauci%C3%B3n"><i class="fa fa-check"></i>Macro global: uso y precaución</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#scalar-vs.-macro"><i class="fa fa-check"></i>Scalar vs. Macro</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-recomendado"><i class="fa fa-check"></i>🧩 Ejercicio recomendado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-foreach"><i class="fa fa-check"></i>Loop con <code>foreach</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-forvalues"><i class="fa fa-check"></i>Loop con <code>forvalues</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-while"><i class="fa fa-check"></i>Loop con <code>while</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados"><i class="fa fa-check"></i>🧠 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#estructura-b%C3%A1sica"><i class="fa fa-check"></i>Estructura básica</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-con-argumentos"><i class="fa fa-check"></i>Programas con argumentos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum"><i class="fa fa-check"></i>Tu programa original mejorado: <code>mysum</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#notas-importantes"><i class="fa fa-check"></i>Notas importantes</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados-1"><i class="fa fa-check"></i>🔧 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-postfile"><i class="fa fa-check"></i>¿Qué hace <code>postfile</code>?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize"><i class="fa fa-check"></i>Paso a paso: guardar medias con <code>summarize</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hicimos-aqu%C3%AD"><i class="fa fa-check"></i>¿Qué hicimos aquí?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-1"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-con-postfile"><i class="fa fa-check"></i>📦 Ejercicios con <code>postfile</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-al-programar-en-stata"><i class="fa fa-check"></i>Buenas prácticas al programar en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-de-repaso"><i class="fa fa-check"></i>🧠 Ejercicio de repaso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables"><i class="fa fa-check"></i>Iterar sobre lista de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="01-intro.html"><a href="#definici%C3%B3n-de-estimadores-resultados-potenciales-e-introducci%C3%B3n-al-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>3</b> 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección</a>
+<ul>
+<li class="chapter" data-level="" data-path="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><i class="fa fa-check"></i>🔹 Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>🔹 Parámetros de interés</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>🔹 ¿Por qué no es suficiente el estimador naïve?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>🔹 Sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>🔹 Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html"><i class="fa fa-check"></i><b>4</b> Estimadores Causales en Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas"><i class="fa fa-check"></i>📎 Descargas</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas-1"><i class="fa fa-check"></i>📎 Descargas</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="01-intro.html"><a href="#por-qu%C3%A9-la-asignaci%C3%B3n-aleatoria-elimina-el-sesgo"><i class="fa fa-check"></i><b>5</b> ¿Por qué la asignación aleatoria elimina el sesgo?</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>¿Qué hace la aleatorización?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#densidad-de-la-motivaci%C3%B3n-por-grupo"><i class="fa fa-check"></i>Densidad de la motivación por grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html"><i class="fa fa-check"></i><b>6</b> Experimentos Controlados RECETA</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#paso-1-dise%C3%B1ar-el-experimento"><i class="fa fa-check"></i>PASO 1) Diseñar el experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#paso-2-aleatorizar-la-asignaci%C3%B3n-stata"><i class="fa fa-check"></i>Paso 2) Aleatorizar la asignación (Stata)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-3-verificar-el-balance-de-covariables"><i class="fa fa-check"></i>PASO 3) Verificar el balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-4-estimar-el-efecto-del-tratamiento"><i class="fa fa-check"></i>PASO 4) Estimar el efecto del tratamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes"><i class="fa fa-check"></i>Asignación a nivel individual (dos muestras independientes)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#pruebas"><i class="fa fa-check"></i>Pruebas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-de-secciones-transversales" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Capitulo 1</span> Análisis de Secciones Transversales<a href="#an%C3%A1lisis-de-secciones-transversales" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="motivación-para-el-análisis-causal" class="section level2 unnumbered hasAnchor">
+<h2>Motivación para el análisis causal<a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En su breve y sugerente cuento Del rigor en la ciencia, Jorge Luis Borges relata la historia de un imperio en el que los cartógrafos llevaron su arte a un grado de perfección tal, que terminaron por construir un mapa a escala 1:1, tan extenso y detallado como el mismo territorio que pretendía representar. Con el tiempo, ese mapa fue olvidado, y sus ruinas todavía se confunden con las del imperio.</p>
+<blockquote>
+<p>En aquel Imperio, el Arte de la Cartografía logró tal Perfección que el mapa de una sola Provincia ocupaba toda una Ciudad, y el mapa del Imperio, toda una Provincia. Con el tiempo, estos Mapas Desmesurados no satisficieron y los Colegios de Cartógrafos levantaron un Mapa del Imperio, que tenía el tamaño del Imperio y coincidía puntualmente con él.
+Menos Adictas al Estudio de la Cartografía, las Generaciones Siguientes entendieron que ese dilatado Mapa era Inútil y no sin Impiedad lo entregaron a las Inclemencias del Sol y los Inviernos. En los desiertos del Oeste perduran despedazadas Ruinas del Mapa, habitadas por Animales y por Mendigos; en todo el País no hay otra reliquia de las Disciplinas Geográficas.
+(Suárez Miranda, Viajes de Varones Prudentes, Libro Cuarto, Cap. XLV, Lérida, 1658.)
+FIN</p>
+</blockquote>
+<p>Sabemos que no podemos capturar la complejidad del mundo en un solo modelo, pero aspiramos a representarlo con la suficiente precisión como para <em>entenderlo, intervenirlo y mejorarlo</em>.</p>
+<p>En este sentido, la econometría aplicada moderna se centra en la identificación de relaciones causales. Estas relaciones son fundamentales para comprender cómo funciona el mundo social, y para guiar decisiones informadas en el diseño de políticas públicas.</p>
+<p>Como explican Angrist y Pischke en su libro <em>Mostly Harmless Econometrics</em>:</p>
+<blockquote>
+<p>En primer lugar, creemos que la investigación empírica es más valiosa cuando utiliza datos para responder preguntas causales específicas, <em>como si</em> se tratara de un ensayo clínico aleatorizado. Esta perspectiva moldea nuestro enfoque hacia la mayoría de las preguntas de investigación. En ausencia de un experimento real, buscamos comparaciones bien controladas y/o cuasiexperimentos naturales. Por supuesto, algunos diseños de investigación cuasiexperimentales son más convincentes que otros, pero .purple[los métodos econométricos utilizados en estos estudios suelen ser bastante simples].
+<em>Mostly Harmless Econometrics</em>, p. xii</p>
+</blockquote>
+</div>
+<div id="motivación-para-el-análisis-causal---por-qué-es-importante" class="section level2 unnumbered hasAnchor">
+<h2>Motivación para el análisis causal - ¿Por qué es importante?<a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>¿Cómo lo entendemos? Sin duda, la identficación de relaciones causales es fundamental para entender cómo funcionan las cosas.
+Enteder la consecuencia de una acción es crucial para entender el mundo que nos rodea.</p>
+<p>Aquí es donde la teoría económica juega un papel central: nos proporciona un marco para interpretar esas relaciones causales, al tiempo que orienta nuestra atención hacia posibles mecanismos. Hacer econometría sin una teoría económica sólida, sin una teoría del cambio ni un esfuerzo por establecer mecanismos, es simplemente machacar datos.</p>
+<p>¿Cómo lo intervenimos? Las relaciones causales nos permiten hacer predicciones sobre el impacto de intervenciones y políticas. Por ejemplo, si sabemos que aumentar la educación de los niños mejora sus ingresos futuros, podemos diseñar políticas educativas que maximicen ese efecto. Sin esta información, el diseño de políticas se convierte en un ejercicio de ensayo y error, muchas veces costoso e ineficaz.</p>
+<p>¿Cómo mejoramos? El análisis causal nos permite decir con cierta confianza qué cosas funcionan y bajo qué condiciones. Esto hace posible ajustar intervenciones para maximizar su impacto positivo. Por ejemplo, si sabemos que las transferencias monetarias condicionadas a la asistencia escolar aumentan la matrícula, podemos adaptar ese diseño a otros contextos y poblaciones.</p>
+<p>Por esta razón, ha ganado fuerza el enfoque de políticas basadas en evidencia, que busca reemplazar la intuición, la tradición o la ideología con análisis rigurosos del mundo real. La microeconometría aplicada, con su atención al detalle y su vocación por la causalidad, es una herramienta clave en esa transición.</p>
+</div>
+<div id="microeconometría-y-política-pública" class="section level2 unnumbered hasAnchor">
+<h2>Microeconometría y política pública<a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La microeconometría aplicada es una herramienta fundamental para informar y mejorar la formulación de políticas públicas. Sus aportes se pueden clasificar en dos tipos:</p>
+<p><strong>Efectos directos</strong>
+Asignación eficiente de recursos: permite identificar qué intervenciones generan mayor impacto por peso invertido.
+Mejora de la calidad, eficiencia y efectividad de programas e instituciones.
+Focalización en resultados, más allá de insumos o procesos.
+Identificación de efectos no previstos, tanto positivos como negativos.
+Fortalecimiento de la rendición de cuentas, mediante evaluaciones transparentes.
+Efectos indirectos
+Alimentar el debate público con evidencia rigurosa que permita contrastar discursos, creencias y enfoques ideológicos.</p>
+</div>
+<div id="microeconometría-y-teoría-económica" class="section level2 unnumbered hasAnchor">
+<h2>Microeconometría y teoría económica<a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Además de su valor instrumental, la microeconometría contribuye activamente al desarrollo y evaluación de la teoría económica. Entre sus aportes están:</p>
+<p>Generar mejor y más información empírica, útil para contrastar modelos.
+Reducir el ruido, eliminando hipótesis o mecanismos irrelevantes.
+Guiar el diseño de nuevas políticas y experimentos, a partir de evidencia acumulada.
+Promover discusiones más transparentes sobre los supuestos, facilitando la crítica constructiva.
+Estimular la retroalimentación entre teoría, datos y política.</p>
+<div id="ejemplo-exitoso-progresa-oportunidades-méxico-1990" class="section level3 unnumbered hasAnchor">
+<h3>Ejemplo exitoso: Progresa (Oportunidades, México, 1990)<a href="#ejemplo-exitoso-progresa-oportunidades-m%C3%A9xico-1990" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Uno de los programas más influyentes y mejor evaluados en América Latina es Progresa, posteriormente conocido como Oportunidades y luego Prospera. Lanzado en México en 1997, su diseño se basó en evidencia empírica y principios de incentivos económicos.</p>
+<div id="objetivo" class="section level4 hasAnchor" number="1.0.0.1">
+<h4><span class="header-section-number">1.0.0.1</span> 🎯 Objetivo<a href="análisis-de-secciones-transversales.html#objetivo" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Reducir la pobreza y mejorar el capital humano de los hogares más vulnerables, especialmente en áreas rurales. Para eso se bridó a los hogares pobres
+-un ingreso monetario de corto plazo
+-incentivos para invertir en capital humano, especialmente en la educación y salud infantil.
+-Mecanismo_ Las transferencias estaban condicionadas a la asistencia escolar de los niños y a visitas regulares a centros de salud.</p>
+</div>
+<div id="resultados-iniciales-2001" class="section level4 unnumbered hasAnchor">
+<h4>Resultados iniciales (2001)<a href="análisis-de-secciones-transversales.html#resultados-iniciales-2001" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Las evaluaciones experimentales y cuasiexperimentales del programa mostraron efectos significativos:</p>
+<p>Shultz (2004): aumento promedio de 0.7 años de escolaridad.
+Gertler (2001): reducción del 23% en incidencia de enfermedades.
+El programa mostró una focalización efectiva, beneficiando principalmente a los hogares más pobres.</p>
+<p><img src="img/pegado2.png" width="80%" /><img src="img/pegado1.png" width="80%" /></p>
+</div>
+</div>
+</div>
+<div id="formulando-una-buena-pregunta-causal" class="section level2 unnumbered hasAnchor">
+<h2>Formulando una buena pregunta causal<a href="análisis-de-secciones-transversales.html#formulando-una-buena-pregunta-causal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Más allá de definir la estrategia empírica, una investigación de calidad comienza por formular preguntas bien planteadas. En el enfoque de Angrist y Pischke, el punto de partida consiste en identificar claramente cuál es la <strong>relación causal de interés</strong>. Esta pregunta guía no solo el análisis, sino también la forma en que interpretamos los resultados y diseñamos la estrategia de identificación. Si no es posible formular de forma precisa y concisa qué efecto queremos estimar, es probable que aún no tengamos un verdadero proyecto de investigación.</p>
+<p>Esto no implica que las descripciones sean inútiles: al contrario, los ejercicios descriptivos pueden ser valiosos e incluso necesarios. Pero en la econometría aplicada moderna, la causalidad ocupa un lugar central. Estimar relaciones causales permite poner a prueba directamente teorías sobre cómo funciona el mundo. Además, nos da acceso a contrafactuales, es decir, a estimaciones de qué habría pasado en ausencia de la intervención o del tratamiento.</p>
+<p>Para ilustrarlo, pensemos en preguntas clásicas de la literatura:</p>
+<ul>
+<li>¿Cómo afecta un año adicional de educación al salario?<br />
+</li>
+<li>¿Qué impacto tienen las instituciones democráticas sobre el desarrollo económico?<br />
+</li>
+<li>¿Los hogares pobres se benefician de la limpieza del medio ambiente?<br />
+</li>
+<li>¿Las leyes de control de armas reducen efectivamente la violencia?</li>
+</ul>
+<p>Todas estas preguntas comparten una estructura causal: comparan una situación observable con un contrafactual no observado. Y todas ellas podrían, en principio, ser abordadas mediante un diseño experimental o cuasiexperimental adecuado.</p>
+</div>
+<div id="el-experimento-ideal" class="section level2 unnumbered hasAnchor">
+<h2>El experimento ideal<a href="análisis-de-secciones-transversales.html#el-experimento-ideal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Una herramienta útil para clarificar la lógica causal de una investigación es imaginar el <strong>experimento ideal</strong>: aquel que asignaría aleatoriamente la causa de interés —educación, democracia, limpieza ambiental, leyes de armas— y luego compararía los resultados. Aunque muchas veces este experimento es hipotético o inviable, su formulación nos obliga a pensar con precisión: ¿qué grupo recibiría el tratamiento?, ¿qué factores deberíamos mantener constantes?, ¿cómo mediríamos el efecto?</p>
+<p>Cuando no es posible siquiera imaginar cómo sería un experimento ideal, puede que estemos enfrentando lo que Angrist y Pischke denominan <em>preguntas fundamentalmente sin respuesta</em>. Por ejemplo, preguntas como “¿Qué efecto tiene el género sobre las trayectorias laborales futuras?” o “¿Qué rol juega la raza en los ingresos?” plantean desafíos éticos, conceptuales y metodológicos difíciles de sortear.</p>
+<p>En cambio, hay preguntas que, aunque complejas, sí permiten imaginar un experimento. Por ejemplo, si quisiéramos estimar el efecto de comenzar la escuela a una edad más avanzada, podríamos imaginar un diseño en el que a algunos niños se les asigna aleatoriamente empezar el primer grado a los seis años, y a otros, a los siete. Luego, compararíamos sus puntajes en pruebas estandarizadas al final del segundo grado. Aun así, este diseño enfrenta un problema: los niños que comienzan más tarde son también más grandes, y la madurez puede explicar parte de las diferencias. Es decir, la edad y la duración de la escolarización quedarían entrelazadas. Incluso con un experimento ideal, algunos efectos son difíciles de aislar completamente.</p>
+</div>
+<div id="más-allá-del-diseño-relevancia-y-aporte-científico" class="section level2 unnumbered hasAnchor">
+<h2>Más allá del diseño: relevancia y aporte científico<a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Además de identificar con claridad la relación causal y el experimento ideal, una buena investigación causal también debe justificar su importancia. Algunas preguntas clave que los investigadores deben hacerse al definir su objeto de estudio son: ¿por qué esta pregunta es relevante o interesante?, ¿por qué la literatura existente no ha resuelto aún esta cuestión?, y ¿cómo contribuye mi trabajo a avanzar esa frontera?</p>
+<p>Estas preguntas ayudan a ubicar el proyecto dentro de un marco más amplio, que no solo busca estimar efectos, sino también producir conocimiento útil, replicable y teóricamente informado.</p>
+</div>
+<div id="checklist-para-una-buena-pregunta-de-investigación-causal" class="section level2 unnumbered hasAnchor">
+<h2>🧰 Checklist para una buena pregunta de investigación causal<a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre><code>## Warning: &#39;xfun::attr()&#39; is deprecated.
+## Use &#39;xfun::attr2()&#39; instead.
+## See help(&quot;Deprecated&quot;)</code></pre>
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:checklist-pregunta-causal">Table 1.1: </span>Checklist para formular una buena pregunta de investigación causal
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Pregunta
+</th>
+<th style="text-align:left;">
+Descripción
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+¿Cuál es la relación causal de interés?
+</td>
+<td style="text-align:left;">
+Define con claridad qué variable actúa como causa y cuál como efecto.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+¿Puedes describir el experimento ideal?
+</td>
+<td style="text-align:left;">
+Imagina cómo se asignaría aleatoriamente el tratamiento y cómo medirías el impacto.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+¿Por qué esta pregunta es importante o interesante?
+</td>
+<td style="text-align:left;">
+Justifica la relevancia empírica, social o política del tema.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+¿Qué aporta respecto a la literatura existente?
+</td>
+<td style="text-align:left;">
+Identifica vacíos o limitaciones en estudios previos que tu trabajo busca superar.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+¿Qué mecanismos o teoría motivan la hipótesis causal?
+</td>
+<td style="text-align:left;">
+Asegúrate de que haya una narrativa teórica detrás de la relación que estudias.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="conceptos-importantes" class="section level2 unnumbered hasAnchor">
+<h2>Conceptos Importantes<a href="análisis-de-secciones-transversales.html#conceptos-importantes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="el-contrafactual" class="section level3 unnumbered hasAnchor">
+<h3>El Contrafactual<a href="análisis-de-secciones-transversales.html#el-contrafactual" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<blockquote>
+<p>¿Cuál habría sido el resultado para los participantes si <strong>no</strong> hubieran participado?</p>
+</blockquote>
+<p>Este concepto es fundamental en la inferencia causal: cada persona tiene un resultado <strong>observado</strong> y un resultado <strong>potencial no observado</strong>. Este último es el contrafactual, es decir, lo que habría ocurrido si la persona hubiera estado en la otra condición (tratada o no tratada).</p>
+<hr />
+</div>
+<div id="visualizando-el-contrafactual" class="section level3 unnumbered hasAnchor">
+<h3>Visualizando el Contrafactual<a href="análisis-de-secciones-transversales.html#visualizando-el-contrafactual" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Participante (Tratado)
+<img src="img/ninas1.png" width="20%" style="display: block; margin: auto auto auto 0;" />
+<span class="math inline">\(Y_1 \Rightarrow\)</span> Resultado observado</p>
+<p>No Participante (Control)
+<img src="img/ninas1.png" width="20%" style="display: block; margin: auto 0 auto auto;" />
+<span class="math inline">\(Y_0 \Rightarrow\)</span> Resultado del contrafactual</p>
+</div>
+<div id="la-banda-sonora" class="section level3 unnumbered hasAnchor">
+<h3>La Banda Sonora<a href="análisis-de-secciones-transversales.html#la-banda-sonora" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/29gLVvN2oYO0p7zB40ts73?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+</iframe>
+<hr />
+</div>
+<div id="resultados-potenciales" class="section level3 unnumbered hasAnchor">
+<h3>Resultados Potenciales<a href="análisis-de-secciones-transversales.html#resultados-potenciales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Cada individuo tiene dos posibles resultados:</p>
+<ul>
+<li><span class="math inline">\(Y_i(D=0)\)</span>: resultado si <strong>no</strong> recibe el tratamiento</li>
+<li><span class="math inline">\(Y_i(D=1)\)</span>: resultado si <strong>recibe</strong> el tratamiento</li>
+</ul>
+<p>Pero solo uno de ellos es observable.</p>
+<p>Por ejemplo, Carolina tiene una pierna rota. Tratamiento: <span class="math inline">\(D=0\)</span> No ir al hospital, <span class="math inline">\(D=1\)</span> Ir al hospital</p>
+<ul>
+<li><span class="math inline">\(Y_i(0)\)</span>: si no va al hospital, su pierna <strong>no</strong> se recupera</li>
+<li><span class="math inline">\(Y_i(1)\)</span>: si va al hospital, su pierna <strong>no</strong> se recupera</li>
+</ul>
+<p>Ahora veamos a Camila quien también tiene una pierna rota.</p>
+<ul>
+<li><span class="math inline">\(Y_i(0)\)</span>: si no va al hospital, su pierna <strong>no</strong> se recupera</li>
+<li><span class="math inline">\(Y_i(1)\)</span>: si va al hospital, su pierna <strong>se recupera</strong></li>
+</ul>
+<p>Por últimpo está Mónica quien también tiene una pierna rota.</p>
+<ul>
+<li><span class="math inline">\(Y_i(0)\)</span>: si no va al hospital, su pierna <strong>se recupera</strong></li>
+<li><span class="math inline">\(Y_i(1)\)</span>: si va al hospital, su pierna <strong>no</strong> se recupera</li>
+</ul>
+<p>Pregunta: ¿a cual de las tres le conviene ir al hospital?</p>
+</div>
+<div id="problema-fundamental-de-la-inferencia-causal" class="section level3 unnumbered hasAnchor">
+<h3>Problema Fundamental de la Inferencia Causal<a href="análisis-de-secciones-transversales.html#problema-fundamental-de-la-inferencia-causal" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Nunca podemos observar los <strong>dos</strong> resultados potenciales para un mismo individuo.</p>
+<p>Esto genera un problema de datos faltantes: no sabemos cuál habría sido el resultado bajo la condición alternativa.</p>
+<p>Solo observamos <strong>uno</strong> de los dos resultados potenciales. Formalmente:</p>
+<p><span class="math display">\[
+Y_i = \begin{cases}
+  Y_i(0) &amp; \text{si } D_i = 0 \\
+  Y_i(1) &amp; \text{si } D_i = 1 \\
+\end{cases}
+\]</span></p>
+<p>donde <span class="math inline">\(D_i\)</span> indica si el individuo fue tratado (<span class="math inline">\(D_i=1\)</span>) o no (<span class="math inline">\(D_i=0\)</span>).</p>
+</div>
+<div id="establecer-causalidad-deseo-de-clonación" class="section level3 unnumbered hasAnchor">
+<h3>Establecer Causalidad (Deseo de Clonación)<a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el mundo ideal, podríamos clonar personas para observar ambos resultados. Como esto no es posible, buscamos estimaciones mediante grupos de comparación.</p>
+<p>Tratado
+<img src="img/ninas1.png" width="20%" style="display: block; margin: auto;" />
+<span class="math inline">\(Y_1 \Rightarrow\)</span> Resultado observado</p>
+<p>Clon en Control
+<img src="img/ninas1.png" width="20%" style="display: block; margin: auto;" />
+<span class="math inline">\(Y_0 \Rightarrow\)</span> Resultado contrafactual</p>
+<p><a href="https://youtu.be/iPBV3BlV7jk">Ver en YouTube</a></p>
+</div>
+<div id="video-recomendado-mastering-metrics" class="section level3 hasAnchor video-box" number="1.0.1">
+<h3><span class="header-section-number">1.0.1</span> 🎥 Video recomendado: <em>Mastering Metrics</em><a href="análisis-de-secciones-transversales.html#video-recomendado-mastering-metrics" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/iPBV3BlV7jk" title="Mastering Metrics" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</div>
+</div>
+<div id="ceteris-paribus" class="section level2 unnumbered hasAnchor">
+<h2>Ceteris Paribus<a href="análisis-de-secciones-transversales.html#ceteris-paribus" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p><em>Todos los demás factores permanecen constantes.</em></p>
+</blockquote>
+<p>Este principio es la piedra angular del análisis causal. Para estimar el efecto de una intervención o tratamiento, debemos <strong>aislar su impacto</strong> de todas las demás influencias posibles. Idealmente, quisiéramos comparar un mundo donde algo ocurre con uno donde no ocurre, manteniendo todo lo demás constante.</p>
+</div>
+<div id="establecer-causalidad" class="section level2 unnumbered hasAnchor">
+<h2>Establecer Causalidad<a href="análisis-de-secciones-transversales.html#establecer-causalidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Nunca observamos ambos estados (tratado y no tratado) para el mismo individuo.</li>
+<li>¿Qué soluciones existen?
+<ul>
+<li>Buscar una persona similar en todas las características relevantes.</li>
+<li>Comparar promedios entre grupos tratados y no tratados (⚠️ puede haber <em>sesgo de selección</em>).</li>
+<li>Comparar antes y después en los mismos individuos (⚠️ puede haber <em>sesgo de maduración</em>).</li>
+</ul></li>
+</ul>
+</div>
+<div id="solución-1-buscar-una-persona-similar" class="section level2 unnumbered hasAnchor">
+<h2>Solución 1: Buscar una persona similar<a href="#soluci%C3%B3n-1-buscar-una-persona-similar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ceteris-paribus-perfecto" class="section level3 hasAnchor" number="1.0.2">
+<h3><span class="header-section-number">1.0.2</span> <strong>Ceteris Paribus: ¿Perfecto?</strong><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Tratada</strong><br />
+<img src="img/ninas1.png" width="20%" /></p>
+<ul>
+<li><span class="math inline">\(Y_1 \Rightarrow\)</span> resultado observado</li>
+</ul>
+<p><strong>Control</strong><br />
+<img src="img/ninas3.png" width="20%" /></p>
+<ul>
+<li><span class="math inline">\(Y_0 \Rightarrow\)</span> resultado del contrafactual</li>
+</ul>
+</div>
+</div>
+<div id="efecto-promedio-del-tratamiento-ate" class="section level2 unnumbered hasAnchor">
+<h2>Efecto Promedio del Tratamiento (ATE)<a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El <strong>Average Treatment Effect (ATE)</strong> se define como:</p>
+<p><span class="math display">\[
+ATE = E[\tau] = E[Y_i(D=1) - Y_i(D=0)]
+\]</span></p>
+<p>Pero si no podemos observar los dos resultados potenciales para un mismo individuo, tampoco podemos calcular directamente este promedio.</p>
+<hr />
+</div>
+<div id="solución-2-diferencia-de-medias-efecto-causal-sesgo-de-selección" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección<a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>.pull-left[ <strong>Tratados</strong>
+<img src="img/pegado3.png" width="20%" />]</p>
+<p>.pull-right[ <strong>Controles</strong>
+<img src="img/pegado4.png" width="20%" />]</p>
+</div>
+<div id="solución-2-diferencia-de-medias-efecto-causal-sesgo-de-selección-1" class="section level2 unnumbered hasAnchor">
+<h2>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección<a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Una alternativa común para estimar efectos causales es comparar los promedios de los grupos tratados y no tratados. Sin embargo, esta estrategia suele estar contaminada por <strong>sesgo de selección</strong>: los grupos pueden diferir de manera sistemática en variables que también afectan el resultado.</p>
+<p>.pull-left[
+<strong>Tratados</strong><br />
+<img src="img/pegado3.png" width="20%" />]</p>
+<p>.pull-right[
+<strong>Controles</strong><br />
+<img src="img/pegado4.png" width="20%" />]</p>
+<hr />
+</div>
+<div id="sesgo-de-selección" class="section level2 unnumbered hasAnchor">
+<h2>Sesgo de Selección<a href="#sesgo-de-selecci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El <strong>sesgo de selección</strong> ocurre cuando las personas que reciben un tratamiento son inherentemente diferentes de aquellas que no lo reciben. Estas diferencias pueden estar asociadas con los resultados que estamos tratando de medir, incluso si no hubieran recibido el tratamiento.</p>
+<p>Incluso con muestras grandes, este problema persiste. Por ejemplo, las personas suelen decidir participar en un programa cuando creen que obtendrán beneficios, lo que significa que sus resultados podrían haber sido distintos desde el principio. En otras palabras, <span class="math inline">\(E[Y_i(D=1) - Y_i(D=0)]\)</span> puede ser mayor para quienes se auto-seleccionan.</p>
+<hr />
+</div>
+<div id="solución-3-comparaciones-antes-después-efecto-causal-efecto-de-maduración" class="section level2 unnumbered hasAnchor">
+<h2>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración<a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Otra estrategia simple consiste en comparar los resultados antes y después del tratamiento para los mismos individuos. Esta comparación, sin embargo, <strong>asume implícitamente que no hay tendencia temporal</strong> en la variable de interés. Es decir, que cualquier cambio entre el “antes” y el “después” se debe exclusivamente al tratamiento.</p>
+<p>Esta suposición es débil, especialmente en contextos donde hay aprendizaje, adaptación o efectos acumulativos en el tiempo.</p>
+<hr />
+</div>
+<div id="comparaciones-prohibidas" class="section level2 unnumbered hasAnchor">
+<h2>Comparaciones Prohibidas<a href="análisis-de-secciones-transversales.html#comparaciones-prohibidas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En el análisis causal riguroso, debemos ser escépticos de dos comparaciones muy comunes:</p>
+<ul>
+<li><strong>Tratados vs. Controles</strong> sin aleatorización<br />
+</li>
+<li><strong>Pre-tratamiento vs. Post-tratamiento</strong> sin grupo de comparación</li>
+</ul>
+<p>Ambas requieren supuestos extremadamente fuertes —en muchos casos imposibles de verificar o cumplir en la práctica— para identificar un efecto causal válido.</p>
+<hr />
+</div>
+<div id="y-entonces" class="section level2 unnumbered hasAnchor">
+<h2>¿Y Entonces?<a href="análisis-de-secciones-transversales.html#y-entonces" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Dada la imposibilidad de observar directamente el contrafactual y los riesgos de comparaciones inadecuadas, ¿cómo podemos avanzar en el análisis causal?</p>
+<p>.pull-left[
+<img src="img/simon1.jpeg" width="60%" /></p>
+<p>.fuente<span class="citation">[Fuente: @banrepcultural]</span>
+]</p>
+<hr />
+</div>
+<div id="cómo-podemos-estimar-efectos-causales" class="section level2 unnumbered hasAnchor">
+<h2>¿Cómo podemos estimar efectos causales?<a href="#c%C3%B3mo-podemos-estimar-efectos-causales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Hoy en día contamos con un conjunto robusto de herramientas para abordar esta pregunta. Estas técnicas buscan crear <strong>contrafactuales plausibles</strong>, ya sea mediante diseño experimental o estrategias cuasi-experimentales.</p>
+<p><strong>Entre las principales estrategias se encuentran:</strong></p>
+<ul>
+<li><strong>Experimentos aleatorizados</strong>: donde los participantes son asignados aleatoriamente al tratamiento y al control.</li>
+<li><strong>Métodos cuasi-experimentales</strong>, como:
+<ul>
+<li>Diferencias en diferencias (DiD)</li>
+<li>Emparejamiento (Matching)</li>
+<li>Variables instrumentales (IV)</li>
+<li>Regresión discontinua (RD)</li>
+<li>Función de control</li>
+<li>Controles sintéticos</li>
+<li>Causal Machine Learning</li>
+</ul></li>
+</ul>
+<p>Cada uno de estos métodos tiene fortalezas y limitaciones, y será explorado en detalle a lo largo del libro.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="stata-para-principiantes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-intro.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

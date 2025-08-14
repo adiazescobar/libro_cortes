@@ -1,0 +1,73 @@
+p.caption {
+  color: #777;
+  margin-top: 10px;
+}
+p code {
+  white-space: inherit;
+}
+pre {
+  word-break: normal;
+  word-wrap: normal;
+}
+pre code {
+  white-space: inherit;
+}
+
+.video-box {
+  border: 2px solid #4A90E2;        /* Borde azul */
+  border-radius: 12px;              /* Bordes redondeados */
+  padding: 1em;                     /* Espaciado interno */
+  background-color: #EAF4FD;        /* Azul claro de fondo */
+  margin: 1.5em 0;                  /* Espacio arriba y abajo */
+}
+
+
+.boxinfo {
+  border-left: 5px solid #007ACC;
+  background-color: #eef6fb;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+.boxwarning {
+  border-left: 5px solid #e67e22;
+  background-color: #fff5e6;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+.boxsuccess {
+  border-left: 5px solid #2ecc71;
+  background-color: #e8f8f5;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+.boxnote {
+  border-left: 5px solid #9b59b6;
+  background-color: #f4ecf7;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+.boxejercicio {
+  border-left: 5px solid #e67e22;
+  background-color: #fff6e6;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 5px;
+  font-size: 0.95em;
+}
+
+.boxvideo {
+  border-left: 5px solid #4A90E2;
+  background-color: #EAF4FD;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 5px;
+}
+
