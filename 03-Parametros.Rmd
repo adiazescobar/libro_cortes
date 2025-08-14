@@ -1,7 +1,7 @@
 # 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección
 
 ---
-
+::: {.boxinfo}
 ## 🎯 Metas de aprendizaje {-}
 
 - Entender qué es un **resultado potencial**  
@@ -15,6 +15,7 @@
   [Enlace al artículo](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)  
 - **Lectura 2:** Bernal y Peña – Capítulo 2  
 - **Lectura 3:** Bernal y Peña – Capítulo 3  
+:::
 
 ### 🔹 Resultados potenciales  {-}
 
