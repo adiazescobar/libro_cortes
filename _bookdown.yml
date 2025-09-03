@@ -11,3 +11,8 @@ rmd_files:
   - 04-ParametrosStata.Rmd
   - 05-RCT.Rmd
   - 06-RCT2.Rmd
+  - 07-POWER.Rmd
+  - 08-DID.Rmd
+  - 09-BadControls.Rmd
+  
+  
