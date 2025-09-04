@@ -17,3 +17,6 @@ gráficos-de-apoyo
 coefplot-del-mediador
 histogramas-monte-carlo
 resumen-práctico
+caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f
+caso-c-f-post-tratamiento-mediador-d-f-y
+resumen-pedagógico

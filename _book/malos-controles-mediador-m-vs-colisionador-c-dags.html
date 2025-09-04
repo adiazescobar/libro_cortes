@@ -347,7 +347,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="9.3" data-path="10-BadControlsStata.html"><a href="#resumen-pr%C3%A1ctico"><i class="fa fa-check"></i><b>9.3</b> Resumen práctico</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html"><i class="fa fa-check"></i>Malos controles: <strong>Mediador (M)</strong> vs <strong>Colisionador (C)</strong> — DAGs</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html"><i class="fa fa-check"></i>Malos controles: <strong>Mediador (M)</strong> vs <strong>Colisionador (C)</strong> — DAGs</a>
+<ul>
+<li class="chapter" data-level="9.4" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f"><i class="fa fa-check"></i><b>9.4</b> Caso B — <strong>F descendiente de colisionador</strong> (<code>D → Y ← U</code> y <code>Y → F</code>)</a></li>
+<li class="chapter" data-level="9.5" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#caso-c-f-post-tratamiento-mediador-d-f-y"><i class="fa fa-check"></i><b>9.5</b> Caso C — <strong>F post-tratamiento (mediador)</strong> (<code>D → F → Y</code>)</a></li>
+<li class="chapter" data-level="9.6" data-path="10-BadControlsStata.html"><a href="#resumen-pedag%C3%B3gico"><i class="fa fa-check"></i><b>9.6</b> Resumen pedagógico</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -456,7 +462,226 @@ Ejemplo empleo
 </tr>
 </tbody>
 </table>
+<div class="sourceCode" id="cb94"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb94-1"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-1" tabindex="-1"></a><span class="fu"># Malos Controles con **F** (en el análisis de **D → Y**)</span></span>
+<span id="cb94-2"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-2" tabindex="-1"></a></span>
+<span id="cb94-3"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-3" tabindex="-1"></a>**Objetivo:** Estimar el efecto causal de **D** sobre **Y** y mostrar por qué **F** es un **mal control** bajo tres estructuras causales distintas (todas en regresiones lineales con datos simulados):</span>
+<span id="cb94-4"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-4" tabindex="-1"></a></span>
+<span id="cb94-5"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-5" tabindex="-1"></a><span class="ss">- </span>**Colisionador:** <span class="in">`D → F ← Y`</span>  </span>
+<span id="cb94-6"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-6" tabindex="-1"></a><span class="ss">- </span>**Descendiente de colisionador:** <span class="in">`D → Y ← U`</span> y <span class="in">`Y → F`</span>  </span>
+<span id="cb94-7"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-7" tabindex="-1"></a><span class="ss">- </span>**Post-tratamiento / Mediador (sobrecontrol si buscamos efecto total):** <span class="in">`D → F → Y`</span></span>
+<span id="cb94-8"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-8" tabindex="-1"></a></span>
+<span id="cb94-9"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-9" tabindex="-1"></a>Cada bloque trae: generación de datos, regresiones **Y ~ D** (modelo objetivo) vs **Y ~ D + F** (mal control), e **Mini Monte Carlo (300 reps)** para ver el sesgo promedio al controlar **F**.</span>
+<span id="cb94-10"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-10" tabindex="-1"></a></span>
+<span id="cb94-11"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-11" tabindex="-1"></a>---</span>
+<span id="cb94-12"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-12" tabindex="-1"></a></span>
+<span id="cb94-13"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-13" tabindex="-1"></a><span class="fu">## Teoría rápida: por qué **F** puede ser un mal control</span></span>
+<span id="cb94-14"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-14" tabindex="-1"></a></span>
+<span id="cb94-15"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-15" tabindex="-1"></a><span class="ss">- </span>**Colisionador (`D → F ← Y`)**  </span>
+<span id="cb94-16"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-16" tabindex="-1"></a>  Ajustar por **F** **abre** un camino espurio entre **D** y **Y** que antes estaba **bloqueado**. Resultado: el coeficiente de **D** queda **sesgado**.</span>
+<span id="cb94-17"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-17" tabindex="-1"></a></span>
+<span id="cb94-18"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-18" tabindex="-1"></a><span class="ss">- </span>**Descendiente de colisionador (`D → Y ← U` y `Y → F`)**  </span>
+<span id="cb94-19"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-19" tabindex="-1"></a>  **F** es descendiente de **Y**, que es un **colisionador** entre **D** y un factor no observado **U** (o el error de **Y**). Al condicionar en **F**, se induce dependencia entre **D** y **U**, sesgando el efecto de **D** sobre **Y**.</span>
+<span id="cb94-20"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-20" tabindex="-1"></a></span>
+<span id="cb94-21"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-21" tabindex="-1"></a><span class="ss">- </span>**Post-tratamiento / Mediador (`D → F → Y`)**  </span>
+<span id="cb94-22"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-22" tabindex="-1"></a>  Si el parámetro de interés es el **efecto total** de **D** sobre **Y**, **no** debemos condicionar en **F** (porque **F** es **descendiente de D** y está en la **ruta causal**). Ajustarlo **bloquea** la vía `D → F → Y` y **sesga** (generalmente a la baja) el coeficiente de **D** respecto del **total**.</span>
+<span id="cb94-23"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-23" tabindex="-1"></a></span>
+<span id="cb94-24"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-24" tabindex="-1"></a><span class="at">&gt; **Regla práctica:** No controles **colisionadores**, ni **descendientes de colisionadores**, ni **variables post-tratamiento** si buscas el **efecto total** de **D**.</span></span>
+<span id="cb94-25"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-25" tabindex="-1"></a></span>
+<span id="cb94-26"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-26" tabindex="-1"></a>---</span>
+<span id="cb94-27"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-27" tabindex="-1"></a></span>
+<span id="cb94-28"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-28" tabindex="-1"></a><span class="fu">## Caso A — **F como colisionador** (`D → F ← Y`)</span></span>
+<span id="cb94-29"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-29" tabindex="-1"></a></span>
+<span id="cb94-30"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-30" tabindex="-1"></a>**Intuición:** **D** y **Y** son independientes en la población (efecto verdadero de D en Y = 0). **F** es causado por ambos. Si ajustas por **F**, abres un camino espurio `D ↔ Y` y obtienes un coeficiente de **D** distinto de 0 (sesgo).</span>
+<span id="cb94-31"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-31" tabindex="-1"></a></span>
+<span id="cb94-32"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-32" tabindex="-1"></a><span class="in">```stata</span></span>
+<span id="cb94-33"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-33" tabindex="-1"></a><span class="in">********************************************************************************</span></span>
+<span id="cb94-34"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-34" tabindex="-1"></a><span class="in">* CASO A: F como COLISIONADOR — D -&gt; F &lt;- Y</span></span>
+<span id="cb94-35"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-35" tabindex="-1"></a><span class="in">* Efecto verdadero de D en Y: 0 (D y Y independientes). Controlar F induce sesgo.</span></span>
+<span id="cb94-36"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-36" tabindex="-1"></a><span class="in">********************************************************************************</span></span>
+<span id="cb94-37"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-37" tabindex="-1"></a></span>
+<span id="cb94-38"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-38" tabindex="-1"></a><span class="in">clear all</span></span>
+<span id="cb94-39"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-39" tabindex="-1"></a><span class="in">set seed 12345</span></span>
+<span id="cb94-40"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-40" tabindex="-1"></a><span class="in">set obs 1000</span></span>
+<span id="cb94-41"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-41" tabindex="-1"></a></span>
+<span id="cb94-42"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-42" tabindex="-1"></a><span class="in">* D y Y independientes</span></span>
+<span id="cb94-43"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-43" tabindex="-1"></a><span class="in">gen double D = rnormal(0,1)</span></span>
+<span id="cb94-44"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-44" tabindex="-1"></a><span class="in">gen double Y = rnormal(0,1)</span></span>
+<span id="cb94-45"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-45" tabindex="-1"></a></span>
+<span id="cb94-46"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-46" tabindex="-1"></a><span class="in">* F causado por D y Y  -&gt;  F es colisionador</span></span>
+<span id="cb94-47"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-47" tabindex="-1"></a><span class="in">gen double F = 2*D - 0.5*Y + rnormal(0,1)</span></span>
+<span id="cb94-48"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-48" tabindex="-1"></a></span>
+<span id="cb94-49"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-49" tabindex="-1"></a><span class="in">* (Correcto) estimar Y~D: coef(D) ≈ 0</span></span>
+<span id="cb94-50"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-50" tabindex="-1"></a><span class="in">reg Y D, vce(robust)</span></span>
+<span id="cb94-51"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-51" tabindex="-1"></a></span>
+<span id="cb94-52"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-52" tabindex="-1"></a><span class="in">* (MAL control) estimar Y~D+F: coef(D) ≠ 0 por abrir el camino vía F</span></span>
+<span id="cb94-53"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-53" tabindex="-1"></a><span class="in">reg Y D F, vce(robust)</span></span>
+<span id="cb94-54"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-54" tabindex="-1"></a></span>
+<span id="cb94-55"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-55" tabindex="-1"></a></span>
+<span id="cb94-56"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-56" tabindex="-1"></a><span class="in">*---------------*</span></span>
+<span id="cb94-57"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-57" tabindex="-1"></a><span class="in">* MONTE CARLO   *</span></span>
+<span id="cb94-58"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-58" tabindex="-1"></a><span class="in">*---------------*</span></span>
+<span id="cb94-59"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-59" tabindex="-1"></a><span class="in">capture program drop mc_F_collider</span></span>
+<span id="cb94-60"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-60" tabindex="-1"></a><span class="in">program define mc_F_collider, rclass</span></span>
+<span id="cb94-61"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-61" tabindex="-1"></a><span class="in">    clear</span></span>
+<span id="cb94-62"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-62" tabindex="-1"></a><span class="in">    set obs 1000</span></span>
+<span id="cb94-63"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-63" tabindex="-1"></a><span class="in">    gen double D = rnormal()</span></span>
+<span id="cb94-64"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-64" tabindex="-1"></a><span class="in">    gen double Y = rnormal()</span></span>
+<span id="cb94-65"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-65" tabindex="-1"></a><span class="in">    gen double F = 2*D - 0.5*Y + rnormal()</span></span>
+<span id="cb94-66"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-66" tabindex="-1"></a><span class="in">    qui reg Y D</span></span>
+<span id="cb94-67"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-67" tabindex="-1"></a><span class="in">    return scalar b_noF = _b[D]</span></span>
+<span id="cb94-68"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-68" tabindex="-1"></a><span class="in">    qui reg Y D F</span></span>
+<span id="cb94-69"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-69" tabindex="-1"></a><span class="in">    return scalar b_conF = _b[D]</span></span>
+<span id="cb94-70"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-70" tabindex="-1"></a><span class="in">end</span></span>
+<span id="cb94-71"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-71" tabindex="-1"></a></span>
+<span id="cb94-72"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-72" tabindex="-1"></a><span class="in">simulate b_noF=r(b_noF) b_conF=r(b_conF), reps(300): mc_F_collider</span></span>
+<span id="cb94-73"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-73" tabindex="-1"></a><span class="in">summ b_noF b_conF</span></span>
+<span id="cb94-74"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb94-74" tabindex="-1"></a><span class="in">* Esperado: mean(b_noF) ≈ 0 (insesgado); mean(b_conF) ≠ 0 (sesgo por controlar F).</span></span></code></pre></div>
+<p><strong>Lectura esperada:</strong></p>
+<ul>
+<li><code>Y ~ D</code> recupera ≈ 0 (no hay efecto causal de D sobre Y).</li>
+<li><code>Y ~ D + F</code> produce un coeficiente de D <strong>significativamente distinto</strong> de 0 ⇒ <strong>sesgo</strong> por colisionador.</li>
+</ul>
+<hr />
+<div id="caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Caso B — <strong>F descendiente de colisionador</strong> (<code>D → Y ← U</code> y <code>Y → F</code>)<a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Intuición:</strong> <strong>Y</strong> es colisionador entre <strong>D</strong> y <strong>U</strong> (no observado). <strong>F</strong> es descendiente de <strong>Y</strong>. Condicionar en <strong>F</strong> introduce dependencia entre <strong>D</strong> y <strong>U</strong> y sesga el coeficiente de <strong>D</strong>. Aquí el <strong>efecto verdadero</strong> de <strong>D</strong> en <strong>Y</strong> es <strong>2</strong>.</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb95-2"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-2" tabindex="-1"></a>* CASO B: <span class="fu">F</span> descendiente <span class="kw">de</span> colisionador — D -&gt; Y ← U  <span class="fu">y</span>  Y -&gt; <span class="fu">F</span></span>
+<span id="cb95-3"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-3" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D en Y: 2. Controlar <span class="fu">F</span> (descendiente <span class="kw">de</span> Y) sesga <span class="fu">el</span> coef(D).</span>
+<span id="cb95-4"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-4" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb95-5"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-5" tabindex="-1"></a></span>
+<span id="cb95-6"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-6" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb95-7"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
+<span id="cb95-8"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb95-9"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-9" tabindex="-1"></a></span>
+<span id="cb95-10"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-10" tabindex="-1"></a>* D ~ <span class="kw">N</span>(0,1), eY ~ <span class="kw">N</span>(0,1) (eY juega <span class="fu">el</span> papel <span class="kw">de</span> U no observado en Y)</span>
+<span id="cb95-11"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-11" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D  = rnormal()</span>
+<span id="cb95-12"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> eY = rnormal()</span>
+<span id="cb95-13"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-13" tabindex="-1"></a></span>
+<span id="cb95-14"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-14" tabindex="-1"></a>* Outcome con efecto <span class="fu">real</span> <span class="kw">de</span> 2: Y = 2*D + eY</span>
+<span id="cb95-15"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-15" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y  = 2*D + eY</span>
+<span id="cb95-16"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-16" tabindex="-1"></a></span>
+<span id="cb95-17"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-17" tabindex="-1"></a>* <span class="fu">F</span> es descendiente <span class="kw">de</span> Y: <span class="fu">F</span> = -0.5*Y + ruido</span>
+<span id="cb95-18"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-18" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span>  = -0.5*Y + rnormal()</span>
+<span id="cb95-19"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-19" tabindex="-1"></a></span>
+<span id="cb95-20"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-20" tabindex="-1"></a>* (Correcto) Y~D: recupera ≈ 2</span>
+<span id="cb95-21"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-21" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb95-22"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-22" tabindex="-1"></a></span>
+<span id="cb95-23"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-23" tabindex="-1"></a>* (MAL control) Y~D+<span class="fu">F</span>: sesgo (condicionar en descendiente <span class="kw">de</span> colisionador vincula D con eY)</span>
+<span id="cb95-24"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-24" tabindex="-1"></a><span class="kw">reg</span> Y D <span class="fu">F</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb95-25"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-25" tabindex="-1"></a></span>
+<span id="cb95-26"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-26" tabindex="-1"></a></span>
+<span id="cb95-27"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-27" tabindex="-1"></a>*---------------*</span>
+<span id="cb95-28"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-28" tabindex="-1"></a>* MONTE CARLO   *</span>
+<span id="cb95-29"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-29" tabindex="-1"></a>*---------------*</span>
+<span id="cb95-30"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-30" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_F_desc</span>
+<span id="cb95-31"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-31" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_F_desc, rclass</span>
+<span id="cb95-32"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-32" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb95-33"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-33" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb95-34"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-34" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D  = rnormal()</span>
+<span id="cb95-35"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-35" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> eY = rnormal()</span>
+<span id="cb95-36"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-36" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y  = 2*D + eY</span>
+<span id="cb95-37"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-37" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span>  = -0.5*Y + rnormal()</span>
+<span id="cb95-38"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-38" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
+<span id="cb95-39"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-39" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_noF = _b[D]</span>
+<span id="cb95-40"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-40" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D <span class="fu">F</span></span>
+<span id="cb95-41"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-41" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conF = _b[D]</span>
+<span id="cb95-42"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-42" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb95-43"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-43" tabindex="-1"></a></span>
+<span id="cb95-44"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-44" tabindex="-1"></a><span class="kw">simulate</span> b_noF=<span class="fu">r</span>(b_noF) b_conF=<span class="fu">r</span>(b_conF), reps(300): mc_F_desc</span>
+<span id="cb95-45"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-45" tabindex="-1"></a>summ b_noF b_conF</span>
+<span id="cb95-46"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb95-46" tabindex="-1"></a>* Esperado: <span class="kw">mean</span>(b_noF) ≈ 2 (correcto); <span class="kw">mean</span>(b_conF) &lt; 2 (sesgo por condicionar en <span class="fu">F</span>).</span></code></pre></div>
+<p><strong>Lectura esperada:</strong></p>
+<ul>
+<li><code>Y ~ D</code> ≈ 2 (efecto verdadero).</li>
+<li><code>Y ~ D + F</code> tiende a <strong>subestimar</strong> (u otra distorsión) el efecto de D ⇒ <strong>sesgo</strong> por condicionar en un descendiente de colisionador.</li>
+</ul>
+<hr />
+</div>
+<div id="caso-c-f-post-tratamiento-mediador-d-f-y" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> Caso C — <strong>F post-tratamiento (mediador)</strong> (<code>D → F → Y</code>)<a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#caso-c-f-post-tratamiento-mediador-d-f-y" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><em>(sobrecontrol si buscamos el <strong>efecto total</strong> de D)</em></p>
+<p><strong>Intuición:</strong> todo el efecto de <strong>D</strong> sobre <strong>Y</strong> pasa por <strong>F</strong> (no hay efecto directo adicional de D). El <strong>efecto total</strong> es <code>a*b</code>. Si ajustas por <strong>F</strong>, bloqueas la ruta causal y el coeficiente de <strong>D</strong> se va a ≈ 0: <strong>sobrecontrol</strong> (sesgo respecto del total).</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb96-2"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-2" tabindex="-1"></a>* CASO C: <span class="fu">F</span> <span class="kw">post</span>-tratamiento (mediador) — D -&gt; <span class="fu">F</span> -&gt; Y</span>
+<span id="cb96-3"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-3" tabindex="-1"></a>* Interés: EFECTO TOTAL <span class="kw">de</span> D en Y (= a*b). Controlar <span class="fu">F</span> lo bloquea (sobrecontrol).</span>
+<span id="cb96-4"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-4" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb96-5"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-5" tabindex="-1"></a></span>
+<span id="cb96-6"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-6" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb96-7"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
+<span id="cb96-8"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb96-9"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-9" tabindex="-1"></a></span>
+<span id="cb96-10"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-10" tabindex="-1"></a><span class="fu">scalar</span> a = 2   <span class="co">// D -&gt; F</span></span>
+<span id="cb96-11"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-11" tabindex="-1"></a><span class="fu">scalar</span> b = 3   <span class="co">// F -&gt; Y</span></span>
+<span id="cb96-12"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-12" tabindex="-1"></a></span>
+<span id="cb96-13"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-13" tabindex="-1"></a>* D exógeno</span>
+<span id="cb96-14"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-14" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
+<span id="cb96-15"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-15" tabindex="-1"></a></span>
+<span id="cb96-16"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-16" tabindex="-1"></a>* <span class="fu">F</span> mediador afectado por D</span>
+<span id="cb96-17"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-17" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = a*D + rnormal()</span>
+<span id="cb96-18"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-18" tabindex="-1"></a></span>
+<span id="cb96-19"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-19" tabindex="-1"></a>* Y depende <span class="kw">de</span> <span class="fu">F</span> (<span class="fu">sin</span> efecto directo adicional <span class="kw">de</span> D en esta DGP)</span>
+<span id="cb96-20"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-20" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = b*<span class="fu">F</span> + rnormal()</span>
+<span id="cb96-21"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-21" tabindex="-1"></a></span>
+<span id="cb96-22"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-22" tabindex="-1"></a>* (Correcto para efecto TOTAL) Y~D: coef(D) ≈ a*b = 6</span>
+<span id="cb96-23"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-23" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb96-24"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-24" tabindex="-1"></a></span>
+<span id="cb96-25"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-25" tabindex="-1"></a>* (MAL control para efecto TOTAL) Y~D+<span class="fu">F</span>: bloquea D-&gt;<span class="fu">F</span>-&gt;Y, coef(D) ≈ 0 (sobrecontrol)</span>
+<span id="cb96-26"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-26" tabindex="-1"></a><span class="kw">reg</span> Y D <span class="fu">F</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb96-27"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-27" tabindex="-1"></a></span>
+<span id="cb96-28"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-28" tabindex="-1"></a></span>
+<span id="cb96-29"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-29" tabindex="-1"></a>*---------------*</span>
+<span id="cb96-30"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-30" tabindex="-1"></a>* MONTE CARLO   *</span>
+<span id="cb96-31"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-31" tabindex="-1"></a>*---------------*</span>
+<span id="cb96-32"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-32" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_F_mediador</span>
+<span id="cb96-33"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-33" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_F_mediador, rclass</span>
+<span id="cb96-34"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-34" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb96-35"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-35" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb96-36"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-36" tabindex="-1"></a>    <span class="fu">scalar</span> a = 2</span>
+<span id="cb96-37"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-37" tabindex="-1"></a>    <span class="fu">scalar</span> b = 3</span>
+<span id="cb96-38"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-38" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
+<span id="cb96-39"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-39" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = a*D + rnormal()</span>
+<span id="cb96-40"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-40" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = b*<span class="fu">F</span> + rnormal()</span>
+<span id="cb96-41"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-41" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
+<span id="cb96-42"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-42" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_total = _b[D]     <span class="co">// efecto total ≈ a*b</span></span>
+<span id="cb96-43"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-43" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D <span class="fu">F</span></span>
+<span id="cb96-44"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-44" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conF = _b[D]      <span class="co">// efecto directo (≈ 0 en esta DGP)</span></span>
+<span id="cb96-45"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-45" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb96-46"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-46" tabindex="-1"></a></span>
+<span id="cb96-47"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-47" tabindex="-1"></a><span class="kw">simulate</span> b_total=<span class="fu">r</span>(b_total) b_conF=<span class="fu">r</span>(b_conF), reps(300): mc_F_mediador</span>
+<span id="cb96-48"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-48" tabindex="-1"></a>summ b_total b_conF</span>
+<span id="cb96-49"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#cb96-49" tabindex="-1"></a>* Esperado: <span class="kw">mean</span>(b_total) ≈ 6 (<span class="kw">total</span>); <span class="kw">mean</span>(b_conF) ≈ 0 (sobrecontrol al incluir <span class="fu">F</span>).</span></code></pre></div>
+<p><strong>Lectura esperada:</strong></p>
+<ul>
+<li><code>Y ~ D</code> ≈ <code>a*b</code> (efecto total).</li>
+<li><code>Y ~ D + F</code> ≈ 0 (porque bloquear F elimina la ruta causal completa de D hacia Y).</li>
+</ul>
+<hr />
+</div>
+<div id="resumen-pedagógico" class="section level2 hasAnchor" number="9.6">
+<h2><span class="header-section-number">9.6</span> Resumen pedagógico<a href="#resumen-pedag%C3%B3gico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Colisionador (<code>D → F ← Y</code>)</strong>: ajustar por <strong>F</strong> <strong>abre</strong> un camino espurio → <strong>sesgo</strong>.</li>
+<li><strong>Descendiente de colisionador (<code>D → Y ← U</code> y <code>Y → F</code>)</strong>: ajustar por <strong>F</strong> <strong>induce dependencia</strong> entre <strong>D</strong> y <strong>U</strong> → <strong>sesgo</strong>.</li>
+<li><strong>Post-tratamiento / Mediador (<code>D → F → Y</code>)</strong>: si buscas <strong>efecto total</strong>, <strong>no controles F</strong> (sobrecontrol).</li>
+<li>Los <strong>p-valores</strong> pueden sugerir que <strong>F</strong> “sirve para predecir”, pero <strong>predicción ≠ identificación</strong>: sin el DAG correcto, el estimador causal puede ser <strong>inconsistente</strong>.</li>
+</ul>
+<hr />
+</div>
+<div id="descarga-los-documentos-2" class="section level2 unnumbered hasAnchor">
+<h2>DESCARGA LOS DOCUMENTOS<a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#descarga-los-documentos-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Descargar Stata do file</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_stata.do">Descargar Stata</a></p>
+<p><strong>Descargar R script</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R">Descargar R</a></p>
+<p><strong>Descargar Phyton Notebook</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb">Descargar Phyton</a></p>
+<p><a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab" /></a></p>
+<p><strong>Descarga los Datos</strong>
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta">Descargar Datos</a></p>
+<pre><code></code></pre>
 
+</div>
 </div>
             </section>
 

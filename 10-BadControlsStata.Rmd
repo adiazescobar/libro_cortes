@@ -251,3 +251,241 @@ twoway (hist b_bench, width(.1) color(green%40)) ///
   </tbody>
 </table>
 
+````markdown
+# Malos Controles con **F** (en el análisis de **D → Y**)
+
+**Objetivo:** Estimar el efecto causal de **D** sobre **Y** y mostrar por qué **F** es un **mal control** bajo tres estructuras causales distintas (todas en regresiones lineales con datos simulados):
+
+- **Colisionador:** `D → F ← Y`  
+- **Descendiente de colisionador:** `D → Y ← U` y `Y → F`  
+- **Post-tratamiento / Mediador (sobrecontrol si buscamos efecto total):** `D → F → Y`
+
+Cada bloque trae: generación de datos, regresiones **Y ~ D** (modelo objetivo) vs **Y ~ D + F** (mal control), e **Mini Monte Carlo (300 reps)** para ver el sesgo promedio al controlar **F**.
+
+---
+
+## Teoría rápida: por qué **F** puede ser un mal control
+
+- **Colisionador (`D → F ← Y`)**  
+  Ajustar por **F** **abre** un camino espurio entre **D** y **Y** que antes estaba **bloqueado**. Resultado: el coeficiente de **D** queda **sesgado**.
+
+- **Descendiente de colisionador (`D → Y ← U` y `Y → F`)**  
+  **F** es descendiente de **Y**, que es un **colisionador** entre **D** y un factor no observado **U** (o el error de **Y**). Al condicionar en **F**, se induce dependencia entre **D** y **U**, sesgando el efecto de **D** sobre **Y**.
+
+- **Post-tratamiento / Mediador (`D → F → Y`)**  
+  Si el parámetro de interés es el **efecto total** de **D** sobre **Y**, **no** debemos condicionar en **F** (porque **F** es **descendiente de D** y está en la **ruta causal**). Ajustarlo **bloquea** la vía `D → F → Y` y **sesga** (generalmente a la baja) el coeficiente de **D** respecto del **total**.
+
+> **Regla práctica:** No controles **colisionadores**, ni **descendientes de colisionadores**, ni **variables post-tratamiento** si buscas el **efecto total** de **D**.
+
+---
+
+## Caso A — **F como colisionador** (`D → F ← Y`)
+
+**Intuición:** **D** y **Y** son independientes en la población (efecto verdadero de D en Y = 0). **F** es causado por ambos. Si ajustas por **F**, abres un camino espurio `D ↔ Y` y obtienes un coeficiente de **D** distinto de 0 (sesgo).
+
+```stata
+********************************************************************************
+* CASO A: F como COLISIONADOR — D -> F <- Y
+* Efecto verdadero de D en Y: 0 (D y Y independientes). Controlar F induce sesgo.
+********************************************************************************
+
+clear all
+set seed 12345
+set obs 1000
+
+* D y Y independientes
+gen double D = rnormal(0,1)
+gen double Y = rnormal(0,1)
+
+* F causado por D y Y  ->  F es colisionador
+gen double F = 2*D - 0.5*Y + rnormal(0,1)
+
+* (Correcto) estimar Y~D: coef(D) ≈ 0
+reg Y D, vce(robust)
+
+* (MAL control) estimar Y~D+F: coef(D) ≠ 0 por abrir el camino vía F
+reg Y D F, vce(robust)
+
+
+*---------------*
+* MONTE CARLO   *
+*---------------*
+capture program drop mc_F_collider
+program define mc_F_collider, rclass
+    clear
+    set obs 1000
+    gen double D = rnormal()
+    gen double Y = rnormal()
+    gen double F = 2*D - 0.5*Y + rnormal()
+    qui reg Y D
+    return scalar b_noF = _b[D]
+    qui reg Y D F
+    return scalar b_conF = _b[D]
+end
+
+simulate b_noF=r(b_noF) b_conF=r(b_conF), reps(300): mc_F_collider
+summ b_noF b_conF
+* Esperado: mean(b_noF) ≈ 0 (insesgado); mean(b_conF) ≠ 0 (sesgo por controlar F).
+````
+
+**Lectura esperada:**
+
+* `Y ~ D` recupera ≈ 0 (no hay efecto causal de D sobre Y).
+* `Y ~ D + F` produce un coeficiente de D **significativamente distinto** de 0 ⇒ **sesgo** por colisionador.
+
+---
+
+## Caso B — **F descendiente de colisionador** (`D → Y ← U` y `Y → F`)
+
+**Intuición:** **Y** es colisionador entre **D** y **U** (no observado). **F** es descendiente de **Y**. Condicionar en **F** introduce dependencia entre **D** y **U** y sesga el coeficiente de **D**. Aquí el **efecto verdadero** de **D** en **Y** es **2**.
+
+```stata
+********************************************************************************
+* CASO B: F descendiente de colisionador — D -> Y ← U  y  Y -> F
+* Efecto verdadero de D en Y: 2. Controlar F (descendiente de Y) sesga el coef(D).
+********************************************************************************
+
+clear all
+set seed 12345
+set obs 1000
+
+* D ~ N(0,1), eY ~ N(0,1) (eY juega el papel de U no observado en Y)
+gen double D  = rnormal()
+gen double eY = rnormal()
+
+* Outcome con efecto real de 2: Y = 2*D + eY
+gen double Y  = 2*D + eY
+
+* F es descendiente de Y: F = -0.5*Y + ruido
+gen double F  = -0.5*Y + rnormal()
+
+* (Correcto) Y~D: recupera ≈ 2
+reg Y D, vce(robust)
+
+* (MAL control) Y~D+F: sesgo (condicionar en descendiente de colisionador vincula D con eY)
+reg Y D F, vce(robust)
+
+
+*---------------*
+* MONTE CARLO   *
+*---------------*
+capture program drop mc_F_desc
+program define mc_F_desc, rclass
+    clear
+    set obs 1000
+    gen double D  = rnormal()
+    gen double eY = rnormal()
+    gen double Y  = 2*D + eY
+    gen double F  = -0.5*Y + rnormal()
+    qui reg Y D
+    return scalar b_noF = _b[D]
+    qui reg Y D F
+    return scalar b_conF = _b[D]
+end
+
+simulate b_noF=r(b_noF) b_conF=r(b_conF), reps(300): mc_F_desc
+summ b_noF b_conF
+* Esperado: mean(b_noF) ≈ 2 (correcto); mean(b_conF) < 2 (sesgo por condicionar en F).
+```
+
+**Lectura esperada:**
+
+* `Y ~ D` ≈ 2 (efecto verdadero).
+* `Y ~ D + F` tiende a **subestimar** (u otra distorsión) el efecto de D ⇒ **sesgo** por condicionar en un descendiente de colisionador.
+
+---
+
+## Caso C — **F post-tratamiento (mediador)** (`D → F → Y`)
+
+*(sobrecontrol si buscamos el **efecto total** de D)*
+
+**Intuición:** todo el efecto de **D** sobre **Y** pasa por **F** (no hay efecto directo adicional de D). El **efecto total** es `a*b`. Si ajustas por **F**, bloqueas la ruta causal y el coeficiente de **D** se va a ≈ 0: **sobrecontrol** (sesgo respecto del total).
+
+```stata
+********************************************************************************
+* CASO C: F post-tratamiento (mediador) — D -> F -> Y
+* Interés: EFECTO TOTAL de D en Y (= a*b). Controlar F lo bloquea (sobrecontrol).
+********************************************************************************
+
+clear all
+set seed 12345
+set obs 1000
+
+scalar a = 2   // D -> F
+scalar b = 3   // F -> Y
+
+* D exógeno
+gen double D = rnormal()
+
+* F mediador afectado por D
+gen double F = a*D + rnormal()
+
+* Y depende de F (sin efecto directo adicional de D en esta DGP)
+gen double Y = b*F + rnormal()
+
+* (Correcto para efecto TOTAL) Y~D: coef(D) ≈ a*b = 6
+reg Y D, vce(robust)
+
+* (MAL control para efecto TOTAL) Y~D+F: bloquea D->F->Y, coef(D) ≈ 0 (sobrecontrol)
+reg Y D F, vce(robust)
+
+
+*---------------*
+* MONTE CARLO   *
+*---------------*
+capture program drop mc_F_mediador
+program define mc_F_mediador, rclass
+    clear
+    set obs 1000
+    scalar a = 2
+    scalar b = 3
+    gen double D = rnormal()
+    gen double F = a*D + rnormal()
+    gen double Y = b*F + rnormal()
+    qui reg Y D
+    return scalar b_total = _b[D]     // efecto total ≈ a*b
+    qui reg Y D F
+    return scalar b_conF = _b[D]      // efecto directo (≈ 0 en esta DGP)
+end
+
+simulate b_total=r(b_total) b_conF=r(b_conF), reps(300): mc_F_mediador
+summ b_total b_conF
+* Esperado: mean(b_total) ≈ 6 (total); mean(b_conF) ≈ 0 (sobrecontrol al incluir F).
+```
+
+**Lectura esperada:**
+
+* `Y ~ D` ≈ `a*b` (efecto total).
+* `Y ~ D + F` ≈ 0 (porque bloquear F elimina la ruta causal completa de D hacia Y).
+
+---
+
+## Resumen pedagógico
+
+* **Colisionador (`D → F ← Y`)**: ajustar por **F** **abre** un camino espurio → **sesgo**.
+* **Descendiente de colisionador (`D → Y ← U` y `Y → F`)**: ajustar por **F** **induce dependencia** entre **D** y **U** → **sesgo**.
+* **Post-tratamiento / Mediador (`D → F → Y`)**: si buscas **efecto total**, **no controles F** (sobrecontrol).
+* Los **p-valores** pueden sugerir que **F** “sirve para predecir”, pero **predicción ≠ identificación**: sin el DAG correcto, el estimador causal puede ser **inconsistente**.
+
+---
+
+## DESCARGA LOS DOCUMENTOS {-}
+
+**Descargar Stata do file**:
+[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_stata.do)
+
+**Descargar R script**:
+[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
+
+**Descargar Phyton Notebook**:
+[Descargar Phyton](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
+
+**Descarga los Datos**
+[Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
+
+```
+```
+
+
