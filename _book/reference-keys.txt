@@ -11,3 +11,9 @@ por-qué-la-asignación-aleatoria-elimina-el-sesgo
 experimentos-controlados-receta
 cálculos-de-poder-estadístico-en-stata
 test-de-tendencias-paralelas-y-malos-controles
+malos-controles-en-stata
+mediador-post-tratamiento
+gráficos-de-apoyo
+coefplot-del-mediador
+histogramas-monte-carlo
+resumen-práctico

@@ -14,5 +14,5 @@ rmd_files:
   - 07-POWER.Rmd
   - 08-DID.Rmd
   - 09-BadControls.Rmd
-  
+  - 10-BadControlsStata.Rmd
   
