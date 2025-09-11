@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 11 ¿Cómo interpretar la salida de bacondecomp? | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 11 ¿Cómo interpretar la salida de bacondecomp? | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 11 ¿Cómo interpretar la salida de bacondecomp? | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 11 ¿Cómo interpretar la salida de bacondecomp? | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2025-09-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-obligatorios"><i class="fa fa-check"></i>Libros Obligatorios</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-recomendados"><i class="fa fa-check"></i>Libros Recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="11-TWFE.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-exitoso-progresa-oportunidades-m%C3%A9xico-1990"><i class="fa fa-check"></i>Ejemplo exitoso: Progresa (Oportunidades, México, 1990)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-contrafactual"><i class="fa fa-check"></i>El Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#visualizando-el-contrafactual"><i class="fa fa-check"></i>Visualizando el Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#la-banda-sonora"><i class="fa fa-check"></i>La Banda Sonora</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#problema-fundamental-de-la-inferencia-causal"><i class="fa fa-check"></i>Problema Fundamental de la Inferencia Causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n"><i class="fa fa-check"></i>Establecer Causalidad (Deseo de Clonación)</a></li>
+<li class="chapter" data-level="1.0.1" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#video-recomendado-mastering-metrics"><i class="fa fa-check"></i><b>1.0.1</b> 🎥 Video recomendado: <em>Mastering Metrics</em></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a>
+<ul>
+<li class="chapter" data-level="1.0.2" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto"><i class="fa fa-check"></i><b>1.0.2</b> <strong>Ceteris Paribus: ¿Perfecto?</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="11-TWFE.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n"><i class="fa fa-check"></i>Macro local: definición y expansión</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros"><i class="fa fa-check"></i>Evaluar expresiones dentro de macros</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macro-con-texto"><i class="fa fa-check"></i>Macro con texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#macro-global-uso-y-precauci%C3%B3n"><i class="fa fa-check"></i>Macro global: uso y precaución</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#scalar-vs.-macro"><i class="fa fa-check"></i>Scalar vs. Macro</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-recomendado"><i class="fa fa-check"></i>🧩 Ejercicio recomendado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-foreach"><i class="fa fa-check"></i>Loop con <code>foreach</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-forvalues"><i class="fa fa-check"></i>Loop con <code>forvalues</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-while"><i class="fa fa-check"></i>Loop con <code>while</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados"><i class="fa fa-check"></i>🧠 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#estructura-b%C3%A1sica"><i class="fa fa-check"></i>Estructura básica</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-con-argumentos"><i class="fa fa-check"></i>Programas con argumentos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum"><i class="fa fa-check"></i>Tu programa original mejorado: <code>mysum</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#notas-importantes"><i class="fa fa-check"></i>Notas importantes</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados-1"><i class="fa fa-check"></i>🔧 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-postfile"><i class="fa fa-check"></i>¿Qué hace <code>postfile</code>?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize"><i class="fa fa-check"></i>Paso a paso: guardar medias con <code>summarize</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hicimos-aqu%C3%AD"><i class="fa fa-check"></i>¿Qué hicimos aquí?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-1"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-con-postfile"><i class="fa fa-check"></i>📦 Ejercicios con <code>postfile</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-al-programar-en-stata"><i class="fa fa-check"></i>Buenas prácticas al programar en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-de-repaso"><i class="fa fa-check"></i>🧠 Ejercicio de repaso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables"><i class="fa fa-check"></i>Iterar sobre lista de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="11-TWFE.html"><a href="#definici%C3%B3n-de-estimadores-resultados-potenciales-e-introducci%C3%B3n-al-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>3</b> 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección</a>
+<ul>
+<li class="chapter" data-level="" data-path="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><i class="fa fa-check"></i>🔹 Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>🔹 Parámetros de interés</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>🔹 ¿Por qué no es suficiente el estimador naïve?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>🔹 Sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>🔹 Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html"><i class="fa fa-check"></i><b>4</b> Estimadores Causales en Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas"><i class="fa fa-check"></i>📎 Descargas</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas-1"><i class="fa fa-check"></i>📎 Descargas</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="11-TWFE.html"><a href="#por-qu%C3%A9-la-asignaci%C3%B3n-aleatoria-elimina-el-sesgo"><i class="fa fa-check"></i><b>5</b> ¿Por qué la asignación aleatoria elimina el sesgo?</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>¿Qué hace la aleatorización?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#densidad-de-la-motivaci%C3%B3n-por-grupo"><i class="fa fa-check"></i>Densidad de la motivación por grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html"><i class="fa fa-check"></i><b>6</b> Experimentos Controlados RECETA</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#paso-1-dise%C3%B1ar-el-experimento"><i class="fa fa-check"></i>PASO 1) Diseñar el experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#paso-2-aleatorizar-la-asignaci%C3%B3n-stata"><i class="fa fa-check"></i>Paso 2) Aleatorizar la asignación (Stata)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-3-verificar-el-balance-de-covariables"><i class="fa fa-check"></i>PASO 3) Verificar el balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-4-estimar-el-efecto-del-tratamiento"><i class="fa fa-check"></i>PASO 4) Estimar el efecto del tratamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes"><i class="fa fa-check"></i>Asignación a nivel individual (dos muestras independientes)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#pruebas"><i class="fa fa-check"></i>Pruebas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="11-TWFE.html"><a href="#c%C3%A1lculos-de-poder-estad%C3%ADstico-en-stata"><i class="fa fa-check"></i><b>7</b> Cálculos de Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html"><i class="fa fa-check"></i>Sin controles</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado"><i class="fa fa-check"></i>Tamaño de muestra para un efecto dado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efecto-m%C3%ADnimo-detectable-mde-para-un-n-dado"><i class="fa fa-check"></i>Efecto mínimo detectable (MDE) para un N dado</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#mde-para-un-n-dado-con-variable-binaria"><i class="fa fa-check"></i>MDE para un N dado con variable binaria</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado-con-covariables"><i class="fa fa-check"></i>Tamaño de muestra para un efecto dado con covariables</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#mde-para-un-n-dado-con-covariables"><i class="fa fa-check"></i>MDE para un N dado con covariables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#n%C3%BAmero-de-cl%C3%BAsteres-para-un-efecto-y-tama%C3%B1o-de-cl%C3%BAster-dados"><i class="fa fa-check"></i>Número de clústeres para un efecto y tamaño de clúster dados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-cl%C3%BAster-para-un-n%C3%BAmero-dado-de-cl%C3%BAsteres"><i class="fa fa-check"></i>Tamaño de clúster para un número dado de clústeres</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#mde-para-un-tama%C3%B1o-de-cl%C3%BAster-y-n%C3%BAmero-de-cl%C3%BAsteres-dados"><i class="fa fa-check"></i>MDE para un tamaño de clúster y número de clústeres dados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#estad%C3%ADsticas-descriptivas"><i class="fa fa-check"></i>Estadísticas descriptivas</a>
+<ul>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#promedios-por-periodo-y-grupo"><i class="fa fa-check"></i>Promedios por periodo y grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-medias"><i class="fa fa-check"></i>Comparación de medias</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#estimador-did-paso-a-paso"><i class="fa fa-check"></i>Estimador DID paso a paso</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#usando-el-comando-diff"><i class="fa fa-check"></i>Usando el comando <code>diff</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-con-regresiones"><i class="fa fa-check"></i>Implementación con regresiones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#extensi%C3%B3n-con-panel"><i class="fa fa-check"></i>Extensión con panel</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n"><i class="fa fa-check"></i>Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html"><i class="fa fa-check"></i><b>8</b> Test de Tendencias Paralelas y Malos Controles</a>
+<ul>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a>
+<ul>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#buenos-controles"><i class="fa fa-check"></i>Buenos controles</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#malos-controles"><i class="fa fa-check"></i>Malos controles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implicaciones-pr%C3%A1cticas"><i class="fa fa-check"></i>Implicaciones prácticas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Agrupación</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html"><i class="fa fa-check"></i><b>9</b> Malos Controles en Stata</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#mediador-post-tratamiento"><i class="fa fa-check"></i><b>9.1</b> Mediador (post-tratamiento)</a>
+<ul>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#mediador-d-rightarrow-m-rightarrow-y"><i class="fa fa-check"></i>Mediador: <span class="math inline">\(D \rightarrow M \rightarrow Y\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#colisionador"><i class="fa fa-check"></i>Colisionador</a></li>
+<li class="chapter" data-level="9.2" data-path="11-TWFE.html"><a href="#gr%C3%A1ficos-de-apoyo"><i class="fa fa-check"></i><b>9.2</b> Gráficos de apoyo</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#coefplot-del-mediador"><i class="fa fa-check"></i><b>9.2.1</b> Coefplot del mediador</a></li>
+<li class="chapter" data-level="9.2.2" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#histogramas-monte-carlo"><i class="fa fa-check"></i><b>9.2.2</b> Histogramas Monte Carlo</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="11-TWFE.html"><a href="#resumen-pr%C3%A1ctico"><i class="fa fa-check"></i><b>9.3</b> Resumen práctico</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html"><i class="fa fa-check"></i>Malos controles: <strong>Mediador (M)</strong> vs <strong>Colisionador (C)</strong> — DAGs</a>
+<ul>
+<li class="chapter" data-level="9.4" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f"><i class="fa fa-check"></i><b>9.4</b> Caso B — <strong>F descendiente de colisionador</strong> (<code>D → Y ← U</code> y <code>Y → F</code>)</a></li>
+<li class="chapter" data-level="9.5" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#caso-c-f-post-tratamiento-mediador-d-f-y"><i class="fa fa-check"></i><b>9.5</b> Caso C — <strong>F post-tratamiento (mediador)</strong> (<code>D → F → Y</code>)</a></li>
+<li class="chapter" data-level="9.6" data-path="11-TWFE.html"><a href="#resumen-pedag%C3%B3gico"><i class="fa fa-check"></i><b>9.6</b> Resumen pedagógico</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="problemas-de-twfe-y-alternativas-modernas-en-did.html"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html"><i class="fa fa-check"></i><b>10</b> Problemas de TWFE y alternativas modernas en DiD</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido"><i class="fa fa-check"></i>Contexto rápido</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#modelo-b%C3%A1sico-22-did"><i class="fa fa-check"></i>Modelo básico 2×2 DiD</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#explicaci%C3%B3n-did%C3%A1ctica"><i class="fa fa-check"></i>Explicación didáctica</a></li>
+<li class="chapter" data-level="10.0.1" data-path="11-TWFE.html"><a href="#c%C3%B3digo-copiarpegar"><i class="fa fa-check"></i><b>10.0.1</b> Código (copiar/pegar)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-2-unidades-y-tratamiento-desde-un-a%C3%B1o-en-adelante"><i class="fa fa-check"></i>Panel largo con 2 unidades y tratamiento “desde un año en adelante”</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#versi%C3%B3n-donde-y-refleja-solo-el-tama%C3%B1o-del-efecto-por-tratado"><i class="fa fa-check"></i>Versión donde <code>Y</code> refleja solo el tamaño del efecto por tratado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#b-versi%C3%B3n-con-y-id-t-efecto_heterog%C3%A9neo"><i class="fa fa-check"></i>3B) Versión con <code>Y = id + t + efecto_heterogéneo</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#descomposici%C3%B3n-de-bacon-y-efecto-real-en-did-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Descomposición de Bacon y “efecto real” en DiD con adopción escalonada</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-es-la-descomposici%C3%B3n-de-bacon-y-por-qu%C3%A9-importa"><i class="fa fa-check"></i>¿Qué es la descomposición de Bacon y por qué importa?</a></li>
+<li class="chapter" data-level="" data-path="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"><a href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"><a href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a>
+<ul>
+<li class="chapter" data-level="10.0.2" data-path="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"><a href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html#caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte"><i class="fa fa-check"></i><b>10.0.2</b> Caso 3 (tu ejemplo con tres unidades, mismo inicio y efecto por cohorte)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-con-adopci%C3%B3n-escalonada-y-efectos-din%C3%A1micos"><i class="fa fa-check"></i>Caso con <strong>adopción escalonada</strong> y <strong>efectos dinámicos</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="11-TWFE.html"><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i><b>11</b> ¿Cómo interpretar la salida de <code>bacondecomp</code>?</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="11-TWFE.html"><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i><b>11.1</b> 1) ¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="11.2" data-path="11-TWFE.html"><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i><b>11.2</b> 2) ¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="11.3" data-path="11-TWFE.html"><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i><b>11.3</b> 3) ¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="11.4" data-path="11-TWFE.html"><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i><b>11.4</b> 4) ¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="11.5" data-path="11-TWFE.html"><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i><b>11.5</b> 5) Resumen en una línea</a></li>
+<li class="chapter" data-level="11.6" data-path="11-TWFE.html"><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i><b>11.6</b> 6) “Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="11-TWFE.html"><a href="#explicaci%C3%B3n-did%C3%A1ctica-1"><i class="fa fa-check"></i><b>11.6.1</b> Explicación didáctica</a></li>
+<li class="chapter" data-level="11.6.2" data-path="11-TWFE.html"><a href="#c%C3%B3digo-copiarpegar-1"><i class="fa fa-check"></i><b>11.6.2</b> Código (copiar/pegar)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="cómo-interpretar-la-salida-de-bacondecomp.html"><a href="cómo-interpretar-la-salida-de-bacondecomp.html"><i class="fa fa-check"></i><b>11.7</b> 7) Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="11.8" data-path="11-TWFE.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>11.8</b> 8) Notas prácticas de ejecución</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="cómo-interpretar-la-salida-de-bacondecomp" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Capitulo 11</span> ¿Cómo interpretar la salida de <code>bacondecomp</code>?<a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<pre><code>
+Computing decomposition across 3 timing groups
+including a never-treated group
+-------------------------------
+</code></pre>
+<pre><code>   Y | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]</code></pre>
+<pre><code>
+\-------------+----------------------------------------------------------------
+D |   2.709677   .3030118     8.94   0.000     2.115785     3.30357
+-------------------------------------------------------------------
+
+Bacon Decomposition
+
++---------------------------------------------------+
+\|                      |         Beta   TotalWeight |
+\|----------------------+----------------------------|
+\|         Early\_v\_Late |            2   .2419354906 |
+\|         Late\_v\_Early |            4   .0967741935 |
+\|       Never\_v\_timing |  2.780487813   .6612903158 |
++---------------------------------------------------+
+</code></pre>
+<hr />
+<div id="qué-significa-cada-fila" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> 1) ¿Qué significa cada fila?<a href="#qu%C3%A9-significa-cada-fila" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><p><strong>Early_v_Late (β=2, peso=0.2419)</strong><br />
+Compara <strong>tratados tempranos</strong> vs <strong>tratados tardíos</strong> <strong>en los períodos en que los tardíos aún no están tratados</strong>.<br />
+→ Identifica el efecto de la cohorte <strong>temprana</strong> (≈ 2 en tu simulación).</p></li>
+<li><p><strong>Late_v_Early (β=4, peso=0.0968)</strong><br />
+Compara <strong>tratados tardíos</strong> vs <strong>tratados tempranos</strong> <strong>cuando los tempranos ya están tratados</strong>.<br />
+→ Usa <strong>tratados</strong> como “control” (no ideal si hay heterogeneidad). En tu caso rinde ≈ <strong>4</strong> (efecto de la cohorte tardía).</p></li>
+<li><p><strong>Never_v_timing (β≈2.7805, peso=0.6613)</strong><br />
+Compara <strong>cohortes tratadas</strong> (temprana y tardía) vs <strong>nunca tratados</strong>.<br />
+→ Es un promedio (con pesos internos) de las comparaciones “tratados vs nunca tratados” a través de los distintos timings; por eso el β cae <strong>entre 2 y 4</strong> y está más cerca de 2 porque la cohorte temprana aporta más periodos post.</p></li>
+</ul>
+<blockquote>
+<p><strong>Idea clave</strong>: El coeficiente <strong>TWFE</strong> final es la <strong>media ponderada</strong> de estos DiD 2×2.</p>
+</blockquote>
+<hr />
+</div>
+<div id="cuadra-el-promedio-ponderado-con-el-β-de-twfe" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> 2) ¿Cuadra el promedio ponderado con el β de TWFE?<a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sí. Los <strong>pesos</strong> suman 1:
+- 0.2419354906 + 0.0967741935 + 0.6612903158 = <strong>1.0000</strong> (≈)</p>
+<p>Promedio ponderado:
+- Aporte Early_v_Late: 2 × 0.2419354906 = <strong>0.483871</strong>
+- Aporte Late_v_Early: 4 × 0.0967741935 = <strong>0.387097</strong>
+- Aporte Never_v_timing: 2.780487813 × 0.6612903158 = <strong>1.838710</strong></p>
+<p><strong>Suma</strong>: 0.483871 + 0.387097 + 1.838710 = <strong>2.709677</strong><br />
+→ Coincide con el <strong>β̂ de TWFE = 2.709677</strong>.</p>
+<hr />
+</div>
+<div id="por-qué-este-β-puede-no-ser-el-efecto-real-promedio" class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> 3) ¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?<a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Lo que normalmente quieres reportar es el <strong>ATT overall</strong>: el <strong>promedio del efecto entre las observaciones tratadas</strong> (cohorte-tiempo) ponderado por su tamaño:</p>
+<p><span class="math display">\[
+\text{ATT}_{\text{overall}}
+=
+\frac{\sum_{g,t: D=1} N_{g,t}\cdot \text{ATT}(g,t)}
+     {\sum_{g,t: D=1} N_{g,t}}.
+\]</span></p>
+<ul>
+<li>En <strong>adopción escalonada</strong> (tempranos con más años post que tardíos) y/o con <strong>efectos que difieren por cohorte</strong> o en el <strong>tiempo desde el tratamiento</strong>, <strong>TWFE</strong> mezcla <strong>tres tipos de comparaciones</strong> (incluyendo <strong>tratado vs tratado</strong>), y su promedio ponderado <strong>puede alejarse</strong> del <strong>ATT overall</strong>.</li>
+</ul>
+<p><strong>Ejemplo mental (ilustrativo):</strong><br />
+Si la cohorte temprana vale <strong>2</strong> (más años post) y la tardía <strong>4</strong> (menos años post), el <strong>promedio correcto entre celdas tratadas</strong> puede ser algo como<br />
+<span class="math display">\[
+\frac{5\cdot 2 + 2\cdot 4}{5+2} = \frac{18}{7} \approx 2.571,
+\]</span>
+mientras que <strong>TWFE</strong> te dio <strong>2.7097</strong> porque <strong>incluye</strong> las comparaciones <strong>Early_v_Late</strong> y <strong>Late_v_Early</strong> con pesos 24% y 9.7%.</p>
+<hr />
+</div>
+<div id="cómo-usar-esta-descomposición-en-la-práctica" class="section level2 hasAnchor" number="11.4">
+<h2><span class="header-section-number">11.4</span> 4) ¿Cómo usar esta descomposición en la práctica?<a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Si <strong>Never_v_timing</strong> concentra <strong>casi todo el peso</strong> y los efectos son <strong>homogéneos</strong>, <strong>TWFE</strong> suele estar cerca del <strong>ATT overall</strong>.<br />
+</li>
+<li>Si hay <strong>peso relevante</strong> en <strong>Early_v_Late</strong> o <strong>Late_v_Early</strong> <strong>y</strong> sospechas <strong>heterogeneidad</strong> (por cohorte o dinámica), <strong>no</strong> confíes en TWFE para el efecto promedio.</li>
+</ul>
+<p><strong>Recomendación</strong>: Estima <span class="math inline">\(\text{ATT}(g,t)\)</span> con métodos modernos (p. ej., <strong>csdid</strong>, <strong>eventstudyinteract</strong>, <strong>did_imputation</strong>, <strong>did2s</strong>) y luego construye el <strong>ATT overall</strong> promediando <strong>solo sobre celdas tratadas</strong> con pesos <span class="math inline">\(N_{g,t}\)</span>.</p>
+<hr />
+</div>
+<div id="resumen-en-una-línea" class="section level2 hasAnchor" number="11.5">
+<h2><span class="header-section-number">11.5</span> 5) Resumen en una línea<a href="#resumen-en-una-l%C3%ADnea" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Tu tabla dice</strong>: el β̂ de TWFE (=<strong>2.7097</strong>) es un <strong>promedio ponderado</strong> de tres DiD 2×2; la mayor parte (66.1%) viene de <strong>tratados vs nunca tratados</strong> (≈2.78), y el resto de <strong>tratados vs tratados</strong> (2 y 4).<br />
+<strong>Conclusión</strong>: Para reportar “el efecto real promedio”, usa el <strong>ATT overall</strong> (promedio sobre observaciones tratadas), no el β̂ de TWFE cuando hay heterogeneidad o adopción escalonada.</p>
+<pre><code>
+
+
+
+
+
+---
+
+## 5) Simulación grande (30 unidades × 60 periodos) con **timings y efectos crecientes**
+
+### Explicación didáctica
+
+* Asignamos a cada unidad una **cohorte** (0–5), un **timing de adopción** aleatorio, y un **tamaño de efecto** aleatorio.
+* El outcome `Y` crece con el tiempo y **acumula** efecto post-tratamiento: `effect * (t - timing)`.
+* Graficamos las trayectorias y estimamos **TWFE** + **Bacon**.
+
+### Código (copiar/pegar)
+
+```stata
+*********************************************************
+
+*
+
+clear
+local units = 30
+local start = 1
+local end   = 60
+
+local time = `end&#39; - `start&#39; + 1
+local obsv = `units&#39; * `time&#39;
+set obs `obsv&#39;
+
+egen id    = seq(), b(`time&#39;)  
+egen t     = seq(), f(`start&#39;) t(`end&#39;)     
+
+sort  id t
+xtset id t
+
+lab var id &quot;Panel variable&quot;
+lab var t  &quot;Time  variable&quot;
+set seed 13082021
+
+
+cap drop Y
+cap drop D
+cap drop cohort
+cap drop effect
+cap drop timing
+
+gen Y      = 0      // outcome variable 
+gen D      = 0      // intervention variable
+gen cohort = .      // total treatment variables
+gen effect = .      // treatment effect size
+gen timing = .      // when the treatment happens for each cohort
+levelsof id, local(lvls)
+foreach x of local lvls {
+    local chrt = runiformint(0,5)   
+    replace cohort = `chrt&#39; if id==`x&#39;
+}
+
+levelsof cohort , local(lvls)  //  let all cohorts be treated for now
+foreach x of local lvls {
+    
+    // (a) effect
+    
+    local eff = runiformint(2,10)
+        replace effect = `eff&#39; if cohort==`x&#39;
+        
+    // (b) timing   
+    
+    local timing = runiformint(`start&#39; + 5,`end&#39; - 5)   
+    replace timing = `timing&#39; if cohort==`x&#39;
+        replace D = 1 if cohort==`x&#39; &amp; t&gt;= `timing&#39; 
+}
+
+replace Y = id + t + cond(D==1, effect * (t - timing), 0)
+
+
+levelsof cohort
+local items = `r(r)&#39;
+
+local lines
+levelsof id
+
+forval x = 1/`r(r)&#39; {
+    
+    qui summ cohort if id==`x&#39;
+    local color = `r(mean)&#39; + 1
+    colorpalette tableau, nograph
+        
+    local lines `lines&#39; (line Y t if id==`x&#39;, lc(&quot;`r(p`color&#39;)&#39;&quot;) lw(vthin))    ||
+}
+
+twoway ///
+    `lines&#39;, legend(off)
+    
+    
+    xtreg Y i.t D, fe
+    reghdfe Y D, absorb(id t)  
+
+
+bacondecomp Y D, ddetail</code></pre>
+<blockquote>
+<p>🔍 <strong>Claves</strong>: Este es el entorno “realista” donde TWFE más sufre: <strong>heterogeneidad + escalonamiento</strong> + <strong>dinámicas</strong> → pesos complicados (a veces negativos).</p>
+</blockquote>
+<hr />
+</div>
+<div id="soluciones-estimadores-modernos-y-gráfico-comparativo-de-estudios-de-evento" class="section level2 hasAnchor" number="11.6">
+<h2><span class="header-section-number">11.6</span> 6) “Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento<a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="explicación-didáctica-1" class="section level3 hasAnchor" number="11.6.1">
+<h3><span class="header-section-number">11.6.1</span> Explicación didáctica<a href="#explicaci%C3%B3n-did%C3%A1ctica-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Simulamos nuevamente con <strong>first_treat</strong> y <strong>rel_time</strong> para construir <strong>leads</strong> (<code>F_#</code>) y <strong>lags</strong> (<code>L_#</code>).</p></li>
+<li><p>Definimos cohortes de <strong>nunca tratados</strong> y variables de <strong>cohorte/gvar</strong> para los métodos que lo requieren.</p></li>
+<li><p><strong>Instalamos</strong> paquetes (hazlo una sola vez; luego puedes comentar estas líneas).</p></li>
+<li><p>Estimamos:</p>
+<ul>
+<li><strong>TWFE</strong> (con <code>reghdfe</code>),</li>
+<li><strong>csdid</strong>,</li>
+<li><strong>did_imputation</strong>,</li>
+<li><strong>did_multiplegt_dyn</strong>,</li>
+<li><strong>eventstudyinteract</strong>,</li>
+<li><strong>did2s</strong>,</li>
+<li><strong>stackedev</strong>;
+y graficamos todos juntos con <code>event_plot</code>.</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>Detalle técnico</strong>: en <code>reghdfe Y L_* F_*, absorb(id t) cluster(i)</code>, tu código agrupa por <code>i</code>. Si tu panel es <code>id</code>, lo más habitual es <code>cluster(id)</code>. <strong>Mantengo tu comando exactamente</strong> (como pediste), pero sugiero revisar el cluster según tu diseño.</p>
+</blockquote>
+</div>
+<div id="código-copiarpegar-1" class="section level3 hasAnchor" number="11.6.2">
+<h3><span class="header-section-number">11.6.2</span> Código (copiar/pegar)<a href="#c%C3%B3digo-copiarpegar-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb110"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb110-1"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-1" tabindex="-1"></a>**********************************************************************************************</span>
+<span id="cb110-2"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-2" tabindex="-1"></a>*Soluciones</span>
+<span id="cb110-3"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-3" tabindex="-1"></a></span>
+<span id="cb110-4"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-4" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb110-5"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-5" tabindex="-1"></a></span>
+<span id="cb110-6"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-6" tabindex="-1"></a><span class="kw">local</span> units = 30</span>
+<span id="cb110-7"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-7" tabindex="-1"></a><span class="kw">local</span> <span class="bn">start</span> = 1</span>
+<span id="cb110-8"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-8" tabindex="-1"></a><span class="kw">local</span> <span class="kw">end</span>   = 60</span>
+<span id="cb110-9"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-9" tabindex="-1"></a></span>
+<span id="cb110-10"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-10" tabindex="-1"></a><span class="kw">local</span> time = <span class="ot">`end&#39;</span> - <span class="ot">`start&#39;</span> + 1</span>
+<span id="cb110-11"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-11" tabindex="-1"></a><span class="kw">local</span> obsv = <span class="ot">`units&#39;</span> * <span class="ot">`time&#39;</span></span>
+<span id="cb110-12"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-12" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obsv&#39;</span></span>
+<span id="cb110-13"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-13" tabindex="-1"></a></span>
+<span id="cb110-14"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-14" tabindex="-1"></a><span class="kw">egen</span> id    = <span class="fu">seq</span>(), b(<span class="ot">`time&#39;</span>)  </span>
+<span id="cb110-15"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-15" tabindex="-1"></a><span class="kw">egen</span> t     = <span class="fu">seq</span>(), f(<span class="ot">`start&#39;</span>) t(<span class="ot">`end&#39;</span>)     </span>
+<span id="cb110-16"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-16" tabindex="-1"></a></span>
+<span id="cb110-17"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-17" tabindex="-1"></a><span class="kw">sort</span>  id t</span>
+<span id="cb110-18"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-18" tabindex="-1"></a>xtset id t</span>
+<span id="cb110-19"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-19" tabindex="-1"></a></span>
+<span id="cb110-20"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-20" tabindex="-1"></a></span>
+<span id="cb110-21"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-21" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20211222</span>
+<span id="cb110-22"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-22" tabindex="-1"></a></span>
+<span id="cb110-23"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-23" tabindex="-1"></a><span class="kw">gen</span> Y           = 0     <span class="co">// outcome variable </span></span>
+<span id="cb110-24"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-24" tabindex="-1"></a><span class="kw">gen</span> D           = 0     <span class="co">// intervention variable</span></span>
+<span id="cb110-25"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-25" tabindex="-1"></a><span class="kw">gen</span> cohort      = .     <span class="co">// treatment cohort</span></span>
+<span id="cb110-26"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-26" tabindex="-1"></a><span class="kw">gen</span> effect      = .     <span class="co">// treatment effect size</span></span>
+<span id="cb110-27"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-27" tabindex="-1"></a><span class="kw">gen</span> first_treat = .     <span class="co">// when the treatment happens for each cohort</span></span>
+<span id="cb110-28"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-28" tabindex="-1"></a><span class="kw">gen</span> rel_time    = .     <span class="co">// time - first_treat</span></span>
+<span id="cb110-29"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-29" tabindex="-1"></a></span>
+<span id="cb110-30"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-30" tabindex="-1"></a><span class="kw">levelsof</span> id, <span class="kw">local</span>(lvls)</span>
+<span id="cb110-31"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-31" tabindex="-1"></a><span class="kw">foreach</span> x <span class="kw">of</span> <span class="kw">local</span> lvls {</span>
+<span id="cb110-32"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-32" tabindex="-1"></a>    <span class="kw">local</span> chrt = runiformint(0,5)   </span>
+<span id="cb110-33"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-33" tabindex="-1"></a>    <span class="kw">replace</span> cohort = <span class="ot">`chrt&#39;</span> <span class="kw">if</span> id==<span class="ot">`x&#39;</span></span>
+<span id="cb110-34"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-34" tabindex="-1"></a>}</span>
+<span id="cb110-35"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-35" tabindex="-1"></a></span>
+<span id="cb110-36"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-36" tabindex="-1"></a></span>
+<span id="cb110-37"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-37" tabindex="-1"></a><span class="kw">levelsof</span> cohort , <span class="kw">local</span>(lvls) </span>
+<span id="cb110-38"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-38" tabindex="-1"></a><span class="kw">foreach</span> x <span class="kw">of</span> <span class="kw">local</span> lvls {</span>
+<span id="cb110-39"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-39" tabindex="-1"></a>    </span>
+<span id="cb110-40"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-40" tabindex="-1"></a>    <span class="kw">local</span> eff = runiformint(2,10)</span>
+<span id="cb110-41"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-41" tabindex="-1"></a>        <span class="kw">replace</span> effect = <span class="ot">`eff&#39;</span> <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span></span>
+<span id="cb110-42"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-42" tabindex="-1"></a>            </span>
+<span id="cb110-43"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-43" tabindex="-1"></a>    <span class="kw">local</span> timing = runiformint(<span class="ot">`start&#39;</span>,<span class="ot">`end&#39;</span> + 20)  <span class="co">// </span></span>
+<span id="cb110-44"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-44" tabindex="-1"></a>    <span class="kw">replace</span> first_treat = <span class="ot">`timing&#39;</span> <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span></span>
+<span id="cb110-45"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-45" tabindex="-1"></a>    <span class="kw">replace</span> first_treat = . <span class="kw">if</span> first_treat &gt; <span class="ot">`end&#39;</span></span>
+<span id="cb110-46"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-46" tabindex="-1"></a>        <span class="kw">replace</span> D = 1 <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span> &amp; t&gt;= <span class="ot">`timing&#39;</span> </span>
+<span id="cb110-47"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-47" tabindex="-1"></a>}</span>
+<span id="cb110-48"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-48" tabindex="-1"></a></span>
+<span id="cb110-49"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-49" tabindex="-1"></a><span class="kw">replace</span> rel_time = t - first_treat</span>
+<span id="cb110-50"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-50" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D==1, effect * rel_time, 0) + rnormal()</span>
+<span id="cb110-51"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-51" tabindex="-1"></a></span>
+<span id="cb110-52"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-52" tabindex="-1"></a></span>
+<span id="cb110-53"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-53" tabindex="-1"></a></span>
+<span id="cb110-54"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-54" tabindex="-1"></a><span class="co">// generate leads and lags (used in some commands)</span></span>
+<span id="cb110-55"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-55" tabindex="-1"></a></span>
+<span id="cb110-56"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-56" tabindex="-1"></a>summ rel_time</span>
+<span id="cb110-57"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-57" tabindex="-1"></a><span class="kw">local</span> relmin = <span class="fu">abs</span>(<span class="fu">r</span>(<span class="fu">min</span>))</span>
+<span id="cb110-58"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-58" tabindex="-1"></a><span class="kw">local</span> relmax = <span class="fu">abs</span>(<span class="fu">r</span>(<span class="fu">max</span>))</span>
+<span id="cb110-59"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-59" tabindex="-1"></a></span>
+<span id="cb110-60"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-60" tabindex="-1"></a>    <span class="co">// leads</span></span>
+<span id="cb110-61"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-61" tabindex="-1"></a>    cap <span class="kw">drop</span> F_*</span>
+<span id="cb110-62"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-62" tabindex="-1"></a>    forval x = 2/<span class="ot">`relmin&#39;</span> {  <span class="co">// drop the first lead</span></span>
+<span id="cb110-63"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-63" tabindex="-1"></a>        <span class="kw">gen</span> F_<span class="ot">`x&#39;</span> = rel_time == -<span class="ot">`x&#39;</span></span>
+<span id="cb110-64"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-64" tabindex="-1"></a>    }</span>
+<span id="cb110-65"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-65" tabindex="-1"></a></span>
+<span id="cb110-66"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-66" tabindex="-1"></a>    </span>
+<span id="cb110-67"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-67" tabindex="-1"></a>    <span class="co">//lags</span></span>
+<span id="cb110-68"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-68" tabindex="-1"></a>    cap <span class="kw">drop</span> L_*</span>
+<span id="cb110-69"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-69" tabindex="-1"></a>    forval x = 0/<span class="ot">`relmax&#39;</span> {</span>
+<span id="cb110-70"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-70" tabindex="-1"></a>        <span class="kw">gen</span> L_<span class="ot">`x&#39;</span> = rel_time ==  <span class="ot">`x&#39;</span></span>
+<span id="cb110-71"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-71" tabindex="-1"></a>    }</span>
+<span id="cb110-72"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-72" tabindex="-1"></a>    </span>
+<span id="cb110-73"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-73" tabindex="-1"></a>    </span>
+<span id="cb110-74"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-74" tabindex="-1"></a><span class="co">// generate the control_cohort variables  (used in some commands)</span></span>
+<span id="cb110-75"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-75" tabindex="-1"></a></span>
+<span id="cb110-76"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-76" tabindex="-1"></a><span class="kw">gen</span> never_treat = first_treat==.</span>
+<span id="cb110-77"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-77" tabindex="-1"></a></span>
+<span id="cb110-78"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-78" tabindex="-1"></a><span class="kw">sum</span> first_treat</span>
+<span id="cb110-79"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-79" tabindex="-1"></a><span class="kw">gen</span> last_cohort = first_treat==<span class="fu">r</span>(<span class="fu">max</span>) <span class="co">// dummy for the latest- or never-treated cohort</span></span>
+<span id="cb110-80"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-80" tabindex="-1"></a></span>
+<span id="cb110-81"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-81" tabindex="-1"></a></span>
+<span id="cb110-82"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-82" tabindex="-1"></a><span class="co">// generate the gvar variabls (used in some commands)</span></span>
+<span id="cb110-83"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-83" tabindex="-1"></a><span class="kw">gen</span> gvar = first_treat</span>
+<span id="cb110-84"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-84" tabindex="-1"></a><span class="kw">recode</span> gvar (. = 0)</span>
+<span id="cb110-85"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-85" tabindex="-1"></a>*************************************</span>
+<span id="cb110-86"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-86" tabindex="-1"></a></span>
+<span id="cb110-87"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-87" tabindex="-1"></a>*Los colegas creativos</span>
+<span id="cb110-88"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-88" tabindex="-1"></a><span class="co">// supporting packages</span></span>
+<span id="cb110-89"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-89" tabindex="-1"></a><span class="kw">ssc</span> install schemepack, <span class="kw">replace</span></span>
+<span id="cb110-90"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-90" tabindex="-1"></a><span class="kw">ssc</span> install avar, <span class="kw">replace</span> </span>
+<span id="cb110-91"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-91" tabindex="-1"></a><span class="kw">ssc</span> install reghdfe, <span class="kw">replace</span></span>
+<span id="cb110-92"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-92" tabindex="-1"></a><span class="kw">ssc</span> install event_plot, <span class="kw">replace</span></span>
+<span id="cb110-93"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-93" tabindex="-1"></a><span class="kw">ssc</span> install palettes, <span class="kw">replace</span></span>
+<span id="cb110-94"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-94" tabindex="-1"></a><span class="kw">ssc</span> install colrspace, <span class="kw">replace</span></span>
+<span id="cb110-95"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-95" tabindex="-1"></a></span>
+<span id="cb110-96"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-96" tabindex="-1"></a><span class="co">// DiD packages</span></span>
+<span id="cb110-97"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-97" tabindex="-1"></a><span class="kw">ssc</span> install drdid, <span class="kw">replace</span></span>
+<span id="cb110-98"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-98" tabindex="-1"></a><span class="kw">ssc</span> install csdid, <span class="kw">replace</span></span>
+<span id="cb110-99"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-99" tabindex="-1"></a><span class="kw">ssc</span> install did_imputation, <span class="kw">replace</span></span>
+<span id="cb110-100"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-100" tabindex="-1"></a><span class="kw">ssc</span> install eventstudyinteract, <span class="kw">replace</span></span>
+<span id="cb110-101"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-101" tabindex="-1"></a><span class="kw">ssc</span> install did_multiplegt, <span class="kw">replace</span></span>
+<span id="cb110-102"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-102" tabindex="-1"></a><span class="kw">ssc</span> install stackedev, <span class="kw">replace</span></span>
+<span id="cb110-103"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-103" tabindex="-1"></a><span class="kw">ssc</span> install did2s, <span class="kw">replace</span></span>
+<span id="cb110-104"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-104" tabindex="-1"></a></span>
+<span id="cb110-105"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-105" tabindex="-1"></a></span>
+<span id="cb110-106"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-106" tabindex="-1"></a>************</span>
+<span id="cb110-107"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-107" tabindex="-1"></a>*** TWFE ***</span>
+<span id="cb110-108"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-108" tabindex="-1"></a>************</span>
+<span id="cb110-109"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-109" tabindex="-1"></a></span>
+<span id="cb110-110"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-110" tabindex="-1"></a>reghdfe Y L_* F_*, absorb(id t) <span class="kw">cluster</span>(i)</span>
+<span id="cb110-111"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-111" tabindex="-1"></a></span>
+<span id="cb110-112"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-112" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> twfe </span>
+<span id="cb110-113"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-113" tabindex="-1"></a></span>
+<span id="cb110-114"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-114" tabindex="-1"></a>*************</span>
+<span id="cb110-115"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-115" tabindex="-1"></a>*** csdid ***</span>
+<span id="cb110-116"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-116" tabindex="-1"></a>*************</span>
+<span id="cb110-117"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-117" tabindex="-1"></a></span>
+<span id="cb110-118"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-118" tabindex="-1"></a>csdid Y, ivar(id) time(t) gvar(gvar) notyet</span>
+<span id="cb110-119"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-119" tabindex="-1"></a></span>
+<span id="cb110-120"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-120" tabindex="-1"></a><span class="kw">estat</span> event, <span class="kw">window</span>(-10 10) estore(csdd) </span>
+<span id="cb110-121"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-121" tabindex="-1"></a></span>
+<span id="cb110-122"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-122" tabindex="-1"></a>***********************</span>
+<span id="cb110-123"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-123" tabindex="-1"></a>*** did_imputation  ***</span>
+<span id="cb110-124"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-124" tabindex="-1"></a>***********************</span>
+<span id="cb110-125"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-125" tabindex="-1"></a></span>
+<span id="cb110-126"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-126" tabindex="-1"></a>did_imputation Y i t first_treat, horizons(0/10) pretrend(10) minn(0) </span>
+<span id="cb110-127"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-127" tabindex="-1"></a></span>
+<span id="cb110-128"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-128" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> didimp  </span>
+<span id="cb110-129"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-129" tabindex="-1"></a>    </span>
+<span id="cb110-130"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-130" tabindex="-1"></a>***********************</span>
+<span id="cb110-131"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-131" tabindex="-1"></a>*** did_multiplegt  ***</span>
+<span id="cb110-132"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-132" tabindex="-1"></a>***********************</span>
+<span id="cb110-133"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-133" tabindex="-1"></a></span>
+<span id="cb110-134"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-134" tabindex="-1"></a>did_multiplegt_dyn Y id t D, <span class="kw">effects</span>(10) placebo(10) <span class="kw">cluster</span>(id)</span>
+<span id="cb110-135"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-135" tabindex="-1"></a></span>
+<span id="cb110-136"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-136" tabindex="-1"></a><span class="fu">matrix</span> didmgt_b = <span class="fu">e</span>(<span class="kw">estimates</span>) </span>
+<span id="cb110-137"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-137" tabindex="-1"></a><span class="fu">matrix</span> didmgt_v = <span class="fu">e</span>(variances)</span>
+<span id="cb110-138"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-138" tabindex="-1"></a></span>
+<span id="cb110-139"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-139" tabindex="-1"></a>*****************************</span>
+<span id="cb110-140"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-140" tabindex="-1"></a>***  eventstudyinteract   ***</span>
+<span id="cb110-141"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-141" tabindex="-1"></a>*****************************</span>
+<span id="cb110-142"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-142" tabindex="-1"></a></span>
+<span id="cb110-143"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-143" tabindex="-1"></a>eventstudyinteract Y L_* F_*, <span class="kw">vce</span>(<span class="kw">cluster</span> id) absorb(id t) cohort(first_treat) control_cohort(never_treat)  </span>
+<span id="cb110-144"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-144" tabindex="-1"></a></span>
+<span id="cb110-145"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-145" tabindex="-1"></a><span class="fu">matrix</span> evtstint_b = <span class="fu">e</span>(b_iw) </span>
+<span id="cb110-146"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-146" tabindex="-1"></a><span class="fu">matrix</span> evtstint_v = <span class="fu">e</span>(V_iw)</span>
+<span id="cb110-147"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-147" tabindex="-1"></a></span>
+<span id="cb110-148"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-148" tabindex="-1"></a>***************     </span>
+<span id="cb110-149"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-149" tabindex="-1"></a>*** did2s   ***</span>
+<span id="cb110-150"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-150" tabindex="-1"></a>***************</span>
+<span id="cb110-151"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-151" tabindex="-1"></a></span>
+<span id="cb110-152"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-152" tabindex="-1"></a>did2s Y, first_stage(id t) second_stage(F_* L_*) treatment(D) <span class="kw">cluster</span>(id)</span>
+<span id="cb110-153"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-153" tabindex="-1"></a></span>
+<span id="cb110-154"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-154" tabindex="-1"></a><span class="fu">matrix</span> did2s_b = <span class="fu">e</span>(b)</span>
+<span id="cb110-155"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-155" tabindex="-1"></a><span class="fu">matrix</span> did2s_v = <span class="fu">e</span>(<span class="kw">V</span>)</span>
+<span id="cb110-156"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-156" tabindex="-1"></a></span>
+<span id="cb110-157"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-157" tabindex="-1"></a>******************</span>
+<span id="cb110-158"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-158" tabindex="-1"></a>*** stackedev  ***</span>
+<span id="cb110-159"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-159" tabindex="-1"></a>******************</span>
+<span id="cb110-160"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-160" tabindex="-1"></a></span>
+<span id="cb110-161"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-161" tabindex="-1"></a>    </span>
+<span id="cb110-162"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-162" tabindex="-1"></a>stackedev Y F_* L_* ref, cohort(first_treat) time(t) never_treat(never_treat) unit_fe(id) clust_unit(id)</span>
+<span id="cb110-163"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-163" tabindex="-1"></a>    </span>
+<span id="cb110-164"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-164" tabindex="-1"></a><span class="fu">matrix</span> stackedev_b = <span class="fu">e</span>(b)</span>
+<span id="cb110-165"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-165" tabindex="-1"></a><span class="fu">matrix</span> stackedev_v = <span class="fu">e</span>(<span class="kw">V</span>)</span>
+<span id="cb110-166"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-166" tabindex="-1"></a></span>
+<span id="cb110-167"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-167" tabindex="-1"></a></span>
+<span id="cb110-168"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-168" tabindex="-1"></a></span>
+<span id="cb110-169"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-169" tabindex="-1"></a>colorpalette tableau, nograph   </span>
+<span id="cb110-170"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-170" tabindex="-1"></a></span>
+<span id="cb110-171"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-171" tabindex="-1"></a>event_plot    twfe  csdd    didimp  dcdh_b#dcdh_v   sa_b#sa_v   stackedev_b#stackedev_v did2s_b#did2s_v ,   <span class="co">///</span></span>
+<span id="cb110-172"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-172" tabindex="-1"></a>    stub_lag( L_#   Tp#     tau#    Effect_#        L_#         L_#                     L_#             )       <span class="co">///</span></span>
+<span id="cb110-173"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-173" tabindex="-1"></a>    stub_lead(F_#   Tm#     pre#    Placebo_#       F_#         F_#                     F_#             )       <span class="co">///</span></span>
+<span id="cb110-174"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-174" tabindex="-1"></a>        together perturb(-0.30(0.10)0.30) trimlead(20) trimlag(20) noautolegend                                     <span class="co">///</span></span>
+<span id="cb110-175"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-175" tabindex="-1"></a>        plottype(<span class="kw">scatter</span>) ciplottype(rspike)                                                                        <span class="co">///</span></span>
+<span id="cb110-176"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-176" tabindex="-1"></a>            lag_opt1(<span class="bn">msymbol</span>(+)   msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="bn">black</span>))     lag_ci_opt1(<span class="kw">color</span>(<span class="bn">black</span>)     lw(0.15))  <span class="co">///</span></span>
+<span id="cb110-177"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-177" tabindex="-1"></a>            lag_opt2(<span class="bn">msymbol</span>(lgx) msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p1)&#39;&quot;</span>)) lag_ci_opt2(<span class="kw">color</span>(<span class="st">&quot;`r(p1)&#39;&quot;</span>) lw(0.15))  <span class="co">///</span></span>
+<span id="cb110-178"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-178" tabindex="-1"></a>            lag_opt3(<span class="bn">msymbol</span>(Dh)  msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p2)&#39;&quot;</span>)) lag_ci_opt3(<span class="kw">color</span>(<span class="st">&quot;`r(p2)&#39;&quot;</span>) lw(0.15))  <span class="co">///</span></span>
+<span id="cb110-179"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-179" tabindex="-1"></a>            lag_opt4(<span class="bn">msymbol</span>(Th)  msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p3)&#39;&quot;</span>)) lag_ci_opt4(<span class="kw">color</span>(<span class="st">&quot;`r(p3)&#39;&quot;</span>) lw(0.15))  <span class="co">///</span></span>
+<span id="cb110-180"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-180" tabindex="-1"></a>            lag_opt5(<span class="bn">msymbol</span>(Sh)  msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p4)&#39;&quot;</span>)) lag_ci_opt5(<span class="kw">color</span>(<span class="st">&quot;`r(p4)&#39;&quot;</span>) lw(0.15))  <span class="co">///</span></span>
+<span id="cb110-181"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-181" tabindex="-1"></a>            lag_opt6(<span class="bn">msymbol</span>(Oh)  msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p5)&#39;&quot;</span>)) lag_ci_opt6(<span class="kw">color</span>(<span class="st">&quot;`r(p5)&#39;&quot;</span>) lw(0.15))  <span class="co">///  </span></span>
+<span id="cb110-182"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-182" tabindex="-1"></a>            lag_opt7(<span class="bn">msymbol</span>(<span class="kw">V</span>)   msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p6)&#39;&quot;</span>)) lag_ci_opt7(<span class="kw">color</span>(<span class="st">&quot;`r(p6)&#39;&quot;</span>) lw(0.15))  <span class="co">///     </span></span>
+<span id="cb110-183"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-183" tabindex="-1"></a>                    graph_opt(                                              <span class="co">///</span></span>
+<span id="cb110-184"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-184" tabindex="-1"></a>                                <span class="bn">title</span>(<span class="st">&quot;DiD event study plot&quot;</span>)                       <span class="co">///</span></span>
+<span id="cb110-185"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-185" tabindex="-1"></a>                                <span class="bn">xtitle</span>(<span class="st">&quot;&quot;</span>)                                  <span class="co">///</span></span>
+<span id="cb110-186"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-186" tabindex="-1"></a>                                <span class="bn">ytitle</span>(<span class="st">&quot;Average effect&quot;</span>) <span class="kw">xlabel</span>(-20(2)20)   <span class="co">///</span></span>
+<span id="cb110-187"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-187" tabindex="-1"></a>                                <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;TWFE&quot;</span> 3 <span class="st">&quot;csdid (CS 2020)&quot;</span> 5 <span class="st">&quot;did_imputation (BJS 2021)&quot;</span> 7 <span class="st">&quot;did_multiplegt (CD 2020)&quot;</span>  9 <span class="st">&quot;eventstudyinteract (SA 2020)&quot;</span> 11 <span class="st">&quot;stackedev (CDLZ 2019)&quot;</span> 13 <span class="st">&quot;did2s (G 2021)&quot;</span>) pos(6) <span class="bn">rows</span>(3) region(style(<span class="kw">none</span>)))  <span class="co">///</span></span>
+<span id="cb110-188"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-188" tabindex="-1"></a>                                <span class="bn">xline</span>(-0.5, lc(gs8) lp(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb110-189"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-189" tabindex="-1"></a>                                <span class="kw">yline</span>(   0, lc(gs8) lp(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb110-190"><a href="cómo-interpretar-la-salida-de-bacondecomp.html#cb110-190" tabindex="-1"></a>                             ) </span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="puntos-de-aprendizaje-resumen" class="section level2 hasAnchor" number="11.7">
+<h2><span class="header-section-number">11.7</span> 7) Puntos de aprendizaje (resumen)<a href="cómo-interpretar-la-salida-de-bacondecomp.html#puntos-de-aprendizaje-resumen" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><p><strong>TWFE</strong> funciona bien en <strong>2×2</strong> simples, pero con <strong>heterogeneidad</strong> y <strong>timing escalonado</strong> puede:</p>
+<ul>
+<li>Promediar comparaciones no deseadas,</li>
+<li>Asignar <strong>pesos negativos</strong>,</li>
+<li>Usar como “controles” unidades ya tratadas.</li>
+</ul></li>
+<li><p>La <strong>descomposición de Bacon</strong> ayuda a entender <strong>quién compara con quién</strong> y <strong>con qué peso</strong>.</p></li>
+<li><p>Estimadores modernos (<strong>csdid, eventstudyinteract, did_imputation, did2s, did_multiplegt, stackedev</strong>) estiman <strong>ATT(g,t)</strong> y permiten <strong>event studies</strong> consistentes, evitando sesgos típicos de TWFE en estos contextos.</p></li>
+</ul>
+<hr />
+</div>
+<div id="notas-prácticas-de-ejecución" class="section level2 hasAnchor" number="11.8">
+<h2><span class="header-section-number">11.8</span> 8) Notas prácticas de ejecución<a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Instalación</strong>: Ejecuta una vez las líneas <code>ssc install …, replace</code>.</li>
+<li><strong>Clustering</strong>: Revisa la variable correcta según tu panel (en tu bloque TWFE final usas <code>cluster(i)</code>; si la unidad es <code>id</code>, suele ser <code>cluster(id)</code>).</li>
+<li><strong><code>xtdidreg</code></strong>: Tu comando está como <code>xtdidreg</code>. En Stata 17/18 el oficial es <code>xtdidregress</code>. Si tu Stata no reconoce <code>xtdidreg</code>, usa <code>xtdidregress</code> con la sintaxis correspondiente.</li>
+<li><strong>Semillas</strong>: Mantengo tus <code>set seed</code> donde aplican para replicabilidad.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/11-TWFE.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -20,3 +20,17 @@ resumen-práctico
 caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f
 caso-c-f-post-tratamiento-mediador-d-f-y
 resumen-pedagógico
+problemas-de-twfe-y-alternativas-modernas-en-did
+código-copiarpegar
+caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte
+cómo-interpretar-la-salida-de-bacondecomp
+qué-significa-cada-fila
+cuadra-el-promedio-ponderado-con-el-β-de-twfe
+por-qué-este-β-puede-no-ser-el-efecto-real-promedio
+cómo-usar-esta-descomposición-en-la-práctica
+resumen-en-una-línea
+soluciones-estimadores-modernos-y-gráfico-comparativo-de-estudios-de-evento
+explicación-didáctica-1
+código-copiarpegar-1
+puntos-de-aprendizaje-resumen
+notas-prácticas-de-ejecución

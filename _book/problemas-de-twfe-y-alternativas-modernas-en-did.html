@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 10 Problemas de TWFE y alternativas modernas en DiD | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 10 Problemas de TWFE y alternativas modernas en DiD | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 10 Problemas de TWFE y alternativas modernas en DiD | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 10 Problemas de TWFE y alternativas modernas en DiD | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2025-09-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="malos-controles-mediador-m-vs-colisionador-c-dags.html"/>
+<link rel="next" href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-obligatorios"><i class="fa fa-check"></i>Libros Obligatorios</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-recomendados"><i class="fa fa-check"></i>Libros Recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="11-TWFE.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-exitoso-progresa-oportunidades-m%C3%A9xico-1990"><i class="fa fa-check"></i>Ejemplo exitoso: Progresa (Oportunidades, México, 1990)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-contrafactual"><i class="fa fa-check"></i>El Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#visualizando-el-contrafactual"><i class="fa fa-check"></i>Visualizando el Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#la-banda-sonora"><i class="fa fa-check"></i>La Banda Sonora</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#problema-fundamental-de-la-inferencia-causal"><i class="fa fa-check"></i>Problema Fundamental de la Inferencia Causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n"><i class="fa fa-check"></i>Establecer Causalidad (Deseo de Clonación)</a></li>
+<li class="chapter" data-level="1.0.1" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#video-recomendado-mastering-metrics"><i class="fa fa-check"></i><b>1.0.1</b> 🎥 Video recomendado: <em>Mastering Metrics</em></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a>
+<ul>
+<li class="chapter" data-level="1.0.2" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto"><i class="fa fa-check"></i><b>1.0.2</b> <strong>Ceteris Paribus: ¿Perfecto?</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="11-TWFE.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n"><i class="fa fa-check"></i>Macro local: definición y expansión</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros"><i class="fa fa-check"></i>Evaluar expresiones dentro de macros</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macro-con-texto"><i class="fa fa-check"></i>Macro con texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#macro-global-uso-y-precauci%C3%B3n"><i class="fa fa-check"></i>Macro global: uso y precaución</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#scalar-vs.-macro"><i class="fa fa-check"></i>Scalar vs. Macro</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-recomendado"><i class="fa fa-check"></i>🧩 Ejercicio recomendado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-foreach"><i class="fa fa-check"></i>Loop con <code>foreach</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-forvalues"><i class="fa fa-check"></i>Loop con <code>forvalues</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-while"><i class="fa fa-check"></i>Loop con <code>while</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados"><i class="fa fa-check"></i>🧠 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#estructura-b%C3%A1sica"><i class="fa fa-check"></i>Estructura básica</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-con-argumentos"><i class="fa fa-check"></i>Programas con argumentos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum"><i class="fa fa-check"></i>Tu programa original mejorado: <code>mysum</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#notas-importantes"><i class="fa fa-check"></i>Notas importantes</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados-1"><i class="fa fa-check"></i>🔧 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-postfile"><i class="fa fa-check"></i>¿Qué hace <code>postfile</code>?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize"><i class="fa fa-check"></i>Paso a paso: guardar medias con <code>summarize</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hicimos-aqu%C3%AD"><i class="fa fa-check"></i>¿Qué hicimos aquí?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-1"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-con-postfile"><i class="fa fa-check"></i>📦 Ejercicios con <code>postfile</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-al-programar-en-stata"><i class="fa fa-check"></i>Buenas prácticas al programar en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-de-repaso"><i class="fa fa-check"></i>🧠 Ejercicio de repaso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables"><i class="fa fa-check"></i>Iterar sobre lista de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="11-TWFE.html"><a href="#definici%C3%B3n-de-estimadores-resultados-potenciales-e-introducci%C3%B3n-al-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>3</b> 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección</a>
+<ul>
+<li class="chapter" data-level="" data-path="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><i class="fa fa-check"></i>🔹 Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>🔹 Parámetros de interés</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>🔹 ¿Por qué no es suficiente el estimador naïve?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>🔹 Sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>🔹 Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html"><i class="fa fa-check"></i><b>4</b> Estimadores Causales en Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas"><i class="fa fa-check"></i>📎 Descargas</a></li>
+<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descargas-1"><i class="fa fa-check"></i>📎 Descargas</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="11-TWFE.html"><a href="#por-qu%C3%A9-la-asignaci%C3%B3n-aleatoria-elimina-el-sesgo"><i class="fa fa-check"></i><b>5</b> ¿Por qué la asignación aleatoria elimina el sesgo?</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>¿Qué hace la aleatorización?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#densidad-de-la-motivaci%C3%B3n-por-grupo"><i class="fa fa-check"></i>Densidad de la motivación por grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html"><i class="fa fa-check"></i><b>6</b> Experimentos Controlados RECETA</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#paso-1-dise%C3%B1ar-el-experimento"><i class="fa fa-check"></i>PASO 1) Diseñar el experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#paso-2-aleatorizar-la-asignaci%C3%B3n-stata"><i class="fa fa-check"></i>Paso 2) Aleatorizar la asignación (Stata)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-3-verificar-el-balance-de-covariables"><i class="fa fa-check"></i>PASO 3) Verificar el balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-4-estimar-el-efecto-del-tratamiento"><i class="fa fa-check"></i>PASO 4) Estimar el efecto del tratamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes"><i class="fa fa-check"></i>Asignación a nivel individual (dos muestras independientes)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#pruebas"><i class="fa fa-check"></i>Pruebas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="11-TWFE.html"><a href="#c%C3%A1lculos-de-poder-estad%C3%ADstico-en-stata"><i class="fa fa-check"></i><b>7</b> Cálculos de Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html"><i class="fa fa-check"></i>Sin controles</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado"><i class="fa fa-check"></i>Tamaño de muestra para un efecto dado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efecto-m%C3%ADnimo-detectable-mde-para-un-n-dado"><i class="fa fa-check"></i>Efecto mínimo detectable (MDE) para un N dado</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#mde-para-un-n-dado-con-variable-binaria"><i class="fa fa-check"></i>MDE para un N dado con variable binaria</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado-con-covariables"><i class="fa fa-check"></i>Tamaño de muestra para un efecto dado con covariables</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#mde-para-un-n-dado-con-covariables"><i class="fa fa-check"></i>MDE para un N dado con covariables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#n%C3%BAmero-de-cl%C3%BAsteres-para-un-efecto-y-tama%C3%B1o-de-cl%C3%BAster-dados"><i class="fa fa-check"></i>Número de clústeres para un efecto y tamaño de clúster dados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-cl%C3%BAster-para-un-n%C3%BAmero-dado-de-cl%C3%BAsteres"><i class="fa fa-check"></i>Tamaño de clúster para un número dado de clústeres</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#mde-para-un-tama%C3%B1o-de-cl%C3%BAster-y-n%C3%BAmero-de-cl%C3%BAsteres-dados"><i class="fa fa-check"></i>MDE para un tamaño de clúster y número de clústeres dados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#estad%C3%ADsticas-descriptivas"><i class="fa fa-check"></i>Estadísticas descriptivas</a>
+<ul>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#promedios-por-periodo-y-grupo"><i class="fa fa-check"></i>Promedios por periodo y grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-medias"><i class="fa fa-check"></i>Comparación de medias</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#estimador-did-paso-a-paso"><i class="fa fa-check"></i>Estimador DID paso a paso</a></li>
+<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#usando-el-comando-diff"><i class="fa fa-check"></i>Usando el comando <code>diff</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-con-regresiones"><i class="fa fa-check"></i>Implementación con regresiones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#extensi%C3%B3n-con-panel"><i class="fa fa-check"></i>Extensión con panel</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n"><i class="fa fa-check"></i>Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html"><i class="fa fa-check"></i><b>8</b> Test de Tendencias Paralelas y Malos Controles</a>
+<ul>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a>
+<ul>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#buenos-controles"><i class="fa fa-check"></i>Buenos controles</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#malos-controles"><i class="fa fa-check"></i>Malos controles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implicaciones-pr%C3%A1cticas"><i class="fa fa-check"></i>Implicaciones prácticas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Agrupación</a></li>
+<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html"><i class="fa fa-check"></i><b>9</b> Malos Controles en Stata</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#mediador-post-tratamiento"><i class="fa fa-check"></i><b>9.1</b> Mediador (post-tratamiento)</a>
+<ul>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#mediador-d-rightarrow-m-rightarrow-y"><i class="fa fa-check"></i>Mediador: <span class="math inline">\(D \rightarrow M \rightarrow Y\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#colisionador"><i class="fa fa-check"></i>Colisionador</a></li>
+<li class="chapter" data-level="9.2" data-path="11-TWFE.html"><a href="#gr%C3%A1ficos-de-apoyo"><i class="fa fa-check"></i><b>9.2</b> Gráficos de apoyo</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#coefplot-del-mediador"><i class="fa fa-check"></i><b>9.2.1</b> Coefplot del mediador</a></li>
+<li class="chapter" data-level="9.2.2" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#histogramas-monte-carlo"><i class="fa fa-check"></i><b>9.2.2</b> Histogramas Monte Carlo</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="11-TWFE.html"><a href="#resumen-pr%C3%A1ctico"><i class="fa fa-check"></i><b>9.3</b> Resumen práctico</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html"><i class="fa fa-check"></i>Malos controles: <strong>Mediador (M)</strong> vs <strong>Colisionador (C)</strong> — DAGs</a>
+<ul>
+<li class="chapter" data-level="9.4" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f"><i class="fa fa-check"></i><b>9.4</b> Caso B — <strong>F descendiente de colisionador</strong> (<code>D → Y ← U</code> y <code>Y → F</code>)</a></li>
+<li class="chapter" data-level="9.5" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#caso-c-f-post-tratamiento-mediador-d-f-y"><i class="fa fa-check"></i><b>9.5</b> Caso C — <strong>F post-tratamiento (mediador)</strong> (<code>D → F → Y</code>)</a></li>
+<li class="chapter" data-level="9.6" data-path="11-TWFE.html"><a href="#resumen-pedag%C3%B3gico"><i class="fa fa-check"></i><b>9.6</b> Resumen pedagógico</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-mediador-m-vs-colisionador-c-dags.html"><a href="malos-controles-mediador-m-vs-colisionador-c-dags.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="problemas-de-twfe-y-alternativas-modernas-en-did.html"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html"><i class="fa fa-check"></i><b>10</b> Problemas de TWFE y alternativas modernas en DiD</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido"><i class="fa fa-check"></i>Contexto rápido</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#modelo-b%C3%A1sico-22-did"><i class="fa fa-check"></i>Modelo básico 2×2 DiD</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#explicaci%C3%B3n-did%C3%A1ctica"><i class="fa fa-check"></i>Explicación didáctica</a></li>
+<li class="chapter" data-level="10.0.1" data-path="11-TWFE.html"><a href="#c%C3%B3digo-copiarpegar"><i class="fa fa-check"></i><b>10.0.1</b> Código (copiar/pegar)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-2-unidades-y-tratamiento-desde-un-a%C3%B1o-en-adelante"><i class="fa fa-check"></i>Panel largo con 2 unidades y tratamiento “desde un año en adelante”</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#versi%C3%B3n-donde-y-refleja-solo-el-tama%C3%B1o-del-efecto-por-tratado"><i class="fa fa-check"></i>Versión donde <code>Y</code> refleja solo el tamaño del efecto por tratado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#b-versi%C3%B3n-con-y-id-t-efecto_heterog%C3%A9neo"><i class="fa fa-check"></i>3B) Versión con <code>Y = id + t + efecto_heterogéneo</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#descomposici%C3%B3n-de-bacon-y-efecto-real-en-did-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Descomposición de Bacon y “efecto real” en DiD con adopción escalonada</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-es-la-descomposici%C3%B3n-de-bacon-y-por-qu%C3%A9-importa"><i class="fa fa-check"></i>¿Qué es la descomposición de Bacon y por qué importa?</a></li>
+<li class="chapter" data-level="" data-path="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"><a href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"><a href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a>
+<ul>
+<li class="chapter" data-level="10.0.2" data-path="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html"><a href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html#caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte"><i class="fa fa-check"></i><b>10.0.2</b> Caso 3 (tu ejemplo con tres unidades, mismo inicio y efecto por cohorte)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-con-adopci%C3%B3n-escalonada-y-efectos-din%C3%A1micos"><i class="fa fa-check"></i>Caso con <strong>adopción escalonada</strong> y <strong>efectos dinámicos</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="11-TWFE.html"><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i><b>11</b> ¿Cómo interpretar la salida de <code>bacondecomp</code>?</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="11-TWFE.html"><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i><b>11.1</b> 1) ¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="11.2" data-path="11-TWFE.html"><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i><b>11.2</b> 2) ¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="11.3" data-path="11-TWFE.html"><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i><b>11.3</b> 3) ¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="11.4" data-path="11-TWFE.html"><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i><b>11.4</b> 4) ¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="11.5" data-path="11-TWFE.html"><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i><b>11.5</b> 5) Resumen en una línea</a></li>
+<li class="chapter" data-level="11.6" data-path="11-TWFE.html"><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i><b>11.6</b> 6) “Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="11-TWFE.html"><a href="#explicaci%C3%B3n-did%C3%A1ctica-1"><i class="fa fa-check"></i><b>11.6.1</b> Explicación didáctica</a></li>
+<li class="chapter" data-level="11.6.2" data-path="11-TWFE.html"><a href="#c%C3%B3digo-copiarpegar-1"><i class="fa fa-check"></i><b>11.6.2</b> Código (copiar/pegar)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="cómo-interpretar-la-salida-de-bacondecomp.html"><a href="cómo-interpretar-la-salida-de-bacondecomp.html"><i class="fa fa-check"></i><b>11.7</b> 7) Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="11.8" data-path="11-TWFE.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>11.8</b> 8) Notas prácticas de ejecución</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="problemas-de-twfe-y-alternativas-modernas-en-did" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">Capitulo 10</span> Problemas de TWFE y alternativas modernas en DiD<a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#problemas-de-twfe-y-alternativas-modernas-en-did" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="contexto-rápido" class="section level2 unnumbered hasAnchor">
+<h2>Contexto rápido<a href="#contexto-r%C3%A1pido" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>¿Qué verás?</strong> Cómo se comporta el estimador <strong>TWFE</strong> (two-way fixed effects) en distintos escenarios de DiD: 2×2, panel largo, más de dos unidades con <strong>heterogeneidad de efectos</strong>, y <strong>adopción escalonada</strong>.</li>
+<li><strong>¿Por qué importa?</strong> Con heterogeneidad y/o timing escalonado, TWFE puede promediar <strong>mal</strong> (incluso con <strong>pesos negativos</strong>), sesgando el estimador.</li>
+<li><strong>¿Cómo lo detectamos?</strong> Con la <strong>descomposición de Bacon</strong> y estudios de eventos.</li>
+<li><strong>¿Qué alternativas hay?</strong> Estimadores modernos: <strong>CSDID (Callaway &amp; Sant’Anna)</strong>, <strong>did_imputation (BJS)</strong>, <strong>eventstudyinteract (Sun &amp; Abraham)</strong>, <strong>did_multiplegt</strong>, <strong>did2s</strong>, <strong>stackedev</strong>, etc.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Nota de ejecución</strong>: Algunas secciones usan comandos/paquetes de SSC. Debes instalarlos al menos una vez (abajo incluyo la instalación con <code>ssc install …, replace</code>).</p>
+</blockquote>
+<hr />
+</div>
+<div id="modelo-básico-22-did" class="section level2 unnumbered hasAnchor">
+<h2>Modelo básico 2×2 DiD<a href="#modelo-b%C3%A1sico-22-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="explicación-didáctica" class="section level3 unnumbered hasAnchor">
+<h3>Explicación didáctica<a href="#explicaci%C3%B3n-did%C3%A1ctica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Construimos un panel simple con <strong>2 unidades</strong> (<code>id = 1,2</code>) y <strong>2 periodos</strong> (<code>t = 1979, 1980</code>).</p></li>
+<li><p>Tratamiento <strong>solo</strong> para <code>id==2</code> en el <strong>año final</strong> (<code>D = 1</code> si <code>id==2 &amp; t==fin</code>).</p></li>
+<li><p>Generamos un outcome <code>Y</code> con nivel por unidad (<code>id</code>), tendencia temporal (<code>3*t</code>) y un “empujón” de tratamiento cuando <code>D==1</code> (<code>tau=2</code>).</p></li>
+<li><p>Graficamos la evolución de <code>Y</code> por grupo (control vs tratado).</p></li>
+<li><p>Estimamos DiD con:</p>
+<ul>
+<li><code>xtreg Y D t, fe</code> (FE de unidad + control lineal por <code>t</code>), y</li>
+<li><code>reghdfe Y D, absorb(id t)</code> (FE completos de unidad y de tiempo).</li>
+</ul></li>
+</ul>
+</div>
+<div id="código-copiarpegar" class="section level3 hasAnchor" number="10.0.1">
+<h3><span class="header-section-number">10.0.1</span> Código (copiar/pegar)<a href="#c%C3%B3digo-copiarpegar" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb98"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb98-1"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-1" tabindex="-1"></a>*----------------------------------------------------------</span>
+<span id="cb98-2"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-2" tabindex="-1"></a>* Archivo DO: TWFE <span class="fu">y</span> Diferencias en Diferencias (DiD)</span>
+<span id="cb98-3"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-3" tabindex="-1"></a>*  modelo TWFE, DiD <span class="fu">y</span> Triple DiD</span>
+<span id="cb98-4"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-4" tabindex="-1"></a>* Autor: Ana Maria Diaz</span>
+<span id="cb98-5"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-5" tabindex="-1"></a>* ----------------------------------------------------------</span>
+<span id="cb98-6"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-6" tabindex="-1"></a></span>
+<span id="cb98-7"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-7" tabindex="-1"></a>* -------------------------</span>
+<span id="cb98-8"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-8" tabindex="-1"></a>* 1. Modelo básico 2x2 DiD</span>
+<span id="cb98-9"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-9" tabindex="-1"></a>* -------------------------</span>
+<span id="cb98-10"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-10" tabindex="-1"></a></span>
+<span id="cb98-11"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-11" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb98-12"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-12" tabindex="-1"></a>* Definir parámetros flexibles</span>
+<span id="cb98-13"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-13" tabindex="-1"></a><span class="kw">local</span> unidades = 2</span>
+<span id="cb98-14"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-14" tabindex="-1"></a><span class="kw">local</span> inicio = 1979</span>
+<span id="cb98-15"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-15" tabindex="-1"></a><span class="kw">local</span> fin    = 1980</span>
+<span id="cb98-16"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-16" tabindex="-1"></a></span>
+<span id="cb98-17"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-17" tabindex="-1"></a><span class="kw">local</span> tiempo = <span class="ot">`fin&#39;</span> - <span class="ot">`inicio&#39;</span> + 1</span>
+<span id="cb98-18"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-18" tabindex="-1"></a><span class="kw">local</span> <span class="kw">obs</span>    = <span class="ot">`unidades&#39;</span> * <span class="ot">`tiempo&#39;</span></span>
+<span id="cb98-19"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-19" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obs&#39;</span></span>
+<span id="cb98-20"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-20" tabindex="-1"></a></span>
+<span id="cb98-21"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-21" tabindex="-1"></a>* Crear variables id <span class="fu">y</span> t (compatibles con años)</span>
+<span id="cb98-22"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-22" tabindex="-1"></a><span class="kw">gen</span> id = .</span>
+<span id="cb98-23"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-23" tabindex="-1"></a><span class="kw">gen</span> t  = .</span>
+<span id="cb98-24"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-24" tabindex="-1"></a></span>
+<span id="cb98-25"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-25" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/<span class="ot">`unidades&#39;</span> {</span>
+<span id="cb98-26"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-26" tabindex="-1"></a>    <span class="kw">forvalues</span> j = 0/<span class="ot">`=`tiempo&#39;</span>-1&#39; {</span>
+<span id="cb98-27"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-27" tabindex="-1"></a>        <span class="kw">local</span> obsnum = (<span class="ot">`i&#39;</span> - 1)*<span class="ot">`tiempo&#39;</span> + <span class="ot">`j&#39;</span> + 1</span>
+<span id="cb98-28"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-28" tabindex="-1"></a>        <span class="kw">replace</span> id = <span class="ot">`i&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb98-29"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-29" tabindex="-1"></a>        <span class="kw">replace</span> t  = <span class="ot">`inicio&#39;</span> + <span class="ot">`j&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb98-30"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-30" tabindex="-1"></a>    }</span>
+<span id="cb98-31"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-31" tabindex="-1"></a>}</span>
+<span id="cb98-32"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-32" tabindex="-1"></a></span>
+<span id="cb98-33"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-33" tabindex="-1"></a><span class="kw">sort</span> id t</span>
+<span id="cb98-34"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-34" tabindex="-1"></a>xtset id t</span>
+<span id="cb98-35"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-35" tabindex="-1"></a></span>
+<span id="cb98-36"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-36" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> id <span class="st">&quot;Unidad&quot;</span></span>
+<span id="cb98-37"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-37" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> t  <span class="st">&quot;Año&quot;</span></span>
+<span id="cb98-38"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-38" tabindex="-1"></a></span>
+<span id="cb98-39"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-39" tabindex="-1"></a>* Generar tratamiento (id==2 tratado en año final)</span>
+<span id="cb98-40"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-40" tabindex="-1"></a><span class="kw">gen</span> D = id==2 &amp; t==<span class="ot">`fin&#39;</span></span>
+<span id="cb98-41"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-41" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> D <span class="st">&quot;Tratamiento (id==2 en año final)&quot;</span></span>
+<span id="cb98-42"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-42" tabindex="-1"></a></span>
+<span id="cb98-43"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-43" tabindex="-1"></a>* Efecto del tratamiento</span>
+<span id="cb98-44"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-44" tabindex="-1"></a><span class="kw">gen</span> tau = <span class="fu">cond</span>(D==1, 2, 0)</span>
+<span id="cb98-45"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-45" tabindex="-1"></a><span class="kw">gen</span> Y = id + 3*t + tau*D </span>
+<span id="cb98-46"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-46" tabindex="-1"></a>*<span class="kw">gen</span> Y = id + 3*t + tau*D + rnormal()</span>
+<span id="cb98-47"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-47" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> Y <span class="st">&quot;Variable dependiente&quot;</span></span>
+<span id="cb98-48"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-48" tabindex="-1"></a></span>
+<span id="cb98-49"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-49" tabindex="-1"></a><span class="kw">twoway</span> <span class="co">///</span></span>
+<span id="cb98-50"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-50" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id==1, <span class="bn">msymbol</span>(<span class="bn">circle</span>) lcolor(<span class="bn">blue</span>)) <span class="co">///</span></span>
+<span id="cb98-51"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-51" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id==2, <span class="bn">msymbol</span>(triangle) lcolor(<span class="kw">red</span>)) <span class="co">///</span></span>
+<span id="cb98-52"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-52" tabindex="-1"></a>  , <span class="co">///</span></span>
+<span id="cb98-53"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-53" tabindex="-1"></a>  <span class="bn">title</span>(<span class="st">&quot;Evolución de Y: Control vs Tratado&quot;</span>) <span class="co">///</span></span>
+<span id="cb98-54"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-54" tabindex="-1"></a>  <span class="bn">xtitle</span>(<span class="st">&quot;Año&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Y&quot;</span>) <span class="co">///</span></span>
+<span id="cb98-55"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-55" tabindex="-1"></a>  <span class="kw">xlabel</span>(<span class="ot">`inicio&#39;</span>(1)<span class="ot">`fin&#39;</span>) <span class="co">///</span></span>
+<span id="cb98-56"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-56" tabindex="-1"></a>  <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Control (id=1)&quot;</span> 2 <span class="st">&quot;Tratado (id=2)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb98-57"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb98-57" tabindex="-1"></a>  <span class="bn">name</span>(grafico1, <span class="kw">replace</span>)</span></code></pre></div>
+<div class="float">
+<img src="dofile/11_TWFE/g1.png" alt="Evolución de Y" />
+<div class="figcaption">Evolución de Y</div>
+</div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb99-1"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb99-1" tabindex="-1"></a>* Estimar DiD con efectos fijos</span>
+<span id="cb99-2"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb99-2" tabindex="-1"></a><span class="kw">xtreg</span> Y D t, <span class="kw">fe</span></span>
+<span id="cb99-3"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb99-3" tabindex="-1"></a></span>
+<span id="cb99-4"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb99-4" tabindex="-1"></a>* Alternativa con reghdfe</span>
+<span id="cb99-5"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb99-5" tabindex="-1"></a>reghdfe Y D, absorb(id t)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="panel-largo-con-2-unidades-y-tratamiento-desde-un-año-en-adelante" class="section level2 unnumbered hasAnchor">
+<h2>Panel largo con 2 unidades y tratamiento “desde un año en adelante”<a href="#panel-largo-con-2-unidades-y-tratamiento-desde-un-a%C3%B1o-en-adelante" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Mantenemos <strong>2 unidades</strong>, pero ampliamos a <strong>1980–1990</strong> (11 años).</li>
+<li>Tratamiento para <code>id==2</code> <strong>desde 1985 en adelante</strong> (escalón).</li>
+<li>Outcome <code>Y</code> con nivel por unidad + tendencia temporal + efecto de tratamiento (<code>tau=5</code>).</li>
+<li>Estimamos <code>xtreg</code>/<code>reghdfe</code> y <strong>DiD oficial</strong> (<code>xtdidreg</code>) con diagnósticos de tendencias (<code>estat trendplots</code>, <code>estat ptrends</code>).</li>
+</ul>
+<div class="sourceCode" id="cb100"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb100-1"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-1" tabindex="-1"></a>* ---------------------------------------------</span>
+<span id="cb100-2"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-2" tabindex="-1"></a>* 2. Añadir más periodos <span class="kw">de</span> tiempo (10 por unidad)</span>
+<span id="cb100-3"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-3" tabindex="-1"></a>* ---------------------------------------------</span>
+<span id="cb100-4"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-4" tabindex="-1"></a></span>
+<span id="cb100-5"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-5" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb100-6"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-6" tabindex="-1"></a><span class="kw">local</span> unidades = 2</span>
+<span id="cb100-7"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-7" tabindex="-1"></a><span class="kw">local</span> inicio = 1980</span>
+<span id="cb100-8"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-8" tabindex="-1"></a><span class="kw">local</span> fin    = 1990</span>
+<span id="cb100-9"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-9" tabindex="-1"></a></span>
+<span id="cb100-10"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-10" tabindex="-1"></a><span class="kw">local</span> tiempo = <span class="ot">`fin&#39;</span> - <span class="ot">`inicio&#39;</span> + 1</span>
+<span id="cb100-11"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-11" tabindex="-1"></a><span class="kw">local</span> <span class="kw">obs</span>    = <span class="ot">`unidades&#39;</span> * <span class="ot">`tiempo&#39;</span></span>
+<span id="cb100-12"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-12" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obs&#39;</span></span>
+<span id="cb100-13"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-13" tabindex="-1"></a></span>
+<span id="cb100-14"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-14" tabindex="-1"></a>* Crear variables id <span class="fu">y</span> t (funciona con años)</span>
+<span id="cb100-15"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-15" tabindex="-1"></a><span class="kw">gen</span> id = .</span>
+<span id="cb100-16"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-16" tabindex="-1"></a><span class="kw">gen</span> t  = .</span>
+<span id="cb100-17"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-17" tabindex="-1"></a></span>
+<span id="cb100-18"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-18" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/<span class="ot">`unidades&#39;</span> {</span>
+<span id="cb100-19"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-19" tabindex="-1"></a>    <span class="kw">forvalues</span> j = 0/<span class="ot">`=`tiempo&#39;</span>-1&#39; {</span>
+<span id="cb100-20"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-20" tabindex="-1"></a>        <span class="kw">local</span> obsnum = (<span class="ot">`i&#39;</span> - 1)*<span class="ot">`tiempo&#39;</span> + <span class="ot">`j&#39;</span> + 1</span>
+<span id="cb100-21"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-21" tabindex="-1"></a>        <span class="kw">replace</span> id = <span class="ot">`i&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb100-22"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-22" tabindex="-1"></a>        <span class="kw">replace</span> t  = <span class="ot">`inicio&#39;</span> + <span class="ot">`j&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb100-23"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-23" tabindex="-1"></a>    }</span>
+<span id="cb100-24"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-24" tabindex="-1"></a>}</span>
+<span id="cb100-25"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-25" tabindex="-1"></a></span>
+<span id="cb100-26"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-26" tabindex="-1"></a><span class="kw">sort</span> id t</span>
+<span id="cb100-27"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-27" tabindex="-1"></a>xtset id t</span>
+<span id="cb100-28"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-28" tabindex="-1"></a></span>
+<span id="cb100-29"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-29" tabindex="-1"></a>* Tratamiento desde cierto año en adelante para id==2</span>
+<span id="cb100-30"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-30" tabindex="-1"></a><span class="kw">gen</span> D = id==2 &amp; t &gt;= 1985  <span class="co">// ejemplo: tratamiento inicia en 1985</span></span>
+<span id="cb100-31"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-31" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> D <span class="st">&quot;Tratado&quot;</span></span>
+<span id="cb100-32"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-32" tabindex="-1"></a></span>
+<span id="cb100-33"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-33" tabindex="-1"></a>* Efecto del tratamiento</span>
+<span id="cb100-34"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-34" tabindex="-1"></a><span class="kw">gen</span> tau = <span class="fu">cond</span>(D==1, 5, 0)</span>
+<span id="cb100-35"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-35" tabindex="-1"></a><span class="kw">gen</span> Y = id + 3*t + tau*D</span>
+<span id="cb100-36"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-36" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> Y <span class="st">&quot;Variable dependiente&quot;</span></span>
+<span id="cb100-37"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-37" tabindex="-1"></a></span>
+<span id="cb100-38"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-38" tabindex="-1"></a>*Visualizar</span>
+<span id="cb100-39"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-39" tabindex="-1"></a><span class="kw">twoway</span> <span class="co">///</span></span>
+<span id="cb100-40"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-40" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id==1, <span class="bn">msymbol</span>(<span class="bn">circle</span>) lcolor(<span class="bn">blue</span>)) <span class="co">///</span></span>
+<span id="cb100-41"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-41" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id==2, <span class="bn">msymbol</span>(triangle) lcolor(<span class="kw">red</span>)) <span class="co">///</span></span>
+<span id="cb100-42"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-42" tabindex="-1"></a>  , <span class="co">///</span></span>
+<span id="cb100-43"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-43" tabindex="-1"></a>  <span class="bn">title</span>(<span class="st">&quot;Evolución de Y: Tratado vs. Control&quot;</span>) <span class="co">///</span></span>
+<span id="cb100-44"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-44" tabindex="-1"></a>  <span class="kw">xlabel</span>(<span class="ot">`inicio&#39;</span>(1)<span class="ot">`fin&#39;</span>) <span class="co">///</span></span>
+<span id="cb100-45"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-45" tabindex="-1"></a>  <span class="kw">ylabel</span>(, angle(horizontal)) <span class="co">///</span></span>
+<span id="cb100-46"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-46" tabindex="-1"></a>  <span class="bn">xtitle</span>(<span class="st">&quot;Año&quot;</span>) <span class="co">///</span></span>
+<span id="cb100-47"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-47" tabindex="-1"></a>  <span class="bn">ytitle</span>(<span class="st">&quot;Y&quot;</span>) <span class="co">///</span></span>
+<span id="cb100-48"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-48" tabindex="-1"></a>  <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Control (id=1)&quot;</span> 2 <span class="st">&quot;Tratado (id=2)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb100-49"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-49" tabindex="-1"></a>  <span class="bn">name</span>(graficoY, <span class="kw">replace</span>)</span>
+<span id="cb100-50"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-50" tabindex="-1"></a></span>
+<span id="cb100-51"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-51" tabindex="-1"></a></span>
+<span id="cb100-52"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-52" tabindex="-1"></a><span class="kw">xtreg</span> Y D t, <span class="kw">fe</span></span>
+<span id="cb100-53"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-53" tabindex="-1"></a>reghdfe Y D, absorb(id t)</span>
+<span id="cb100-54"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-54" tabindex="-1"></a></span>
+<span id="cb100-55"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-55" tabindex="-1"></a>xtdidreg (Y) (D), <span class="fu">group</span>(id) time(t)</span>
+<span id="cb100-56"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-56" tabindex="-1"></a><span class="kw">estat</span> trendplots</span>
+<span id="cb100-57"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb100-57" tabindex="-1"></a><span class="kw">estat</span> ptrends</span></code></pre></div>
+<p><img src="dofile/11_TWFE/g2.png" alt="Evolución de Y" />
+<img src="dofile/11_TWFE/g3.png" alt="TendeciasParalelas" /></p>
+<hr />
+</div>
+<div id="más-unidades-mismo-año-de-inicio-efectos-heterogéneos" class="section level2 unnumbered hasAnchor">
+<h2>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="versión-donde-y-refleja-solo-el-tamaño-del-efecto-por-tratado" class="section level3 unnumbered hasAnchor">
+<h3>Versión donde <code>Y</code> refleja solo el tamaño del efecto por tratado<a href="#versi%C3%B3n-donde-y-refleja-solo-el-tama%C3%B1o-del-efecto-por-tratado" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>3 unidades</strong> (id 1=control; id 2 y 3 tratados desde 1985), con <strong>distinto tamaño de efecto</strong>: 2 vs 4.</li>
+<li>Muestra que TWFE hace un <strong>promedio no trivial</strong> de estos efectos.</li>
+</ul>
+<div class="sourceCode" id="cb101"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb101-1"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-1" tabindex="-1"></a>* --------------------------------------------------</span>
+<span id="cb101-2"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-2" tabindex="-1"></a>* 3. Más unidades, mismo tiempo <span class="kw">de</span> tratamiento, distinto efecto</span>
+<span id="cb101-3"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-3" tabindex="-1"></a>* --------------------------------------------------</span>
+<span id="cb101-4"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-4" tabindex="-1"></a></span>
+<span id="cb101-5"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-5" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb101-6"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-6" tabindex="-1"></a>* Parámetros flexibles</span>
+<span id="cb101-7"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-7" tabindex="-1"></a><span class="kw">local</span> unidades = 3</span>
+<span id="cb101-8"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-8" tabindex="-1"></a><span class="kw">local</span> inicio = 1980</span>
+<span id="cb101-9"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-9" tabindex="-1"></a><span class="kw">local</span> fin    = 1989</span>
+<span id="cb101-10"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-10" tabindex="-1"></a></span>
+<span id="cb101-11"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-11" tabindex="-1"></a><span class="kw">local</span> tiempo = <span class="ot">`fin&#39;</span> - <span class="ot">`inicio&#39;</span> + 1</span>
+<span id="cb101-12"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-12" tabindex="-1"></a><span class="kw">local</span> <span class="kw">obs</span> = <span class="ot">`unidades&#39;</span> * <span class="ot">`tiempo&#39;</span></span>
+<span id="cb101-13"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-13" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obs&#39;</span></span>
+<span id="cb101-14"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-14" tabindex="-1"></a></span>
+<span id="cb101-15"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-15" tabindex="-1"></a>* Crear variables id <span class="fu">y</span> t (con años reales)</span>
+<span id="cb101-16"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-16" tabindex="-1"></a><span class="kw">gen</span> id = .</span>
+<span id="cb101-17"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-17" tabindex="-1"></a><span class="kw">gen</span> t  = .</span>
+<span id="cb101-18"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-18" tabindex="-1"></a></span>
+<span id="cb101-19"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-19" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/<span class="ot">`unidades&#39;</span> {</span>
+<span id="cb101-20"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-20" tabindex="-1"></a>    <span class="kw">forvalues</span> j = 0/<span class="ot">`=`tiempo&#39;</span>-1&#39; {</span>
+<span id="cb101-21"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-21" tabindex="-1"></a>        <span class="kw">local</span> obsnum = (<span class="ot">`i&#39;</span> - 1)*<span class="ot">`tiempo&#39;</span> + <span class="ot">`j&#39;</span> + 1</span>
+<span id="cb101-22"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-22" tabindex="-1"></a>        <span class="kw">replace</span> id = <span class="ot">`i&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb101-23"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-23" tabindex="-1"></a>        <span class="kw">replace</span> t  = <span class="ot">`inicio&#39;</span> + <span class="ot">`j&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb101-24"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-24" tabindex="-1"></a>    }</span>
+<span id="cb101-25"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-25" tabindex="-1"></a>}</span>
+<span id="cb101-26"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-26" tabindex="-1"></a></span>
+<span id="cb101-27"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-27" tabindex="-1"></a><span class="kw">sort</span> id t</span>
+<span id="cb101-28"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-28" tabindex="-1"></a>xtset id t</span>
+<span id="cb101-29"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-29" tabindex="-1"></a></span>
+<span id="cb101-30"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-30" tabindex="-1"></a>* Tratamiento para id &gt;= 2 desde t &gt;= 1985</span>
+<span id="cb101-31"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-31" tabindex="-1"></a><span class="kw">gen</span> D = 0</span>
+<span id="cb101-32"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-32" tabindex="-1"></a><span class="kw">replace</span> D = 1 <span class="kw">if</span> id &gt;= 2 &amp; t &gt;= 1985</span>
+<span id="cb101-33"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-33" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> D <span class="st">&quot;Tratado desde 1985 para id&gt;=2&quot;</span></span>
+<span id="cb101-34"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-34" tabindex="-1"></a></span>
+<span id="cb101-35"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-35" tabindex="-1"></a>* Variable dependiente con diferentes intensidades <span class="kw">de</span> tratamiento</span>
+<span id="cb101-36"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-36" tabindex="-1"></a>cap <span class="kw">drop</span> Y</span>
+<span id="cb101-37"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-37" tabindex="-1"></a><span class="kw">gen</span> Y = 0</span>
+<span id="cb101-38"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-38" tabindex="-1"></a><span class="kw">replace</span> Y = <span class="fu">cond</span>(D == 1, 2, 0) <span class="kw">if</span> id == 2</span>
+<span id="cb101-39"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-39" tabindex="-1"></a><span class="kw">replace</span> Y = <span class="fu">cond</span>(D == 1, 4, 0) <span class="kw">if</span> id == 3</span>
+<span id="cb101-40"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-40" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> Y <span class="st">&quot;Variable dependiente&quot;</span></span>
+<span id="cb101-41"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-41" tabindex="-1"></a><span class="kw">sum</span> Y <span class="kw">if</span>  D == 1</span>
+<span id="cb101-42"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-42" tabindex="-1"></a></span>
+<span id="cb101-43"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-43" tabindex="-1"></a>* -------------------------------</span>
+<span id="cb101-44"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-44" tabindex="-1"></a>* Visualización</span>
+<span id="cb101-45"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-45" tabindex="-1"></a>* -------------------------------</span>
+<span id="cb101-46"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-46" tabindex="-1"></a><span class="kw">twoway</span> <span class="co">///</span></span>
+<span id="cb101-47"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-47" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id == 1, <span class="bn">msymbol</span>(<span class="bn">circle</span>)) <span class="co">///</span></span>
+<span id="cb101-48"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-48" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id == 2, <span class="bn">msymbol</span>(triangle)) <span class="co">///</span></span>
+<span id="cb101-49"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-49" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id == 3, <span class="bn">msymbol</span>(square)) <span class="co">///</span></span>
+<span id="cb101-50"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-50" tabindex="-1"></a>  , <span class="co">///</span></span>
+<span id="cb101-51"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-51" tabindex="-1"></a>  <span class="bn">xline</span>(1985, lpattern(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb101-52"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-52" tabindex="-1"></a>  <span class="kw">xlabel</span>(<span class="ot">`inicio&#39;</span>(1)<span class="ot">`fin&#39;</span>) <span class="co">///</span></span>
+<span id="cb101-53"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-53" tabindex="-1"></a>  <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;id=1 (Control)&quot;</span> 2 <span class="st">&quot;id=2 (Tratado - efecto 2)&quot;</span> 3 <span class="st">&quot;id=3 (Tratado - efecto 4)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb101-54"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-54" tabindex="-1"></a>  <span class="bn">title</span>(<span class="st">&quot;Efectos de distinto tamaño&quot;</span>) <span class="co">///</span></span>
+<span id="cb101-55"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-55" tabindex="-1"></a>  <span class="bn">xtitle</span>(<span class="st">&quot;Año&quot;</span>) <span class="co">///</span></span>
+<span id="cb101-56"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-56" tabindex="-1"></a>  <span class="bn">ytitle</span>(<span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb101-57"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-57" tabindex="-1"></a></span>
+<span id="cb101-58"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-58" tabindex="-1"></a>* -------------------------------</span>
+<span id="cb101-59"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-59" tabindex="-1"></a>* Estimación</span>
+<span id="cb101-60"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-60" tabindex="-1"></a>* -------------------------------</span>
+<span id="cb101-61"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-61" tabindex="-1"></a><span class="kw">xtreg</span> Y D t, <span class="kw">fe</span></span>
+<span id="cb101-62"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-62" tabindex="-1"></a></span>
+<span id="cb101-63"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-63" tabindex="-1"></a>* Comparación con especificaciones alternativas</span>
+<span id="cb101-64"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-64" tabindex="-1"></a><span class="kw">reg</span> Y D                       <span class="co">// sin efectos fijos</span></span>
+<span id="cb101-65"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-65" tabindex="-1"></a><span class="kw">reg</span> Y D i.t                   <span class="co">// solo efectos fijos de tiempo</span></span>
+<span id="cb101-66"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-66" tabindex="-1"></a><span class="kw">reg</span> Y D i.id                  <span class="co">// solo efectos fijos de unidad</span></span>
+<span id="cb101-67"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb101-67" tabindex="-1"></a><span class="kw">reg</span> Y D i.t i.id              <span class="co">// ambos (especificación correcta)</span></span></code></pre></div>
+<div class="float">
+<img src="dofile/11_TWFE/g4.png" alt="Grafico" />
+<div class="figcaption">Grafico</div>
+</div>
+</div>
+<div id="b-versión-con-y-id-t-efecto_heterogéneo" class="section level3 unnumbered hasAnchor">
+<h3>3B) Versión con <code>Y = id + t + efecto_heterogéneo</code><a href="#b-versi%C3%B3n-con-y-id-t-efecto_heterog%C3%A9neo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Añadimos <strong>nivel por unidad</strong> y <strong>tendencia temporal</strong> a <code>Y</code>, además de heterogeneidad en el efecto (<code>2</code> y <code>4</code>).</li>
+<li>Refuerza la idea: <strong>β̂ TWFE</strong> no necesariamente es el ATT promedio.</li>
+</ul>
+<div class="sourceCode" id="cb102"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb102-1"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-1" tabindex="-1"></a>*-----------------------------------------------</span>
+<span id="cb102-2"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-2" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb102-3"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-3" tabindex="-1"></a>* Parámetros flexibles</span>
+<span id="cb102-4"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-4" tabindex="-1"></a><span class="kw">local</span> units = 3</span>
+<span id="cb102-5"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-5" tabindex="-1"></a><span class="kw">local</span> <span class="bn">start</span> = 1980</span>
+<span id="cb102-6"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-6" tabindex="-1"></a><span class="kw">local</span> <span class="kw">end</span>   = 1989</span>
+<span id="cb102-7"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-7" tabindex="-1"></a></span>
+<span id="cb102-8"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-8" tabindex="-1"></a><span class="kw">local</span> time = <span class="ot">`end&#39;</span> - <span class="ot">`start&#39;</span> + 1</span>
+<span id="cb102-9"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-9" tabindex="-1"></a><span class="kw">local</span> obsv = <span class="ot">`units&#39;</span> * <span class="ot">`time&#39;</span></span>
+<span id="cb102-10"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-10" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obsv&#39;</span></span>
+<span id="cb102-11"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-11" tabindex="-1"></a></span>
+<span id="cb102-12"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-12" tabindex="-1"></a>* Crear variables <span class="kw">de</span> panel <span class="fu">y</span> tiempo</span>
+<span id="cb102-13"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-13" tabindex="-1"></a><span class="kw">gen</span> id = .</span>
+<span id="cb102-14"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-14" tabindex="-1"></a><span class="kw">gen</span> t  = .</span>
+<span id="cb102-15"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-15" tabindex="-1"></a></span>
+<span id="cb102-16"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-16" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/<span class="ot">`units&#39;</span> {</span>
+<span id="cb102-17"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-17" tabindex="-1"></a>    <span class="kw">forvalues</span> j = 0/<span class="ot">`=`time&#39;</span>-1&#39; {</span>
+<span id="cb102-18"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-18" tabindex="-1"></a>        <span class="kw">local</span> obsnum = (<span class="ot">`i&#39;</span> - 1)*<span class="ot">`time&#39;</span> + <span class="ot">`j&#39;</span> + 1</span>
+<span id="cb102-19"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-19" tabindex="-1"></a>        <span class="kw">replace</span> id = <span class="ot">`i&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb102-20"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-20" tabindex="-1"></a>        <span class="kw">replace</span> t  = <span class="ot">`start&#39;</span> + <span class="ot">`j&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb102-21"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-21" tabindex="-1"></a>    }</span>
+<span id="cb102-22"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-22" tabindex="-1"></a>}</span>
+<span id="cb102-23"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-23" tabindex="-1"></a></span>
+<span id="cb102-24"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-24" tabindex="-1"></a><span class="kw">sort</span> id t</span>
+<span id="cb102-25"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-25" tabindex="-1"></a>xtset id t</span>
+<span id="cb102-26"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-26" tabindex="-1"></a></span>
+<span id="cb102-27"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-27" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> id <span class="st">&quot;Unidad (panel)&quot;</span></span>
+<span id="cb102-28"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-28" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> t  <span class="st">&quot;Año&quot;</span></span>
+<span id="cb102-29"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-29" tabindex="-1"></a></span>
+<span id="cb102-30"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-30" tabindex="-1"></a>* Tratamiento para id &gt;= 2 desde t &gt;= 1985</span>
+<span id="cb102-31"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-31" tabindex="-1"></a><span class="kw">gen</span> D = 0</span>
+<span id="cb102-32"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-32" tabindex="-1"></a><span class="kw">replace</span> D = 1 <span class="kw">if</span> id &gt;= 2 &amp; t &gt;= 1985</span>
+<span id="cb102-33"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-33" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> D <span class="st">&quot;Tratamiento desde 1985 para id &gt;= 2&quot;</span></span>
+<span id="cb102-34"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-34" tabindex="-1"></a></span>
+<span id="cb102-35"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-35" tabindex="-1"></a>* Generar outcome con efectos heterogéneos</span>
+<span id="cb102-36"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-36" tabindex="-1"></a>cap <span class="kw">drop</span> Y</span>
+<span id="cb102-37"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-37" tabindex="-1"></a><span class="kw">gen</span> Y = 0</span>
+<span id="cb102-38"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-38" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D == 1, 0, 0) <span class="kw">if</span> id == 1</span>
+<span id="cb102-39"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-39" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D == 1, 2, 0) <span class="kw">if</span> id == 2</span>
+<span id="cb102-40"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-40" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D == 1, 4, 0) <span class="kw">if</span> id == 3</span>
+<span id="cb102-41"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-41" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> Y <span class="st">&quot;Variable dependiente (Y)&quot;</span></span>
+<span id="cb102-42"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-42" tabindex="-1"></a></span>
+<span id="cb102-43"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-43" tabindex="-1"></a>* ----------------------------------</span>
+<span id="cb102-44"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-44" tabindex="-1"></a>* Gráfico adaptado para años reales</span>
+<span id="cb102-45"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-45" tabindex="-1"></a>* ----------------------------------</span>
+<span id="cb102-46"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-46" tabindex="-1"></a><span class="kw">twoway</span> <span class="co">///</span></span>
+<span id="cb102-47"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-47" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id == 1, <span class="bn">msymbol</span>(<span class="bn">circle</span>)) <span class="co">///</span></span>
+<span id="cb102-48"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-48" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id == 2, <span class="bn">msymbol</span>(triangle)) <span class="co">///</span></span>
+<span id="cb102-49"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-49" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id == 3, <span class="bn">msymbol</span>(square)) <span class="co">///</span></span>
+<span id="cb102-50"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-50" tabindex="-1"></a>    , <span class="co">///</span></span>
+<span id="cb102-51"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-51" tabindex="-1"></a>    <span class="bn">xline</span>(1985, lpattern(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb102-52"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-52" tabindex="-1"></a>    <span class="kw">xlabel</span>(<span class="ot">`start&#39;</span>(1)<span class="ot">`end&#39;</span>) <span class="co">///</span></span>
+<span id="cb102-53"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-53" tabindex="-1"></a>    <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;id=1 (Control)&quot;</span> 2 <span class="st">&quot;id=2 (Tratado - efecto 2)&quot;</span> 3 <span class="st">&quot;id=3 (Tratado - efecto 4)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb102-54"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-54" tabindex="-1"></a>    <span class="bn">title</span>(<span class="st">&quot;Evolución de Y con tratamiento heterogéneo&quot;</span>) <span class="co">///</span></span>
+<span id="cb102-55"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-55" tabindex="-1"></a>    <span class="bn">xtitle</span>(<span class="st">&quot;Año&quot;</span>) <span class="co">///</span></span>
+<span id="cb102-56"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-56" tabindex="-1"></a>    <span class="bn">ytitle</span>(<span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb102-57"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-57" tabindex="-1"></a></span>
+<span id="cb102-58"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-58" tabindex="-1"></a></span>
+<span id="cb102-59"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-59" tabindex="-1"></a>* -------------------------------</span>
+<span id="cb102-60"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-60" tabindex="-1"></a>* Estimación</span>
+<span id="cb102-61"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-61" tabindex="-1"></a>* -------------------------------</span>
+<span id="cb102-62"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-62" tabindex="-1"></a><span class="kw">xtreg</span> Y D t, <span class="kw">fe</span></span>
+<span id="cb102-63"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-63" tabindex="-1"></a></span>
+<span id="cb102-64"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-64" tabindex="-1"></a>* Comparación con especificaciones alternativas</span>
+<span id="cb102-65"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-65" tabindex="-1"></a><span class="kw">reg</span> Y D                       <span class="co">// sin efectos fijos</span></span>
+<span id="cb102-66"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-66" tabindex="-1"></a><span class="kw">reg</span> Y D i.t                   <span class="co">// solo efectos fijos de tiempo</span></span>
+<span id="cb102-67"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-67" tabindex="-1"></a><span class="kw">reg</span> Y D i.id                  <span class="co">// solo efectos fijos de unidad</span></span>
+<span id="cb102-68"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb102-68" tabindex="-1"></a><span class="kw">reg</span> Y D i.t i.id              <span class="co">// ambos (especificación correcta)</span></span></code></pre></div>
+<div class="float">
+<img src="dofile/11_TWFE/g5.png" alt="Grafico" />
+<div class="figcaption">Grafico</div>
+</div>
+</div>
+</div>
+<div id="más-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto" class="section level2 unnumbered hasAnchor">
+<h2>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>id=2</strong> se trata desde <strong>1985</strong>; <strong>id=3</strong> desde <strong>1988</strong> (escalonado).</li>
+<li>Los <strong>tamaños de efecto</strong> difieren (2 vs 4).</li>
+<li>Estimamos varias especificaciones y usamos <strong>Bacon decomposition</strong> para ver <strong>qué comparaciones</strong> y <strong>con qué peso</strong> componen el β̂ TWFE.</li>
+<li>Finalmente, estimamos pares 2×2 (id 1–2 e id 1–3) para ver los <strong>componentes</strong> del promedio.</li>
+</ul>
+<div class="sourceCode" id="cb103"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb103-1"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-1" tabindex="-1"></a>* --------------------------------------------------</span>
+<span id="cb103-2"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-2" tabindex="-1"></a>* 4. Más unidades, distinto tiempo <span class="kw">de</span> tratamiento <span class="fu">y</span> distinto efecto</span>
+<span id="cb103-3"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-3" tabindex="-1"></a>* --------------------------------------------------</span>
+<span id="cb103-4"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-4" tabindex="-1"></a></span>
+<span id="cb103-5"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-5" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb103-6"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-6" tabindex="-1"></a>* Parámetros flexibles</span>
+<span id="cb103-7"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-7" tabindex="-1"></a><span class="kw">local</span> unidades = 3</span>
+<span id="cb103-8"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-8" tabindex="-1"></a><span class="kw">local</span> inicio = 1980</span>
+<span id="cb103-9"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-9" tabindex="-1"></a><span class="kw">local</span> fin    = 1989</span>
+<span id="cb103-10"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-10" tabindex="-1"></a></span>
+<span id="cb103-11"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-11" tabindex="-1"></a><span class="kw">local</span> tiempo = <span class="ot">`fin&#39;</span> - <span class="ot">`inicio&#39;</span> + 1</span>
+<span id="cb103-12"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-12" tabindex="-1"></a><span class="kw">local</span> <span class="kw">obs</span> = <span class="ot">`unidades&#39;</span> * <span class="ot">`tiempo&#39;</span></span>
+<span id="cb103-13"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-13" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obs&#39;</span></span>
+<span id="cb103-14"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-14" tabindex="-1"></a></span>
+<span id="cb103-15"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-15" tabindex="-1"></a>* Crear variables id <span class="fu">y</span> t con años reales</span>
+<span id="cb103-16"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-16" tabindex="-1"></a><span class="kw">gen</span> id = .</span>
+<span id="cb103-17"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-17" tabindex="-1"></a><span class="kw">gen</span> t  = .</span>
+<span id="cb103-18"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-18" tabindex="-1"></a></span>
+<span id="cb103-19"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-19" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/<span class="ot">`unidades&#39;</span> {</span>
+<span id="cb103-20"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-20" tabindex="-1"></a>    <span class="kw">forvalues</span> j = 0/<span class="ot">`=`tiempo&#39;</span>-1&#39; {</span>
+<span id="cb103-21"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-21" tabindex="-1"></a>        <span class="kw">local</span> obsnum = (<span class="ot">`i&#39;</span> - 1)*<span class="ot">`tiempo&#39;</span> + <span class="ot">`j&#39;</span> + 1</span>
+<span id="cb103-22"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-22" tabindex="-1"></a>        <span class="kw">replace</span> id = <span class="ot">`i&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb103-23"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-23" tabindex="-1"></a>        <span class="kw">replace</span> t  = <span class="ot">`inicio&#39;</span> + <span class="ot">`j&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb103-24"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-24" tabindex="-1"></a>    }</span>
+<span id="cb103-25"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-25" tabindex="-1"></a>}</span>
+<span id="cb103-26"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-26" tabindex="-1"></a></span>
+<span id="cb103-27"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-27" tabindex="-1"></a><span class="kw">sort</span> id t</span>
+<span id="cb103-28"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-28" tabindex="-1"></a>xtset id t</span>
+<span id="cb103-29"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-29" tabindex="-1"></a></span>
+<span id="cb103-30"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-30" tabindex="-1"></a>* Tratamiento escalonado: id 2 desde 1985, id 3 desde 1988</span>
+<span id="cb103-31"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-31" tabindex="-1"></a><span class="kw">gen</span> D = 0</span>
+<span id="cb103-32"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-32" tabindex="-1"></a><span class="kw">replace</span> D = 1 <span class="kw">if</span> id == 2 &amp; t &gt;= 1985</span>
+<span id="cb103-33"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-33" tabindex="-1"></a><span class="kw">replace</span> D = 1 <span class="kw">if</span> id == 3 &amp; t &gt;= 1988</span>
+<span id="cb103-34"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-34" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> D <span class="st">&quot;Tratamiento escalonado&quot;</span></span>
+<span id="cb103-35"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-35" tabindex="-1"></a></span>
+<span id="cb103-36"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-36" tabindex="-1"></a>* Efectos distintos por grupo <span class="fu">y</span> tiempo</span>
+<span id="cb103-37"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-37" tabindex="-1"></a><span class="kw">gen</span> Y = 0</span>
+<span id="cb103-38"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-38" tabindex="-1"></a><span class="kw">replace</span> Y = D * 2 <span class="kw">if</span> id == 2 &amp; t &gt;= 1985</span>
+<span id="cb103-39"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-39" tabindex="-1"></a><span class="kw">replace</span> Y = D * 4 <span class="kw">if</span> id == 3 &amp; t &gt;= 1988</span>
+<span id="cb103-40"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-40" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> Y <span class="st">&quot;Variable dependiente&quot;</span></span>
+<span id="cb103-41"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-41" tabindex="-1"></a></span>
+<span id="cb103-42"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-42" tabindex="-1"></a>* ----------------------------------</span>
+<span id="cb103-43"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-43" tabindex="-1"></a>* Gráfico adaptado para años reales</span>
+<span id="cb103-44"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-44" tabindex="-1"></a>* ----------------------------------</span>
+<span id="cb103-45"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-45" tabindex="-1"></a><span class="kw">twoway</span> <span class="co">///</span></span>
+<span id="cb103-46"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-46" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id == 1, <span class="bn">msymbol</span>(<span class="bn">circle</span>)) <span class="co">///</span></span>
+<span id="cb103-47"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-47" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id == 2, <span class="bn">msymbol</span>(triangle)) <span class="co">///</span></span>
+<span id="cb103-48"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-48" tabindex="-1"></a>  (connected Y t <span class="kw">if</span> id == 3, <span class="bn">msymbol</span>(square)) <span class="co">///</span></span>
+<span id="cb103-49"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-49" tabindex="-1"></a>  , <span class="co">///</span></span>
+<span id="cb103-50"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-50" tabindex="-1"></a>  <span class="bn">xline</span>(1985 1988, lpattern(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb103-51"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-51" tabindex="-1"></a>  <span class="kw">xlabel</span>(<span class="ot">`inicio&#39;</span>(1)<span class="ot">`fin&#39;</span>) <span class="co">///</span></span>
+<span id="cb103-52"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-52" tabindex="-1"></a>  <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;id=1 (Control)&quot;</span> 2 <span class="st">&quot;id=2 (Tratado desde 1985)&quot;</span> 3 <span class="st">&quot;id=3 (Tratado desde 1988)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb103-53"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-53" tabindex="-1"></a>  <span class="bn">title</span>(<span class="st">&quot;Tratamiento con distintos tiempos y efectos&quot;</span>) <span class="co">///</span></span>
+<span id="cb103-54"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-54" tabindex="-1"></a>  <span class="bn">xtitle</span>(<span class="st">&quot;Año&quot;</span>) <span class="co">///</span></span>
+<span id="cb103-55"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb103-55" tabindex="-1"></a>  <span class="bn">ytitle</span>(<span class="st">&quot;Y&quot;</span>)</span></code></pre></div>
+<div class="float">
+<img src="dofile/11_TWFE/g6.png" alt="Grafico" />
+<div class="figcaption">Grafico</div>
+</div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb104-1"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-1" tabindex="-1"></a>* ----------------------------------</span>
+<span id="cb104-2"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-2" tabindex="-1"></a>* Estimaciones</span>
+<span id="cb104-3"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-3" tabindex="-1"></a>* ----------------------------------</span>
+<span id="cb104-4"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-4" tabindex="-1"></a><span class="kw">reg</span> Y D</span>
+<span id="cb104-5"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-5" tabindex="-1"></a><span class="kw">reg</span> Y D i.t</span>
+<span id="cb104-6"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-6" tabindex="-1"></a><span class="kw">reg</span> Y D i.id</span>
+<span id="cb104-7"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-7" tabindex="-1"></a><span class="kw">reg</span> Y D i.t i.id</span>
+<span id="cb104-8"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-8" tabindex="-1"></a></span>
+<span id="cb104-9"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-9" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t, <span class="kw">fe</span></span>
+<span id="cb104-10"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb104-10" tabindex="-1"></a>reghdfe Y D, absorb(id t)</span></code></pre></div>
+<ul>
+<li>Descomposición de Bacon</li>
+</ul>
+<div class="sourceCode" id="cb105"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb105-1"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb105-1" tabindex="-1"></a><span class="kw">ssc</span> install bacondecomp, <span class="kw">replace</span></span>
+<span id="cb105-2"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb105-2" tabindex="-1"></a>bacondecomp Y D, ddetail</span>
+<span id="cb105-3"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb105-3" tabindex="-1"></a></span>
+<span id="cb105-4"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb105-4" tabindex="-1"></a>*LEER: Goodman-Bacon, A. (2021). Difference-<span class="kw">in</span>-differences with variation <span class="kw">in</span> treatment timing. Journal <span class="kw">of</span> Econometrics.</span>
+<span id="cb105-5"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb105-5" tabindex="-1"></a></span>
+<span id="cb105-6"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb105-6" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t <span class="kw">if</span> (id==1 | id==2), <span class="kw">fe</span> <span class="kw">robust</span></span>
+<span id="cb105-7"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#cb105-7" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t <span class="kw">if</span> (id==1 | id==3), <span class="kw">fe</span> <span class="kw">robust</span> </span></code></pre></div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="malos-controles-mediador-m-vs-colisionador-c-dags.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="descomposición-de-bacon-y-efecto-real-en-did-con-adopción-escalonada.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/11-TWFE.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf", "_main.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -15,4 +15,4 @@ rmd_files:
   - 08-DID.Rmd
   - 09-BadControls.Rmd
   - 10-BadControlsStata.Rmd
-  
+  - 11-TWFE.Rmd
