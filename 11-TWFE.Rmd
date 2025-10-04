@@ -428,9 +428,7 @@ xtreg Y D i.t if (id==1 | id==2), fe robust
 xtreg Y D i.t if (id==1 | id==3), fe robust	
 ```
 
-# Descomposición de Bacon y “efecto real” en DiD con adopción escalonada {-}
-
-## ¿Qué es la descomposición de Bacon y por qué importa? {-}
+##Descomposición de Bacon y “efecto real” en DiD con adopción escalonada {-}
 
 Cuando el tratamiento se **adopta en momentos distintos** (staggered DiD), el coeficiente de un modelo **TWFE** (efectos fijos de unidad y tiempo) **no** es un simple DiD clásico.  
 Goodman-Bacon muestra que ese coeficiente es un **promedio ponderado de muchos DiD 2×2** construidos a partir de las comparaciones disponibles en tus datos.
@@ -548,7 +546,7 @@ promedia **también** comparaciones **tratado vs tratado** (tempranos vs tardío
 
 
 
-# ¿Cómo interpretar la salida de `bacondecomp`?
+## ¿Cómo interpretar la salida de `bacondecomp`? {-}
 
 
 ```
@@ -579,7 +577,7 @@ Bacon Decomposition
 
 ---
 
-## 1) ¿Qué significa cada fila?
+##  ¿Qué significa cada fila? {-}
 
 - **Early_v_Late (β=2, peso=0.2419)**  
   Compara **tratados tempranos** vs **tratados tardíos** **en los períodos en que los tardíos aún no están tratados**.  
@@ -597,7 +595,7 @@ Bacon Decomposition
 
 ---
 
-## 2) ¿Cuadra el promedio ponderado con el β de TWFE?
+## ¿Cuadra el promedio ponderado con el β de TWFE?  {-}
 
 Sí. Los **pesos** suman 1:
 - 0.2419354906 + 0.0967741935 + 0.6612903158 = **1.0000** (≈)
@@ -612,7 +610,7 @@ Promedio ponderado:
 
 ---
 
-## 3) ¿Por qué este β̂ puede **no** ser “el efecto real promedio”?
+## ¿Por qué este β̂ puede **no** ser “el efecto real promedio”?  {-}
 
 Lo que normalmente quieres reportar es el **ATT overall**: el **promedio del efecto entre las observaciones tratadas** (cohorte-tiempo) ponderado por su tamaño:
 
@@ -632,44 +630,36 @@ Si la cohorte temprana vale **2** (más años post) y la tardía **4** (menos a�
 \]
 mientras que **TWFE** te dio **2.7097** porque **incluye** las comparaciones **Early_v_Late** y **Late_v_Early** con pesos 24% y 9.7%.
 
----
 
-## 4) ¿Cómo usar esta descomposición en la práctica?
+
+## ¿Cómo usar esta descomposición en la práctica?  {-}
 
 - Si **Never_v_timing** concentra **casi todo el peso** y los efectos son **homogéneos**, **TWFE** suele estar cerca del **ATT overall**.  
 - Si hay **peso relevante** en **Early_v_Late** o **Late_v_Early** **y** sospechas **heterogeneidad** (por cohorte o dinámica), **no** confíes en TWFE para el efecto promedio.
 
 **Recomendación**: Estima \(\text{ATT}(g,t)\) con métodos modernos (p. ej., **csdid**, **eventstudyinteract**, **did_imputation**, **did2s**) y luego construye el **ATT overall** promediando **solo sobre celdas tratadas** con pesos \(N_{g,t}\).
 
----
 
-## 5) Resumen en una línea
+
+## Resumen en una línea  {-}
 
 **Tu tabla dice**: el β̂ de TWFE (=**2.7097**) es un **promedio ponderado** de tres DiD 2×2; la mayor parte (66.1%) viene de **tratados vs nunca tratados** (≈2.78), y el resto de **tratados vs tratados** (2 y 4).  
 **Conclusión**: Para reportar “el efecto real promedio”, usa el **ATT overall** (promedio sobre observaciones tratadas), no el β̂ de TWFE cuando hay heterogeneidad o adopción escalonada.
-```
 
 
 
+## Simulación grande (30 unidades × 60 periodos) con **timings y efectos crecientes**  {-}
 
 
-
----
-
-## 5) Simulación grande (30 unidades × 60 periodos) con **timings y efectos crecientes**
-
-### Explicación didáctica
 
 * Asignamos a cada unidad una **cohorte** (0–5), un **timing de adopción** aleatorio, y un **tamaño de efecto** aleatorio.
 * El outcome `Y` crece con el tiempo y **acumula** efecto post-tratamiento: `effect * (t - timing)`.
 * Graficamos las trayectorias y estimamos **TWFE** + **Bacon**.
 
-### Código (copiar/pegar)
+
 
 ```stata
 *********************************************************
-
-*
 
 clear
 local units = 30
@@ -754,11 +744,11 @@ bacondecomp Y D, ddetail
 
 > 🔍 **Claves**: Este es el entorno “realista” donde TWFE más sufre: **heterogeneidad + escalonamiento** + **dinámicas** → pesos complicados (a veces negativos).
 
----
 
-## 6) “Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento
 
-### Explicación didáctica
+## “Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento  {-}
+
+### Explicación didáctica  {-}
 
 * Simulamos nuevamente con **first\_treat** y **rel\_time** para construir **leads** (`F_#`) y **lags** (`L_#`).
 * Definimos cohortes de **nunca tratados** y variables de **cohorte/gvar** para los métodos que lo requieren.
@@ -776,7 +766,6 @@ bacondecomp Y D, ddetail
 
 > ⚠️ **Detalle técnico**: en `reghdfe Y L_* F_*, absorb(id t) cluster(i)`, tu código agrupa por `i`. Si tu panel es `id`, lo más habitual es `cluster(id)`. **Mantengo tu comando exactamente** (como pediste), pero sugiero revisar el cluster según tu diseño.
 
-### Código (copiar/pegar)
 
 ```stata
 **********************************************************************************************
@@ -971,9 +960,9 @@ event_plot    twfe	csdd    didimp  dcdh_b#dcdh_v   sa_b#sa_v   stackedev_b#stack
 							 ) 
 ```
 
----
 
-## 7) Puntos de aprendizaje (resumen)
+
+## Puntos de aprendizaje (resumen)  {-}
 
 * **TWFE** funciona bien en **2×2** simples, pero con **heterogeneidad** y **timing escalonado** puede:
 

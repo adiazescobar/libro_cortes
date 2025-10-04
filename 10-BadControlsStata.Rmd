@@ -8,251 +8,183 @@
 - Visualizar los resultados con **coefplots** e **histogramas**.
 :::
 
----
 
-## Mediador (post-tratamiento)
+## Mediador (post-tratamiento) {-}
 
-**Idea:** \(D\) afecta a \(Y\). También \(D\) afecta una variable \(M\) (post-tratamiento), que a su vez afecta \(Y\).  
-Si **controlas \(M\)** cuando tu objetivo es el **efecto total** de \(D\) sobre \(Y\), “le quitas” al coeficiente la parte del camino \(D \rightarrow M \rightarrow Y\).  
+**Idea:** \(D \rightarrow M \rightarrow Y\). Si tu objetivo es el **efecto total** de \(D\) en \(Y\), **no controles \(M\)**: al hacerlo, **bloqueas** la ruta \(D\to M\to Y\) y el coeficiente de \(D\) pasa a medir solo el **efecto directo** (en esta DGP será \(\approx 0\)). Esto es un **mal control para el total**, aunque no abre un camino espurio si el mediador es “puro”.
 
+### Mediador puro: \( D \rightarrow M \rightarrow Y \)  {-}
 
-### Mediador: \( D \rightarrow M \rightarrow Y \) {-}
-<div style="margin:1rem 0;"> <svg width="520" height="140" viewBox="0 0 520 140" xmlns="http://www.w3.org/2000/svg"> <defs> <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"> <path d="M0,0 L0,6 L9,3 z" fill="#333" /> </marker> <style> .node { fill: #fff; stroke: #333; stroke-width: 2px; } .label { font-family: sans-serif; font-size: 14px; fill: #111; dominant-baseline: middle; text-anchor: middle; } .edge { stroke: #333; stroke-width: 2px; fill: none; marker-end: url(#arrow); } </style> </defs> <!-- Nodes --> <circle class="node" cx="60" cy="70" r="24"/> <text class="label" x="60" y="70">D</text> <circle class="node" cx="220" cy="70" r="24"/> <text class="label" x="220" y="70">M</text> <circle class="node" cx="380" cy="70" r="24"/> <text class="label" x="380" y="70">Y</text> <circle class="node" cx="380" cy="24" r="24"/> <text class="label" x="380" y="24">U</text> <!-- Edges --> <line class="edge" x1="84" y1="70" x2="196" y2="70"/> <line class="edge" x1="244" y1="70" x2="356" y2="70"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- small spacer --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- (keeps marker size consistent) --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- Actual U->Y --> <path class="edge" d="M380,48 L380,46 M380,48 L380,46 M380,48 L380,46 M380,48 L380,46"/> <path class="edge" d="M380,48 L380,46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- Simple straight U->Y --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- Clean final arrow --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- Minimal final arrow (from U to Y) --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- Real arrow U->Y --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- Simpler: draw a direct line --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- Final actual line --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> <!-- Sorry for redundancy; some renderers clip short markers. --> <line class="edge" x1="380" y1="48" x2="380" y2="46"/> </svg> <p style="font-family:sans-serif; font-size:13px; color:#333;"> <b>Nota:</b> Si tu parámetro es el <i>efecto total</i> de D sobre Y, <b>no</b> controles M. </p> </div>
+<div style="margin:1rem 0;">
+<svg width="520" height="120" viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mediador puro D->M->Y">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#333"/></marker>
+    <style>.n{fill:#fff;stroke:#333;stroke-width:2px}.t{font-family:sans-serif;font-size:14px;fill:#111;dominant-baseline:middle;text-anchor:middle}.e{stroke:#333;stroke-width:2px;fill:none;marker-end:url(#arr)}</style>
+  </defs>
+  <circle class="n" cx="80"  cy="70" r="22"/><text class="t" x="80"  y="70">D</text>
+  <circle class="n" cx="240" cy="70" r="22"/><text class="t" x="240" y="70">M</text>
+  <circle class="n" cx="400" cy="70" r="22"/><text class="t" x="400" y="70">Y</text>
+  <line class="e" x1="102" y1="70" x2="218" y2="70"/>
+  <line class="e" x1="262" y1="70" x2="378" y2="70"/>
+</svg>
+<p style="font-family:sans-serif; font-size:13px; color:#333; margin:.4rem 0 0 0;">
+<b>Nota:</b> si tu parámetro es el <i>efecto total</i> de D en Y, <b>no</b> controles M (bloqueas la ruta D→M→Y).
+</p>
+</div>
 
-```stata
+~~~stata
 ********************************************************************************
-* SOLO MEDIADOR: versión simple y didáctica
+* MEDIADOR PURO (sobrecontrol del efecto total)
+* DGP: D -> M -> Y, sin otras causas de M o Y (salvo ruido)
 ********************************************************************************
 clear all
 set more off
 set seed 2468
-set obs 50000
+set obs 10000
 
-gen D = (runiform()<0.5)
-local rho = .30
-matrix C = (1, `rho' \ `rho', 1)
-drawnorm eY eM, corr(C)
+* Parámetros (efecto total = a*b)
+scalar a = 2     // D -> M
+scalar b = 1     // M -> Y
 
-replace eY = 4*eY
-gen Y_0 = 1 + eY
-gen Y_1 = 3 + eY
-gen Y   = D*Y_1 + (1-D)*Y_0
+gen double D = (runiform()<0.5)
+gen double M = a*D + rnormal()
+gen double Y = b*M + rnormal()
 
-replace eM = 4*eM
-gen M_0 = 1 + eM
-gen M_1 = 4 + eM
-gen M   = D*M_1 + (1-D)*M_0
+* (Total) Y ~ D  -> coef(D) ≈ a*b = 2
+reg Y D, vce(robust)
 
-reg Y D
-reg Y D M
+* (Directo) Y ~ D M  -> bloquea D->M->Y, coef(D) ≈ 0  => mal control para TOTAL
+reg Y D M, vce(robust)
 
-capture program drop mc_mediador
-program define mc_mediador, rclass
+* --- Mini Monte Carlo (promedios)
+capture program drop mc_mediador_puro
+program define mc_mediador_puro, rclass
     clear
     set obs 3000
-    gen D = (runiform()<0.5)
-    matrix C = (1, .30 \ .30, 1)
-    drawnorm eY eM, corr(C)
-    replace eY = 4*eY
-    replace eM = 4*eM
-
-    gen Y_0 = 1 + eY
-    gen Y_1 = 3 + eY
-    gen Y   = D*Y_1 + (1-D)*Y_0
-
-    gen M_0 = 1 + eM
-    gen M_1 = 4 + eM
-    gen M   = D*M_1 + (1-D)*M_0
-
+    gen double D = (runiform()<0.5)
+    gen double M = 2*D + rnormal()
+    gen double Y = 1*M + rnormal()
     qui reg Y D
     return scalar b_total = _b[D]
     qui reg Y D M
     return scalar b_directo = _b[D]
 end
 
-simulate b_total=r(b_total) b_directo=r(b_directo), reps(300): mc_mediador
-sum b_total b_directo
+simulate b_total=r(b_total) b_directo=r(b_directo), reps(300): mc_mediador_puro
+summ b_total b_directo
 
-```
-**Lectura esperada:**
+* --- (Opcional) Coefplot rápido
+* capture which coefplot
+* if _rc ssc install coefplot
+reg Y D
+est store total
+reg Y D M
+est store directo
+coefplot (total, label("Total")) (directo, label("Directo (con M)")), ///
+    keep(D) xline(0) drop(_cons) title("Mediador: coeficiente de D")
+~~~
 
-* `reg Y D` recupera el **efecto total**.
-* `reg Y D M` da solo el **efecto directo**, más pequeño.
+**Lectura esperada**
 
-```stata
-coefplot (reg Y D) (reg Y D M), keep(D) ///
-    xline(0) drop(_cons) ///
-    legend(order(1 "Total" 2 "Directo (con M)")) ///
-    title("Mediador: coeficiente de D")
-```
-
-## Colisionador {-}
-
-**Idea:**
-
-* $U$ afecta $Y$.
-* $C$ es causado por $D$ y por $U$.
-* Si controlamos $C$, se abre el camino $D \leftrightarrow U \rightarrow Y$.
+- `reg Y D` ≈ \(a b\) (total).  
+- `reg Y D M` ≈ 0 (directo).  
+- En promedio, `b_total` ≈ \(a b\) y `b_directo` ≈ 0.
 
 
-<div style="margin:1rem 0;"> <svg width="520" height="160" viewBox="0 0 520 160" xmlns="http://www.w3.org/2000/svg"> <defs> <marker id="arrow2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"> <path d="M0,0 L0,6 L9,3 z" fill="#333" /> </marker> <style> .node { fill: #fff; stroke: #333; stroke-width: 2px; } .label { font-family: sans-serif; font-size: 14px; fill: #111; dominant-baseline: middle; text-anchor: middle; } .edge { stroke: #333; stroke-width: 2px; fill: none; marker-end: url(#arrow2); } </style> </defs> <!-- Nodes --> <circle class="node" cx="60" cy="90" r="24"/> <text class="label" x="60" y="90">D</text> <circle class="node" cx="220" cy="90" r="24"/> <text class="label" x="220" y="90">C</text> <circle class="node" cx="220" cy="34" r="24"/> <text class="label" x="220" y="34">U</text> <circle class="node" cx="380" cy="90" r="24"/> <text class="label" x="380" y="90">Y</text> <!-- Edges -->
-<line class="edge" x1="84" y1="90" x2="196" y2="90"/> <!-- D -> C -->
-<line class="edge" x1="220" y1="58" x2="220" y2="66"/> <!-- U -> C (down) -->
-<line class="edge" x1="244" y1="90" x2="356" y2="90"/> <!-- C -> Y? no, U -> Y -->
-<!-- Replace previous with U -> Y -->
-<line class="edge" x1="244" y1="34" x2="356" y2="90"/> <!-- U -> Y (diagonal) -->
+
+## Colisionador  {-}
+
+**Idea:** \(C\) es causado por \(D\) **y** por \(U\), y \(U\) también afecta \(Y\). Si controlas \(C\), **abres** el camino \(D \leftrightarrow U \rightarrow Y\) ⇒ el coeficiente de \(D\) se vuelve **sesgado** (aun si \(D\) y \(Y\) eran independientes).
+
+### Colisionador: \( D \rightarrow C \leftarrow U \rightarrow Y \)  {-}
+
+<div style="margin:1rem 0;">
+<svg width="520" height="140" viewBox="0 0 520 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Colisionador D->C<-U->Y">
+  <defs>
+    <marker id="arr2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#333"/></marker>
+    <style>.n{fill:#fff;stroke:#333;stroke-width:2px}.t{font-family:sans-serif;font-size:14px;fill:#111;dominant-baseline:middle;text-anchor:middle}.e{stroke:#333;stroke-width:2px;fill:none;marker-end:url(#arr2)}</style>
+  </defs>
+  <circle class="n" cx="80"  cy="90" r="22"/><text class="t" x="80"  y="90">D</text>
+  <circle class="n" cx="240" cy="90" r="22"/><text class="t" x="240" y="90">C</text>
+  <circle class="n" cx="240" cy="30" r="22"/><text class="t" x="240" y="30">U</text>
+  <circle class="n" cx="400" cy="90" r="22"/><text class="t" x="400" y="90">Y</text>
+  <line class="e" x1="102" y1="90" x2="218" y2="90"/>
+  <line class="e" x1="240" y1="52" x2="240" y2="68"/>
+  <line class="e" x1="258" y1="42" x2="382" y2="78"/>
 </svg>
-<p style="font-family:sans-serif; font-size:13px; color:#333;"> <b>Nota:</b> Controlar <b>C</b> abre el camino <i>D ⟷ U → Y</i> y sesga el efecto de <b>D</b>. </p> </div>
+<p style="font-family:sans-serif; font-size:13px; color:#333; margin:.4rem 0 0 0;">
+<b>Nota:</b> Condicionar en <b>C</b> abre el camino <i>D ⟷ U → Y</i>.
+</p>
+</div>
 
-```stata
+~~~stata
 ********************************************************************************
-* COLISIONADOR: 
+* COLISIONADOR CLÁSICO (efecto verdadero de D en Y = 0)
+* D y Y independientes; C es efecto de D y Y (o D y U que afecta Y)
 ********************************************************************************
 clear
 set more off
 set seed 2468
-set obs 50000
+set obs 1000
 
-gen U  = rnormal()
-gen eC = rnormal()
-gen eY = rnormal()
-gen D  = (runiform()<0.5)
+* Versión simple tipo manual: D ⟂ Y, C = 2*D - 0.5*Y + e
+gen double D = rnormal()
+gen double Y = rnormal()
+gen double C = 2*D - 0.5*Y + rnormal()
 
-gen C = 0.7*D + 0.7*U + eC
-gen Y = 2 + 2.0*D + 1.0*U + eY
+* (Correcto) Y ~ D  -> ~0
+reg Y D, vce(robust)
 
-reg Y D        // Benchmark correcto
-reg Y D C      // Sesgado por controlar colisionador
-```
+* (MAL) Y ~ D C  -> |coef(D)| grande por camino espurio vía C
+reg Y D C, vce(robust)
 
----
-
-
-```stata
-
-
----
-
-## Mini-Monte Carlo: Colisionador
-
-```stata
-********************************************************************************
-* MONTE CARLO: Colisionador
-********************************************************************************
+* --- Mini Monte Carlo
 capture program drop mc_colisionador
 program define mc_colisionador, rclass
     clear
-    set obs 3000
-    gen U  = rnormal()
-    gen eC = rnormal()
-    gen eY = rnormal()
-    gen D  = (runiform()<0.5)
-
-    gen C = 0.7*D + 0.7*U + eC
-    gen Y = 2 + 2.0*D + 1.0*U + eY
-
+    set obs 1000
+    gen double D = rnormal()
+    gen double Y = rnormal()
+    gen double C = 2*D - 0.5*Y + rnormal()
     qui reg Y D
-    return scalar b_bench = _b[D]
+    return scalar b_noC = _b[D]
     qui reg Y D C
     return scalar b_conC = _b[D]
 end
 
-simulate b_bench=r(b_bench) b_conC=r(b_conC), reps(300): mc_colisionador
-sum b_bench b_conC
-```
+simulate b_noC=r(b_noC) b_conC=r(b_conC), reps(300): mc_colisionador
+summ b_noC b_conC
 
----
+* (Opcional coefplot)
+* reg Y D
+* est store base
+* reg Y D C
+* est store conC
+* coefplot (base, label("Sin C")) (conC, label("Con C")), ///
+*     keep(D) xline(0) drop(_cons) title("Colisionador: coeficiente de D")
+~~~
 
-## Gráficos de apoyo
 
-### Coefplot del mediador
+## Histogramas (distribuciones Monte Carlo)  {-}
 
-```stata
-coefplot (reg Y D) (reg Y D M), keep(D) ///
-    xline(0) drop(_cons) ///
-    legend(order(1 "Total" 2 "Directo (con M)")) ///
-    title("Mediador: coeficiente de D")
-```
-
-### Histogramas Monte Carlo
+> Ejecuta primero cada bloque de simulación; luego corre los histogramas sobre el dataset de resultados que deja `simulate`.
 
 ```stata
-* Histogramas lado a lado para mediador
-twoway (hist b_total, width(.1) color(navy%40)) ///
-       (hist b_directo, width(.1) color(red%40)), ///
-       legend(order(1 "Total" 2 "Directo")) ///
-       title("Distribución de coef D: con y sin M")
+* Para el mediador (dataset con variables: b_total, b_directo)
+twoway (hist b_total, width(.05) color(navy%40)) ///
+       (hist b_directo, width(.05) color(red%40)), ///
+       legend(order(1 "Total (Y~D)" 2 "Directo (Y~D M)")) ///
+       title("Mediador puro: distribución del coeficiente de D")
 
-* Histogramas para colisionador
-twoway (hist b_bench, width(.1) color(green%40)) ///
-       (hist b_conC, width(.1) color(orange%40)), ///
-       legend(order(1 "Benchmark" 2 "Con C")) ///
-       title("Distribución de coef D: benchmark vs. colisionador")
+* Para el colisionador (dataset con variables: b_noC, b_conC)
+twoway (hist b_noC, width(.05) color(green%40)) ///
+       (hist b_conC, width(.05) color(orange%40)), ///
+       legend(order(1 "Sin C" 2 "Con C")) ///
+       title("Colisionador: distribución del coeficiente de D")
 ```
 
----
 
-## Resumen práctico
-
-* **Mediador:** si buscas el **efecto total**, **no lo controles**.
-* **Colisionador:** nunca lo controles; introduce sesgo espurio.
-* **Pre-tratamiento:** buenos controles para ganar precisión.
-
-
-
-
-# Malos controles: **Mediador (M)** vs **Colisionador (C)** — DAGs {-}
-<!-- MEDIADOR --> <h3 style="margin:0 0 8px 0; font-family:sans-serif;">Mediador (M)</h3> <svg width="560" height="150" viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DAG Mediador"> <defs> <marker id="arrowM" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"> <path d="M0,0 L0,6 L9,3 z" fill="#111" /> </marker> <style> .node { fill:#fff; stroke:#111; stroke-width:2px; } .label{ font:14px sans-serif; fill:#111; dominant-baseline:middle; text-anchor:middle; } .edge { stroke:#111; stroke-width:2px; fill:none; marker-end:url(#arrowM); } .pill { fill:#fee2e2; stroke:#b91c1c; stroke-width:1.5px; rx:6; ry:6; } .warn { font:12px sans-serif; fill:#b91c1c; } </style> </defs> <!-- Nodes -->
-<circle class="node" cx="60" cy="90" r="24"/><text class="label" x="60" y="90">D</text>
-<circle class="node" cx="240" cy="90" r="24"/><text class="label" x="240" y="90">M</text>
-<circle class="node" cx="420" cy="90" r="24"/><text class="label" x="420" y="90">Y</text>
-<circle class="node" cx="420" cy="30" r="24"/><text class="label" x="420" y="30">U</text>
-<!-- Edges --> <line class="edge" x1="84" y1="90" x2="216" y2="90"/> <line class="edge" x1="264" y1="90" x2="396" y2="90"/> <line class="edge" x1="420" y1="54" x2="420" y2="66"/> <!-- Nota --> <rect x="170" y="116" width="140" height="24" class="pill"/> <text class="warn" x="240" y="132">No controles M</text> </svg> <hr style="border:none; border-top:1px solid #eee; margin:16px 0;"> <!-- COLISIONADOR --> <h3 style="margin:0 0 8px 0; font-family:sans-serif;">Colisionador (C)</h3> <svg width="560" height="150" viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DAG Colisionador"> <defs> <marker id="arrowC" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"> <path d="M0,0 L0,6 L9,3 z" fill="#111" /> </marker> <style> .node { fill:#fff; stroke:#111; stroke-width:2px; } .label{ font:14px sans-serif; fill:#111; dominant-baseline:middle; text-anchor:middle; } .edge { stroke:#111; stroke-width:2px; fill:none; marker-end:url(#arrowC); } .pill { fill:#ffedd5; stroke:#b45309; stroke-width:1.5px; rx:6; ry:6; } .warn { font:12px sans-serif; fill:#b45309; } .dash { stroke:#b45309; stroke-width:1.5px; fill:none; stroke-dasharray:4 4; } </style> </defs> <!-- Nodes -->
-<circle class="node" cx="60" cy="90" r="24"/><text class="label" x="60" y="90">D</text>
-<circle class="node" cx="240" cy="90" r="24"/><text class="label" x="240" y="90">C</text>
-<circle class="node" cx="240" cy="30" r="24"/><text class="label" x="240" y="30">U</text>
-<circle class="node" cx="420" cy="90" r="24"/><text class="label" x="420" y="90">Y</text>
-<!-- Edges -->
-<line class="edge" x1="84" y1="90" x2="216" y2="90"/> <!-- D -> C -->
-<line class="edge" x1="240" y1="54" x2="240" y2="66"/> <!-- U -> C -->
-<line class="edge" x1="258" y1="42" x2="402" y2="78"/> <!-- U -> Y (diagonal) -->
-<!-- Nota --> <rect x="170" y="116" width="140" height="24" class="pill"/> <text class="warn" x="240" y="132">No controles C</text> <!-- Camino espurio ilustrado --> <path d="M90,66 C150,10 330,10 390,66" class="dash"/> <text x="280" y="18" class="warn" style="text-anchor:middle;">Condicionar en C abre D ⟷ U → Y</text> </svg>
-
-
-<table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:14px;">
-  <thead>
-    <tr>
-      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Aspecto</th>
-      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Mediador (M)</th>
-      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Colisionador (C)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Estructura causal</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;"><code>D → M → Y</code> (y posibles <code>U → Y</code>)</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;"><code>D → C ← U → Y</code></td>
-    </tr>
-    <tr>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Qué ocurre si controlas</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Condicionas en post-tratamiento ⇒ cambias la población de comparación ⇒ <b>sesgo</b> respecto al efecto total.</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Abres camino espurio <code>D ⟷ U → Y</code> ⇒ <b>sesgo</b>.</td>
-    </tr>
-    <tr>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Frase para clase</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Si buscas el <i>efecto total</i> de D en Y, <b>no controles M</b>.</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;"><b>Nunca</b> controles colisionadores.</td>
-    </tr>
-    <tr>
-      <td style="padding:8px;">Ejemplo empleo</td>
-      <td style="padding:8px;"><i>D</i>=usar redes; <i>M</i>=entrar al sector formal; <i>Y</i>=salario.</td>
-      <td style="padding:8px;"><i>D</i>=usar redes; <i>C</i>=tamaño de empresa; <i>U</i>=habilidad; <i>Y</i>=salario.</td>
-    </tr>
-  </tbody>
-</table>
-
-````markdown
-# Malos Controles con **F** (en el análisis de **D → Y**)
+## Malos Controles con **F** (en el análisis de **D → Y**)  {-}
 
 **Objetivo:** Estimar el efecto causal de **D** sobre **Y** y mostrar por qué **F** es un **mal control** bajo tres estructuras causales distintas (todas en regresiones lineales con datos simulados):
 
@@ -264,7 +196,7 @@ Cada bloque trae: generación de datos, regresiones **Y ~ D** (modelo objetivo) 
 
 ---
 
-## Teoría rápida: por qué **F** puede ser un mal control
+### Teoría rápida: por qué **F** puede ser un mal control  {-}
 
 - **Colisionador (`D → F ← Y`)**  
   Ajustar por **F** **abre** un camino espurio entre **D** y **Y** que antes estaba **bloqueado**. Resultado: el coeficiente de **D** queda **sesgado**.
@@ -279,11 +211,11 @@ Cada bloque trae: generación de datos, regresiones **Y ~ D** (modelo objetivo) 
 
 ---
 
-## Caso A — **F como colisionador** (`D → F ← Y`)
+### Caso A — **F como colisionador** (`D → F ← Y`)  {-}
 
 **Intuición:** **D** y **Y** son independientes en la población (efecto verdadero de D en Y = 0). **F** es causado por ambos. Si ajustas por **F**, abres un camino espurio `D ↔ Y` y obtienes un coeficiente de **D** distinto de 0 (sesgo).
 
-```stata
+~~~stata
 ********************************************************************************
 * CASO A: F como COLISIONADOR — D -> F <- Y
 * Efecto verdadero de D en Y: 0 (D y Y independientes). Controlar F induce sesgo.
@@ -326,20 +258,20 @@ end
 simulate b_noF=r(b_noF) b_conF=r(b_conF), reps(300): mc_F_collider
 summ b_noF b_conF
 * Esperado: mean(b_noF) ≈ 0 (insesgado); mean(b_conF) ≠ 0 (sesgo por controlar F).
-````
+~~~
 
 **Lectura esperada:**
 
-* `Y ~ D` recupera ≈ 0 (no hay efecto causal de D sobre Y).
-* `Y ~ D + F` produce un coeficiente de D **significativamente distinto** de 0 ⇒ **sesgo** por colisionador.
+- `Y ~ D` recupera ≈ 0 (no hay efecto causal de D sobre Y).  
+- `Y ~ D + F` produce un coeficiente de D **significativamente distinto** de 0 ⇒ **sesgo** por colisionador.
 
 ---
 
-## Caso B — **F descendiente de colisionador** (`D → Y ← U` y `Y → F`)
+### Caso B — **F descendiente de colisionador** (`D → Y ← U` y `Y → F`)  {-}
 
 **Intuición:** **Y** es colisionador entre **D** y **U** (no observado). **F** es descendiente de **Y**. Condicionar en **F** introduce dependencia entre **D** y **U** y sesga el coeficiente de **D**. Aquí el **efecto verdadero** de **D** en **Y** es **2**.
 
-```stata
+~~~stata
 ********************************************************************************
 * CASO B: F descendiente de colisionador — D -> Y ← U  y  Y -> F
 * Efecto verdadero de D en Y: 2. Controlar F (descendiente de Y) sesga el coef(D).
@@ -386,22 +318,22 @@ end
 simulate b_noF=r(b_noF) b_conF=r(b_conF), reps(300): mc_F_desc
 summ b_noF b_conF
 * Esperado: mean(b_noF) ≈ 2 (correcto); mean(b_conF) < 2 (sesgo por condicionar en F).
-```
+~~~
 
 **Lectura esperada:**
 
-* `Y ~ D` ≈ 2 (efecto verdadero).
-* `Y ~ D + F` tiende a **subestimar** (u otra distorsión) el efecto de D ⇒ **sesgo** por condicionar en un descendiente de colisionador.
+- `Y ~ D` ≈ 2 (efecto verdadero).  
+- `Y ~ D + F` tiende a **subestimar** (u otra distorsión) el efecto de D ⇒ **sesgo** por condicionar en un descendiente de colisionador.
 
 ---
 
-## Caso C — **F post-tratamiento (mediador)** (`D → F → Y`)
+### Caso C — **F post-tratamiento (mediador)** (`D → F → Y`)  {-}
 
 *(sobrecontrol si buscamos el **efecto total** de D)*
 
 **Intuición:** todo el efecto de **D** sobre **Y** pasa por **F** (no hay efecto directo adicional de D). El **efecto total** es `a*b`. Si ajustas por **F**, bloqueas la ruta causal y el coeficiente de **D** se va a ≈ 0: **sobrecontrol** (sesgo respecto del total).
 
-```stata
+~~~stata
 ********************************************************************************
 * CASO C: F post-tratamiento (mediador) — D -> F -> Y
 * Interés: EFECTO TOTAL de D en Y (= a*b). Controlar F lo bloquea (sobrecontrol).
@@ -451,41 +383,61 @@ end
 simulate b_total=r(b_total) b_conF=r(b_conF), reps(300): mc_F_mediador
 summ b_total b_conF
 * Esperado: mean(b_total) ≈ 6 (total); mean(b_conF) ≈ 0 (sobrecontrol al incluir F).
-```
+~~~
 
 **Lectura esperada:**
 
-* `Y ~ D` ≈ `a*b` (efecto total).
-* `Y ~ D + F` ≈ 0 (porque bloquear F elimina la ruta causal completa de D hacia Y).
+- `Y ~ D` ≈ `a*b` (efecto total).  
+- `Y ~ D + F` ≈ 0 (porque bloquear F elimina la ruta causal completa de D hacia Y).
 
 ---
 
-## Resumen pedagógico
+### Tabla comparativa (Mediador vs Colisionador)  {-}
 
-* **Colisionador (`D → F ← Y`)**: ajustar por **F** **abre** un camino espurio → **sesgo**.
-* **Descendiente de colisionador (`D → Y ← U` y `Y → F`)**: ajustar por **F** **induce dependencia** entre **D** y **U** → **sesgo**.
-* **Post-tratamiento / Mediador (`D → F → Y`)**: si buscas **efecto total**, **no controles F** (sobrecontrol).
-* Los **p-valores** pueden sugerir que **F** “sirve para predecir”, pero **predicción ≠ identificación**: sin el DAG correcto, el estimador causal puede ser **inconsistente**.
+<table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:14px;">
+  <thead>
+    <tr>
+      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Aspecto</th>
+      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Mediador (M)</th>
+      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Colisionador (C)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Estructura causal</td>
+      <td style="border-bottom:1px solid #f3f4f6; padding:8px;"><code>D → M → Y</code></td>
+      <td style="border-bottom:1px solid #f3f4f6; padding:8px;"><code>D → C ← U → Y</code></td>
+    </tr>
+    <tr>
+      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Qué ocurre si controlas</td>
+      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Bloqueas la vía <code>D→M→Y</code> ⇒ <b>sesgo</b> respecto al <b>total</b> (cambia el estimando a “directo”).</td>
+      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Abres camino espurio <code>D ⟷ U → Y</code> ⇒ <b>sesgo</b>.</td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">Regla práctica</td>
+      <td style="padding:8px;"><b>No controles M</b> si buscas el <i>total</i>.</td>
+      <td style="padding:8px;"><b>Nunca</b> controles colisionadores.</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
-## DESCARGA LOS DOCUMENTOS {-}
+### DESCARGA LOS DOCUMENTOS {-}
 
-**Descargar Stata do file**:
+**Descargar Stata do file**:  
 [Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_stata.do)
 
-**Descargar R script**:
+**Descargar R script**:  
 [Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
 
-**Descargar Phyton Notebook**:
+**Descargar Phyton Notebook**:  
 [Descargar Phyton](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
 
-**Descarga los Datos**
+**Descarga los Datos**  
 [Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
 
-```
-```
 
 
