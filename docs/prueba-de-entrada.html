@@ -161,11 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
 <ul>
-<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#seccion-1-estadistica-basica"><i class="fa fa-check"></i>Seccion 1: Estadistica Basica</a></li>
-<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#seccion-2-regresion-lineal"><i class="fa fa-check"></i>Seccion 2: Regresion Lineal</a></li>
-<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#seccion-3-causalidad"><i class="fa fa-check"></i>Seccion 3: Causalidad</a></li>
-<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#seccion-4-stata"><i class="fa fa-check"></i>Seccion 4: Stata</a></li>
-<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#guia-de-puntuacion"><i class="fa fa-check"></i>Guia de Puntuacion</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#puntaje-automatico"><i class="fa fa-check"></i>Puntaje (automatico)</a></li>
 <li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a>
 <ul>
 <li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#consejos-para-el-curso"><i class="fa fa-check"></i>Consejos para el Curso</a></li>
@@ -489,7 +485,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   margin-left: 10px;
 }
 
-/* Estilo para respuestas correctas e incorrectas */
+/* Estilo para respuestas correctas e incorrectas (cuando ya se muestra feedback) */
 .webex-correct {
   color: #28a745;
   font-weight: bold;
@@ -514,6 +510,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   margin: 15px 0;
   border-radius: 5px;
 }
+
+/* ======= CLAVE: Desactivar feedback inmediato de webexercises hasta finalizar ======= */
+#prueba-entrada-quiz:not(.show-feedback) .webex-check,
+#prueba-entrada-quiz:not(.show-feedback) .webex-correct,
+#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect,
+#prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-correct,
+#prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-incorrect,
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-correct,
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-incorrect {
+  display: none !important;
+}
+
+/* Botón de puntaje */
+.btn-score {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #1F77B4;
+  background: #1F77B4;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-score:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#score-result table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#score-result th, #score-result td {
+  border: 1px solid #dee2e6;
+  padding: 8px;
+  text-align: left;
+}
 </style>
 <div class="intro-box">
 <h3>
@@ -524,16 +560,17 @@ Bienvenido a la Prueba de Entrada
 <ul>
 <li>La prueba contiene <strong>18 preguntas</strong> divididas en 4 secciones</li>
 <li>Responde cada pregunta seleccionando la opcion correcta o escribiendo tu respuesta</li>
-<li>Al seleccionar una respuesta, recibiras retroalimentacion inmediata</li>
+<li>La retroalimentación y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong></li>
 <li>No hay limite de tiempo, pero intenta responder sin consultar materiales</li>
-<li>Al final encontraras una guia de puntuacion y recursos para repasar</li>
+<li>Al final encontraras recursos para repasar</li>
 </ul>
 <p><strong>Tiempo estimado:</strong> 15-20 minutos</p>
 </div>
 <hr />
+<div id="prueba-entrada-quiz">
 <div id="seccion-1-estadistica-basica" class="section level2 unnumbered hasAnchor">
 <h2>Seccion 1: Estadistica Basica<a href="prueba-de-entrada.html#seccion-1-estadistica-basica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="quiz-section">
+<div class="quiz-section" data-section="Estadistica Basica">
 <p>Esta seccion evalua conceptos fundamentales de estadistica descriptiva e inferencial que son esenciales para el analisis econometrico.</p>
 <div class="question-box">
 <p><span class="question-number">Pregunta 1.</span> Si una variable X tiene media 50 y desviacion estandar 10, y sigue una distribucion normal, que porcentaje de las observaciones se encuentra entre 30 y 70?</p>
@@ -545,10 +582,10 @@ Ver explicacion
 <p>En una distribucion normal:</p>
 <ul>
 <li>El 68% de los datos esta dentro de 1 desviacion estandar de la media</li>
-<li>El <strong>95%</strong> de los datos esta dentro de 2 desviaciones estandar de la media</li>
+<li>El 95% de los datos esta dentro de 2 desviaciones estandar de la media</li>
 <li>El 99.7% esta dentro de 3 desviaciones estandar</li>
 </ul>
-<p>Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones estandar, por lo tanto es el <strong>95%</strong>.</p>
+<p>Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones estandar, por lo tanto es el 95%.</p>
 </div>
 </div>
 <div class="question-box">
@@ -558,12 +595,7 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>El <strong>p-value</strong> es la probabilidad de obtener un resultado tan extremo o mas extremo que el observado, <strong>asumiendo que la hipotesis nula es verdadera</strong>.</p>
-<p>Es importante no confundirlo con:</p>
-<ul>
-<li>La probabilidad de que H0 sea verdadera (error comun)</li>
-<li>El nivel de significancia (alpha), que es un umbral que nosotros establecemos</li>
-</ul>
+<p>El p-value es la probabilidad de obtener un resultado tan extremo o mas extremo que el observado, asumiendo que la hipotesis nula es verdadera.</p>
 </div>
 </div>
 <div class="question-box">
@@ -574,10 +606,9 @@ Ver explicacion
 Ver explicacion
 </button>
 <ul>
-<li><strong>Error Tipo I (Falso Positivo):</strong> Rechazar H0 cuando es verdadera. La probabilidad de cometer este error es alpha (nivel de significancia).</li>
-<li><strong>Error Tipo II (Falso Negativo):</strong> No rechazar H0 cuando es falsa. La probabilidad de cometer este error es beta.</li>
+<li>Error Tipo I: Rechazar H0 cuando es verdadera (probabilidad alpha).</li>
+<li>Error Tipo II: No rechazar H0 cuando es falsa (probabilidad beta).</li>
 </ul>
-<p>Recuerda: El poder estadistico = 1 - beta</p>
 </div>
 </div>
 <div class="question-box">
@@ -587,8 +618,7 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>La interpretacion correcta es <strong>frecuentista</strong>: si repitieramos el muestreo muchas veces y calcularamos un IC del 95% cada vez, aproximadamente el 95% de esos intervalos contendrian el verdadero valor del parametro.</p>
-<p><strong>No significa</strong> que hay 95% de probabilidad de que el parametro este en un intervalo particular ya calculado.</p>
+<p>Interpretacion frecuentista: si repitieramos el muestreo muchas veces y construyeramos IC del 95% cada vez, cerca del 95% de esos intervalos contendrian el valor verdadero del parametro.</p>
 </div>
 </div>
 <div class="question-box">
@@ -598,9 +628,7 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>La <strong>varianza</strong> mide que tan dispersos estan los datos respecto a su media. Se calcula como el promedio de las desviaciones al cuadrado:</p>
-<p><span class="math display">\[Var(X) = E[(X - \mu)^2]\]</span></p>
-<p>La desviacion estandar es simplemente la raiz cuadrada de la varianza, y tiene la ventaja de estar en las mismas unidades que la variable original.</p>
+<p>La varianza mide la dispersion alrededor de la media: Var(X) = E[(X - mu)^2]. La desviacion estandar es la raiz cuadrada de la varianza.</p>
 </div>
 </div>
 </div>
@@ -608,39 +636,26 @@ Ver explicacion
 </div>
 <div id="seccion-2-regresion-lineal" class="section level2 unnumbered hasAnchor">
 <h2>Seccion 2: Regresion Lineal<a href="prueba-de-entrada.html#seccion-2-regresion-lineal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="quiz-section">
+<div class="quiz-section" data-section="Regresion Lineal">
 <p>Esta seccion evalua tu comprension del modelo de regresion lineal, sus supuestos e interpretacion.</p>
 <div class="question-box">
-<p><span class="question-number">Pregunta 6.</span> En el modelo <span class="math inline">\(Y = \beta_0 + \beta_1 X + \varepsilon\)</span>, el coeficiente <span class="math inline">\(\beta_1\)</span> representa:</p>
+<p><span class="question-number">Pregunta 6.</span> En el modelo Y = beta0 + beta1 X + e, el coeficiente beta1 representa:</p>
 <p><select class='webex-select'><option value='blank'></option><option value=''>El valor de Y cuando X = 0</option><option value='answer'>El cambio esperado en Y por cada unidad adicional de X</option><option value=''>La correlacion entre X e Y</option><option value=''>La varianza de Y explicada por X</option></select></p>
 <div class="webex-solution">
 <button>
 Ver explicacion
 </button>
-<p>En una regresion lineal simple:</p>
-<ul>
-<li><span class="math inline">\(\beta_0\)</span> (intercepto): El valor esperado de Y cuando X = 0</li>
-<li><span class="math inline">\(\beta_1\)</span> (pendiente): El <strong>cambio esperado en Y</strong> por cada unidad adicional en X, manteniendo todo lo demas constante</li>
-</ul>
-<p>Matematicamente: <span class="math inline">\(\beta_1 = \frac{\partial E[Y|X]}{\partial X}\)</span></p>
+<p>beta1 es el cambio esperado en Y asociado con una unidad adicional de X (ceteris paribus).</p>
 </div>
 </div>
 <div class="question-box">
-<p><span class="question-number">Pregunta 7.</span> Si <span class="math inline">\(R^2 = 0.75\)</span>, esto significa que:</p>
+<p><span class="question-number">Pregunta 7.</span> Si R2 = 0.75, esto significa que:</p>
 <p><select class='webex-select'><option value='blank'></option><option value=''>El coeficiente de correlacion es 0.75</option><option value=''>El modelo tiene 75% de probabilidad de ser correcto</option><option value='answer'>El 75% de la variacion en Y es explicada por las variables independientes</option><option value=''>El 75% de las observaciones estan correctamente predichas</option></select></p>
 <div class="webex-solution">
 <button>
 Ver explicacion
 </button>
-<p>El <strong>coeficiente de determinacion</strong> <span class="math inline">\(R^2\)</span> indica la proporcion de la varianza de la variable dependiente que es explicada por el modelo.</p>
-<p><span class="math display">\[R^2 = 1 - \frac{SCR}{SCT} = \frac{SCE}{SCT}\]</span></p>
-<p>Donde:</p>
-<ul>
-<li>SCR = Suma de Cuadrados de los Residuos</li>
-<li>SCT = Suma de Cuadrados Total</li>
-<li>SCE = Suma de Cuadrados Explicada</li>
-</ul>
-<p>Un <span class="math inline">\(R^2 = 0.75\)</span> indica que el modelo explica el 75% de la variabilidad observada en Y.</p>
+<p>R2 es la proporcion de la varianza de Y explicada por el modelo.</p>
 </div>
 </div>
 <div class="question-box">
@@ -650,16 +665,7 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>Los supuestos clasicos de OLS incluyen:</p>
-<ol style="list-style-type: decimal">
-<li>Linealidad en parametros</li>
-<li>Muestreo aleatorio</li>
-<li>No hay multicolinealidad perfecta</li>
-<li>Media condicional cero de los errores: <span class="math inline">\(E[\varepsilon|X] = 0\)</span></li>
-<li>Homocedasticidad: <span class="math inline">\(Var(\varepsilon|X) = \sigma^2\)</span></li>
-<li>(Para inferencia) Normalidad de los errores</li>
-</ol>
-<p><strong>No se requiere</strong> que los errores sigan una distribucion uniforme. De hecho, para inferencia en muestras pequenas se asume normalidad.</p>
+<p>OLS no requiere errores uniformes. Para inferencia en muestras pequeñas suele asumirse normalidad.</p>
 </div>
 </div>
 <div class="question-box">
@@ -669,27 +675,17 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>Un p-value de 0.03 significa:</p>
-<ul>
-<li><strong>Es significativo al 5%</strong> (porque 0.03 &lt; 0.05)</li>
-<li><strong>Es significativo al 10%</strong> (porque 0.03 &lt; 0.10)</li>
-<li><strong>NO es significativo al 1%</strong> (porque 0.03 &gt; 0.01)</li>
-</ul>
-<p>Rechazamos H0 cuando el p-value es menor que nuestro nivel de significancia elegido.</p>
+<p>0.03 &lt; 0.05 implica significancia al 5% (y al 10%), pero no al 1%.</p>
 </div>
 </div>
 <div class="question-box">
-<p><span class="question-number">Pregunta 10.</span> En un modelo <span class="math inline">\(\log(Y) = \beta_0 + \beta_1 X + \varepsilon\)</span>, el coeficiente <span class="math inline">\(\beta_1\)</span> se interpreta aproximadamente como:</p>
+<p><span class="question-number">Pregunta 10.</span> En un modelo log(Y) = beta0 + beta1 X + e, el coeficiente beta1 se interpreta aproximadamente como:</p>
 <p><select class='webex-select'><option value='blank'></option><option value=''>El cambio absoluto en Y por unidad de X</option><option value=''>El cambio en log(Y) en terminos absolutos</option><option value='answer'>El cambio porcentual en Y por cada unidad adicional de X</option><option value=''>La elasticidad de Y respecto a X</option></select></p>
 <div class="webex-solution">
 <button>
 Ver explicacion
 </button>
-<p>Cuando la variable dependiente esta en logaritmos (modelo log-lineal o semi-log):</p>
-<p><span class="math display">\[\log(Y) = \beta_0 + \beta_1 X\]</span></p>
-<p>El coeficiente <span class="math inline">\(\beta_1\)</span> se interpreta como: <strong>un aumento de una unidad en X esta asociado con un cambio de aproximadamente <span class="math inline">\(\beta_1 \times 100\)</span>% en Y</strong>.</p>
-<p>Para cambios pequenos: <span class="math inline">\(\frac{\Delta Y}{Y} \approx \beta_1 \cdot \Delta X\)</span></p>
-<p>Nota: Para la elasticidad necesitariamos <span class="math inline">\(\log(Y) = \beta_0 + \beta_1 \log(X)\)</span>.</p>
+<p>En un modelo semi-log, beta1 * 100 es el cambio porcentual aproximado en Y por una unidad adicional de X (para cambios pequeños).</p>
 </div>
 </div>
 </div>
@@ -697,8 +693,8 @@ Ver explicacion
 </div>
 <div id="seccion-3-causalidad" class="section level2 unnumbered hasAnchor">
 <h2>Seccion 3: Causalidad<a href="prueba-de-entrada.html#seccion-3-causalidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="quiz-section">
-<p>Esta seccion es fundamental para el curso. Evalua tu comprension de la diferencia entre correlacion y causalidad, y los conceptos basicos de inferencia causal.</p>
+<div class="quiz-section" data-section="Causalidad">
+<p>Esta seccion evalua la diferencia entre correlacion y causalidad, y conceptos basicos de inferencia causal.</p>
 <div class="question-box">
 <p><span class="question-number">Pregunta 11.</span> La observacion de que “los paises con mayor consumo de chocolate tienen mas premios Nobel per capita” es un ejemplo de:</p>
 <p><select class='webex-select'><option value='blank'></option><option value=''>Causalidad directa</option><option value=''>Causalidad inversa</option><option value='answer'>Correlacion espuria (correlacion sin causalidad)</option><option value=''>Efecto placebo</option></select></p>
@@ -706,13 +702,7 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>Este es un ejemplo clasico de <strong>correlacion espuria</strong>. Aunque existe una correlacion estadistica, no hay razon para creer que comer chocolate cause que las personas ganen premios Nobel.</p>
-<p>Posibles explicaciones:</p>
-<ul>
-<li><strong>Variable confusora</strong>: El nivel de desarrollo economico de un pais podria afectar tanto el consumo de chocolate como el numero de premios Nobel</li>
-<li><strong>Coincidencia estadistica</strong>: Con suficientes variables, algunas correlaran por azar</li>
-</ul>
-<p>Recuerda: <strong>Correlacion no implica causalidad!</strong></p>
+<p>Ejemplo de correlacion espuria: puede haber una tercera variable (p. ej. desarrollo) que explique ambos.</p>
 </div>
 </div>
 <div class="question-box">
@@ -722,10 +712,7 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>El <strong>sesgo de seleccion</strong> surge cuando los individuos que reciben el tratamiento difieren sistematicamente de los que no lo reciben, en caracteristicas que tambien afectan el resultado.</p>
-<p>Ejemplo: Si comparamos ingresos de universitarios vs. no universitarios, las diferencias observadas no solo reflejan el efecto de la educacion, sino tambien diferencias previas en habilidad, motivacion, contexto familiar, etc.</p>
-<p><span class="math display">\[E[Y_0|D=1] \neq E[Y_0|D=0]\]</span></p>
-<p>Donde <span class="math inline">\(Y_0\)</span> es el resultado potencial sin tratamiento.</p>
+<p>Sesgo de seleccion: E[Y0|D=1] != E[Y0|D=0].</p>
 </div>
 </div>
 <div class="question-box">
@@ -735,14 +722,7 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>La <strong>aleatorizacion</strong> es el estandar de oro en inferencia causal porque:</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Elimina el sesgo de seleccion</strong>: En expectativa, los grupos tratado y control son identicos en todas las caracteristicas (observables y no observables)</p></li>
-<li><p><strong>Balancea confusores</strong>: Tanto los factores conocidos como los desconocidos se distribuyen equitativamente</p></li>
-<li><p><strong>Permite identificar efectos causales</strong>: La diferencia simple de medias estima el efecto causal promedio:
-<span class="math display">\[E[Y|D=1] - E[Y|D=0] = ATE\]</span></p></li>
-</ol>
-<p>Por eso los experimentos aleatorizados (RCT) son tan valorados en la evaluacion de impacto.</p>
+<p>Aleatorizacion: balancea (en expectativa) observables y no observables.</p>
 </div>
 </div>
 <div class="question-box">
@@ -752,38 +732,17 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>El <strong>contrafactual</strong> es el concepto central de la inferencia causal. Se refiere a lo que <strong>habria pasado</strong> a una unidad si no hubiera recibido el tratamiento.</p>
-<p>El problema fundamental de la inferencia causal es que <strong>nunca observamos el contrafactual</strong> para un individuo especifico (no podemos ver a la misma persona con y sin tratamiento al mismo tiempo).</p>
-<p>Para el individuo <span class="math inline">\(i\)</span>:</p>
-<ul>
-<li>Observamos: <span class="math inline">\(Y_i = D_i \cdot Y_{1i} + (1-D_i) \cdot Y_{0i}\)</span></li>
-<li>El contrafactual para los tratados es <span class="math inline">\(Y_{0i}\)</span></li>
-<li>El contrafactual para los no tratados es <span class="math inline">\(Y_{1i}\)</span></li>
-</ul>
+<p>Contrafactual: el resultado potencial en el estado no observado.</p>
 </div>
 </div>
 <div class="question-box">
-<p><span class="question-number">Pregunta 15.</span> El principal problema al comparar simplemente los resultados de participantes de un programa vs. no participantes es:</p>
+<p><span class="question-number">Pregunta 15.</span> El principal problema al comparar simplemente participantes vs. no participantes es:</p>
 <p><select class='webex-select'><option value='blank'></option><option value=''>La diferencia en tamano de los grupos</option><option value=''>Los errores de medicion en los datos</option><option value='answer'>La autoseleccion (los que participan pueden ser diferentes de los que no)</option><option value=''>La falta de datos</option></select></p>
 <div class="webex-solution">
 <button>
 Ver explicacion
 </button>
-<p>La <strong>autoseleccion</strong> es un problema critico porque las personas que eligen participar en un programa probablemente difieren de las que no participan en:</p>
-<ul>
-<li>Motivacion</li>
-<li>Informacion disponible</li>
-<li>Habilidades</li>
-<li>Circunstancias personales</li>
-</ul>
-<p>Ejemplo: Las personas que se inscriben en un programa de capacitacion laboral probablemente son mas motivadas o tienen mas informacion sobre oportunidades, lo que afectaria sus resultados independientemente del programa.</p>
-<p>Esta es la razon por la que necesitamos metodos como:</p>
-<ul>
-<li>Experimentos aleatorios</li>
-<li>Diferencias en diferencias</li>
-<li>Variables instrumentales</li>
-<li>Regression discontinuity</li>
-</ul>
+<p>Autoseleccion: diferencias previas (motivacion, habilidad, redes) contaminan la comparacion.</p>
 </div>
 </div>
 </div>
@@ -791,8 +750,8 @@ Ver explicacion
 </div>
 <div id="seccion-4-stata" class="section level2 unnumbered hasAnchor">
 <h2>Seccion 4: Stata<a href="prueba-de-entrada.html#seccion-4-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="quiz-section">
-<p>Esta seccion evalua tu familiaridad basica con el software Stata, que usaremos durante todo el curso.</p>
+<div class="quiz-section" data-section="Stata">
+<p>Esta seccion evalua tu familiaridad basica con Stata.</p>
 <div class="question-box">
 <p><span class="question-number">Pregunta 16.</span> En Stata, cual comando usarias para ver las primeras observaciones de tu base de datos?</p>
 <p><select class='webex-select'><option value='blank'></option><option value=''>view</option><option value='answer'>browse o list</option><option value=''>show</option><option value=''>display</option></select></p>
@@ -800,112 +759,224 @@ Ver explicacion
 <button>
 Ver explicacion
 </button>
-<p>En Stata hay varias formas de ver los datos:</p>
-<ul>
-<li><strong><code>browse</code></strong>: Abre el visor de datos (Data Editor en modo lectura)</li>
-<li><strong><code>list</code></strong>: Muestra las observaciones en la ventana de resultados</li>
-<li><strong><code>list in 1/10</code></strong>: Muestra solo las primeras 10 observaciones</li>
-</ul>
-<p>Ejemplo:</p>
-<pre><code>browse
-list in 1/5
-list var1 var2 in 1/10</code></pre>
+<p><code>browse</code> abre el visor de datos. <code>list</code> imprime observaciones en Results (por ejemplo: <code>list in 1/10</code>).</p>
 </div>
 </div>
 <div class="question-box">
-<p><span class="question-number">Pregunta 17.</span> En una regresion en Stata, si el coeficiente de la variable <code>x</code> es 2.35, esto significa que:</p>
+<p><span class="question-number">Pregunta 17.</span> En una regresion en Stata, si el coeficiente de x es 2.35, esto significa que:</p>
 <p><select class='webex-select'><option value='blank'></option><option value=''>La variable x tiene un p-value de 2.35</option><option value='answer'>Por cada unidad adicional de x, Y aumenta en 2.35 unidades (en promedio)</option><option value=''>El R-cuadrado del modelo es 2.35</option><option value=''>Hay 2.35 observaciones con esa variable</option></select></p>
 <div class="webex-solution">
 <button>
 Ver explicacion
 </button>
-<p>El coeficiente en una regresion lineal indica el <strong>cambio en la variable dependiente</strong> asociado con un cambio de una unidad en la variable independiente, manteniendo las demas variables constantes.</p>
-<p>Si <span class="math inline">\(\hat{\beta}_x = 2.35\)</span>, interpretamos:</p>
-<blockquote>
-<p>“Un aumento de una unidad en X esta asociado con un aumento promedio de 2.35 unidades en Y, ceteris paribus.”</p>
-</blockquote>
-<p>En Stata, el output de regresion muestra:</p>
-<ul>
-<li><code>Coef.</code>: El valor del coeficiente</li>
-<li><code>Std. Err.</code>: El error estandar</li>
-<li><code>t</code>: El estadistico t</li>
-<li><code>P&gt;|t|</code>: El p-value</li>
-</ul>
+<p>El coeficiente es el cambio promedio en Y asociado con una unidad adicional en X, ceteris paribus.</p>
 </div>
 </div>
 <div class="question-box">
-<p><span class="question-number">Pregunta 18.</span> Cual es el comando correcto en Stata para realizar una regresion de la variable dependiente Y sobre las variables independientes X1 y X2?</p>
+<p><span class="question-number">Pregunta 18.</span> Cual es el comando correcto en Stata para realizar una regresion de Y sobre X1 y X2?</p>
 <p><input class='webex-solveme nospaces ignorecase' size='25' data-answer='["reg Y X1 X2","regress Y X1 X2"]'/></p>
 <div class="webex-solution">
 <button>
 Ver explicacion
 </button>
-<p>En Stata, el comando para regresion lineal es:</p>
-<pre><code>regress varY varX1 varX2 varX3</code></pre>
-<p>O de forma abreviada:</p>
-<pre><code>reg varY varX1 varX2 varX3</code></pre>
-<p>La sintaxis general es:</p>
-<pre><code>reg variable_dependiente variables_independientes [if] [in] [, opciones]</code></pre>
-<p>Ejemplo completo:</p>
-<pre><code>reg salario educacion experiencia edad, robust</code></pre>
+<p>Comando: <code>regress Y X1 X2</code> (abreviado: <code>reg Y X1 X2</code>).</p>
 </div>
 </div>
 </div>
+</div>
+</div>
+<p><!-- cierre prueba-entrada-quiz --></p>
 <hr />
-</div>
-<div id="guia-de-puntuacion" class="section level2 unnumbered hasAnchor">
-<h2>Guia de Puntuacion<a href="prueba-de-entrada.html#guia-de-puntuacion" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="puntaje-automatico" class="section level2 unnumbered hasAnchor">
+<h2>Puntaje (automatico)<a href="prueba-de-entrada.html#puntaje-automatico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="scoring-guide">
-<div id="como-evaluar-tu-desempeno" class="section level3 unnumbered hasAnchor">
-<h3>Como evaluar tu desempeno<a href="prueba-de-entrada.html#como-evaluar-tu-desempeno" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Cuenta el numero de respuestas correctas en cada seccion:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Seccion</th>
-<th>Preguntas</th>
-<th>Tu puntaje</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Estadistica Basica</td>
-<td>5</td>
-<td>__ / 5</td>
-</tr>
-<tr class="even">
-<td>Regresion Lineal</td>
-<td>5</td>
-<td>__ / 5</td>
-</tr>
-<tr class="odd">
-<td>Causalidad</td>
-<td>5</td>
-<td>__ / 5</td>
-</tr>
-<tr class="even">
-<td>Stata</td>
-<td>3</td>
-<td>__ / 3</td>
-</tr>
-<tr class="odd">
-<td><strong>Total</strong></td>
-<td><strong>18</strong></td>
-<td><strong>__ / 18</strong></td>
-</tr>
-</tbody>
-</table>
+<p><button type="button" id="btn-finalizar" class="btn-score">
+Finalizar y calcular puntaje
+</button></p>
+<div id="score-result" style="display:none; margin-top: 15px;">
+
 </div>
-<div id="interpretacion" class="section level3 unnumbered hasAnchor">
-<h3>Interpretacion<a href="prueba-de-entrada.html#interpretacion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li><strong>16-18 correctas (90-100%):</strong> Excelente! Tienes una base solida para el curso.</li>
-<li><strong>13-15 correctas (70-89%):</strong> Buen nivel. Repasa los temas donde tuviste errores.</li>
-<li><strong>10-12 correctas (55-69%):</strong> Nivel aceptable. Te recomendamos repasar los conceptos basicos.</li>
-<li><strong>Menos de 10 correctas (&lt;55%):</strong> Necesitas reforzar los prerequisitos. Consulta los recursos abajo.</li>
-</ul>
+<p style="margin-top: 12px;">
+Nota: el puntaje se calcula en tu navegador (HTML).
+</p>
 </div>
-</div>
+<script>
+(function () {
+
+  function normalizeText(s, ignoreCase, noSpaces) {
+    let out = (s ?? "").toString().trim();
+    if (noSpaces) out = out.replace(/\s+/g, "");
+    if (ignoreCase) out = out.toLowerCase();
+    return out;
+  }
+
+  function fitbCorrect(input) {
+    const raw = (input.value ?? "").toString();
+    const answered = raw.trim().length > 0;
+
+    const ignoreCase =
+      input.classList.contains("ignorecase") ||
+      input.classList.contains("ignore_case") ||
+      input.classList.contains("ignore-case");
+
+    const noSpaces = input.classList.contains("nospaces");
+
+    if (!answered) return { answered: false, correct: false };
+
+    let answers = [];
+    if (input.dataset && input.dataset.answer) {
+      try { answers = JSON.parse(input.dataset.answer); }
+      catch (e) { answers = [input.dataset.answer]; }
+    }
+
+    const isNum = input.classList.contains("num");
+    const tol = (input.dataset && input.dataset.tol) ? parseFloat(input.dataset.tol) : null;
+    const isRegex = input.classList.contains("regex");
+
+    if (isNum) {
+      const v = parseFloat(raw);
+      if (Number.isNaN(v)) return { answered: true, correct: false };
+      for (const a of answers) {
+        const af = parseFloat(a);
+        if (Number.isNaN(af)) continue;
+        if (tol !== null) {
+          if (Math.abs(v - af) <= tol) return { answered: true, correct: true };
+        } else {
+          if (v === af) return { answered: true, correct: true };
+        }
+      }
+      return { answered: true, correct: false };
+    }
+
+    if (isRegex) {
+      for (const a of answers) {
+        try {
+          const re = new RegExp(a);
+          if (re.test(raw.trim())) return { answered: true, correct: true };
+        } catch (e) {}
+      }
+      return { answered: true, correct: false };
+    }
+
+    const val = normalizeText(raw, ignoreCase, noSpaces);
+    for (const a of answers) {
+      const ans = normalizeText(a, ignoreCase, noSpaces);
+      if (val === ans) return { answered: true, correct: true };
+    }
+    return { answered: true, correct: false };
+  }
+
+  function selectCorrect(sel) {
+    const v = (sel.value ?? "").toString();
+    if (v === "" || v === "blank") return { answered: false, correct: false };
+    return { answered: true, correct: v === "answer" };
+  }
+
+  function radioCorrect(group) {
+    const checked = group.querySelector("input[type='radio']:checked");
+    if (!checked) return { answered: false, correct: false };
+    return { answered: true, correct: checked.value === "answer" };
+  }
+
+  function scoreQuestionBox(box) {
+    const inputs = Array.from(box.querySelectorAll("input.webex-solveme"));
+    const selects = Array.from(box.querySelectorAll("select.webex-select"));
+    const radios  = Array.from(box.querySelectorAll(".webex-radiogroup"));
+
+    const widgets = inputs.length + selects.length + radios.length;
+    if (widgets === 0) return { answered: false, correct: false };
+
+    let answeredAny = false;
+    let allCorrect = true;
+
+    inputs.forEach(i => {
+      const r = fitbCorrect(i);
+      answeredAny = answeredAny || r.answered;
+      allCorrect = allCorrect && r.correct;
+    });
+
+    selects.forEach(s => {
+      const r = selectCorrect(s);
+      answeredAny = answeredAny || r.answered;
+      allCorrect = allCorrect && r.correct;
+    });
+
+    radios.forEach(g => {
+      const r = radioCorrect(g);
+      answeredAny = answeredAny || r.answered;
+      allCorrect = allCorrect && r.correct;
+    });
+
+    return { answered: answeredAny, correct: allCorrect };
+  }
+
+  function computeScores(root) {
+    const qBoxes = Array.from(root.querySelectorAll(".question-box"));
+    const sections = Array.from(root.querySelectorAll(".quiz-section"));
+
+    let total = 0, correct = 0, answered = 0;
+
+    qBoxes.forEach(box => {
+      total += 1;
+      const r = scoreQuestionBox(box);
+      if (r.answered) answered += 1;
+      if (r.correct) correct += 1;
+    });
+
+    const bySection = sections.map(sec => {
+      const name = sec.getAttribute("data-section") || "Seccion";
+      const boxes = Array.from(sec.querySelectorAll(".question-box"));
+      let t = boxes.length, c = 0;
+      boxes.forEach(b => { if (scoreQuestionBox(b).correct) c += 1; });
+      return { name, total: t, correct: c };
+    });
+
+    return { total, correct, answered, bySection };
+  }
+
+  function levelMessage(nCorrect) {
+    if (nCorrect >= 16) return "Excelente: base muy solida para el curso.";
+    if (nCorrect >= 13) return "Buen nivel: repasa los temas con errores.";
+    if (nCorrect >= 10) return "Nivel aceptable: conviene repasar prerequisitos.";
+    return "Reforzar prerequisitos: revisa los recursos sugeridos.";
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const root = document.getElementById("prueba-entrada-quiz");
+    const btn = document.getElementById("btn-finalizar");
+    const out = document.getElementById("score-result");
+
+    if (!root || !btn || !out) return;
+
+    btn.addEventListener("click", () => {
+      const s = computeScores(root);
+      const pct = s.total > 0 ? Math.round(100 * s.correct / s.total) : 0;
+
+      const rows = s.bySection.map(x =>
+        `<tr><td>${x.name}</td><td>${x.correct} / ${x.total}</td></tr>`
+      ).join("");
+
+      out.innerHTML = `
+        <h3>Resultados</h3>
+        <p><strong>Puntaje total:</strong> ${s.correct} / ${s.total} (${pct}%)</p>
+        <p><strong>Preguntas respondidas:</strong> ${s.answered} / ${s.total}</p>
+        <p><strong>Diagnostico:</strong> ${levelMessage(s.correct)}</p>
+
+        <h4>Desglose por seccion</h4>
+        <table>
+          <thead><tr><th>Seccion</th><th>Puntaje</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+
+      out.style.display = "block";
+      root.classList.add("show-feedback"); // ahora sí se muestra correct/incorrect
+      out.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+})();
+</script>
 <hr />
 </div>
 <div id="recursos-para-repasar" class="section level2 unnumbered hasAnchor">
@@ -914,50 +985,48 @@ Ver explicacion
 <div id="si-necesitas-repasar-estadistica-basica" class="section level3 unnumbered hasAnchor">
 <h3>Si necesitas repasar Estadistica Basica<a href="prueba-de-entrada.html#si-necesitas-repasar-estadistica-basica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li><strong>Khan Academy - Estadistica y Probabilidad:</strong> <a href="https://es.khanacademy.org/math/statistics-probability">https://es.khanacademy.org/math/statistics-probability</a></li>
-<li><strong>OpenIntro Statistics:</strong> Libro gratuito disponible en <a href="https://www.openintro.org/book/os/">https://www.openintro.org/book/os/</a></li>
-<li><strong>Capitulos 1-3</strong> de cualquier libro introductorio de estadistica</li>
+<li>Khan Academy - Estadistica y Probabilidad: <a href="https://es.khanacademy.org/math/statistics-probability" class="uri">https://es.khanacademy.org/math/statistics-probability</a></li>
+<li>OpenIntro Statistics: <a href="https://www.openintro.org/book/os/" class="uri">https://www.openintro.org/book/os/</a></li>
+<li>Capitulos 1-3 de cualquier libro introductorio de estadistica</li>
 </ul>
 </div>
 <div id="si-necesitas-repasar-regresion-lineal" class="section level3 unnumbered hasAnchor">
 <h3>Si necesitas repasar Regresion Lineal<a href="prueba-de-entrada.html#si-necesitas-repasar-regresion-lineal" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li><strong>Wooldridge, J.M. “Introductory Econometrics”</strong> - Capitulos 1-4</li>
-<li><strong>Khan Academy - Regresion:</strong> <a href="https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data">https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data</a></li>
-<li><strong>Clase de Econometria Basica de Ben Lambert:</strong> <a href="https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU">https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU</a></li>
+<li>Wooldridge, “Introductory Econometrics”, Capitulos 1-4</li>
+<li>Khan Academy - Regresion: <a href="https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data" class="uri">https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data</a></li>
+<li>Ben Lambert (playlist): <a href="https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU" class="uri">https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU</a></li>
 </ul>
 </div>
 <div id="si-necesitas-repasar-causalidad" class="section level3 unnumbered hasAnchor">
 <h3>Si necesitas repasar Causalidad<a href="prueba-de-entrada.html#si-necesitas-repasar-causalidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li><strong>Cunningham, Scott. “Causal Inference: The Mixtape”</strong> - Capitulos 1-3: <a href="https://mixtape.scunning.com/">https://mixtape.scunning.com/</a></li>
-<li><strong>Angrist &amp; Pischke. “Mastering Metrics”</strong> - Introduccion</li>
-<li><strong>Videos de Nick Huntington-Klein:</strong> <a href="https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW">https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW</a></li>
+<li>Cunningham, “Causal Inference: The Mixtape” (Caps 1-3): <a href="https://mixtape.scunning.com/" class="uri">https://mixtape.scunning.com/</a></li>
+<li>Angrist &amp; Pischke, “Mastering Metrics”, Introduccion</li>
+<li>Nick Huntington-Klein (playlist): <a href="https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW" class="uri">https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW</a></li>
 </ul>
 </div>
 <div id="si-necesitas-aprenderrepasar-stata" class="section level3 unnumbered hasAnchor">
 <h3>Si necesitas aprender/repasar Stata<a href="prueba-de-entrada.html#si-necesitas-aprenderrepasar-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li><strong>UCLA IDRE Stata Learning Modules:</strong> <a href="https://stats.oarc.ucla.edu/stata/modules/">https://stats.oarc.ucla.edu/stata/modules/</a></li>
-<li><strong>Stata Video Tutorials:</strong> <a href="https://www.stata.com/links/video-tutorials/">https://www.stata.com/links/video-tutorials/</a></li>
-<li><strong>Cameron &amp; Trivedi. “Microeconometrics Using Stata”</strong> - Capitulo 1</li>
+<li>UCLA IDRE Stata Modules: <a href="https://stats.oarc.ucla.edu/stata/modules/" class="uri">https://stats.oarc.ucla.edu/stata/modules/</a></li>
+<li>Stata Video Tutorials: <a href="https://www.stata.com/links/video-tutorials/" class="uri">https://www.stata.com/links/video-tutorials/</a></li>
+<li>Cameron &amp; Trivedi, “Microeconometrics Using Stata”, Capitulo 1</li>
 </ul>
 </div>
 </div>
 <div id="consejos-para-el-curso" class="section level3 unnumbered hasAnchor tip-box">
 <h3>Consejos para el Curso<a href="prueba-de-entrada.html#consejos-para-el-curso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li><p><strong>Practica con datos reales:</strong> La mejor forma de aprender econometria es aplicandola.</p></li>
-<li><p><strong>No memorices, entiende:</strong> Los conceptos de causalidad son mas importantes que las formulas.</p></li>
-<li><p><strong>Haz los ejercicios:</strong> Los talleres de clase son oportunidades para practicar antes de los examenes.</p></li>
-<li><p><strong>Pregunta:</strong> Si algo no esta claro, pregunta en clase o en horas de oficina.</p></li>
-<li><p><strong>Forma grupos de estudio:</strong> Discutir los conceptos con companeros ayuda a consolidar el aprendizaje.</p></li>
+<li>Practica con datos reales.</li>
+<li>No memorices: entiende.</li>
+<li>Haz los ejercicios.</li>
+<li>Pregunta en clase u horas de oficina.</li>
+<li>Forma grupos de estudio.</li>
 </ol>
 </div>
-<hr />
 <center>
-<p><strong>Buena suerte en el curso!</strong></p>
-Si tienes dudas sobre algun tema de esta prueba, no dudes en consultarlas durante la primera semana de clase.
+<strong>Buena suerte en el curso</strong>
 </center>
 
 </div>
