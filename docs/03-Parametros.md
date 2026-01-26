@@ -1,0 +1,259 @@
+# 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección
+
+::: {.boxinfo}
+## 🎯 Metas de aprendizaje {-}
+
+- Entender qué es un **resultado potencial**  
+- Diferenciar entre **ATE**, **ATT**, **ATU** y el **estimador naïve**  
+- Comprender la lógica del **sesgo de selección** y su relación con los **contrafactuales**
+
+
+## 📚 Lecturas recomendadas  {-}
+
+- **Lectura 1:** *The Credibility Revolution* - Angrist y Pischke (2010)  
+  [Enlace al artículo](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)  
+- **Lectura 2:** Bernal y Peña – Capítulo 2  
+- **Lectura 3:** Bernal y Peña – Capítulo 3  
+:::
+
+### 🔹 Resultados potenciales  {-}
+
+Para cada unidad \( i \), existen dos posibles resultados:
+
+- \( Y_i(D=1) \): resultado si **recibe tratamiento**  
+- \( Y_i(D=0) \): resultado si **no recibe tratamiento**
+
+Pero solo observamos uno de ellos:
+
+\[
+Y_i = D_i \cdot Y_i(D=1) + (1 - D_i) \cdot Y_i(D=0)
+\]
+
+Donde:  
+- \( D_i = 1 \) si la unidad fue tratada  
+- \( D_i = 0 \) si no fue tratada
+
+---
+
+### 🔹 Parámetros de interés  {-}
+
+#### 📌 Efecto Promedio del Tratamiento (ATE)  {-}
+
+\[
+ATE = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
+\]
+
+#### 📌 Efecto Promedio del Tratamiento sobre los Tratados (ATT)  {-}
+
+\[
+ATT = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 1]
+\]
+
+#### 📌 Efecto Promedio del Tratamiento sobre los No Tratados (ATU)  {-}
+
+\[
+ATU = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 0]
+\]
+
+#### 📌 Estimador naïve (comparación directa de medias)  {-}
+
+\[
+\mathbb{E}[Y_i \mid D_i = 1] - \mathbb{E}[Y_i \mid D_i = 0]
+\]
+
+---
+
+### 🔹 ¿Por qué no es suficiente el estimador naïve?  {-}
+
+El estimador naïve asume implícitamente que:
+
+\[
+\mathbb{E}[Y_i(D=0) \mid D_i = 1] = \mathbb{E}[Y_i(D=0) \mid D_i = 0]
+\]
+
+Es decir, que los grupos tratados y no tratados son **comparables** en su resultado contrafactual.  
+Este supuesto es **poco realista** si la asignación al tratamiento está relacionada con factores que afectan el resultado, como motivación, ingresos o necesidad.
+
+---
+
+### 🔹 Sesgo de selección  {-}
+
+El **sesgo de selección** se define como la diferencia entre el estimador naïve y el verdadero ATT:
+
+\[
+\text{Sesgo} = \left( \mathbb{E}[Y_i(D=1) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 1] \right)
+- \left( \mathbb{E}[Y_i(D=1) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 0] \right)
+\]
+
+Lo que se reduce a:
+
+\[
+\text{Sesgo} = \mathbb{E}[Y_i(D=0) \mid D_i = 0] - \mathbb{E}[Y_i(D=0) \mid D_i = 1]
+\]
+
+> Si los no tratados (controles) tienen peores resultados potenciales que los tratados, el estimador naïve **sobreestima** el verdadero efecto del tratamiento. {-}
+
+
+::: {.boxejercicio .green title="🧠 Pausa activa: ¿Dónde está el contrafactual?"}
+
+## 🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección {-}
+
+Supongamos que tenemos una muestra de 8 individuos. Algunos recibieron tratamiento (\(D = 1\)) y otros no (\(D = 0\)). Cada persona tiene dos resultados potenciales:
+
+- \(Y(1)\): lo que obtendría si recibe el tratamiento  
+- \(Y(0)\): lo que obtendría si no lo recibe
+
+Pero solo observamos **uno** de esos dos valores:  
+\[
+Y_i = D_i \cdot Y_i(1) + (1 - D_i) \cdot Y_i(0)
+\]
+
+Datos
+
+| ID | \(D_i\) | \(Y_i(D=0)\) | \(Y_i(D=1)\) | \(Y_i\)  |
+|----|--------|------------|------------|-----|
+| 1  | 1      | 10         | 12          | 12  |
+| 2  | 0      | 4          | 5         | 4  |
+| 3  | 1      | 9          | 10          | 10   |
+| 4  | 1      | 10         | 11         | 11  |
+| 5  | 0      | 5          | 6          | 5   |
+| 6  | 0      | 3          | 2          | 3   |
+| 7  | 1      | 12         | 11          | 11   |
+| 8  | 0      | 5          | 7          | 5   |
+---
+
+*🎯 Preguntas para discutir en grupo*
+
+1. ¿Cuál es el **contrafactual** que NO podemos observar para cada individuo?
+2. Calcula el **efecto promedio del tratamiento sobre los tratados (ATT)**.
+3. Calcula el **estimador naïve**:  
+   \[
+   \mathbb{E}[Y \mid D = 1] - \mathbb{E}[Y \mid D = 0]
+   \]
+4. ¿Cuál es el **sesgo de selección** entre ambos estimadores?
+5. Reflexiona: ¿por qué hay sesgo en este ejemplo? ¿Qué supuesto implícito está fallando?
+
+📌 Pista:
+
+Los individuos tratados tienen mejores valores de \(Y(0)\) (lo que habrían obtenido sin tratamiento) que los no tratados.  
+¿Es válido entonces comparar directamente los promedios observados entre grupos?
+
+:::
+
+
+### 🔹 Sesgo en comparaciones antes-después (sin grupo de control) {-}
+
+Una estrategia común es comparar el **resultado promedio antes y después del tratamiento** en el mismo grupo de individuos tratados:
+
+\[
+\text{Estimador Antes-Después} = \mathbb{E}[Y_{t=1} \mid D = 1] - \mathbb{E}[Y_{t=0} \mid D = 1]
+\]
+
+Este estimador es observable, pero **no necesariamente causal**, porque no tenemos el contrafactual de lo que habría pasado en \( t = 1 \) sin tratamiento.
+
+¿Qué observamos?
+
+- En \( t = 1 \), observamos \( Y(d=1) \): el resultado **con tratamiento**  
+- En \( t = 0 \), observamos \( Y(d=0) \): el resultado **sin tratamiento**
+
+Para identificar el efecto del tratamiento, lo que quisiéramos conocer es:
+
+\[
+Y(d=0) \text{ en } t = 1
+\]
+
+Es decir, **¿qué habría pasado en el periodo \( t=1 \) si no hubiéramos tratado a nadie?** 💡 El efecto causal real para una unidad sería:
+
+\[
+Y(d=1) - Y(d=0) \text{ en el mismo periodo } t=1
+\]
+
+Pero en el diseño antes-después usamos \( Y(d=0) \) del periodo anterior como sustituto de ese contrafactual. Entonces, el sesgo es:
+
+\[
+\text{Sesgo} = \underbrace{\mathbb{E}[Y(d=0) \text{ en } t = 1]}_{\text{contrafactual deseado}} - \underbrace{\mathbb{E}[Y(d=0) \text{ en } t = 0]}_{\text{valor observado como "antes"}}
+\]
+
+Este sesgo aparece si el resultado habría cambiado con el tiempo incluso sin el tratamiento.
+
+🧪 Ejemplo ilustrativo
+
+| Año  | Resultado observado | Tratamiento |
+|------|---------------------|-------------|
+|2019  | 6                   | 0 (antes)   |
+|2020  | 9                   | 1 (después) |
+
+- Estimador antes-después:  
+  \[
+  9 - 6 = 3
+  \]
+- Pero supongamos que, sin tratamiento, el resultado en 2020 habría sido 8  
+  \[
+  \Rightarrow Y(d=0) \text{ en } 2020 = 8
+  \]
+- Entonces el efecto causal verdadero es:  
+  \[
+  9 - 8 = 1
+  \]
+- Y el sesgo de selección por tiempo es:
+  \[
+  3 - 1 = 2
+  \]
+
+
+
+El diseño antes-después asume que no habría cambio en el tiempo sin tratamiento. Este supuesto es **muy fuerte** y raramente cierto. Por eso, necesitamos un grupo de control que nos ayude a estimar \( \mathbb{E}[Y(d=0) \text{ en } t=1] \).
+
+> En otras palabras, sin grupo de control **no podemos saber si el cambio fue por el tratamiento o por el tiempo**.
+
+::: {.boxvideo .green title="🎥 Videos recomendados:"}
+
+
+Estos videos ayudan a reforzar visualmente los conceptos de **resultados potenciales**, **contrafactuales** y **sesgo en el diseño antes-después**.
+
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/ln5LBKiF8hE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/iPBV3BlV7jk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+:::
+
+
+
+
+---
+
+::: {.boxnote }
+
+🛠️ 💬 **PROMPT DE CHATGPT PARA REFLEXIÓN PROFUNDA**
+
+Estás escribiendo el apartado metodológico de un artículo donde se implementa un programa de formación técnica para jóvenes. Tu grupo de tratamiento incluye individuos que aplicaron y fueron aceptados. No tienes grupo de control explícito, pero tienes datos de resultados antes y después.
+
+📌 Instrucciones:
+
+Escribe a ChatGPT usando el siguiente mensaje:
+
+Actúa como mi tutor metodológico. No quiero que simplemente expliques los conceptos, sino que me hagas preguntas, desafíes mis supuestos, y me ayudes a razonar paso a paso como si estuviéramos en una asesoría.
+
+🧪 Contexto: Quiero evaluar el efecto de un programa de formación técnica para jóvenes. Tengo datos de ingreso mensual antes y después del programa, pero solo para quienes participaron. Estoy pensando en calcular:
+
+    Ȳ_despues - Ȳ_antes
+
+para reportar el efecto del programa.
+
+Quiero que me ayudes a pensar críticamente si esta estrategia identifica un efecto causal. Por favor:
+
+1. Guíame para identificar cuál es el verdadero contrafactual que estoy ignorando.
+2. Pregúntame qué estoy asumiendo implícitamente.
+3. Explórame en qué condiciones este estimador funcionaría bien.
+4. Hazme reflexionar sobre qué sesgos podrían surgir si los ingresos hubieran aumentado igual sin el programa.
+5. Llévame a conectar este ejemplo con los conceptos de Y(D=1), Y(D=0), ATT, ATE y el estimador naïve.
+
+⚠️ Importante: no me lo des todo resuelto. Quiero que me vayas preguntando cosas, como haría un buen profe. Quiero pensar, no solo escuchar. Hazlo interactivo.
+:::
+
+
+
+---
+
