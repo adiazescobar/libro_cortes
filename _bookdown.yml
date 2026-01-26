@@ -1,4 +1,7 @@
+book_filename: "econometria-avanzada"
+output_dir: "_book"
 delete_merged_file: true
+new_session: true
 language:
   ui:
     chapter_name: "Capitulo "

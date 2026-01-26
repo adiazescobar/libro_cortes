@@ -1,0 +1,44 @@
+# Carpeta de salida del libro
+_book/
+_bookdown_files/
+
+# Archivos temporales de R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user
+
+# Archivos de log
+*.log
+
+# Archivos temporales de LaTeX
+*.aux
+*.lof
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.synctex.gz
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*~
+NA
+
+# Credenciales (nunca subir)
+*creds*.json
+*.credentials

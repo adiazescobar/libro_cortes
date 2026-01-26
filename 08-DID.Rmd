@@ -1,8 +1,6 @@
+# Difference-in-Differences (DID)
 
-
-#  Diferencias en Diferencias {-}
-
-\::: {.boxinfo}
+::: {.boxinfo}
 **🎯 Objetivos de la clase**
 
 * Entender la lógica detrás del estimador **Difference-in-Differences (DID)**.
@@ -12,7 +10,7 @@
   1. Cálculo manual paso a paso.
   2. Usando el comando `diff`.
   3. Mediante regresiones.
-     \:::
+:::
 
 ---
 
