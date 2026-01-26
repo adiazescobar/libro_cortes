@@ -450,55 +450,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <b>Nota:</b> si tu parámetro es el <i>efecto total</i> de D en Y, <b>no</b> controles M (bloqueas la ruta D→M→Y).
 </p>
 </div>
-<div class="sourceCode" id="cb85"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb85-1"><a href="malos-controles-en-stata.html#cb85-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb85-2"><a href="malos-controles-en-stata.html#cb85-2" tabindex="-1"></a>* MEDIADOR PURO (sobrecontrol del efecto <span class="kw">total</span>)</span>
-<span id="cb85-3"><a href="malos-controles-en-stata.html#cb85-3" tabindex="-1"></a>* DGP: D -&gt; M -&gt; Y, <span class="fu">sin</span> otras causas <span class="kw">de</span> M o Y (salvo ruido)</span>
-<span id="cb85-4"><a href="malos-controles-en-stata.html#cb85-4" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb85-5"><a href="malos-controles-en-stata.html#cb85-5" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb85-6"><a href="malos-controles-en-stata.html#cb85-6" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
-<span id="cb85-7"><a href="malos-controles-en-stata.html#cb85-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 2468</span>
-<span id="cb85-8"><a href="malos-controles-en-stata.html#cb85-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 10000</span>
-<span id="cb85-9"><a href="malos-controles-en-stata.html#cb85-9" tabindex="-1"></a></span>
-<span id="cb85-10"><a href="malos-controles-en-stata.html#cb85-10" tabindex="-1"></a>* Parámetros (efecto <span class="kw">total</span> = a*b)</span>
-<span id="cb85-11"><a href="malos-controles-en-stata.html#cb85-11" tabindex="-1"></a><span class="fu">scalar</span> a = 2     <span class="co">// D -&gt; M</span></span>
-<span id="cb85-12"><a href="malos-controles-en-stata.html#cb85-12" tabindex="-1"></a><span class="fu">scalar</span> b = 1     <span class="co">// M -&gt; Y</span></span>
-<span id="cb85-13"><a href="malos-controles-en-stata.html#cb85-13" tabindex="-1"></a></span>
-<span id="cb85-14"><a href="malos-controles-en-stata.html#cb85-14" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = (runiform()&lt;0.5)</span>
-<span id="cb85-15"><a href="malos-controles-en-stata.html#cb85-15" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> M = a*D + rnormal()</span>
-<span id="cb85-16"><a href="malos-controles-en-stata.html#cb85-16" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = b*M + rnormal()</span>
-<span id="cb85-17"><a href="malos-controles-en-stata.html#cb85-17" tabindex="-1"></a></span>
-<span id="cb85-18"><a href="malos-controles-en-stata.html#cb85-18" tabindex="-1"></a>* (Total) Y ~ D  -&gt; coef(D) ≈ a*b = 2</span>
-<span id="cb85-19"><a href="malos-controles-en-stata.html#cb85-19" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb85-20"><a href="malos-controles-en-stata.html#cb85-20" tabindex="-1"></a></span>
-<span id="cb85-21"><a href="malos-controles-en-stata.html#cb85-21" tabindex="-1"></a>* (Directo) Y ~ D M  -&gt; bloquea D-&gt;M-&gt;Y, coef(D) ≈ 0  =&gt; mal control para TOTAL</span>
-<span id="cb85-22"><a href="malos-controles-en-stata.html#cb85-22" tabindex="-1"></a><span class="kw">reg</span> Y D M, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb85-23"><a href="malos-controles-en-stata.html#cb85-23" tabindex="-1"></a></span>
-<span id="cb85-24"><a href="malos-controles-en-stata.html#cb85-24" tabindex="-1"></a>* --- Mini Monte Carlo (promedios)</span>
-<span id="cb85-25"><a href="malos-controles-en-stata.html#cb85-25" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_mediador_puro</span>
-<span id="cb85-26"><a href="malos-controles-en-stata.html#cb85-26" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_mediador_puro, rclass</span>
-<span id="cb85-27"><a href="malos-controles-en-stata.html#cb85-27" tabindex="-1"></a>    <span class="kw">clear</span></span>
-<span id="cb85-28"><a href="malos-controles-en-stata.html#cb85-28" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 3000</span>
-<span id="cb85-29"><a href="malos-controles-en-stata.html#cb85-29" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = (runiform()&lt;0.5)</span>
-<span id="cb85-30"><a href="malos-controles-en-stata.html#cb85-30" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> M = 2*D + rnormal()</span>
-<span id="cb85-31"><a href="malos-controles-en-stata.html#cb85-31" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = 1*M + rnormal()</span>
-<span id="cb85-32"><a href="malos-controles-en-stata.html#cb85-32" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
-<span id="cb85-33"><a href="malos-controles-en-stata.html#cb85-33" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_total = _b[D]</span>
-<span id="cb85-34"><a href="malos-controles-en-stata.html#cb85-34" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D M</span>
-<span id="cb85-35"><a href="malos-controles-en-stata.html#cb85-35" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_directo = _b[D]</span>
-<span id="cb85-36"><a href="malos-controles-en-stata.html#cb85-36" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb85-37"><a href="malos-controles-en-stata.html#cb85-37" tabindex="-1"></a></span>
-<span id="cb85-38"><a href="malos-controles-en-stata.html#cb85-38" tabindex="-1"></a><span class="kw">simulate</span> b_total=<span class="fu">r</span>(b_total) b_directo=<span class="fu">r</span>(b_directo), reps(300): mc_mediador_puro</span>
-<span id="cb85-39"><a href="malos-controles-en-stata.html#cb85-39" tabindex="-1"></a>summ b_total b_directo</span>
-<span id="cb85-40"><a href="malos-controles-en-stata.html#cb85-40" tabindex="-1"></a></span>
-<span id="cb85-41"><a href="malos-controles-en-stata.html#cb85-41" tabindex="-1"></a>* --- (Opcional) Coefplot rápido</span>
-<span id="cb85-42"><a href="malos-controles-en-stata.html#cb85-42" tabindex="-1"></a>* <span class="kw">capture</span> which coefplot</span>
-<span id="cb85-43"><a href="malos-controles-en-stata.html#cb85-43" tabindex="-1"></a>* <span class="kw">if</span> <span class="dt">_rc</span> <span class="kw">ssc</span> install coefplot</span>
-<span id="cb85-44"><a href="malos-controles-en-stata.html#cb85-44" tabindex="-1"></a><span class="kw">reg</span> Y D</span>
-<span id="cb85-45"><a href="malos-controles-en-stata.html#cb85-45" tabindex="-1"></a><span class="kw">est</span> <span class="kw">store</span> <span class="kw">total</span></span>
-<span id="cb85-46"><a href="malos-controles-en-stata.html#cb85-46" tabindex="-1"></a><span class="kw">reg</span> Y D M</span>
-<span id="cb85-47"><a href="malos-controles-en-stata.html#cb85-47" tabindex="-1"></a><span class="kw">est</span> <span class="kw">store</span> directo</span>
-<span id="cb85-48"><a href="malos-controles-en-stata.html#cb85-48" tabindex="-1"></a>coefplot (<span class="kw">total</span>, <span class="kw">label</span>(<span class="st">&quot;Total&quot;</span>)) (directo, <span class="kw">label</span>(<span class="st">&quot;Directo (con M)&quot;</span>)), <span class="co">///</span></span>
-<span id="cb85-49"><a href="malos-controles-en-stata.html#cb85-49" tabindex="-1"></a>    <span class="kw">keep</span>(D) <span class="bn">xline</span>(0) <span class="kw">drop</span>(<span class="dt">_cons</span>) <span class="bn">title</span>(<span class="st">&quot;Mediador: coeficiente de D&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="malos-controles-en-stata.html#cb94-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb94-2"><a href="malos-controles-en-stata.html#cb94-2" tabindex="-1"></a>* MEDIADOR PURO (sobrecontrol del efecto <span class="kw">total</span>)</span>
+<span id="cb94-3"><a href="malos-controles-en-stata.html#cb94-3" tabindex="-1"></a>* DGP: D -&gt; M -&gt; Y, <span class="fu">sin</span> otras causas <span class="kw">de</span> M o Y (salvo ruido)</span>
+<span id="cb94-4"><a href="malos-controles-en-stata.html#cb94-4" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb94-5"><a href="malos-controles-en-stata.html#cb94-5" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb94-6"><a href="malos-controles-en-stata.html#cb94-6" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb94-7"><a href="malos-controles-en-stata.html#cb94-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 2468</span>
+<span id="cb94-8"><a href="malos-controles-en-stata.html#cb94-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 10000</span>
+<span id="cb94-9"><a href="malos-controles-en-stata.html#cb94-9" tabindex="-1"></a></span>
+<span id="cb94-10"><a href="malos-controles-en-stata.html#cb94-10" tabindex="-1"></a>* Parámetros (efecto <span class="kw">total</span> = a*b)</span>
+<span id="cb94-11"><a href="malos-controles-en-stata.html#cb94-11" tabindex="-1"></a><span class="fu">scalar</span> a = 2     <span class="co">// D -&gt; M</span></span>
+<span id="cb94-12"><a href="malos-controles-en-stata.html#cb94-12" tabindex="-1"></a><span class="fu">scalar</span> b = 1     <span class="co">// M -&gt; Y</span></span>
+<span id="cb94-13"><a href="malos-controles-en-stata.html#cb94-13" tabindex="-1"></a></span>
+<span id="cb94-14"><a href="malos-controles-en-stata.html#cb94-14" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = (runiform()&lt;0.5)</span>
+<span id="cb94-15"><a href="malos-controles-en-stata.html#cb94-15" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> M = a*D + rnormal()</span>
+<span id="cb94-16"><a href="malos-controles-en-stata.html#cb94-16" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = b*M + rnormal()</span>
+<span id="cb94-17"><a href="malos-controles-en-stata.html#cb94-17" tabindex="-1"></a></span>
+<span id="cb94-18"><a href="malos-controles-en-stata.html#cb94-18" tabindex="-1"></a>* (Total) Y ~ D  -&gt; coef(D) ≈ a*b = 2</span>
+<span id="cb94-19"><a href="malos-controles-en-stata.html#cb94-19" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb94-20"><a href="malos-controles-en-stata.html#cb94-20" tabindex="-1"></a></span>
+<span id="cb94-21"><a href="malos-controles-en-stata.html#cb94-21" tabindex="-1"></a>* (Directo) Y ~ D M  -&gt; bloquea D-&gt;M-&gt;Y, coef(D) ≈ 0  =&gt; mal control para TOTAL</span>
+<span id="cb94-22"><a href="malos-controles-en-stata.html#cb94-22" tabindex="-1"></a><span class="kw">reg</span> Y D M, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb94-23"><a href="malos-controles-en-stata.html#cb94-23" tabindex="-1"></a></span>
+<span id="cb94-24"><a href="malos-controles-en-stata.html#cb94-24" tabindex="-1"></a>* --- Mini Monte Carlo (promedios)</span>
+<span id="cb94-25"><a href="malos-controles-en-stata.html#cb94-25" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_mediador_puro</span>
+<span id="cb94-26"><a href="malos-controles-en-stata.html#cb94-26" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_mediador_puro, rclass</span>
+<span id="cb94-27"><a href="malos-controles-en-stata.html#cb94-27" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb94-28"><a href="malos-controles-en-stata.html#cb94-28" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 3000</span>
+<span id="cb94-29"><a href="malos-controles-en-stata.html#cb94-29" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = (runiform()&lt;0.5)</span>
+<span id="cb94-30"><a href="malos-controles-en-stata.html#cb94-30" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> M = 2*D + rnormal()</span>
+<span id="cb94-31"><a href="malos-controles-en-stata.html#cb94-31" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = 1*M + rnormal()</span>
+<span id="cb94-32"><a href="malos-controles-en-stata.html#cb94-32" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
+<span id="cb94-33"><a href="malos-controles-en-stata.html#cb94-33" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_total = _b[D]</span>
+<span id="cb94-34"><a href="malos-controles-en-stata.html#cb94-34" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D M</span>
+<span id="cb94-35"><a href="malos-controles-en-stata.html#cb94-35" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_directo = _b[D]</span>
+<span id="cb94-36"><a href="malos-controles-en-stata.html#cb94-36" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb94-37"><a href="malos-controles-en-stata.html#cb94-37" tabindex="-1"></a></span>
+<span id="cb94-38"><a href="malos-controles-en-stata.html#cb94-38" tabindex="-1"></a><span class="kw">simulate</span> b_total=<span class="fu">r</span>(b_total) b_directo=<span class="fu">r</span>(b_directo), reps(300): mc_mediador_puro</span>
+<span id="cb94-39"><a href="malos-controles-en-stata.html#cb94-39" tabindex="-1"></a>summ b_total b_directo</span>
+<span id="cb94-40"><a href="malos-controles-en-stata.html#cb94-40" tabindex="-1"></a></span>
+<span id="cb94-41"><a href="malos-controles-en-stata.html#cb94-41" tabindex="-1"></a>* --- (Opcional) Coefplot rápido</span>
+<span id="cb94-42"><a href="malos-controles-en-stata.html#cb94-42" tabindex="-1"></a>* <span class="kw">capture</span> which coefplot</span>
+<span id="cb94-43"><a href="malos-controles-en-stata.html#cb94-43" tabindex="-1"></a>* <span class="kw">if</span> <span class="dt">_rc</span> <span class="kw">ssc</span> install coefplot</span>
+<span id="cb94-44"><a href="malos-controles-en-stata.html#cb94-44" tabindex="-1"></a><span class="kw">reg</span> Y D</span>
+<span id="cb94-45"><a href="malos-controles-en-stata.html#cb94-45" tabindex="-1"></a><span class="kw">est</span> <span class="kw">store</span> <span class="kw">total</span></span>
+<span id="cb94-46"><a href="malos-controles-en-stata.html#cb94-46" tabindex="-1"></a><span class="kw">reg</span> Y D M</span>
+<span id="cb94-47"><a href="malos-controles-en-stata.html#cb94-47" tabindex="-1"></a><span class="kw">est</span> <span class="kw">store</span> directo</span>
+<span id="cb94-48"><a href="malos-controles-en-stata.html#cb94-48" tabindex="-1"></a>coefplot (<span class="kw">total</span>, <span class="kw">label</span>(<span class="st">&quot;Total&quot;</span>)) (directo, <span class="kw">label</span>(<span class="st">&quot;Directo (con M)&quot;</span>)), <span class="co">///</span></span>
+<span id="cb94-49"><a href="malos-controles-en-stata.html#cb94-49" tabindex="-1"></a>    <span class="kw">keep</span>(D) <span class="bn">xline</span>(0) <span class="kw">drop</span>(<span class="dt">_cons</span>) <span class="bn">title</span>(<span class="st">&quot;Mediador: coeficiente de D&quot;</span>)</span></code></pre></div>
 <p><strong>Lectura esperada</strong></p>
 <ul>
 <li><code>reg Y D</code> ≈ <span class="math inline">\(a b\)</span> (total).<br />
@@ -532,50 +532,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <b>Nota:</b> Condicionar en <b>C</b> abre el camino <i>D ⟷ U → Y</i>.
 </p>
 </div>
-<div class="sourceCode" id="cb86"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb86-1"><a href="malos-controles-en-stata.html#cb86-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb86-2"><a href="malos-controles-en-stata.html#cb86-2" tabindex="-1"></a>* COLISIONADOR CLÁSICO (efecto verdadero <span class="kw">de</span> D en Y = 0)</span>
-<span id="cb86-3"><a href="malos-controles-en-stata.html#cb86-3" tabindex="-1"></a>* D <span class="fu">y</span> Y independientes; C es efecto <span class="kw">de</span> D <span class="fu">y</span> Y (o D <span class="fu">y</span> U que afecta Y)</span>
-<span id="cb86-4"><a href="malos-controles-en-stata.html#cb86-4" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb86-5"><a href="malos-controles-en-stata.html#cb86-5" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb86-6"><a href="malos-controles-en-stata.html#cb86-6" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
-<span id="cb86-7"><a href="malos-controles-en-stata.html#cb86-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 2468</span>
-<span id="cb86-8"><a href="malos-controles-en-stata.html#cb86-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb86-9"><a href="malos-controles-en-stata.html#cb86-9" tabindex="-1"></a></span>
-<span id="cb86-10"><a href="malos-controles-en-stata.html#cb86-10" tabindex="-1"></a>* Versión simple tipo manual: D ⟂ Y, C = 2*D - 0.5*Y + <span class="fu">e</span></span>
-<span id="cb86-11"><a href="malos-controles-en-stata.html#cb86-11" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
-<span id="cb86-12"><a href="malos-controles-en-stata.html#cb86-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = rnormal()</span>
-<span id="cb86-13"><a href="malos-controles-en-stata.html#cb86-13" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> C = 2*D - 0.5*Y + rnormal()</span>
-<span id="cb86-14"><a href="malos-controles-en-stata.html#cb86-14" tabindex="-1"></a></span>
-<span id="cb86-15"><a href="malos-controles-en-stata.html#cb86-15" tabindex="-1"></a>* (Correcto) Y ~ D  -&gt; ~0</span>
-<span id="cb86-16"><a href="malos-controles-en-stata.html#cb86-16" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb86-17"><a href="malos-controles-en-stata.html#cb86-17" tabindex="-1"></a></span>
-<span id="cb86-18"><a href="malos-controles-en-stata.html#cb86-18" tabindex="-1"></a>* (MAL) Y ~ D C  -&gt; |coef(D)| grande por camino espurio vía C</span>
-<span id="cb86-19"><a href="malos-controles-en-stata.html#cb86-19" tabindex="-1"></a><span class="kw">reg</span> Y D C, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb86-20"><a href="malos-controles-en-stata.html#cb86-20" tabindex="-1"></a></span>
-<span id="cb86-21"><a href="malos-controles-en-stata.html#cb86-21" tabindex="-1"></a>* --- Mini Monte Carlo</span>
-<span id="cb86-22"><a href="malos-controles-en-stata.html#cb86-22" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_colisionador</span>
-<span id="cb86-23"><a href="malos-controles-en-stata.html#cb86-23" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_colisionador, rclass</span>
-<span id="cb86-24"><a href="malos-controles-en-stata.html#cb86-24" tabindex="-1"></a>    <span class="kw">clear</span></span>
-<span id="cb86-25"><a href="malos-controles-en-stata.html#cb86-25" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb86-26"><a href="malos-controles-en-stata.html#cb86-26" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
-<span id="cb86-27"><a href="malos-controles-en-stata.html#cb86-27" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = rnormal()</span>
-<span id="cb86-28"><a href="malos-controles-en-stata.html#cb86-28" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> C = 2*D - 0.5*Y + rnormal()</span>
-<span id="cb86-29"><a href="malos-controles-en-stata.html#cb86-29" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
-<span id="cb86-30"><a href="malos-controles-en-stata.html#cb86-30" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_noC = _b[D]</span>
-<span id="cb86-31"><a href="malos-controles-en-stata.html#cb86-31" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D C</span>
-<span id="cb86-32"><a href="malos-controles-en-stata.html#cb86-32" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conC = _b[D]</span>
-<span id="cb86-33"><a href="malos-controles-en-stata.html#cb86-33" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb86-34"><a href="malos-controles-en-stata.html#cb86-34" tabindex="-1"></a></span>
-<span id="cb86-35"><a href="malos-controles-en-stata.html#cb86-35" tabindex="-1"></a><span class="kw">simulate</span> b_noC=<span class="fu">r</span>(b_noC) b_conC=<span class="fu">r</span>(b_conC), reps(300): mc_colisionador</span>
-<span id="cb86-36"><a href="malos-controles-en-stata.html#cb86-36" tabindex="-1"></a>summ b_noC b_conC</span>
-<span id="cb86-37"><a href="malos-controles-en-stata.html#cb86-37" tabindex="-1"></a></span>
-<span id="cb86-38"><a href="malos-controles-en-stata.html#cb86-38" tabindex="-1"></a>* (Opcional coefplot)</span>
-<span id="cb86-39"><a href="malos-controles-en-stata.html#cb86-39" tabindex="-1"></a>* <span class="kw">reg</span> Y D</span>
-<span id="cb86-40"><a href="malos-controles-en-stata.html#cb86-40" tabindex="-1"></a>* <span class="kw">est</span> <span class="kw">store</span> base</span>
-<span id="cb86-41"><a href="malos-controles-en-stata.html#cb86-41" tabindex="-1"></a>* <span class="kw">reg</span> Y D C</span>
-<span id="cb86-42"><a href="malos-controles-en-stata.html#cb86-42" tabindex="-1"></a>* <span class="kw">est</span> <span class="kw">store</span> conC</span>
-<span id="cb86-43"><a href="malos-controles-en-stata.html#cb86-43" tabindex="-1"></a>* coefplot (base, <span class="kw">label</span>(<span class="st">&quot;Sin C&quot;</span>)) (conC, <span class="kw">label</span>(<span class="st">&quot;Con C&quot;</span>)), <span class="co">///</span></span>
-<span id="cb86-44"><a href="malos-controles-en-stata.html#cb86-44" tabindex="-1"></a>*     <span class="kw">keep</span>(D) <span class="bn">xline</span>(0) <span class="kw">drop</span>(<span class="dt">_cons</span>) <span class="bn">title</span>(<span class="st">&quot;Colisionador: coeficiente de D&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="malos-controles-en-stata.html#cb95-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb95-2"><a href="malos-controles-en-stata.html#cb95-2" tabindex="-1"></a>* COLISIONADOR CLÁSICO (efecto verdadero <span class="kw">de</span> D en Y = 0)</span>
+<span id="cb95-3"><a href="malos-controles-en-stata.html#cb95-3" tabindex="-1"></a>* D <span class="fu">y</span> Y independientes; C es efecto <span class="kw">de</span> D <span class="fu">y</span> Y (o D <span class="fu">y</span> U que afecta Y)</span>
+<span id="cb95-4"><a href="malos-controles-en-stata.html#cb95-4" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb95-5"><a href="malos-controles-en-stata.html#cb95-5" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb95-6"><a href="malos-controles-en-stata.html#cb95-6" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb95-7"><a href="malos-controles-en-stata.html#cb95-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 2468</span>
+<span id="cb95-8"><a href="malos-controles-en-stata.html#cb95-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb95-9"><a href="malos-controles-en-stata.html#cb95-9" tabindex="-1"></a></span>
+<span id="cb95-10"><a href="malos-controles-en-stata.html#cb95-10" tabindex="-1"></a>* Versión simple tipo manual: D ⟂ Y, C = 2*D - 0.5*Y + <span class="fu">e</span></span>
+<span id="cb95-11"><a href="malos-controles-en-stata.html#cb95-11" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
+<span id="cb95-12"><a href="malos-controles-en-stata.html#cb95-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = rnormal()</span>
+<span id="cb95-13"><a href="malos-controles-en-stata.html#cb95-13" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> C = 2*D - 0.5*Y + rnormal()</span>
+<span id="cb95-14"><a href="malos-controles-en-stata.html#cb95-14" tabindex="-1"></a></span>
+<span id="cb95-15"><a href="malos-controles-en-stata.html#cb95-15" tabindex="-1"></a>* (Correcto) Y ~ D  -&gt; ~0</span>
+<span id="cb95-16"><a href="malos-controles-en-stata.html#cb95-16" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb95-17"><a href="malos-controles-en-stata.html#cb95-17" tabindex="-1"></a></span>
+<span id="cb95-18"><a href="malos-controles-en-stata.html#cb95-18" tabindex="-1"></a>* (MAL) Y ~ D C  -&gt; |coef(D)| grande por camino espurio vía C</span>
+<span id="cb95-19"><a href="malos-controles-en-stata.html#cb95-19" tabindex="-1"></a><span class="kw">reg</span> Y D C, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb95-20"><a href="malos-controles-en-stata.html#cb95-20" tabindex="-1"></a></span>
+<span id="cb95-21"><a href="malos-controles-en-stata.html#cb95-21" tabindex="-1"></a>* --- Mini Monte Carlo</span>
+<span id="cb95-22"><a href="malos-controles-en-stata.html#cb95-22" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_colisionador</span>
+<span id="cb95-23"><a href="malos-controles-en-stata.html#cb95-23" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_colisionador, rclass</span>
+<span id="cb95-24"><a href="malos-controles-en-stata.html#cb95-24" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb95-25"><a href="malos-controles-en-stata.html#cb95-25" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb95-26"><a href="malos-controles-en-stata.html#cb95-26" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
+<span id="cb95-27"><a href="malos-controles-en-stata.html#cb95-27" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = rnormal()</span>
+<span id="cb95-28"><a href="malos-controles-en-stata.html#cb95-28" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> C = 2*D - 0.5*Y + rnormal()</span>
+<span id="cb95-29"><a href="malos-controles-en-stata.html#cb95-29" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
+<span id="cb95-30"><a href="malos-controles-en-stata.html#cb95-30" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_noC = _b[D]</span>
+<span id="cb95-31"><a href="malos-controles-en-stata.html#cb95-31" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D C</span>
+<span id="cb95-32"><a href="malos-controles-en-stata.html#cb95-32" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conC = _b[D]</span>
+<span id="cb95-33"><a href="malos-controles-en-stata.html#cb95-33" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb95-34"><a href="malos-controles-en-stata.html#cb95-34" tabindex="-1"></a></span>
+<span id="cb95-35"><a href="malos-controles-en-stata.html#cb95-35" tabindex="-1"></a><span class="kw">simulate</span> b_noC=<span class="fu">r</span>(b_noC) b_conC=<span class="fu">r</span>(b_conC), reps(300): mc_colisionador</span>
+<span id="cb95-36"><a href="malos-controles-en-stata.html#cb95-36" tabindex="-1"></a>summ b_noC b_conC</span>
+<span id="cb95-37"><a href="malos-controles-en-stata.html#cb95-37" tabindex="-1"></a></span>
+<span id="cb95-38"><a href="malos-controles-en-stata.html#cb95-38" tabindex="-1"></a>* (Opcional coefplot)</span>
+<span id="cb95-39"><a href="malos-controles-en-stata.html#cb95-39" tabindex="-1"></a>* <span class="kw">reg</span> Y D</span>
+<span id="cb95-40"><a href="malos-controles-en-stata.html#cb95-40" tabindex="-1"></a>* <span class="kw">est</span> <span class="kw">store</span> base</span>
+<span id="cb95-41"><a href="malos-controles-en-stata.html#cb95-41" tabindex="-1"></a>* <span class="kw">reg</span> Y D C</span>
+<span id="cb95-42"><a href="malos-controles-en-stata.html#cb95-42" tabindex="-1"></a>* <span class="kw">est</span> <span class="kw">store</span> conC</span>
+<span id="cb95-43"><a href="malos-controles-en-stata.html#cb95-43" tabindex="-1"></a>* coefplot (base, <span class="kw">label</span>(<span class="st">&quot;Sin C&quot;</span>)) (conC, <span class="kw">label</span>(<span class="st">&quot;Con C&quot;</span>)), <span class="co">///</span></span>
+<span id="cb95-44"><a href="malos-controles-en-stata.html#cb95-44" tabindex="-1"></a>*     <span class="kw">keep</span>(D) <span class="bn">xline</span>(0) <span class="kw">drop</span>(<span class="dt">_cons</span>) <span class="bn">title</span>(<span class="st">&quot;Colisionador: coeficiente de D&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="histogramas-distribuciones-monte-carlo" class="section level2 unnumbered hasAnchor">
@@ -583,17 +583,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>Ejecuta primero cada bloque de simulación; luego corre los histogramas sobre el dataset de resultados que deja <code>simulate</code>.</p>
 </blockquote>
-<div class="sourceCode" id="cb87"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb87-1"><a href="malos-controles-en-stata.html#cb87-1" tabindex="-1"></a>* Para <span class="fu">el</span> mediador (dataset con variables: b_total, b_directo)</span>
-<span id="cb87-2"><a href="malos-controles-en-stata.html#cb87-2" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> b_total, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="bn">navy</span>%40)) <span class="co">///</span></span>
-<span id="cb87-3"><a href="malos-controles-en-stata.html#cb87-3" tabindex="-1"></a>       (<span class="kw">hist</span> b_directo, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="kw">red</span>%40)), <span class="co">///</span></span>
-<span id="cb87-4"><a href="malos-controles-en-stata.html#cb87-4" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Total (Y~D)&quot;</span> 2 <span class="st">&quot;Directo (Y~D M)&quot;</span>)) <span class="co">///</span></span>
-<span id="cb87-5"><a href="malos-controles-en-stata.html#cb87-5" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Mediador puro: distribución del coeficiente de D&quot;</span>)</span>
-<span id="cb87-6"><a href="malos-controles-en-stata.html#cb87-6" tabindex="-1"></a></span>
-<span id="cb87-7"><a href="malos-controles-en-stata.html#cb87-7" tabindex="-1"></a>* Para <span class="fu">el</span> colisionador (dataset con variables: b_noC, b_conC)</span>
-<span id="cb87-8"><a href="malos-controles-en-stata.html#cb87-8" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> b_noC, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="kw">green</span>%40)) <span class="co">///</span></span>
-<span id="cb87-9"><a href="malos-controles-en-stata.html#cb87-9" tabindex="-1"></a>       (<span class="kw">hist</span> b_conC, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="bn">orange</span>%40)), <span class="co">///</span></span>
-<span id="cb87-10"><a href="malos-controles-en-stata.html#cb87-10" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Sin C&quot;</span> 2 <span class="st">&quot;Con C&quot;</span>)) <span class="co">///</span></span>
-<span id="cb87-11"><a href="malos-controles-en-stata.html#cb87-11" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Colisionador: distribución del coeficiente de D&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="malos-controles-en-stata.html#cb96-1" tabindex="-1"></a>* Para <span class="fu">el</span> mediador (dataset con variables: b_total, b_directo)</span>
+<span id="cb96-2"><a href="malos-controles-en-stata.html#cb96-2" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> b_total, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="bn">navy</span>%40)) <span class="co">///</span></span>
+<span id="cb96-3"><a href="malos-controles-en-stata.html#cb96-3" tabindex="-1"></a>       (<span class="kw">hist</span> b_directo, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="kw">red</span>%40)), <span class="co">///</span></span>
+<span id="cb96-4"><a href="malos-controles-en-stata.html#cb96-4" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Total (Y~D)&quot;</span> 2 <span class="st">&quot;Directo (Y~D M)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb96-5"><a href="malos-controles-en-stata.html#cb96-5" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Mediador puro: distribución del coeficiente de D&quot;</span>)</span>
+<span id="cb96-6"><a href="malos-controles-en-stata.html#cb96-6" tabindex="-1"></a></span>
+<span id="cb96-7"><a href="malos-controles-en-stata.html#cb96-7" tabindex="-1"></a>* Para <span class="fu">el</span> colisionador (dataset con variables: b_noC, b_conC)</span>
+<span id="cb96-8"><a href="malos-controles-en-stata.html#cb96-8" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> b_noC, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="kw">green</span>%40)) <span class="co">///</span></span>
+<span id="cb96-9"><a href="malos-controles-en-stata.html#cb96-9" tabindex="-1"></a>       (<span class="kw">hist</span> b_conC, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="bn">orange</span>%40)), <span class="co">///</span></span>
+<span id="cb96-10"><a href="malos-controles-en-stata.html#cb96-10" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Sin C&quot;</span> 2 <span class="st">&quot;Con C&quot;</span>)) <span class="co">///</span></span>
+<span id="cb96-11"><a href="malos-controles-en-stata.html#cb96-11" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Colisionador: distribución del coeficiente de D&quot;</span>)</span></code></pre></div>
 </div>
 <div id="malos-controles-con-f-en-el-análisis-de-d-y" class="section level2 unnumbered hasAnchor">
 <h2>Malos Controles con <strong>F</strong> (en el análisis de <strong>D → Y</strong>)<a href="#malos-controles-con-f-en-el-an%C3%A1lisis-de-d-y" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -625,48 +625,48 @@ Si el parámetro de interés es el <strong>efecto total</strong> de <strong>D</s
 <div id="caso-a-f-como-colisionador-d-f-y" class="section level3 unnumbered hasAnchor">
 <h3>Caso A — <strong>F como colisionador</strong> (<code>D → F ← Y</code>)<a href="malos-controles-en-stata.html#caso-a-f-como-colisionador-d-f-y" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><strong>Intuición:</strong> <strong>D</strong> y <strong>Y</strong> son independientes en la población (efecto verdadero de D en Y = 0). <strong>F</strong> es causado por ambos. Si ajustas por <strong>F</strong>, abres un camino espurio <code>D ↔︎ Y</code> y obtienes un coeficiente de <strong>D</strong> distinto de 0 (sesgo).</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb88-1"><a href="malos-controles-en-stata.html#cb88-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb88-2"><a href="malos-controles-en-stata.html#cb88-2" tabindex="-1"></a>* CASO A: <span class="fu">F</span> como COLISIONADOR — D -&gt; <span class="fu">F</span> &lt;- Y</span>
-<span id="cb88-3"><a href="malos-controles-en-stata.html#cb88-3" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D en Y: 0 (D <span class="fu">y</span> Y independientes). Controlar <span class="fu">F</span> induce sesgo.</span>
-<span id="cb88-4"><a href="malos-controles-en-stata.html#cb88-4" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb88-5"><a href="malos-controles-en-stata.html#cb88-5" tabindex="-1"></a></span>
-<span id="cb88-6"><a href="malos-controles-en-stata.html#cb88-6" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb88-7"><a href="malos-controles-en-stata.html#cb88-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
-<span id="cb88-8"><a href="malos-controles-en-stata.html#cb88-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb88-9"><a href="malos-controles-en-stata.html#cb88-9" tabindex="-1"></a></span>
-<span id="cb88-10"><a href="malos-controles-en-stata.html#cb88-10" tabindex="-1"></a>* D <span class="fu">y</span> Y independientes</span>
-<span id="cb88-11"><a href="malos-controles-en-stata.html#cb88-11" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = rnormal(0,1)</span>
-<span id="cb88-12"><a href="malos-controles-en-stata.html#cb88-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = rnormal(0,1)</span>
-<span id="cb88-13"><a href="malos-controles-en-stata.html#cb88-13" tabindex="-1"></a></span>
-<span id="cb88-14"><a href="malos-controles-en-stata.html#cb88-14" tabindex="-1"></a>* <span class="fu">F</span> causado por D <span class="fu">y</span> Y  -&gt;  <span class="fu">F</span> es colisionador</span>
-<span id="cb88-15"><a href="malos-controles-en-stata.html#cb88-15" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = 2*D - 0.5*Y + rnormal(0,1)</span>
-<span id="cb88-16"><a href="malos-controles-en-stata.html#cb88-16" tabindex="-1"></a></span>
-<span id="cb88-17"><a href="malos-controles-en-stata.html#cb88-17" tabindex="-1"></a>* (Correcto) estimar Y~D: coef(D) ≈ 0</span>
-<span id="cb88-18"><a href="malos-controles-en-stata.html#cb88-18" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb88-19"><a href="malos-controles-en-stata.html#cb88-19" tabindex="-1"></a></span>
-<span id="cb88-20"><a href="malos-controles-en-stata.html#cb88-20" tabindex="-1"></a>* (MAL control) estimar Y~D+<span class="fu">F</span>: coef(D) ≠ 0 por abrir <span class="fu">el</span> camino vía <span class="fu">F</span></span>
-<span id="cb88-21"><a href="malos-controles-en-stata.html#cb88-21" tabindex="-1"></a><span class="kw">reg</span> Y D <span class="fu">F</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb88-22"><a href="malos-controles-en-stata.html#cb88-22" tabindex="-1"></a></span>
-<span id="cb88-23"><a href="malos-controles-en-stata.html#cb88-23" tabindex="-1"></a></span>
-<span id="cb88-24"><a href="malos-controles-en-stata.html#cb88-24" tabindex="-1"></a>*---------------*</span>
-<span id="cb88-25"><a href="malos-controles-en-stata.html#cb88-25" tabindex="-1"></a>* MONTE CARLO   *</span>
-<span id="cb88-26"><a href="malos-controles-en-stata.html#cb88-26" tabindex="-1"></a>*---------------*</span>
-<span id="cb88-27"><a href="malos-controles-en-stata.html#cb88-27" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_F_collider</span>
-<span id="cb88-28"><a href="malos-controles-en-stata.html#cb88-28" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_F_collider, rclass</span>
-<span id="cb88-29"><a href="malos-controles-en-stata.html#cb88-29" tabindex="-1"></a>    <span class="kw">clear</span></span>
-<span id="cb88-30"><a href="malos-controles-en-stata.html#cb88-30" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb88-31"><a href="malos-controles-en-stata.html#cb88-31" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
-<span id="cb88-32"><a href="malos-controles-en-stata.html#cb88-32" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = rnormal()</span>
-<span id="cb88-33"><a href="malos-controles-en-stata.html#cb88-33" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = 2*D - 0.5*Y + rnormal()</span>
-<span id="cb88-34"><a href="malos-controles-en-stata.html#cb88-34" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
-<span id="cb88-35"><a href="malos-controles-en-stata.html#cb88-35" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_noF = _b[D]</span>
-<span id="cb88-36"><a href="malos-controles-en-stata.html#cb88-36" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D <span class="fu">F</span></span>
-<span id="cb88-37"><a href="malos-controles-en-stata.html#cb88-37" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conF = _b[D]</span>
-<span id="cb88-38"><a href="malos-controles-en-stata.html#cb88-38" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb88-39"><a href="malos-controles-en-stata.html#cb88-39" tabindex="-1"></a></span>
-<span id="cb88-40"><a href="malos-controles-en-stata.html#cb88-40" tabindex="-1"></a><span class="kw">simulate</span> b_noF=<span class="fu">r</span>(b_noF) b_conF=<span class="fu">r</span>(b_conF), reps(300): mc_F_collider</span>
-<span id="cb88-41"><a href="malos-controles-en-stata.html#cb88-41" tabindex="-1"></a>summ b_noF b_conF</span>
-<span id="cb88-42"><a href="malos-controles-en-stata.html#cb88-42" tabindex="-1"></a>* Esperado: <span class="kw">mean</span>(b_noF) ≈ 0 (insesgado); <span class="kw">mean</span>(b_conF) ≠ 0 (sesgo por controlar <span class="fu">F</span>).</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb97-1"><a href="malos-controles-en-stata.html#cb97-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb97-2"><a href="malos-controles-en-stata.html#cb97-2" tabindex="-1"></a>* CASO A: <span class="fu">F</span> como COLISIONADOR — D -&gt; <span class="fu">F</span> &lt;- Y</span>
+<span id="cb97-3"><a href="malos-controles-en-stata.html#cb97-3" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D en Y: 0 (D <span class="fu">y</span> Y independientes). Controlar <span class="fu">F</span> induce sesgo.</span>
+<span id="cb97-4"><a href="malos-controles-en-stata.html#cb97-4" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb97-5"><a href="malos-controles-en-stata.html#cb97-5" tabindex="-1"></a></span>
+<span id="cb97-6"><a href="malos-controles-en-stata.html#cb97-6" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb97-7"><a href="malos-controles-en-stata.html#cb97-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
+<span id="cb97-8"><a href="malos-controles-en-stata.html#cb97-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb97-9"><a href="malos-controles-en-stata.html#cb97-9" tabindex="-1"></a></span>
+<span id="cb97-10"><a href="malos-controles-en-stata.html#cb97-10" tabindex="-1"></a>* D <span class="fu">y</span> Y independientes</span>
+<span id="cb97-11"><a href="malos-controles-en-stata.html#cb97-11" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = rnormal(0,1)</span>
+<span id="cb97-12"><a href="malos-controles-en-stata.html#cb97-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = rnormal(0,1)</span>
+<span id="cb97-13"><a href="malos-controles-en-stata.html#cb97-13" tabindex="-1"></a></span>
+<span id="cb97-14"><a href="malos-controles-en-stata.html#cb97-14" tabindex="-1"></a>* <span class="fu">F</span> causado por D <span class="fu">y</span> Y  -&gt;  <span class="fu">F</span> es colisionador</span>
+<span id="cb97-15"><a href="malos-controles-en-stata.html#cb97-15" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = 2*D - 0.5*Y + rnormal(0,1)</span>
+<span id="cb97-16"><a href="malos-controles-en-stata.html#cb97-16" tabindex="-1"></a></span>
+<span id="cb97-17"><a href="malos-controles-en-stata.html#cb97-17" tabindex="-1"></a>* (Correcto) estimar Y~D: coef(D) ≈ 0</span>
+<span id="cb97-18"><a href="malos-controles-en-stata.html#cb97-18" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb97-19"><a href="malos-controles-en-stata.html#cb97-19" tabindex="-1"></a></span>
+<span id="cb97-20"><a href="malos-controles-en-stata.html#cb97-20" tabindex="-1"></a>* (MAL control) estimar Y~D+<span class="fu">F</span>: coef(D) ≠ 0 por abrir <span class="fu">el</span> camino vía <span class="fu">F</span></span>
+<span id="cb97-21"><a href="malos-controles-en-stata.html#cb97-21" tabindex="-1"></a><span class="kw">reg</span> Y D <span class="fu">F</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb97-22"><a href="malos-controles-en-stata.html#cb97-22" tabindex="-1"></a></span>
+<span id="cb97-23"><a href="malos-controles-en-stata.html#cb97-23" tabindex="-1"></a></span>
+<span id="cb97-24"><a href="malos-controles-en-stata.html#cb97-24" tabindex="-1"></a>*---------------*</span>
+<span id="cb97-25"><a href="malos-controles-en-stata.html#cb97-25" tabindex="-1"></a>* MONTE CARLO   *</span>
+<span id="cb97-26"><a href="malos-controles-en-stata.html#cb97-26" tabindex="-1"></a>*---------------*</span>
+<span id="cb97-27"><a href="malos-controles-en-stata.html#cb97-27" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_F_collider</span>
+<span id="cb97-28"><a href="malos-controles-en-stata.html#cb97-28" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_F_collider, rclass</span>
+<span id="cb97-29"><a href="malos-controles-en-stata.html#cb97-29" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb97-30"><a href="malos-controles-en-stata.html#cb97-30" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb97-31"><a href="malos-controles-en-stata.html#cb97-31" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
+<span id="cb97-32"><a href="malos-controles-en-stata.html#cb97-32" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = rnormal()</span>
+<span id="cb97-33"><a href="malos-controles-en-stata.html#cb97-33" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = 2*D - 0.5*Y + rnormal()</span>
+<span id="cb97-34"><a href="malos-controles-en-stata.html#cb97-34" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
+<span id="cb97-35"><a href="malos-controles-en-stata.html#cb97-35" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_noF = _b[D]</span>
+<span id="cb97-36"><a href="malos-controles-en-stata.html#cb97-36" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D <span class="fu">F</span></span>
+<span id="cb97-37"><a href="malos-controles-en-stata.html#cb97-37" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conF = _b[D]</span>
+<span id="cb97-38"><a href="malos-controles-en-stata.html#cb97-38" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb97-39"><a href="malos-controles-en-stata.html#cb97-39" tabindex="-1"></a></span>
+<span id="cb97-40"><a href="malos-controles-en-stata.html#cb97-40" tabindex="-1"></a><span class="kw">simulate</span> b_noF=<span class="fu">r</span>(b_noF) b_conF=<span class="fu">r</span>(b_conF), reps(300): mc_F_collider</span>
+<span id="cb97-41"><a href="malos-controles-en-stata.html#cb97-41" tabindex="-1"></a>summ b_noF b_conF</span>
+<span id="cb97-42"><a href="malos-controles-en-stata.html#cb97-42" tabindex="-1"></a>* Esperado: <span class="kw">mean</span>(b_noF) ≈ 0 (insesgado); <span class="kw">mean</span>(b_conF) ≠ 0 (sesgo por controlar <span class="fu">F</span>).</span></code></pre></div>
 <p><strong>Lectura esperada:</strong></p>
 <ul>
 <li><code>Y ~ D</code> recupera ≈ 0 (no hay efecto causal de D sobre Y).<br />
@@ -678,52 +678,52 @@ Si el parámetro de interés es el <strong>efecto total</strong> de <strong>D</s
 <div id="caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f" class="section level3 unnumbered hasAnchor">
 <h3>Caso B — <strong>F descendiente de colisionador</strong> (<code>D → Y ← U</code> y <code>Y → F</code>)<a href="malos-controles-en-stata.html#caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><strong>Intuición:</strong> <strong>Y</strong> es colisionador entre <strong>D</strong> y <strong>U</strong> (no observado). <strong>F</strong> es descendiente de <strong>Y</strong>. Condicionar en <strong>F</strong> introduce dependencia entre <strong>D</strong> y <strong>U</strong> y sesga el coeficiente de <strong>D</strong>. Aquí el <strong>efecto verdadero</strong> de <strong>D</strong> en <strong>Y</strong> es <strong>2</strong>.</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb89-1"><a href="malos-controles-en-stata.html#cb89-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb89-2"><a href="malos-controles-en-stata.html#cb89-2" tabindex="-1"></a>* CASO B: <span class="fu">F</span> descendiente <span class="kw">de</span> colisionador — D -&gt; Y ← U  <span class="fu">y</span>  Y -&gt; <span class="fu">F</span></span>
-<span id="cb89-3"><a href="malos-controles-en-stata.html#cb89-3" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D en Y: 2. Controlar <span class="fu">F</span> (descendiente <span class="kw">de</span> Y) sesga <span class="fu">el</span> coef(D).</span>
-<span id="cb89-4"><a href="malos-controles-en-stata.html#cb89-4" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb89-5"><a href="malos-controles-en-stata.html#cb89-5" tabindex="-1"></a></span>
-<span id="cb89-6"><a href="malos-controles-en-stata.html#cb89-6" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb89-7"><a href="malos-controles-en-stata.html#cb89-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
-<span id="cb89-8"><a href="malos-controles-en-stata.html#cb89-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb89-9"><a href="malos-controles-en-stata.html#cb89-9" tabindex="-1"></a></span>
-<span id="cb89-10"><a href="malos-controles-en-stata.html#cb89-10" tabindex="-1"></a>* D ~ <span class="kw">N</span>(0,1), eY ~ <span class="kw">N</span>(0,1) (eY juega <span class="fu">el</span> papel <span class="kw">de</span> U no observado en Y)</span>
-<span id="cb89-11"><a href="malos-controles-en-stata.html#cb89-11" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D  = rnormal()</span>
-<span id="cb89-12"><a href="malos-controles-en-stata.html#cb89-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> eY = rnormal()</span>
-<span id="cb89-13"><a href="malos-controles-en-stata.html#cb89-13" tabindex="-1"></a></span>
-<span id="cb89-14"><a href="malos-controles-en-stata.html#cb89-14" tabindex="-1"></a>* Outcome con efecto <span class="fu">real</span> <span class="kw">de</span> 2: Y = 2*D + eY</span>
-<span id="cb89-15"><a href="malos-controles-en-stata.html#cb89-15" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y  = 2*D + eY</span>
-<span id="cb89-16"><a href="malos-controles-en-stata.html#cb89-16" tabindex="-1"></a></span>
-<span id="cb89-17"><a href="malos-controles-en-stata.html#cb89-17" tabindex="-1"></a>* <span class="fu">F</span> es descendiente <span class="kw">de</span> Y: <span class="fu">F</span> = -0.5*Y + ruido</span>
-<span id="cb89-18"><a href="malos-controles-en-stata.html#cb89-18" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span>  = -0.5*Y + rnormal()</span>
-<span id="cb89-19"><a href="malos-controles-en-stata.html#cb89-19" tabindex="-1"></a></span>
-<span id="cb89-20"><a href="malos-controles-en-stata.html#cb89-20" tabindex="-1"></a>* (Correcto) Y~D: recupera ≈ 2</span>
-<span id="cb89-21"><a href="malos-controles-en-stata.html#cb89-21" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb89-22"><a href="malos-controles-en-stata.html#cb89-22" tabindex="-1"></a></span>
-<span id="cb89-23"><a href="malos-controles-en-stata.html#cb89-23" tabindex="-1"></a>* (MAL control) Y~D+<span class="fu">F</span>: sesgo (condicionar en descendiente <span class="kw">de</span> colisionador vincula D con eY)</span>
-<span id="cb89-24"><a href="malos-controles-en-stata.html#cb89-24" tabindex="-1"></a><span class="kw">reg</span> Y D <span class="fu">F</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb89-25"><a href="malos-controles-en-stata.html#cb89-25" tabindex="-1"></a></span>
-<span id="cb89-26"><a href="malos-controles-en-stata.html#cb89-26" tabindex="-1"></a></span>
-<span id="cb89-27"><a href="malos-controles-en-stata.html#cb89-27" tabindex="-1"></a>*---------------*</span>
-<span id="cb89-28"><a href="malos-controles-en-stata.html#cb89-28" tabindex="-1"></a>* MONTE CARLO   *</span>
-<span id="cb89-29"><a href="malos-controles-en-stata.html#cb89-29" tabindex="-1"></a>*---------------*</span>
-<span id="cb89-30"><a href="malos-controles-en-stata.html#cb89-30" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_F_desc</span>
-<span id="cb89-31"><a href="malos-controles-en-stata.html#cb89-31" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_F_desc, rclass</span>
-<span id="cb89-32"><a href="malos-controles-en-stata.html#cb89-32" tabindex="-1"></a>    <span class="kw">clear</span></span>
-<span id="cb89-33"><a href="malos-controles-en-stata.html#cb89-33" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb89-34"><a href="malos-controles-en-stata.html#cb89-34" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D  = rnormal()</span>
-<span id="cb89-35"><a href="malos-controles-en-stata.html#cb89-35" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> eY = rnormal()</span>
-<span id="cb89-36"><a href="malos-controles-en-stata.html#cb89-36" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y  = 2*D + eY</span>
-<span id="cb89-37"><a href="malos-controles-en-stata.html#cb89-37" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span>  = -0.5*Y + rnormal()</span>
-<span id="cb89-38"><a href="malos-controles-en-stata.html#cb89-38" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
-<span id="cb89-39"><a href="malos-controles-en-stata.html#cb89-39" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_noF = _b[D]</span>
-<span id="cb89-40"><a href="malos-controles-en-stata.html#cb89-40" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D <span class="fu">F</span></span>
-<span id="cb89-41"><a href="malos-controles-en-stata.html#cb89-41" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conF = _b[D]</span>
-<span id="cb89-42"><a href="malos-controles-en-stata.html#cb89-42" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb89-43"><a href="malos-controles-en-stata.html#cb89-43" tabindex="-1"></a></span>
-<span id="cb89-44"><a href="malos-controles-en-stata.html#cb89-44" tabindex="-1"></a><span class="kw">simulate</span> b_noF=<span class="fu">r</span>(b_noF) b_conF=<span class="fu">r</span>(b_conF), reps(300): mc_F_desc</span>
-<span id="cb89-45"><a href="malos-controles-en-stata.html#cb89-45" tabindex="-1"></a>summ b_noF b_conF</span>
-<span id="cb89-46"><a href="malos-controles-en-stata.html#cb89-46" tabindex="-1"></a>* Esperado: <span class="kw">mean</span>(b_noF) ≈ 2 (correcto); <span class="kw">mean</span>(b_conF) &lt; 2 (sesgo por condicionar en <span class="fu">F</span>).</span></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb98-1"><a href="malos-controles-en-stata.html#cb98-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb98-2"><a href="malos-controles-en-stata.html#cb98-2" tabindex="-1"></a>* CASO B: <span class="fu">F</span> descendiente <span class="kw">de</span> colisionador — D -&gt; Y ← U  <span class="fu">y</span>  Y -&gt; <span class="fu">F</span></span>
+<span id="cb98-3"><a href="malos-controles-en-stata.html#cb98-3" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D en Y: 2. Controlar <span class="fu">F</span> (descendiente <span class="kw">de</span> Y) sesga <span class="fu">el</span> coef(D).</span>
+<span id="cb98-4"><a href="malos-controles-en-stata.html#cb98-4" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb98-5"><a href="malos-controles-en-stata.html#cb98-5" tabindex="-1"></a></span>
+<span id="cb98-6"><a href="malos-controles-en-stata.html#cb98-6" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb98-7"><a href="malos-controles-en-stata.html#cb98-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
+<span id="cb98-8"><a href="malos-controles-en-stata.html#cb98-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb98-9"><a href="malos-controles-en-stata.html#cb98-9" tabindex="-1"></a></span>
+<span id="cb98-10"><a href="malos-controles-en-stata.html#cb98-10" tabindex="-1"></a>* D ~ <span class="kw">N</span>(0,1), eY ~ <span class="kw">N</span>(0,1) (eY juega <span class="fu">el</span> papel <span class="kw">de</span> U no observado en Y)</span>
+<span id="cb98-11"><a href="malos-controles-en-stata.html#cb98-11" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D  = rnormal()</span>
+<span id="cb98-12"><a href="malos-controles-en-stata.html#cb98-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> eY = rnormal()</span>
+<span id="cb98-13"><a href="malos-controles-en-stata.html#cb98-13" tabindex="-1"></a></span>
+<span id="cb98-14"><a href="malos-controles-en-stata.html#cb98-14" tabindex="-1"></a>* Outcome con efecto <span class="fu">real</span> <span class="kw">de</span> 2: Y = 2*D + eY</span>
+<span id="cb98-15"><a href="malos-controles-en-stata.html#cb98-15" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y  = 2*D + eY</span>
+<span id="cb98-16"><a href="malos-controles-en-stata.html#cb98-16" tabindex="-1"></a></span>
+<span id="cb98-17"><a href="malos-controles-en-stata.html#cb98-17" tabindex="-1"></a>* <span class="fu">F</span> es descendiente <span class="kw">de</span> Y: <span class="fu">F</span> = -0.5*Y + ruido</span>
+<span id="cb98-18"><a href="malos-controles-en-stata.html#cb98-18" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span>  = -0.5*Y + rnormal()</span>
+<span id="cb98-19"><a href="malos-controles-en-stata.html#cb98-19" tabindex="-1"></a></span>
+<span id="cb98-20"><a href="malos-controles-en-stata.html#cb98-20" tabindex="-1"></a>* (Correcto) Y~D: recupera ≈ 2</span>
+<span id="cb98-21"><a href="malos-controles-en-stata.html#cb98-21" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb98-22"><a href="malos-controles-en-stata.html#cb98-22" tabindex="-1"></a></span>
+<span id="cb98-23"><a href="malos-controles-en-stata.html#cb98-23" tabindex="-1"></a>* (MAL control) Y~D+<span class="fu">F</span>: sesgo (condicionar en descendiente <span class="kw">de</span> colisionador vincula D con eY)</span>
+<span id="cb98-24"><a href="malos-controles-en-stata.html#cb98-24" tabindex="-1"></a><span class="kw">reg</span> Y D <span class="fu">F</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb98-25"><a href="malos-controles-en-stata.html#cb98-25" tabindex="-1"></a></span>
+<span id="cb98-26"><a href="malos-controles-en-stata.html#cb98-26" tabindex="-1"></a></span>
+<span id="cb98-27"><a href="malos-controles-en-stata.html#cb98-27" tabindex="-1"></a>*---------------*</span>
+<span id="cb98-28"><a href="malos-controles-en-stata.html#cb98-28" tabindex="-1"></a>* MONTE CARLO   *</span>
+<span id="cb98-29"><a href="malos-controles-en-stata.html#cb98-29" tabindex="-1"></a>*---------------*</span>
+<span id="cb98-30"><a href="malos-controles-en-stata.html#cb98-30" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_F_desc</span>
+<span id="cb98-31"><a href="malos-controles-en-stata.html#cb98-31" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_F_desc, rclass</span>
+<span id="cb98-32"><a href="malos-controles-en-stata.html#cb98-32" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb98-33"><a href="malos-controles-en-stata.html#cb98-33" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb98-34"><a href="malos-controles-en-stata.html#cb98-34" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D  = rnormal()</span>
+<span id="cb98-35"><a href="malos-controles-en-stata.html#cb98-35" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> eY = rnormal()</span>
+<span id="cb98-36"><a href="malos-controles-en-stata.html#cb98-36" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y  = 2*D + eY</span>
+<span id="cb98-37"><a href="malos-controles-en-stata.html#cb98-37" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span>  = -0.5*Y + rnormal()</span>
+<span id="cb98-38"><a href="malos-controles-en-stata.html#cb98-38" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
+<span id="cb98-39"><a href="malos-controles-en-stata.html#cb98-39" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_noF = _b[D]</span>
+<span id="cb98-40"><a href="malos-controles-en-stata.html#cb98-40" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D <span class="fu">F</span></span>
+<span id="cb98-41"><a href="malos-controles-en-stata.html#cb98-41" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conF = _b[D]</span>
+<span id="cb98-42"><a href="malos-controles-en-stata.html#cb98-42" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb98-43"><a href="malos-controles-en-stata.html#cb98-43" tabindex="-1"></a></span>
+<span id="cb98-44"><a href="malos-controles-en-stata.html#cb98-44" tabindex="-1"></a><span class="kw">simulate</span> b_noF=<span class="fu">r</span>(b_noF) b_conF=<span class="fu">r</span>(b_conF), reps(300): mc_F_desc</span>
+<span id="cb98-45"><a href="malos-controles-en-stata.html#cb98-45" tabindex="-1"></a>summ b_noF b_conF</span>
+<span id="cb98-46"><a href="malos-controles-en-stata.html#cb98-46" tabindex="-1"></a>* Esperado: <span class="kw">mean</span>(b_noF) ≈ 2 (correcto); <span class="kw">mean</span>(b_conF) &lt; 2 (sesgo por condicionar en <span class="fu">F</span>).</span></code></pre></div>
 <p><strong>Lectura esperada:</strong></p>
 <ul>
 <li><code>Y ~ D</code> ≈ 2 (efecto verdadero).<br />
@@ -736,55 +736,55 @@ Si el parámetro de interés es el <strong>efecto total</strong> de <strong>D</s
 <h3>Caso C — <strong>F post-tratamiento (mediador)</strong> (<code>D → F → Y</code>)<a href="malos-controles-en-stata.html#caso-c-f-post-tratamiento-mediador-d-f-y" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><em>(sobrecontrol si buscamos el <strong>efecto total</strong> de D)</em></p>
 <p><strong>Intuición:</strong> todo el efecto de <strong>D</strong> sobre <strong>Y</strong> pasa por <strong>F</strong> (no hay efecto directo adicional de D). El <strong>efecto total</strong> es <code>a*b</code>. Si ajustas por <strong>F</strong>, bloqueas la ruta causal y el coeficiente de <strong>D</strong> se va a ≈ 0: <strong>sobrecontrol</strong> (sesgo respecto del total).</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb90-1"><a href="malos-controles-en-stata.html#cb90-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb90-2"><a href="malos-controles-en-stata.html#cb90-2" tabindex="-1"></a>* CASO C: <span class="fu">F</span> <span class="kw">post</span>-tratamiento (mediador) — D -&gt; <span class="fu">F</span> -&gt; Y</span>
-<span id="cb90-3"><a href="malos-controles-en-stata.html#cb90-3" tabindex="-1"></a>* Interés: EFECTO TOTAL <span class="kw">de</span> D en Y (= a*b). Controlar <span class="fu">F</span> lo bloquea (sobrecontrol).</span>
-<span id="cb90-4"><a href="malos-controles-en-stata.html#cb90-4" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb90-5"><a href="malos-controles-en-stata.html#cb90-5" tabindex="-1"></a></span>
-<span id="cb90-6"><a href="malos-controles-en-stata.html#cb90-6" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb90-7"><a href="malos-controles-en-stata.html#cb90-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
-<span id="cb90-8"><a href="malos-controles-en-stata.html#cb90-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb90-9"><a href="malos-controles-en-stata.html#cb90-9" tabindex="-1"></a></span>
-<span id="cb90-10"><a href="malos-controles-en-stata.html#cb90-10" tabindex="-1"></a><span class="fu">scalar</span> a = 2   <span class="co">// D -&gt; F</span></span>
-<span id="cb90-11"><a href="malos-controles-en-stata.html#cb90-11" tabindex="-1"></a><span class="fu">scalar</span> b = 3   <span class="co">// F -&gt; Y</span></span>
-<span id="cb90-12"><a href="malos-controles-en-stata.html#cb90-12" tabindex="-1"></a></span>
-<span id="cb90-13"><a href="malos-controles-en-stata.html#cb90-13" tabindex="-1"></a>* D exógeno</span>
-<span id="cb90-14"><a href="malos-controles-en-stata.html#cb90-14" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
-<span id="cb90-15"><a href="malos-controles-en-stata.html#cb90-15" tabindex="-1"></a></span>
-<span id="cb90-16"><a href="malos-controles-en-stata.html#cb90-16" tabindex="-1"></a>* <span class="fu">F</span> mediador afectado por D</span>
-<span id="cb90-17"><a href="malos-controles-en-stata.html#cb90-17" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = a*D + rnormal()</span>
-<span id="cb90-18"><a href="malos-controles-en-stata.html#cb90-18" tabindex="-1"></a></span>
-<span id="cb90-19"><a href="malos-controles-en-stata.html#cb90-19" tabindex="-1"></a>* Y depende <span class="kw">de</span> <span class="fu">F</span> (<span class="fu">sin</span> efecto directo adicional <span class="kw">de</span> D en esta DGP)</span>
-<span id="cb90-20"><a href="malos-controles-en-stata.html#cb90-20" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = b*<span class="fu">F</span> + rnormal()</span>
-<span id="cb90-21"><a href="malos-controles-en-stata.html#cb90-21" tabindex="-1"></a></span>
-<span id="cb90-22"><a href="malos-controles-en-stata.html#cb90-22" tabindex="-1"></a>* (Correcto para efecto TOTAL) Y~D: coef(D) ≈ a*b = 6</span>
-<span id="cb90-23"><a href="malos-controles-en-stata.html#cb90-23" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb90-24"><a href="malos-controles-en-stata.html#cb90-24" tabindex="-1"></a></span>
-<span id="cb90-25"><a href="malos-controles-en-stata.html#cb90-25" tabindex="-1"></a>* (MAL control para efecto TOTAL) Y~D+<span class="fu">F</span>: bloquea D-&gt;<span class="fu">F</span>-&gt;Y, coef(D) ≈ 0 (sobrecontrol)</span>
-<span id="cb90-26"><a href="malos-controles-en-stata.html#cb90-26" tabindex="-1"></a><span class="kw">reg</span> Y D <span class="fu">F</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb90-27"><a href="malos-controles-en-stata.html#cb90-27" tabindex="-1"></a></span>
-<span id="cb90-28"><a href="malos-controles-en-stata.html#cb90-28" tabindex="-1"></a></span>
-<span id="cb90-29"><a href="malos-controles-en-stata.html#cb90-29" tabindex="-1"></a>*---------------*</span>
-<span id="cb90-30"><a href="malos-controles-en-stata.html#cb90-30" tabindex="-1"></a>* MONTE CARLO   *</span>
-<span id="cb90-31"><a href="malos-controles-en-stata.html#cb90-31" tabindex="-1"></a>*---------------*</span>
-<span id="cb90-32"><a href="malos-controles-en-stata.html#cb90-32" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_F_mediador</span>
-<span id="cb90-33"><a href="malos-controles-en-stata.html#cb90-33" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_F_mediador, rclass</span>
-<span id="cb90-34"><a href="malos-controles-en-stata.html#cb90-34" tabindex="-1"></a>    <span class="kw">clear</span></span>
-<span id="cb90-35"><a href="malos-controles-en-stata.html#cb90-35" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb90-36"><a href="malos-controles-en-stata.html#cb90-36" tabindex="-1"></a>    <span class="fu">scalar</span> a = 2</span>
-<span id="cb90-37"><a href="malos-controles-en-stata.html#cb90-37" tabindex="-1"></a>    <span class="fu">scalar</span> b = 3</span>
-<span id="cb90-38"><a href="malos-controles-en-stata.html#cb90-38" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
-<span id="cb90-39"><a href="malos-controles-en-stata.html#cb90-39" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = a*D + rnormal()</span>
-<span id="cb90-40"><a href="malos-controles-en-stata.html#cb90-40" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = b*<span class="fu">F</span> + rnormal()</span>
-<span id="cb90-41"><a href="malos-controles-en-stata.html#cb90-41" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
-<span id="cb90-42"><a href="malos-controles-en-stata.html#cb90-42" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_total = _b[D]     <span class="co">// efecto total ≈ a*b</span></span>
-<span id="cb90-43"><a href="malos-controles-en-stata.html#cb90-43" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D <span class="fu">F</span></span>
-<span id="cb90-44"><a href="malos-controles-en-stata.html#cb90-44" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conF = _b[D]      <span class="co">// efecto directo (≈ 0 en esta DGP)</span></span>
-<span id="cb90-45"><a href="malos-controles-en-stata.html#cb90-45" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb90-46"><a href="malos-controles-en-stata.html#cb90-46" tabindex="-1"></a></span>
-<span id="cb90-47"><a href="malos-controles-en-stata.html#cb90-47" tabindex="-1"></a><span class="kw">simulate</span> b_total=<span class="fu">r</span>(b_total) b_conF=<span class="fu">r</span>(b_conF), reps(300): mc_F_mediador</span>
-<span id="cb90-48"><a href="malos-controles-en-stata.html#cb90-48" tabindex="-1"></a>summ b_total b_conF</span>
-<span id="cb90-49"><a href="malos-controles-en-stata.html#cb90-49" tabindex="-1"></a>* Esperado: <span class="kw">mean</span>(b_total) ≈ 6 (<span class="kw">total</span>); <span class="kw">mean</span>(b_conF) ≈ 0 (sobrecontrol al incluir <span class="fu">F</span>).</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb99-1"><a href="malos-controles-en-stata.html#cb99-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb99-2"><a href="malos-controles-en-stata.html#cb99-2" tabindex="-1"></a>* CASO C: <span class="fu">F</span> <span class="kw">post</span>-tratamiento (mediador) — D -&gt; <span class="fu">F</span> -&gt; Y</span>
+<span id="cb99-3"><a href="malos-controles-en-stata.html#cb99-3" tabindex="-1"></a>* Interés: EFECTO TOTAL <span class="kw">de</span> D en Y (= a*b). Controlar <span class="fu">F</span> lo bloquea (sobrecontrol).</span>
+<span id="cb99-4"><a href="malos-controles-en-stata.html#cb99-4" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb99-5"><a href="malos-controles-en-stata.html#cb99-5" tabindex="-1"></a></span>
+<span id="cb99-6"><a href="malos-controles-en-stata.html#cb99-6" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb99-7"><a href="malos-controles-en-stata.html#cb99-7" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
+<span id="cb99-8"><a href="malos-controles-en-stata.html#cb99-8" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb99-9"><a href="malos-controles-en-stata.html#cb99-9" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="malos-controles-en-stata.html#cb99-10" tabindex="-1"></a><span class="fu">scalar</span> a = 2   <span class="co">// D -&gt; F</span></span>
+<span id="cb99-11"><a href="malos-controles-en-stata.html#cb99-11" tabindex="-1"></a><span class="fu">scalar</span> b = 3   <span class="co">// F -&gt; Y</span></span>
+<span id="cb99-12"><a href="malos-controles-en-stata.html#cb99-12" tabindex="-1"></a></span>
+<span id="cb99-13"><a href="malos-controles-en-stata.html#cb99-13" tabindex="-1"></a>* D exógeno</span>
+<span id="cb99-14"><a href="malos-controles-en-stata.html#cb99-14" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
+<span id="cb99-15"><a href="malos-controles-en-stata.html#cb99-15" tabindex="-1"></a></span>
+<span id="cb99-16"><a href="malos-controles-en-stata.html#cb99-16" tabindex="-1"></a>* <span class="fu">F</span> mediador afectado por D</span>
+<span id="cb99-17"><a href="malos-controles-en-stata.html#cb99-17" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = a*D + rnormal()</span>
+<span id="cb99-18"><a href="malos-controles-en-stata.html#cb99-18" tabindex="-1"></a></span>
+<span id="cb99-19"><a href="malos-controles-en-stata.html#cb99-19" tabindex="-1"></a>* Y depende <span class="kw">de</span> <span class="fu">F</span> (<span class="fu">sin</span> efecto directo adicional <span class="kw">de</span> D en esta DGP)</span>
+<span id="cb99-20"><a href="malos-controles-en-stata.html#cb99-20" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y = b*<span class="fu">F</span> + rnormal()</span>
+<span id="cb99-21"><a href="malos-controles-en-stata.html#cb99-21" tabindex="-1"></a></span>
+<span id="cb99-22"><a href="malos-controles-en-stata.html#cb99-22" tabindex="-1"></a>* (Correcto para efecto TOTAL) Y~D: coef(D) ≈ a*b = 6</span>
+<span id="cb99-23"><a href="malos-controles-en-stata.html#cb99-23" tabindex="-1"></a><span class="kw">reg</span> Y D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb99-24"><a href="malos-controles-en-stata.html#cb99-24" tabindex="-1"></a></span>
+<span id="cb99-25"><a href="malos-controles-en-stata.html#cb99-25" tabindex="-1"></a>* (MAL control para efecto TOTAL) Y~D+<span class="fu">F</span>: bloquea D-&gt;<span class="fu">F</span>-&gt;Y, coef(D) ≈ 0 (sobrecontrol)</span>
+<span id="cb99-26"><a href="malos-controles-en-stata.html#cb99-26" tabindex="-1"></a><span class="kw">reg</span> Y D <span class="fu">F</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb99-27"><a href="malos-controles-en-stata.html#cb99-27" tabindex="-1"></a></span>
+<span id="cb99-28"><a href="malos-controles-en-stata.html#cb99-28" tabindex="-1"></a></span>
+<span id="cb99-29"><a href="malos-controles-en-stata.html#cb99-29" tabindex="-1"></a>*---------------*</span>
+<span id="cb99-30"><a href="malos-controles-en-stata.html#cb99-30" tabindex="-1"></a>* MONTE CARLO   *</span>
+<span id="cb99-31"><a href="malos-controles-en-stata.html#cb99-31" tabindex="-1"></a>*---------------*</span>
+<span id="cb99-32"><a href="malos-controles-en-stata.html#cb99-32" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_F_mediador</span>
+<span id="cb99-33"><a href="malos-controles-en-stata.html#cb99-33" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_F_mediador, rclass</span>
+<span id="cb99-34"><a href="malos-controles-en-stata.html#cb99-34" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb99-35"><a href="malos-controles-en-stata.html#cb99-35" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb99-36"><a href="malos-controles-en-stata.html#cb99-36" tabindex="-1"></a>    <span class="fu">scalar</span> a = 2</span>
+<span id="cb99-37"><a href="malos-controles-en-stata.html#cb99-37" tabindex="-1"></a>    <span class="fu">scalar</span> b = 3</span>
+<span id="cb99-38"><a href="malos-controles-en-stata.html#cb99-38" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D = rnormal()</span>
+<span id="cb99-39"><a href="malos-controles-en-stata.html#cb99-39" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> <span class="fu">F</span> = a*D + rnormal()</span>
+<span id="cb99-40"><a href="malos-controles-en-stata.html#cb99-40" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y = b*<span class="fu">F</span> + rnormal()</span>
+<span id="cb99-41"><a href="malos-controles-en-stata.html#cb99-41" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D</span>
+<span id="cb99-42"><a href="malos-controles-en-stata.html#cb99-42" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_total = _b[D]     <span class="co">// efecto total ≈ a*b</span></span>
+<span id="cb99-43"><a href="malos-controles-en-stata.html#cb99-43" tabindex="-1"></a>    <span class="kw">qui</span> <span class="kw">reg</span> Y D <span class="fu">F</span></span>
+<span id="cb99-44"><a href="malos-controles-en-stata.html#cb99-44" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_conF = _b[D]      <span class="co">// efecto directo (≈ 0 en esta DGP)</span></span>
+<span id="cb99-45"><a href="malos-controles-en-stata.html#cb99-45" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb99-46"><a href="malos-controles-en-stata.html#cb99-46" tabindex="-1"></a></span>
+<span id="cb99-47"><a href="malos-controles-en-stata.html#cb99-47" tabindex="-1"></a><span class="kw">simulate</span> b_total=<span class="fu">r</span>(b_total) b_conF=<span class="fu">r</span>(b_conF), reps(300): mc_F_mediador</span>
+<span id="cb99-48"><a href="malos-controles-en-stata.html#cb99-48" tabindex="-1"></a>summ b_total b_conF</span>
+<span id="cb99-49"><a href="malos-controles-en-stata.html#cb99-49" tabindex="-1"></a>* Esperado: <span class="kw">mean</span>(b_total) ≈ 6 (<span class="kw">total</span>); <span class="kw">mean</span>(b_conF) ≈ 0 (sobrecontrol al incluir <span class="fu">F</span>).</span></code></pre></div>
 <p><strong>Lectura esperada:</strong></p>
 <ul>
 <li><code>Y ~ D</code> ≈ <code>a*b</code> (efecto total).<br />

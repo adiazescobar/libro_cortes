@@ -511,7 +511,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-radius: 5px;
 }
 
-/* ======= CLAVE: Desactivar feedback inmediato de webexercises hasta finalizar ======= */
+/* ======= CLAVE 1: Desactivar feedback inmediato de webexercises hasta finalizar ======= */
 #prueba-entrada-quiz:not(.show-feedback) .webex-check,
 #prueba-entrada-quiz:not(.show-feedback) .webex-correct,
 #prueba-entrada-quiz:not(.show-feedback) .webex-incorrect,
@@ -519,6 +519,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-incorrect,
 #prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-correct,
 #prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-incorrect {
+  display: none !important;
+}
+
+/* ======= CLAVE 2: Ocultar explicaciones/soluciones hasta finalizar =======
+   hide()/unhide() generan bloques con clase .webex-solution.
+   Con esto, el estudiante no ve el botón "Ver explicación" ni el contenido
+   hasta presionar "Finalizar y calcular puntaje".
+*/
+#prueba-entrada-quiz:not(.show-feedback) .webex-solution {
   display: none !important;
 }
 
@@ -560,7 +569,7 @@ Bienvenido a la Prueba de Entrada
 <ul>
 <li>La prueba contiene <strong>18 preguntas</strong> divididas en 4 secciones</li>
 <li>Responde cada pregunta seleccionando la opcion correcta o escribiendo tu respuesta</li>
-<li>La retroalimentación y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong></li>
+<li>La retroalimentación, las explicaciones y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong></li>
 <li>No hay limite de tiempo, pero intenta responder sin consultar materiales</li>
 <li>Al final encontraras recursos para repasar</li>
 </ul>
@@ -970,7 +979,7 @@ Nota: el puntaje se calcula en tu navegador (HTML).
       `;
 
       out.style.display = "block";
-      root.classList.add("show-feedback"); // ahora sí se muestra correct/incorrect
+      root.classList.add("show-feedback"); // ahora sí se muestran correct/incorrect y explicaciones
       out.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
@@ -985,34 +994,52 @@ Nota: el puntaje se calcula en tu navegador (HTML).
 <div id="si-necesitas-repasar-estadistica-basica" class="section level3 unnumbered hasAnchor">
 <h3>Si necesitas repasar Estadistica Basica<a href="prueba-de-entrada.html#si-necesitas-repasar-estadistica-basica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>Khan Academy - Estadistica y Probabilidad: <a href="https://es.khanacademy.org/math/statistics-probability" class="uri">https://es.khanacademy.org/math/statistics-probability</a></li>
-<li>OpenIntro Statistics: <a href="https://www.openintro.org/book/os/" class="uri">https://www.openintro.org/book/os/</a></li>
-<li>Capitulos 1-3 de cualquier libro introductorio de estadistica</li>
+<li>Khan Academy - Estadistica y Probabilidad</li>
 </ul>
+<pre class="text"><code>https://es.khanacademy.org/math/statistics-probability</code></pre>
+<ul>
+<li>OpenIntro Statistics (libro gratuito)</li>
+</ul>
+<pre class="text"><code>https://www.openintro.org/book/os/</code></pre>
 </div>
 <div id="si-necesitas-repasar-regresion-lineal" class="section level3 unnumbered hasAnchor">
 <h3>Si necesitas repasar Regresion Lineal<a href="prueba-de-entrada.html#si-necesitas-repasar-regresion-lineal" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>Wooldridge, “Introductory Econometrics”, Capitulos 1-4</li>
-<li>Khan Academy - Regresion: <a href="https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data" class="uri">https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data</a></li>
-<li>Ben Lambert (playlist): <a href="https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU" class="uri">https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU</a></li>
+<li><p>Wooldridge, “Introductory Econometrics” (Caps 1-4)</p></li>
+<li><p>Khan Academy - Regresion</p></li>
 </ul>
+<pre class="text"><code>https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data</code></pre>
+<ul>
+<li>Ben Lambert (playlist)</li>
+</ul>
+<pre class="text"><code>https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU</code></pre>
+<ul>
+<li>Pablo Adrián Garlati-Bertoldi (Pontificia Universidad Javeriana) – Econometría básica (canal y playlist)</li>
+</ul>
+<pre class="text"><code>Canal: https://www.youtube.com/@adriangarlati
+Playlist Econometría básica: https://www.youtube.com/playlist?list=PLOhc9wF2hQxFhTw2qvS6hd3RiezOh4tBl</code></pre>
 </div>
 <div id="si-necesitas-repasar-causalidad" class="section level3 unnumbered hasAnchor">
 <h3>Si necesitas repasar Causalidad<a href="prueba-de-entrada.html#si-necesitas-repasar-causalidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>Cunningham, “Causal Inference: The Mixtape” (Caps 1-3): <a href="https://mixtape.scunning.com/" class="uri">https://mixtape.scunning.com/</a></li>
-<li>Angrist &amp; Pischke, “Mastering Metrics”, Introduccion</li>
-<li>Nick Huntington-Klein (playlist): <a href="https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW" class="uri">https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW</a></li>
+<li>Cunningham, “Causal Inference: The Mixtape” (Caps 1-3)</li>
 </ul>
+<pre class="text"><code>https://mixtape.scunning.com/</code></pre>
+<ul>
+<li>Nick Huntington-Klein (playlist)</li>
+</ul>
+<pre class="text"><code>https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW</code></pre>
 </div>
 <div id="si-necesitas-aprenderrepasar-stata" class="section level3 unnumbered hasAnchor">
 <h3>Si necesitas aprender/repasar Stata<a href="prueba-de-entrada.html#si-necesitas-aprenderrepasar-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>UCLA IDRE Stata Modules: <a href="https://stats.oarc.ucla.edu/stata/modules/" class="uri">https://stats.oarc.ucla.edu/stata/modules/</a></li>
-<li>Stata Video Tutorials: <a href="https://www.stata.com/links/video-tutorials/" class="uri">https://www.stata.com/links/video-tutorials/</a></li>
-<li>Cameron &amp; Trivedi, “Microeconometrics Using Stata”, Capitulo 1</li>
+<li>UCLA IDRE Stata Modules</li>
 </ul>
+<pre class="text"><code>https://stats.oarc.ucla.edu/stata/modules/</code></pre>
+<ul>
+<li>Stata Video Tutorials</li>
+</ul>
+<pre class="text"><code>https://www.stata.com/links/video-tutorials/</code></pre>
 </div>
 </div>
 <div id="consejos-para-el-curso" class="section level3 unnumbered hasAnchor tip-box">

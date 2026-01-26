@@ -99,7 +99,7 @@ library(webexercises)
   border-radius: 5px;
 }
 
-/* ======= CLAVE: Desactivar feedback inmediato de webexercises hasta finalizar ======= */
+/* ======= CLAVE 1: Desactivar feedback inmediato de webexercises hasta finalizar ======= */
 #prueba-entrada-quiz:not(.show-feedback) .webex-check,
 #prueba-entrada-quiz:not(.show-feedback) .webex-correct,
 #prueba-entrada-quiz:not(.show-feedback) .webex-incorrect,
@@ -107,6 +107,15 @@ library(webexercises)
 #prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-incorrect,
 #prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-correct,
 #prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-incorrect {
+  display: none !important;
+}
+
+/* ======= CLAVE 2: Ocultar explicaciones/soluciones hasta finalizar =======
+   hide()/unhide() generan bloques con clase .webex-solution.
+   Con esto, el estudiante no ve el botón "Ver explicación" ni el contenido
+   hasta presionar "Finalizar y calcular puntaje".
+*/
+#prueba-entrada-quiz:not(.show-feedback) .webex-solution {
   display: none !important;
 }
 
@@ -149,7 +158,7 @@ Esta prueba diagnostica tiene como objetivo evaluar tus conocimientos previos en
 
 - La prueba contiene <strong>18 preguntas</strong> divididas en 4 secciones
 - Responde cada pregunta seleccionando la opcion correcta o escribiendo tu respuesta
-- La retroalimentación y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong>
+- La retroalimentación, las explicaciones y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong>
 - No hay limite de tiempo, pero intenta responder sin consultar materiales
 - Al final encontraras recursos para repasar
 
@@ -575,7 +584,7 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
       `;
 
       out.style.display = "block";
-      root.classList.add("show-feedback"); // ahora sí se muestra correct/incorrect
+      root.classList.add("show-feedback"); // ahora sí se muestran correct/incorrect y explicaciones
       out.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
@@ -592,27 +601,59 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
 
 ### Si necesitas repasar Estadistica Basica {-}
 
-- Khan Academy - Estadistica y Probabilidad: https://es.khanacademy.org/math/statistics-probability
-- OpenIntro Statistics: https://www.openintro.org/book/os/
-- Capitulos 1-3 de cualquier libro introductorio de estadistica
+- Khan Academy - Estadistica y Probabilidad
+```text
+https://es.khanacademy.org/math/statistics-probability
+```
+
+- OpenIntro Statistics (libro gratuito)
+```text
+https://www.openintro.org/book/os/
+```
 
 ### Si necesitas repasar Regresion Lineal {-}
 
-- Wooldridge, "Introductory Econometrics", Capitulos 1-4
-- Khan Academy - Regresion: https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data
-- Ben Lambert (playlist): https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU
+- Wooldridge, "Introductory Econometrics" (Caps 1-4)
+
+- Khan Academy - Regresion
+```text
+https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data
+```
+
+- Ben Lambert (playlist)
+```text
+https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU
+```
+
+- Pablo Adrián Garlati-Bertoldi (Pontificia Universidad Javeriana) – Econometría básica (canal y playlist)
+```text
+Canal: https://www.youtube.com/@adriangarlati
+Playlist Econometría básica: https://www.youtube.com/playlist?list=PLOhc9wF2hQxFhTw2qvS6hd3RiezOh4tBl
+```
 
 ### Si necesitas repasar Causalidad {-}
 
-- Cunningham, "Causal Inference: The Mixtape" (Caps 1-3): https://mixtape.scunning.com/
-- Angrist & Pischke, "Mastering Metrics", Introduccion
-- Nick Huntington-Klein (playlist): https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW
+- Cunningham, "Causal Inference: The Mixtape" (Caps 1-3)
+```text
+https://mixtape.scunning.com/
+```
+
+- Nick Huntington-Klein (playlist)
+```text
+https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW
+```
 
 ### Si necesitas aprender/repasar Stata {-}
 
-- UCLA IDRE Stata Modules: https://stats.oarc.ucla.edu/stata/modules/
-- Stata Video Tutorials: https://www.stata.com/links/video-tutorials/
-- Cameron & Trivedi, "Microeconometrics Using Stata", Capitulo 1
+- UCLA IDRE Stata Modules
+```text
+https://stats.oarc.ucla.edu/stata/modules/
+```
+
+- Stata Video Tutorials
+```text
+https://www.stata.com/links/video-tutorials/
+```
 
 </div>
 
