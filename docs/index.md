@@ -2,7 +2,7 @@
 title: "Cortes Transversales"
 subtitle: " Curso Avanzado de Microeconometría Aplicada"
 author: "Ana María Díaz"
-date: "2026-01-26"
+date: "2026-01-29"
 site: bookdown::bookdown_site
 documentclass: book
 output:
