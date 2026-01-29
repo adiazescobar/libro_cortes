@@ -535,7 +535,7 @@ resultados_df = pd.DataFrame(resultados)
 ## DESCARGA LOS DOCUMENTOS {-}
 
 **Descargar Stata do file**:
-[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase00_Stata.do)
+[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/Clase00_Stata.do)
 
 **Descargar R script**:
 [Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
