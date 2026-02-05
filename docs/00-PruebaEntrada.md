@@ -144,7 +144,7 @@
 <div class="intro-box">
 <h3>Bienvenido a la Prueba de Entrada</h3>
 
-Esta prueba diagnostica tiene como objetivo evaluar tus conocimientos previos en estadistica, regresion lineal, causalidad y manejo basico de Stata.
+Esta prueba diagnóstica tiene como objetivo evaluar tus conocimientos previos en estadística, regresión lineal, causalidad y manejo básico de Stata.
 
 <strong>Instrucciones:</strong>
 
@@ -169,7 +169,7 @@ Esta prueba diagnostica tiene como objetivo evaluar tus conocimientos previos en
 Esta seccion evalua conceptos fundamentales de estadistica descriptiva e inferencial que son esenciales para el analisis econometrico.
 
 <div class="question-box">
-<span class="question-number">Pregunta 1.</span> Si una variable X tiene media 50 y desviacion estandar 10, y sigue una distribucion normal, que porcentaje de las observaciones se encuentra entre 30 y 70?
+<span class="question-number">Pregunta 1.</span> Si una variable X tiene media 50 y desviación estándar 10, y sigue una distribución normal, ¿qué porcentaje de las observaciones se encuentra entre 30 y 70?
 
 <select class='webex-select'><option value='blank'></option><option value=''>68%</option><option value='answer'>95%</option><option value=''>99%</option><option value=''>50%</option></select>
 
@@ -220,12 +220,12 @@ El p-value es la probabilidad de obtener un resultado tan extremo o mas extremo 
 <div class="question-box">
 <span class="question-number">Pregunta 4.</span> Un intervalo de confianza del 95% significa que:
 
-<select class='webex-select'><option value='blank'></option><option value=''>Hay 95% de probabilidad de que el parametro verdadero este en este intervalo especifico</option><option value='answer'>Si construyeramos 100 intervalos de esta manera, 95 de ellos contendrian el parametro verdadero</option><option value=''>El 95% de los datos esta dentro del intervalo</option><option value=''>Estamos 95% seguros de nuestra estimacion</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>Hay 95% de probabilidad de que el parámetro verdadero esté en este intervalo específico</option><option value='answer'>Si construyéramos 100 intervalos de esta manera, 95 de ellos contendrían el parámetro verdadero</option><option value=''>El 95% de los datos está dentro del intervalo</option><option value=''>Estamos 95% seguros de nuestra estimación</option></select>
 
 
 <div class='webex-solution'><button>Ver explicacion</button>
 
-Interpretacion frecuentista: si repitieramos el muestreo muchas veces y construyeramos IC del 95% cada vez, cerca del 95% de esos intervalos contendrian el valor verdadero del parametro.
+Interpretación frecuentista: si repitiéramos el muestreo muchas veces y construyéramos IC del 95% cada vez, cerca del 95% de esos intervalos contendrían el valor verdadero del parámetro.
 
 </div>
 
@@ -286,12 +286,12 @@ R2 es la proporcion de la varianza de Y explicada por el modelo.
 <div class="question-box">
 <span class="question-number">Pregunta 8.</span> Cual de las siguientes NO es un supuesto del modelo clasico de regresion lineal (OLS)?
 
-<select class='webex-select'><option value='blank'></option><option value=''>Los errores tienen media cero</option><option value=''>Los errores son homocedasticos</option><option value=''>No hay multicolinealidad perfecta</option><option value='answer'>Los errores deben seguir una distribucion uniforme</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>Los errores tienen media cero</option><option value=''>Los errores son homocedásticos</option><option value=''>No hay multicolinealidad perfecta</option><option value='answer'>Los errores deben seguir una distribución uniforme</option></select>
 
 
 <div class='webex-solution'><button>Ver explicacion</button>
 
-OLS no requiere errores uniformes. Para inferencia en muestras pequeñas suele asumirse normalidad.
+OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suele asumir normalidad.
 
 </div>
 

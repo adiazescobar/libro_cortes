@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 7 Poder Estadístico en Stata | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 7 Poder Estadístico en Stata | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 7 Poder Estadístico en Stata | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 7 Poder Estadístico en Stata | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2026-02-05" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="experimentos-aleatorizados-en-stata.html"/>
+<link rel="next" href="malos-controles-teoría.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-obligatorios"><i class="fa fa-check"></i>Libros Obligatorios</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#libros-recomendados"><i class="fa fa-check"></i>Libros Recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#puntaje-automatico"><i class="fa fa-check"></i>Puntaje (automatico)</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#consejos-para-el-curso"><i class="fa fa-check"></i>Consejos para el Curso</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="08-DID.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-exitoso-progresa-oportunidades-m%C3%A9xico-1990"><i class="fa fa-check"></i>Ejemplo exitoso: Progresa (Oportunidades, México, 1990)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#el-contrafactual"><i class="fa fa-check"></i>El Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#visualizando-el-contrafactual"><i class="fa fa-check"></i>Visualizando el Contrafactual</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#la-banda-sonora"><i class="fa fa-check"></i>La Banda Sonora</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#problema-fundamental-de-la-inferencia-causal"><i class="fa fa-check"></i>Problema Fundamental de la Inferencia Causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#establecer-causalidad-deseo-de-clonaci%C3%B3n"><i class="fa fa-check"></i>Establecer Causalidad (Deseo de Clonación)</a></li>
+<li class="chapter" data-level="1.0.1" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#video-recomendado-mastering-metrics"><i class="fa fa-check"></i><b>1.0.1</b> 🎥 Video recomendado: <em>Mastering Metrics</em></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a>
+<ul>
+<li class="chapter" data-level="1.0.2" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto"><i class="fa fa-check"></i><b>1.0.2</b> <strong>Ceteris Paribus: ¿Perfecto?</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="08-DID.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#macro-local-definici%C3%B3n-y-expansi%C3%B3n"><i class="fa fa-check"></i>Macro local: definición y expansión</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#evaluar-expresiones-dentro-de-macros"><i class="fa fa-check"></i>Evaluar expresiones dentro de macros</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macro-con-texto"><i class="fa fa-check"></i>Macro con texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#macro-global-uso-y-precauci%C3%B3n"><i class="fa fa-check"></i>Macro global: uso y precaución</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#scalar-vs.-macro"><i class="fa fa-check"></i>Scalar vs. Macro</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-recomendado"><i class="fa fa-check"></i>🧩 Ejercicio recomendado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-foreach"><i class="fa fa-check"></i>Loop con <code>foreach</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-forvalues"><i class="fa fa-check"></i>Loop con <code>forvalues</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loop-con-while"><i class="fa fa-check"></i>Loop con <code>while</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados"><i class="fa fa-check"></i>🧠 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#estructura-b%C3%A1sica"><i class="fa fa-check"></i>Estructura básica</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-con-argumentos"><i class="fa fa-check"></i>Programas con argumentos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#tu-programa-original-mejorado-mysum"><i class="fa fa-check"></i>Tu programa original mejorado: <code>mysum</code></a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#notas-importantes"><i class="fa fa-check"></i>Notas importantes</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-recomendados-1"><i class="fa fa-check"></i>🔧 Ejercicios recomendados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-postfile"><i class="fa fa-check"></i>¿Qué hace <code>postfile</code>?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#paso-a-paso-guardar-medias-con-summarize"><i class="fa fa-check"></i>Paso a paso: guardar medias con <code>summarize</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hicimos-aqu%C3%AD"><i class="fa fa-check"></i>¿Qué hicimos aquí?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-1"><i class="fa fa-check"></i>Buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicios-con-postfile"><i class="fa fa-check"></i>📦 Ejercicios con <code>postfile</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-al-programar-en-stata"><i class="fa fa-check"></i>Buenas prácticas al programar en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#ejercicio-de-repaso"><i class="fa fa-check"></i>🧠 Ejercicio de repaso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#iterar-sobre-lista-de-variables"><i class="fa fa-check"></i>Iterar sobre lista de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="08-DID.html"><a href="#par%C3%A1metros-causales-teor%C3%ADa"><i class="fa fa-check"></i><b>3</b> Parámetros Causales (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="parámetros-causales-teoría.html"><a href="parámetros-causales-teoría.html"><i class="fa fa-check"></i>🔹 Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>🔹 Parámetros de interés</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>🔹 ¿Por qué no es suficiente el estimador naïve?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>🔹 Sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path="parámetros-causales-teoría.html"><a href="parámetros-causales-teoría.html#el-supuesto-de-independencia-o-ignorabilidad"><i class="fa fa-check"></i>🔹 El supuesto de independencia (o ignorabilidad)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>🔹 Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
+<li class="chapter" data-level="" data-path="parámetros-causales-teoría.html"><a href="parámetros-causales-teoría.html#sutva-supuesto-de-valor-estable-del-tratamiento-unitario"><i class="fa fa-check"></i>🔹 SUTVA: Supuesto de Valor Estable del Tratamiento Unitario</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="08-DID.html"><a href="#par%C3%A1metros-causales-en-stata"><i class="fa fa-check"></i><b>4</b> Parámetros Causales en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="parámetros-causales-en-stata.html"><a href="parámetros-causales-en-stata.html"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="parámetros-causales-en-stata.html"><a href="parámetros-causales-en-stata.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="08-DID.html"><a href="#experimentos-aleatorizados-teor%C3%ADa"><i class="fa fa-check"></i><b>5</b> Experimentos Aleatorizados (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>¿Qué hace la aleatorización?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#densidad-de-la-motivaci%C3%B3n-por-grupo"><i class="fa fa-check"></i>Densidad de la motivación por grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html"><i class="fa fa-check"></i><b>6</b> Experimentos Aleatorizados en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#paso-1-dise%C3%B1ar-el-experimento"><i class="fa fa-check"></i>PASO 1) Diseñar el experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#paso-2-aleatorizar-la-asignaci%C3%B3n-stata"><i class="fa fa-check"></i>Paso 2) Aleatorizar la asignación (Stata)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-3-verificar-el-balance-de-covariables"><i class="fa fa-check"></i>PASO 3) Verificar el balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-4-estimar-el-efecto-del-tratamiento"><i class="fa fa-check"></i>PASO 4) Estimar el efecto del tratamiento</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes"><i class="fa fa-check"></i>Asignación a nivel individual (dos muestras independientes)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#pruebas"><i class="fa fa-check"></i>Pruebas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="08-DID.html"><a href="#poder-estad%C3%ADstico-en-stata"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html"><i class="fa fa-check"></i>Sin controles</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado"><i class="fa fa-check"></i>Tamaño de muestra para un efecto dado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efecto-m%C3%ADnimo-detectable-mde-para-un-n-dado"><i class="fa fa-check"></i>Efecto mínimo detectable (MDE) para un N dado</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#mde-para-un-n-dado-con-variable-binaria"><i class="fa fa-check"></i>MDE para un N dado con variable binaria</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado-con-covariables"><i class="fa fa-check"></i>Tamaño de muestra para un efecto dado con covariables</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#mde-para-un-n-dado-con-covariables"><i class="fa fa-check"></i>MDE para un N dado con covariables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#n%C3%BAmero-de-cl%C3%BAsteres-para-un-efecto-y-tama%C3%B1o-de-cl%C3%BAster-dados"><i class="fa fa-check"></i>Número de clústeres para un efecto y tamaño de clúster dados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-cl%C3%BAster-para-un-n%C3%BAmero-dado-de-cl%C3%BAsteres"><i class="fa fa-check"></i>Tamaño de clúster para un número dado de clústeres</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#mde-para-un-tama%C3%B1o-de-cl%C3%BAster-y-n%C3%BAmero-de-cl%C3%BAsteres-dados"><i class="fa fa-check"></i>MDE para un tamaño de clúster y número de clústeres dados</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#estad%C3%ADsticas-descriptivas"><i class="fa fa-check"></i>Estadísticas descriptivas</a>
+<ul>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#promedios-por-periodo-y-grupo"><i class="fa fa-check"></i>Promedios por periodo y grupo</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-medias"><i class="fa fa-check"></i>Comparación de medias</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#estimador-did-paso-a-paso"><i class="fa fa-check"></i>Estimador DID paso a paso</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#usando-el-comando-diff"><i class="fa fa-check"></i>Usando el comando <code>diff</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-con-regresiones"><i class="fa fa-check"></i>Implementación con regresiones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#extensi%C3%B3n-con-panel"><i class="fa fa-check"></i>Extensión con panel</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n"><i class="fa fa-check"></i>Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="08-DID.html"><a href="#malos-controles-teor%C3%ADa"><i class="fa fa-check"></i><b>8</b> Malos Controles (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a>
+<ul>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#buenos-controles"><i class="fa fa-check"></i>Buenos controles</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#malos-controles"><i class="fa fa-check"></i>Malos controles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implicaciones-pr%C3%A1cticas"><i class="fa fa-check"></i>Implicaciones prácticas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Agrupación</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html"><i class="fa fa-check"></i><b>9</b> Malos Controles en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#mediador-post-tratamiento"><i class="fa fa-check"></i>Mediador (post-tratamiento)</a>
+<ul>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#mediador-puro-d-rightarrow-m-rightarrow-y"><i class="fa fa-check"></i>Mediador puro: <span class="math inline">\(D \rightarrow M \rightarrow Y\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#colisionador"><i class="fa fa-check"></i>Colisionador</a>
+<ul>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#colisionador-d-rightarrow-c-leftarrow-u-rightarrow-y"><i class="fa fa-check"></i>Colisionador: <span class="math inline">\(D \rightarrow C \leftarrow U \rightarrow Y\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#histogramas-distribuciones-monte-carlo"><i class="fa fa-check"></i>Histogramas (distribuciones Monte Carlo)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#malos-controles-con-f-en-el-an%C3%A1lisis-de-d-y"><i class="fa fa-check"></i>Malos Controles con <strong>F</strong> (en el análisis de <strong>D → Y</strong>)</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#teor%C3%ADa-r%C3%A1pida-por-qu%C3%A9-f-puede-ser-un-mal-control"><i class="fa fa-check"></i>Teoría rápida: por qué <strong>F</strong> puede ser un mal control</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#caso-a-f-como-colisionador-d-f-y"><i class="fa fa-check"></i>Caso A — <strong>F como colisionador</strong> (<code>D → F ← Y</code>)</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#caso-b-f-descendiente-de-colisionador-d-y-u-y-y-f"><i class="fa fa-check"></i>Caso B — <strong>F descendiente de colisionador</strong> (<code>D → Y ← U</code> y <code>Y → F</code>)</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#caso-c-f-post-tratamiento-mediador-d-f-y"><i class="fa fa-check"></i>Caso C — <strong>F post-tratamiento (mediador)</strong> (<code>D → F → Y</code>)</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#tabla-comparativa-mediador-vs-colisionador"><i class="fa fa-check"></i>Tabla comparativa (Mediador vs Colisionador)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html"><i class="fa fa-check"></i><b>10</b> TWFE y DiD Moderno en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido"><i class="fa fa-check"></i>Contexto rápido</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#modelo-b%C3%A1sico-22-did"><i class="fa fa-check"></i>Modelo básico 2×2 DiD</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#explicaci%C3%B3n-did%C3%A1ctica"><i class="fa fa-check"></i>Explicación didáctica</a></li>
+<li class="chapter" data-level="10.0.1" data-path="08-DID.html"><a href="#c%C3%B3digo-copiarpegar"><i class="fa fa-check"></i><b>10.0.1</b> Código (copiar/pegar)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-2-unidades-y-tratamiento-desde-un-a%C3%B1o-en-adelante"><i class="fa fa-check"></i>Panel largo con 2 unidades y tratamiento “desde un año en adelante”</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#versi%C3%B3n-donde-y-refleja-solo-el-tama%C3%B1o-del-efecto-por-tratado"><i class="fa fa-check"></i>Versión donde <code>Y</code> refleja solo el tamaño del efecto por tratado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#b-versi%C3%B3n-con-y-id-t-efecto_heterog%C3%A9neo"><i class="fa fa-check"></i>3B) Versión con <code>Y = id + t + efecto_heterogéneo</code></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a>
+<ul>
+<li class="chapter" data-level="10.0.2" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte"><i class="fa fa-check"></i><b>10.0.2</b> Caso 3 (tu ejemplo con tres unidades, mismo inicio y efecto por cohorte)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-con-adopci%C3%B3n-escalonada-y-efectos-din%C3%A1micos"><i class="fa fa-check"></i>Caso con <strong>adopción escalonada</strong> y <strong>efectos dinámicos</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i>¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i>¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i>¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#explicaci%C3%B3n-did%C3%A1ctica-1"><i class="fa fa-check"></i>Explicación didáctica</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="10.1" data-path="08-DID.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>10.1</b> 8) Notas prácticas de ejecución</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="poder-estadístico-en-stata" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Capitulo 7</span> Poder Estadístico en Stata<a href="#poder-estad%C3%ADstico-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introducción" class="section level2 unnumbered hasAnchor">
+<h2>Introducción<a href="#introducci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En esta clase trabajaremos con el comando <code>power</code> de Stata para calcular tamaños de muestra, efectos mínimos detectables (MDE) y explorar cómo cambian estos cálculos cuando incorporamos controles consideramos cumplimiento parcial o diseñamos experimentos aleatorizados por conglomerados. Usaremos el <em>do-file</em> proporcionado y desglosaremos cada sección con su explicación y las fórmulas subyacentes. Nos basamos en la documentación oficial de Stata sobre el comando <code>power</code>: <a href="https://www.stata.com/manuals/pss.pdf">Stata Power and Sample Size Reference Manual</a>. y el do file de Poverty Action Lab desarrollado por Sabhya Gupta with input from Jack Cavanagh, Maya Duru, Mike Gibson, Sarah Kopperud, and Chris Udry: <a href="https://www.povertyactionlab.org/resource/power-calculations">Poverty Action Lab - Power Calculations in Stata</a>. Super recomendado leer el manual y el do file para entender todos los detalles.</p>
+</div>
+<div id="sin-controles" class="section level2 unnumbered hasAnchor">
+<h2>Sin controles<a href="poder-estadístico-en-stata.html#sin-controles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="tamaño-de-muestra-para-un-efecto-dado" class="section level3 unnumbered hasAnchor">
+<h3>Tamaño de muestra para un efecto dado<a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La primera sección calcula el tamaño de muestra requerido para detectar un efecto específico. Se define el poder deseado, la razón de asignación entre tratamiento y control (<span class="math inline">\(nratio\)</span>), el nivel de significancia <span class="math inline">\(\alpha\)</span>, y se calcula la media (<span class="math inline">\(\bar{Y}\)</span>) y la desviación estándar (<span class="math inline">\(s\)</span>) de la variable de interés.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb73-1"><a href="poder-estadístico-en-stata.html#cb73-1" tabindex="-1"></a><span class="kw">local</span> power  = 0.8           <span class="co">// Poder deseado</span></span>
+<span id="cb73-2"><a href="poder-estadístico-en-stata.html#cb73-2" tabindex="-1"></a><span class="kw">local</span> nratio = 1             <span class="co">// Razón N2/N1 (1 = tamaños iguales)</span></span>
+<span id="cb73-3"><a href="poder-estadístico-en-stata.html#cb73-3" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span>  = 0.05          <span class="co">// Nivel de significancia</span></span>
+<span id="cb73-4"><a href="poder-estadístico-en-stata.html#cb73-4" tabindex="-1"></a></span>
+<span id="cb73-5"><a href="poder-estadístico-en-stata.html#cb73-5" tabindex="-1"></a><span class="co">// Calcular media y desviación estándar del outcome</span></span>
+<span id="cb73-6"><a href="poder-estadístico-en-stata.html#cb73-6" tabindex="-1"></a><span class="kw">sum</span> <span class="ot">$outcome</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome</span>)</span>
+<span id="cb73-7"><a href="poder-estadístico-en-stata.html#cb73-7" tabindex="-1"></a><span class="kw">local</span> <span class="fu">sd</span>      = <span class="ot">`r(sd)&#39;</span></span>
+<span id="cb73-8"><a href="poder-estadístico-en-stata.html#cb73-8" tabindex="-1"></a><span class="kw">local</span> baseline= <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb73-9"><a href="poder-estadístico-en-stata.html#cb73-9" tabindex="-1"></a></span>
+<span id="cb73-10"><a href="poder-estadístico-en-stata.html#cb73-10" tabindex="-1"></a><span class="co">// Definir el efecto como 0.3 desviaciones estándar</span></span>
+<span id="cb73-11"><a href="poder-estadístico-en-stata.html#cb73-11" tabindex="-1"></a><span class="kw">local</span> effect  = <span class="ot">`sd&#39;</span>*0.3</span>
+<span id="cb73-12"><a href="poder-estadístico-en-stata.html#cb73-12" tabindex="-1"></a><span class="kw">local</span> treat   = <span class="ot">`baseline&#39;</span> + <span class="ot">`effect&#39;</span></span>
+<span id="cb73-13"><a href="poder-estadístico-en-stata.html#cb73-13" tabindex="-1"></a></span>
+<span id="cb73-14"><a href="poder-estadístico-en-stata.html#cb73-14" tabindex="-1"></a><span class="co">// Calcular tamaño de muestra para detectar ese efecto</span></span>
+<span id="cb73-15"><a href="poder-estadístico-en-stata.html#cb73-15" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span> <span class="ot">`treat&#39;</span>, power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) nratio(<span class="ot">`nratio&#39;</span>) <span class="kw">table</span></span>
+<span id="cb73-16"><a href="poder-estadístico-en-stata.html#cb73-16" tabindex="-1"></a></span>
+<span id="cb73-17"><a href="poder-estadístico-en-stata.html#cb73-17" tabindex="-1"></a><span class="co">// Calcular tamaños de muestra para un rango de efectos posibles con 4870 observaciones</span></span>
+<span id="cb73-18"><a href="poder-estadístico-en-stata.html#cb73-18" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span>, power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) nratio(<span class="ot">`nratio&#39;</span>) n(4870) <span class="kw">table</span></span></code></pre></div>
+<p><strong>Fórmula utilizada:</strong> Para una prueba bilateral de igualdad de medias con varianzas iguales (<span class="math inline">\(\sigma_1 = \sigma_2\)</span>), el tamaño de muestra total <span class="math inline">\(N\)</span> requerido para detectar una diferencia <span class="math inline">\(\delta = \mu_2 - \mu_1\)</span> con poder <span class="math inline">\(1-\beta\)</span> y nivel <span class="math inline">\(\alpha\)</span> es:</p>
+<p><span class="math display">\[
+N = 2 \times \frac{\bigl(z_{1-\alpha/2} + z_{1-\beta}\bigr)^2\,\sigma^2}{\delta^2},
+\]</span></p>
+<p>donde <span class="math inline">\(\sigma\)</span> es la desviación estándar común.</p>
+<p>En el código, definimos <span class="math inline">\(\delta = 0.3 \times s\)</span> y llamamos a <code>power twomeans</code> para que Stata resuelva <span class="math inline">\(N\)</span> usando esta fórmula.</p>
+<p>Al final, convertimos el efecto a un valor redondeado y extraemos el tamaño de muestra calculado:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb74-1"><a href="poder-estadístico-en-stata.html#cb74-1" tabindex="-1"></a><span class="kw">local</span> effect    = <span class="fu">round</span>(<span class="ot">`effect&#39;</span>,0.0001)</span>
+<span id="cb74-2"><a href="poder-estadístico-en-stata.html#cb74-2" tabindex="-1"></a><span class="kw">local</span> samplesize= <span class="fu">r</span>(<span class="kw">N</span>)</span>
+<span id="cb74-3"><a href="poder-estadístico-en-stata.html#cb74-3" tabindex="-1"></a></span>
+<span id="cb74-4"><a href="poder-estadístico-en-stata.html#cb74-4" tabindex="-1"></a><span class="co">// Mensaje explicativo</span></span>
+<span id="cb74-5"><a href="poder-estadístico-en-stata.html#cb74-5" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">&quot;La muestra requerida es `samplesize&#39; para detectar un efecto de `effect&#39; con una probabilidad de `power&#39; si el efecto es verdadero y nratio=`nratio&#39;&quot;</span></span></code></pre></div>
+<p>A continuación se exploran diferentes escenarios variando el efecto o la desviación estándar:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb75-1"><a href="poder-estadístico-en-stata.html#cb75-1" tabindex="-1"></a><span class="co">// Variar el tamaño del efecto (diff) y ver cómo cambia el N</span></span>
+<span id="cb75-2"><a href="poder-estadístico-en-stata.html#cb75-2" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span>, power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) nratio(<span class="ot">`nratio&#39;</span>) <span class="fu">diff</span>(0.1(0.15)2) <span class="kw">table</span></span>
+<span id="cb75-3"><a href="poder-estadístico-en-stata.html#cb75-3" tabindex="-1"></a></span>
+<span id="cb75-4"><a href="poder-estadístico-en-stata.html#cb75-4" tabindex="-1"></a><span class="co">// Variar la desviación estándar de 0.5 a 2 en pasos de 0.1</span></span>
+<span id="cb75-5"><a href="poder-estadístico-en-stata.html#cb75-5" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span> <span class="ot">`treat&#39;</span>, power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(0.5(0.1)2) nratio(<span class="ot">`nratio&#39;</span>) <span class="kw">table</span></span></code></pre></div>
+<p>Estas tablas permiten comparar cómo afectan los cambios en <span class="math inline">\(\delta\)</span> o en <span class="math inline">\(\sigma\)</span> al tamaño de muestra requerido.</p>
+</div>
+<div id="efecto-mínimo-detectable-mde-para-un-n-dado" class="section level3 unnumbered hasAnchor">
+<h3>Efecto mínimo detectable (MDE) para un N dado<a href="#efecto-m%C3%ADnimo-detectable-mde-para-un-n-dado" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En esta sección se fija el tamaño de muestra total <span class="math inline">\(N\)</span> y se calcula el efecto mínimo detectable (<span class="math inline">\(\delta_{\min}\)</span>).</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb76-1"><a href="poder-estadístico-en-stata.html#cb76-1" tabindex="-1"></a><span class="kw">local</span> power  = 0.8</span>
+<span id="cb76-2"><a href="poder-estadístico-en-stata.html#cb76-2" tabindex="-1"></a><span class="kw">local</span> nratio = 1</span>
+<span id="cb76-3"><a href="poder-estadístico-en-stata.html#cb76-3" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span>  = 0.05</span>
+<span id="cb76-4"><a href="poder-estadístico-en-stata.html#cb76-4" tabindex="-1"></a><span class="kw">local</span> <span class="kw">N</span>      = _N          <span class="co">// Número total de observaciones del dataset actual</span></span>
+<span id="cb76-5"><a href="poder-estadístico-en-stata.html#cb76-5" tabindex="-1"></a></span>
+<span id="cb76-6"><a href="poder-estadístico-en-stata.html#cb76-6" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> <span class="ot">$outcome</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome</span>)</span>
+<span id="cb76-7"><a href="poder-estadístico-en-stata.html#cb76-7" tabindex="-1"></a><span class="kw">local</span> <span class="fu">sd</span>       = <span class="ot">`r(sd)&#39;</span></span>
+<span id="cb76-8"><a href="poder-estadístico-en-stata.html#cb76-8" tabindex="-1"></a><span class="kw">local</span> baseline = <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb76-9"><a href="poder-estadístico-en-stata.html#cb76-9" tabindex="-1"></a></span>
+<span id="cb76-10"><a href="poder-estadístico-en-stata.html#cb76-10" tabindex="-1"></a><span class="co">// Calcular el MDE dado N</span></span>
+<span id="cb76-11"><a href="poder-estadístico-en-stata.html#cb76-11" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span>, n(<span class="ot">`N&#39;</span>) power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) nratio(<span class="ot">`nratio&#39;</span>) <span class="kw">table</span></span>
+<span id="cb76-12"><a href="poder-estadístico-en-stata.html#cb76-12" tabindex="-1"></a></span>
+<span id="cb76-13"><a href="poder-estadístico-en-stata.html#cb76-13" tabindex="-1"></a><span class="kw">local</span> mde = <span class="fu">round</span>(<span class="ot">`r(delta)&#39;</span>,0.0001)</span>
+<span id="cb76-14"><a href="poder-estadístico-en-stata.html#cb76-14" tabindex="-1"></a></span>
+<span id="cb76-15"><a href="poder-estadístico-en-stata.html#cb76-15" tabindex="-1"></a><span class="co">// Mensaje explicativo</span></span>
+<span id="cb76-16"><a href="poder-estadístico-en-stata.html#cb76-16" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">&quot;El efecto mínimo detectable es `mde&#39; dado un tamaño de muestra `N&#39;, nratio=`nratio&#39; y poder=`power&#39;&quot;</span></span></code></pre></div>
+<p><strong>Fórmula utilizada:</strong> Con <span class="math inline">\(N\)</span> fijo y asignación balanceada (<span class="math inline">\(n_1=n_2=N/2\)</span>), el efecto mínimo detectable es:</p>
+<p><span class="math display">\[
+\delta_{\min} = \bigl(z_{1-\alpha/2} + z_{1-\beta}\bigr)\, \sigma\, \sqrt{\frac{2}{N}}.
+\]</span></p>
+<p>El código muestra cómo varía el MDE al modificar el tamaño de muestra o la razón de asignación:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb77-1"><a href="poder-estadístico-en-stata.html#cb77-1" tabindex="-1"></a><span class="co">// Cambiar N de 10 000 a 20 000 en pasos de 2 000</span></span>
+<span id="cb77-2"><a href="poder-estadístico-en-stata.html#cb77-2" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span>, power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) n(10000(2000)20000) nratio(<span class="ot">`nratio&#39;</span>) <span class="kw">table</span></span>
+<span id="cb77-3"><a href="poder-estadístico-en-stata.html#cb77-3" tabindex="-1"></a></span>
+<span id="cb77-4"><a href="poder-estadístico-en-stata.html#cb77-4" tabindex="-1"></a><span class="co">// Cambiar la razón de tratados a controles</span></span>
+<span id="cb77-5"><a href="poder-estadístico-en-stata.html#cb77-5" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span>, n(<span class="ot">`N&#39;</span>) power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) nratio(1(-0.2)0.1) <span class="kw">table</span></span></code></pre></div>
+<p>Una disminución en <code>nratio</code> implica asignar una proporción mayor al grupo de control, lo que en general reduce el poder y aumenta el MDE.</p>
+</div>
+<div id="mde-para-un-n-dado-con-variable-binaria" class="section level3 unnumbered hasAnchor">
+<h3>MDE para un N dado con variable binaria<a href="poder-estadístico-en-stata.html#mde-para-un-n-dado-con-variable-binaria" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Cuando el resultado es binario (proporción de éxitos), se utiliza el comando <code>power twoproportions</code>.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb78-1"><a href="poder-estadístico-en-stata.html#cb78-1" tabindex="-1"></a><span class="kw">global</span> outcome2 desn_cr  <span class="co">// Variable binaria</span></span>
+<span id="cb78-2"><a href="poder-estadístico-en-stata.html#cb78-2" tabindex="-1"></a></span>
+<span id="cb78-3"><a href="poder-estadístico-en-stata.html#cb78-3" tabindex="-1"></a><span class="kw">local</span> power  = 0.8</span>
+<span id="cb78-4"><a href="poder-estadístico-en-stata.html#cb78-4" tabindex="-1"></a><span class="kw">local</span> nratio = 1</span>
+<span id="cb78-5"><a href="poder-estadístico-en-stata.html#cb78-5" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span>  = 0.05</span>
+<span id="cb78-6"><a href="poder-estadístico-en-stata.html#cb78-6" tabindex="-1"></a><span class="kw">local</span> <span class="kw">N</span>      = _N</span>
+<span id="cb78-7"><a href="poder-estadístico-en-stata.html#cb78-7" tabindex="-1"></a></span>
+<span id="cb78-8"><a href="poder-estadístico-en-stata.html#cb78-8" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> <span class="ot">$outcome2</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome2</span>)</span>
+<span id="cb78-9"><a href="poder-estadístico-en-stata.html#cb78-9" tabindex="-1"></a><span class="kw">local</span> <span class="fu">sd</span>       = <span class="ot">`r(sd)&#39;</span></span>
+<span id="cb78-10"><a href="poder-estadístico-en-stata.html#cb78-10" tabindex="-1"></a><span class="kw">local</span> baseline = <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb78-11"><a href="poder-estadístico-en-stata.html#cb78-11" tabindex="-1"></a></span>
+<span id="cb78-12"><a href="poder-estadístico-en-stata.html#cb78-12" tabindex="-1"></a><span class="co">// Ejemplo: comparar una proporción de 0.08 frente a un rango de proporciones alternativas</span></span>
+<span id="cb78-13"><a href="poder-estadístico-en-stata.html#cb78-13" tabindex="-1"></a>power twoproportions 0.08 (0.01(0.005)0.1), power(0.8 0.9) <span class="kw">graph</span></span>
+<span id="cb78-14"><a href="poder-estadístico-en-stata.html#cb78-14" tabindex="-1"></a></span>
+<span id="cb78-15"><a href="poder-estadístico-en-stata.html#cb78-15" tabindex="-1"></a><span class="kw">local</span> mde = <span class="fu">round</span>(<span class="ot">`r(delta)&#39;</span>,0.0001)</span></code></pre></div>
+<p><strong>Fórmula utilizada:</strong> Para comparar dos proporciones <span class="math inline">\(p_1\)</span> y <span class="math inline">\(p_2\)</span> con tamaño de muestra <span class="math inline">\(n\)</span> por grupo, el tamaño de muestra necesario es:</p>
+<p><span class="math display">\[
+n = \frac{\bigl(z_{1-\alpha/2} + z_{1-\beta}\bigr)^2\bigl[ p_1(1 - p_1) + p_2(1 - p_2) \bigr]}{(p_1 - p_2)^2},
+\]</span></p>
+<p>y el MDE se obtiene despejando <span class="math inline">\(|p_1 - p_2|\)</span> de esta expresión.</p>
+</div>
+</div>
+<div id="incorporando-controles" class="section level2 unnumbered hasAnchor">
+<h2>Incorporando controles<a href="poder-estadístico-en-stata.html#incorporando-controles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para aumentar el poder, es común incluir covariables que expliquen parte de la variabilidad del resultado. Esto reduce la desviación estándar residual y permite detectar efectos más pequeños.</p>
+<div id="tamaño-de-muestra-para-un-efecto-dado-con-covariables" class="section level3 unnumbered hasAnchor">
+<h3>Tamaño de muestra para un efecto dado con covariables<a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado-con-covariables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb79"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb79-1"><a href="poder-estadístico-en-stata.html#cb79-1" tabindex="-1"></a><span class="kw">local</span> power  = 0.8</span>
+<span id="cb79-2"><a href="poder-estadístico-en-stata.html#cb79-2" tabindex="-1"></a><span class="kw">local</span> nratio = 1</span>
+<span id="cb79-3"><a href="poder-estadístico-en-stata.html#cb79-3" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span>  = 0.05</span>
+<span id="cb79-4"><a href="poder-estadístico-en-stata.html#cb79-4" tabindex="-1"></a></span>
+<span id="cb79-5"><a href="poder-estadístico-en-stata.html#cb79-5" tabindex="-1"></a><span class="kw">local</span> covariates <span class="ot">$X</span>         <span class="co">// Variables de control</span></span>
+<span id="cb79-6"><a href="poder-estadístico-en-stata.html#cb79-6" tabindex="-1"></a><span class="kw">local</span> number_covariates: <span class="fu">word</span> <span class="fu">count</span> <span class="ot">`covariates&#39;</span></span>
+<span id="cb79-7"><a href="poder-estadístico-en-stata.html#cb79-7" tabindex="-1"></a></span>
+<span id="cb79-8"><a href="poder-estadístico-en-stata.html#cb79-8" tabindex="-1"></a><span class="co">// Ajustar el outcome por las covariables</span></span>
+<span id="cb79-9"><a href="poder-estadístico-en-stata.html#cb79-9" tabindex="-1"></a><span class="kw">regress</span> <span class="ot">$outcome</span> <span class="ot">`covariates&#39;</span></span>
+<span id="cb79-10"><a href="poder-estadístico-en-stata.html#cb79-10" tabindex="-1"></a></span>
+<span id="cb79-11"><a href="poder-estadístico-en-stata.html#cb79-11" tabindex="-1"></a><span class="kw">local</span> res_sd = <span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="ot">`e(rss)&#39;</span>/<span class="ot">`e(df_r)&#39;</span>), 0.0001)  <span class="co">// Desviación estándar residual</span></span>
+<span id="cb79-12"><a href="poder-estadístico-en-stata.html#cb79-12" tabindex="-1"></a></span>
+<span id="cb79-13"><a href="poder-estadístico-en-stata.html#cb79-13" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> <span class="ot">$outcome</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome</span>)</span>
+<span id="cb79-14"><a href="poder-estadístico-en-stata.html#cb79-14" tabindex="-1"></a><span class="kw">local</span> baseline = <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb79-15"><a href="poder-estadístico-en-stata.html#cb79-15" tabindex="-1"></a><span class="kw">local</span> <span class="fu">sd</span>       = <span class="ot">`r(sd)&#39;</span></span>
+<span id="cb79-16"><a href="poder-estadístico-en-stata.html#cb79-16" tabindex="-1"></a></span>
+<span id="cb79-17"><a href="poder-estadístico-en-stata.html#cb79-17" tabindex="-1"></a><span class="kw">local</span> effect_cov = <span class="ot">`sd&#39;</span> * 0.3</span>
+<span id="cb79-18"><a href="poder-estadístico-en-stata.html#cb79-18" tabindex="-1"></a><span class="kw">local</span> treat      = <span class="ot">`baseline&#39;</span> + <span class="ot">`effect_cov&#39;</span></span>
+<span id="cb79-19"><a href="poder-estadístico-en-stata.html#cb79-19" tabindex="-1"></a></span>
+<span id="cb79-20"><a href="poder-estadístico-en-stata.html#cb79-20" tabindex="-1"></a><span class="co">// Calcular tamaño de muestra usando la desviación estándar residual</span></span>
+<span id="cb79-21"><a href="poder-estadístico-en-stata.html#cb79-21" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span> <span class="ot">`treat&#39;</span>, power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`res_sd&#39;</span>) nratio(<span class="ot">`nratio&#39;</span>) <span class="kw">alpha</span>(<span class="ot">`alpha&#39;</span>) <span class="kw">table</span></span>
+<span id="cb79-22"><a href="poder-estadístico-en-stata.html#cb79-22" tabindex="-1"></a></span>
+<span id="cb79-23"><a href="poder-estadístico-en-stata.html#cb79-23" tabindex="-1"></a><span class="kw">local</span> effect_cov   = <span class="fu">round</span>(<span class="ot">`effect_cov&#39;</span>, 0.0001)</span>
+<span id="cb79-24"><a href="poder-estadístico-en-stata.html#cb79-24" tabindex="-1"></a><span class="kw">local</span> samplesize_cov = <span class="ot">`r(N)&#39;</span></span>
+<span id="cb79-25"><a href="poder-estadístico-en-stata.html#cb79-25" tabindex="-1"></a></span>
+<span id="cb79-26"><a href="poder-estadístico-en-stata.html#cb79-26" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">&quot;Se necesita un tamaño de muestra de `samplesize_cov&#39; para detectar un efecto de `effect_cov&#39; con poder=`power&#39; y desviación residual=`res_sd&#39; dado nratio=`nratio&#39;&quot;</span></span></code></pre></div>
+<p>La desviación residual reemplaza a <span class="math inline">\(\sigma\)</span> en la fórmula de tamaño de muestra:</p>
+<p><span class="math display">\[
+N = 2 \times \frac{\bigl(z_{1-\alpha/2}+z_{1-\beta}\bigr)^2\,\sigma_{\text{res}}^2}{\delta^2}.
+\]</span></p>
+</div>
+<div id="mde-para-un-n-dado-con-covariables" class="section level3 unnumbered hasAnchor">
+<h3>MDE para un N dado con covariables<a href="poder-estadístico-en-stata.html#mde-para-un-n-dado-con-covariables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb80"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb80-1"><a href="poder-estadístico-en-stata.html#cb80-1" tabindex="-1"></a><span class="kw">local</span> power  = 0.8</span>
+<span id="cb80-2"><a href="poder-estadístico-en-stata.html#cb80-2" tabindex="-1"></a><span class="kw">local</span> nratio = 1</span>
+<span id="cb80-3"><a href="poder-estadístico-en-stata.html#cb80-3" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span>  = 0.05</span>
+<span id="cb80-4"><a href="poder-estadístico-en-stata.html#cb80-4" tabindex="-1"></a><span class="kw">local</span> N_cov  = _N  <span class="co">// Tamaño de muestra total</span></span>
+<span id="cb80-5"><a href="poder-estadístico-en-stata.html#cb80-5" tabindex="-1"></a></span>
+<span id="cb80-6"><a href="poder-estadístico-en-stata.html#cb80-6" tabindex="-1"></a><span class="co">// Ajustar el outcome por las covariables</span></span>
+<span id="cb80-7"><a href="poder-estadístico-en-stata.html#cb80-7" tabindex="-1"></a><span class="kw">regress</span> <span class="ot">$outcome</span> <span class="ot">`covariates&#39;</span></span>
+<span id="cb80-8"><a href="poder-estadístico-en-stata.html#cb80-8" tabindex="-1"></a></span>
+<span id="cb80-9"><a href="poder-estadístico-en-stata.html#cb80-9" tabindex="-1"></a><span class="kw">local</span> res_sd = <span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="ot">`e(rss)&#39;</span>/<span class="ot">`e(df_r)&#39;</span>), 0.0001)</span>
+<span id="cb80-10"><a href="poder-estadístico-en-stata.html#cb80-10" tabindex="-1"></a></span>
+<span id="cb80-11"><a href="poder-estadístico-en-stata.html#cb80-11" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> <span class="ot">$outcome</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome</span>)</span>
+<span id="cb80-12"><a href="poder-estadístico-en-stata.html#cb80-12" tabindex="-1"></a><span class="kw">local</span> baseline = <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb80-13"><a href="poder-estadístico-en-stata.html#cb80-13" tabindex="-1"></a></span>
+<span id="cb80-14"><a href="poder-estadístico-en-stata.html#cb80-14" tabindex="-1"></a><span class="co">// Calcular MDE con la desviación residual</span></span>
+<span id="cb80-15"><a href="poder-estadístico-en-stata.html#cb80-15" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span>, n(<span class="ot">`N_cov&#39;</span>) power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`res_sd&#39;</span>) nratio(<span class="ot">`nratio&#39;</span>) <span class="kw">alpha</span>(<span class="ot">`alpha&#39;</span>) <span class="kw">table</span></span>
+<span id="cb80-16"><a href="poder-estadístico-en-stata.html#cb80-16" tabindex="-1"></a></span>
+<span id="cb80-17"><a href="poder-estadístico-en-stata.html#cb80-17" tabindex="-1"></a><span class="kw">local</span> mde_cov = <span class="fu">round</span>(<span class="ot">`r(delta)&#39;</span>, 0.0001)</span>
+<span id="cb80-18"><a href="poder-estadístico-en-stata.html#cb80-18" tabindex="-1"></a></span>
+<span id="cb80-19"><a href="poder-estadístico-en-stata.html#cb80-19" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">&quot;El MDE es `mde_cov&#39; dado N=`N_cov&#39;, nratio=`nratio&#39;, poder=`power&#39; y desviación residual=`res_sd&#39;&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="tamaño-de-muestra-con-cumplimiento-parcial-take-up" class="section level2 unnumbered hasAnchor">
+<h2>Tamaño de muestra con cumplimiento parcial (take-up)<a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cuando no todos los asignados al tratamiento lo reciben (o algunos controles sí lo reciben), el efecto observable se reduce. El efecto ajustado es el efecto real multiplicado por la diferencia de tasas de participación entre grupos:</p>
+<p><span class="math display">\[
+\delta_{\text{efectivo}} = \delta \times (\pi_{\text{treat}} - \pi_{\text{control}}).
+\]</span></p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb81-1"><a href="poder-estadístico-en-stata.html#cb81-1" tabindex="-1"></a><span class="kw">local</span> power  = 0.8</span>
+<span id="cb81-2"><a href="poder-estadístico-en-stata.html#cb81-2" tabindex="-1"></a><span class="kw">local</span> nratio = 1</span>
+<span id="cb81-3"><a href="poder-estadístico-en-stata.html#cb81-3" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span>  = 0.05</span>
+<span id="cb81-4"><a href="poder-estadístico-en-stata.html#cb81-4" tabindex="-1"></a></span>
+<span id="cb81-5"><a href="poder-estadístico-en-stata.html#cb81-5" tabindex="-1"></a><span class="kw">local</span> takeup_treat   = 0.9</span>
+<span id="cb81-6"><a href="poder-estadístico-en-stata.html#cb81-6" tabindex="-1"></a><span class="kw">local</span> takeup_control = 0.1</span>
+<span id="cb81-7"><a href="poder-estadístico-en-stata.html#cb81-7" tabindex="-1"></a></span>
+<span id="cb81-8"><a href="poder-estadístico-en-stata.html#cb81-8" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> <span class="ot">$outcome</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome</span>)</span>
+<span id="cb81-9"><a href="poder-estadístico-en-stata.html#cb81-9" tabindex="-1"></a><span class="kw">local</span> <span class="fu">sd</span>       = <span class="ot">`r(sd)&#39;</span></span>
+<span id="cb81-10"><a href="poder-estadístico-en-stata.html#cb81-10" tabindex="-1"></a><span class="kw">local</span> baseline = <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb81-11"><a href="poder-estadístico-en-stata.html#cb81-11" tabindex="-1"></a></span>
+<span id="cb81-12"><a href="poder-estadístico-en-stata.html#cb81-12" tabindex="-1"></a><span class="kw">local</span> effect_tu = <span class="ot">`sd&#39;</span> * 0.3        <span class="co">// Efecto con cumplimiento perfecto</span></span>
+<span id="cb81-13"><a href="poder-estadístico-en-stata.html#cb81-13" tabindex="-1"></a><span class="kw">local</span> tu        = <span class="ot">`takeup_treat&#39;</span> - <span class="ot">`takeup_control&#39;</span></span>
+<span id="cb81-14"><a href="poder-estadístico-en-stata.html#cb81-14" tabindex="-1"></a><span class="kw">local</span> effect_tu = <span class="ot">`effect_tu&#39;</span> * <span class="ot">`tu&#39;</span>   <span class="co">// Efecto ajustado por cumplimiento</span></span>
+<span id="cb81-15"><a href="poder-estadístico-en-stata.html#cb81-15" tabindex="-1"></a><span class="kw">local</span> treat_tu  = <span class="ot">`baseline&#39;</span> + <span class="ot">`effect_tu&#39;</span></span>
+<span id="cb81-16"><a href="poder-estadístico-en-stata.html#cb81-16" tabindex="-1"></a></span>
+<span id="cb81-17"><a href="poder-estadístico-en-stata.html#cb81-17" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span> <span class="ot">`treat_tu&#39;</span>, power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) nratio(<span class="ot">`nratio&#39;</span>) <span class="kw">table</span></span>
+<span id="cb81-18"><a href="poder-estadístico-en-stata.html#cb81-18" tabindex="-1"></a></span>
+<span id="cb81-19"><a href="poder-estadístico-en-stata.html#cb81-19" tabindex="-1"></a><span class="kw">local</span> samplesize_tu = <span class="ot">`r(N)&#39;</span></span>
+<span id="cb81-20"><a href="poder-estadístico-en-stata.html#cb81-20" tabindex="-1"></a><span class="kw">local</span> effect_tu     = <span class="fu">round</span>(<span class="ot">`effect_tu&#39;</span>, 0.01)</span>
+<span id="cb81-21"><a href="poder-estadístico-en-stata.html#cb81-21" tabindex="-1"></a></span>
+<span id="cb81-22"><a href="poder-estadístico-en-stata.html#cb81-22" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">&quot;Se necesita una muestra de `samplesize_tu&#39; para detectar un efecto de `effect_tu&#39; con poder=`power&#39; si nratio=`nratio&#39;&quot;</span></span></code></pre></div>
+</div>
+<div id="diseños-por-conglomerados-o-grupos" class="section level2 unnumbered hasAnchor">
+<h2>Diseños por conglomerados o grupos<a href="#dise%C3%B1os-por-conglomerados-o-grupos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cuando la unidad de aleatorización es un grupo (por ejemplo, escuelas), el cálculo de poder debe ajustarse por la correlación intra-grupo. Se introduce el ICC (<span class="math inline">\(\rho\)</span>) y el efecto de diseño <span class="math inline">\(DE = 1 + \rho(M-1)\)</span>, donde <span class="math inline">\(M\)</span> es el tamaño del clúster.</p>
+<div id="número-de-clústeres-para-un-efecto-y-tamaño-de-clúster-dados" class="section level3 unnumbered hasAnchor">
+<h3>Número de clústeres para un efecto y tamaño de clúster dados<a href="#n%C3%BAmero-de-cl%C3%BAsteres-para-un-efecto-y-tama%C3%B1o-de-cl%C3%BAster-dados" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb82"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb82-1"><a href="poder-estadístico-en-stata.html#cb82-1" tabindex="-1"></a><span class="kw">global</span> cluster_var educa_jefe  <span class="co">// Variable de conglomerado</span></span>
+<span id="cb82-2"><a href="poder-estadístico-en-stata.html#cb82-2" tabindex="-1"></a></span>
+<span id="cb82-3"><a href="poder-estadístico-en-stata.html#cb82-3" tabindex="-1"></a><span class="kw">local</span> power  = 0.8</span>
+<span id="cb82-4"><a href="poder-estadístico-en-stata.html#cb82-4" tabindex="-1"></a><span class="kw">local</span> nratio = 1</span>
+<span id="cb82-5"><a href="poder-estadístico-en-stata.html#cb82-5" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span>  = 0.05</span>
+<span id="cb82-6"><a href="poder-estadístico-en-stata.html#cb82-6" tabindex="-1"></a></span>
+<span id="cb82-7"><a href="poder-estadístico-en-stata.html#cb82-7" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> <span class="ot">$outcome</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome</span>)</span>
+<span id="cb82-8"><a href="poder-estadístico-en-stata.html#cb82-8" tabindex="-1"></a><span class="kw">local</span> <span class="fu">sd</span>       = <span class="ot">`r(sd)&#39;</span></span>
+<span id="cb82-9"><a href="poder-estadístico-en-stata.html#cb82-9" tabindex="-1"></a><span class="kw">local</span> baseline = <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb82-10"><a href="poder-estadístico-en-stata.html#cb82-10" tabindex="-1"></a></span>
+<span id="cb82-11"><a href="poder-estadístico-en-stata.html#cb82-11" tabindex="-1"></a><span class="kw">local</span> cluster_size_control = 50</span>
+<span id="cb82-12"><a href="poder-estadístico-en-stata.html#cb82-12" tabindex="-1"></a><span class="kw">local</span> mratio  = 1    <span class="co">// Razón M2/M1</span></span>
+<span id="cb82-13"><a href="poder-estadístico-en-stata.html#cb82-13" tabindex="-1"></a><span class="kw">local</span> kratio  = 1    <span class="co">// Razón K2/K1</span></span>
+<span id="cb82-14"><a href="poder-estadístico-en-stata.html#cb82-14" tabindex="-1"></a></span>
+<span id="cb82-15"><a href="poder-estadístico-en-stata.html#cb82-15" tabindex="-1"></a><span class="kw">local</span> effect_cluster = <span class="ot">`sd&#39;</span> * 0.3</span>
+<span id="cb82-16"><a href="poder-estadístico-en-stata.html#cb82-16" tabindex="-1"></a><span class="kw">local</span> treat         = <span class="ot">`baseline&#39;</span> + <span class="ot">`effect_cluster&#39;</span></span>
+<span id="cb82-17"><a href="poder-estadístico-en-stata.html#cb82-17" tabindex="-1"></a></span>
+<span id="cb82-18"><a href="poder-estadístico-en-stata.html#cb82-18" tabindex="-1"></a><span class="kw">loneway</span> <span class="ot">$outcome</span> <span class="ot">$cluster_var</span>    <span class="co">// Obtener ICC</span></span>
+<span id="cb82-19"><a href="poder-estadístico-en-stata.html#cb82-19" tabindex="-1"></a><span class="kw">local</span> rho = <span class="ot">`r(rho)&#39;</span></span>
+<span id="cb82-20"><a href="poder-estadístico-en-stata.html#cb82-20" tabindex="-1"></a></span>
+<span id="cb82-21"><a href="poder-estadístico-en-stata.html#cb82-21" tabindex="-1"></a><span class="co">// Calcular número de clústeres necesarios</span></span>
+<span id="cb82-22"><a href="poder-estadístico-en-stata.html#cb82-22" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span> <span class="ot">`treat&#39;</span>, <span class="kw">cluster</span> m1(<span class="ot">`cluster_size_control&#39;</span>) mratio(<span class="ot">`mratio&#39;</span>) kratio(<span class="ot">`kratio&#39;</span>) power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) rho(<span class="ot">`rho&#39;</span>) <span class="kw">alpha</span>(<span class="ot">`alpha&#39;</span>) <span class="kw">table</span></span>
+<span id="cb82-23"><a href="poder-estadístico-en-stata.html#cb82-23" tabindex="-1"></a></span>
+<span id="cb82-24"><a href="poder-estadístico-en-stata.html#cb82-24" tabindex="-1"></a><span class="kw">local</span> effect_cluster = <span class="fu">round</span>(<span class="ot">`effect_cluster&#39;</span>,0.0001)</span>
+<span id="cb82-25"><a href="poder-estadístico-en-stata.html#cb82-25" tabindex="-1"></a><span class="kw">local</span> n_clus_t = <span class="ot">`r(K2)&#39;</span></span>
+<span id="cb82-26"><a href="poder-estadístico-en-stata.html#cb82-26" tabindex="-1"></a><span class="kw">local</span> n_clus_c = <span class="ot">`r(K1)&#39;</span></span>
+<span id="cb82-27"><a href="poder-estadístico-en-stata.html#cb82-27" tabindex="-1"></a></span>
+<span id="cb82-28"><a href="poder-estadístico-en-stata.html#cb82-28" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">&quot;Se necesitan `n_clus_c&#39; clústeres de control y `n_clus_t&#39; de tratamiento para detectar un efecto de `effect_cluster&#39; con poder=`power&#39; y tamaño de clúster=`cluster_size_control&#39;&quot;</span></span></code></pre></div>
+<p><strong>Fórmula utilizada:</strong> Con tamaños de clúster <span class="math inline">\(M_1\)</span> y <span class="math inline">\(M_2\)</span> fijos, y <span class="math inline">\(\delta\)</span> el efecto esperado, el número de clústeres de control <span class="math inline">\(K_1\)</span> se calcula como:</p>
+<p><span class="math display">\[
+K_1 = \frac{\bigl(z_{1-\alpha/2}+z_{1-\beta}\bigr)^2}{\delta^2} \left( \frac{\sigma_1^2 DE_1}{M_1} + \frac{\sigma_2^2 DE_2}{M_2 R_k} \right),
+\]</span></p>
+<p>donde <span class="math inline">\(DE_j = 1 + \rho (M_j - 1)\)</span> y <span class="math inline">\(R_k = K_2/K_1\)</span>.</p>
+</div>
+<div id="tamaño-de-clúster-para-un-número-dado-de-clústeres" class="section level3 unnumbered hasAnchor">
+<h3>Tamaño de clúster para un número dado de clústeres<a href="#tama%C3%B1o-de-cl%C3%BAster-para-un-n%C3%BAmero-dado-de-cl%C3%BAsteres" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb83"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb83-1"><a href="poder-estadístico-en-stata.html#cb83-1" tabindex="-1"></a><span class="kw">local</span> power = 0.8</span>
+<span id="cb83-2"><a href="poder-estadístico-en-stata.html#cb83-2" tabindex="-1"></a><span class="kw">local</span> nratio = 1</span>
+<span id="cb83-3"><a href="poder-estadístico-en-stata.html#cb83-3" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span> = 0.05</span>
+<span id="cb83-4"><a href="poder-estadístico-en-stata.html#cb83-4" tabindex="-1"></a></span>
+<span id="cb83-5"><a href="poder-estadístico-en-stata.html#cb83-5" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> <span class="ot">$outcome</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome</span>)</span>
+<span id="cb83-6"><a href="poder-estadístico-en-stata.html#cb83-6" tabindex="-1"></a><span class="kw">local</span> <span class="fu">sd</span>       = <span class="ot">`r(sd)&#39;</span></span>
+<span id="cb83-7"><a href="poder-estadístico-en-stata.html#cb83-7" tabindex="-1"></a><span class="kw">local</span> baseline = <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb83-8"><a href="poder-estadístico-en-stata.html#cb83-8" tabindex="-1"></a></span>
+<span id="cb83-9"><a href="poder-estadístico-en-stata.html#cb83-9" tabindex="-1"></a><span class="kw">bysort</span> <span class="ot">$cluster_var</span>: <span class="kw">gen</span> control_cluster = <span class="dt">_n</span>==1</span>
+<span id="cb83-10"><a href="poder-estadístico-en-stata.html#cb83-10" tabindex="-1"></a><span class="fu">count</span> <span class="kw">if</span> control_cluster &amp; D == 0</span>
+<span id="cb83-11"><a href="poder-estadístico-en-stata.html#cb83-11" tabindex="-1"></a><span class="kw">local</span> num_clusters_control = <span class="ot">`r(N)&#39;</span></span>
+<span id="cb83-12"><a href="poder-estadístico-en-stata.html#cb83-12" tabindex="-1"></a></span>
+<span id="cb83-13"><a href="poder-estadístico-en-stata.html#cb83-13" tabindex="-1"></a><span class="kw">local</span> kratio = 1</span>
+<span id="cb83-14"><a href="poder-estadístico-en-stata.html#cb83-14" tabindex="-1"></a><span class="kw">local</span> effect_cluster = <span class="ot">`sd&#39;</span> * 0.3</span>
+<span id="cb83-15"><a href="poder-estadístico-en-stata.html#cb83-15" tabindex="-1"></a><span class="kw">local</span> treat = <span class="ot">`baseline&#39;</span> + <span class="ot">`effect_cluster&#39;</span></span>
+<span id="cb83-16"><a href="poder-estadístico-en-stata.html#cb83-16" tabindex="-1"></a></span>
+<span id="cb83-17"><a href="poder-estadístico-en-stata.html#cb83-17" tabindex="-1"></a><span class="kw">loneway</span> <span class="ot">$outcome</span> <span class="ot">$cluster_var</span></span>
+<span id="cb83-18"><a href="poder-estadístico-en-stata.html#cb83-18" tabindex="-1"></a><span class="kw">local</span> rho = <span class="ot">`r(rho)&#39;</span></span>
+<span id="cb83-19"><a href="poder-estadístico-en-stata.html#cb83-19" tabindex="-1"></a></span>
+<span id="cb83-20"><a href="poder-estadístico-en-stata.html#cb83-20" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span> <span class="ot">`treat&#39;</span>, <span class="kw">cluster</span> k1(<span class="ot">`num_clusters_control&#39;</span>) kratio(<span class="ot">`kratio&#39;</span>) power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) rho(<span class="ot">`rho&#39;</span>)</span>
+<span id="cb83-21"><a href="poder-estadístico-en-stata.html#cb83-21" tabindex="-1"></a></span>
+<span id="cb83-22"><a href="poder-estadístico-en-stata.html#cb83-22" tabindex="-1"></a><span class="kw">local</span> clus_size_t = <span class="ot">`r(M2)&#39;</span></span>
+<span id="cb83-23"><a href="poder-estadístico-en-stata.html#cb83-23" tabindex="-1"></a><span class="kw">local</span> clus_size_c = <span class="ot">`r(M1)&#39;</span></span>
+<span id="cb83-24"><a href="poder-estadístico-en-stata.html#cb83-24" tabindex="-1"></a></span>
+<span id="cb83-25"><a href="poder-estadístico-en-stata.html#cb83-25" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">&quot;El tamaño mínimo de cada clúster debe ser `clus_size_c&#39; en control y `clus_size_t&#39; en tratamiento para detectar un efecto de `effect_cluster&#39;&quot;</span></span>
+<span id="cb83-26"><a href="poder-estadístico-en-stata.html#cb83-26" tabindex="-1"></a></span>
+<span id="cb83-27"><a href="poder-estadístico-en-stata.html#cb83-27" tabindex="-1"></a><span class="kw">drop</span> control_cluster</span></code></pre></div>
+</div>
+<div id="mde-para-un-tamaño-de-clúster-y-número-de-clústeres-dados" class="section level3 unnumbered hasAnchor">
+<h3>MDE para un tamaño de clúster y número de clústeres dados<a href="#mde-para-un-tama%C3%B1o-de-cl%C3%BAster-y-n%C3%BAmero-de-cl%C3%BAsteres-dados" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb84"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb84-1"><a href="poder-estadístico-en-stata.html#cb84-1" tabindex="-1"></a><span class="kw">local</span> power  = 0.8</span>
+<span id="cb84-2"><a href="poder-estadístico-en-stata.html#cb84-2" tabindex="-1"></a><span class="kw">local</span> nratio = 1</span>
+<span id="cb84-3"><a href="poder-estadístico-en-stata.html#cb84-3" tabindex="-1"></a><span class="kw">local</span> <span class="kw">alpha</span>  = 0.05</span>
+<span id="cb84-4"><a href="poder-estadístico-en-stata.html#cb84-4" tabindex="-1"></a></span>
+<span id="cb84-5"><a href="poder-estadístico-en-stata.html#cb84-5" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> <span class="ot">$outcome</span> <span class="kw">if</span> !<span class="fu">missing</span>(<span class="ot">$outcome</span>)</span>
+<span id="cb84-6"><a href="poder-estadístico-en-stata.html#cb84-6" tabindex="-1"></a><span class="kw">local</span> <span class="fu">sd</span>       = <span class="ot">`r(sd)&#39;</span></span>
+<span id="cb84-7"><a href="poder-estadístico-en-stata.html#cb84-7" tabindex="-1"></a><span class="kw">local</span> baseline = <span class="ot">`r(mean)&#39;</span></span>
+<span id="cb84-8"><a href="poder-estadístico-en-stata.html#cb84-8" tabindex="-1"></a></span>
+<span id="cb84-9"><a href="poder-estadístico-en-stata.html#cb84-9" tabindex="-1"></a><span class="kw">bysort</span> <span class="ot">$cluster_var</span>: <span class="kw">gen</span> control_cluster = <span class="dt">_n</span>==1</span>
+<span id="cb84-10"><a href="poder-estadístico-en-stata.html#cb84-10" tabindex="-1"></a><span class="fu">count</span> <span class="kw">if</span> control_cluster &amp; D == 0</span>
+<span id="cb84-11"><a href="poder-estadístico-en-stata.html#cb84-11" tabindex="-1"></a><span class="kw">local</span> num_clusters_control = <span class="ot">`r(N)&#39;</span></span>
+<span id="cb84-12"><a href="poder-estadístico-en-stata.html#cb84-12" tabindex="-1"></a></span>
+<span id="cb84-13"><a href="poder-estadístico-en-stata.html#cb84-13" tabindex="-1"></a><span class="kw">local</span> kratio = 1</span>
+<span id="cb84-14"><a href="poder-estadístico-en-stata.html#cb84-14" tabindex="-1"></a><span class="kw">local</span> cluster_size_control = 50</span>
+<span id="cb84-15"><a href="poder-estadístico-en-stata.html#cb84-15" tabindex="-1"></a><span class="kw">local</span> mratio = 1</span>
+<span id="cb84-16"><a href="poder-estadístico-en-stata.html#cb84-16" tabindex="-1"></a></span>
+<span id="cb84-17"><a href="poder-estadístico-en-stata.html#cb84-17" tabindex="-1"></a><span class="kw">loneway</span> <span class="ot">$outcome</span> <span class="ot">$cluster_var</span></span>
+<span id="cb84-18"><a href="poder-estadístico-en-stata.html#cb84-18" tabindex="-1"></a><span class="kw">local</span> rho = <span class="ot">`r(rho)&#39;</span></span>
+<span id="cb84-19"><a href="poder-estadístico-en-stata.html#cb84-19" tabindex="-1"></a></span>
+<span id="cb84-20"><a href="poder-estadístico-en-stata.html#cb84-20" tabindex="-1"></a>power twomeans <span class="ot">`baseline&#39;</span>, <span class="kw">cluster</span> k1(<span class="ot">`num_clusters_control&#39;</span>) kratio(<span class="ot">`kratio&#39;</span>) mratio(<span class="ot">`mratio&#39;</span>) m1(<span class="ot">`cluster_size_control&#39;</span>) power(<span class="ot">`power&#39;</span>) <span class="fu">sd</span>(<span class="ot">`sd&#39;</span>) rho(<span class="ot">`rho&#39;</span>) <span class="kw">alpha</span>(<span class="ot">`alpha&#39;</span>) <span class="kw">table</span></span>
+<span id="cb84-21"><a href="poder-estadístico-en-stata.html#cb84-21" tabindex="-1"></a></span>
+<span id="cb84-22"><a href="poder-estadístico-en-stata.html#cb84-22" tabindex="-1"></a><span class="kw">local</span> mde_cluster = <span class="fu">round</span>(<span class="ot">`r(delta)&#39;</span>, 0.0001)</span>
+<span id="cb84-23"><a href="poder-estadístico-en-stata.html#cb84-23" tabindex="-1"></a></span>
+<span id="cb84-24"><a href="poder-estadístico-en-stata.html#cb84-24" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">&quot;El MDE es `mde_cluster&#39; dado `num_clusters_control&#39; clústeres de control, tamaño de clúster=`cluster_size_control&#39; y kratio=`kratio&#39;&quot;</span></span>
+<span id="cb84-25"><a href="poder-estadístico-en-stata.html#cb84-25" tabindex="-1"></a></span>
+<span id="cb84-26"><a href="poder-estadístico-en-stata.html#cb84-26" tabindex="-1"></a><span class="kw">drop</span> control_cluster</span>
+<span id="cb84-27"><a href="poder-estadístico-en-stata.html#cb84-27" tabindex="-1"></a>cap <span class="fu">log</span> <span class="kw">close</span></span></code></pre></div>
+<p>En un diseño por conglomerados, el MDE se calcula como:</p>
+<p><span class="math display">\[
+|\delta| = \bigl(z_{1-\alpha/2}+z_{1-\beta}\bigr)\,\sigma_D,
+\]</span></p>
+<p>donde <span class="math inline">\(\sigma_D = \sqrt{\sigma_1^2 DE_1/n_1 + \sigma_2^2 DE_2/n_2}\)</span>.</p>
+<pre><code>
+## DESCARGA LOS DOCUMENTOS {-}
+
+**Descargar Stata do file**:
+[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_stata.do)
+
+**Descargar R script**:
+[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_R.R)
+
+**Descargar Python Notebook**:
+[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_phyton.ipynb)
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/07_Power/07_phyton.ipynb)
+
+**Descarga los Datos**:
+[Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
+
+&lt;!--chapter:end:07-POWER.Rmd--&gt;
+
+# Diferencias en Diferencias (Teoría)
+
+::: {.boxinfo}
+**🎯 Objetivos de la clase**
+
+* Entender la lógica detrás del estimador **Difference-in-Differences (DID)**.
+* Analizar estadísticamente la evolución de una variable de resultado para grupos de **tratamiento** y **control** en dos periodos de tiempo.
+* Implementar DID en **Stata** de tres formas:
+
+  1. Cálculo manual paso a paso.
+  2. Usando el comando `diff`.
+  3. Mediante regresiones.
+:::
+
+---
+
+## Preparación de los datos {-}
+
+```stata
+clear all
+set mem 150m
+capture log close 
+use &quot;datafiles/base3.dta&quot;</code></pre>
+<p>Verificamos cómo están definidas las variables de <strong>tiempo</strong> y <strong>tratamiento</strong>:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb86-1"><a href="poder-estadístico-en-stata.html#cb86-1" tabindex="-1"></a><span class="kw">tab</span> t</span>
+<span id="cb86-2"><a href="poder-estadístico-en-stata.html#cb86-2" tabindex="-1"></a><span class="kw">tab</span> D</span>
+<span id="cb86-3"><a href="poder-estadístico-en-stata.html#cb86-3" tabindex="-1"></a><span class="kw">tab</span> t D</span></code></pre></div>
+<p>La variable de resultado es <code>ha_nchs</code>, el número de desviaciones estándar que el niño está por encima o por debajo de la media del grupo relevante. En el do-file la llamaremos simplemente <code>y</code>.</p>
+<hr />
+</div>
+</div>
+<div id="estadísticas-descriptivas" class="section level2 unnumbered hasAnchor">
+<h2>Estadísticas descriptivas<a href="#estad%C3%ADsticas-descriptivas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="promedios-por-periodo-y-grupo" class="section level3 unnumbered hasAnchor">
+<h3>Promedios por periodo y grupo<a href="poder-estadístico-en-stata.html#promedios-por-periodo-y-grupo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb87"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb87-1"><a href="poder-estadístico-en-stata.html#cb87-1" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span></span>
+<span id="cb87-2"><a href="poder-estadístico-en-stata.html#cb87-2" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> t==0</span>
+<span id="cb87-3"><a href="poder-estadístico-en-stata.html#cb87-3" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> t==1</span>
+<span id="cb87-4"><a href="poder-estadístico-en-stata.html#cb87-4" tabindex="-1"></a><span class="kw">bysort</span> t: <span class="kw">sum</span> <span class="fu">y</span></span>
+<span id="cb87-5"><a href="poder-estadístico-en-stata.html#cb87-5" tabindex="-1"></a><span class="kw">bysort</span> D: <span class="kw">sum</span> <span class="fu">y</span></span>
+<span id="cb87-6"><a href="poder-estadístico-en-stata.html#cb87-6" tabindex="-1"></a><span class="kw">bysort</span> D t: <span class="kw">sum</span> <span class="fu">y</span></span>
+<span id="cb87-7"><a href="poder-estadístico-en-stata.html#cb87-7" tabindex="-1"></a></span>
+<span id="cb87-8"><a href="poder-estadístico-en-stata.html#cb87-8" tabindex="-1"></a><span class="kw">table</span> D t, c(<span class="kw">mean</span> <span class="fu">y</span> <span class="fu">sd</span> <span class="fu">y</span>)</span></code></pre></div>
+<p>Definimos etiquetas y graficamos:</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb88-1"><a href="poder-estadístico-en-stata.html#cb88-1" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> t 0 <span class="st">&quot;t=0&quot;</span> 1 <span class="st">&quot;t=1&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb88-2"><a href="poder-estadístico-en-stata.html#cb88-2" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> t t </span>
+<span id="cb88-3"><a href="poder-estadístico-en-stata.html#cb88-3" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> D 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratado&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb88-4"><a href="poder-estadístico-en-stata.html#cb88-4" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> D D</span>
+<span id="cb88-5"><a href="poder-estadístico-en-stata.html#cb88-5" tabindex="-1"></a></span>
+<span id="cb88-6"><a href="poder-estadístico-en-stata.html#cb88-6" tabindex="-1"></a><span class="kw">graph</span> <span class="bn">dot</span> <span class="fu">y</span>, <span class="bn">over</span>(D) <span class="kw">by</span>(t) vertical</span></code></pre></div>
+<p>Evolución temporal:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb89-1"><a href="poder-estadístico-en-stata.html#cb89-1" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb89-2"><a href="poder-estadístico-en-stata.html#cb89-2" tabindex="-1"></a><span class="kw">collapse</span> <span class="fu">y</span>, <span class="kw">by</span>(t D)</span>
+<span id="cb89-3"><a href="poder-estadístico-en-stata.html#cb89-3" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">line</span> <span class="fu">y</span> t <span class="kw">if</span> D==1) (<span class="kw">line</span> <span class="fu">y</span> t <span class="kw">if</span> D==0), <span class="co">///</span></span>
+<span id="cb89-4"><a href="poder-estadístico-en-stata.html#cb89-4" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>))</span>
+<span id="cb89-5"><a href="poder-estadístico-en-stata.html#cb89-5" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="comparación-de-medias" class="section level2 unnumbered hasAnchor">
+<h2>Comparación de medias<a href="#comparaci%C3%B3n-de-medias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb90"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb90-1"><a href="poder-estadístico-en-stata.html#cb90-1" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 0, <span class="kw">by</span>(D)</span>
+<span id="cb90-2"><a href="poder-estadístico-en-stata.html#cb90-2" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 1, <span class="kw">by</span>(D)</span></code></pre></div>
+<p><strong>Interpretación preliminar:</strong></p>
+<ul>
+<li>Hay una diferencia preexistente entre tratados y controles en el periodo inicial.</li>
+<li>La diferencia aumenta después del tratamiento.</li>
+<li>DID nos permitirá aislar el efecto neto del tratamiento controlando por diferencias iniciales.</li>
+</ul>
+<hr />
+</div>
+<div id="estimador-did-paso-a-paso" class="section level2 unnumbered hasAnchor">
+<h2>Estimador DID paso a paso<a href="poder-estadístico-en-stata.html#estimador-did-paso-a-paso" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Definimos los promedios:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb91-1"><a href="poder-estadístico-en-stata.html#cb91-1" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 0</span>
+<span id="cb91-2"><a href="poder-estadístico-en-stata.html#cb91-2" tabindex="-1"></a><span class="fu">scalar</span> y_c0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb91-3"><a href="poder-estadístico-en-stata.html#cb91-3" tabindex="-1"></a></span>
+<span id="cb91-4"><a href="poder-estadístico-en-stata.html#cb91-4" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 1</span>
+<span id="cb91-5"><a href="poder-estadístico-en-stata.html#cb91-5" tabindex="-1"></a><span class="fu">scalar</span> y_c1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb91-6"><a href="poder-estadístico-en-stata.html#cb91-6" tabindex="-1"></a></span>
+<span id="cb91-7"><a href="poder-estadístico-en-stata.html#cb91-7" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 0</span>
+<span id="cb91-8"><a href="poder-estadístico-en-stata.html#cb91-8" tabindex="-1"></a><span class="fu">scalar</span> y_t0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb91-9"><a href="poder-estadístico-en-stata.html#cb91-9" tabindex="-1"></a></span>
+<span id="cb91-10"><a href="poder-estadístico-en-stata.html#cb91-10" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 1</span>
+<span id="cb91-11"><a href="poder-estadístico-en-stata.html#cb91-11" tabindex="-1"></a><span class="fu">scalar</span> y_t1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span></code></pre></div>
+<p>Cálculo manual del estimador DID:</p>
+<p><span class="math display">\[
+\widehat{DD} = \big( \bar{Y}_{T,1} - \bar{Y}_{T,0}\big) - \big( \bar{Y}_{C,1} - \bar{Y}_{C,0}\big)
+\]</span></p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb92-1"><a href="poder-estadístico-en-stata.html#cb92-1" tabindex="-1"></a><span class="fu">scalar</span> DD = (y_t1 - y_t0) - (y_c1 - y_c0)</span>
+<span id="cb92-2"><a href="poder-estadístico-en-stata.html#cb92-2" tabindex="-1"></a><span class="kw">di</span> DD</span></code></pre></div>
+<hr />
+</div>
+<div id="usando-el-comando-diff" class="section level2 unnumbered hasAnchor">
+<h2>Usando el comando <code>diff</code><a href="poder-estadístico-en-stata.html#usando-el-comando-diff" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb93"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb93-1"><a href="poder-estadístico-en-stata.html#cb93-1" tabindex="-1"></a><span class="kw">ssc</span> inst <span class="fu">diff</span>, <span class="kw">replace</span></span>
+<span id="cb93-2"><a href="poder-estadístico-en-stata.html#cb93-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t)</span></code></pre></div>
+<hr />
+</div>
+<div id="implementación-con-regresiones" class="section level2 unnumbered hasAnchor">
+<h2>Implementación con regresiones<a href="#implementaci%C3%B3n-con-regresiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El modelo DID se puede estimar con una regresión incluyendo interacción entre tratamiento y tiempo:</p>
+<p><span class="math display">\[
+Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon_{it}
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(\delta\)</span> es el estimador DID.</li>
+</ul>
+<p>En Stata:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="poder-estadístico-en-stata.html#cb94-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D##t</span></code></pre></div>
+<p>Comparación con regresión simple:</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="poder-estadístico-en-stata.html#cb95-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D</span></code></pre></div>
+<hr />
+</div>
+<div id="extensión-con-panel" class="section level2 unnumbered hasAnchor">
+<h2>Extensión con panel<a href="#extensi%C3%B3n-con-panel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Definimos datos de panel y usamos notación de diferencias:</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="poder-estadístico-en-stata.html#cb96-1" tabindex="-1"></a>xtset id t</span>
+<span id="cb96-2"><a href="poder-estadístico-en-stata.html#cb96-2" tabindex="-1"></a><span class="kw">reg</span> D.<span class="fu">y</span> D.D</span></code></pre></div>
+<hr />
+</div>
+<div id="interpretación" class="section level2 unnumbered hasAnchor">
+<h2>Interpretación<a href="#interpretaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El coeficiente asociado a la interacción <span class="math inline">\(D \times t\)</span> captura el <strong>efecto causal estimado</strong> bajo el supuesto de <strong>tendencias paralelas</strong>.</p>
+<p>En este caso, el coeficiente fue <strong>0.18</strong> y significativo, lo que indica que la diferencia en talla para la edad entre tratados y controles aumentó en <strong>0.18 desviaciones estándar</strong> después de la aplicación del programa.</p>
+<hr />
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="experimentos-aleatorizados-en-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="malos-controles-teoría.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/08-DID.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["econometria-avanzada.pdf", "econometria-avanzada.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

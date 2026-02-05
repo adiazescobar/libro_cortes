@@ -540,8 +540,8 @@ resultados_df = pd.DataFrame(resultados)
 **Descargar R script**:
 [Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
 
-**Descargar Phyton Notebook**:
-[Descargar Phyton](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
+**Descargar Python Notebook**:
+[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
 

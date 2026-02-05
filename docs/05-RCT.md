@@ -1,4 +1,4 @@
-# ¿Por qué la asignación aleatoria elimina el sesgo?
+# Experimentos Aleatorizados (Teoría)
 
 ::: {.boxinfo}
 **🎯 Objetivo del capítulo**
@@ -133,10 +133,10 @@ Por lo tanto ya no es necesario observar la motivación, ya que la aleatorizaci�
 Y = \alpha + \tau D + u
 \]
 
-- Cual es el valor de \(\alpha\) y \(\tau\) en este caso?
+- ¿Cuál es el valor de \(\alpha\) y \(\tau\) en este caso?
 - ¿Por qué se incluyen controles en el análisis de RCT?
 - ¿Qué pasa si no se incluyen?
-- ¿Calcule los errores estándar? 
+- Calcule los errores estándar 
 
 
 

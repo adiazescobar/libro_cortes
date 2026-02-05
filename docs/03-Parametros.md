@@ -1,4 +1,4 @@
-# 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección
+# Parámetros Causales (Teoría)
 
 ::: {.boxinfo}
 ## 🎯 Metas de aprendizaje {-}

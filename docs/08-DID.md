@@ -1,4 +1,4 @@
-# Difference-in-Differences (DID)
+# Diferencias en Diferencias (Teoría)
 
 ::: {.boxinfo}
 **🎯 Objetivos de la clase**

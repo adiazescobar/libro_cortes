@@ -22,8 +22,8 @@ Como explican Angrist y Pischke en su libro *Mostly Harmless Econometrics*:
 
 ## Motivación para el análisis causal - ¿Por qué es importante? {-}
 
-¿Cómo lo entendemos? Sin duda, la identficación de relaciones causales es fundamental para entender cómo funcionan las cosas. 
-Enteder la consecuencia de una acción es crucial para entender el mundo que nos rodea. 
+¿Cómo lo entendemos? Sin duda, la identificación de relaciones causales es fundamental para entender cómo funcionan las cosas.
+Entender la consecuencia de una acción es crucial para entender el mundo que nos rodea. 
 
 Aquí es donde la teoría económica juega un papel central: nos proporciona un marco para interpretar esas relaciones causales, al tiempo que orienta nuestra atención hacia posibles mecanismos. Hacer econometría sin una teoría económica sólida, sin una teoría del cambio ni un esfuerzo por establecer mecanismos, es simplemente machacar datos. 
 
@@ -61,10 +61,11 @@ Estimular la retroalimentación entre teoría, datos y política.
 Uno de los programas más influyentes y mejor evaluados en América Latina es Progresa, posteriormente conocido como Oportunidades y luego Prospera. Lanzado en México en 1997, su diseño se basó en evidencia empírica y principios de incentivos económicos.
 
 #### 🎯 Objetivo
-Reducir la pobreza y mejorar el capital humano de los hogares más vulnerables, especialmente en áreas rurales. Para eso se bridó a los hogares pobres
--un ingreso monetario de corto plazo
--incentivos para invertir en capital humano, especialmente en la educación y salud infantil.
--Mecanismo_ Las transferencias estaban condicionadas a la asistencia escolar de los niños y a visitas regulares a centros de salud.
+Reducir la pobreza y mejorar el capital humano de los hogares más vulnerables, especialmente en áreas rurales. Para eso se brindó a los hogares pobres:
+
+- Un ingreso monetario de corto plazo
+- Incentivos para invertir en capital humano, especialmente en la educación y salud infantil
+- **Mecanismo:** Las transferencias estaban condicionadas a la asistencia escolar de los niños y a visitas regulares a centros de salud
 
 #### Resultados iniciales (2001) {-}
 

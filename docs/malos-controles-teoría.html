@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 5 ¿Por qué la asignación aleatoria elimina el sesgo? | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 5 ¿Por qué la asignación aleatoria elimina el sesgo? | Cortes Transversales" />
+  <title>Capitulo 8 Malos Controles (Teoría) | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 8 Malos Controles (Teoría) | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 5 ¿Por qué la asignación aleatoria elimina el sesgo? | Cortes Transversales" />
+  <meta property="og:title" content="Capitulo 8 Malos Controles (Teoría) | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 5 ¿Por qué la asignación aleatoria elimina el sesgo? | Cortes Transversales" />
+  <meta name="twitter:title" content="Capitulo 8 Malos Controles (Teoría) | Cortes Transversales" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="estimadores-causales-en-secciones-transversales.html"/>
-<link rel="next" href="experimentos-controlados-receta.html"/>
+<link rel="prev" href="poder-estadístico-en-stata.html"/>
+<link rel="next" href="malos-controles-en-stata.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -167,7 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#consejos-para-el-curso"><i class="fa fa-check"></i>Consejos para el Curso</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="05-RCT.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
+<li class="chapter" data-level="1" data-path="09-BadControls.html"><a href="#an%C3%A1lisis-de-secciones-transversales"><i class="fa fa-check"></i><b>1</b> Análisis de Secciones Transversales</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
@@ -197,7 +197,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.0.2" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#ceteris-paribus-perfecto"><i class="fa fa-check"></i><b>1.0.2</b> <strong>Ceteris Paribus: ¿Perfecto?</strong></a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="análisis-de-secciones-transversales.html"><a href="análisis-de-secciones-transversales.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
-<li class="chapter" data-level="1.1" data-path="05-RCT.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="1.1" data-path="09-BadControls.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
@@ -256,58 +256,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
 <li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="05-RCT.html"><a href="#definici%C3%B3n-de-estimadores-resultados-potenciales-e-introducci%C3%B3n-al-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>3</b> 📘 Definición de estimadores, resultados potenciales e introducción al sesgo de selección</a>
+<li class="chapter" data-level="3" data-path="09-BadControls.html"><a href="#par%C3%A1metros-causales-teor%C3%ADa"><i class="fa fa-check"></i><b>3</b> Parámetros Causales (Teoría)</a>
 <ul>
-<li class="chapter" data-level="" data-path="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><i class="fa fa-check"></i>🔹 Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path="parámetros-causales-teoría.html"><a href="parámetros-causales-teoría.html"><i class="fa fa-check"></i>🔹 Resultados potenciales</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>🔹 Parámetros de interés</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>🔹 ¿Por qué no es suficiente el estimador naïve?</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>🔹 Sesgo de selección</a></li>
-<li class="chapter" data-level="" data-path="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html#el-supuesto-de-independencia-o-ignorabilidad"><i class="fa fa-check"></i>🔹 El supuesto de independencia (o ignorabilidad)</a></li>
+<li class="chapter" data-level="" data-path="parámetros-causales-teoría.html"><a href="parámetros-causales-teoría.html#el-supuesto-de-independencia-o-ignorabilidad"><i class="fa fa-check"></i>🔹 El supuesto de independencia (o ignorabilidad)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>🔹 Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
-<li class="chapter" data-level="" data-path="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html"><a href="definición-de-estimadores-resultados-potenciales-e-introducción-al-sesgo-de-selección.html#sutva-supuesto-de-valor-estable-del-tratamiento-unitario"><i class="fa fa-check"></i>🔹 SUTVA: Supuesto de Valor Estable del Tratamiento Unitario</a></li>
+<li class="chapter" data-level="" data-path="parámetros-causales-teoría.html"><a href="parámetros-causales-teoría.html#sutva-supuesto-de-valor-estable-del-tratamiento-unitario"><i class="fa fa-check"></i>🔹 SUTVA: Supuesto de Valor Estable del Tratamiento Unitario</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html"><i class="fa fa-check"></i><b>4</b> Estimadores Causales en Secciones Transversales</a>
+<li class="chapter" data-level="4" data-path="09-BadControls.html"><a href="#par%C3%A1metros-causales-en-stata"><i class="fa fa-check"></i><b>4</b> Parámetros Causales en Stata</a>
 <ul>
-<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
-<li class="chapter" data-level="" data-path="estimadores-causales-en-secciones-transversales.html"><a href="estimadores-causales-en-secciones-transversales.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+<li class="chapter" data-level="" data-path="parámetros-causales-en-stata.html"><a href="parámetros-causales-en-stata.html"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="parámetros-causales-en-stata.html"><a href="parámetros-causales-en-stata.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="05-RCT.html"><a href="#por-qu%C3%A9-la-asignaci%C3%B3n-aleatoria-elimina-el-sesgo"><i class="fa fa-check"></i><b>5</b> ¿Por qué la asignación aleatoria elimina el sesgo?</a>
+<li class="chapter" data-level="5" data-path="09-BadControls.html"><a href="#experimentos-aleatorizados-teor%C3%ADa"><i class="fa fa-check"></i><b>5</b> Experimentos Aleatorizados (Teoría)</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>¿Qué hace la aleatorización?</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#densidad-de-la-motivaci%C3%B3n-por-grupo"><i class="fa fa-check"></i>Densidad de la motivación por grupo</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html"><i class="fa fa-check"></i><b>6</b> Experimentos Controlados RECETA</a>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html"><i class="fa fa-check"></i><b>6</b> Experimentos Aleatorizados en Stata</a>
 <ul>
-<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#paso-1-dise%C3%B1ar-el-experimento"><i class="fa fa-check"></i>PASO 1) Diseñar el experimento</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#paso-2-aleatorizar-la-asignaci%C3%B3n-stata"><i class="fa fa-check"></i>Paso 2) Aleatorizar la asignación (Stata)</a></li>
-<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-3-verificar-el-balance-de-covariables"><i class="fa fa-check"></i>PASO 3) Verificar el balance de covariables</a></li>
-<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#paso-4-estimar-el-efecto-del-tratamiento"><i class="fa fa-check"></i>PASO 4) Estimar el efecto del tratamiento</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-3-verificar-el-balance-de-covariables"><i class="fa fa-check"></i>PASO 3) Verificar el balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-4-estimar-el-efecto-del-tratamiento"><i class="fa fa-check"></i>PASO 4) Estimar el efecto del tratamiento</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes"><i class="fa fa-check"></i>Asignación a nivel individual (dos muestras independientes)</a></li>
-<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#pruebas"><i class="fa fa-check"></i>Pruebas</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#pruebas"><i class="fa fa-check"></i>Pruebas</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
-<li class="chapter" data-level="" data-path="experimentos-controlados-receta.html"><a href="experimentos-controlados-receta.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="05-RCT.html"><a href="#c%C3%A1lculos-de-poder-estad%C3%ADstico-en-stata"><i class="fa fa-check"></i><b>7</b> Cálculos de Poder Estadístico en Stata</a>
+<li class="chapter" data-level="7" data-path="09-BadControls.html"><a href="#poder-estad%C3%ADstico-en-stata"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
-<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html"><i class="fa fa-check"></i>Sin controles</a>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html"><i class="fa fa-check"></i>Sin controles</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado"><i class="fa fa-check"></i>Tamaño de muestra para un efecto dado</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#efecto-m%C3%ADnimo-detectable-mde-para-un-n-dado"><i class="fa fa-check"></i>Efecto mínimo detectable (MDE) para un N dado</a></li>
-<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#mde-para-un-n-dado-con-variable-binaria"><i class="fa fa-check"></i>MDE para un N dado con variable binaria</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#mde-para-un-n-dado-con-variable-binaria"><i class="fa fa-check"></i>MDE para un N dado con variable binaria</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-para-un-efecto-dado-con-covariables"><i class="fa fa-check"></i>Tamaño de muestra para un efecto dado con covariables</a></li>
-<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#mde-para-un-n-dado-con-covariables"><i class="fa fa-check"></i>MDE para un N dado con covariables</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#mde-para-un-n-dado-con-covariables"><i class="fa fa-check"></i>MDE para un N dado con covariables</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a>
@@ -318,29 +318,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path=""><a href="#estad%C3%ADsticas-descriptivas"><i class="fa fa-check"></i>Estadísticas descriptivas</a>
 <ul>
-<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#promedios-por-periodo-y-grupo"><i class="fa fa-check"></i>Promedios por periodo y grupo</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#promedios-por-periodo-y-grupo"><i class="fa fa-check"></i>Promedios por periodo y grupo</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-medias"><i class="fa fa-check"></i>Comparación de medias</a></li>
-<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#estimador-did-paso-a-paso"><i class="fa fa-check"></i>Estimador DID paso a paso</a></li>
-<li class="chapter" data-level="" data-path="cálculos-de-poder-estadístico-en-stata.html"><a href="cálculos-de-poder-estadístico-en-stata.html#usando-el-comando-diff"><i class="fa fa-check"></i>Usando el comando <code>diff</code></a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#estimador-did-paso-a-paso"><i class="fa fa-check"></i>Estimador DID paso a paso</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#usando-el-comando-diff"><i class="fa fa-check"></i>Usando el comando <code>diff</code></a></li>
 <li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-con-regresiones"><i class="fa fa-check"></i>Implementación con regresiones</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#extensi%C3%B3n-con-panel"><i class="fa fa-check"></i>Extensión con panel</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n"><i class="fa fa-check"></i>Interpretación</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html"><i class="fa fa-check"></i><b>8</b> Test de Tendencias Paralelas y Malos Controles</a>
+<li class="chapter" data-level="8" data-path="09-BadControls.html"><a href="#malos-controles-teor%C3%ADa"><i class="fa fa-check"></i><b>8</b> Malos Controles (Teoría)</a>
 <ul>
-<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
-<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
-<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
-<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a>
 <ul>
-<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#buenos-controles"><i class="fa fa-check"></i>Buenos controles</a></li>
-<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#malos-controles"><i class="fa fa-check"></i>Malos controles</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#buenos-controles"><i class="fa fa-check"></i>Buenos controles</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#malos-controles"><i class="fa fa-check"></i>Malos controles</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#implicaciones-pr%C3%A1cticas"><i class="fa fa-check"></i>Implicaciones prácticas</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Agrupación</a></li>
-<li class="chapter" data-level="" data-path="test-de-tendencias-paralelas-y-malos-controles.html"><a href="test-de-tendencias-paralelas-y-malos-controles.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html"><i class="fa fa-check"></i><b>9</b> Malos Controles en Stata</a>
 <ul>
@@ -363,13 +363,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="problemas-de-twfe-y-alternativas-modernas-en-did.html"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html"><i class="fa fa-check"></i><b>10</b> Problemas de TWFE y alternativas modernas en DiD</a>
+<li class="chapter" data-level="10" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html"><i class="fa fa-check"></i><b>10</b> TWFE y DiD Moderno en Stata</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido"><i class="fa fa-check"></i>Contexto rápido</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#modelo-b%C3%A1sico-22-did"><i class="fa fa-check"></i>Modelo básico 2×2 DiD</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#explicaci%C3%B3n-did%C3%A1ctica"><i class="fa fa-check"></i>Explicación didáctica</a></li>
-<li class="chapter" data-level="10.0.1" data-path="05-RCT.html"><a href="#c%C3%B3digo-copiarpegar"><i class="fa fa-check"></i><b>10.0.1</b> Código (copiar/pegar)</a></li>
+<li class="chapter" data-level="10.0.1" data-path="09-BadControls.html"><a href="#c%C3%B3digo-copiarpegar"><i class="fa fa-check"></i><b>10.0.1</b> Código (copiar/pegar)</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-2-unidades-y-tratamiento-desde-un-a%C3%B1o-en-adelante"><i class="fa fa-check"></i>Panel largo con 2 unidades y tratamiento “desde un año en adelante”</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a>
@@ -378,12 +378,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#b-versi%C3%B3n-con-y-id-t-efecto_heterog%C3%A9neo"><i class="fa fa-check"></i>3B) Versión con <code>Y = id + t + efecto_heterogéneo</code></a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
-<li class="chapter" data-level="" data-path="problemas-de-twfe-y-alternativas-modernas-en-did.html"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
-<li class="chapter" data-level="" data-path="problemas-de-twfe-y-alternativas-modernas-en-did.html"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a>
 <ul>
-<li class="chapter" data-level="10.0.2" data-path="problemas-de-twfe-y-alternativas-modernas-en-did.html"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte"><i class="fa fa-check"></i><b>10.0.2</b> Caso 3 (tu ejemplo con tres unidades, mismo inicio y efecto por cohorte)</a></li>
+<li class="chapter" data-level="10.0.2" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte"><i class="fa fa-check"></i><b>10.0.2</b> Caso 3 (tu ejemplo con tres unidades, mismo inicio y efecto por cohorte)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#caso-con-adopci%C3%B3n-escalonada-y-efectos-din%C3%A1micos"><i class="fa fa-check"></i>Caso con <strong>adopción escalonada</strong> y <strong>efectos dinámicos</strong></a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
@@ -399,8 +399,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#explicaci%C3%B3n-did%C3%A1ctica-1"><i class="fa fa-check"></i>Explicación didáctica</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="problemas-de-twfe-y-alternativas-modernas-en-did.html"><a href="problemas-de-twfe-y-alternativas-modernas-en-did.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
-<li class="chapter" data-level="10.1" data-path="05-RCT.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>10.1</b> 8) Notas prácticas de ejecución</a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="10.1" data-path="09-BadControls.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>10.1</b> 8) Notas prácticas de ejecución</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -422,196 +422,178 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="por-qué-la-asignación-aleatoria-elimina-el-sesgo" class="section level1 hasAnchor" number="5">
-<h1><span class="header-section-number">Capitulo 5</span> ¿Por qué la asignación aleatoria elimina el sesgo?<a href="#por-qu%C3%A9-la-asignaci%C3%B3n-aleatoria-elimina-el-sesgo" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="malos-controles-teoría" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Capitulo 8</span> Malos Controles (Teoría)<a href="#malos-controles-teor%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="boxinfo">
-<p><strong>🎯 Objetivo del capítulo</strong></p>
+<p><strong>🎯 Metas de aprendizaje</strong></p>
 <ul>
-<li>✔️ Entender qué se debe cumplir para que un experimento sea exitoso y reduzca el sesgo de selección<br />
+<li>Comprender el <strong>supuesto de tendencias paralelas</strong> en Diferencias en Diferencias (DID).<br />
 </li>
-<li>✔️ Conocer las diferentes formas de realizar asignación aleatoria<br />
+<li>Entender la diferencia entre <strong>buenos y malos controles</strong>.<br />
 </li>
-<li>✔️ Traducir los resultados potenciales a una regresión lineal</li>
-</ul>
-<div id="lecturas" class="section level3 unnumbered hasAnchor">
-<h3>📚 Lecturas<a href="por-qué-la-asignación-aleatoria-elimina-el-sesgo.html#lecturas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li>📄 <strong>Paper Alert:</strong> <a href="https://www.nber.org/papers/w24003">When Should You Adjust Standard Errors for Clustering? (NBER)</a></li>
-<li>📄 <strong>Teoría:</strong> <a href="https://www.dropbox.com/s/vxpgxt22pvphwx3/Capitulo%204%20Bernal%20y%20Pe%C3%B1a.pdf?dl=0">Lectura 4. Capítulo 4 Bernal y Peña (PDF)</a></li>
+<li>Relacionar los <strong>resultados potenciales</strong> con la validez de las estimaciones.<br />
+</li>
+<li>Analizar las implicaciones de usar (o no usar) controles en una regresión.<br />
+</li>
 </ul>
 </div>
+<div id="el-supuesto-de-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
+<h2>El supuesto de Tendencias Paralelas<a href="malos-controles-teoría.html#el-supuesto-de-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El corazón de la estrategia de <strong>Diferencias en Diferencias (DID)</strong> es el supuesto de que, en ausencia del tratamiento, la evolución de los grupos tratados y de control habría sido <strong>paralela</strong> en el tiempo.</p>
+<p><span class="math display">\[
+Y_{it} = \alpha + \beta D_i + \delta T_t + \gamma (D_i \times T_t) + \varepsilon_{it}
+\]</span></p>
+<p>donde:<br />
+- <span class="math inline">\(D_i\)</span>: indicador de tratamiento,<br />
+- <span class="math inline">\(T_t\)</span>: indicador de post-tratamiento,<br />
+- <span class="math inline">\(\gamma\)</span>: estimador DID.</p>
+<p>El supuesto clave es:</p>
+<p><span class="math display">\[
+E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=1] = E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=0]
+\]</span></p>
+<p>Si esto se cumple, la estimación DID es <strong>insesgada</strong>.</p>
 </div>
-<p>Tenemos el siguiente modelo de regresión lineal:</p>
-<p><span class="math display">\[
-Y = \alpha + \tau D + \varepsilon
-\]</span></p>
-<p>Donde:</p>
+<div id="resultados-potenciales-2" class="section level2 unnumbered hasAnchor">
+<h2>Resultados Potenciales<a href="malos-controles-teoría.html#resultados-potenciales-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recordemos la notación:</p>
 <ul>
-<li><span class="math inline">\(Y\)</span> es el resultado (por ejemplo, salario),</li>
-<li><span class="math inline">\(D\)</span> es una variable binaria de tratamiento,</li>
-<li><span class="math inline">\(\varepsilon\)</span> incluye <strong>motivación</strong>, que no observamos.</li>
+<li><span class="math inline">\(Y_i(1)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> si recibe tratamiento.<br />
+</li>
+<li><span class="math inline">\(Y_i(0)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> si no recibe tratamiento.</li>
 </ul>
-<p>Supongamos que la verdadera relación es:</p>
+<p>El <strong>ATE</strong> se define como:</p>
 <p><span class="math display">\[
-Y = \alpha + \tau D + \gamma M + u
+ATE = E[Y_i(1) - Y_i(0)]
 \]</span></p>
-<p>Donde:</p>
+<p>En DID, el estimador busca identificar justamente esa diferencia, bajo el supuesto de tendencias paralelas.</p>
+</div>
+<div id="primeras-diferencias-y-did" class="section level2 unnumbered hasAnchor">
+<h2>Primeras Diferencias y DID<a href="malos-controles-teoría.html#primeras-diferencias-y-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En primeras diferencias:</p>
+<p><span class="math display">\[
+\Delta Y_i = Y_{i,t=1} - Y_{i,t=0}
+\]</span></p>
+<p>y en DID:</p>
+<p><span class="math display">\[
+DID = \big( E[\Delta Y_i \mid D=1] - E[\Delta Y_i \mid D=0] \big)
+\]</span></p>
+</div>
+<div id="controles-en-did" class="section level2 unnumbered hasAnchor">
+<h2>Controles en DID<a href="malos-controles-teoría.html#controles-en-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="buenos-controles" class="section level3 unnumbered hasAnchor">
+<h3>Buenos controles<a href="malos-controles-teoría.html#buenos-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li><span class="math inline">\(M\)</span> es motivación (no observable),</li>
-<li><span class="math inline">\(u\)</span> es un nuevo error sin correlación con <span class="math inline">\(D\)</span>,</li>
-<li>Pero <strong>no incluimos</strong> <span class="math inline">\(M\)</span> en la estimación → queda absorbido en <span class="math inline">\(\varepsilon = \gamma M + u\)</span></li>
-</ul>
-<p>El modelo estimado es:</p>
-<p><span class="math display">\[
-Y = \alpha + \tau D + \varepsilon \quad \text{con} \quad \varepsilon = \gamma M + u
-\]</span></p>
-<p>Recordemos que el estimador de mínimos cuadrados ordinarios es:</p>
-<p><span class="math display">\[
-\hat{\beta} = (X&#39;X)^{-1} X&#39;Y
-\]</span></p>
-<p>Con <span class="math inline">\(X = [\mathbf{1}, D]\)</span>, tenemos:</p>
-<p><span class="math display">\[
-\hat{\beta} =
-\begin{bmatrix}
-\hat{\alpha} \\
-\hat{\tau}
-\end{bmatrix}
-=
-\left( \begin{bmatrix}
-1 &amp; D_1 \\
-\vdots &amp; \vdots \\
-1 &amp; D_n \\
-\end{bmatrix}&#39;
-\begin{bmatrix}
-1 &amp; D_1 \\
-\vdots &amp; \vdots \\
-1 &amp; D_n \\
-\end{bmatrix} \right)^{-1}
-\begin{bmatrix}
-1 &amp; D_1 \\
-\vdots &amp; \vdots \\
-1 &amp; D_n \\
-\end{bmatrix}&#39; Y
-\]</span></p>
-<p>Queremos analizar el <strong>sesgo</strong> en <span class="math inline">\(\hat{\tau}\)</span>. Sustituyendo <span class="math inline">\(Y = \alpha + \tau D + \gamma M + u\)</span></p>
-<p>Entonces:</p>
-<p><span class="math display">\[
-\hat{\tau} = \tau + \gamma \cdot \frac{\text{Cov}(D, M)}{\text{Var}(D)}
-\]</span></p>
-<p>Interpretación</p>
+<li>Características <strong>predeterminadas</strong>, no afectadas por el tratamiento.<br />
+</li>
+<li>Ejemplo: educación, experiencia laboral previa, género, edad.<br />
+</li>
+<li>Se pueden incluir para:
 <ul>
-<li>Si <span class="math inline">\(\text{Cov}(D, M) \neq 0\)</span>, es decir, <strong>si el tratamiento está correlacionado con la motivación</strong>, el estimador de <span class="math inline">\(\tau\)</span> estará <strong>sesgado</strong>.</li>
-<li>El sesgo es proporcional a:
-<ul>
-<li>El efecto de la motivación sobre <span class="math inline">\(Y\)</span>: <span class="math inline">\(\gamma\)</span></li>
-<li>La correlación entre <span class="math inline">\(D\)</span> y <span class="math inline">\(M\)</span>: <span class="math inline">\(\text{Cov}(D, M)\)</span></li>
+<li>Mejorar la <strong>precisión</strong> de la estimación.<br />
+</li>
+<li>Aumentar la potencia estadística.<br />
+</li>
+<li>Reducir varianza residual.</li>
 </ul></li>
 </ul>
-<p><strong>Resumen del sesgo</strong></p>
-<div class="table table-bordered table-striped">
-<table style="width:100%;">
-<colgroup>
-<col width="23%" />
-<col width="31%" />
-<col width="21%" />
-<col width="23%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">Correlación entre <span class="math inline">\(D\)</span> y <span class="math inline">\(M\)</span></th>
-<th align="center">Efecto de <span class="math inline">\(M\)</span> sobre <span class="math inline">\(Y\)</span> (<span class="math inline">\(\gamma\)</span>)</th>
-<th align="center">¿Hay sesgo en <span class="math inline">\(\hat{\tau}\)</span>?</th>
-<th align="center">Dirección esperada del sesgo</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">Cero</td>
-<td align="center">Cualquiera</td>
-<td align="center">❌ No</td>
-<td align="center">–</td>
-</tr>
-<tr class="even">
-<td align="center">Positiva</td>
-<td align="center">Positiva</td>
-<td align="center">✅ Sí</td>
-<td align="center"><span class="math inline">\(\hat{\tau} &gt; \tau\)</span> (sesgo hacia arriba)</td>
-</tr>
-<tr class="odd">
-<td align="center">Positiva</td>
-<td align="center">Negativa</td>
-<td align="center">✅ Sí</td>
-<td align="center"><span class="math inline">\(\hat{\tau} &lt; \tau\)</span> (sesgo hacia abajo)</td>
-</tr>
-<tr class="even">
-<td align="center">Negativa</td>
-<td align="center">Positiva</td>
-<td align="center">✅ Sí</td>
-<td align="center"><span class="math inline">\(\hat{\tau} &lt; \tau\)</span> (sesgo hacia abajo)</td>
-</tr>
-<tr class="odd">
-<td align="center">Negativa</td>
-<td align="center">Negativa</td>
-<td align="center">✅ Sí</td>
-<td align="center"><span class="math inline">\(\hat{\tau} &gt; \tau\)</span> (sesgo hacia arriba)</td>
-</tr>
-</tbody>
-</table>
+<div class="boxcerebro">
+<p><strong>Definición formal:</strong><br />
+Un <strong>buen control</strong> es toda característica observable que <strong>no cambia como consecuencia del tratamiento</strong>.<br />
+Son variables predeterminadas que ayudan a explicar el resultado pero no están mediadas por el programa.</p>
 </div>
-<p><strong>Lectura de la tabla</strong>:</p>
+<p><strong>Ejemplo informal:</strong><br />
+Si evaluamos el efecto de un programa de formación laboral:<br />
+- <strong>Buen control</strong>: nivel educativo alcanzado antes del programa.<br />
+- <strong>Buen control</strong>: años de experiencia previa.</p>
+</div>
+<div id="malos-controles" class="section level3 unnumbered hasAnchor">
+<h3>Malos controles<a href="malos-controles-teoría.html#malos-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>Si el tratamiento está <strong>correlacionado positivamente</strong> con la motivación y la motivación <strong>aumenta</strong> el resultado, el estimador de <span class="math inline">\(\tau\)</span> estará <strong>sesgado hacia arriba</strong>.</li>
-<li>Si la motivación está <strong>omitida</strong> y además está <strong>correlacionada con el tratamiento</strong>, siempre hay <strong>sesgo</strong>.</li>
-<li>Solo si la <strong>motivación no está correlacionada con el tratamiento</strong>, aunque no la observemos, <strong>no hay sesgo</strong>.</li>
+<li>Variables que <strong>sí son afectadas por el tratamiento</strong> (variables de resultado o mediadoras).</li>
+<li>Incluirlas rompe la interpretación causal porque introducen <strong>endogeneidad</strong>.<br />
+</li>
+<li>Al condicionar en una variable que está “en el camino causal”, se elimina parte del efecto verdadero.</li>
 </ul>
-<div id="qué-hace-la-aleatorización" class="section level2 unnumbered hasAnchor">
-<h2>¿Qué hace la aleatorización?<a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>📌 La <strong>aleatorización</strong> garantiza <span class="math inline">\(\text{Cov}(D, M) = 0\)</span>, eliminando el sesgo de selección sin necesidad de observar <span class="math inline">\(M\)</span>.</p>
-<p><em>Visualización: motivación, selección y aleatorización</em></p>
-<p><img src="05-RCT_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<div class="boxcerebro">
+<p><strong>Definición formal:</strong><br />
+Un <strong>mal control</strong> es toda variable que se encuentra <strong>dentro del mecanismo causal</strong> que conecta el tratamiento con el resultado.<br />
+Condicionar en ella genera <strong>sesgo de post-tratamiento</strong>.</p>
+</div>
+<p><strong>Ejemplo informal:</strong><br />
+Siguiendo el programa de formación laboral:<br />
+- <strong>Mal control</strong>: salario después de haber recibido la capacitación.<br />
+- <strong>Mal control</strong>: horas trabajadas después del programa.<br />
+- <strong>Mal control</strong>: sector de empleo obtenido gracias al programa.</p>
+<p>👉 Todas estas variables son consecuencias (directas o indirectas) del tratamiento. Si las incluimos como controles, estamos <strong>borrando</strong> parte del impacto que queremos medir.</p>
 <hr />
 </div>
-<div id="densidad-de-la-motivación-por-grupo" class="section level2 unnumbered hasAnchor">
-<h2>Densidad de la motivación por grupo<a href="#densidad-de-la-motivaci%C3%B3n-por-grupo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><img src="05-RCT_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<p>Por lo tanto ya no es necesario observar la motivación, ya que la aleatorización garantiza que los grupos sean comparables. Y la estimación de <span class="math inline">\(\tau\)</span> será insesgada y consistente en la siguiente regresión:</p>
+<div id="implicaciones-prácticas" class="section level3 unnumbered hasAnchor">
+<h3>Implicaciones prácticas<a href="#implicaciones-pr%C3%A1cticas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Con buenos controles</strong>:
+<ul>
+<li>El coeficiente del DID mantiene <strong>interpretación causal</strong>.<br />
+</li>
+<li>Mejora la precisión de la estimación.</li>
+</ul></li>
+<li><strong>Con malos controles</strong>:
+<ul>
+<li>El estimador se <strong>vuelve inconsistente</strong>.<br />
+</li>
+<li>Perdemos la interpretación causal → ya no estamos midiendo el efecto del programa, sino algo condicionado en una consecuencia del mismo.</li>
+</ul></li>
+</ul>
+<p>En palabras simples:<br />
+&gt; “Un buen control aclara la foto, un mal control la distorsiona”.</p>
+</div>
+</div>
+<div id="supuestos-y-consistencia" class="section level2 unnumbered hasAnchor">
+<h2>Supuestos y Consistencia<a href="malos-controles-teoría.html#supuestos-y-consistencia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El estimador DID será insesgado si:</p>
 <p><span class="math display">\[
-Y = \alpha + \tau D + u
+E[Y_{i}(0) \mid D=1, t=1] - E[Y_{i}(0) \mid D=1, t=0] = E[Y_{i}(0) \mid D=0, t=1] - E[Y_{i}(0) \mid D=0, t=0]
 \]</span></p>
 <ul>
-<li>Cual es el valor de <span class="math inline">\(\alpha\)</span> y <span class="math inline">\(\tau\)</span> en este caso?</li>
-<li>¿Por qué se incluyen controles en el análisis de RCT?</li>
-<li>¿Qué pasa si no se incluyen?</li>
-<li>¿Calcule los errores estándar?</li>
-</ul>
-<div class="boxvideo green" title="🎥 Videos recomendados:">
-<ul>
-<li><a href="https://www.youtube.com/embed/eGRd8jBdNYg">Video 1</a><br />
+<li>Si los grupos no siguen tendencias paralelas → <strong>sesgo</strong>.<br />
 </li>
-<li><a href="https://www.youtube.com/embed/crpuBZv6XtA">Video 2</a><br />
+<li>Si incluimos malos controles → <strong>sesgo adicional</strong>.<br />
 </li>
-<li><a href="https://www.youtube.com/embed/xlX3VtuIfQ0">Video 3</a></li>
+<li>Con buenos controles → <strong>más precisión</strong>, pero no cambia la interpretación causal.</li>
 </ul>
-<p>Y todos los que encuentres en Google buscando: <strong>RCT Esther Duflo</strong></p>
-</div>
-<div class="boxnote">
-<p>🛠️ 💬 <strong>PROMPT DE CHATGPT PARA REFLEXIÓN PROFUNDA</strong></p>
-<p><strong>Instrucciones</strong>: Copia este mensaje en ChatGPT o la IA de tu preferencia. Tu objetivo no es obtener respuestas, sino <strong>reflexionar guiado por preguntas</strong>.</p>
 <hr />
-<p>Hola. Actúa como mi tutor metodológico. No quiero que me des respuestas. Quiero que me ayudes a pensar como si estuviéramos en una tutoría.</p>
-<p>Estoy estudiando diseños experimentales. Entiendo que si el tratamiento se asigna aleatoriamente, entonces <span class="math inline">\(\text{Cov}(D, X) = 0\)</span>, incluso para variables no observables.</p>
-<p>Pero sigo viendo que en muchos papers experimentales incluyen <strong>controles en la regresión</strong>. Ayúdame a pensar <strong>paso a paso</strong> si eso es necesario o no.</p>
-<p>Por favor, hazme preguntas como:</p>
-<ul>
-<li>¿Qué gana o pierde la estimación si incluyo controles?</li>
-<li>¿Qué pasa si hay desequilibrios por azar?</li>
-<li>¿Qué efecto tiene sobre la precisión del estimador?</li>
-<li>¿Los controles ayudan a mejorar algo aunque <span class="math inline">\(\hat{\tau}\)</span> ya sea insesgado?</li>
-<li>¿Hay casos en que incluir controles puede ser problemático?</li>
-</ul>
-<p>⚠️ No me des respuestas. Solo nuevas preguntas que me ayuden a entender mejor este punto.</p>
 </div>
+<div id="sesgo-de-agrupación" class="section level2 unnumbered hasAnchor">
+<h2>Sesgo de Agrupación<a href="#sesgo-de-agrupaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Otro problema común es el <strong>sesgo de agrupación</strong>, que ocurre cuando:<br />
+- Se promedian resultados sin respetar la estructura de tratamiento y control.<br />
+- Se incluyen controles endógenos que re-agrupan la variación.</p>
+<p>La moraleja es:<br />
+👉 Siempre analizar qué variables se incluyen y si cumplen el criterio de ser predeterminadas.</p>
 <hr />
+</div>
+<div id="moraleja-final" class="section level2 unnumbered hasAnchor">
+<h2>Moraleja Final<a href="malos-controles-teoría.html#moraleja-final" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>El supuesto de tendencias paralelas es <strong>fundamental</strong>.<br />
+</li>
+<li>Los buenos controles ayudan; los malos controles dañan.<br />
+</li>
+<li>DID se entiende mejor desde los <strong>resultados potenciales</strong>.<br />
+</li>
+<li>La interpretación causal depende estrictamente de los <strong>supuestos</strong>.</li>
+</ol>
+<hr />
+<div class="boxejercicio">
+<p><strong>✍️ Ejercicio para reflexionar</strong></p>
+<ol style="list-style-type: decimal">
+<li>Da un ejemplo de <strong>buen control</strong> y de <strong>mal control</strong> en la evaluación de un programa de transferencias condicionadas.<br />
+</li>
+<li>¿Por qué incluir el nivel de ingreso post-programa sería un mal control en DID?<br />
+</li>
+<li>¿Cómo verificarías gráficamente el supuesto de tendencias paralelas antes de correr la regresión?<br />
+</li>
+</ol>
+</div>
 
 </div>
 </div>
@@ -620,8 +602,8 @@ Y = \alpha + \tau D + u
           </div>
         </div>
       </div>
-<a href="estimadores-causales-en-secciones-transversales.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="experimentos-controlados-receta.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="poder-estadístico-en-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="malos-controles-en-stata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -652,7 +634,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/05-RCT.Rmd",
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/09-BadControls.Rmd",
     "text": "Edit"
   },
   "history": {

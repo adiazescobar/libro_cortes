@@ -1,4 +1,4 @@
-# Test de Tendencias Paralelas y Malos Controles
+# Malos Controles (Teoría)
 
 ::: {.boxinfo}
 **🎯 Metas de aprendizaje**
@@ -87,8 +87,8 @@ Si evaluamos el efecto de un programa de formación laboral:
 
 
 
-### Malos controles  {-} 
-- Variables que **sí pueden variables de resultados**.  
+### Malos controles  {-}
+- Variables que **sí son afectadas por el tratamiento** (variables de resultado o mediadoras).
 - Incluirlas rompe la interpretación causal porque introducen **endogeneidad**.  
 - Al condicionar en una variable que está “en el camino causal”, se elimina parte del efecto verdadero.  
 

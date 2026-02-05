@@ -1,4 +1,4 @@
-# Estimadores Causales en Secciones Transversales 
+# Parámetros Causales en Stata 
 
 ::: {.boxinfo}
 ## 📚 Lecturas obligatorias{-}

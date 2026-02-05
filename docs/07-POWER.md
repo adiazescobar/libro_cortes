@@ -1,5 +1,5 @@
 
-# Cálculos de Poder Estadístico en Stata
+# Poder Estadístico en Stata
 
 
 
