@@ -98,59 +98,79 @@ estimadores tau y D
 * Experimento 3: Simulación Monte Carlo
 * ==================================================
 
+* ¿Por qué eliminamos el D original en cada simulación?
+* Si NO eliminamos el D original, todas las 1000 simulaciones usarían
+* exactamente la misma asignación de tratamiento y darían el mismo resultado.
+* El Monte Carlo no tendría sentido.
+*
+* Lo que queremos es simular "¿qué pasaría si repetimos el estudio 1000 veces?":
+* - En cada simulación mantenemos los mismos resultados potenciales (yd0, yd1)
+* - Pero re-asignamos el tratamiento de forma diferente
+
 * --------------------------
 * Escenario 1: Con SELECCIÓN (viola independencia)
 * --------------------------
 
+* Primero, preparamos los datos de clase expandidos
+use "04_data.dta", clear
+
+* Expandimos a 80,000 observaciones
+expand 10000
+
+* Guardamos los datos expandidos
+tempfile datos_expandidos
+save `datos_expandidos', replace
+
+* Ahora creamos base para almacenar resultados de 1000 simulaciones
 clear all
 set seed 12345
-
-* Crear base para almacenar resultados de 1000 simulaciones
 set obs 1000
 gen sim_id = _n
-gen naive_sesgo = .
-gen ate_sesgo = .
+gen SESGO = .
 
 * Loop de Monte Carlo
 forvalues i = 1/1000 {
 
     quietly {
         preserve
-        clear
 
-        * Generar población de 1000 individuos
-        set obs 1000
+        * Cargar datos expandidos de clase
+        use `datos_expandidos', clear
 
-        * Generar resultados potenciales
-        gen yd0 = rnormal(10, 3)     // Sin tratamiento
-        gen yd1 = yd0 + rnormal(2, 1) // Con tratamiento (efecto heterogéneo)
+        * IMPORTANTE: Eliminamos el D original y creamos uno nuevo en cada simulación
+        * Si no hacemos esto, todas las simulaciones darían el mismo resultado
+        drop D
 
         * SELECCIÓN: Los que tienen mejor yd0 se tratan más
-        gen prob_D = invlogit((yd0 - 10)/2)  // Mayor yd0 → mayor prob de D=1
+        * Calcular media de yd0 para centrar
+        sum yd0
+        scalar mean_yd0 = r(mean)
+
+        gen prob_D = invlogit((yd0 - mean_yd0)/2)  // Mayor yd0 → mayor prob de D=1
         gen D = (uniform() < prob_D)
 
-        * Generar resultado observado
+        * Generar resultado observado y efecto individual
         gen y = D*yd1 + (1-D)*yd0
         gen tau = yd1 - yd0
 
-        * Calcular estimadores
+        * Calcular estimadores (misma nomenclatura que en clase)
         sum tau
-        scalar ate_sim = r(mean)
+        scalar ATE = r(mean)
 
         sum tau if D==1
-        scalar att_sim = r(mean)
+        scalar ATT = r(mean)
 
         sum y if D==1
-        scalar y1_sim = r(mean)
+        scalar ybar_1 = r(mean)
         sum y if D==0
-        scalar y0_sim = r(mean)
-        scalar naive_sim = y1_sim - y0_sim
+        scalar ybar_0 = r(mean)
+        scalar NAIVE = ybar_1 - ybar_0
 
         restore
 
-        * Guardar resultados de esta simulación
-        replace naive_sesgo = naive_sim - ate_sim in `i'
-        replace ate_sesgo = att_sim - ate_sim in `i'
+        * Guardar el sesgo de esta simulación
+        * Recordar: NAIVE = ATT + SESGO, por lo tanto SESGO = NAIVE - ATT
+        replace SESGO = NAIVE - ATT in `i'
     }
 
     * Mostrar progreso cada 100 simulaciones
@@ -161,16 +181,16 @@ forvalues i = 1/1000 {
 
 * Resultados de la simulación CON SELECCIÓN
 di _n "=== RESULTADOS CON SELECCIÓN (viola independencia) ==="
-sum naive_sesgo
+sum SESGO
 di "Sesgo promedio del estimador Naive: " r(mean)
 di "El sesgo persiste incluso con muchas observaciones!"
 
 * Gráfico
-histogram naive_sesgo, ///
+histogram SESGO, ///
     xline(0, lcolor(red) lwidth(thick)) ///
     title("Distribución del Sesgo del Estimador Naive") ///
-    subtitle("1000 simulaciones con SELECCIÓN") ///
-    xtitle("Sesgo = Naive - ATE verdadero") ///
+    subtitle("1000 simulaciones con SELECCIÓN - Datos de clase") ///
+    xtitle("SESGO = NAIVE - ATT") ///
     note("Línea roja = sesgo cero (lo ideal)")
 graph export "sesgo_con_seleccion.png", replace
 
@@ -178,54 +198,57 @@ graph export "sesgo_con_seleccion.png", replace
 * Escenario 2: Con ALEATORIZACIÓN (cumple independencia)
 * --------------------------
 
-clear all
-set seed 12345
+* Cargar datos de clase y expandir (si no está ya cargado del escenario anterior)
+use "04_data.dta", clear
+expand 10000
+tempfile datos_expandidos
+save `datos_expandidos', replace
 
 * Crear base para almacenar resultados
+clear all
+set seed 12345
 set obs 1000
 gen sim_id = _n
-gen naive_sesgo = .
-gen ate_sesgo = .
+gen SESGO = .
 
 * Loop de Monte Carlo
 forvalues i = 1/1000 {
 
     quietly {
         preserve
-        clear
 
-        * Generar población de 1000 individuos
-        set obs 1000
+        * Cargar datos expandidos de clase
+        use `datos_expandidos', clear
 
-        * Generar resultados potenciales (exactamente igual que antes)
-        gen yd0 = rnormal(10, 3)
-        gen yd1 = yd0 + rnormal(2, 1)
+        * IMPORTANTE: Eliminamos el D original y creamos uno nuevo en cada simulación
+        * Si no hacemos esto, todas las simulaciones darían el mismo resultado
+        drop D
 
         * ALEATORIZACIÓN: D es independiente de yd0 y yd1
         gen D = (uniform() < 0.5)   // 50% tratamiento, 50% control
 
-        * Generar resultado observado
+        * Generar resultado observado y efecto individual
         gen y = D*yd1 + (1-D)*yd0
         gen tau = yd1 - yd0
 
-        * Calcular estimadores
+        * Calcular estimadores (misma nomenclatura que en clase)
         sum tau
-        scalar ate_sim = r(mean)
+        scalar ATE = r(mean)
 
         sum tau if D==1
-        scalar att_sim = r(mean)
+        scalar ATT = r(mean)
 
         sum y if D==1
-        scalar y1_sim = r(mean)
+        scalar ybar_1 = r(mean)
         sum y if D==0
-        scalar y0_sim = r(mean)
-        scalar naive_sim = y1_sim - y0_sim
+        scalar ybar_0 = r(mean)
+        scalar NAIVE = ybar_1 - ybar_0
 
         restore
 
-        * Guardar resultados
-        replace naive_sesgo = naive_sim - ate_sim in `i'
-        replace ate_sesgo = att_sim - ate_sim in `i'
+        * Guardar el sesgo de esta simulación
+        * Recordar: NAIVE = ATT + SESGO, por lo tanto SESGO = NAIVE - ATT
+        replace SESGO = NAIVE - ATT in `i'
     }
 
     if mod(`i', 100) == 0 {
@@ -235,16 +258,16 @@ forvalues i = 1/1000 {
 
 * Resultados de la simulación CON ALEATORIZACIÓN
 di _n "=== RESULTADOS CON ALEATORIZACIÓN (cumple independencia) ==="
-sum naive_sesgo
+sum SESGO
 di "Sesgo promedio del estimador Naive: " r(mean)
 di "El sesgo es aproximadamente CERO!"
 
 * Gráfico
-histogram naive_sesgo, ///
+histogram SESGO, ///
     xline(0, lcolor(green) lwidth(thick)) ///
     title("Distribución del Sesgo del Estimador Naive") ///
-    subtitle("1000 simulaciones con ALEATORIZACIÓN") ///
-    xtitle("Sesgo = Naive - ATE verdadero") ///
+    subtitle("1000 simulaciones con ALEATORIZACIÓN - Datos de clase") ///
+    xtitle("SESGO = NAIVE - ATT") ///
     note("Línea verde = sesgo cero. ¡La distribución está centrada en cero!")
 graph export "sesgo_con_aleatorizacion.png", replace
 
