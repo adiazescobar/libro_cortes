@@ -95,6 +95,64 @@ Lo que se reduce a:
 
 > Si los no tratados (controles) tienen peores resultados potenciales que los tratados, el estimador naïve **sobreestima** el verdadero efecto del tratamiento. {-}
 
+---
+
+### 🔹 El supuesto de independencia (o ignorabilidad)  {-}
+
+Para que el estimador naïve identifique correctamente el efecto causal, necesitamos que se cumpla el **supuesto de independencia**:
+
+\[
+(Y_i(D=1), Y_i(D=0)) \perp D_i
+\]
+
+Este supuesto establece que los **resultados potenciales son independientes de la asignación al tratamiento**. En otras palabras:
+
+- Recibir o no el tratamiento **no está relacionado** con lo que habría pasado en cualquiera de los dos escenarios
+- Los grupos tratados y no tratados son **comparables** en todos los aspectos relevantes
+- No hay **selección** en quién recibe el tratamiento basada en características que también afectan el resultado
+
+#### 📌 Independencia condicional  {-}
+
+En la práctica, rara vez tenemos independencia incondicional. Más comúnmente trabajamos con **independencia condicional** (o ignorabilidad condicional):
+
+\[
+(Y_i(D=1), Y_i(D=0)) \perp D_i \mid X_i
+\]
+
+Esto significa que, **condicionando en ciertas variables observables** \(X_i\), la asignación al tratamiento es independiente de los resultados potenciales.
+
+#### 📌 ¿Cuándo se cumple independencia?  {-}
+
+El supuesto de independencia se cumple automáticamente cuando:
+
+1. **Asignación aleatoria del tratamiento** (experimentos controlados aleatorizados)
+   - La aleatorización garantiza que \(D_i\) es independiente de todas las características, observables y no observables
+
+2. **Diseños cuasi-experimentales bien implementados**
+   - Variables instrumentales
+   - Regresión discontinua
+   - Diferencias-en-diferencias (con supuestos adicionales)
+
+3. **"Selección en observables"** (con supuestos fuertes)
+   - Si controlamos por **todas** las variables que afectan tanto \(D_i\) como \(Y_i\)
+   - Requiere tener datos muy completos y conocer el proceso de selección
+
+#### 📌 ¿Cuándo se viola?  {-}
+
+El supuesto de independencia se viola cuando hay **selección** en el tratamiento:
+
+- **Auto-selección**: Los individuos eligen participar basándose en ganancias esperadas
+  - Ejemplo: Solo los más motivados se inscriben en un programa de capacitación
+
+- **Selección administrativa**: Alguien asigna el tratamiento basándose en características
+  - Ejemplo: Un programa social focalizado en los más pobres
+
+- **Variables omitidas**: Hay factores no observados que afectan tanto \(D_i\) como \(Y_i\)
+  - Ejemplo: Habilidad innata afecta tanto la probabilidad de ir a la universidad como los ingresos futuros
+
+> **Recordatorio:** Cuando se viola independencia, el estimador naïve produce estimaciones sesgadas. Por eso la econometría moderna se enfoca en diseños que garanticen (o aproximen) este supuesto. {-}
+
+---
 
 ::: {.boxejercicio .green title="🧠 Pausa activa: ¿Dónde está el contrafactual?"}
 
