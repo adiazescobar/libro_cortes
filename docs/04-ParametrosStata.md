@@ -251,6 +251,222 @@ estimadores tau y D
 
 ---
 
+*🧪 Experimento 3: Simulación Monte Carlo - ¿El sesgo persiste siempre?*
+
+**¿Qué es una simulación Monte Carlo?**
+
+Es repetir un proceso aleatorio **muchas veces** (ej: 1000 repeticiones) para observar:
+- La distribución de nuestros estimadores
+- Si en promedio acertamos (sesgo)
+- Qué tan dispersas son nuestras estimaciones (varianza)
+
+**¿Por qué es útil?**
+
+Nos permite **ver** qué pasaría si pudiéramos repetir nuestro estudio 1000 veces. En la vida real solo tenemos una muestra, pero en simulación podemos explorar "¿qué pasaría si...?"
+
+---
+
+**📊 Escenario 1: Simulación con SELECCIÓN (viola independencia)**
+
+Simulamos 1000 estudios donde las unidades **se auto-seleccionan** al tratamiento (los que tienen mejores \(Y(0)\) eligen tratarse):
+
+```stata
+clear all
+set seed 12345
+
+* Crear base para almacenar resultados de 1000 simulaciones
+set obs 1000
+gen sim_id = _n
+gen naive_sesgo = .
+gen ate_sesgo = .
+
+* Loop de Monte Carlo
+forvalues i = 1/1000 {
+
+    quietly {
+        preserve
+        clear
+
+        * Generar población de 1000 individuos
+        set obs 1000
+
+        * Generar resultados potenciales
+        gen yd0 = rnormal(10, 3)     // Sin tratamiento
+        gen yd1 = yd0 + rnormal(2, 1) // Con tratamiento (efecto heterogéneo)
+
+        * SELECCIÓN: Los que tienen mejor yd0 se tratan más
+        gen prob_D = invlogit((yd0 - 10)/2)  // Mayor yd0 → mayor prob de D=1
+        gen D = (uniform() < prob_D)
+
+        * Generar resultado observado
+        gen y = D*yd1 + (1-D)*yd0
+        gen tau = yd1 - yd0
+
+        * Calcular estimadores
+        sum tau
+        scalar ate_sim = r(mean)
+
+        sum tau if D==1
+        scalar att_sim = r(mean)
+
+        sum y if D==1
+        scalar y1_sim = r(mean)
+        sum y if D==0
+        scalar y0_sim = r(mean)
+        scalar naive_sim = y1_sim - y0_sim
+
+        restore
+
+        * Guardar resultados de esta simulación
+        replace naive_sesgo = naive_sim - ate_sim in `i'
+        replace ate_sesgo = att_sim - ate_sim in `i'
+    }
+
+    * Mostrar progreso cada 100 simulaciones
+    if mod(`i', 100) == 0 {
+        di "Simulación `i' de 1000 completada"
+    }
+}
+
+* Resultados de la simulación CON SELECCIÓN
+di _n "=== RESULTADOS CON SELECCIÓN (viola independencia) ==="
+sum naive_sesgo
+di "Sesgo promedio del estimador Naive: " r(mean)
+di "El sesgo persiste incluso con muchas observaciones!"
+
+* Gráfico
+histogram naive_sesgo, ///
+    xline(0, lcolor(red) lwidth(thick)) ///
+    title("Distribución del Sesgo del Estimador Naive") ///
+    subtitle("1000 simulaciones con SELECCIÓN") ///
+    xtitle("Sesgo = Naive - ATE verdadero") ///
+    note("Línea roja = sesgo cero (lo ideal)")
+graph export "sesgo_con_seleccion.png", replace
+```
+
+📌 **Interpretación:**
+- El histograma muestra que el estimador naive está **sistemáticamente sesgado**
+- En promedio, el sesgo NO es cero (la distribución no está centrada en 0)
+- **Aumentar el tamaño muestral NO elimina este sesgo** (problema de identificación)
+
+---
+
+**📊 Escenario 2: Simulación con ALEATORIZACIÓN (cumple independencia)**
+
+Ahora simulamos 1000 estudios donde el tratamiento se asigna **aleatoriamente**:
+
+```stata
+clear all
+set seed 12345
+
+* Crear base para almacenar resultados
+set obs 1000
+gen sim_id = _n
+gen naive_sesgo = .
+gen ate_sesgo = .
+
+* Loop de Monte Carlo
+forvalues i = 1/1000 {
+
+    quietly {
+        preserve
+        clear
+
+        * Generar población de 1000 individuos
+        set obs 1000
+
+        * Generar resultados potenciales (exactamente igual que antes)
+        gen yd0 = rnormal(10, 3)
+        gen yd1 = yd0 + rnormal(2, 1)
+
+        * ALEATORIZACIÓN: D es independiente de yd0 y yd1
+        gen D = (uniform() < 0.5)   // 50% tratamiento, 50% control
+
+        * Generar resultado observado
+        gen y = D*yd1 + (1-D)*yd0
+        gen tau = yd1 - yd0
+
+        * Calcular estimadores
+        sum tau
+        scalar ate_sim = r(mean)
+
+        sum tau if D==1
+        scalar att_sim = r(mean)
+
+        sum y if D==1
+        scalar y1_sim = r(mean)
+        sum y if D==0
+        scalar y0_sim = r(mean)
+        scalar naive_sim = y1_sim - y0_sim
+
+        restore
+
+        * Guardar resultados
+        replace naive_sesgo = naive_sim - ate_sim in `i'
+        replace ate_sesgo = att_sim - ate_sim in `i'
+    }
+
+    if mod(`i', 100) == 0 {
+        di "Simulación `i' de 1000 completada"
+    }
+}
+
+* Resultados de la simulación CON ALEATORIZACIÓN
+di _n "=== RESULTADOS CON ALEATORIZACIÓN (cumple independencia) ==="
+sum naive_sesgo
+di "Sesgo promedio del estimador Naive: " r(mean)
+di "El sesgo es aproximadamente CERO!"
+
+* Gráfico
+histogram naive_sesgo, ///
+    xline(0, lcolor(green) lwidth(thick)) ///
+    title("Distribución del Sesgo del Estimador Naive") ///
+    subtitle("1000 simulaciones con ALEATORIZACIÓN") ///
+    xtitle("Sesgo = Naive - ATE verdadero") ///
+    note("Línea verde = sesgo cero. ¡La distribución está centrada en cero!")
+graph export "sesgo_con_aleatorizacion.png", replace
+```
+
+📌 **Interpretación:**
+- El histograma muestra que el estimador naive **NO tiene sesgo sistemático**
+- La distribución está centrada en cero (sesgo promedio ≈ 0)
+- **La aleatorización garantiza que en promedio acertamos** (insesgadez)
+- Hay variabilidad muestral (no todas las simulaciones dan exactamente ATE), ¡pero en promedio es correcto!
+
+---
+
+**🔬 Comparación lado a lado**
+
+```stata
+* Podemos combinar ambos gráficos para comparar
+twoway ///
+    (histogram naive_sesgo if seleccion==1, color(red%30)) ///
+    (histogram naive_sesgo if seleccion==0, color(green%30)), ///
+    legend(order(1 "Con selección" 2 "Con aleatorización")) ///
+    xline(0, lcolor(black) lwidth(thick)) ///
+    title("Comparación: Sesgo con vs sin aleatorización") ///
+    note("1000 simulaciones Monte Carlo")
+```
+
+---
+
+**💡 Lecciones clave del Monte Carlo**
+
+1. **El sesgo de selección NO desaparece con más datos**
+   - En el Escenario 1, incluso con 1000 observaciones por simulación, el sesgo persiste
+
+2. **La aleatorización elimina el sesgo en expectativa**
+   - En el Escenario 2, el sesgo promedio es ~0 (aunque hay variabilidad muestral)
+
+3. **Podemos CUANTIFICAR el sesgo**
+   - Las simulaciones nos muestran qué tan grande es el problema
+
+4. **La inferencia causal requiere identificación, no solo más datos**
+   - Big Data con sesgo sigue teniendo sesgo
+   - Small Data bien identificado es más confiable
+
+---
+
 *🧠 Reflexiones finales*
 
 - El estimador naïve es solo válido si hay **asignación aleatoria**.
