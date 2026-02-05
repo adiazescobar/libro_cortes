@@ -1,12 +1,24 @@
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/libro_cortes/dofile/Clase0_StataBasics/prueba.log
+       log:  /Users/adiazescobar/Library/CloudStorage/Dropb
+> ox/ClasesR/EconometriaAV/libro_cortes/dofile/Clase0_Stata
+> Basics/prueba.log
   log type:  text
- opened on:  24 Jul 2025, 07:26:56
+ opened on:  29 Jan 2026, 07:24:49
+
+. close
+command close is unrecognized
+r(199);
+
+. log using prueba2.txt, replace
+log file already open
+r(604);
 
 . log close
       name:  <unnamed>
-       log:  /Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/libro_cortes/dofile/Clase0_StataBasics/prueba.log
+       log:  /Users/adiazescobar/Library/CloudStorage/Dropb
+> ox/ClasesR/EconometriaAV/libro_cortes/dofile/Clase0_Stata
+> Basics/prueba.log
   log type:  text
- closed on:  24 Jul 2025, 07:27:10
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ closed on:  29 Jan 2026, 07:25:22
+-----------------------------------------------------------
