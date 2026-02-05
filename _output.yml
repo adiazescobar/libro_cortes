@@ -4,9 +4,9 @@ bookdown::gitbook:
   split_bib: yes
   config:
     toc:
-      collapse: subsection
+      collapse: none
       scroll_highlight: yes
-      depth: 2
+      depth: 1
       before: |
         <li><a href="./">Econometría Avanzada</a></li>
       after: |
