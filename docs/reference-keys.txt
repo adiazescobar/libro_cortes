@@ -1,4 +1,5 @@
 tab:checklist-pregunta-causal
+fig:sutva-meme
 análisis-de-secciones-transversales
 objetivo
 video-recomendado-mastering-metrics

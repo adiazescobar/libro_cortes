@@ -49,6 +49,8 @@ ATE = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
 ATT = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 1]
 \]
 
+> **Nota:** No confundir ATT con **ITT (Intention-to-Treat)**^[El ITT (Intention-to-Treat) es el efecto promedio del **tratamiento asignado**, sin importar si la unidad efectivamente recibió el tratamiento. Se calcula como: \(ITT = \mathbb{E}[Y_i \mid Z_i = 1] - \mathbb{E}[Y_i \mid Z_i = 0]\), donde \(Z_i\) es la asignación al tratamiento. Es especialmente útil en experimentos con incumplimiento (non-compliance), donde algunos asignados al tratamiento no lo reciben, o viceversa.]
+
 #### 📌 Efecto Promedio del Tratamiento sobre los No Tratados (ATU)  {-}
 
 \[
@@ -110,16 +112,16 @@ Y_i = D_i \cdot Y_i(1) + (1 - D_i) \cdot Y_i(0)
 
 Datos
 
-| ID | \(D_i\) | \(Y_i(D=0)\) | \(Y_i(D=1)\) | \(Y_i\)  |
-|----|--------|------------|------------|-----|
-| 1  | 1      | 10         | 12          | 12  |
-| 2  | 0      | 4          | 5         | 4  |
-| 3  | 1      | 9          | 10          | 10   |
-| 4  | 1      | 10         | 11         | 11  |
-| 5  | 0      | 5          | 6          | 5   |
-| 6  | 0      | 3          | 2          | 3   |
-| 7  | 1      | 12         | 11          | 11   |
-| 8  | 0      | 5          | 7          | 5   |
+| i  | yd0 | yd1 | D |
+|----|-----|-----|---|
+| 1  | 10  | 12  | 1 |
+| 2  | 4   | 5   | 0 |
+| 3  | 9   | 10  | 1 |
+| 4  | 10  | 11  | 1 |
+| 5  | 5   | 6   | 0 |
+| 6  | 3   | 2   | 0 |
+| 7  | 12  | 11  | 1 |
+| 8  | 5   | 7   | 0 |
 ---
 
 *🎯 Preguntas para discutir en grupo*
@@ -205,6 +207,47 @@ Este sesgo aparece si el resultado habría cambiado con el tiempo incluso sin el
 El diseño antes-después asume que no habría cambio en el tiempo sin tratamiento. Este supuesto es **muy fuerte** y raramente cierto. Por eso, necesitamos un grupo de control que nos ayude a estimar \( \mathbb{E}[Y(d=0) \text{ en } t=1] \).
 
 > En otras palabras, sin grupo de control **no podemos saber si el cambio fue por el tratamiento o por el tiempo**.
+
+---
+
+### 🔹 SUTVA: Supuesto de Valor Estable del Tratamiento Unitario  {-}
+
+El **SUTVA (Stable Unit Treatment Value Assumption)** es un supuesto fundamental en inferencia causal que establece dos condiciones:
+
+1. **No interferencia**: El resultado potencial de una unidad no se ve afectado por el estado de tratamiento de otras unidades
+   - Es decir: \(Y_i(D_1, D_2, ..., D_n) = Y_i(D_i)\)
+   - El tratamiento del vecino no afecta mi resultado
+
+2. **Consistencia del tratamiento**: No hay versiones diferentes del tratamiento
+   - Es decir: Si \(D_i = 1\), entonces \(Y_i = Y_i(1)\)
+   - Un curso online de 8 semanas debe ser el mismo para todos los tratados
+
+#### ¿Por qué es importante SUTVA?  {-}
+
+SUTVA nos permite:
+- Definir claramente los resultados potenciales \(Y_i(1)\) y \(Y_i(0)\)
+- Comparar grupos de forma válida
+- Estimar efectos causales sin ambigüedad
+
+#### ¿Cuándo se viola SUTVA?  {-}
+
+**Ejemplos de violación por interferencia:**
+- Vacunación: si mis vecinos están vacunados, mi riesgo de contagio disminuye
+- Redes sociales: si mis amigos usan una app, mi experiencia cambia
+- Efectos de equilibrio general: un programa de empleo puede afectar salarios de no participantes
+
+**Ejemplos de violación por inconsistencia del tratamiento:**
+- Un programa educativo implementado de forma diferente en distintas escuelas
+- Medicamentos con diferentes dosis o formas de administración
+
+<div class="figure" style="text-align: center">
+<img src="img/sutva_meme.png" alt="Cuando asumes SUTVA pero hay efectos de derrame (spillovers)" width="60%" />
+<p class="caption">(\#fig:sutva-meme)Cuando asumes SUTVA pero hay efectos de derrame (spillovers)</p>
+</div>
+
+> **Reflexión:** ¿Se te ocurre algún ejemplo de tu vida cotidiana donde SUTVA claramente **no se cumpla**?
+
+---
 
 ::: {.boxvideo .green title="🎥 Videos recomendados:"}
 
