@@ -1,3 +1,8 @@
+/* Ocultar subsecciones en el sidebar TOC: solo mostrar títulos de capítulo */
+.book-summary ul.summary li ul {
+  display: none;
+}
+
 p.caption {
   color: #777;
   margin-top: 10px;
