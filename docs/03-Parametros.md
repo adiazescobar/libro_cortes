@@ -80,20 +80,19 @@ Este supuesto es **poco realista** si la asignación al tratamiento está relaci
 
 ### 🔹 Sesgo de selección  {-}
 
-El **sesgo de selección** se define como la diferencia entre el estimador naïve y el verdadero ATT:
+El estimador naïve se puede descomponer como:
 
 \[
-\text{Sesgo} = \left( \mathbb{E}[Y_i(D=1) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 1] \right)
-- \left( \mathbb{E}[Y_i(D=1) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 0] \right)
+\underbrace{\mathbb{E}[Y_i \mid D_i = 1] - \mathbb{E}[Y_i \mid D_i = 0]}_{\text{Naïve}} = \underbrace{\mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 1]}_{ATT} + \underbrace{\mathbb{E}[Y_i(D=0) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 0]}_{\text{Sesgo de selección}}
 \]
 
-Lo que se reduce a:
+El **sesgo de selección** mide si los tratados y controles eran diferentes **antes** del tratamiento:
 
 \[
-\text{Sesgo} = \mathbb{E}[Y_i(D=0) \mid D_i = 0] - \mathbb{E}[Y_i(D=0) \mid D_i = 1]
+\text{Sesgo} = \mathbb{E}[Y_i(D=0) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 0]
 \]
 
-> Si los no tratados (controles) tienen peores resultados potenciales que los tratados, el estimador naïve **sobreestima** el verdadero efecto del tratamiento. {-}
+> Si los tratados habrían tenido mejores resultados **incluso sin tratamiento** (por ejemplo, por mayor motivación), entonces el sesgo es **positivo** y el estimador naïve **sobreestima** el verdadero efecto del tratamiento. {-}
 
 ---
 

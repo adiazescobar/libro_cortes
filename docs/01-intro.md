@@ -278,7 +278,7 @@ Este principio es la piedra angular del análisis causal. Para estimar el efecto
 El **Average Treatment Effect (ATE)** se define como:
 
 \[
-ATE = E[\tau] = E[Y_i(D=1) - Y_i(D=0)]
+ATE = \mathbb{E}[\tau] = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
 \]
 
 Pero si no podemos observar los dos resultados potenciales para un mismo individuo, tampoco podemos calcular directamente este promedio.

@@ -37,13 +37,13 @@ Si esto se cumple, la estimación DID es **insesgada**.
 
 Recordemos la notación:
 
-- \(Y_i(1)\): resultado del individuo \(i\) si recibe tratamiento.  
-- \(Y_i(0)\): resultado del individuo \(i\) si no recibe tratamiento.  
+- \(Y_i(D=1)\): resultado del individuo \(i\) si recibe tratamiento.
+- \(Y_i(D=0)\): resultado del individuo \(i\) si no recibe tratamiento.
 
 El **ATE** se define como:
 
 \[
-ATE = E[Y_i(1) - Y_i(0)]
+ATE = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
 \]
 
 En DID, el estimador busca identificar justamente esa diferencia, bajo el supuesto de tendencias paralelas.
