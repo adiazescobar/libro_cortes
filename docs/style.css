@@ -1,6 +1,30 @@
-/* Ocultar subsecciones en el sidebar TOC: solo mostrar títulos de capítulo */
+/* Ocultar subsecciones pero mantener funcionalidad de enlaces principales */
 .book-summary ul.summary li ul {
-  display: none;
+  display: none !important;
+}
+
+/* Asegurar que los enlaces de CAPÍTULOS PRINCIPALES sean clickeables */
+.book .book-summary ul.summary > li > a {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    display: block !important;
+    padding: 10px 15px;
+}
+
+/* Mejorar la interactividad de capítulos principales */
+.book .book-summary ul.summary > li > a:hover {
+    color: #008cff !important;
+    background-color: rgba(0, 140, 255, 0.1);
+}
+
+.book .book-summary ul.summary > li.active > a {
+    color: #008cff !important;
+    font-weight: bold;
+}
+
+/* Asegurar que los capítulos colapsados sean clickeables */
+.book .book-summary ul.summary > li.chapter > a {
+    display: block !important;
 }
 
 p.caption {
