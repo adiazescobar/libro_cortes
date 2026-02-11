@@ -1,6 +1,27 @@
-/* Ocultar subsecciones en el sidebar TOC: solo mostrar títulos de capítulo */
-.book-summary ul.summary li ul {
-  display: none;
+/* Asegurar que los enlaces del TOC sean clickeables */
+.book .book-summary ul.summary li a {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+.book .book-summary ul.summary li.chapter {
+  cursor: pointer !important;
+}
+
+/* Mejorar la interactividad del TOC */
+.book .book-summary ul.summary li a:hover {
+  color: #008cff !important;
+}
+
+.book .book-summary ul.summary li.active > a {
+  color: #008cff !important;
+  font-weight: bold;
+}
+
+/* Asegurar que los capítulos colapsables funcionen */
+.book .book-summary ul.summary li.chapter > a {
+  display: block;
+  padding: 10px 15px;
 }
 
 p.caption {
