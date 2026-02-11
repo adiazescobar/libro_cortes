@@ -3,12 +3,12 @@ bookdown::gitbook:
   split_by: chapter
   split_bib: yes
   number_sections: yes
-  toc_depth: 1
+  toc_depth: 2
   config:
     toc:
-      collapse: section
+      collapse: subsection
       scroll_highlight: yes
-      depth: 1
+      depth: 2
       before: |
         <li><a href="./">Econometría Avanzada</a></li>
       after: |
