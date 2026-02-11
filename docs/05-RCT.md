@@ -1,4 +1,4 @@
-# Experimentos Aleatorizados (Teoría)
+# Experimentos Aleatorizados
 
 ::: {.boxinfo}
 **Objetivo del capítulo**

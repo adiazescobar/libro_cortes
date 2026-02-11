@@ -1,4 +1,4 @@
-# Parámetros Causales (Teoría)
+# Parámetros Causales (Teoría) {#parametros-causales-teoria}
 
 ::: {.boxinfo}
 ## 🎯 Metas de aprendizaje {-}

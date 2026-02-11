@@ -1,4 +1,4 @@
-# Análisis de Secciones Transversales
+# Microeconometría (#microeconometria)
 
 
 ## Motivación para el análisis causal {-}

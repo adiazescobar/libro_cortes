@@ -1,4 +1,4 @@
-# Parámetros Causales en Stata 
+# Parámetros Causales en Stata {#parametros-causales-stata}
 
 ::: {.boxinfo}
 ## 📚 Lecturas obligatorias{-}
