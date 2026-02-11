@@ -3,18 +3,28 @@ bookdown::gitbook:
   split_by: chapter
   split_bib: yes
   number_sections: yes
-  toc_depth: 2
+  toc_depth: 3
   config:
     toc:
       collapse: subsection
       scroll_highlight: yes
-      depth: 2
+      depth: 3
       before: |
         <li><a href="./">Econometría Avanzada</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
     edit: https://github.com/adiazescobar/libro_cortes/edit/main/%s
     download: ["pdf", "epub"]
+    fontsettings:
+      theme: white
+      family: sans
+      size: 2
+    sharing:
+      github: yes
+      facebook: no
+      twitter: no
+      linkedin: no
+      all: []
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex
