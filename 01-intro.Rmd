@@ -1,4 +1,4 @@
-# Microeconometría (#microeconometria)
+# Intro
 
 
 ## Motivación para el análisis causal {-}
