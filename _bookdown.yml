@@ -11,12 +11,12 @@ rmd_files:
   - 00-PruebaEntrada.Rmd
   - 01-intro.Rmd
   - 02-StataBasics.Rmd
-  - 03-Parametros.Rmd
-  - 04-ParametrosStata.Rmd
-  - 05-RCT.Rmd
-  - 06-RCT2.Rmd
-  - 07-POWER.Rmd
-  - 08-DID.Rmd
-  - 09-BadControls.Rmd
-  - 10-BadControlsStata.Rmd
-  - 11-TWFE.Rmd
+  - 03-Parametros.Rmd          # Este será Cap 3
+  - 04-ParametrosStata.Rmd    # Este será Cap 4
+  - 05-RCT.Rmd                # Este será Cap 5
+  - 06-RCT2.Rmd               # Este será Cap 6
+  - 07-POWER.Rmd              # Este será Cap 7
+  - 08-DID.Rmd                # Este será Cap 8
+  - 09-BadControls.Rmd        # Este será Cap 9
+  - 10-BadControlsStata.Rmd   # Este será Cap 10
+  - 11-TWFE.Rmd               # Este será Cap 11
