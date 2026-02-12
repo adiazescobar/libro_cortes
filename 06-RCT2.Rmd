@@ -1,22 +1,45 @@
 # Experimentos Aleatorizados en Stata
 
 ::: {.boxinfo}
-**🎯 Metas de aprendizaje**
+**Objetivo del capítulo**
 
-- Entender cómo hacer **inferencia estadística** con asignación aleatoria.  
-- Discutir **cuándo** incluir controles y **qué ocurre** con la varianza/SE al incluirlos.  
-- Traducir **resultados potenciales** a una **regresión lineal**.  
-- Implementar **diagnósticos de balance**, **efectos heterogéneos** y **reporte reproducible**.
+En el capítulo anterior formalizamos la teoría de resultados potenciales, la descomposición del sesgo de selección, su conexión con el sesgo por variable omitida, y los **cuatro escenarios de diseño** experimental. Ahora implementamos todo esto paso a paso en Stata, usando datos reales de un experimento de aula replicado en cuatro semestres.
 
-## 📚 Lecturas {-}
+- Implementar los **cuatro escenarios de regresión** (simple, con controles, estratificado, estratificado + controles).
+- Ejecutar **diagnósticos de balance**, **efectos heterogéneos** y el **truco de centrar** de Wooldridge.
+- Manejar **inferencia estadística** (SE robustas, clusters, bootstrap).
+- Producir **reporte reproducible** exportable a Excel/PDF.
 
-- **Paper Alert:** [When Should You Adjust Standard Errors for Clustering? (NBER w24003)](https://www.nber.org/papers/w24003)  
-- **Teoría:** [Jakiela & Ozier — Handout](http://economics.ozier.com/econ626/lec/econ626-L07-handout-2019.pdf)  
+### Lecturas {-}
+
+- **Paper Alert:** [When Should You Adjust Standard Errors for Clustering? (NBER w24003)](https://www.nber.org/papers/w24003)
+- **Teoría:** [Jakiela & Ozier — Handout](http://economics.ozier.com/econ626/lec/econ626-L07-handout-2019.pdf)
 - **Herramienta:** [J-PAL — Power calculations](https://www.povertyactionlab.org/resource/power-calculations)
 :::
 
+```{r setup-cap6, echo=FALSE, message=FALSE, warning=FALSE}
+library(haven)
+library(dplyr)
+library(estimatr)
+library(modelsummary)
+library(ggplot2)
+library(kableExtra)
+library(patchwork)
+
+# Cargar datos
+dat <- read_dta("dofile/06_RCT_Stata/data.dta") %>%
+  mutate(
+    D       = as.integer(grupo == "B"),
+    y       = resultado,
+    mujer   = as.integer(genero == "Mujer"),
+    pregrado = as.integer(programa == "Pregrado"),
+    maestria = as.integer(programa == "Maestría"),
+    semestre_f = factor(semestre)
+  )
+```
 
 
+## Recordatorio teórico (del capítulo anterior) {-}
 
 *1) Setup*
 
@@ -37,15 +60,17 @@
    \[
    D_i \;\perp\; \{Y_i(1), Y_i(0)\}.
    \]
-2. **SUTVA** (Stable Unit Treatment Value Assumption): no hay interferencia entre unidades ni versiones del tratamiento.  
+2. **SUTVA** (Stable Unit Treatment Value Assumption): no hay interferencia entre unidades ni versiones del tratamiento.
    En español: no hay externalidades ni efectos de equilibrio general que cambien los resultados potenciales de otros individuos.
 
-*3) Implicaciones y parámetros*
+*3) Parámetros y equivalencias clave*
 
-- **ATE (efecto promedio):**
-  \[
-  \tau \;=\; \mathbb{E}\!\left[\,Y(D=1)-Y(D=0)\,\right].
-  \]
+- **ATE:** \(\tau = \mathbb{E}[Y(1)-Y(0)]\).
+- **ATT:** \(\mathbb{E}[Y(1)-Y(0) \mid D=1]\).
+- **ATU:** \(\mathbb{E}[Y(1)-Y(0) \mid D=0]\).
+
+Bajo aleatorización: \(ATE = ATT = ATU\), porque los grupos son comparables en todo (observable y no observable).
+
 - **Identificación con aleatorización:**
   \[
   \mathbb{E}[\,Y \mid D=1\,] - \mathbb{E}[\,Y \mid D=0\,] \;=\; \tau.
@@ -54,7 +79,7 @@
   \[
   \hat{\tau} \;=\; \bar{Y}_{D=1}-\bar{Y}_{D=0}.
   \]
-- **Estimador “naïve” sin aleatorización (descomposición):**
+- **Descomposición (sin aleatorización):**
   \[
   \underbrace{\mathbb{E}[Y \mid D=1] - \mathbb{E}[Y \mid D=0]}_{\text{naïve}}
   \;=\;
@@ -62,6 +87,10 @@
   \;+\;
   \underbrace{\mathbb{E}[Y(0)\mid D=1] - \mathbb{E}[Y(0)\mid D=0]}_{\text{sesgo de selección}}.
   \]
+
+::: {.boxnote}
+**Conexión con variable omitida (cap. anterior):** en regresión, el sesgo de selección es exactamente el sesgo por variable omitida: \(\text{sesgo} = \gamma \cdot \text{Cov}(D,M)/\text{Var}(D)\). La aleatorización garantiza \(\text{Cov}(D,M)=0\) para **cualquier** variable \(M\), observable o no.
+:::
 
 
 ## Paso a Paso para un RCT {-}
@@ -252,20 +281,24 @@ tab D
 
 ### PASO 3) Verificar el balance de covariables {-}
 
+Nuestra base `data.dta` contiene datos de un experimento de aula replicado en **cuatro semestres**. En cada semestre, a un grupo se le entregaron **definiciones de palabras difíciles** (tratamiento) y al otro un **texto crítico de economía** (control), y luego todos presentaron el mismo quiz de vocabulario.
 
 ```stata
 use "data.dta", clear
 
-* Tratamiento 1=B, 0=A
+* Tratamiento 1=B (definiciones), 0=A (texto crítico)
 gen D = (grupo == "B")
 label define Dlbl 0 "Control" 1 "Tratado"
 label values D Dlbl
 
-* Outcome y y controles
+* Outcome y controles
 gen y        = resultado
 gen mujer    = (genero == "Mujer")
 gen pregrado = (programa == "Pregrado")
 gen maestria = (programa == "Maestría")
+
+* Semestre como estrato (variable clave para escenarios 3 y 4)
+tab semestre D
 
 global X edad mujer libros pregrado maestria
 ```
@@ -351,44 +384,109 @@ esttab, se star(* 0.10 ** 0.05 *** 0.01) ///
 
 ```
 
-### PASO 4) Estimar el efecto del tratamiento {-}
+**Resultados del balance (con nuestros datos):**
 
-\[
-Y_i \;=\; \alpha \;+\; \tau D_i \;+\; \varepsilon_i.
-\]
-- Bajo aleatorización, \(\hat{\tau}_{OLS}\) es insesgado y coincide con la diferencia de medias.
+```{r balance-table, echo=FALSE, message=FALSE, warning=FALSE}
+# Tabla de balance: t-tests univariados
+Xvars <- c("edad", "mujer", "libros", "pregrado", "maestria")
+bal <- lapply(Xvars, function(v) {
+  tt <- t.test(dat[[v]][dat$D == 1], dat[[v]][dat$D == 0])
+  data.frame(
+    Variable  = v,
+    Media_T   = round(mean(dat[[v]][dat$D == 1]), 3),
+    Media_C   = round(mean(dat[[v]][dat$D == 0]), 3),
+    Diff      = round(mean(dat[[v]][dat$D == 1]) - mean(dat[[v]][dat$D == 0]), 3),
+    t         = round(tt$statistic, 3),
+    `p-valor` = round(tt$p.value, 3),
+    check.names = FALSE
+  )
+}) %>% bind_rows()
 
-Sea \(D\) la columna binaria (0/1) y \(\iota\) el vector de unos. Entonces, en \(Y = \alpha \iota + \tau D + \varepsilon\), se tiene:
-\[
-\hat{\tau}
-\;=\;
-\bar{Y}_1 - \bar{Y}_0.
-\]
-
-```stata
-eststo clear
-eststo m1: reg y D, vce(robust)
-eststo m2: reg y D $X, vce(robust)
-
-esttab m1 m2, se star(* 0.10 ** 0.05 *** 0.01) ///
-    stats(N r2, fmt(%9.0g %9.3f) labels("N" "R2")) ///
-    b(%9.4f) compress nonote ///
-    title("Efecto del tratamiento con y sin controles")
+kable(bal, align = "lrrrcc", caption = "Balance de covariables (t-tests)") %>%
+  kable_styling(bootstrap_options = c("striped","condensed"), full_width = FALSE)
 ```
 
+```{r balance-ftest, echo=FALSE, message=FALSE, warning=FALSE}
+# Prueba conjunta: D ~ X (LPM con F-test)
+lpm <- lm(D ~ edad + mujer + libros + pregrado + maestria, data = dat)
+ft <- summary(lpm)$fstatistic
+pval_f <- pf(ft[1], ft[2], ft[3], lower.tail = FALSE)
+```
+
+**Prueba conjunta (LPM):** F = `r round(ft[1], 3)`, p-valor = `r round(pval_f, 3)`. `r if(pval_f > 0.10) "No rechazamos balance conjunto." else "Se rechaza balance conjunto."`
+
+### PASO 4) Estimar el efecto del tratamiento: los cuatro escenarios {-}
+
+En el capítulo anterior derivamos **cuatro especificaciones** según el diseño experimental. Ahora las implementamos en Stata, usando `semestre` como variable de estrato \(S_i\):
+
+::: {.table .table-bordered .table-striped}
+| Escenario | Regresión | Objetivo |
+|:---:|:---|:---|
+| 1 | \( Y_i = \alpha + \tau D_i + u_i \) | Identificación pura por aleatorización |
+| 2 | \( Y_i = \alpha + \tau D_i + \beta' X_i + u_i \) | + precisión con controles baseline |
+| 3 | \( Y_i = \alpha + \tau D_i + \delta' S_i + u_i \) | Respetar diseño estratificado |
+| 4 | \( Y_i = \alpha + \tau D_i + \delta' S_i + \beta' X_i + u_i \) | Diseño + eficiencia (especificación completa) |
+:::
+
+En los cuatro casos, \(\hat{\tau}\) estima el **ATE** de forma consistente. Lo que cambia es la **precisión**.
+
+```stata
+* ── Escenario 1: RCT simple (diferencia de medias) ──────────────────────
+eststo clear
+eststo m1: reg y D, vce(robust)
+
+* ── Escenario 2: RCT simple + controles baseline ────────────────────────
+eststo m2: reg y D $X, vce(robust)
+
+* ── Escenario 3: Estratificado por semestre, sin controles ───────────────
+eststo m3: reg y D i.semestre, vce(robust)
+
+* ── Escenario 4: Estratificado + controles (especificación completa) ────
+eststo m4: reg y D i.semestre $X, vce(robust)
+
+* Comparar los cuatro modelos lado a lado
+esttab m1 m2 m3 m4, se star(* 0.10 ** 0.05 *** 0.01) ///
+    stats(N r2, fmt(%9.0g %9.3f) labels("N" "R2")) ///
+    b(%9.4f) compress nonote ///
+    mtitle("Simple" "+Controles" "+Estratos" "Completo") ///
+    title("Cuatro escenarios de estimación del ATE")
+```
+
+**Resultados (con nuestros datos):**
+
+```{r cuatro-escenarios, echo=FALSE, message=FALSE, warning=FALSE}
+m1 <- lm_robust(y ~ D, data = dat, se_type = "HC1")
+m2 <- lm_robust(y ~ D + edad + mujer + libros + pregrado + maestria,
+                 data = dat, se_type = "HC1")
+m3 <- lm_robust(y ~ D + semestre_f, data = dat, se_type = "HC1")
+m4 <- lm_robust(y ~ D + semestre_f + edad + mujer + libros + pregrado + maestria,
+                 data = dat, se_type = "HC1")
+
+modelsummary(
+  list("Simple" = m1, "+Controles" = m2, "+Estratos" = m3, "Completo" = m4),
+  stars = c("*" = 0.10, "**" = 0.05, "***" = 0.01),
+  coef_omit = "semestre|Intercept|pregrado",
+  gof_map = c("nobs", "r.squared"),
+  title = "Cuatro escenarios de estimación del ATE",
+  notes = "SE robustas (HC1) entre paréntesis. Dummies de semestre incluidas en modelos 3 y 4."
+)
+```
+
+::: {.boxnote}
+**Observe cómo cambian los SE de \(\hat{\tau}\)** entre los cuatro modelos. El punto estimado debe ser similar (la aleatorización garantiza consistencia), pero los errores estándar se reducen al agregar variables que predicen \(Y\). Los estratos (semestre) absorben diferencias de nivel entre cohortes.
+:::
 
 ::: {.boxnote}
 Interpretación según escala de \(Y\)
 
 1. **\(Y\) en niveles (continuo):** \(\hat{\tau}\) es diferencia de unidades de \(Y\) entre tratados y control.
-2. **\(Y\) en logaritmos:** \(\hat{\tau}\) es una **semi-elasticidad**; el efecto porcentual aproximado es \(100\times \hat{\tau}\%\).  
-   Efecto exacto: \(100\times(\exp(\hat{\tau})-1)\%\).  
+2. **\(Y\) en logaritmos:** \(\hat{\tau}\) es una **semi-elasticidad**; el efecto porcentual aproximado es \(100\times \hat{\tau}\%\).
+   Efecto exacto: \(100\times(\exp(\hat{\tau})-1)\%\).
    *Ejemplo:* \(\hat{\tau}=0.13 \Rightarrow \exp(0.13)-1 \approx 0.139\) → **13.9%**.
 3. **\(Y\) estandarizado:** media 0 y varianza 1; \(\hat{\tau}\) se interpreta en **desviaciones estándar**.
-4. **\(Y\) binario:** \(\hat{\tau}\) es **diferencia de probabilidades** (puntos porcentuales).  
+4. **\(Y\) binario:** \(\hat{\tau}\) es **diferencia de probabilidades** (puntos porcentuales).
    *Ejemplo:* \(p_1=0.30\), \(p_0=0.25\) ⇒ \(\hat{\tau}=0.05 = 5\) pp.
 :::
-
 
 
 
@@ -427,7 +525,7 @@ Interpretación según escala de \(Y\)
   Y_i \;=\; \alpha \;+\; \tau D_i \;+\; \gamma W_i \;+\; \delta\, (D_i \times W_i) \;+\; X_i'\beta \;+\; u_i,
   \]
   donde \(W\) es el moderador (p. ej., **mujer**, **libros**, **cuartiles de edad**).
-- **Interpretación:** \(\delta\) es el **cambio en el efecto de \(D\)** al pasar de un nivel de \(W\) a otro.  
+- **Interpretación:** \(\delta\) es el **cambio en el efecto de \(D\)** al pasar de un nivel de \(W\) a otro.
   Usar `margins`/`marginsplot` para reportar efectos marginales y perfiles por subgrupo.
 
 ```stata
@@ -449,16 +547,120 @@ eststo: reg y D##i.q_edad, vce(robust)
 margins D#q_edad
 marginsplot, title("Heterogeneidad por cuartiles de edad")
 graph export "margins_qedad.pdf", replace
-
 ```
+
+**Resultados (con nuestros datos):**
+
+```{r het-mujer, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3.5, fig.width=8}
+# Heterogeneidad por mujer
+het_m <- lm_robust(y ~ D * mujer, data = dat, se_type = "HC1")
+
+# Predicciones por grupo
+grid_mujer <- expand.grid(D = 0:1, mujer = 0:1)
+grid_mujer$yhat <- predict(het_m, newdata = grid_mujer)
+grid_mujer$Grupo <- factor(grid_mujer$D, labels = c("Control", "Tratado"))
+grid_mujer$Mujer <- factor(grid_mujer$mujer, labels = c("Hombre", "Mujer"))
+
+p1 <- ggplot(grid_mujer, aes(x = Mujer, y = yhat, fill = Grupo)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  labs(title = "Efecto por género", y = "E[Y]", x = "") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+# Heterogeneidad por libros
+het_l <- lm_robust(y ~ D * libros, data = dat, se_type = "HC1")
+grid_lib <- expand.grid(D = 0:1, libros = 0:8)
+pred <- predict(het_l, newdata = grid_lib, se.fit = TRUE)
+grid_lib$yhat <- pred$fit
+grid_lib$se   <- pred$se.fit
+grid_lib$Grupo <- factor(grid_lib$D, labels = c("Control", "Tratado"))
+
+p2 <- ggplot(grid_lib, aes(x = libros, y = yhat, color = Grupo, fill = Grupo)) +
+  geom_ribbon(aes(ymin = yhat - 1.96*se, ymax = yhat + 1.96*se), alpha = 0.15, color = NA) +
+  geom_line(linewidth = 1) +
+  labs(title = "Efecto marginal según libros leídos",
+       y = "E[Y]", x = "Libros leídos") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+p1 + p2
+```
+
+```{r het-edad, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3.5, fig.width=6}
+# Heterogeneidad por cuartiles de edad
+dat$q_edad <- cut(dat$edad, breaks = quantile(dat$edad, probs = 0:4/4, na.rm = TRUE),
+                  include.lowest = TRUE, labels = paste0("Q", 1:4))
+
+het_q <- lm_robust(y ~ D * q_edad, data = dat, se_type = "HC1")
+grid_q <- expand.grid(D = 0:1, q_edad = levels(dat$q_edad))
+grid_q$yhat <- predict(het_q, newdata = grid_q)
+grid_q$Grupo <- factor(grid_q$D, labels = c("Control", "Tratado"))
+
+ggplot(grid_q, aes(x = q_edad, y = yhat, fill = Grupo)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  labs(title = "Heterogeneidad por cuartiles de edad",
+       y = "E[Y]", x = "Cuartil de edad") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+### El truco de centrar (Wooldridge) {-}
+
+En el capítulo anterior vimos que si interactuamos \(D\) con una covariable \(W\), el coeficiente \(\tau\) solo es el efecto para \(W=0\), **no** el ATE promedio. Para que \(\tau\) sea directamente el ATE, centramos la covariable:
+
+\[
+W_c = W - \bar{W}, \qquad Y_i = \alpha + \tau D_i + \gamma W_{c,i} + \delta (D_i \cdot W_{c,i}) + u_i
+\]
+
+Como \(\mathbb{E}[W_c]=0\), ahora \(\tau = ATE\) directamente.
+
+```stata
+* ── Sin centrar: τ = efecto solo para libros=0 ──────────────────────────
+reg y c.D##c.libros, vce(robust)
+
+* ── Con centrado: τ = ATE promedio ───────────────────────────────────────
+sum libros
+gen libros_c = libros - r(mean)
+reg y c.D##c.libros_c, vce(robust)
+* Ahora el coeficiente de D es directamente el ATE
+```
+
+**Resultados (con nuestros datos):**
+
+```{r centrado, echo=FALSE, message=FALSE, warning=FALSE}
+# Sin centrar
+m_nc <- lm_robust(y ~ D * libros, data = dat, se_type = "HC1")
+
+# Con centrado
+dat$libros_c <- dat$libros - mean(dat$libros)
+m_c  <- lm_robust(y ~ D * libros_c, data = dat, se_type = "HC1")
+
+modelsummary(
+  list("Sin centrar" = m_nc, "Con centrado" = m_c),
+  stars = c("*" = 0.10, "**" = 0.05, "***" = 0.01),
+  coef_rename = c("D" = "D (tratamiento)",
+                  "libros" = "libros",
+                  "libros_c" = "libros (centrado)",
+                  "D:libros" = "D x libros",
+                  "D:libros_c" = "D x libros_c"),
+  gof_map = c("nobs", "r.squared"),
+  title = "Truco de centrar: comparación",
+  notes = c("Sin centrar: coef(D) = efecto cuando libros = 0.",
+            "Con centrado: coef(D) = ATE promedio.")
+)
+```
+
+::: {.boxnote}
+**Regla práctica:** siempre que interactúes el tratamiento con una variable continua, **centra la variable** para que el coeficiente de \(D\) siga siendo interpretable como el efecto promedio.
+:::
 
 
 ::: {.boxejercicio}
-**🧪 Ejercicios**
+**Ejercicios**
 
 1. **Aleatorización (Bernoulli y estratos)**
    (a) Con tu `data.dta`, genera `D` con p=0.5 usando `runiform()`.
-   (b) Repite p=0.3.
+   (b) Repite con p=0.3.
    (c) Crea estratos por `mujer × programa` y asigna 50/50 exacto por estrato.
 
 2. **`randtreat` avanzado**
@@ -470,33 +672,72 @@ graph export "margins_qedad.pdf", replace
    (b) Estima `D ~ X` (LPM/logit/probit) y reporta el test conjunto.
    (c) Interpreta: ¿hay evidencia de desbalance?
 
-4. **Efecto del tratamiento**
-   (a) Estima $Y\sim D$ y $Y\sim D+X$ con SE robustas.
-   (b) Compara $\hat\tau$ y sus SE entre modelos; discute precisión.
-   (c) Si `resultado` es binario, interpreta en puntos porcentuales.
+4. **Los cuatro escenarios**
+   (a) Estima los cuatro modelos del PASO 4 (simple, +controles, +estratos, completo).
+   (b) Compara \(\hat{\tau}\) y sus SE entre los cuatro. ¿Cuál tiene menor SE? ¿Por qué?
+   (c) ¿Cambia mucho el punto estimado al incluir estratos? Discute.
 
-5. **Heterogeneidad**
-   (a) Estima $Y\sim D\times \text{mujer}$ y reporta `margins`.
-   (b) Estima $Y\sim D\times \text{libros}$, grafica `marginsplot` y comenta el perfil.
+5. **Heterogeneidad y centrado**
+   (a) Estima \(Y \sim D \times \text{mujer}\) y reporta `margins`.
+   (b) Estima \(Y \sim D \times \text{libros}\) **sin centrar** y **con centrado**. Compara el coeficiente de \(D\) en ambos casos.
+   (c) Grafica `marginsplot` para libros y comenta el perfil.
 
 **Bonus (opcional):**
-6\. Repite la estimación con **SE cluster** suponiendo que la asignación fue por `escuela`. Discute diferencias con SE robustas.
-\
+6\. Repite la estimación con **SE cluster** por `semestre`. Discute diferencias con SE robustas (nota: con solo 4 clusters, ¿qué problema surge?).
 :::
 
 
+
+---
+
+::: {.boxvideo .green title="Videos recomendados:"}
+
+- [Video 1](https://www.youtube.com/embed/eGRd8jBdNYg)
+- [Video 2](https://www.youtube.com/embed/crpuBZv6XtA)
+- [Video 3](https://www.youtube.com/embed/xlX3VtuIfQ0)
+
+Y todos los que encuentres en Google buscando: **RCT Esther Duflo**
+:::
+
+::: {.boxnote}
+
+**PROMPT DE CHATGPT PARA REFLEXIÓN PROFUNDA**
+
+**Instrucciones**: Copia este mensaje en ChatGPT o la IA de tu preferencia. Tu objetivo no es obtener respuestas, sino **reflexionar guiado por preguntas**.
+
+---
+
+Hola. Actúa como mi tutor de Stata para diseño experimental. No quiero que me des código directamente. Quiero que me ayudes a pensar paso a paso.
+
+Tengo un experimento con datos de varios semestres (variable `semestre`). Ya estimé el modelo simple \(Y = \alpha + \tau D + u\). Ahora quiero entender:
+
+Por favor, hazme preguntas como:
+
+- ¿Qué pasa con mi estimador \(\hat{\tau}\) si no incluyo dummies de semestre, sabiendo que la aleatorización fue **dentro** de cada semestre?
+- ¿Cómo interpreto el coeficiente de \(D\) cuando interactúo con una variable continua? ¿Qué pasa si no centro?
+- Si tengo solo 4 semestres y quiero hacer cluster SE por semestre, ¿cuántos clusters necesito para que los SE sean confiables?
+- ¿Por qué el \(R^2\) sube al agregar estratos pero \(\hat{\tau}\) casi no cambia?
+
+No me des respuestas. Solo nuevas preguntas que me ayuden a entender mejor la conexión entre diseño y estimación.
+
+:::
+
+---
+
 ## DESCARGA LOS DOCUMENTOS {-}
 
-**Descargar Stata do file**:  
-[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_stata.do)
+**Descargar Stata do file**:
+[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_stata.do)
 
-**Descargar R script**:  
-[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_R.R)
+**Descargar R script**:
+[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_R.R)
 
 **Descargar Python Notebook**:
-[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_phyton.ipynb)
+[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_python.ipynb)
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase1_Experimentos/clase1_phyton.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/06_RCT_Stata/clase6_python.ipynb)
 
-**Descarga los Datos**  
-*(En esta clase usamos la base real `data.dta` con columnas: `id, resultado, grupo, edad, genero, programa, libros`.)*
+**Descarga los Datos**
+[Descargar data.dta](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/data.dta)
+
+*(Base real de un experimento  replicado en 4 semestres. Columnas: `id, resultado, grupo, edad, genero, programa, libros, semestre, n_preguntas`. N=70. El grupo B recibió definiciones de palabras difíciles (tratamiento) y el grupo A recibió un texto crítico de economía (control). La variable `semestre` sirve como estrato.)*

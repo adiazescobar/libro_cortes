@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-02-11" />
+<meta name="date" content="2026-02-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -219,6 +219,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html"><i class="fa fa-check"></i><b>6</b> Experimentos Aleatorizados en Stata</a>
 <ul>
+<li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
 <li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
@@ -305,27 +306,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="experimentos-aleatorizados-en-stata" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Capitulo 6</span> Experimentos Aleatorizados en Stata<a href="experimentos-aleatorizados-en-stata.html#experimentos-aleatorizados-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="boxinfo">
-<p><strong>🎯 Metas de aprendizaje</strong></p>
+<p><strong>Objetivo del capítulo</strong></p>
+<p>En el capítulo anterior formalizamos la teoría de resultados potenciales, la descomposición del sesgo de selección, su conexión con el sesgo por variable omitida, y los <strong>cuatro escenarios de diseño</strong> experimental. Ahora implementamos todo esto paso a paso en Stata, usando datos reales de un experimento de aula replicado en cuatro semestres.</p>
 <ul>
-<li>Entender cómo hacer <strong>inferencia estadística</strong> con asignación aleatoria.<br />
-</li>
-<li>Discutir <strong>cuándo</strong> incluir controles y <strong>qué ocurre</strong> con la varianza/SE al incluirlos.<br />
-</li>
-<li>Traducir <strong>resultados potenciales</strong> a una <strong>regresión lineal</strong>.<br />
-</li>
-<li>Implementar <strong>diagnósticos de balance</strong>, <strong>efectos heterogéneos</strong> y <strong>reporte reproducible</strong>.</li>
+<li>Implementar los <strong>cuatro escenarios de regresión</strong> (simple, con controles, estratificado, estratificado + controles).</li>
+<li>Ejecutar <strong>diagnósticos de balance</strong>, <strong>efectos heterogéneos</strong> y el <strong>truco de centrar</strong> de Wooldridge.</li>
+<li>Manejar <strong>inferencia estadística</strong> (SE robustas, clusters, bootstrap).</li>
+<li>Producir <strong>reporte reproducible</strong> exportable a Excel/PDF.</li>
 </ul>
-<div id="lecturas-1" class="section level2 unnumbered hasAnchor">
-<h2>📚 Lecturas<a href="experimentos-aleatorizados-en-stata.html#lecturas-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="lecturas-1" class="section level3 unnumbered hasAnchor">
+<h3>Lecturas<a href="experimentos-aleatorizados-en-stata.html#lecturas-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li><strong>Paper Alert:</strong> <a href="https://www.nber.org/papers/w24003">When Should You Adjust Standard Errors for Clustering? (NBER w24003)</a><br />
-</li>
-<li><strong>Teoría:</strong> <a href="http://economics.ozier.com/econ626/lec/econ626-L07-handout-2019.pdf">Jakiela &amp; Ozier — Handout</a><br />
-</li>
+<li><strong>Paper Alert:</strong> <a href="https://www.nber.org/papers/w24003">When Should You Adjust Standard Errors for Clustering? (NBER w24003)</a></li>
+<li><strong>Teoría:</strong> <a href="http://economics.ozier.com/econ626/lec/econ626-L07-handout-2019.pdf">Jakiela &amp; Ozier — Handout</a></li>
 <li><strong>Herramienta:</strong> <a href="https://www.povertyactionlab.org/resource/power-calculations">J-PAL — Power calculations</a></li>
 </ul>
 </div>
 </div>
+<div id="recordatorio-teórico-del-capítulo-anterior" class="section level2 unnumbered hasAnchor">
+<h2>Recordatorio teórico (del capítulo anterior)<a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><em>1) Setup</em></p>
 <ul>
 <li>Unidades: <span class="math inline">\(N\)</span>.</li>
@@ -347,15 +346,17 @@ Y_i \;=\; D_i\,Y_i(D=1) \;+\; (1-D_i)\,Y_i(D=0).
 <span class="math display">\[
 D_i \;\perp\; \{Y_i(1), Y_i(0)\}.
 \]</span></li>
-<li><strong>SUTVA</strong> (Stable Unit Treatment Value Assumption): no hay interferencia entre unidades ni versiones del tratamiento.<br />
+<li><strong>SUTVA</strong> (Stable Unit Treatment Value Assumption): no hay interferencia entre unidades ni versiones del tratamiento.
 En español: no hay externalidades ni efectos de equilibrio general que cambien los resultados potenciales de otros individuos.</li>
 </ol>
-<p><em>3) Implicaciones y parámetros</em></p>
+<p><em>3) Parámetros y equivalencias clave</em></p>
 <ul>
-<li><strong>ATE (efecto promedio):</strong>
-<span class="math display">\[
-\tau \;=\; \mathbb{E}\!\left[\,Y(D=1)-Y(D=0)\,\right].
-\]</span></li>
+<li><strong>ATE:</strong> <span class="math inline">\(\tau = \mathbb{E}[Y(1)-Y(0)]\)</span>.</li>
+<li><strong>ATT:</strong> <span class="math inline">\(\mathbb{E}[Y(1)-Y(0) \mid D=1]\)</span>.</li>
+<li><strong>ATU:</strong> <span class="math inline">\(\mathbb{E}[Y(1)-Y(0) \mid D=0]\)</span>.</li>
+</ul>
+<p>Bajo aleatorización: <span class="math inline">\(ATE = ATT = ATU\)</span>, porque los grupos son comparables en todo (observable y no observable).</p>
+<ul>
 <li><strong>Identificación con aleatorización:</strong>
 <span class="math display">\[
 \mathbb{E}[\,Y \mid D=1\,] - \mathbb{E}[\,Y \mid D=0\,] \;=\; \tau.
@@ -364,7 +365,7 @@ En español: no hay externalidades ni efectos de equilibrio general que cambien 
 <span class="math display">\[
 \hat{\tau} \;=\; \bar{Y}_{D=1}-\bar{Y}_{D=0}.
 \]</span></li>
-<li><strong>Estimador “naïve” sin aleatorización (descomposición):</strong>
+<li><strong>Descomposición (sin aleatorización):</strong>
 <span class="math display">\[
 \underbrace{\mathbb{E}[Y \mid D=1] - \mathbb{E}[Y \mid D=0]}_{\text{naïve}}
 \;=\;
@@ -373,6 +374,10 @@ En español: no hay externalidades ni efectos de equilibrio general que cambien 
 \underbrace{\mathbb{E}[Y(0)\mid D=1] - \mathbb{E}[Y(0)\mid D=0]}_{\text{sesgo de selección}}.
 \]</span></li>
 </ul>
+<div class="boxnote">
+<p><strong>Conexión con variable omitida (cap. anterior):</strong> en regresión, el sesgo de selección es exactamente el sesgo por variable omitida: <span class="math inline">\(\text{sesgo} = \gamma \cdot \text{Cov}(D,M)/\text{Var}(D)\)</span>. La aleatorización garantiza <span class="math inline">\(\text{Cov}(D,M)=0\)</span> para <strong>cualquier</strong> variable <span class="math inline">\(M\)</span>, observable o no.</p>
+</div>
+</div>
 <div id="paso-a-paso-para-un-rct" class="section level2 unnumbered hasAnchor">
 <h2>Paso a Paso para un RCT<a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="paso-1-diseñar-el-experimento" class="section level3 unnumbered hasAnchor">
@@ -504,20 +509,24 @@ Ejecuta <code>randtreat</code> sobre los <strong>clusters únicos</strong> y lue
 </div>
 <div id="paso-3-verificar-el-balance-de-covariables" class="section level3 unnumbered hasAnchor">
 <h3>PASO 3) Verificar el balance de covariables<a href="experimentos-aleatorizados-en-stata.html#paso-3-verificar-el-balance-de-covariables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Nuestra base <code>data.dta</code> contiene datos de un experimento de aula replicado en <strong>cuatro semestres</strong>. En cada semestre, a un grupo se le entregaron <strong>definiciones de palabras difíciles</strong> (tratamiento) y al otro un <strong>texto crítico de economía</strong> (control), y luego todos presentaron el mismo quiz de vocabulario.</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb69-1"><a href="experimentos-aleatorizados-en-stata.html#cb69-1" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;data.dta&quot;</span>, <span class="kw">clear</span></span>
 <span id="cb69-2"><a href="experimentos-aleatorizados-en-stata.html#cb69-2" tabindex="-1"></a></span>
-<span id="cb69-3"><a href="experimentos-aleatorizados-en-stata.html#cb69-3" tabindex="-1"></a>* Tratamiento 1=B, 0=A</span>
+<span id="cb69-3"><a href="experimentos-aleatorizados-en-stata.html#cb69-3" tabindex="-1"></a>* Tratamiento 1=B (definiciones), 0=A (texto crítico)</span>
 <span id="cb69-4"><a href="experimentos-aleatorizados-en-stata.html#cb69-4" tabindex="-1"></a><span class="kw">gen</span> D = (grupo == <span class="st">&quot;B&quot;</span>)</span>
 <span id="cb69-5"><a href="experimentos-aleatorizados-en-stata.html#cb69-5" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> Dlbl 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratado&quot;</span></span>
 <span id="cb69-6"><a href="experimentos-aleatorizados-en-stata.html#cb69-6" tabindex="-1"></a><span class="kw">label</span> <span class="kw">values</span> D Dlbl</span>
 <span id="cb69-7"><a href="experimentos-aleatorizados-en-stata.html#cb69-7" tabindex="-1"></a></span>
-<span id="cb69-8"><a href="experimentos-aleatorizados-en-stata.html#cb69-8" tabindex="-1"></a>* Outcome <span class="fu">y</span> <span class="fu">y</span> controles</span>
+<span id="cb69-8"><a href="experimentos-aleatorizados-en-stata.html#cb69-8" tabindex="-1"></a>* Outcome <span class="fu">y</span> controles</span>
 <span id="cb69-9"><a href="experimentos-aleatorizados-en-stata.html#cb69-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>        = resultado</span>
 <span id="cb69-10"><a href="experimentos-aleatorizados-en-stata.html#cb69-10" tabindex="-1"></a><span class="kw">gen</span> mujer    = (genero == <span class="st">&quot;Mujer&quot;</span>)</span>
 <span id="cb69-11"><a href="experimentos-aleatorizados-en-stata.html#cb69-11" tabindex="-1"></a><span class="kw">gen</span> pregrado = (programa == <span class="st">&quot;Pregrado&quot;</span>)</span>
 <span id="cb69-12"><a href="experimentos-aleatorizados-en-stata.html#cb69-12" tabindex="-1"></a><span class="kw">gen</span> maestria = (programa == <span class="st">&quot;Maestría&quot;</span>)</span>
 <span id="cb69-13"><a href="experimentos-aleatorizados-en-stata.html#cb69-13" tabindex="-1"></a></span>
-<span id="cb69-14"><a href="experimentos-aleatorizados-en-stata.html#cb69-14" tabindex="-1"></a><span class="kw">global</span> X edad mujer libros pregrado maestria</span></code></pre></div>
+<span id="cb69-14"><a href="experimentos-aleatorizados-en-stata.html#cb69-14" tabindex="-1"></a>* Semestre como estrato (<span class="kw">variable</span> clave para escenarios 3 <span class="fu">y</span> 4)</span>
+<span id="cb69-15"><a href="experimentos-aleatorizados-en-stata.html#cb69-15" tabindex="-1"></a><span class="kw">tab</span> semestre D</span>
+<span id="cb69-16"><a href="experimentos-aleatorizados-en-stata.html#cb69-16" tabindex="-1"></a></span>
+<span id="cb69-17"><a href="experimentos-aleatorizados-en-stata.html#cb69-17" tabindex="-1"></a><span class="kw">global</span> X edad mujer libros pregrado maestria</span></code></pre></div>
 <ul>
 <li>Programa de diferencia de medias con t-test y opción de guardar resultados en un archivo .dta**</li>
 </ul>
@@ -598,36 +607,360 @@ Objetivo: <strong>no rechazar</strong> que las medias son iguales.</li>
 <span id="cb70-68"><a href="experimentos-aleatorizados-en-stata.html#cb70-68" tabindex="-1"></a>esttab, se <span class="kw">star</span>(* 0.10 ** 0.05 *** 0.01) <span class="co">///</span></span>
 <span id="cb70-69"><a href="experimentos-aleatorizados-en-stata.html#cb70-69" tabindex="-1"></a>    <span class="kw">stats</span>(<span class="kw">N</span> r2, fmt(%9.0g %9.3f) labels(<span class="st">&quot;N&quot;</span> <span class="st">&quot;R2&quot;</span>)) <span class="co">///</span></span>
 <span id="cb70-70"><a href="experimentos-aleatorizados-en-stata.html#cb70-70" tabindex="-1"></a>    nomtitle <span class="kw">compress</span></span></code></pre></div>
+<p><strong>Resultados del balance (con nuestros datos):</strong></p>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:balance-table">Table 6.1: </span><span id="tab:balance-table">Table 6.2: </span>Balance de covariables (t-tests)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+Media_T
+</th>
+<th style="text-align:right;">
+Media_C
+</th>
+<th style="text-align:right;">
+Diff
+</th>
+<th style="text-align:center;">
+t
+</th>
+<th style="text-align:center;">
+p-valor
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+t…1
+</td>
+<td style="text-align:left;">
+edad
+</td>
+<td style="text-align:right;">
+26.513
+</td>
+<td style="text-align:right;">
+23.548
+</td>
+<td style="text-align:right;">
+2.964
+</td>
+<td style="text-align:center;">
+1.842
+</td>
+<td style="text-align:center;">
+0.071
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+t…2
+</td>
+<td style="text-align:left;">
+mujer
+</td>
+<td style="text-align:right;">
+0.282
+</td>
+<td style="text-align:right;">
+0.258
+</td>
+<td style="text-align:right;">
+0.024
+</td>
+<td style="text-align:center;">
+0.222
+</td>
+<td style="text-align:center;">
+0.825
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+t…3
+</td>
+<td style="text-align:left;">
+libros
+</td>
+<td style="text-align:right;">
+3.674
+</td>
+<td style="text-align:right;">
+2.726
+</td>
+<td style="text-align:right;">
+0.949
+</td>
+<td style="text-align:center;">
+1.169
+</td>
+<td style="text-align:center;">
+0.247
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+t…4
+</td>
+<td style="text-align:left;">
+pregrado
+</td>
+<td style="text-align:right;">
+0.513
+</td>
+<td style="text-align:right;">
+0.355
+</td>
+<td style="text-align:right;">
+0.158
+</td>
+<td style="text-align:center;">
+1.325
+</td>
+<td style="text-align:center;">
+0.190
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+t…5
+</td>
+<td style="text-align:left;">
+maestria
+</td>
+<td style="text-align:right;">
+0.487
+</td>
+<td style="text-align:right;">
+0.645
+</td>
+<td style="text-align:right;">
+-0.158
+</td>
+<td style="text-align:center;">
+-1.325
+</td>
+<td style="text-align:center;">
+0.190
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Prueba conjunta (LPM):</strong> F = 3.249, p-valor = 0.017. Se rechaza balance conjunto.</p>
 </div>
-<div id="paso-4-estimar-el-efecto-del-tratamiento" class="section level3 unnumbered hasAnchor">
-<h3>PASO 4) Estimar el efecto del tratamiento<a href="experimentos-aleatorizados-en-stata.html#paso-4-estimar-el-efecto-del-tratamiento" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><span class="math display">\[
-Y_i \;=\; \alpha \;+\; \tau D_i \;+\; \varepsilon_i.
-\]</span>
-- Bajo aleatorización, <span class="math inline">\(\hat{\tau}_{OLS}\)</span> es insesgado y coincide con la diferencia de medias.</p>
-<p>Sea <span class="math inline">\(D\)</span> la columna binaria (0/1) y <span class="math inline">\(\iota\)</span> el vector de unos. Entonces, en <span class="math inline">\(Y = \alpha \iota + \tau D + \varepsilon\)</span>, se tiene:
-<span class="math display">\[
-\hat{\tau}
-\;=\;
-\bar{Y}_1 - \bar{Y}_0.
-\]</span></p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb71-1"><a href="experimentos-aleatorizados-en-stata.html#cb71-1" tabindex="-1"></a>eststo <span class="kw">clear</span></span>
-<span id="cb71-2"><a href="experimentos-aleatorizados-en-stata.html#cb71-2" tabindex="-1"></a>eststo m1: <span class="kw">reg</span> <span class="fu">y</span> D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb71-3"><a href="experimentos-aleatorizados-en-stata.html#cb71-3" tabindex="-1"></a>eststo m2: <span class="kw">reg</span> <span class="fu">y</span> D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<div id="paso-4-estimar-el-efecto-del-tratamiento-los-cuatro-escenarios" class="section level3 unnumbered hasAnchor">
+<h3>PASO 4) Estimar el efecto del tratamiento: los cuatro escenarios<a href="experimentos-aleatorizados-en-stata.html#paso-4-estimar-el-efecto-del-tratamiento-los-cuatro-escenarios" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el capítulo anterior derivamos <strong>cuatro especificaciones</strong> según el diseño experimental. Ahora las implementamos en Stata, usando <code>semestre</code> como variable de estrato <span class="math inline">\(S_i\)</span>:</p>
+<div class="table table-bordered table-striped">
+<table>
+<colgroup>
+<col width="38%" />
+<col width="30%" />
+<col width="30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Escenario</th>
+<th align="left">Regresión</th>
+<th align="left">Objetivo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + u_i\)</span></td>
+<td align="left">Identificación pura por aleatorización</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \beta&#39; X_i + u_i\)</span></td>
+<td align="left">+ precisión con controles baseline</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \delta&#39; S_i + u_i\)</span></td>
+<td align="left">Respetar diseño estratificado</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \delta&#39; S_i + \beta&#39; X_i + u_i\)</span></td>
+<td align="left">Diseño + eficiencia (especificación completa)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>En los cuatro casos, <span class="math inline">\(\hat{\tau}\)</span> estima el <strong>ATE</strong> de forma consistente. Lo que cambia es la <strong>precisión</strong>.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb71-1"><a href="experimentos-aleatorizados-en-stata.html#cb71-1" tabindex="-1"></a>* ── Escenario 1: RCT simple (diferencia <span class="kw">de</span> medias) ──────────────────────</span>
+<span id="cb71-2"><a href="experimentos-aleatorizados-en-stata.html#cb71-2" tabindex="-1"></a>eststo <span class="kw">clear</span></span>
+<span id="cb71-3"><a href="experimentos-aleatorizados-en-stata.html#cb71-3" tabindex="-1"></a>eststo m1: <span class="kw">reg</span> <span class="fu">y</span> D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
 <span id="cb71-4"><a href="experimentos-aleatorizados-en-stata.html#cb71-4" tabindex="-1"></a></span>
-<span id="cb71-5"><a href="experimentos-aleatorizados-en-stata.html#cb71-5" tabindex="-1"></a>esttab m1 m2, se <span class="kw">star</span>(* 0.10 ** 0.05 *** 0.01) <span class="co">///</span></span>
-<span id="cb71-6"><a href="experimentos-aleatorizados-en-stata.html#cb71-6" tabindex="-1"></a>    <span class="kw">stats</span>(<span class="kw">N</span> r2, fmt(%9.0g %9.3f) labels(<span class="st">&quot;N&quot;</span> <span class="st">&quot;R2&quot;</span>)) <span class="co">///</span></span>
-<span id="cb71-7"><a href="experimentos-aleatorizados-en-stata.html#cb71-7" tabindex="-1"></a>    b(%9.4f) <span class="kw">compress</span> nonote <span class="co">///</span></span>
-<span id="cb71-8"><a href="experimentos-aleatorizados-en-stata.html#cb71-8" tabindex="-1"></a>    <span class="bn">title</span>(<span class="st">&quot;Efecto del tratamiento con y sin controles&quot;</span>)</span></code></pre></div>
+<span id="cb71-5"><a href="experimentos-aleatorizados-en-stata.html#cb71-5" tabindex="-1"></a>* ── Escenario 2: RCT simple + controles baseline ────────────────────────</span>
+<span id="cb71-6"><a href="experimentos-aleatorizados-en-stata.html#cb71-6" tabindex="-1"></a>eststo m2: <span class="kw">reg</span> <span class="fu">y</span> D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb71-7"><a href="experimentos-aleatorizados-en-stata.html#cb71-7" tabindex="-1"></a></span>
+<span id="cb71-8"><a href="experimentos-aleatorizados-en-stata.html#cb71-8" tabindex="-1"></a>* ── Escenario 3: Estratificado por semestre, <span class="fu">sin</span> controles ───────────────</span>
+<span id="cb71-9"><a href="experimentos-aleatorizados-en-stata.html#cb71-9" tabindex="-1"></a>eststo m3: <span class="kw">reg</span> <span class="fu">y</span> D i.semestre, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb71-10"><a href="experimentos-aleatorizados-en-stata.html#cb71-10" tabindex="-1"></a></span>
+<span id="cb71-11"><a href="experimentos-aleatorizados-en-stata.html#cb71-11" tabindex="-1"></a>* ── Escenario 4: Estratificado + controles (especificación completa) ────</span>
+<span id="cb71-12"><a href="experimentos-aleatorizados-en-stata.html#cb71-12" tabindex="-1"></a>eststo m4: <span class="kw">reg</span> <span class="fu">y</span> D i.semestre <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb71-13"><a href="experimentos-aleatorizados-en-stata.html#cb71-13" tabindex="-1"></a></span>
+<span id="cb71-14"><a href="experimentos-aleatorizados-en-stata.html#cb71-14" tabindex="-1"></a>* Comparar los cuatro modelos lado a lado</span>
+<span id="cb71-15"><a href="experimentos-aleatorizados-en-stata.html#cb71-15" tabindex="-1"></a>esttab m1 m2 m3 m4, se <span class="kw">star</span>(* 0.10 ** 0.05 *** 0.01) <span class="co">///</span></span>
+<span id="cb71-16"><a href="experimentos-aleatorizados-en-stata.html#cb71-16" tabindex="-1"></a>    <span class="kw">stats</span>(<span class="kw">N</span> r2, fmt(%9.0g %9.3f) labels(<span class="st">&quot;N&quot;</span> <span class="st">&quot;R2&quot;</span>)) <span class="co">///</span></span>
+<span id="cb71-17"><a href="experimentos-aleatorizados-en-stata.html#cb71-17" tabindex="-1"></a>    b(%9.4f) <span class="kw">compress</span> nonote <span class="co">///</span></span>
+<span id="cb71-18"><a href="experimentos-aleatorizados-en-stata.html#cb71-18" tabindex="-1"></a>    mtitle(<span class="st">&quot;Simple&quot;</span> <span class="st">&quot;+Controles&quot;</span> <span class="st">&quot;+Estratos&quot;</span> <span class="st">&quot;Completo&quot;</span>) <span class="co">///</span></span>
+<span id="cb71-19"><a href="experimentos-aleatorizados-en-stata.html#cb71-19" tabindex="-1"></a>    <span class="bn">title</span>(<span class="st">&quot;Cuatro escenarios de estimación del ATE&quot;</span>)</span></code></pre></div>
+<p><strong>Resultados (con nuestros datos):</strong></p>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
+
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_pfzlyzcs0exmd7va8z3h = TinyTable.createTableFunctions("tinytable_pfzlyzcs0exmd7va8z3h");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '10', j: 2 }, { i: '10', j: 3 }, { i: '10', j: 4 }, { i: '10', j: 5 } ], css_id: 'tinytable_css_9az3wwbozlpiewfyfqhh',}, 
+          { positions: [ { i: '8', j: 2 }, { i: '8', j: 3 }, { i: '8', j: 4 }, { i: '8', j: 5 } ], css_id: 'tinytable_css_i0uhkygy819by8t358x3',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '9', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '3', j: 4 }, { i: '4', j: 4 }, { i: '5', j: 4 }, { i: '6', j: 4 }, { i: '7', j: 4 }, { i: '9', j: 4 }, { i: '1', j: 5 }, { i: '2', j: 5 }, { i: '3', j: 5 }, { i: '4', j: 5 }, { i: '5', j: 5 }, { i: '6', j: 5 }, { i: '7', j: 5 }, { i: '9', j: 5 } ], css_id: 'tinytable_css_r7po6285a7ap7smzxsgh',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 }, { i: '0', j: 5 } ], css_id: 'tinytable_css_x8xz83o4efkexa7auos1',}, 
+          { positions: [ { i: '10', j: 1 } ], css_id: 'tinytable_css_3lxy3j0ul4w3edxh25tk',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_aam7di7dpdvkg81eo3yb',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 } ], css_id: 'tinytable_css_8f5jkksne5y9rm404npy',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_3p6jzs6qlnrrp8r8zo7d',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_pfzlyzcs0exmd7va8z3h.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_pfzlyzcs0exmd7va8z3h td.tinytable_css_9az3wwbozlpiewfyfqhh, #tinytable_pfzlyzcs0exmd7va8z3h th.tinytable_css_9az3wwbozlpiewfyfqhh {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_pfzlyzcs0exmd7va8z3h td.tinytable_css_i0uhkygy819by8t358x3, #tinytable_pfzlyzcs0exmd7va8z3h th.tinytable_css_i0uhkygy819by8t358x3 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_pfzlyzcs0exmd7va8z3h td.tinytable_css_r7po6285a7ap7smzxsgh, #tinytable_pfzlyzcs0exmd7va8z3h th.tinytable_css_r7po6285a7ap7smzxsgh { text-align: center }
+    #tinytable_pfzlyzcs0exmd7va8z3h td.tinytable_css_x8xz83o4efkexa7auos1, #tinytable_pfzlyzcs0exmd7va8z3h th.tinytable_css_x8xz83o4efkexa7auos1 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_pfzlyzcs0exmd7va8z3h td.tinytable_css_3lxy3j0ul4w3edxh25tk, #tinytable_pfzlyzcs0exmd7va8z3h th.tinytable_css_3lxy3j0ul4w3edxh25tk {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_pfzlyzcs0exmd7va8z3h td.tinytable_css_aam7di7dpdvkg81eo3yb, #tinytable_pfzlyzcs0exmd7va8z3h th.tinytable_css_aam7di7dpdvkg81eo3yb {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_pfzlyzcs0exmd7va8z3h td.tinytable_css_8f5jkksne5y9rm404npy, #tinytable_pfzlyzcs0exmd7va8z3h th.tinytable_css_8f5jkksne5y9rm404npy { text-align: left }
+    #tinytable_pfzlyzcs0exmd7va8z3h td.tinytable_css_3p6jzs6qlnrrp8r8zo7d, #tinytable_pfzlyzcs0exmd7va8z3h th.tinytable_css_3p6jzs6qlnrrp8r8zo7d {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_pfzlyzcs0exmd7va8z3h" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <caption>Cuatro escenarios de estimación del ATE</caption>
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">Simple</th>
+                <th scope="col" data-row="0" data-col="3">+Controles</th>
+                <th scope="col" data-row="0" data-col="4">+Estratos</th>
+                <th scope="col" data-row="0" data-col="5">Completo</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='5'>* p < 0.1, ** p < 0.05, *** p < 0.01</td></tr>
+<tr><td colspan='5'>SE robustas (HC1) entre paréntesis. Dummies de semestre incluidas en modelos 3 y 4.</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">D</td>
+                  <td data-row="1" data-col="2">4.312***</td>
+                  <td data-row="1" data-col="3">4.252***</td>
+                  <td data-row="1" data-col="4">4.390***</td>
+                  <td data-row="1" data-col="5">4.296***</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.476)</td>
+                  <td data-row="2" data-col="3">(0.464)</td>
+                  <td data-row="2" data-col="4">(0.429)</td>
+                  <td data-row="2" data-col="5">(0.440)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">edad</td>
+                  <td data-row="3" data-col="2"></td>
+                  <td data-row="3" data-col="3">0.046*</td>
+                  <td data-row="3" data-col="4"></td>
+                  <td data-row="3" data-col="5">0.041</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2"></td>
+                  <td data-row="4" data-col="3">(0.023)</td>
+                  <td data-row="4" data-col="4"></td>
+                  <td data-row="4" data-col="5">(0.026)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">mujer</td>
+                  <td data-row="5" data-col="2"></td>
+                  <td data-row="5" data-col="3">0.064</td>
+                  <td data-row="5" data-col="4"></td>
+                  <td data-row="5" data-col="5">-0.148</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2"></td>
+                  <td data-row="6" data-col="3">(0.532)</td>
+                  <td data-row="6" data-col="4"></td>
+                  <td data-row="6" data-col="5">(0.492)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">libros</td>
+                  <td data-row="7" data-col="2"></td>
+                  <td data-row="7" data-col="3">0.023</td>
+                  <td data-row="7" data-col="4"></td>
+                  <td data-row="7" data-col="5">0.048</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2"></td>
+                  <td data-row="8" data-col="3">(0.041)</td>
+                  <td data-row="8" data-col="4"></td>
+                  <td data-row="8" data-col="5">(0.049)</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">70</td>
+                  <td data-row="9" data-col="3">70</td>
+                  <td data-row="9" data-col="4">70</td>
+                  <td data-row="9" data-col="5">70</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1">R2</td>
+                  <td data-row="10" data-col="2">0.553</td>
+                  <td data-row="10" data-col="3">0.593</td>
+                  <td data-row="10" data-col="4">0.650</td>
+                  <td data-row="10" data-col="5">0.672</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+<div class="boxnote">
+<p><strong>Observe cómo cambian los SE de <span class="math inline">\(\hat{\tau}\)</span></strong> entre los cuatro modelos. El punto estimado debe ser similar (la aleatorización garantiza consistencia), pero los errores estándar se reducen al agregar variables que predicen <span class="math inline">\(Y\)</span>. Los estratos (semestre) absorben diferencias de nivel entre cohortes.</p>
+</div>
 <div class="boxnote">
 <p>Interpretación según escala de <span class="math inline">\(Y\)</span></p>
 <ol style="list-style-type: decimal">
 <li><strong><span class="math inline">\(Y\)</span> en niveles (continuo):</strong> <span class="math inline">\(\hat{\tau}\)</span> es diferencia de unidades de <span class="math inline">\(Y\)</span> entre tratados y control.</li>
-<li><strong><span class="math inline">\(Y\)</span> en logaritmos:</strong> <span class="math inline">\(\hat{\tau}\)</span> es una <strong>semi-elasticidad</strong>; el efecto porcentual aproximado es <span class="math inline">\(100\times \hat{\tau}\%\)</span>.<br />
-Efecto exacto: <span class="math inline">\(100\times(\exp(\hat{\tau})-1)\%\)</span>.<br />
+<li><strong><span class="math inline">\(Y\)</span> en logaritmos:</strong> <span class="math inline">\(\hat{\tau}\)</span> es una <strong>semi-elasticidad</strong>; el efecto porcentual aproximado es <span class="math inline">\(100\times \hat{\tau}\%\)</span>.
+Efecto exacto: <span class="math inline">\(100\times(\exp(\hat{\tau})-1)\%\)</span>.
 <em>Ejemplo:</em> <span class="math inline">\(\hat{\tau}=0.13 \Rightarrow \exp(0.13)-1 \approx 0.139\)</span> → <strong>13.9%</strong>.</li>
 <li><strong><span class="math inline">\(Y\)</span> estandarizado:</strong> media 0 y varianza 1; <span class="math inline">\(\hat{\tau}\)</span> se interpreta en <strong>desviaciones estándar</strong>.</li>
-<li><strong><span class="math inline">\(Y\)</span> binario:</strong> <span class="math inline">\(\hat{\tau}\)</span> es <strong>diferencia de probabilidades</strong> (puntos porcentuales).<br />
+<li><strong><span class="math inline">\(Y\)</span> binario:</strong> <span class="math inline">\(\hat{\tau}\)</span> es <strong>diferencia de probabilidades</strong> (puntos porcentuales).
 <em>Ejemplo:</em> <span class="math inline">\(p_1=0.30\)</span>, <span class="math inline">\(p_0=0.25\)</span> ⇒ <span class="math inline">\(\hat{\tau}=0.05 = 5\)</span> pp.</li>
 </ol>
 </div>
@@ -680,7 +1013,7 @@ Si <span class="math inline">\(X \perp D\)</span> (por diseño) y <span class="m
 Y_i \;=\; \alpha \;+\; \tau D_i \;+\; \gamma W_i \;+\; \delta\, (D_i \times W_i) \;+\; X_i&#39;\beta \;+\; u_i,
 \]</span>
 donde <span class="math inline">\(W\)</span> es el moderador (p. ej., <strong>mujer</strong>, <strong>libros</strong>, <strong>cuartiles de edad</strong>).</li>
-<li><strong>Interpretación:</strong> <span class="math inline">\(\delta\)</span> es el <strong>cambio en el efecto de <span class="math inline">\(D\)</span></strong> al pasar de un nivel de <span class="math inline">\(W\)</span> a otro.<br />
+<li><strong>Interpretación:</strong> <span class="math inline">\(\delta\)</span> es el <strong>cambio en el efecto de <span class="math inline">\(D\)</span></strong> al pasar de un nivel de <span class="math inline">\(W\)</span> a otro.
 Usar <code>margins</code>/<code>marginsplot</code> para reportar efectos marginales y perfiles por subgrupo.</li>
 </ul>
 <div class="sourceCode" id="cb72"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb72-1"><a href="experimentos-aleatorizados-en-stata.html#cb72-1" tabindex="-1"></a>* Por mujer (binaria)</span>
@@ -701,13 +1034,165 @@ Usar <code>margins</code>/<code>marginsplot</code> para reportar efectos margina
 <span id="cb72-16"><a href="experimentos-aleatorizados-en-stata.html#cb72-16" tabindex="-1"></a>margins D#q_edad</span>
 <span id="cb72-17"><a href="experimentos-aleatorizados-en-stata.html#cb72-17" tabindex="-1"></a>marginsplot, <span class="bn">title</span>(<span class="st">&quot;Heterogeneidad por cuartiles de edad&quot;</span>)</span>
 <span id="cb72-18"><a href="experimentos-aleatorizados-en-stata.html#cb72-18" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">&quot;margins_qedad.pdf&quot;</span>, <span class="kw">replace</span></span></code></pre></div>
+<p><strong>Resultados (con nuestros datos):</strong></p>
+<p><img src="06-RCT2_files/figure-html/het-mujer-1.png" width="768" /></p>
+<p><img src="06-RCT2_files/figure-html/het-edad-1.png" width="576" /></p>
+<div id="el-truco-de-centrar-wooldridge-1" class="section level3 unnumbered hasAnchor">
+<h3>El truco de centrar (Wooldridge)<a href="experimentos-aleatorizados-en-stata.html#el-truco-de-centrar-wooldridge-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el capítulo anterior vimos que si interactuamos <span class="math inline">\(D\)</span> con una covariable <span class="math inline">\(W\)</span>, el coeficiente <span class="math inline">\(\tau\)</span> solo es el efecto para <span class="math inline">\(W=0\)</span>, <strong>no</strong> el ATE promedio. Para que <span class="math inline">\(\tau\)</span> sea directamente el ATE, centramos la covariable:</p>
+<p><span class="math display">\[
+W_c = W - \bar{W}, \qquad Y_i = \alpha + \tau D_i + \gamma W_{c,i} + \delta (D_i \cdot W_{c,i}) + u_i
+\]</span></p>
+<p>Como <span class="math inline">\(\mathbb{E}[W_c]=0\)</span>, ahora <span class="math inline">\(\tau = ATE\)</span> directamente.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb73-1"><a href="experimentos-aleatorizados-en-stata.html#cb73-1" tabindex="-1"></a>* ── Sin centrar: τ = efecto solo para libros=0 ──────────────────────────</span>
+<span id="cb73-2"><a href="experimentos-aleatorizados-en-stata.html#cb73-2" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> c.D##c.libros, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb73-3"><a href="experimentos-aleatorizados-en-stata.html#cb73-3" tabindex="-1"></a></span>
+<span id="cb73-4"><a href="experimentos-aleatorizados-en-stata.html#cb73-4" tabindex="-1"></a>* ── Con centrado: τ = ATE promedio ───────────────────────────────────────</span>
+<span id="cb73-5"><a href="experimentos-aleatorizados-en-stata.html#cb73-5" tabindex="-1"></a><span class="kw">sum</span> libros</span>
+<span id="cb73-6"><a href="experimentos-aleatorizados-en-stata.html#cb73-6" tabindex="-1"></a><span class="kw">gen</span> libros_c = libros - <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb73-7"><a href="experimentos-aleatorizados-en-stata.html#cb73-7" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> c.D##c.libros_c, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb73-8"><a href="experimentos-aleatorizados-en-stata.html#cb73-8" tabindex="-1"></a>* Ahora <span class="fu">el</span> coeficiente <span class="kw">de</span> D es directamente <span class="fu">el</span> ATE</span></code></pre></div>
+<p><strong>Resultados (con nuestros datos):</strong></p>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
+
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_zbhjb4d743mvmbh04o4p = TinyTable.createTableFunctions("tinytable_zbhjb4d743mvmbh04o4p");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '14', j: 2 }, { i: '14', j: 3 } ], css_id: 'tinytable_css_23vh6r0680a18o8nzt94',}, 
+          { positions: [ { i: '12', j: 2 }, { i: '12', j: 3 } ], css_id: 'tinytable_css_31dk9kbbfn90359h3d71',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '13', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '13', j: 3 } ], css_id: 'tinytable_css_3bgo7xb2xejg97n5ye3t',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_f7e1wjor9ig5x9kpeh10',}, 
+          { positions: [ { i: '14', j: 1 } ], css_id: 'tinytable_css_hyuoym4cv8cqhz2tufoc',}, 
+          { positions: [ { i: '12', j: 1 } ], css_id: 'tinytable_css_d0gwcp7zk6gf45ar6muc',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '13', j: 1 } ], css_id: 'tinytable_css_ioz9sgh4jecpjjopvenb',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_jrm3k0c1jywy3r9v7iq1',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_zbhjb4d743mvmbh04o4p.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_zbhjb4d743mvmbh04o4p td.tinytable_css_23vh6r0680a18o8nzt94, #tinytable_zbhjb4d743mvmbh04o4p th.tinytable_css_23vh6r0680a18o8nzt94 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_zbhjb4d743mvmbh04o4p td.tinytable_css_31dk9kbbfn90359h3d71, #tinytable_zbhjb4d743mvmbh04o4p th.tinytable_css_31dk9kbbfn90359h3d71 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_zbhjb4d743mvmbh04o4p td.tinytable_css_3bgo7xb2xejg97n5ye3t, #tinytable_zbhjb4d743mvmbh04o4p th.tinytable_css_3bgo7xb2xejg97n5ye3t { text-align: center }
+    #tinytable_zbhjb4d743mvmbh04o4p td.tinytable_css_f7e1wjor9ig5x9kpeh10, #tinytable_zbhjb4d743mvmbh04o4p th.tinytable_css_f7e1wjor9ig5x9kpeh10 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_zbhjb4d743mvmbh04o4p td.tinytable_css_hyuoym4cv8cqhz2tufoc, #tinytable_zbhjb4d743mvmbh04o4p th.tinytable_css_hyuoym4cv8cqhz2tufoc {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_zbhjb4d743mvmbh04o4p td.tinytable_css_d0gwcp7zk6gf45ar6muc, #tinytable_zbhjb4d743mvmbh04o4p th.tinytable_css_d0gwcp7zk6gf45ar6muc {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_zbhjb4d743mvmbh04o4p td.tinytable_css_ioz9sgh4jecpjjopvenb, #tinytable_zbhjb4d743mvmbh04o4p th.tinytable_css_ioz9sgh4jecpjjopvenb { text-align: left }
+    #tinytable_zbhjb4d743mvmbh04o4p td.tinytable_css_jrm3k0c1jywy3r9v7iq1, #tinytable_zbhjb4d743mvmbh04o4p th.tinytable_css_jrm3k0c1jywy3r9v7iq1 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_zbhjb4d743mvmbh04o4p" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <caption>Truco de centrar: comparación</caption>
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">Sin centrar</th>
+                <th scope="col" data-row="0" data-col="3">Con centrado</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='3'>* p < 0.1, ** p < 0.05, *** p < 0.01</td></tr>
+<tr><td colspan='3'>Sin centrar: coef(D) = efecto cuando libros = 0.</td></tr>
+<tr><td colspan='3'>Con centrado: coef(D) = ATE promedio.</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">2.927***</td>
+                  <td data-row="1" data-col="3">3.438***</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.442)</td>
+                  <td data-row="2" data-col="3">(0.363)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">D (tratamiento)</td>
+                  <td data-row="3" data-col="2">4.669***</td>
+                  <td data-row="3" data-col="3">4.221***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.580)</td>
+                  <td data-row="4" data-col="3">(0.475)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">libros</td>
+                  <td data-row="5" data-col="2">0.157**</td>
+                  <td data-row="5" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.067)</td>
+                  <td data-row="6" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">D x libros</td>
+                  <td data-row="7" data-col="2">-0.138*</td>
+                  <td data-row="7" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(0.082)</td>
+                  <td data-row="8" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">libros (centrado)</td>
+                  <td data-row="9" data-col="2"></td>
+                  <td data-row="9" data-col="3">0.157**</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1"></td>
+                  <td data-row="10" data-col="2"></td>
+                  <td data-row="10" data-col="3">(0.067)</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">D x libros_c</td>
+                  <td data-row="11" data-col="2"></td>
+                  <td data-row="11" data-col="3">-0.138*</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1"></td>
+                  <td data-row="12" data-col="2"></td>
+                  <td data-row="12" data-col="3">(0.082)</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">Num.Obs.</td>
+                  <td data-row="13" data-col="2">70</td>
+                  <td data-row="13" data-col="3">70</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">R2</td>
+                  <td data-row="14" data-col="2">0.563</td>
+                  <td data-row="14" data-col="3">0.563</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+<div class="boxnote">
+<p><strong>Regla práctica:</strong> siempre que interactúes el tratamiento con una variable continua, <strong>centra la variable</strong> para que el coeficiente de <span class="math inline">\(D\)</span> siga siendo interpretable como el efecto promedio.</p>
+</div>
 <div class="boxejercicio">
-<p><strong>🧪 Ejercicios</strong></p>
+<p><strong>Ejercicios</strong></p>
 <ol style="list-style-type: decimal">
 <li><strong>Aleatorización (Bernoulli y estratos)</strong>
 <ol style="list-style-type: lower-alpha">
 <li>Con tu <code>data.dta</code>, genera <code>D</code> con p=0.5 usando <code>runiform()</code>.</li>
-<li>Repite p=0.3.</li>
+<li>Repite con p=0.3.</li>
 <li>Crea estratos por <code>mujer × programa</code> y asigna 50/50 exacto por estrato.</li>
 </ol></li>
 <li><strong><code>randtreat</code> avanzado</strong>
@@ -721,34 +1206,61 @@ Usar <code>margins</code>/<code>marginsplot</code> para reportar efectos margina
 <li>Estima <code>D ~ X</code> (LPM/logit/probit) y reporta el test conjunto.</li>
 <li>Interpreta: ¿hay evidencia de desbalance?</li>
 </ol></li>
-<li><strong>Efecto del tratamiento</strong>
+<li><strong>Los cuatro escenarios</strong>
 <ol style="list-style-type: lower-alpha">
-<li>Estima <span class="math inline">\(Y\sim D\)</span> y <span class="math inline">\(Y\sim D+X\)</span> con SE robustas.</li>
-<li>Compara <span class="math inline">\(\hat\tau\)</span> y sus SE entre modelos; discute precisión.</li>
-<li>Si <code>resultado</code> es binario, interpreta en puntos porcentuales.</li>
+<li>Estima los cuatro modelos del PASO 4 (simple, +controles, +estratos, completo).</li>
+<li>Compara <span class="math inline">\(\hat{\tau}\)</span> y sus SE entre los cuatro. ¿Cuál tiene menor SE? ¿Por qué?</li>
+<li>¿Cambia mucho el punto estimado al incluir estratos? Discute.</li>
 </ol></li>
-<li><strong>Heterogeneidad</strong>
+<li><strong>Heterogeneidad y centrado</strong>
 <ol style="list-style-type: lower-alpha">
-<li>Estima <span class="math inline">\(Y\sim D\times \text{mujer}\)</span> y reporta <code>margins</code>.</li>
-<li>Estima <span class="math inline">\(Y\sim D\times \text{libros}\)</span>, grafica <code>marginsplot</code> y comenta el perfil.</li>
+<li>Estima <span class="math inline">\(Y \sim D \times \text{mujer}\)</span> y reporta <code>margins</code>.</li>
+<li>Estima <span class="math inline">\(Y \sim D \times \text{libros}\)</span> <strong>sin centrar</strong> y <strong>con centrado</strong>. Compara el coeficiente de <span class="math inline">\(D\)</span> en ambos casos.</li>
+<li>Grafica <code>marginsplot</code> para libros y comenta el perfil.</li>
 </ol></li>
 </ol>
 <p><strong>Bonus (opcional):</strong>
-6. Repite la estimación con <strong>SE cluster</strong> suponiendo que la asignación fue por <code>escuela</code>. Discute diferencias con SE robustas.<br />
-</p>
+6. Repite la estimación con <strong>SE cluster</strong> por <code>semestre</code>. Discute diferencias con SE robustas (nota: con solo 4 clusters, ¿qué problema surge?).</p>
+</div>
+<hr />
+<div class="boxvideo green" title="Videos recomendados:">
+<ul>
+<li><a href="https://www.youtube.com/embed/eGRd8jBdNYg">Video 1</a></li>
+<li><a href="https://www.youtube.com/embed/crpuBZv6XtA">Video 2</a></li>
+<li><a href="https://www.youtube.com/embed/xlX3VtuIfQ0">Video 3</a></li>
+</ul>
+<p>Y todos los que encuentres en Google buscando: <strong>RCT Esther Duflo</strong></p>
+</div>
+<div class="boxnote">
+<p><strong>PROMPT DE CHATGPT PARA REFLEXIÓN PROFUNDA</strong></p>
+<p><strong>Instrucciones</strong>: Copia este mensaje en ChatGPT o la IA de tu preferencia. Tu objetivo no es obtener respuestas, sino <strong>reflexionar guiado por preguntas</strong>.</p>
+<hr />
+<p>Hola. Actúa como mi tutor de Stata para diseño experimental. No quiero que me des código directamente. Quiero que me ayudes a pensar paso a paso.</p>
+<p>Tengo un experimento con datos de varios semestres (variable <code>semestre</code>). Ya estimé el modelo simple <span class="math inline">\(Y = \alpha + \tau D + u\)</span>. Ahora quiero entender:</p>
+<p>Por favor, hazme preguntas como:</p>
+<ul>
+<li>¿Qué pasa con mi estimador <span class="math inline">\(\hat{\tau}\)</span> si no incluyo dummies de semestre, sabiendo que la aleatorización fue <strong>dentro</strong> de cada semestre?</li>
+<li>¿Cómo interpreto el coeficiente de <span class="math inline">\(D\)</span> cuando interactúo con una variable continua? ¿Qué pasa si no centro?</li>
+<li>Si tengo solo 4 semestres y quiero hacer cluster SE por semestre, ¿cuántos clusters necesito para que los SE sean confiables?</li>
+<li>¿Por qué el <span class="math inline">\(R^2\)</span> sube al agregar estratos pero <span class="math inline">\(\hat{\tau}\)</span> casi no cambia?</li>
+</ul>
+<p>No me des respuestas. Solo nuevas preguntas que me ayuden a entender mejor la conexión entre diseño y estimación.</p>
+</div>
+<hr />
 </div>
 </div>
 <div id="descarga-los-documentos-2" class="section level2 unnumbered hasAnchor">
 <h2>DESCARGA LOS DOCUMENTOS<a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Descargar Stata do file</strong>:<br />
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_stata.do">Descargar Stata</a></p>
-<p><strong>Descargar R script</strong>:<br />
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_R.R">Descargar R</a></p>
+<p><strong>Descargar Stata do file</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_stata.do">Descargar Stata</a></p>
+<p><strong>Descargar R script</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_R.R">Descargar R</a></p>
 <p><strong>Descargar Python Notebook</strong>:
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase1_Experimentos/clase1_phyton.ipynb">Descargar Python</a></p>
-<p><a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase1_Experimentos/clase1_phyton.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab" /></a></p>
-<p><strong>Descarga los Datos</strong><br />
-<em>(En esta clase usamos la base real <code>data.dta</code> con columnas: <code>id, resultado, grupo, edad, genero, programa, libros</code>.)</em></p>
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_python.ipynb">Descargar Python</a></p>
+<p><a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/06_RCT_Stata/clase6_python.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab" /></a></p>
+<p><strong>Descarga los Datos</strong>
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/data.dta">Descargar data.dta</a></p>
+<p><em>(Base real de un experimento replicado en 4 semestres. Columnas: <code>id, resultado, grupo, edad, genero, programa, libros, semestre, n_preguntas</code>. N=70. El grupo B recibió definiciones de palabras difíciles (tratamiento) y el grupo A recibió un texto crítico de economía (control). La variable <code>semestre</code> sirve como estrato.)</em></p>
 
 </div>
 </div>

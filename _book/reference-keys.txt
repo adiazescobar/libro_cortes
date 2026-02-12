@@ -1,5 +1,6 @@
 tab:checklist-pregunta-causal
 fig:sutva-meme
+tab:balance-table
 intro
 objetivo
 video-recomendado-mastering-metrics
