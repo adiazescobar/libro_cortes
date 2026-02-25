@@ -1,3 +1,4 @@
+
 # Diferencias en Diferencias (Teoría)
 
 ::: {.boxinfo}

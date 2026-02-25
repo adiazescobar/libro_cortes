@@ -1,6 +1,5 @@
 
-# Poder Estadístico en Stata
-
+# Poder Estadístico en Stata {#poder-estadistico-stata}
 
 
 ## Introducción {-}
@@ -352,10 +351,18 @@ $$
 
 donde $\sigma_D = \sqrt{\sigma_1^2 DE_1/n_1 + \sigma_2^2 DE_2/n_2}$.
 
-
-```
+---
 
 ## Qué puede salir mal en un RCT {-}
+
+::: {.boxinfo}
+**🎯 Objetivos de la sección**
+
+- Identificar los principales problemas que amenazan la validez interna y externa de un RCT
+- Distinguir entre efectos de equilibrio parcial y general
+- Reconocer los efectos de comportamiento (Hawthorne, John Henry, Placebo, Demanda)
+- Conocer los tres pilares del Informe Belmont y sus implicaciones éticas
+:::
 
 Un experimento aleatorio bien diseñado elimina el sesgo de selección — pero no garantiza que el estimador sea el efecto causal que nos interesa. Hay al menos cinco grandes categorías de problemas que pueden comprometer la validez interna o externa de un RCT.
 
@@ -421,6 +428,15 @@ Los beneficios y cargas del experimento deben distribuirse equitativamente. No e
 ---
 
 ## Ejercicio aplicado: Bertrand y Mullainathan (2004) {-}
+
+::: {.boxejercicio}
+**📋 Ejercicio**
+
+Descarga el do-file y los datos. Trabaja cada pregunta antes de ver el código de referencia.
+
+- [Descargar BM_parcial.do](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/BM_parcial.do)
+- [Descargar bm.dta](https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1)
+:::
 
 ### El experimento {-}
 
