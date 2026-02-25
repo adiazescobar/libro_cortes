@@ -11,7 +11,7 @@ parametros-causales-teoria
 parametros-causales-stata
 experimentos-aleatorizados
 experimentos-aleatorizados-en-stata
-poder-estadístico-en-stata
+poder-estadistico-stata
 diferencias-en-diferencias-teoría
 malos-controles-teoría
 malos-controles-en-stata
