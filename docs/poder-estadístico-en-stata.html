@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-02-12" />
+<meta name="date" content="2026-02-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,16 +31,16 @@
   
   
 <link rel="prev" href="experimentos-aleatorizados-en-stata.html"/>
-<link rel="next" href="malos-controles-teoría.html"/>
-<script src="libs/jquery/jquery-3.6.0.min.js"></script>
+<link rel="next" href="diferencias-en-diferencias-teoría.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -49,13 +49,13 @@
 
 
 
-<link href="libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections/anchor-sections.js"></script>
-<script src="libs/kePrint/kePrint.js"></script>
-<link href="libs/lightable/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable/bootstrapTable.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -175,7 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
-<li class="chapter" data-level="1.1" data-path="08-DID.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="1.1" data-path="07-POWER.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
@@ -226,22 +226,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
 <li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="08-DID.html"><a href="#poder-estad%C3%ADstico-en-stata"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
+<li class="chapter" data-level="7" data-path="07-POWER.html"><a href="#poder-estad%C3%ADstico-en-stata"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
 <li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html"><i class="fa fa-check"></i>Sin controles</a></li>
 <li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a></li>
+<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="07-POWER.html"><a href="#diferencias-en-diferencias-teor%C3%ADa"><i class="fa fa-check"></i><b>8</b> Diferencias en Diferencias (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#preparaci%C3%B3n-de-los-datos"><i class="fa fa-check"></i>Preparación de los datos</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#estad%C3%ADsticas-descriptivas"><i class="fa fa-check"></i>Estadísticas descriptivas</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-medias"><i class="fa fa-check"></i>Comparación de medias</a></li>
-<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#estimador-did-paso-a-paso"><i class="fa fa-check"></i>Estimador DID paso a paso</a></li>
-<li class="chapter" data-level="" data-path="poder-estadístico-en-stata.html"><a href="poder-estadístico-en-stata.html#usando-el-comando-diff"><i class="fa fa-check"></i>Usando el comando <code>diff</code></a></li>
+<li class="chapter" data-level="" data-path="diferencias-en-diferencias-teoría.html"><a href="diferencias-en-diferencias-teoría.html"><i class="fa fa-check"></i>Estimador DID paso a paso</a></li>
+<li class="chapter" data-level="" data-path="diferencias-en-diferencias-teoría.html"><a href="diferencias-en-diferencias-teoría.html#usando-el-comando-diff"><i class="fa fa-check"></i>Usando el comando <code>diff</code></a></li>
 <li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-con-regresiones"><i class="fa fa-check"></i>Implementación con regresiones</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#extensi%C3%B3n-con-panel"><i class="fa fa-check"></i>Extensión con panel</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n"><i class="fa fa-check"></i>Interpretación</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="08-DID.html"><a href="#malos-controles-teor%C3%ADa"><i class="fa fa-check"></i><b>8</b> Malos Controles (Teoría)</a>
+<li class="chapter" data-level="9" data-path="07-POWER.html"><a href="#malos-controles-teor%C3%ADa"><i class="fa fa-check"></i><b>9</b> Malos Controles (Teoría)</a>
 <ul>
 <li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
 <li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
@@ -251,15 +256,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Agrupación</a></li>
 <li class="chapter" data-level="" data-path="malos-controles-teoría.html"><a href="malos-controles-teoría.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html"><i class="fa fa-check"></i><b>9</b> Malos Controles en Stata</a>
+<li class="chapter" data-level="10" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html"><i class="fa fa-check"></i><b>10</b> Malos Controles en Stata</a>
 <ul>
 <li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#mediador-post-tratamiento"><i class="fa fa-check"></i>Mediador (post-tratamiento)</a></li>
 <li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#colisionador"><i class="fa fa-check"></i>Colisionador</a></li>
 <li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#histogramas-distribuciones-monte-carlo"><i class="fa fa-check"></i>Histogramas (distribuciones Monte Carlo)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#malos-controles-con-f-en-el-an%C3%A1lisis-de-d-y"><i class="fa fa-check"></i>Malos Controles con <strong>F</strong> (en el análisis de <strong>D → Y</strong>)</a></li>
-<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+<li class="chapter" data-level="" data-path="malos-controles-en-stata.html"><a href="malos-controles-en-stata.html#descarga-los-documentos-4"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html"><i class="fa fa-check"></i><b>10</b> TWFE y DiD Moderno en Stata</a>
+<li class="chapter" data-level="11" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html"><i class="fa fa-check"></i><b>11</b> TWFE y DiD Moderno en Stata</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido"><i class="fa fa-check"></i>Contexto rápido</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#modelo-b%C3%A1sico-22-did"><i class="fa fa-check"></i>Modelo básico 2×2 DiD</a></li>
@@ -281,7 +286,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
 <li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
-<li class="chapter" data-level="10.1" data-path="08-DID.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>10.1</b> 8) Notas prácticas de ejecución</a></li>
+<li class="chapter" data-level="11.1" data-path="07-POWER.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>11.1</b> 8) Notas prácticas de ejecución</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -600,151 +605,160 @@ K_1 = \frac{\bigl(z_{1-\alpha/2}+z_{1-\beta}\bigr)^2}{\delta^2} \left( \frac{\si
 \]</span></p>
 <p>donde <span class="math inline">\(\sigma_D = \sqrt{\sigma_1^2 DE_1/n_1 + \sigma_2^2 DE_2/n_2}\)</span>.</p>
 <pre><code>
-## DESCARGA LOS DOCUMENTOS {-}
+## Qué puede salir mal en un RCT {-}
 
-**Descargar Stata do file**:
-[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_stata.do)
+Un experimento aleatorio bien diseñado elimina el sesgo de selección — pero no garantiza que el estimador sea el efecto causal que nos interesa. Hay al menos cinco grandes categorías de problemas que pueden comprometer la validez interna o externa de un RCT.
 
-**Descargar R script**:
-[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_R.R)
+### 1. Externalidades y efectos de derrame (*spillovers*) {-}
 
-**Descargar Python Notebook**:
-[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_phyton.ipynb)
+El supuesto de no-interferencia de SUTVA (*Stable Unit Treatment Value Assumption*) exige que el resultado del individuo $i$ dependa **solo** de su propio tratamiento, no del de sus vecinos. Cuando esto falla, el grupo de control se &quot;contamina&quot;:
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/07_Power/07_phyton.ipynb)
+- Un programa de vacunación que reduce la circulación del virus también protege a los no vacunados → el efecto de control sube, el efecto estimado cae.
+- Dar microcrédito en un barrio puede hacer que los negocios del control pierdan clientes frente a los tratados.
 
-**Descarga los Datos**:
-[Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
+**Solución:** aleatorizar a nivel de *cluster* (barrio, escuela, aldea) lo suficientemente grandes para que la interferencia quede *dentro* del grupo, no entre grupos. Alternativamente, diseños de dos brazos con zonas buffer.
 
-&lt;!--chapter:end:07-POWER.Rmd--&gt;
+### 2. Efectos de equilibrio general {-}
 
-# Diferencias en Diferencias (Teoría)
+Los RCTs identifican el efecto de un programa a **escala pequeña**. Cuando el programa escala, los precios, salarios y comportamientos de equilibrio cambian — y el efecto puede ser muy distinto:
 
-::: {.boxinfo}
-**🎯 Objetivos de la clase**
+- Un programa de formación laboral para el 1% de los desempleados puede aumentar sus salarios. Para el 50%, la oferta adicional de trabajo capacitado reduce el salario de equilibrio.
+- Los subsidios de vivienda que funcionan en pilotos elevan los alquiles cuando se universalizan.
 
-* Entender la lógica detrás del estimador **Difference-in-Differences (DID)**.
-* Analizar estadísticamente la evolución de una variable de resultado para grupos de **tratamiento** y **control** en dos periodos de tiempo.
-* Implementar DID en **Stata** de tres formas:
+**Implicación:** el efecto de equilibrio parcial (LATE, estimado en el RCT) puede sobrestimar o subestimar el efecto de equilibrio general relevante para política pública.
 
-  1. Cálculo manual paso a paso.
-  2. Usando el comando `diff`.
-  3. Mediante regresiones.
-:::
+### 3. Efectos de comportamiento {-}
+
+| Efecto | Descripción | Dirección del sesgo |
+|--------|-------------|---------------------|
+| **Hawthorne** | Los tratados cambian de comportamiento porque saben que los observan | Sobreestimación |
+| **John Henry** | El control trabaja más al saber que está siendo comparado | Subestimación |
+| **Placebo** | El control recibe algo y mejora solo por eso | Subestimación |
+| **Demanda** | Los tratados responden lo que creen que el investigador espera | Sobreestimación |
+| **Anticipación** | Control o tratados cambian antes de recibir el tratamiento | Sesgo ambiguo |
+
+**Solución parcial:** doble ciego cuando sea posible; grupos de control activos; minimizar la visibilidad del experimento.
+
+### 4. Problemas éticos: los tres pilares del Belmont Report {-}
+
+Cualquier experimento con seres humanos debe cumplir tres principios fundamentales del [Informe Belmont (1979)](https://www.hhs.gov/ohrp/regulations-and-policy/belmont-report/index.html), que también regula la IRB (*Institutional Review Board*):
+
+**I. Respeto a las personas (*Respect for persons*)**
+Los participantes deben dar **consentimiento informado** libre y voluntario. Las poblaciones vulnerables (niños, prisioneros, personas con discapacidad cognitiva) requieren protecciones adicionales.
+
+&gt; *Escucha antes de la clase:* [Three Pillars of Human Experimentation](https://www.youtube.com/watch?v=3YBuuN3Tlok) — resumen del Belmont Report en 10 minutos.
+
+**II. Beneficencia (*Beneficence*)**
+Maximizar el beneficio y minimizar el daño. Implica:
+- No asignar al control cuando se sabe que el tratamiento funciona (problema del grupo de control con &quot;tratamiento cero&quot;).
+- Detener el experimento si hay evidencia de daño.
+
+**III. Justicia (*Justice*)**
+Los beneficios y cargas del experimento deben distribuirse equitativamente. No es justo experimentar solo con los más pobres o vulnerables para beneficiar a otros.
+
+**Ejemplos históricos de violación:**
+- Experimento de Tuskegee (1932-1972): 399 hombres afroamericanos con sífilis no recibieron penicilina aunque ya estaba disponible.
+- Estudio de Guatemala (1940s): inoculación deliberada de ETS sin consentimiento.
+
+### 5. Otros problemas comunes {-}
+
+**Attrición diferencial:** si el grupo de tratamiento abandona el experimento más que el control (o viceversa), la muestra final ya no es aleatoria. Prueba: comparar tasas de attrición y características de los que salen por grupo.
+
+**Incumplimiento (*non-compliance*):** no todos los asignados al tratamiento lo reciben; algunos del control lo buscan. El estimador OLS da el ITT (*Intent-to-Treat*); con IV se estima el LATE (*Local Average Treatment Effect*) para los *compliers*.
+
+**Validez externa:** el LATE identifica el efecto para los *compliers* en el sitio de estudio. No es claro que ese efecto aplique a otras poblaciones, épocas o contextos → necesidad de múltiples RCTs en distintos contextos.
 
 ---
 
-## Preparación de los datos {-}
+## Ejercicio aplicado: Bertrand y Mullainathan (2004) {-}
+
+### El experimento {-}
+
+Marianne Bertrand y Sendhil Mullainathan enviaron **4.870 hojas de vida ficticias** a empleadores en Boston y Chicago en respuesta a anuncios de empleo reales. Las hojas de vida eran idénticas en calificaciones, pero los nombres variaban: algunos eran claramente de personas blancas (*Emily, Greg*) y otros claramente de personas afroamericanas (*Lakisha, Jamal*).
+
+**Variable de tratamiento:** `black` = 1 si el nombre suena afroamericano, 0 si suena blanco.
+**Variable de resultado:** `call` = 1 si el empleador llamó de regreso.
+
+Los datos están disponibles aquí: [Descargar bm.dta](https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&amp;dl=1)
+
+### Preguntas del ejercicio {-}
+
+**1. ¿Por qué un experimento?**
+Explique por qué no sirve comparar simplemente a individuos negros *contratados* vs. blancos *contratados*. ¿Qué tipo de sesgo generaría esa comparación y en qué dirección?
+
+**2. Verificación de la aleatorización**
+Evalúe si la asignación aleatoria fue exitosa comparando las características de las hojas de vida entre el grupo de nombres blancos y el de nombres afroamericanos. Interprete los resultados.
+
+**3. Efecto del tratamiento**
+Estime el efecto de tener un nombre afroamericano sobre la probabilidad de recibir una llamada:
+- Modelo sin controles
+- Modelo con controles (educación, experiencia, honores, voluntariado, etc.)
+¿Por qué debería —o no— cambiar el estimador al agregar controles en un experimento aleatorio? ¿Qué pasa en la práctica con estos datos?
+
+**4. Efectos heterogéneos**
+Estime al menos dos modelos de efectos heterogéneos:
+- Uno con una variable **binaria** (ej. género del nombre)
+- Uno con una variable **continua** (ej. años de experiencia en la hoja de vida)
+¿Qué revela la interacción sobre el retorno a la &quot;calidad&quot; de la hoja de vida según raza?
+
+**5. Poder estadístico**
+Con la información de los datos:
+- ¿Qué poder tiene la muestra de 4.870 observaciones para detectar el efecto observado?
+- ¿Cuál es el efecto mínimo detectable (MDE) con esa muestra?
+- ¿Cuántas observaciones se necesitarían para detectar la mitad del efecto?
+
+### Código de referencia {-}
 
 ```stata
-clear all
-set mem 150m
-capture log close 
-use &quot;datafiles/base3.dta&quot;</code></pre>
-<p>Verificamos cómo están definidas las variables de <strong>tiempo</strong> y <strong>tratamiento</strong>:</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb87-1"><a href="poder-estadístico-en-stata.html#cb87-1" tabindex="-1"></a><span class="kw">tab</span> t</span>
-<span id="cb87-2"><a href="poder-estadístico-en-stata.html#cb87-2" tabindex="-1"></a><span class="kw">tab</span> D</span>
-<span id="cb87-3"><a href="poder-estadístico-en-stata.html#cb87-3" tabindex="-1"></a><span class="kw">tab</span> t D</span></code></pre></div>
-<p>La variable de resultado es <code>ha_nchs</code>, el número de desviaciones estándar que el niño está por encima o por debajo de la media del grupo relevante. En el do-file la llamaremos simplemente <code>y</code>.</p>
-<hr />
+* Cargar datos
+use &quot;https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&amp;dl=1&quot;, clear
+
+* Pregunta 2 — Balance
+tabstat yearsexp education honors volunteer military holes email computer special ///
+        female chicago, by(black) stat(mean) format(%6.3f) nototal
+
+* Pregunta 3 — Efecto promedio
+reg call black, robust
+reg call black female yearsexp education honors volunteer military holes ///
+        email computer special chicago, robust
+
+* Pregunta 4a — Heterogeneidad por género (binaria)
+reg call i.black##i.female, robust
+margins female, dydx(black)
+
+* Pregunta 4b — Heterogeneidad por experiencia (continua)
+reg call c.black##c.yearsexp, robust
+margins, dydx(black) at(yearsexp=(0(2)20))
+marginsplot
+
+* Pregunta 5 — Poder estadístico
+quietly sum call if black == 0
+local p_white = r(mean)
+quietly sum call if black == 1
+local p_black = r(mean)
+
+* Poder dado N=4870
+power twoproportions `p_black&#39; `p_white&#39;, n(4870) alpha(0.05)
+
+* MDE dado N=4870 y poder=0.80
+power twoproportions `p_black&#39;, n(4870) power(0.80) alpha(0.05)</code></pre>
 </div>
 </div>
-<div id="estadísticas-descriptivas" class="section level2 unnumbered hasAnchor">
-<h2>Estadísticas descriptivas<a href="#estad%C3%ADsticas-descriptivas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="promedios-por-periodo-y-grupo" class="section level3 unnumbered hasAnchor">
-<h3>Promedios por periodo y grupo<a href="poder-estadístico-en-stata.html#promedios-por-periodo-y-grupo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb88"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb88-1"><a href="poder-estadístico-en-stata.html#cb88-1" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb88-2"><a href="poder-estadístico-en-stata.html#cb88-2" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> t==0</span>
-<span id="cb88-3"><a href="poder-estadístico-en-stata.html#cb88-3" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> t==1</span>
-<span id="cb88-4"><a href="poder-estadístico-en-stata.html#cb88-4" tabindex="-1"></a><span class="kw">bysort</span> t: <span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb88-5"><a href="poder-estadístico-en-stata.html#cb88-5" tabindex="-1"></a><span class="kw">bysort</span> D: <span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb88-6"><a href="poder-estadístico-en-stata.html#cb88-6" tabindex="-1"></a><span class="kw">bysort</span> D t: <span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb88-7"><a href="poder-estadístico-en-stata.html#cb88-7" tabindex="-1"></a></span>
-<span id="cb88-8"><a href="poder-estadístico-en-stata.html#cb88-8" tabindex="-1"></a><span class="kw">table</span> D t, c(<span class="kw">mean</span> <span class="fu">y</span> <span class="fu">sd</span> <span class="fu">y</span>)</span></code></pre></div>
-<p>Definimos etiquetas y graficamos:</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb89-1"><a href="poder-estadístico-en-stata.html#cb89-1" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> t 0 <span class="st">&quot;t=0&quot;</span> 1 <span class="st">&quot;t=1&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb89-2"><a href="poder-estadístico-en-stata.html#cb89-2" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> t t </span>
-<span id="cb89-3"><a href="poder-estadístico-en-stata.html#cb89-3" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> D 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratado&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb89-4"><a href="poder-estadístico-en-stata.html#cb89-4" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> D D</span>
-<span id="cb89-5"><a href="poder-estadístico-en-stata.html#cb89-5" tabindex="-1"></a></span>
-<span id="cb89-6"><a href="poder-estadístico-en-stata.html#cb89-6" tabindex="-1"></a><span class="kw">graph</span> <span class="bn">dot</span> <span class="fu">y</span>, <span class="bn">over</span>(D) <span class="kw">by</span>(t) vertical</span></code></pre></div>
-<p>Evolución temporal:</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb90-1"><a href="poder-estadístico-en-stata.html#cb90-1" tabindex="-1"></a><span class="kw">preserve</span></span>
-<span id="cb90-2"><a href="poder-estadístico-en-stata.html#cb90-2" tabindex="-1"></a><span class="kw">collapse</span> <span class="fu">y</span>, <span class="kw">by</span>(t D)</span>
-<span id="cb90-3"><a href="poder-estadístico-en-stata.html#cb90-3" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">line</span> <span class="fu">y</span> t <span class="kw">if</span> D==1) (<span class="kw">line</span> <span class="fu">y</span> t <span class="kw">if</span> D==0), <span class="co">///</span></span>
-<span id="cb90-4"><a href="poder-estadístico-en-stata.html#cb90-4" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>))</span>
-<span id="cb90-5"><a href="poder-estadístico-en-stata.html#cb90-5" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div>
-<hr />
-</div>
-</div>
-<div id="comparación-de-medias" class="section level2 unnumbered hasAnchor">
-<h2>Comparación de medias<a href="#comparaci%C3%B3n-de-medias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb91"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb91-1"><a href="poder-estadístico-en-stata.html#cb91-1" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 0, <span class="kw">by</span>(D)</span>
-<span id="cb91-2"><a href="poder-estadístico-en-stata.html#cb91-2" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 1, <span class="kw">by</span>(D)</span></code></pre></div>
-<p><strong>Interpretación preliminar:</strong></p>
-<ul>
-<li>Hay una diferencia preexistente entre tratados y controles en el periodo inicial.</li>
-<li>La diferencia aumenta después del tratamiento.</li>
-<li>DID nos permitirá aislar el efecto neto del tratamiento controlando por diferencias iniciales.</li>
-</ul>
-<hr />
-</div>
-<div id="estimador-did-paso-a-paso" class="section level2 unnumbered hasAnchor">
-<h2>Estimador DID paso a paso<a href="poder-estadístico-en-stata.html#estimador-did-paso-a-paso" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Definimos los promedios:</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb92-1"><a href="poder-estadístico-en-stata.html#cb92-1" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 0</span>
-<span id="cb92-2"><a href="poder-estadístico-en-stata.html#cb92-2" tabindex="-1"></a><span class="fu">scalar</span> y_c0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb92-3"><a href="poder-estadístico-en-stata.html#cb92-3" tabindex="-1"></a></span>
-<span id="cb92-4"><a href="poder-estadístico-en-stata.html#cb92-4" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 1</span>
-<span id="cb92-5"><a href="poder-estadístico-en-stata.html#cb92-5" tabindex="-1"></a><span class="fu">scalar</span> y_c1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb92-6"><a href="poder-estadístico-en-stata.html#cb92-6" tabindex="-1"></a></span>
-<span id="cb92-7"><a href="poder-estadístico-en-stata.html#cb92-7" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 0</span>
-<span id="cb92-8"><a href="poder-estadístico-en-stata.html#cb92-8" tabindex="-1"></a><span class="fu">scalar</span> y_t0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb92-9"><a href="poder-estadístico-en-stata.html#cb92-9" tabindex="-1"></a></span>
-<span id="cb92-10"><a href="poder-estadístico-en-stata.html#cb92-10" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 1</span>
-<span id="cb92-11"><a href="poder-estadístico-en-stata.html#cb92-11" tabindex="-1"></a><span class="fu">scalar</span> y_t1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span></code></pre></div>
-<p>Cálculo manual del estimador DID:</p>
-<p><span class="math display">\[
-\widehat{DD} = \big( \bar{Y}_{T,1} - \bar{Y}_{T,0}\big) - \big( \bar{Y}_{C,1} - \bar{Y}_{C,0}\big)
-\]</span></p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb93-1"><a href="poder-estadístico-en-stata.html#cb93-1" tabindex="-1"></a><span class="fu">scalar</span> DD = (y_t1 - y_t0) - (y_c1 - y_c0)</span>
-<span id="cb93-2"><a href="poder-estadístico-en-stata.html#cb93-2" tabindex="-1"></a><span class="kw">di</span> DD</span></code></pre></div>
-<hr />
-</div>
-<div id="usando-el-comando-diff" class="section level2 unnumbered hasAnchor">
-<h2>Usando el comando <code>diff</code><a href="poder-estadístico-en-stata.html#usando-el-comando-diff" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="poder-estadístico-en-stata.html#cb94-1" tabindex="-1"></a><span class="kw">ssc</span> inst <span class="fu">diff</span>, <span class="kw">replace</span></span>
-<span id="cb94-2"><a href="poder-estadístico-en-stata.html#cb94-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t)</span></code></pre></div>
-<hr />
-</div>
-<div id="implementación-con-regresiones" class="section level2 unnumbered hasAnchor">
-<h2>Implementación con regresiones<a href="#implementaci%C3%B3n-con-regresiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El modelo DID se puede estimar con una regresión incluyendo interacción entre tratamiento y tiempo:</p>
-<p><span class="math display">\[
-Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon_{it}
-\]</span></p>
-<p>Donde:</p>
-<ul>
-<li><span class="math inline">\(\delta\)</span> es el estimador DID.</li>
-</ul>
-<p>En Stata:</p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="poder-estadístico-en-stata.html#cb95-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D##t</span></code></pre></div>
-<p>Comparación con regresión simple:</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="poder-estadístico-en-stata.html#cb96-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D</span></code></pre></div>
-<hr />
-</div>
-<div id="extensión-con-panel" class="section level2 unnumbered hasAnchor">
-<h2>Extensión con panel<a href="#extensi%C3%B3n-con-panel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Definimos datos de panel y usamos notación de diferencias:</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb97-1"><a href="poder-estadístico-en-stata.html#cb97-1" tabindex="-1"></a>xtset id t</span>
-<span id="cb97-2"><a href="poder-estadístico-en-stata.html#cb97-2" tabindex="-1"></a><span class="kw">reg</span> D.<span class="fu">y</span> D.D</span></code></pre></div>
-<hr />
-</div>
-<div id="interpretación" class="section level2 unnumbered hasAnchor">
-<h2>Interpretación<a href="#interpretaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El coeficiente asociado a la interacción <span class="math inline">\(D \times t\)</span> captura el <strong>efecto causal estimado</strong> bajo el supuesto de <strong>tendencias paralelas</strong>.</p>
-<p>En este caso, el coeficiente fue <strong>0.18</strong> y significativo, lo que indica que la diferencia en talla para la edad entre tratados y controles aumentó en <strong>0.18 desviaciones estándar</strong> después de la aplicación del programa.</p>
-<hr />
+<div id="descarga-los-documentos-3" class="section level2 unnumbered hasAnchor">
+<h2>DESCARGA LOS DOCUMENTOS<a href="poder-estadístico-en-stata.html#descarga-los-documentos-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Descargar Stata do file</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_stata.do">Descargar Stata</a></p>
+<p><strong>Descargar do-file ejercicio Bertrand &amp; Mullainathan</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/BM_parcial.do">Descargar BM_parcial.do</a></p>
+<p><strong>Descargar R script</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_R.R">Descargar R</a></p>
+<p><strong>Descargar Python Notebook</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_phyton.ipynb">Descargar Python</a></p>
+<p><a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/07_Power/07_phyton.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab" /></a></p>
+<p><strong>Descarga los Datos (ejercicio clase)</strong>:
+<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta">Descargar Datos</a></p>
+<p><strong>Descarga los Datos (ejercicio B&amp;M)</strong>:
+<a href="https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&amp;dl=1">Descargar bm.dta</a></p>
 
 </div>
 </div>
@@ -754,17 +768,17 @@ Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon
         </div>
       </div>
 <a href="experimentos-aleatorizados-en-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="malos-controles-teoría.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="diferencias-en-diferencias-teoría.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
-<script src="libs/gitbook/js/app.min.js"></script>
-<script src="libs/gitbook/js/clipboard.min.js"></script>
-<script src="libs/gitbook/js/plugin-search.js"></script>
-<script src="libs/gitbook/js/plugin-sharing.js"></script>
-<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook/js/jquery.highlight.js"></script>
-<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -785,7 +799,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/08-DID.Rmd",
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/07-POWER.Rmd",
     "text": "Edit"
   },
   "history": {

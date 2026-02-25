@@ -355,10 +355,152 @@ donde $\sigma_D = \sqrt{\sigma_1^2 DE_1/n_1 + \sigma_2^2 DE_2/n_2}$.
 
 ```
 
+## Qué puede salir mal en un RCT {-}
+
+Un experimento aleatorio bien diseñado elimina el sesgo de selección — pero no garantiza que el estimador sea el efecto causal que nos interesa. Hay al menos cinco grandes categorías de problemas que pueden comprometer la validez interna o externa de un RCT.
+
+### 1. Externalidades y efectos de derrame (*spillovers*) {-}
+
+El supuesto de no-interferencia de SUTVA (*Stable Unit Treatment Value Assumption*) exige que el resultado del individuo $i$ dependa **solo** de su propio tratamiento, no del de sus vecinos. Cuando esto falla, el grupo de control se "contamina":
+
+- Un programa de vacunación que reduce la circulación del virus también protege a los no vacunados → el efecto de control sube, el efecto estimado cae.
+- Dar microcrédito en un barrio puede hacer que los negocios del control pierdan clientes frente a los tratados.
+
+**Solución:** aleatorizar a nivel de *cluster* (barrio, escuela, aldea) lo suficientemente grandes para que la interferencia quede *dentro* del grupo, no entre grupos. Alternativamente, diseños de dos brazos con zonas buffer.
+
+### 2. Efectos de equilibrio general {-}
+
+Los RCTs identifican el efecto de un programa a **escala pequeña**. Cuando el programa escala, los precios, salarios y comportamientos de equilibrio cambian — y el efecto puede ser muy distinto:
+
+- Un programa de formación laboral para el 1% de los desempleados puede aumentar sus salarios. Para el 50%, la oferta adicional de trabajo capacitado reduce el salario de equilibrio.
+- Los subsidios de vivienda que funcionan en pilotos elevan los alquiles cuando se universalizan.
+
+**Implicación:** el efecto de equilibrio parcial (LATE, estimado en el RCT) puede sobrestimar o subestimar el efecto de equilibrio general relevante para política pública.
+
+### 3. Efectos de comportamiento {-}
+
+| Efecto | Descripción | Dirección del sesgo |
+|--------|-------------|---------------------|
+| **Hawthorne** | Los tratados cambian de comportamiento porque saben que los observan | Sobreestimación |
+| **John Henry** | El control trabaja más al saber que está siendo comparado | Subestimación |
+| **Placebo** | El control recibe algo y mejora solo por eso | Subestimación |
+| **Demanda** | Los tratados responden lo que creen que el investigador espera | Sobreestimación |
+| **Anticipación** | Control o tratados cambian antes de recibir el tratamiento | Sesgo ambiguo |
+
+**Solución parcial:** doble ciego cuando sea posible; grupos de control activos; minimizar la visibilidad del experimento.
+
+### 4. Problemas éticos: los tres pilares del Belmont Report {-}
+
+Cualquier experimento con seres humanos debe cumplir tres principios fundamentales del [Informe Belmont (1979)](https://www.hhs.gov/ohrp/regulations-and-policy/belmont-report/index.html), que también regula la IRB (*Institutional Review Board*):
+
+**I. Respeto a las personas (*Respect for persons*)**
+Los participantes deben dar **consentimiento informado** libre y voluntario. Las poblaciones vulnerables (niños, prisioneros, personas con discapacidad cognitiva) requieren protecciones adicionales.
+
+> *Escucha antes de la clase:* [Three Pillars of Human Experimentation](https://www.youtube.com/watch?v=3YBuuN3Tlok) — resumen del Belmont Report en 10 minutos.
+
+**II. Beneficencia (*Beneficence*)**
+Maximizar el beneficio y minimizar el daño. Implica:
+- No asignar al control cuando se sabe que el tratamiento funciona (problema del grupo de control con "tratamiento cero").
+- Detener el experimento si hay evidencia de daño.
+
+**III. Justicia (*Justice*)**
+Los beneficios y cargas del experimento deben distribuirse equitativamente. No es justo experimentar solo con los más pobres o vulnerables para beneficiar a otros.
+
+**Ejemplos históricos de violación:**
+- Experimento de Tuskegee (1932-1972): 399 hombres afroamericanos con sífilis no recibieron penicilina aunque ya estaba disponible.
+- Estudio de Guatemala (1940s): inoculación deliberada de ETS sin consentimiento.
+
+### 5. Otros problemas comunes {-}
+
+**Attrición diferencial:** si el grupo de tratamiento abandona el experimento más que el control (o viceversa), la muestra final ya no es aleatoria. Prueba: comparar tasas de attrición y características de los que salen por grupo.
+
+**Incumplimiento (*non-compliance*):** no todos los asignados al tratamiento lo reciben; algunos del control lo buscan. El estimador OLS da el ITT (*Intent-to-Treat*); con IV se estima el LATE (*Local Average Treatment Effect*) para los *compliers*.
+
+**Validez externa:** el LATE identifica el efecto para los *compliers* en el sitio de estudio. No es claro que ese efecto aplique a otras poblaciones, épocas o contextos → necesidad de múltiples RCTs en distintos contextos.
+
+---
+
+## Ejercicio aplicado: Bertrand y Mullainathan (2004) {-}
+
+### El experimento {-}
+
+Marianne Bertrand y Sendhil Mullainathan enviaron **4.870 hojas de vida ficticias** a empleadores en Boston y Chicago en respuesta a anuncios de empleo reales. Las hojas de vida eran idénticas en calificaciones, pero los nombres variaban: algunos eran claramente de personas blancas (*Emily, Greg*) y otros claramente de personas afroamericanas (*Lakisha, Jamal*).
+
+**Variable de tratamiento:** `black` = 1 si el nombre suena afroamericano, 0 si suena blanco.
+**Variable de resultado:** `call` = 1 si el empleador llamó de regreso.
+
+Los datos están disponibles aquí: [Descargar bm.dta](https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1)
+
+### Preguntas del ejercicio {-}
+
+**1. ¿Por qué un experimento?**
+Explique por qué no sirve comparar simplemente a individuos negros *contratados* vs. blancos *contratados*. ¿Qué tipo de sesgo generaría esa comparación y en qué dirección?
+
+**2. Verificación de la aleatorización**
+Evalúe si la asignación aleatoria fue exitosa comparando las características de las hojas de vida entre el grupo de nombres blancos y el de nombres afroamericanos. Interprete los resultados.
+
+**3. Efecto del tratamiento**
+Estime el efecto de tener un nombre afroamericano sobre la probabilidad de recibir una llamada:
+- Modelo sin controles
+- Modelo con controles (educación, experiencia, honores, voluntariado, etc.)
+¿Por qué debería —o no— cambiar el estimador al agregar controles en un experimento aleatorio? ¿Qué pasa en la práctica con estos datos?
+
+**4. Efectos heterogéneos**
+Estime al menos dos modelos de efectos heterogéneos:
+- Uno con una variable **binaria** (ej. género del nombre)
+- Uno con una variable **continua** (ej. años de experiencia en la hoja de vida)
+¿Qué revela la interacción sobre el retorno a la "calidad" de la hoja de vida según raza?
+
+**5. Poder estadístico**
+Con la información de los datos:
+- ¿Qué poder tiene la muestra de 4.870 observaciones para detectar el efecto observado?
+- ¿Cuál es el efecto mínimo detectable (MDE) con esa muestra?
+- ¿Cuántas observaciones se necesitarían para detectar la mitad del efecto?
+
+### Código de referencia {-}
+
+```stata
+* Cargar datos
+use "https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1", clear
+
+* Pregunta 2 — Balance
+tabstat yearsexp education honors volunteer military holes email computer special ///
+        female chicago, by(black) stat(mean) format(%6.3f) nototal
+
+* Pregunta 3 — Efecto promedio
+reg call black, robust
+reg call black female yearsexp education honors volunteer military holes ///
+        email computer special chicago, robust
+
+* Pregunta 4a — Heterogeneidad por género (binaria)
+reg call i.black##i.female, robust
+margins female, dydx(black)
+
+* Pregunta 4b — Heterogeneidad por experiencia (continua)
+reg call c.black##c.yearsexp, robust
+margins, dydx(black) at(yearsexp=(0(2)20))
+marginsplot
+
+* Pregunta 5 — Poder estadístico
+quietly sum call if black == 0
+local p_white = r(mean)
+quietly sum call if black == 1
+local p_black = r(mean)
+
+* Poder dado N=4870
+power twoproportions `p_black' `p_white', n(4870) alpha(0.05)
+
+* MDE dado N=4870 y poder=0.80
+power twoproportions `p_black', n(4870) power(0.80) alpha(0.05)
+```
+
 ## DESCARGA LOS DOCUMENTOS {-}
 
 **Descargar Stata do file**:
 [Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_stata.do)
+
+**Descargar do-file ejercicio Bertrand & Mullainathan**:
+[Descargar BM_parcial.do](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/BM_parcial.do)
 
 **Descargar R script**:
 [Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_R.R)
@@ -368,5 +510,8 @@ donde $\sigma_D = \sqrt{\sigma_1^2 DE_1/n_1 + \sigma_2^2 DE_2/n_2}$.
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/07_Power/07_phyton.ipynb)
 
-**Descarga los Datos**:
+**Descarga los Datos (ejercicio clase)**:
 [Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
+
+**Descarga los Datos (ejercicio B&M)**:
+[Descargar bm.dta](https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1)
