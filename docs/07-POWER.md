@@ -403,14 +403,14 @@ Cualquier experimento con seres humanos debe cumplir tres principios fundamental
 **I. Respeto a las personas (*Respect for persons*)**
 Los participantes deben dar **consentimiento informado** libre y voluntario. Las poblaciones vulnerables (niños, prisioneros, personas con discapacidad cognitiva) requieren protecciones adicionales.
 
-::: {.boxvideo}
-🎧 **Escucha antes de la clase:** *The Three Pillars of Human Experimentation* — resumen del Informe Belmont
-
-<audio controls style="width:100%">
+<div class="boxaudio">
+<p class="audio-title">🎧 Escucha antes de la clase &mdash; <em>The Three Pillars of Human Experimentation</em></p>
+<p style="margin:0 0 0.8em 0; font-size:0.92em; color:#5b4a9e;">Resumen del Informe Belmont (1979): los tres principios éticos que rigen cualquier experimento con seres humanos.</p>
+<audio controls>
   <source src="audio/The_Three_Pillars_of_Human_Experimentation.m4a" type="audio/mp4">
   Tu navegador no soporta el reproductor de audio.
 </audio>
-:::
+</div>
 
 
 **II. Beneficencia (*Beneficence*)**

@@ -100,3 +100,26 @@ pre code {
   border-radius: 5px;
 }
 
+.boxaudio {
+  border: 2px solid #6c5ce7;
+  border-radius: 12px;
+  padding: 1.2em 1.4em;
+  margin: 1.2em 0;
+  background: linear-gradient(135deg, #f3f0ff 0%, #ede9fe 100%);
+  box-shadow: 0 3px 10px rgba(108, 92, 231, 0.12);
+}
+
+.boxaudio p.audio-title {
+  font-size: 1em;
+  font-weight: 700;
+  color: #4c3d9e;
+  margin: 0 0 0.7em 0;
+}
+
+.boxaudio audio {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 0.3em;
+  accent-color: #6c5ce7;
+}
+
