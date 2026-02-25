@@ -412,6 +412,7 @@ Los participantes deben dar **consentimiento informado** libre y voluntario. Las
 </audio>
 :::
 
+
 **II. Beneficencia (*Beneficence*)**
 Maximizar el beneficio y minimizar el daño. Implica:
 - No asignar al control cuando se sabe que el tratamiento funciona (problema del grupo de control con "tratamiento cero").
