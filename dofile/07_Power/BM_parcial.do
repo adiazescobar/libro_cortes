@@ -17,25 +17,26 @@ set more off
 * Descargue bm.dta desde el enlace del curso y ajuste la ruta:
 use "https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1", clear
 
-* Variables clave:
-*   black     = 1 si el nombre suena afroamericano, 0 si suena blanco (TRATAMIENTO)
-*   call      = 1 si recibió llamada de regreso (OUTCOME)
-*   female    = 1 si el nombre es femenino
-*   yearsexp  = años de experiencia en la hoja de vida
-*   education = nivel educativo (0=sin grado, 1=bachillerato, etc.)
-*   honors    = 1 si tiene mención de honor
-*   volunteer = 1 si tiene experiencia de voluntariado
-*   military  = 1 si tiene experiencia militar
-*   holes     = 1 si tiene brechas de empleo
-*   email     = 1 si tiene correo electrónico en la HV
-*   computer  = 1 si menciona habilidades informáticas
-*   special   = 1 si menciona habilidades especiales
-*   chicago   = 1 si el empleo es en Chicago (0 = Boston)
+* Variables disponibles en la base:
+*   black          = 1 si el nombre suena afroamericano, 0 si suena blanco  (TRATAMIENTO)
+*   call           = 1 si recibió llamada de regreso                         (OUTCOME)
+*   female         = 1 si el nombre es femenino
+*   yearsexp       = años de experiencia en la hoja de vida
+*   education      = nivel educativo
+*   ofjobs         = número de empleos anteriores
+*   computerskills = 1 si menciona habilidades informáticas
 
-label variable black    "Nombre afroamericano (tratamiento)"
-label variable call     "Recibió llamada de regreso"
-label variable female   "Nombre femenino"
-label variable yearsexp "Años de experiencia"
+label variable black          "Nombre afroamericano (tratamiento)"
+label variable call           "Recibió llamada de regreso"
+label variable female         "Nombre femenino"
+label variable yearsexp       "Años de experiencia"
+label variable education      "Nivel educativo"
+label variable ofjobs         "Número de empleos anteriores"
+label variable computerskills "Habilidades informáticas"
+
+* Confirmar variables cargadas
+describe
+sum
 
 ********************************************************************************
 ** PREGUNTA 1: ¿Por qué un experimento y no comparar contratados negros vs blancos?
@@ -65,13 +66,13 @@ di as result "=" * 70
 di as result "PREGUNTA 2 — TABLA DE BALANCE"
 di as result "=" * 70
 
+* Variables de control disponibles en esta versión de la base
+local controls yearsexp education ofjobs computerskills female
+
 * Estadísticas descriptivas por grupo
-tabstat yearsexp education honors volunteer military holes email computer special ///
-        female chicago, by(black) stat(mean sd) format(%6.4f) nototal
+tabstat `controls', by(black) stat(mean sd) format(%6.4f) nototal
 
 * Pruebas t por variable — debe no haber diferencias significativas
-local controls yearsexp education honors volunteer military holes email computer special female chicago
-
 di as result _newline "Tests t de diferencia de medias por característica de la HV:"
 foreach var of local controls {
     quietly ttest `var', by(black)
@@ -79,11 +80,11 @@ foreach var of local controls {
     di as text "  `var': p-value = `pval'"
 }
 
-* Regresión de cada covariable sobre tratamiento — si la asignación es exitosa,
-* ningún coeficiente debe ser significativo
-di as result _newline "Regresiones de covariables sobre tratamiento (F-test conjunto):"
-reg female chicago yearsexp education honors volunteer military holes email computer special black, robust
-test black   // si p > 0.05 → no hay diferencia sistemática
+* Regresión de las covariables sobre tratamiento: si la asignación fue exitosa,
+* ningún coeficiente debería ser significativo
+di as result _newline "F-test conjunto: ¿predicen las covariables el tratamiento?"
+reg black `controls', robust
+test `controls'   // si p > 0.05 → balance exitoso
 
 ********************************************************************************
 ** PREGUNTA 3: Efecto del tratamiento sobre la probabilidad de recibir una llamada
@@ -104,7 +105,7 @@ estimates store m_sin_controles
 
 * --- Modelo CON controles ---
 di as result _newline "Modelo con controles (MCO):"
-reg call black female yearsexp education honors volunteer military holes email computer special chicago, robust
+reg call black female yearsexp education ofjobs computerskills, robust
 estimates store m_con_controles
 
 * --- Tabla comparativa ---
@@ -124,8 +125,7 @@ Interpretación esperada:
 
 * --- Probit con efectos marginales ---
 di as result _newline "Probit (efectos marginales promedio en muestra):"
-probit call black female yearsexp education honors volunteer military holes ///
-      email computer special chicago, robust
+probit call black female yearsexp education ofjobs computerskills, robust
 margins, dydx(black)
 
 ********************************************************************************
@@ -142,9 +142,9 @@ di as result _newline "Heterogeneidad por género (variable binaria):"
 reg call i.black##i.female, robust
 /*
 Interpretación:
-  Coeficiente de black:         efecto para hombres
+  Coeficiente de black:             efecto para hombres (female==0)
   Coeficiente de 1.black#1.female:  diferencia del efecto mujer vs hombre
-  Si es significativo → discriminación difiere por género
+  Si es significativo → la discriminación difiere por género
 */
 
 * Efectos marginales condicionales
@@ -160,8 +160,8 @@ Interpretación:
   black:              efecto con 0 años de experiencia
   black#c.yearsexp:   ¿cómo cambia el efecto a medida que la experiencia aumenta?
   Si es negativo → la brecha se amplía con más experiencia (retorno a calidad ≠ para negros)
-  Este es el resultado más impactante de Bertrand & Mullainathan:
-  más calidad en la HV ayuda a los blancos pero casi no ayuda a los negros.
+  Este es el resultado más impactante de B&M: más calidad en la HV ayuda a los
+  blancos pero casi no ayuda a los negros.
 */
 
 * Visualizar el efecto para distintos niveles de experiencia
@@ -170,11 +170,6 @@ marginsplot, ///
     title("Efecto del nombre sobre P(callback) por años de experiencia") ///
     xtitle("Años de experiencia en la hoja de vida") ///
     ytitle("Efecto marginal de nombre afroamericano")
-
-* --- 4c. Bonus: heterogeneidad por ciudad ---
-di as result _newline "Heterogeneidad por ciudad (Chicago vs Boston):"
-reg call i.black##i.chicago, robust
-margins chicago, dydx(black)
 
 ********************************************************************************
 ** PREGUNTA 5: PODER ESTADÍSTICO
@@ -193,49 +188,48 @@ quietly sum call if black == 1
 local p_black = r(mean)
 local n_black = r(N)
 
-di as result _newline "Tasa de callback blancos:       " %6.4f `p_white'
+di as result _newline "Tasa de callback blancos:        " %6.4f `p_white'
 di as result "Tasa de callback afroamericanos: " %6.4f `p_black'
 di as result "Diferencia observada:            " %6.4f (`p_white' - `p_black')
 di as result "N total:                         " _N
 
 * --- 5a. ¿Qué poder tiene la muestra de 4870 para detectar el efecto observado? ---
 di as result _newline "5a. Poder dado N=4870 y las tasas observadas:"
-power twoproportions `p_black' `p_white', n(4870) alpha(0.05)
+power twoproportions `p_white' `p_black', n(4870) alpha(0.05)
 
 * --- 5b. ¿Cuál es el efecto mínimo detectable con N=4870 y poder=0.80? ---
 di as result _newline "5b. Efecto mínimo detectable (MDE) dado N=4870:"
-power twoproportions `p_black', n(4870) power(0.80) alpha(0.05)
+power twoproportions `p_white', n(4870) power(0.80) alpha(0.05)
 
 local mde = r(delta)
 di as result "MDE = " %6.4f `mde' " pp (diferencia mínima detectable en tasas de callback)"
 
 * --- 5c. ¿Cuántas observaciones se necesitarían para detectar la mitad del efecto? ---
-local efecto_mitad = (`p_white' - `p_black') / 2
-local p_white_mitad = `p_black' + `efecto_mitad'
+local efecto_mitad  = (`p_white' - `p_black') / 2
+local p_black_mitad = `p_white' - `efecto_mitad'
 
 di as result _newline "5c. Muestra necesaria para detectar la mitad del efecto observado:"
-power twoproportions `p_black' `p_white_mitad', power(0.80) alpha(0.05)
+power twoproportions `p_white' `p_black_mitad', power(0.80) alpha(0.05)
 local N_mitad = r(N)
 di as result "Se necesitarían aproximadamente " %6.0f `N_mitad' " observaciones"
 
-* --- 5d. Gráfico: poder vs tamaño de muestra para distintos efectos ---
+* --- 5d. Gráfico: poder vs diferencia en proporción ---
 di as result _newline "5d. Gráfico: curvas de poder:"
-power twoproportions `p_black' (`p_black'(0.005)`p_white'), n(4870) alpha(0.05) graph ///
+power twoproportions `p_white' (`p_black'(0.005)`p_white'), n(4870) alpha(0.05) graph ///
     title("Poder estadístico dado N=4870") ///
-    xtitle("Tasa de callback en grupo de blancos (p2)") ///
+    xtitle("Tasa de callback en grupo afroamericano (p2)") ///
     ytitle("Poder") ///
-    xline(`p_white', lcolor(red) lpattern(dash))
+    xline(`p_black', lcolor(red) lpattern(dash))
 
 /*
 Interpretación de la Pregunta 5:
-Con N=4870 y las tasas observadas (6.45% vs 9.65%):
-- El estudio tiene poder muy alto (>99%) para detectar una diferencia de 3.2pp
-- El MDE es mucho menor que el efecto observado
-- Bertrand & Mullainathan sobre-diseñaron la muestra o el efecto real es mayor de lo esperado
-- Para detectar un efecto de la mitad (~1.6pp), necesitarían ~15,000-20,000 observaciones
+Con N=4870 y las tasas observadas (~6.5% vs ~9.7%):
+- El estudio tiene poder muy alto (>99%) para detectar la diferencia de 3.2pp
+- El MDE es considerablemente menor que el efecto observado
+- Para detectar un efecto de la mitad (~1.6pp), se necesitarían ~15,000-20,000 obs
 
-Conclusión: la muestra de 4870 es SUFICIENTE para el efecto que encontraron,
-pero si el efecto real fuera más pequeño (ej. 1pp), serían insuficientes.
+Conclusión: la muestra de 4870 es suficiente para el efecto que encontraron.
+Si el efecto real fuera más pequeño (ej. 1pp), serían insuficientes.
 */
 
 di as result _newline "=" * 70

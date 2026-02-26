@@ -457,6 +457,20 @@ Marianne Bertrand y Sendhil Mullainathan enviaron **4.870 hojas de vida ficticia
 
 Los datos están disponibles aquí: [Descargar bm.dta](https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1)
 
+::: {.boxinfo}
+**Variables disponibles en `bm.dta`**
+
+| Variable | Descripción |
+|---|---|
+| `black` | 1 = nombre afroamericano (tratamiento) |
+| `call` | 1 = recibió llamada de regreso (resultado) |
+| `female` | 1 = nombre femenino |
+| `yearsexp` | Años de experiencia en la hoja de vida |
+| `education` | Nivel educativo |
+| `ofjobs` | Número de empleos anteriores |
+| `computerskills` | 1 = menciona habilidades informáticas |
+:::
+
 ### Preguntas del ejercicio {-}
 
 **1. ¿Por qué un experimento?**
@@ -468,13 +482,13 @@ Evalúe si la asignación aleatoria fue exitosa comparando las características 
 **3. Efecto del tratamiento**
 Estime el efecto de tener un nombre afroamericano sobre la probabilidad de recibir una llamada:
 - Modelo sin controles
-- Modelo con controles (educación, experiencia, honores, voluntariado, etc.)
+- Modelo con controles (educación, experiencia, número de empleos, habilidades informáticas, género)
 ¿Por qué debería —o no— cambiar el estimador al agregar controles en un experimento aleatorio? ¿Qué pasa en la práctica con estos datos?
 
 **4. Efectos heterogéneos**
 Estime al menos dos modelos de efectos heterogéneos:
-- Uno con una variable **binaria** (ej. género del nombre)
-- Uno con una variable **continua** (ej. años de experiencia en la hoja de vida)
+- Uno con una variable **binaria** (género del nombre: `female`)
+- Uno con una variable **continua** (años de experiencia: `yearsexp`)
 ¿Qué revela la interacción sobre el retorno a la "calidad" de la hoja de vida según raza?
 
 **5. Poder estadístico**
@@ -489,35 +503,50 @@ Con la información de los datos:
 * Cargar datos
 use "https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1", clear
 
-* Pregunta 2 — Balance
-tabstat yearsexp education honors volunteer military holes email computer special ///
-        female chicago, by(black) stat(mean) format(%6.3f) nototal
+* ── Pregunta 2: Balance ──
+tabstat yearsexp education ofjobs computerskills female, ///
+        by(black) stat(mean) format(%6.3f) nototal
 
-* Pregunta 3 — Efecto promedio
+foreach var of varlist yearsexp education ofjobs computerskills female {
+    quietly ttest `var', by(black)
+    di as text "`var': p = " %5.3f r(p)
+}
+
+* ── Pregunta 3: Efecto promedio ──
+* Sin controles
 reg call black, robust
-reg call black female yearsexp education honors volunteer military holes ///
-        email computer special chicago, robust
 
-* Pregunta 4a — Heterogeneidad por género (binaria)
+* Con controles
+reg call black female yearsexp education ofjobs computerskills, robust
+
+* ── Pregunta 4a: Heterogeneidad por género (binaria) ──
 reg call i.black##i.female, robust
 margins female, dydx(black)
+marginsplot
 
-* Pregunta 4b — Heterogeneidad por experiencia (continua)
+* ── Pregunta 4b: Heterogeneidad por experiencia (continua) ──
 reg call c.black##c.yearsexp, robust
 margins, dydx(black) at(yearsexp=(0(2)20))
 marginsplot
 
-* Pregunta 5 — Poder estadístico
+* ── Pregunta 5: Poder estadístico ──
 quietly sum call if black == 0
 local p_white = r(mean)
 quietly sum call if black == 1
 local p_black = r(mean)
 
-* Poder dado N=4870
-power twoproportions `p_black' `p_white', n(4870) alpha(0.05)
+di "Tasa callback blancos:       " %5.4f `p_white'
+di "Tasa callback afroamericanos: " %5.4f `p_black'
 
-* MDE dado N=4870 y poder=0.80
-power twoproportions `p_black', n(4870) power(0.80) alpha(0.05)
+* 5a. Poder dado N=4870
+power twoproportions `p_white' `p_black', n(4870) alpha(0.05)
+
+* 5b. MDE dado N=4870 y poder=0.80
+power twoproportions `p_white', n(4870) power(0.80) alpha(0.05)
+
+* 5c. N para detectar la mitad del efecto
+local p_mitad = `p_white' - (`p_white' - `p_black') / 2
+power twoproportions `p_white' `p_mitad', power(0.80) alpha(0.05)
 ```
 
 ## DESCARGA LOS DOCUMENTOS {-}
