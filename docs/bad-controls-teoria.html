@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 8 Diferencias en Diferencias (Teoría) | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 8 Diferencias en Diferencias (Teoría) | Cortes Transversales" />
+  <title>Capitulo 9 Malos Controles (Teoría) | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 8 Diferencias en Diferencias (Teoría) | Cortes Transversales" />
+  <meta property="og:title" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 8 Diferencias en Diferencias (Teoría) | Cortes Transversales" />
+  <meta name="twitter:title" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
   
   
   
@@ -23,15 +23,15 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-02-25" />
+<meta name="date" content="2026-03-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="poder-estadistico-stata.html"/>
-<link rel="next" href="malos-controles-teoría.html"/>
+<link rel="prev" href="did-teoria.html"/>
+<link rel="next" href="malos-controles-en-stata.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,7 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
-<li class="chapter" data-level="1.1" data-path="08-DID.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="1.1" data-path="09-BadControls.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
@@ -255,131 +255,177 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="diferencias-en-diferencias-teoría" class="section level1 hasAnchor" number="8">
-<h1><span class="header-section-number">Capitulo 8</span> Diferencias en Diferencias (Teoría)<a href="#diferencias-en-diferencias-teor%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="bad-controls-teoria" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Capitulo 9</span> Malos Controles (Teoría)<a href="bad-controls-teoria.html#bad-controls-teoria" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="boxinfo">
-<p><strong>🎯 Objetivos de la clase</strong></p>
+<p><strong>🎯 Metas de aprendizaje</strong></p>
 <ul>
-<li><p>Entender la lógica detrás del estimador <strong>Difference-in-Differences (DID)</strong>.</p></li>
-<li><p>Analizar estadísticamente la evolución de una variable de resultado para grupos de <strong>tratamiento</strong> y <strong>control</strong> en dos periodos de tiempo.</p></li>
-<li><p>Implementar DID en <strong>Stata</strong> de tres formas:</p>
+<li>Comprender el <strong>supuesto de tendencias paralelas</strong> en Diferencias en Diferencias (DID).<br />
+</li>
+<li>Entender la diferencia entre <strong>buenos y malos controles</strong>.<br />
+</li>
+<li>Relacionar los <strong>resultados potenciales</strong> con la validez de las estimaciones.<br />
+</li>
+<li>Analizar las implicaciones de usar (o no usar) controles en una regresión.<br />
+</li>
+</ul>
+</div>
+<div id="el-supuesto-de-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
+<h2>El supuesto de Tendencias Paralelas<a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El corazón de la estrategia de <strong>Diferencias en Diferencias (DID)</strong> es el supuesto de que, en ausencia del tratamiento, la evolución de los grupos tratados y de control habría sido <strong>paralela</strong> en el tiempo.</p>
+<p><span class="math display">\[
+Y_{it} = \alpha + \beta D_i + \delta T_t + \gamma (D_i \times T_t) + \varepsilon_{it}
+\]</span></p>
+<p>donde:<br />
+- <span class="math inline">\(D_i\)</span>: indicador de tratamiento,<br />
+- <span class="math inline">\(T_t\)</span>: indicador de post-tratamiento,<br />
+- <span class="math inline">\(\gamma\)</span>: estimador DID.</p>
+<p>El supuesto clave es:</p>
+<p><span class="math display">\[
+E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=1] = E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=0]
+\]</span></p>
+<p>Si esto se cumple, la estimación DID es <strong>insesgada</strong>.</p>
+</div>
+<div id="resultados-potenciales-2" class="section level2 unnumbered hasAnchor">
+<h2>Resultados Potenciales<a href="bad-controls-teoria.html#resultados-potenciales-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recordemos la notación:</p>
+<ul>
+<li><span class="math inline">\(Y_i(D=1)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> si recibe tratamiento.</li>
+<li><span class="math inline">\(Y_i(D=0)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> si no recibe tratamiento.</li>
+</ul>
+<p>El <strong>ATE</strong> se define como:</p>
+<p><span class="math display">\[
+ATE = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
+\]</span></p>
+<p>En DID, el estimador busca identificar justamente esa diferencia, bajo el supuesto de tendencias paralelas.</p>
+</div>
+<div id="primeras-diferencias-y-did" class="section level2 unnumbered hasAnchor">
+<h2>Primeras Diferencias y DID<a href="bad-controls-teoria.html#primeras-diferencias-y-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En primeras diferencias:</p>
+<p><span class="math display">\[
+\Delta Y_i = Y_{i,t=1} - Y_{i,t=0}
+\]</span></p>
+<p>y en DID:</p>
+<p><span class="math display">\[
+DID = \big( E[\Delta Y_i \mid D=1] - E[\Delta Y_i \mid D=0] \big)
+\]</span></p>
+</div>
+<div id="controles-en-did" class="section level2 unnumbered hasAnchor">
+<h2>Controles en DID<a href="bad-controls-teoria.html#controles-en-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="buenos-controles" class="section level3 unnumbered hasAnchor">
+<h3>Buenos controles<a href="bad-controls-teoria.html#buenos-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Características <strong>predeterminadas</strong>, no afectadas por el tratamiento.<br />
+</li>
+<li>Ejemplo: educación, experiencia laboral previa, género, edad.<br />
+</li>
+<li>Se pueden incluir para:
+<ul>
+<li>Mejorar la <strong>precisión</strong> de la estimación.<br />
+</li>
+<li>Aumentar la potencia estadística.<br />
+</li>
+<li>Reducir varianza residual.</li>
+</ul></li>
+</ul>
+<div class="boxcerebro">
+<p><strong>Definición formal:</strong><br />
+Un <strong>buen control</strong> es toda característica observable que <strong>no cambia como consecuencia del tratamiento</strong>.<br />
+Son variables predeterminadas que ayudan a explicar el resultado pero no están mediadas por el programa.</p>
+</div>
+<p><strong>Ejemplo informal:</strong><br />
+Si evaluamos el efecto de un programa de formación laboral:<br />
+- <strong>Buen control</strong>: nivel educativo alcanzado antes del programa.<br />
+- <strong>Buen control</strong>: años de experiencia previa.</p>
+</div>
+<div id="malos-controles" class="section level3 unnumbered hasAnchor">
+<h3>Malos controles<a href="bad-controls-teoria.html#malos-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Variables que <strong>sí son afectadas por el tratamiento</strong> (variables de resultado o mediadoras).</li>
+<li>Incluirlas rompe la interpretación causal porque introducen <strong>endogeneidad</strong>.<br />
+</li>
+<li>Al condicionar en una variable que está “en el camino causal”, se elimina parte del efecto verdadero.</li>
+</ul>
+<div class="boxcerebro">
+<p><strong>Definición formal:</strong><br />
+Un <strong>mal control</strong> es toda variable que se encuentra <strong>dentro del mecanismo causal</strong> que conecta el tratamiento con el resultado.<br />
+Condicionar en ella genera <strong>sesgo de post-tratamiento</strong>.</p>
+</div>
+<p><strong>Ejemplo informal:</strong><br />
+Siguiendo el programa de formación laboral:<br />
+- <strong>Mal control</strong>: salario después de haber recibido la capacitación.<br />
+- <strong>Mal control</strong>: horas trabajadas después del programa.<br />
+- <strong>Mal control</strong>: sector de empleo obtenido gracias al programa.</p>
+<p>👉 Todas estas variables son consecuencias (directas o indirectas) del tratamiento. Si las incluimos como controles, estamos <strong>borrando</strong> parte del impacto que queremos medir.</p>
+<hr />
+</div>
+<div id="implicaciones-prácticas" class="section level3 unnumbered hasAnchor">
+<h3>Implicaciones prácticas<a href="#implicaciones-pr%C3%A1cticas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Con buenos controles</strong>:
+<ul>
+<li>El coeficiente del DID mantiene <strong>interpretación causal</strong>.<br />
+</li>
+<li>Mejora la precisión de la estimación.</li>
+</ul></li>
+<li><strong>Con malos controles</strong>:
+<ul>
+<li>El estimador se <strong>vuelve inconsistente</strong>.<br />
+</li>
+<li>Perdemos la interpretación causal → ya no estamos midiendo el efecto del programa, sino algo condicionado en una consecuencia del mismo.</li>
+</ul></li>
+</ul>
+<p>En palabras simples:<br />
+&gt; “Un buen control aclara la foto, un mal control la distorsiona”.</p>
+</div>
+</div>
+<div id="supuestos-y-consistencia" class="section level2 unnumbered hasAnchor">
+<h2>Supuestos y Consistencia<a href="bad-controls-teoria.html#supuestos-y-consistencia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El estimador DID será insesgado si:</p>
+<p><span class="math display">\[
+E[Y_{i}(0) \mid D=1, t=1] - E[Y_{i}(0) \mid D=1, t=0] = E[Y_{i}(0) \mid D=0, t=1] - E[Y_{i}(0) \mid D=0, t=0]
+\]</span></p>
+<ul>
+<li>Si los grupos no siguen tendencias paralelas → <strong>sesgo</strong>.<br />
+</li>
+<li>Si incluimos malos controles → <strong>sesgo adicional</strong>.<br />
+</li>
+<li>Con buenos controles → <strong>más precisión</strong>, pero no cambia la interpretación causal.</li>
+</ul>
+<hr />
+</div>
+<div id="sesgo-de-agrupación" class="section level2 unnumbered hasAnchor">
+<h2>Sesgo de Agrupación<a href="#sesgo-de-agrupaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Otro problema común es el <strong>sesgo de agrupación</strong>, que ocurre cuando:<br />
+- Se promedian resultados sin respetar la estructura de tratamiento y control.<br />
+- Se incluyen controles endógenos que re-agrupan la variación.</p>
+<p>La moraleja es:<br />
+👉 Siempre analizar qué variables se incluyen y si cumplen el criterio de ser predeterminadas.</p>
+<hr />
+</div>
+<div id="moraleja-final" class="section level2 unnumbered hasAnchor">
+<h2>Moraleja Final<a href="bad-controls-teoria.html#moraleja-final" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
-<li>Cálculo manual paso a paso.</li>
-<li>Usando el comando <code>diff</code>.</li>
-<li>Mediante regresiones.</li>
-</ol></li>
-</ul>
-</div>
+<li>El supuesto de tendencias paralelas es <strong>fundamental</strong>.<br />
+</li>
+<li>Los buenos controles ayudan; los malos controles dañan.<br />
+</li>
+<li>DID se entiende mejor desde los <strong>resultados potenciales</strong>.<br />
+</li>
+<li>La interpretación causal depende estrictamente de los <strong>supuestos</strong>.</li>
+</ol>
 <hr />
-<div id="preparación-de-los-datos" class="section level2 unnumbered hasAnchor">
-<h2>Preparación de los datos<a href="#preparaci%C3%B3n-de-los-datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb87"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb87-1"><a href="diferencias-en-diferencias-teoría.html#cb87-1" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb87-2"><a href="diferencias-en-diferencias-teoría.html#cb87-2" tabindex="-1"></a><span class="kw">set</span> mem 150m</span>
-<span id="cb87-3"><a href="diferencias-en-diferencias-teoría.html#cb87-3" tabindex="-1"></a><span class="kw">capture</span> <span class="fu">log</span> <span class="kw">close</span> </span>
-<span id="cb87-4"><a href="diferencias-en-diferencias-teoría.html#cb87-4" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;datafiles/base3.dta&quot;</span></span></code></pre></div>
-<p>Verificamos cómo están definidas las variables de <strong>tiempo</strong> y <strong>tratamiento</strong>:</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb88-1"><a href="diferencias-en-diferencias-teoría.html#cb88-1" tabindex="-1"></a><span class="kw">tab</span> t</span>
-<span id="cb88-2"><a href="diferencias-en-diferencias-teoría.html#cb88-2" tabindex="-1"></a><span class="kw">tab</span> D</span>
-<span id="cb88-3"><a href="diferencias-en-diferencias-teoría.html#cb88-3" tabindex="-1"></a><span class="kw">tab</span> t D</span></code></pre></div>
-<p>La variable de resultado es <code>ha_nchs</code>, el número de desviaciones estándar que el niño está por encima o por debajo de la media del grupo relevante. En el do-file la llamaremos simplemente <code>y</code>.</p>
-<hr />
+<div class="boxejercicio">
+<p><strong>✍️ Ejercicio para reflexionar</strong></p>
+<ol style="list-style-type: decimal">
+<li>Da un ejemplo de <strong>buen control</strong> y de <strong>mal control</strong> en la evaluación de un programa de transferencias condicionadas.<br />
+</li>
+<li>¿Por qué incluir el nivel de ingreso post-programa sería un mal control en DID?<br />
+</li>
+<li>¿Cómo verificarías gráficamente el supuesto de tendencias paralelas antes de correr la regresión?<br />
+</li>
+</ol>
 </div>
-<div id="estadísticas-descriptivas" class="section level2 unnumbered hasAnchor">
-<h2>Estadísticas descriptivas<a href="#estad%C3%ADsticas-descriptivas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="promedios-por-periodo-y-grupo" class="section level3 unnumbered hasAnchor">
-<h3>Promedios por periodo y grupo<a href="diferencias-en-diferencias-teoría.html#promedios-por-periodo-y-grupo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb89"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb89-1"><a href="diferencias-en-diferencias-teoría.html#cb89-1" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb89-2"><a href="diferencias-en-diferencias-teoría.html#cb89-2" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> t==0</span>
-<span id="cb89-3"><a href="diferencias-en-diferencias-teoría.html#cb89-3" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> t==1</span>
-<span id="cb89-4"><a href="diferencias-en-diferencias-teoría.html#cb89-4" tabindex="-1"></a><span class="kw">bysort</span> t: <span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb89-5"><a href="diferencias-en-diferencias-teoría.html#cb89-5" tabindex="-1"></a><span class="kw">bysort</span> D: <span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb89-6"><a href="diferencias-en-diferencias-teoría.html#cb89-6" tabindex="-1"></a><span class="kw">bysort</span> D t: <span class="kw">sum</span> <span class="fu">y</span></span>
-<span id="cb89-7"><a href="diferencias-en-diferencias-teoría.html#cb89-7" tabindex="-1"></a></span>
-<span id="cb89-8"><a href="diferencias-en-diferencias-teoría.html#cb89-8" tabindex="-1"></a><span class="kw">table</span> D t, c(<span class="kw">mean</span> <span class="fu">y</span> <span class="fu">sd</span> <span class="fu">y</span>)</span></code></pre></div>
-<p>Definimos etiquetas y graficamos:</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb90-1"><a href="diferencias-en-diferencias-teoría.html#cb90-1" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> t 0 <span class="st">&quot;t=0&quot;</span> 1 <span class="st">&quot;t=1&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb90-2"><a href="diferencias-en-diferencias-teoría.html#cb90-2" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> t t </span>
-<span id="cb90-3"><a href="diferencias-en-diferencias-teoría.html#cb90-3" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> D 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratado&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb90-4"><a href="diferencias-en-diferencias-teoría.html#cb90-4" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> D D</span>
-<span id="cb90-5"><a href="diferencias-en-diferencias-teoría.html#cb90-5" tabindex="-1"></a></span>
-<span id="cb90-6"><a href="diferencias-en-diferencias-teoría.html#cb90-6" tabindex="-1"></a><span class="kw">graph</span> <span class="bn">dot</span> <span class="fu">y</span>, <span class="bn">over</span>(D) <span class="kw">by</span>(t) vertical</span></code></pre></div>
-<p>Evolución temporal:</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb91-1"><a href="diferencias-en-diferencias-teoría.html#cb91-1" tabindex="-1"></a><span class="kw">preserve</span></span>
-<span id="cb91-2"><a href="diferencias-en-diferencias-teoría.html#cb91-2" tabindex="-1"></a><span class="kw">collapse</span> <span class="fu">y</span>, <span class="kw">by</span>(t D)</span>
-<span id="cb91-3"><a href="diferencias-en-diferencias-teoría.html#cb91-3" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">line</span> <span class="fu">y</span> t <span class="kw">if</span> D==1) (<span class="kw">line</span> <span class="fu">y</span> t <span class="kw">if</span> D==0), <span class="co">///</span></span>
-<span id="cb91-4"><a href="diferencias-en-diferencias-teoría.html#cb91-4" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>))</span>
-<span id="cb91-5"><a href="diferencias-en-diferencias-teoría.html#cb91-5" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div>
-<hr />
-</div>
-</div>
-<div id="comparación-de-medias" class="section level2 unnumbered hasAnchor">
-<h2>Comparación de medias<a href="#comparaci%C3%B3n-de-medias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb92"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb92-1"><a href="diferencias-en-diferencias-teoría.html#cb92-1" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 0, <span class="kw">by</span>(D)</span>
-<span id="cb92-2"><a href="diferencias-en-diferencias-teoría.html#cb92-2" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 1, <span class="kw">by</span>(D)</span></code></pre></div>
-<p><strong>Interpretación preliminar:</strong></p>
-<ul>
-<li>Hay una diferencia preexistente entre tratados y controles en el periodo inicial.</li>
-<li>La diferencia aumenta después del tratamiento.</li>
-<li>DID nos permitirá aislar el efecto neto del tratamiento controlando por diferencias iniciales.</li>
-</ul>
-<hr />
-</div>
-<div id="estimador-did-paso-a-paso" class="section level2 unnumbered hasAnchor">
-<h2>Estimador DID paso a paso<a href="diferencias-en-diferencias-teoría.html#estimador-did-paso-a-paso" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Definimos los promedios:</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb93-1"><a href="diferencias-en-diferencias-teoría.html#cb93-1" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 0</span>
-<span id="cb93-2"><a href="diferencias-en-diferencias-teoría.html#cb93-2" tabindex="-1"></a><span class="fu">scalar</span> y_c0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb93-3"><a href="diferencias-en-diferencias-teoría.html#cb93-3" tabindex="-1"></a></span>
-<span id="cb93-4"><a href="diferencias-en-diferencias-teoría.html#cb93-4" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 1</span>
-<span id="cb93-5"><a href="diferencias-en-diferencias-teoría.html#cb93-5" tabindex="-1"></a><span class="fu">scalar</span> y_c1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb93-6"><a href="diferencias-en-diferencias-teoría.html#cb93-6" tabindex="-1"></a></span>
-<span id="cb93-7"><a href="diferencias-en-diferencias-teoría.html#cb93-7" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 0</span>
-<span id="cb93-8"><a href="diferencias-en-diferencias-teoría.html#cb93-8" tabindex="-1"></a><span class="fu">scalar</span> y_t0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb93-9"><a href="diferencias-en-diferencias-teoría.html#cb93-9" tabindex="-1"></a></span>
-<span id="cb93-10"><a href="diferencias-en-diferencias-teoría.html#cb93-10" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 1</span>
-<span id="cb93-11"><a href="diferencias-en-diferencias-teoría.html#cb93-11" tabindex="-1"></a><span class="fu">scalar</span> y_t1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span></code></pre></div>
-<p>Cálculo manual del estimador DID:</p>
-<p><span class="math display">\[
-\widehat{DD} = \big( \bar{Y}_{T,1} - \bar{Y}_{T,0}\big) - \big( \bar{Y}_{C,1} - \bar{Y}_{C,0}\big)
-\]</span></p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="diferencias-en-diferencias-teoría.html#cb94-1" tabindex="-1"></a><span class="fu">scalar</span> DD = (y_t1 - y_t0) - (y_c1 - y_c0)</span>
-<span id="cb94-2"><a href="diferencias-en-diferencias-teoría.html#cb94-2" tabindex="-1"></a><span class="kw">di</span> DD</span></code></pre></div>
-<hr />
-</div>
-<div id="usando-el-comando-diff" class="section level2 unnumbered hasAnchor">
-<h2>Usando el comando <code>diff</code><a href="diferencias-en-diferencias-teoría.html#usando-el-comando-diff" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="diferencias-en-diferencias-teoría.html#cb95-1" tabindex="-1"></a><span class="kw">ssc</span> inst <span class="fu">diff</span>, <span class="kw">replace</span></span>
-<span id="cb95-2"><a href="diferencias-en-diferencias-teoría.html#cb95-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t)</span></code></pre></div>
-<hr />
-</div>
-<div id="implementación-con-regresiones" class="section level2 unnumbered hasAnchor">
-<h2>Implementación con regresiones<a href="#implementaci%C3%B3n-con-regresiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El modelo DID se puede estimar con una regresión incluyendo interacción entre tratamiento y tiempo:</p>
-<p><span class="math display">\[
-Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon_{it}
-\]</span></p>
-<p>Donde:</p>
-<ul>
-<li><span class="math inline">\(\delta\)</span> es el estimador DID.</li>
-</ul>
-<p>En Stata:</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="diferencias-en-diferencias-teoría.html#cb96-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D##t</span></code></pre></div>
-<p>Comparación con regresión simple:</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb97-1"><a href="diferencias-en-diferencias-teoría.html#cb97-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D</span></code></pre></div>
-<hr />
-</div>
-<div id="extensión-con-panel" class="section level2 unnumbered hasAnchor">
-<h2>Extensión con panel<a href="#extensi%C3%B3n-con-panel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Definimos datos de panel y usamos notación de diferencias:</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb98-1"><a href="diferencias-en-diferencias-teoría.html#cb98-1" tabindex="-1"></a>xtset id t</span>
-<span id="cb98-2"><a href="diferencias-en-diferencias-teoría.html#cb98-2" tabindex="-1"></a><span class="kw">reg</span> D.<span class="fu">y</span> D.D</span></code></pre></div>
-<hr />
-</div>
-<div id="interpretación" class="section level2 unnumbered hasAnchor">
-<h2>Interpretación<a href="#interpretaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El coeficiente asociado a la interacción <span class="math inline">\(D \times t\)</span> captura el <strong>efecto causal estimado</strong> bajo el supuesto de <strong>tendencias paralelas</strong>.</p>
-<p>En este caso, el coeficiente fue <strong>0.18</strong> y significativo, lo que indica que la diferencia en talla para la edad entre tratados y controles aumentó en <strong>0.18 desviaciones estándar</strong> después de la aplicación del programa.</p>
-<hr />
 
 </div>
 </div>
@@ -388,8 +434,8 @@ Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon
           </div>
         </div>
       </div>
-<a href="poder-estadistico-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="malos-controles-teoría.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="did-teoria.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="malos-controles-en-stata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -420,7 +466,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/08-DID.Rmd",
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/09-BadControls.Rmd",
     "text": "Edit"
   },
   "history": {

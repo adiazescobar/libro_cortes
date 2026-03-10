@@ -220,7 +220,7 @@ El p-value es la probabilidad de obtener un resultado tan extremo o mas extremo 
 <div class="question-box">
 <span class="question-number">Pregunta 4.</span> Un intervalo de confianza del 95% significa que:
 
-<select class='webex-select'><option value='blank'></option><option value=''>Hay 95% de probabilidad de que el parámetro verdadero esté en este intervalo específico</option><option value='answer'>Si construyéramos 100 intervalos de esta manera, 95 de ellos contendrían el parámetro verdadero</option><option value=''>El 95% de los datos está dentro del intervalo</option><option value=''>Estamos 95% seguros de nuestra estimación</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>Hay 95% de probabilidad de que el par<U+00E1>metro verdadero est<U+00E9> en este intervalo espec<U+00ED>fico</option><option value='answer'>Si construy<U+00E9>ramos 100 intervalos de esta manera, 95 de ellos contendr<U+00ED>an el par<U+00E1>metro verdadero</option><option value=''>El 95% de los datos est<U+00E1> dentro del intervalo</option><option value=''>Estamos 95% seguros de nuestra estimaci<U+00F3>n</option></select>
 
 
 <div class='webex-solution'><button>Ver explicacion</button>
@@ -286,7 +286,7 @@ R2 es la proporcion de la varianza de Y explicada por el modelo.
 <div class="question-box">
 <span class="question-number">Pregunta 8.</span> Cual de las siguientes NO es un supuesto del modelo clasico de regresion lineal (OLS)?
 
-<select class='webex-select'><option value='blank'></option><option value=''>Los errores tienen media cero</option><option value=''>Los errores son homocedásticos</option><option value=''>No hay multicolinealidad perfecta</option><option value='answer'>Los errores deben seguir una distribución uniforme</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>Los errores tienen media cero</option><option value=''>Los errores son homoced<U+00E1>sticos</option><option value=''>No hay multicolinealidad perfecta</option><option value='answer'>Los errores deben seguir una distribuci<U+00F3>n uniforme</option></select>
 
 
 <div class='webex-solution'><button>Ver explicacion</button>

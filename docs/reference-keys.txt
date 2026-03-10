@@ -12,8 +12,8 @@ parametros-causales-stata
 experimentos-aleatorizados
 experimentos-aleatorizados-en-stata
 poder-estadistico-stata
-diferencias-en-diferencias-teoría
-malos-controles-teoría
+did-teoria
+bad-controls-teoria
 malos-controles-en-stata
 twfe-y-did-moderno-en-stata
 código-copiarpegar

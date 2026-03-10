@@ -110,33 +110,34 @@ Estas preguntas ayudan a ubicar el proyecto dentro de un marco más amplio, que 
 ## 🧰 Checklist para una buena pregunta de investigación causal {-}
 
 <table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:checklist-pregunta-causal)Checklist para formular una buena pregunta de investigación causal</caption>
+<caption>(\#tab:checklist-pregunta-causal)Checklist para formular una buena pregunta de investigaci<u>n causal</u>
+</caption>
  <thead>
   <tr>
    <th style="text-align:left;"> Pregunta </th>
-   <th style="text-align:left;"> Descripción </th>
+   <th style="text-align:left;"> Descripci&lt;U+00F3&gt;n </th>
   </tr>
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> ¿Cuál es la relación causal de interés? </td>
-   <td style="text-align:left;"> Define con claridad qué variable actúa como causa y cuál como efecto. </td>
+   <td style="text-align:left;"> &lt;U+00BF&gt;Cu&lt;U+00E1&gt;l es la relaci&lt;U+00F3&gt;n causal de inter&lt;U+00E9&gt;s? </td>
+   <td style="text-align:left;"> Define con claridad qu&lt;U+00E9&gt; variable act&lt;U+00FA&gt;a como causa y cu&lt;U+00E1&gt;l como efecto. </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> ¿Puedes describir el experimento ideal? </td>
-   <td style="text-align:left;"> Imagina cómo se asignaría aleatoriamente el tratamiento y cómo medirías el impacto. </td>
+   <td style="text-align:left;"> &lt;U+00BF&gt;Puedes describir el experimento ideal? </td>
+   <td style="text-align:left;"> Imagina c&lt;U+00F3&gt;mo se asignar&lt;U+00ED&gt;a aleatoriamente el tratamiento y c&lt;U+00F3&gt;mo medir&lt;U+00ED&gt;as el impacto. </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> ¿Por qué esta pregunta es importante o interesante? </td>
-   <td style="text-align:left;"> Justifica la relevancia empírica, social o política del tema. </td>
+   <td style="text-align:left;"> &lt;U+00BF&gt;Por qu&lt;U+00E9&gt; esta pregunta es importante o interesante? </td>
+   <td style="text-align:left;"> Justifica la relevancia emp&lt;U+00ED&gt;rica, social o pol&lt;U+00ED&gt;tica del tema. </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> ¿Qué aporta respecto a la literatura existente? </td>
-   <td style="text-align:left;"> Identifica vacíos o limitaciones en estudios previos que tu trabajo busca superar. </td>
+   <td style="text-align:left;"> &lt;U+00BF&gt;Qu&lt;U+00E9&gt; aporta respecto a la literatura existente? </td>
+   <td style="text-align:left;"> Identifica vac&lt;U+00ED&gt;os o limitaciones en estudios previos que tu trabajo busca superar. </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> ¿Qué mecanismos o teoría motivan la hipótesis causal? </td>
-   <td style="text-align:left;"> Asegúrate de que haya una narrativa teórica detrás de la relación que estudias. </td>
+   <td style="text-align:left;"> &lt;U+00BF&gt;Qu&lt;U+00E9&gt; mecanismos o teor&lt;U+00ED&gt;a motivan la hip&lt;U+00F3&gt;tesis causal? </td>
+   <td style="text-align:left;"> Aseg&lt;U+00FA&gt;rate de que haya una narrativa te&lt;U+00F3&gt;rica detr&lt;U+00E1&gt;s de la relaci&lt;U+00F3&gt;n que estudias. </td>
   </tr>
 </tbody>
 </table>

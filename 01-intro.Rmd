@@ -119,7 +119,7 @@ library(knitr)
 library(kableExtra)
 
 checklist <- tribble(
-  ~Pregunta, ~Descripción,
+  ~Pregunta, ~Descripcion,
 
   "¿Cuál es la relación causal de interés?",
   "Define con claridad qué variable actúa como causa y cuál como efecto.",
@@ -137,7 +137,9 @@ checklist <- tribble(
   "Asegúrate de que haya una narrativa teórica detrás de la relación que estudias."
 )
 
-kbl(checklist, align = "l", booktabs = TRUE, caption = "Checklist para formular una buena pregunta de investigación causal") %>%
+kbl(checklist, align = "l", booktabs = TRUE,
+    col.names = c("Pregunta", "Descripción"),
+    caption = "Checklist para formular una buena pregunta de investigación causal") %>%
   kable_styling(full_width = FALSE, position = "center", bootstrap_options = c("striped", "hover"))
 ```
 

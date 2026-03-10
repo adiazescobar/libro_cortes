@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-02-25" />
+<meta name="date" content="2026-03-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="experimentos-aleatorizados-en-stata.html"/>
-<link rel="next" href="diferencias-en-diferencias-teoría.html"/>
+<link rel="next" href="did-teoria.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -636,10 +636,10 @@ K_1 = \frac{\bigl(z_{1-\alpha/2}+z_{1-\beta}\bigr)^2}{\delta^2} \left( \frac{\si
 Los participantes deben dar <strong>consentimiento informado</strong> libre y voluntario. Las poblaciones vulnerables (niños, prisioneros, personas con discapacidad cognitiva) requieren protecciones adicionales.</p>
 <div class="boxaudio">
 <p class="audio-title">
-🎧 Escucha antes de la clase — <em>The Three Pillars of Human Experimentation</em>
+&lt;U+0001F3A7&gt; Escucha antes de la clase — <em>The Three Pillars of Human Experimentation</em>
 </p>
 <p style="margin:0 0 0.8em 0; font-size:0.92em; color:#5b4a9e;">
-Resumen del Informe Belmont (1979): los tres principios éticos que rigen cualquier experimento con seres humanos.
+Resumen del Informe Belmont (1979): los tres principios &lt;U+00E9&gt;ticos que rigen cualquier experimento con seres humanos.
 </p>
 <audio controls>
 <source src="audio/The_Three_Pillars_of_Human_Experimentation.m4a" type="audio/mp4">
@@ -678,6 +678,47 @@ Los beneficios y cargas del experimento deben distribuirse equitativamente. No e
 <p><strong>Variable de tratamiento:</strong> <code>black</code> = 1 si el nombre suena afroamericano, 0 si suena blanco.
 <strong>Variable de resultado:</strong> <code>call</code> = 1 si el empleador llamó de regreso.</p>
 <p>Los datos están disponibles aquí: <a href="https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&amp;dl=1">Descargar bm.dta</a></p>
+<div class="boxinfo">
+<p><strong>Variables disponibles en <code>bm.dta</code></strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>black</code></td>
+<td>1 = nombre afroamericano (tratamiento)</td>
+</tr>
+<tr class="even">
+<td><code>call</code></td>
+<td>1 = recibió llamada de regreso (resultado)</td>
+</tr>
+<tr class="odd">
+<td><code>female</code></td>
+<td>1 = nombre femenino</td>
+</tr>
+<tr class="even">
+<td><code>yearsexp</code></td>
+<td>Años de experiencia en la hoja de vida</td>
+</tr>
+<tr class="odd">
+<td><code>education</code></td>
+<td>Nivel educativo</td>
+</tr>
+<tr class="even">
+<td><code>ofjobs</code></td>
+<td>Número de empleos anteriores</td>
+</tr>
+<tr class="odd">
+<td><code>computerskills</code></td>
+<td>1 = menciona habilidades informáticas</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="preguntas-del-ejercicio" class="section level3 unnumbered hasAnchor">
 <h3>Preguntas del ejercicio<a href="poder-estadistico-stata.html#preguntas-del-ejercicio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -688,12 +729,12 @@ Evalúe si la asignación aleatoria fue exitosa comparando las características 
 <p><strong>3. Efecto del tratamiento</strong>
 Estime el efecto de tener un nombre afroamericano sobre la probabilidad de recibir una llamada:
 - Modelo sin controles
-- Modelo con controles (educación, experiencia, honores, voluntariado, etc.)
+- Modelo con controles (educación, experiencia, número de empleos, habilidades informáticas, género)
 ¿Por qué debería —o no— cambiar el estimador al agregar controles en un experimento aleatorio? ¿Qué pasa en la práctica con estos datos?</p>
 <p><strong>4. Efectos heterogéneos</strong>
 Estime al menos dos modelos de efectos heterogéneos:
-- Uno con una variable <strong>binaria</strong> (ej. género del nombre)
-- Uno con una variable <strong>continua</strong> (ej. años de experiencia en la hoja de vida)
+- Uno con una variable <strong>binaria</strong> (género del nombre: <code>female</code>)
+- Uno con una variable <strong>continua</strong> (años de experiencia: <code>yearsexp</code>)
 ¿Qué revela la interacción sobre el retorno a la “calidad” de la hoja de vida según raza?</p>
 <p><strong>5. Poder estadístico</strong>
 Con la información de los datos:
@@ -706,35 +747,50 @@ Con la información de los datos:
 <div class="sourceCode" id="cb86"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb86-1"><a href="poder-estadistico-stata.html#cb86-1" tabindex="-1"></a>* Cargar datos</span>
 <span id="cb86-2"><a href="poder-estadistico-stata.html#cb86-2" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&amp;dl=1&quot;</span>, <span class="kw">clear</span></span>
 <span id="cb86-3"><a href="poder-estadistico-stata.html#cb86-3" tabindex="-1"></a></span>
-<span id="cb86-4"><a href="poder-estadistico-stata.html#cb86-4" tabindex="-1"></a>* Pregunta 2 — Balance</span>
-<span id="cb86-5"><a href="poder-estadistico-stata.html#cb86-5" tabindex="-1"></a><span class="kw">tabstat</span> yearsexp education honors volunteer military holes email computer special <span class="co">///</span></span>
-<span id="cb86-6"><a href="poder-estadistico-stata.html#cb86-6" tabindex="-1"></a>        female chicago, <span class="kw">by</span>(<span class="bn">black</span>) stat(<span class="kw">mean</span>) <span class="kw">format</span>(%6.3f) <span class="kw">nototal</span></span>
+<span id="cb86-4"><a href="poder-estadistico-stata.html#cb86-4" tabindex="-1"></a>* ── Pregunta 2: Balance ──</span>
+<span id="cb86-5"><a href="poder-estadistico-stata.html#cb86-5" tabindex="-1"></a><span class="kw">tabstat</span> yearsexp education ofjobs computerskills female, <span class="co">///</span></span>
+<span id="cb86-6"><a href="poder-estadistico-stata.html#cb86-6" tabindex="-1"></a>        <span class="kw">by</span>(<span class="bn">black</span>) stat(<span class="kw">mean</span>) <span class="kw">format</span>(%6.3f) <span class="kw">nototal</span></span>
 <span id="cb86-7"><a href="poder-estadistico-stata.html#cb86-7" tabindex="-1"></a></span>
-<span id="cb86-8"><a href="poder-estadistico-stata.html#cb86-8" tabindex="-1"></a>* Pregunta 3 — Efecto promedio</span>
-<span id="cb86-9"><a href="poder-estadistico-stata.html#cb86-9" tabindex="-1"></a><span class="kw">reg</span> call <span class="bn">black</span>, <span class="kw">robust</span></span>
-<span id="cb86-10"><a href="poder-estadistico-stata.html#cb86-10" tabindex="-1"></a><span class="kw">reg</span> call <span class="bn">black</span> female yearsexp education honors volunteer military holes <span class="co">///</span></span>
-<span id="cb86-11"><a href="poder-estadistico-stata.html#cb86-11" tabindex="-1"></a>        email computer special chicago, <span class="kw">robust</span></span>
+<span id="cb86-8"><a href="poder-estadistico-stata.html#cb86-8" tabindex="-1"></a><span class="kw">foreach</span> <span class="kw">var</span> <span class="kw">of</span> <span class="kw">varlist</span> yearsexp education ofjobs computerskills female {</span>
+<span id="cb86-9"><a href="poder-estadistico-stata.html#cb86-9" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">ttest</span> <span class="ot">`var&#39;</span>, <span class="kw">by</span>(<span class="bn">black</span>)</span>
+<span id="cb86-10"><a href="poder-estadistico-stata.html#cb86-10" tabindex="-1"></a>    <span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;`var&#39;: p = &quot;</span> %5.3f <span class="fu">r</span>(<span class="kw">p</span>)</span>
+<span id="cb86-11"><a href="poder-estadistico-stata.html#cb86-11" tabindex="-1"></a>}</span>
 <span id="cb86-12"><a href="poder-estadistico-stata.html#cb86-12" tabindex="-1"></a></span>
-<span id="cb86-13"><a href="poder-estadistico-stata.html#cb86-13" tabindex="-1"></a>* Pregunta 4a — Heterogeneidad por género (binaria)</span>
-<span id="cb86-14"><a href="poder-estadistico-stata.html#cb86-14" tabindex="-1"></a><span class="kw">reg</span> call i.black##i.female, <span class="kw">robust</span></span>
-<span id="cb86-15"><a href="poder-estadistico-stata.html#cb86-15" tabindex="-1"></a>margins female, <span class="kw">dydx</span>(<span class="bn">black</span>)</span>
+<span id="cb86-13"><a href="poder-estadistico-stata.html#cb86-13" tabindex="-1"></a>* ── Pregunta 3: Efecto promedio ──</span>
+<span id="cb86-14"><a href="poder-estadistico-stata.html#cb86-14" tabindex="-1"></a>* Sin controles</span>
+<span id="cb86-15"><a href="poder-estadistico-stata.html#cb86-15" tabindex="-1"></a><span class="kw">reg</span> call <span class="bn">black</span>, <span class="kw">robust</span></span>
 <span id="cb86-16"><a href="poder-estadistico-stata.html#cb86-16" tabindex="-1"></a></span>
-<span id="cb86-17"><a href="poder-estadistico-stata.html#cb86-17" tabindex="-1"></a>* Pregunta 4b — Heterogeneidad por experiencia (continua)</span>
-<span id="cb86-18"><a href="poder-estadistico-stata.html#cb86-18" tabindex="-1"></a><span class="kw">reg</span> call c.black##c.yearsexp, <span class="kw">robust</span></span>
-<span id="cb86-19"><a href="poder-estadistico-stata.html#cb86-19" tabindex="-1"></a>margins, <span class="kw">dydx</span>(<span class="bn">black</span>) <span class="fu">at</span>(yearsexp=(0(2)20))</span>
-<span id="cb86-20"><a href="poder-estadistico-stata.html#cb86-20" tabindex="-1"></a>marginsplot</span>
-<span id="cb86-21"><a href="poder-estadistico-stata.html#cb86-21" tabindex="-1"></a></span>
-<span id="cb86-22"><a href="poder-estadistico-stata.html#cb86-22" tabindex="-1"></a>* Pregunta 5 — Poder estadístico</span>
-<span id="cb86-23"><a href="poder-estadistico-stata.html#cb86-23" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> call <span class="kw">if</span> <span class="bn">black</span> == 0</span>
-<span id="cb86-24"><a href="poder-estadistico-stata.html#cb86-24" tabindex="-1"></a><span class="kw">local</span> p_white = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb86-25"><a href="poder-estadistico-stata.html#cb86-25" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> call <span class="kw">if</span> <span class="bn">black</span> == 1</span>
-<span id="cb86-26"><a href="poder-estadistico-stata.html#cb86-26" tabindex="-1"></a><span class="kw">local</span> p_black = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb86-27"><a href="poder-estadistico-stata.html#cb86-27" tabindex="-1"></a></span>
-<span id="cb86-28"><a href="poder-estadistico-stata.html#cb86-28" tabindex="-1"></a>* Poder dado <span class="kw">N</span>=4870</span>
-<span id="cb86-29"><a href="poder-estadistico-stata.html#cb86-29" tabindex="-1"></a>power twoproportions <span class="ot">`p_black&#39;</span> <span class="ot">`p_white&#39;</span>, n(4870) <span class="kw">alpha</span>(0.05)</span>
-<span id="cb86-30"><a href="poder-estadistico-stata.html#cb86-30" tabindex="-1"></a></span>
-<span id="cb86-31"><a href="poder-estadistico-stata.html#cb86-31" tabindex="-1"></a>* MDE dado <span class="kw">N</span>=4870 <span class="fu">y</span> poder=0.80</span>
-<span id="cb86-32"><a href="poder-estadistico-stata.html#cb86-32" tabindex="-1"></a>power twoproportions <span class="ot">`p_black&#39;</span>, n(4870) power(0.80) <span class="kw">alpha</span>(0.05)</span></code></pre></div>
+<span id="cb86-17"><a href="poder-estadistico-stata.html#cb86-17" tabindex="-1"></a>* Con controles</span>
+<span id="cb86-18"><a href="poder-estadistico-stata.html#cb86-18" tabindex="-1"></a><span class="kw">reg</span> call <span class="bn">black</span> female yearsexp education ofjobs computerskills, <span class="kw">robust</span></span>
+<span id="cb86-19"><a href="poder-estadistico-stata.html#cb86-19" tabindex="-1"></a></span>
+<span id="cb86-20"><a href="poder-estadistico-stata.html#cb86-20" tabindex="-1"></a>* ── Pregunta 4a: Heterogeneidad por género (binaria) ──</span>
+<span id="cb86-21"><a href="poder-estadistico-stata.html#cb86-21" tabindex="-1"></a><span class="kw">reg</span> call i.black##i.female, <span class="kw">robust</span></span>
+<span id="cb86-22"><a href="poder-estadistico-stata.html#cb86-22" tabindex="-1"></a>margins female, <span class="kw">dydx</span>(<span class="bn">black</span>)</span>
+<span id="cb86-23"><a href="poder-estadistico-stata.html#cb86-23" tabindex="-1"></a>marginsplot</span>
+<span id="cb86-24"><a href="poder-estadistico-stata.html#cb86-24" tabindex="-1"></a></span>
+<span id="cb86-25"><a href="poder-estadistico-stata.html#cb86-25" tabindex="-1"></a>* ── Pregunta 4b: Heterogeneidad por experiencia (continua) ──</span>
+<span id="cb86-26"><a href="poder-estadistico-stata.html#cb86-26" tabindex="-1"></a><span class="kw">reg</span> call c.black##c.yearsexp, <span class="kw">robust</span></span>
+<span id="cb86-27"><a href="poder-estadistico-stata.html#cb86-27" tabindex="-1"></a>margins, <span class="kw">dydx</span>(<span class="bn">black</span>) <span class="fu">at</span>(yearsexp=(0(2)20))</span>
+<span id="cb86-28"><a href="poder-estadistico-stata.html#cb86-28" tabindex="-1"></a>marginsplot</span>
+<span id="cb86-29"><a href="poder-estadistico-stata.html#cb86-29" tabindex="-1"></a></span>
+<span id="cb86-30"><a href="poder-estadistico-stata.html#cb86-30" tabindex="-1"></a>* ── Pregunta 5: Poder estadístico ──</span>
+<span id="cb86-31"><a href="poder-estadistico-stata.html#cb86-31" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> call <span class="kw">if</span> <span class="bn">black</span> == 0</span>
+<span id="cb86-32"><a href="poder-estadistico-stata.html#cb86-32" tabindex="-1"></a><span class="kw">local</span> p_white = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb86-33"><a href="poder-estadistico-stata.html#cb86-33" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> call <span class="kw">if</span> <span class="bn">black</span> == 1</span>
+<span id="cb86-34"><a href="poder-estadistico-stata.html#cb86-34" tabindex="-1"></a><span class="kw">local</span> p_black = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb86-35"><a href="poder-estadistico-stata.html#cb86-35" tabindex="-1"></a></span>
+<span id="cb86-36"><a href="poder-estadistico-stata.html#cb86-36" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Tasa callback blancos:       &quot;</span> %5.4f <span class="ot">`p_white&#39;</span></span>
+<span id="cb86-37"><a href="poder-estadistico-stata.html#cb86-37" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Tasa callback afroamericanos: &quot;</span> %5.4f <span class="ot">`p_black&#39;</span></span>
+<span id="cb86-38"><a href="poder-estadistico-stata.html#cb86-38" tabindex="-1"></a></span>
+<span id="cb86-39"><a href="poder-estadistico-stata.html#cb86-39" tabindex="-1"></a>* 5a. Poder dado <span class="kw">N</span>=4870</span>
+<span id="cb86-40"><a href="poder-estadistico-stata.html#cb86-40" tabindex="-1"></a>power twoproportions <span class="ot">`p_white&#39;</span> <span class="ot">`p_black&#39;</span>, n(4870) <span class="kw">alpha</span>(0.05)</span>
+<span id="cb86-41"><a href="poder-estadistico-stata.html#cb86-41" tabindex="-1"></a></span>
+<span id="cb86-42"><a href="poder-estadistico-stata.html#cb86-42" tabindex="-1"></a>* 5b. MDE dado <span class="kw">N</span>=4870 <span class="fu">y</span> poder=0.80</span>
+<span id="cb86-43"><a href="poder-estadistico-stata.html#cb86-43" tabindex="-1"></a>power twoproportions <span class="ot">`p_white&#39;</span>, n(4870) power(0.80) <span class="kw">alpha</span>(0.05)</span>
+<span id="cb86-44"><a href="poder-estadistico-stata.html#cb86-44" tabindex="-1"></a></span>
+<span id="cb86-45"><a href="poder-estadistico-stata.html#cb86-45" tabindex="-1"></a>* 5c. <span class="kw">N</span> para detectar la mitad del efecto</span>
+<span id="cb86-46"><a href="poder-estadistico-stata.html#cb86-46" tabindex="-1"></a><span class="kw">local</span> p_mitad = <span class="ot">`p_white&#39;</span> - (<span class="ot">`p_white&#39;</span> - <span class="ot">`p_black&#39;</span>) / 2</span>
+<span id="cb86-47"><a href="poder-estadistico-stata.html#cb86-47" tabindex="-1"></a>power twoproportions <span class="ot">`p_white&#39;</span> <span class="ot">`p_mitad&#39;</span>, power(0.80) <span class="kw">alpha</span>(0.05)</span></code></pre></div>
 </div>
 </div>
 <div id="descarga-los-documentos-3" class="section level2 unnumbered hasAnchor">
@@ -760,7 +816,7 @@ Con la información de los datos:
         </div>
       </div>
 <a href="experimentos-aleatorizados-en-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="diferencias-en-diferencias-teoría.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="did-teoria.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

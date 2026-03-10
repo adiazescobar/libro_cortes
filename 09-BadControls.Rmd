@@ -1,4 +1,4 @@
-# Malos Controles (Teoría)
+# Malos Controles (Teoría) {#bad-controls-teoria}
 
 ::: {.boxinfo}
 **🎯 Metas de aprendizaje**

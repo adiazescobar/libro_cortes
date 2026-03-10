@@ -88,7 +88,7 @@ library(tibble)
 
 # Crear tabla
 programa <- tribble(
-  ~Semana, ~Módulo, ~Temas, ~Lecturas,
+  ~Semana, ~Modulo, ~Temas, ~Lecturas,
 
   "1", "1: Introducción a la Inferencia Causal", 
   "• Inferencia causal  
@@ -181,6 +181,7 @@ programa <- tribble(
 # Mostrar tabla bonita
 programa %>%
   kbl(booktabs = TRUE, escape = FALSE, align = "c",
+      col.names = c("Semana", "Módulo", "Temas", "Lecturas"),
       caption = "Programa del curso de microeconometría aplicada") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
                 full_width = FALSE, position = "center") %>%
@@ -199,7 +200,10 @@ bookdown::serve_book()
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
-), 'packages.bib')
+tryCatch(
+  knitr::write_bib(c(
+    .packages(), 'bookdown', 'knitr', 'rmarkdown'
+  ), 'packages.bib'),
+  error = function(e) message("write_bib skipped: ", conditionMessage(e))
+)
 ```

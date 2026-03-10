@@ -1,5 +1,5 @@
 
-# Diferencias en Diferencias (Teoría)
+# Diferencias en Diferencias (Teoría) {#did-teoria}
 
 ::: {.boxinfo}
 **🎯 Objetivos de la clase**
@@ -17,11 +17,21 @@
 
 ## Preparación de los datos {-}
 
+Descarga la base de datos y el do-file de esta clase:
+
+::: {.boxejercicio}
+📁 **Archivos de la clase**
+
+* [base3.dta](dofile/08_DID/base3.dta) — base de datos (8 000 observaciones, niños con dos periodos de seguimiento)
+* [08_DID.do](dofile/08_DID/08_DID.do) — do-file completo
+:::
+
 ```stata
 clear all
 set mem 150m
-capture log close 
-use "datafiles/base3.dta"
+capture log close
+cd "RUTA_DE_TU_CARPETA/dofile/08_DID"
+use "base3.dta"
 ```
 
 Verificamos cómo están definidas las variables de **tiempo** y **tratamiento**:
@@ -32,7 +42,15 @@ tab D
 tab t D
 ```
 
-La variable de resultado es `ha_nchs`, el número de desviaciones estándar que el niño está por encima o por debajo de la media del grupo relevante. En el do-file la llamaremos simplemente `y`.
+Las variables clave de la base son:
+
+| Variable | Descripción |
+|---|---|
+| `y` | Talla para la edad (z-score): desviaciones estándar respecto a la media del grupo |
+| `ha_nchs` | Ídem (nombre original NCHS — es la misma información que `y`) |
+| `D` | Indicador de tratamiento (1 = tratado, 0 = control) |
+| `t` | Periodo (0 = antes, 1 = después) |
+| `orden_n` | Orden de nacimiento del niño en el hogar |
 
 ---
 
@@ -157,9 +175,13 @@ reg y D
 
 ## Extensión con panel {-}
 
-Definimos datos de panel y usamos notación de diferencias:
+La base no incluye un identificador individual explícito, así que lo generamos antes de declarar el panel:
 
 ```stata
+* Crear identificador individual (panel balanceado: 4 000 niños × 2 periodos)
+sort t orden_n
+by t: gen id = _n
+
 xtset id t
 reg D.y D.D
 ```

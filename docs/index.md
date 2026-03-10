@@ -2,7 +2,7 @@
 title: "Cortes Transversales"
 subtitle: " Curso Avanzado de Microeconometría Aplicada"
 author: "Ana María Díaz"
-date: "2026-02-25"
+date: "2026-03-09"
 site: bookdown::bookdown_site
 documentclass: book
 output:
@@ -79,11 +79,13 @@ No se permite el uso de inteligencia artificial, internet o ayudas externas en e
 
 A continuación se presenta el programa semanal del curso, organizado por módulo.
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:programa_tabla)Programa del curso de microeconometría aplicada</caption>
+<caption>(\#tab:programa_tabla)Programa del curso de microeconometr<u>a aplicada</u>
+</caption>
  <thead>
   <tr>
    <th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;"> Semana </th>
-   <th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;"> Módulo </th>
+   <th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;"> M<u>dulo </u>
+</th>
    <th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;"> Temas </th>
    <th style="text-align:center;font-weight: bold;color: white !important;background-color: rgba(31, 119, 180, 255) !important;"> Lecturas </th>
   </tr>
@@ -91,44 +93,56 @@ A continuación se presenta el programa semanal del curso, organizado por módul
 <tbody>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 1 </td>
-   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 1: Introducción a la Inferencia Causal </td>
-   <td style="text-align:center;width: 20em; "> • Inferencia causal  
-   • Contrafactual  
-   • Parámetros de impacto </td>
-   <td style="text-align:center;width: 20em; "> Bernal y Peña (2011), Cap. 2-3  
+   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 1: Introducci<u>n a la Inferencia Causal </u>
+</td>
+   <td style="text-align:center;width: 20em; "> <u> Inferencia causal  
+   <u> Contrafactual  
+   <u> Par<u>metros de impacto </u></u></u></u>
+</td>
+   <td style="text-align:center;width: 20em; "> Bernal y Pe<u>a (2011), Cap. 2-3  
    Heckman (2008)  
-   Angrist y Pischke </td>
+   Angrist y Pischke </u>
+</td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 2 </td>
-   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 1: Introducción a la Inferencia Causal </td>
-   <td style="text-align:center;width: 20em; "> • Sesgo de selección </td>
+   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 1: Introducci<u>n a la Inferencia Causal </u>
+</td>
+   <td style="text-align:center;width: 20em; "> <u> Sesgo de selecci<u>n </u></u>
+</td>
    <td style="text-align:center;width: 20em; "> Angrist &amp; Krueger (2000) </td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 3 </td>
-   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 2: Métodos Experimentales </td>
-   <td style="text-align:center;width: 20em; "> • Aleatorización  
-   • Contrafactual  
-   • Sesgo de selección </td>
-   <td style="text-align:center;width: 20em; "> Bernal y Peña (2011), Cap. 4  
+   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 2: M<u>todos Experimentales </u>
+</td>
+   <td style="text-align:center;width: 20em; "> <u> Aleatorizaci<u>n  
+   <u> Contrafactual  
+   <u> Sesgo de selecci<u>n </u></u></u></u></u>
+</td>
+   <td style="text-align:center;width: 20em; "> Bernal y Pe<u>a (2011), Cap. 4  
    Duflo et al. (2008)  
-   Heckman et al. (1997) </td>
+   Heckman et al. (1997) </u>
+</td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 4 </td>
-   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 2: Métodos Experimentales </td>
-   <td style="text-align:center;width: 20em; "> • Impacto con aleatorización  
-   • Poder estadístico  
-   • Problemas de aleatorización </td>
+   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 2: M<u>todos Experimentales </u>
+</td>
+   <td style="text-align:center;width: 20em; "> <u> Impacto con aleatorizaci<u>n  
+   <u> Poder estad<u>stico  
+   <u> Problemas de aleatorizaci<u>n </u></u></u></u></u></u>
+</td>
    <td style="text-align:center;width: 20em; "> Duflo et al. (2008) </td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 5 </td>
-   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 3: Métodos Cuasi-Experimentales </td>
-   <td style="text-align:center;width: 20em; "> • Regresión lineal  
-   • Supuestos de independencia condicional  
-   • Variable dependiente binaria </td>
+   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 3: M<u>todos Cuasi-Experimentales </u>
+</td>
+   <td style="text-align:center;width: 20em; "> <u> Regresi<u>n lineal  
+   <u> Supuestos de independencia condicional  
+   <u> Variable dependiente binaria </u></u></u></u>
+</td>
    <td style="text-align:center;width: 20em; "> Angrist y Pischke (2009), Cap. 3  
    Cameron &amp; Trivedi (2005), Cap. 14  
    Heckman (1990) </td>
@@ -136,71 +150,86 @@ A continuación se presenta el programa semanal del curso, organizado por módul
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 6-7 </td>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 4: Diferencias en Diferencias y Panel </td>
-   <td style="text-align:center;width: 20em; "> • DID simple y de panel  
-   • Efectos fijos  
-   • Heterogeneidad en DID </td>
+   <td style="text-align:center;width: 20em; "> <u> DID simple y de panel  
+   <u> Efectos fijos  
+   <u> Heterogeneidad en DID </u></u></u>
+</td>
    <td style="text-align:center;width: 20em; "> Gertler et al. (2010), Cap. 6  
    Bertrand et al. (2004) </td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 8 </td>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 4: Diferencias en Diferencias y Panel </td>
-   <td style="text-align:center;width: 20em; "> • Efectos fijos y aleatorios  
-   • Ventajas y desventajas del panel </td>
-   <td style="text-align:center;width: 20em; "> Bernal y Peña (2011), Cap. 5  
-   Angrist y Pischke (2009) </td>
+   <td style="text-align:center;width: 20em; "> <u> Efectos fijos y aleatorios  
+   <u> Ventajas y desventajas del panel </u></u>
+</td>
+   <td style="text-align:center;width: 20em; "> Bernal y Pe<u>a (2011), Cap. 5  
+   Angrist y Pischke (2009) </u>
+</td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 9 </td>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 5: Propensity Score Matching </td>
-   <td style="text-align:center;width: 20em; "> • Estimación del PS  
-   • Balanceo  
-   • Soporte común </td>
-   <td style="text-align:center;width: 20em; "> Bernal y Peña (2011), Cap. 6  
-   Caliendo &amp; Kopeining (2008) </td>
+   <td style="text-align:center;width: 20em; "> <u> Estimaci<u>n del PS  
+   <u> Balanceo  
+   <u> Soporte com<u>n </u></u></u></u></u>
+</td>
+   <td style="text-align:center;width: 20em; "> Bernal y Pe<u>a (2011), Cap. 6  
+   Caliendo &amp; Kopeining (2008) </u>
+</td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 10 </td>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 5: Propensity Score Matching </td>
-   <td style="text-align:center;width: 20em; "> • Algoritmos de emparejamiento  
-   • Errores estándar  
-   • Falsificación </td>
-   <td style="text-align:center;width: 20em; "> Bernal y Peña (2011), Cap. 6  
-   Caliendo &amp; Kopeining (2008) </td>
+   <td style="text-align:center;width: 20em; "> <u> Algoritmos de emparejamiento  
+   <u> Errores est<u>ndar  
+   <u> Falsificaci<u>n </u></u></u></u></u>
+</td>
+   <td style="text-align:center;width: 20em; "> Bernal y Pe<u>a (2011), Cap. 6  
+   Caliendo &amp; Kopeining (2008) </u>
+</td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 11 </td>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 6: Variables Instrumentales </td>
-   <td style="text-align:center;width: 20em; "> • Definición de IV  
-   • LATE  
-   • Estimación con variables continuas </td>
+   <td style="text-align:center;width: 20em; "> <u> Definici<u>n de IV  
+   <u> LATE  
+   <u> Estimaci<u>n con variables continuas </u></u></u></u></u>
+</td>
    <td style="text-align:center;width: 20em; "> Angrist y Pischke (2009), Cap. 4  
    Gertler et al. (2010), Cap. 7  
-   Bernal y Peña (2011), Cap. 7 </td>
+   Bernal y Pe<u>a (2011), Cap. 7 </u>
+</td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 12 </td>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 6: Variables Instrumentales </td>
-   <td style="text-align:center;width: 20em; "> • IV con variables discretas  
-   • PSM con IV  
-   • Problemas del IV </td>
+   <td style="text-align:center;width: 20em; "> <u> IV con variables discretas  
+   <u> PSM con IV  
+   <u> Problemas del IV </u></u></u>
+</td>
    <td style="text-align:center;width: 20em; "> Khandker et al. (2010), Cap. 6-7 </td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 13 </td>
-   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 7: Regresión Discontinua </td>
-   <td style="text-align:center;width: 20em; "> • RDD lineal  
-   • RDD no paramétrica  
-   • Sharp y Fuzzy RDD </td>
+   <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 7: Regresi<u>n Discontinua </u>
+</td>
+   <td style="text-align:center;width: 20em; "> <u> RDD lineal  
+   <u> RDD no param<u>trica  
+   <u> Sharp y Fuzzy RDD </u></u></u></u>
+</td>
    <td style="text-align:center;width: 20em; "> Gertler et al. (2010), Cap. 5  
-   Bernal y Peña (2011), Cap. 8 </td>
+   Bernal y Pe<u>a (2011), Cap. 8 </u>
+</td>
   </tr>
   <tr>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;"> 14 </td>
    <td style="text-align:center;font-weight: bold;color: rgba(68, 68, 68, 255) !important;background-color: rgba(234, 234, 242, 255) !important;"> 8: Varios </td>
-   <td style="text-align:center;width: 20em; "> • Función de control  
-   • Machine Learning </td>
-   <td style="text-align:center;width: 20em; "> Bernal y Peña (2011), Cap. 9-10 </td>
+   <td style="text-align:center;width: 20em; "> <u> Funci<u>n de control  
+   <u> Machine Learning </u></u></u>
+</td>
+   <td style="text-align:center;width: 20em; "> Bernal y Pe<u>a (2011), Cap. 9-10 </u>
+</td>
   </tr>
 </tbody>
 </table>
