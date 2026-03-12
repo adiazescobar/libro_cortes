@@ -1,141 +1,196 @@
 ********************************************************************************
 * Malos Controles en Stata
 * Econometria Avanzada - Ana Maria Diaz
+* Tres casos: mediador, colisionador, proxy contaminado
+* Reproducible con set seed. Variables con nombres intuitivos.
 ********************************************************************************
 
 clear all
 set more off
 
 ********************************************************************************
-* PARTE 1: MEDIADOR PURO (sobrecontrol del efecto total)
-* DGP: D -> M -> Y, sin otras causas de M o Y (salvo ruido)
+* CASO 1: MEDIADOR / POST-TRATAMIENTO
+* Estructura: tratamiento -> mediador -> resultado
+* Pregunta: ¿cuál es el efecto TOTAL del tratamiento sobre el resultado?
+* Valor verdadero: a × b = 2 × 1 = 2
+* Con mal control (mediador): estimado ≈ 0
 ********************************************************************************
 
 set seed 2468
 set obs 10000
 
-* Parametros (efecto total = a*b)
-scalar a = 2     // D -> M
-scalar b = 1     // M -> Y
+scalar a = 2         // efecto del tratamiento sobre el mediador
+scalar b = 1         // efecto del mediador sobre el resultado
 
-gen double D = (runiform()<0.5)
-gen double M = a*D + rnormal()
-gen double Y = b*M + rnormal()
+gen byte   tratamiento = (runiform() < 0.5)           // D: aleatorio
+gen double mediador    = a * tratamiento + rnormal()   // M: post-tratamiento
+gen double resultado   = b * mediador    + rnormal()   // Y: determinado por M
 
-* (Total) Y ~ D  -> coef(D) ≈ a*b = 2
-di "=== Regresion sin mediador (efecto TOTAL) ==="
-reg Y D, vce(robust)
+di as text "=== CASO 1: Efecto TOTAL (correcto) — coef ≈ 2 ==="
+reg resultado tratamiento, vce(robust)
 
-* (Directo) Y ~ D M  -> bloquea D->M->Y, coef(D) ≈ 0  => mal control para TOTAL
-di "=== Regresion con mediador (efecto DIRECTO - MAL CONTROL) ==="
-reg Y D M, vce(robust)
+di as text "=== CASO 1: Con mediador (MAL CONTROL) — coef ≈ 0 ==="
+reg resultado tratamiento mediador, vce(robust)
+
 
 ********************************************************************************
-* PARTE 2: COLISIONADOR CLASICO
-* D y Y independientes; C es efecto de D y Y
+* MONTE CARLO — CASO 1: MEDIADOR
+* Muestra que el sesgo es sistemático (no accidental)
 ********************************************************************************
 
-clear
-set seed 2468
-set obs 1000
-
-* D y Y independientes
-gen double D = rnormal()
-gen double Y = rnormal()
-
-* C es colisionador (causado por D y Y)
-gen double C = 2*D - 0.5*Y + rnormal()
-
-* (Correcto) Y ~ D  -> ~0
-di "=== Regresion sin colisionador (CORRECTO) ==="
-reg Y D, vce(robust)
-
-* (MAL) Y ~ D C  -> sesgo por abrir camino espurio
-di "=== Regresion con colisionador (MAL CONTROL) ==="
-reg Y D C, vce(robust)
-
-********************************************************************************
-* PARTE 3: MONTE CARLO - MEDIADOR
-********************************************************************************
-
-capture program drop mc_mediador_puro
-program define mc_mediador_puro, rclass
+capture program drop mc_mediador
+program define mc_mediador, rclass
     clear
     set obs 3000
-    gen double D = (runiform()<0.5)
-    gen double M = 2*D + rnormal()
-    gen double Y = 1*M + rnormal()
-    qui reg Y D
-    return scalar b_total = _b[D]
-    qui reg Y D M
-    return scalar b_directo = _b[D]
+    gen byte   trat = (runiform() < 0.5)
+    gen double med  = 2 * trat + rnormal()
+    gen double res  = 1 * med  + rnormal()
+    quietly reg res trat
+    return scalar efecto_total   = _b[trat]
+    quietly reg res trat med
+    return scalar efecto_directo = _b[trat]
 end
 
-di "=== Monte Carlo: Mediador Puro (300 reps) ==="
-simulate b_total=r(b_total) b_directo=r(b_directo), reps(300): mc_mediador_puro
-summ b_total b_directo
+simulate efecto_total=r(efecto_total) efecto_directo=r(efecto_directo), ///
+    reps(300) seed(2468): mc_mediador
+
+di as text "=== MC Caso 1: promedio total ≈ 2; promedio directo ≈ 0 ==="
+summarize efecto_total efecto_directo
+
+twoway (hist efecto_total,   width(.05) color(navy%50))   ///
+       (hist efecto_directo, width(.05) color(red%50)),   ///
+       legend(order(1 "Efecto total (correcto)" 2 "Con mediador (mal control)")) ///
+       xline(2, lcolor(navy) lpattern(dash))              ///
+       xline(0, lcolor(red)  lpattern(dash))              ///
+       title("Mediador: distribución del coeficiente de tratamiento") ///
+       xtitle("Estimado de tratamiento") ytitle("Frecuencia")
+
 
 ********************************************************************************
-* PARTE 4: MONTE CARLO - COLISIONADOR
+* CASO 2: COLISIONADOR / SELECCIÓN ENDÓGENA
+* Estructura: D -> C <- U -> Y  (simplificado: D y Y independientes, C = f(D,Y))
+* Valor verdadero de D sobre Y: 0
+* Sin colisionador: ≈ 0 (correcto)
+* Con colisionador: ≠ 0 (sesgo inducido al controlar)
+********************************************************************************
+
+clear all
+set more off
+set seed 12345
+set obs 1000
+
+gen double conexiones    = rnormal()   // D: tratamiento (conexiones laborales)
+gen double productividad = rnormal()   // Y: resultado — independiente de D
+
+* C es colisionador: causado por D y por Y (o por U que afecta Y)
+gen double contratacion = 2 * conexiones - 0.5 * productividad + rnormal()
+
+di as text "=== CASO 2: Sin colisionador (correcto) — coef ≈ 0 ==="
+reg productividad conexiones, vce(robust)
+
+di as text "=== CASO 2: Con colisionador (MAL CONTROL) — coef ≠ 0 ==="
+reg productividad conexiones contratacion, vce(robust)
+
+
+********************************************************************************
+* MONTE CARLO — CASO 2: COLISIONADOR
 ********************************************************************************
 
 capture program drop mc_colisionador
 program define mc_colisionador, rclass
     clear
     set obs 1000
-    gen double D = rnormal()
-    gen double Y = rnormal()
-    gen double C = 2*D - 0.5*Y + rnormal()
-    qui reg Y D
-    return scalar b_noC = _b[D]
-    qui reg Y D C
-    return scalar b_conC = _b[D]
+    gen double conexiones    = rnormal()
+    gen double productividad = rnormal()
+    gen double contratacion  = 2 * conexiones - 0.5 * productividad + rnormal()
+    quietly reg productividad conexiones
+    return scalar b_sin_c = _b[conexiones]
+    quietly reg productividad conexiones contratacion
+    return scalar b_con_c = _b[conexiones]
 end
 
-di "=== Monte Carlo: Colisionador (300 reps) ==="
-simulate b_noC=r(b_noC) b_conC=r(b_conC), reps(300): mc_colisionador
-summ b_noC b_conC
+simulate b_sin_c=r(b_sin_c) b_con_c=r(b_con_c), ///
+    reps(300) seed(12345): mc_colisionador
+
+di as text "=== MC Caso 2: b_sin_c ≈ 0; b_con_c ≠ 0 ==="
+summarize b_sin_c b_con_c
+
+twoway (hist b_sin_c, width(.03) color(navy%50))  ///
+       (hist b_con_c, width(.03) color(red%50)),  ///
+       legend(order(1 "Sin colisionador (correcto)" 2 "Con colisionador (sesgo)")) ///
+       xline(0, lcolor(black) lpattern(dash))     ///
+       title("Colisionador: distribución del coeficiente de conexiones") ///
+       xtitle("Estimado de conexiones") ytitle("Frecuencia")
+
 
 ********************************************************************************
-* PARTE 5: F DESCENDIENTE DE COLISIONADOR
-* D -> Y <- U  y  Y -> F
+* CASO 3: PROXY CONTAMINADO
+* Estructura: D -> L <- U -> Y  (L también afecta Y directamente)
+* L parece proxy útil de U, pero también recibe el efecto de D
+* Valor verdadero de D sobre Y: 2
+* Sin L: sesgado por omisión de U (si D no es exógeno); correcto si D es exógeno
+* Con L: sesgo adicional por contaminar el proxy con el tratamiento
+* Con U directamente: correcto (referencia)
 ********************************************************************************
 
-clear
-set seed 12345
-set obs 1000
+clear all
+set more off
+set seed 99999
+set obs 2000
 
-gen double D  = rnormal()
-gen double eY = rnormal()
-gen double Y  = 2*D + eY
-gen double F  = -0.5*Y + rnormal()
+gen double habilidad_innata = rnormal()          // U: no observable
+gen double educacion        = rnormal()           // D: exógeno en este DGP
 
-di "=== F descendiente de colisionador: Sin F (CORRECTO) ==="
-reg Y D, vce(robust)
+* Proxy contaminado: test tomado después del programa (afectado por D y U)
+gen double test_tardio = 0.8 * educacion + 1.2 * habilidad_innata + rnormal()
 
-di "=== F descendiente de colisionador: Con F (MAL CONTROL) ==="
-reg Y D F, vce(robust)
+* Resultado: afectado por D (efecto = 2) y por U (habilidad también importa)
+gen double salario = 2 * educacion + 1.5 * habilidad_innata + rnormal()
+
+di as text "=== CASO 3: Sin control (D exógeno aquí) — coef no capta U ==="
+reg salario educacion, vce(robust)
+
+di as text "=== CASO 3: Con proxy contaminado (MAL CONTROL) — coef distorsionado ==="
+reg salario educacion test_tardio, vce(robust)
+
+di as text "=== CASO 3: Con U directamente (referencia ideal) — coef ≈ 2 ==="
+reg salario educacion habilidad_innata, vce(robust)
+
 
 ********************************************************************************
-* PARTE 6: F POST-TRATAMIENTO (MEDIADOR)
-* D -> F -> Y
+* MONTE CARLO — CASO 3: PROXY CONTAMINADO
 ********************************************************************************
 
-clear
-set seed 12345
-set obs 1000
+capture program drop mc_proxy
+program define mc_proxy, rclass
+    clear
+    set obs 1000
+    gen double U = rnormal()
+    gen double D = rnormal()
+    gen double L = 0.8 * D + 1.2 * U + rnormal()
+    gen double Y = 2 * D + 1.5 * U + rnormal()
+    quietly reg Y D
+    return scalar b_sin_control   = _b[D]
+    quietly reg Y D L
+    return scalar b_proxy_malo    = _b[D]
+    quietly reg Y D U
+    return scalar b_control_bueno = _b[D]
+end
 
-scalar a = 2
-scalar b = 3
+simulate b_sin_control=r(b_sin_control)     ///
+         b_proxy_malo=r(b_proxy_malo)       ///
+         b_control_bueno=r(b_control_bueno), ///
+    reps(300) seed(99999): mc_proxy
 
-gen double D = rnormal()
-gen double F = a*D + rnormal()
-gen double Y = b*F + rnormal()
+di as text "=== MC Caso 3: b_control_bueno ≈ 2; b_proxy_malo distorsionado ==="
+summarize b_sin_control b_proxy_malo b_control_bueno
 
-di "=== F post-tratamiento: Sin F (efecto TOTAL) ==="
-reg Y D, vce(robust)
+twoway (hist b_sin_control,   width(.04) color(gray%40))   ///
+       (hist b_proxy_malo,    width(.04) color(red%50))    ///
+       (hist b_control_bueno, width(.04) color(navy%50)),  ///
+       legend(order(1 "Sin control" 2 "Proxy contaminado (mal)" 3 "Control correcto (U)")) ///
+       xline(2, lcolor(black) lpattern(dash))              ///
+       title("Proxy contaminado: distribución del coeficiente de educación") ///
+       xtitle("Estimado de educación") ytitle("Frecuencia")
 
-di "=== F post-tratamiento: Con F (sobrecontrol) ==="
-reg Y D F, vce(robust)
-
-di "=== FIN DEL DO FILE ==="
+di as text "=== FIN DEL DO FILE ==="

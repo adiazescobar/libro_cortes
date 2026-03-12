@@ -1,440 +1,519 @@
-# Malos Controles en Stata
+# Malos Controles: Código y Simulaciones {#bad-controls-stata}
 
 ::: {.boxinfo}
-**🎯 Metas de aprendizaje**
-- Ver por qué controlar un **mediador** (variable post-tratamiento) **reduce** el coeficiente de \(D\) cuando queremos el **efecto total**.  
-- Entender, con un ejemplo separado y simple, qué es un **colisionador** y por qué controlarlo abre un camino espurio que sesga el estimador.  
-- Confirmar con un **Mini-Monte Carlo** que estos sesgos aparecen en promedio.  
-- Visualizar los resultados con **coefplots** e **histogramas**.
+**Metas de aprendizaje**
+
+- Entender con precisión qué es un mal control y por qué hace daño.
+- Ver los tres casos clásicos: post-tratamiento/mediador, colisionador, y proxy contaminado.
+- Confirmar con simulaciones en Stata que el sesgo es real y sistemático.
 :::
 
+---
 
-## Mediador (post-tratamiento) {-}
+## La idea central: controlar no siempre ayuda {-}
 
-**Idea:** \(D \rightarrow M \rightarrow Y\). Si tu objetivo es el **efecto total** de \(D\) en \(Y\), **no controles \(M\)**: al hacerlo, **bloqueas** la ruta \(D\to M\to Y\) y el coeficiente de \(D\) pasa a medir solo el **efecto directo** (en esta DGP será \(\approx 0\)). Esto es un **mal control para el total**, aunque no abre un camino espurio si el mediador es “puro”.
+Cuando estimamos el efecto de un tratamiento $D$ sobre un resultado $Y$, la tentación es incluir tantas variables de control como sea posible. La lógica parece razonable: "más controles = más preciso".
 
-### Mediador puro: \( D \rightarrow M \rightarrow Y \)  {-}
+Eso es **falso**.
 
-<div style="margin:1rem 0;">
-<svg width="520" height="120" viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mediador puro D->M->Y">
-  <defs>
-    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#333"/></marker>
-    <style>.n{fill:#fff;stroke:#333;stroke-width:2px}.t{font-family:sans-serif;font-size:14px;fill:#111;dominant-baseline:middle;text-anchor:middle}.e{stroke:#333;stroke-width:2px;fill:none;marker-end:url(#arr)}</style>
-  </defs>
-  <circle class="n" cx="80"  cy="70" r="22"/><text class="t" x="80"  y="70">D</text>
-  <circle class="n" cx="240" cy="70" r="22"/><text class="t" x="240" y="70">M</text>
-  <circle class="n" cx="400" cy="70" r="22"/><text class="t" x="400" y="70">Y</text>
-  <line class="e" x1="102" y1="70" x2="218" y2="70"/>
-  <line class="e" x1="262" y1="70" x2="378" y2="70"/>
-</svg>
-<p style="font-family:sans-serif; font-size:13px; color:#333; margin:.4rem 0 0 0;">
-<b>Nota:</b> si tu parámetro es el <i>efecto total</i> de D en Y, <b>no</b> controles M (bloqueas la ruta D→M→Y).
-</p>
-</div>
+Hay variables que, si las incluimos, **distorsionan** el coeficiente de $D$ en vez de corregirlo. No porque estén mal medidas ni porque haya ruido — sino porque la **estructura causal** hace que condicionar en ellas abra caminos espurios o bloquee el efecto que queremos medir.
 
-~~~stata
+La regla de oro es simple:
+
+> Solo incluir variables que son **causas** de $D$ o de $Y$ (o de ambas) **y que fueron determinadas antes del tratamiento**. Nunca incluir variables que son consecuencia del tratamiento, ni variables causadas por $D$ y por $Y$ al mismo tiempo.
+
+En esta sección vemos los tres casos en que esa regla se viola, con código que muestra el sesgo en datos simulados.
+
+---
+
+## Buen control vs. mal control: la diferencia en una imagen {-}
+
+**Buen control**: $X$ causa tanto $D$ como $Y$. Condicionar en $X$ cierra un camino de confusión y ayuda a identificar el efecto de $D$.
+
+$$X \rightarrow D \rightarrow Y \quad \text{y} \quad X \rightarrow Y$$
+
+**Mal control**: $Z$ es consecuencia de $D$, o es causada por $D$ y por $Y$ al mismo tiempo. Condicionar en $Z$ distorsiona el coeficiente.
+
+| Estructura | Nombre | Qué pasa si controlas |
+|---|---|---|
+| $D \rightarrow M \rightarrow Y$ | Mediador / post-tratamiento | Bloqueas parte del efecto total |
+| $D \rightarrow C \leftarrow U \rightarrow Y$ | Colisionador | Abres un camino espurio |
+| $D \rightarrow L \leftarrow U \rightarrow Y$ | Proxy contaminado | Mezclas tratamiento y no observables |
+
+---
+
+## Caso 1: Post-tratamiento / mediador {-}
+
+### Intuición paso a paso {-}
+
+Imagina que quieres saber cuánto **aumenta el salario** una persona que completó la universidad.
+
+La educación universitaria actúa así:
+
+$$\text{Educación} \rightarrow \text{Tipo de empleo} \rightarrow \text{Salario}$$
+
+La educación te permite acceder a empleos de mayor calificación, y esos empleos pagan mejor. Ese es el **mecanismo** por el que la educación sube el salario.
+
+**¿Por qué parece buena idea controlar por tipo de empleo?**
+
+Alguien podría pensar: "quiero comparar personas con el mismo tipo de empleo, para aislar el efecto puro de la educación". Suena razonable.
+
+**¿Por qué en realidad es un error?**
+
+El tipo de empleo **es parte del efecto**. Si controlas por él, estás preguntando: "entre personas que ya tienen el mismo tipo de empleo, ¿cuánto diferencia la educación el salario?". Esa pregunta ya eliminó la mayor parte del impacto.
+
+Es como querer medir si un medicamento reduce la fiebre, pero controlar por la temperatura corporal post-tratamiento. Obviamente no vas a ver diferencia — ya bloqueaste el mecanismo.
+
+**El efecto total pasa por el mediador. Si lo tapas, no mides el total.**
+
+::: {.boxcerebro}
+**Para recordar:** Si $M$ está en el camino causal entre $D$ y $Y$, controlar $M$ convierte tu estimación del efecto total en una estimación del efecto directo (que en muchos casos es cero o casi cero). No es que el tratamiento "no funcione" — es que bloqueaste la ruta.
+:::
+
+### Ejemplo cotidiano {-}
+
+Quieres saber si hacer ejercicio reduce el riesgo de infarto.
+
+El mecanismo es: ejercicio $\rightarrow$ presión arterial baja $\rightarrow$ menor riesgo de infarto.
+
+Si controlas por presión arterial, estás preguntando: "entre personas con la misma presión, ¿hace diferencia el ejercicio?". El efecto casi desaparece — no porque el ejercicio no sirva, sino porque bloqueaste el canal por el que actúa.
+
+### Ejemplo econométrico y código Stata {-}
+
+Generamos datos con la estructura $D \rightarrow M \rightarrow Y$. El parámetro que queremos recuperar es el **efecto total**: $a \times b = 2 \times 1 = 2$.
+
+```stata
 ********************************************************************************
-* MEDIADOR PURO (sobrecontrol del efecto total)
-* DGP: D -> M -> Y, sin otras causas de M o Y (salvo ruido)
+* CASO 1: MEDIADOR / POST-TRATAMIENTO
+* Estructura: tratamiento -> mediador -> resultado
+* Pregunta: ¿cuál es el efecto TOTAL del tratamiento sobre el resultado?
+* Respuesta correcta: 2 (= a × b)
+* Respuesta con mal control: ≈ 0 (bloqueamos el canal)
 ********************************************************************************
+
 clear all
 set more off
-set seed 2468
-set obs 10000
+set seed 2468        // fija la semilla para reproducibilidad
+set obs 10000        // muestra grande para ver el sesgo con claridad
 
-* Parámetros (efecto total = a*b)
-scalar a = 2     // D -> M
-scalar b = 1     // M -> Y
+* Definimos los parámetros verdaderos
+scalar a = 2         // efecto del tratamiento sobre el mediador
+scalar b = 1         // efecto del mediador sobre el resultado
 
-gen double D = (runiform()<0.5)
-gen double M = a*D + rnormal()
-gen double Y = b*M + rnormal()
+* Generamos las variables con nombres intuitivos
+gen byte   tratamiento = (runiform() < 0.5)           // D: tratamiento aleatorio (0/1)
+gen double mediador    = a * tratamiento + rnormal()   // M: afectado por D
+gen double resultado   = b * mediador    + rnormal()   // Y: afectado por M (no por D directamente)
 
-* (Total) Y ~ D  -> coef(D) ≈ a*b = 2
-reg Y D, vce(robust)
+* ---------------------------------------------------------------
+* REGRESIÓN CORRECTA: solo tratamiento
+* El coeficiente de tratamiento debe ser ≈ a*b = 2
+* ---------------------------------------------------------------
+di as text "=== Regresión correcta: efecto TOTAL del tratamiento ==="
+reg resultado tratamiento, vce(robust)
 
-* (Directo) Y ~ D M  -> bloquea D->M->Y, coef(D) ≈ 0  => mal control para TOTAL
-reg Y D M, vce(robust)
+* ---------------------------------------------------------------
+* REGRESIÓN CON MAL CONTROL: incluimos el mediador
+* El coeficiente de tratamiento cae a ≈ 0
+* Interpretación: el tratamiento no "causa" directamente el resultado
+* sin pasar por el mediador → efecto directo ≈ 0
+* ---------------------------------------------------------------
+di as text "=== Regresión con MAL CONTROL (mediador): efecto directo ==="
+reg resultado tratamiento mediador, vce(robust)
+```
 
-* --- Mini Monte Carlo (promedios)
-capture program drop mc_mediador_puro
-program define mc_mediador_puro, rclass
+**Lectura esperada de los resultados:**
+
+- `reg resultado tratamiento`: coeficiente $\approx 2$ — recupera el efecto total.
+- `reg resultado tratamiento mediador`: coeficiente de `tratamiento` $\approx 0$ — no porque el tratamiento no funcione, sino porque bloqueamos la ruta $D \rightarrow M \rightarrow Y$.
+
+### Mini Monte Carlo: el sesgo es sistemático {-}
+
+Una sola muestra podría tener ruido. El Monte Carlo nos muestra que el sesgo ocurre en promedio, en cientos de muestras distintas.
+
+```stata
+********************************************************************************
+* MONTE CARLO: Mediador
+* Verifica que el sesgo no es accidental — ocurre en promedio
+********************************************************************************
+
+capture program drop mc_mediador
+program define mc_mediador, rclass
     clear
     set obs 3000
-    gen double D = (runiform()<0.5)
-    gen double M = 2*D + rnormal()
-    gen double Y = 1*M + rnormal()
-    qui reg Y D
-    return scalar b_total = _b[D]
-    qui reg Y D M
-    return scalar b_directo = _b[D]
+    gen byte   trat = (runiform() < 0.5)
+    gen double med  = 2 * trat + rnormal()
+    gen double res  = 1 * med  + rnormal()
+    quietly reg res trat        // sin mediador
+    return scalar efecto_total   = _b[trat]
+    quietly reg res trat med    // con mediador (mal control)
+    return scalar efecto_directo = _b[trat]
 end
 
-simulate b_total=r(b_total) b_directo=r(b_directo), reps(300): mc_mediador_puro
-summ b_total b_directo
+simulate efecto_total=r(efecto_total) efecto_directo=r(efecto_directo), ///
+    reps(300) seed(2468): mc_mediador
 
-* --- (Opcional) Coefplot rápido
-* capture which coefplot
-* if _rc ssc install coefplot
-reg Y D
-est store total
-reg Y D M
-est store directo
-coefplot (total, label("Total")) (directo, label("Directo (con M)")), ///
-    keep(D) xline(0) drop(_cons) title("Mediador: coeficiente de D")
-~~~
+* Esperado: promedio de efecto_total ≈ 2; promedio de efecto_directo ≈ 0
+summarize efecto_total efecto_directo
 
-**Lectura esperada**
+* Visualización: distribuciones de los dos estimadores
+twoway (hist efecto_total,   width(.05) color(navy%50))   ///
+       (hist efecto_directo, width(.05) color(red%50)),   ///
+       legend(order(1 "Efecto total (correcto)" 2 "Con mediador (mal control)")) ///
+       xline(2, lcolor(navy) lpattern(dash))              ///
+       xline(0, lcolor(red)  lpattern(dash))              ///
+       title("Mediador: distribución del coeficiente de tratamiento") ///
+       xtitle("Estimado de tratamiento") ytitle("Frecuencia")
+```
 
-- `reg Y D` ≈ \(a b\) (total).  
-- `reg Y D M` ≈ 0 (directo).  
-- En promedio, `b_total` ≈ \(a b\) y `b_directo` ≈ 0.
+El histograma azul se centra en 2 (valor verdadero). El histograma rojo se centra en 0 (sesgo severo por controlar el mediador).
 
+---
 
+## Caso 2: Colisionador / selección endógena {-}
 
-## Colisionador  {-}
+### Intuición paso a paso {-}
 
-**Idea:** \(C\) es causado por \(D\) **y** por \(U\), y \(U\) también afecta \(Y\). Si controlas \(C\), **abres** el camino \(D \leftrightarrow U \rightarrow Y\) ⇒ el coeficiente de \(D\) se vuelve **sesgado** (aun si \(D\) y \(Y\) eran independientes).
+Este caso es más sorprendente porque el sesgo **aparece por controlar**, no por omitir.
 
-### Colisionador: \( D \rightarrow C \leftarrow U \rightarrow Y \)  {-}
+La estructura es: $D$ y un factor no observado $U$ son **causas independientes** de una variable $C$. Además, $U$ también afecta $Y$. Si $D$ y $Y$ no tienen ninguna relación causal entre sí, la regresión de $Y$ sobre $D$ debería dar cero.
 
-<div style="margin:1rem 0;">
-<svg width="520" height="140" viewBox="0 0 520 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Colisionador D->C<-U->Y">
-  <defs>
-    <marker id="arr2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#333"/></marker>
-    <style>.n{fill:#fff;stroke:#333;stroke-width:2px}.t{font-family:sans-serif;font-size:14px;fill:#111;dominant-baseline:middle;text-anchor:middle}.e{stroke:#333;stroke-width:2px;fill:none;marker-end:url(#arr2)}</style>
-  </defs>
-  <circle class="n" cx="80"  cy="90" r="22"/><text class="t" x="80"  y="90">D</text>
-  <circle class="n" cx="240" cy="90" r="22"/><text class="t" x="240" y="90">C</text>
-  <circle class="n" cx="240" cy="30" r="22"/><text class="t" x="240" y="30">U</text>
-  <circle class="n" cx="400" cy="90" r="22"/><text class="t" x="400" y="90">Y</text>
-  <line class="e" x1="102" y1="90" x2="218" y2="90"/>
-  <line class="e" x1="240" y1="52" x2="240" y2="68"/>
-  <line class="e" x1="258" y1="42" x2="382" y2="78"/>
-</svg>
-<p style="font-family:sans-serif; font-size:13px; color:#333; margin:.4rem 0 0 0;">
-<b>Nota:</b> Condicionar en <b>C</b> abre el camino <i>D ⟷ U → Y</i>.
-</p>
-</div>
+Pero si agregas $C$ como control, el coeficiente de $D$ se vuelve distinto de cero. ¿Por qué?
 
-~~~stata
+**La variable $C$ "recibe dos flechas"**. Condicionar en ella crea una dependencia artificial entre sus causas: si sabes que $C = 1$, entonces saber el valor de $D$ te da información sobre $U$, y viceversa. Abriste un canal de información entre $D$ y $U$ que antes estaba cerrado.
+
+Como $U$ afecta $Y$, ahora $D$ está correlacionado con $Y$ a través de ese canal — aunque en la realidad no haya ninguna relación causal.
+
+**¿Por qué parece buena idea controlar por $C$?**
+
+Porque $C$ es observable y parece relevante. El investigador podría pensar que "más controles es mejor" sin darse cuenta de que $C$ es un colisionador.
+
+**¿Por qué en realidad genera problema?**
+
+Porque el camino $D \leftarrow C \rightarrow U \rightarrow Y$ estaba bloqueado **precisamente** porque nadie lo había abierto. Al condicionar en $C$, lo abriste tú.
+
+::: {.boxcerebro}
+**Para recordar:** Un colisionador es una variable que recibe flechas de dos fuentes causalmente separadas. Condicionar en él abre un camino que antes estaba cerrado. El sesgo no existía antes de controlar — lo creamos nosotros al agregar la variable.
+:::
+
+### Ejemplo cotidiano {-}
+
+Quieres saber si tener conexiones (red de contactos) aumenta la productividad en el trabajo.
+
+En realidad, no hay relación directa: las conexiones no hacen a nadie más productivo por sí solas.
+
+Pero hay un colisionador: la **contratación**. Tanto las conexiones como la habilidad (no observable) llevan a que te contraten.
+
+Si estudias solo a los empleados (es decir, condicionas en "fue contratado"), introduces una correlación artificial: entre los empleados, quien tiene pocas conexiones tiende a haber sido contratado por su alta habilidad, y quien tiene muchas conexiones puede tener habilidad más variable. Ahora conexiones y habilidad están correlacionadas dentro de la muestra, aunque no lo estén en la población.
+
+Como la habilidad afecta la productividad, las conexiones parecen estar "relacionadas" con la productividad — aunque no lo estén causalmente.
+
+**Restringir la muestra a "solo empleados" es una forma de condicionar en un colisionador.**
+
+### Ejemplo econométrico y código Stata {-}
+
+El efecto verdadero de $D$ sobre $Y$ es **cero**. El colisionador $C$ es causado por $D$ y por $Y$.
+
+```stata
 ********************************************************************************
-* COLISIONADOR CLÁSICO (efecto verdadero de D en Y = 0)
-* D y Y independientes; C es efecto de D y Y (o D y U que afecta Y)
+* CASO 2: COLISIONADOR
+* Estructura: D -> C <- U -> Y  (donde U afecta tanto C como Y)
+* Versión simplificada: D -> C <- Y  (D y Y independientes)
+* Efecto verdadero de D sobre Y: 0
+* Sin controlar C: estimado ≈ 0 (correcto)
+* Controlando C: estimado ≠ 0 (sesgo inducido)
 ********************************************************************************
-clear
+
+clear all
 set more off
-set seed 2468
+set seed 12345
 set obs 1000
 
-* Versión simple tipo manual: D ⟂ Y, C = 2*D - 0.5*Y + e
-gen double D = rnormal()
-gen double Y = rnormal()
-gen double C = 2*D - 0.5*Y + rnormal()
+* D y Y son independientes — no hay relación causal entre ellos
+gen double conexiones   = rnormal()   // D: tratamiento (conexiones laborales)
+gen double productividad = rnormal()   // Y: resultado (productividad)
 
-* (Correcto) Y ~ D  -> ~0
-reg Y D, vce(robust)
+* C es el colisionador: causado por D y por Y (o por un U que afecta Y)
+* Piénsalo como "fue contratado" = función de conexiones y habilidad (proxy de productividad)
+gen double contratacion = 2 * conexiones - 0.5 * productividad + rnormal()
 
-* (MAL) Y ~ D C  -> |coef(D)| grande por camino espurio vía C
-reg Y D C, vce(robust)
+* ---------------------------------------------------------------
+* REGRESIÓN CORRECTA: solo D
+* El coeficiente de conexiones debe ser ≈ 0
+* ---------------------------------------------------------------
+di as text "=== Regresión correcta: sin colisionador ==="
+reg productividad conexiones, vce(robust)
 
-* --- Mini Monte Carlo
+* ---------------------------------------------------------------
+* REGRESIÓN CON MAL CONTROL: incluimos el colisionador
+* El coeficiente de conexiones se aleja de 0 — sesgo por abrir el camino espurio
+* ---------------------------------------------------------------
+di as text "=== Regresión con MAL CONTROL (colisionador) ==="
+reg productividad conexiones contratacion, vce(robust)
+```
+
+**Lectura esperada:**
+
+- Sin `contratacion`: coeficiente de `conexiones` $\approx 0$ (no hay efecto causal).
+- Con `contratacion`: coeficiente de `conexiones` es significativamente distinto de 0 — sesgo que **creamos** al incluir el colisionador.
+
+### Monte Carlo: el sesgo es consistente {-}
+
+```stata
+********************************************************************************
+* MONTE CARLO: Colisionador
+********************************************************************************
+
 capture program drop mc_colisionador
 program define mc_colisionador, rclass
     clear
     set obs 1000
-    gen double D = rnormal()
-    gen double Y = rnormal()
-    gen double C = 2*D - 0.5*Y + rnormal()
-    qui reg Y D
-    return scalar b_noC = _b[D]
-    qui reg Y D C
-    return scalar b_conC = _b[D]
+    gen double conexiones    = rnormal()
+    gen double productividad = rnormal()
+    gen double contratacion  = 2 * conexiones - 0.5 * productividad + rnormal()
+    quietly reg productividad conexiones
+    return scalar b_sin_c = _b[conexiones]
+    quietly reg productividad conexiones contratacion
+    return scalar b_con_c = _b[conexiones]
 end
 
-simulate b_noC=r(b_noC) b_conC=r(b_conC), reps(300): mc_colisionador
-summ b_noC b_conC
+simulate b_sin_c=r(b_sin_c) b_con_c=r(b_con_c), ///
+    reps(300) seed(12345): mc_colisionador
 
-* (Opcional coefplot)
-* reg Y D
-* est store base
-* reg Y D C
-* est store conC
-* coefplot (base, label("Sin C")) (conC, label("Con C")), ///
-*     keep(D) xline(0) drop(_cons) title("Colisionador: coeficiente de D")
-~~~
+* Esperado: b_sin_c ≈ 0 (insesgado); b_con_c ≠ 0 (sesgo por colisionador)
+summarize b_sin_c b_con_c
 
-
-## Histogramas (distribuciones Monte Carlo)  {-}
-
-> Ejecuta primero cada bloque de simulación; luego corre los histogramas sobre el dataset de resultados que deja `simulate`.
-
-```stata
-* Para el mediador (dataset con variables: b_total, b_directo)
-twoway (hist b_total, width(.05) color(navy%40)) ///
-       (hist b_directo, width(.05) color(red%40)), ///
-       legend(order(1 "Total (Y~D)" 2 "Directo (Y~D M)")) ///
-       title("Mediador puro: distribución del coeficiente de D")
-
-* Para el colisionador (dataset con variables: b_noC, b_conC)
-twoway (hist b_noC, width(.05) color(green%40)) ///
-       (hist b_conC, width(.05) color(orange%40)), ///
-       legend(order(1 "Sin C" 2 "Con C")) ///
-       title("Colisionador: distribución del coeficiente de D")
+twoway (hist b_sin_c, width(.03) color(navy%50))  ///
+       (hist b_con_c, width(.03) color(red%50)),  ///
+       legend(order(1 "Sin colisionador (correcto)" 2 "Con colisionador (sesgo)")) ///
+       xline(0, lcolor(black) lpattern(dash))     ///
+       title("Colisionador: distribución del coeficiente de conexiones") ///
+       xtitle("Estimado de conexiones") ytitle("Frecuencia")
 ```
 
+El histograma azul se centra en 0 (verdadero efecto). El histograma rojo está desplazado — el sesgo es sistemático y no desaparece con más datos.
 
-## Malos Controles con **F** (en el análisis de **D → Y**)  {-}
+### Selección muestral como colisionador {-}
 
-**Objetivo:** Estimar el efecto causal de **D** sobre **Y** y mostrar por qué **F** es un **mal control** bajo tres estructuras causales distintas (todas en regresiones lineales con datos simulados):
+Un caso frecuente en la práctica es **restringir la muestra** a un subgrupo que fue determinado por el tratamiento (o por variables relacionadas). Esto equivale a condicionar en un colisionador.
 
-- **Colisionador:** `D → F ← Y`  
-- **Descendiente de colisionador:** `D → Y ← U` y `Y → F`  
-- **Post-tratamiento / Mediador (sobrecontrol si buscamos efecto total):** `D → F → Y`
+Ejemplos clásicos:
 
-Cada bloque trae: generación de datos, regresiones **Y ~ D** (modelo objetivo) vs **Y ~ D + F** (mal control), e **Mini Monte Carlo (300 reps)** para ver el sesgo promedio al controlar **F**.
+- **Solo empleados**: si estudias el efecto de la educación sobre el salario usando solo personas que trabajan, condicionas en "estar empleado" — que depende tanto de la educación como de factores no observados (salud, redes, etc.).
+- **Solo sobrevivientes**: si evalúas el desempeño de empresas que sobrevivieron a un choque, condicionas en "supervivencia" — que depende tanto del choque como de la resiliencia no observable.
+- **Solo admitidos**: en estudios de universidades selectivas, el acceso a datos puede estar restringido a quienes fueron admitidos — lo que introduce sesgo de colisionador.
 
----
-
-### Teoría rápida: por qué **F** puede ser un mal control  {-}
-
-- **Colisionador (`D → F ← Y`)**  
-  Ajustar por **F** **abre** un camino espurio entre **D** y **Y** que antes estaba **bloqueado**. Resultado: el coeficiente de **D** queda **sesgado**.
-
-- **Descendiente de colisionador (`D → Y ← U` y `Y → F`)**  
-  **F** es descendiente de **Y**, que es un **colisionador** entre **D** y un factor no observado **U** (o el error de **Y**). Al condicionar en **F**, se induce dependencia entre **D** y **U**, sesgando el efecto de **D** sobre **Y**.
-
-- **Post-tratamiento / Mediador (`D → F → Y`)**  
-  Si el parámetro de interés es el **efecto total** de **D** sobre **Y**, **no** debemos condicionar en **F** (porque **F** es **descendiente de D** y está en la **ruta causal**). Ajustarlo **bloquea** la vía `D → F → Y` y **sesga** (generalmente a la baja) el coeficiente de **D** respecto del **total**.
-
-> **Regla práctica:** No controles **colisionadores**, ni **descendientes de colisionadores**, ni **variables post-tratamiento** si buscas el **efecto total** de **D**.
+::: {.boxcerebro}
+**Para recordar:** Siempre pregunta: ¿mi muestra fue seleccionada o filtrada de alguna forma que depende del tratamiento o del resultado? Si la respuesta es sí, tienes un posible problema de colisionador.
+:::
 
 ---
 
-### Caso A — **F como colisionador** (`D → F ← Y`)  {-}
+## Caso 3: Proxy contaminado {-}
 
-**Intuición:** **D** y **Y** son independientes en la población (efecto verdadero de D en Y = 0). **F** es causado por ambos. Si ajustas por **F**, abres un camino espurio `D ↔ Y` y obtienes un coeficiente de **D** distinto de 0 (sesgo).
+### Intuición paso a paso {-}
 
-~~~stata
+Este caso combina elementos de los dos anteriores y es quizás el más difícil de detectar en la práctica.
+
+Supongamos que hay una variable no observada $U$ que confunde la relación entre $D$ y $Y$. Idealmente querríamos controlar por $U$, pero no la tenemos. Sin embargo, tenemos $L$, que parece un buen proxy de $U$.
+
+El problema: $L$ no solo captura $U$ — también es afectada por $D$.
+
+La estructura es: $D \rightarrow L \leftarrow U \rightarrow Y$, con $L \rightarrow Y$ también.
+
+**¿Por qué parece buena idea controlar por $L$?**
+
+Porque $L$ contiene información sobre $U$, y controlar por $U$ sería lo correcto. El investigador ve que $L$ está correlacionado con $U$ y piensa que lo está usando como proxy del confounder.
+
+**¿Por qué en realidad genera problema?**
+
+Porque $L$ también recibe el efecto de $D$. Al condicionar en $L$, estás parcialmente controlando el efecto del tratamiento mismo — como en el caso del mediador — y además abriendo el camino espurio $D \leftrightarrow U \rightarrow Y$ — como en el caso del colisionador.
+
+Es el peor de los dos mundos: sesga el coeficiente en dos direcciones distintas a la vez.
+
+::: {.boxcerebro}
+**Para recordar:** Si el supuesto "proxy de $U$" fue medido **después** del tratamiento, es casi seguro que está contaminado. Un proxy de confounder debe ser **pretratamiento**.
+:::
+
+### Ejemplo cotidiano {-}
+
+Quieres saber si la educación universitaria aumenta el salario, controlando por habilidad (que no observas).
+
+Tienes un test de habilidad disponible — pero el test fue tomado **después** de que la persona completó la universidad. La educación universitaria probablemente mejoró el desempeño en el test.
+
+Así que el test es: $D \rightarrow \text{test} \leftarrow U_{\text{habilidad innata}} \rightarrow \text{salario}$.
+
+Si controlas por el test, estás bloqueando parte del efecto de la educación (el que opera a través de habilidades adquiridas) y además abriendo el camino espurio entre educación y habilidad innata.
+
+### Ejemplo econométrico y código Stata {-}
+
+```stata
 ********************************************************************************
-* CASO A: F como COLISIONADOR — D -> F <- Y
-* Efecto verdadero de D en Y: 0 (D y Y independientes). Controlar F induce sesgo.
+* CASO 3: PROXY CONTAMINADO
+* Estructura: D -> L <- U -> Y  (y L -> Y también)
+* L parece proxy de U, pero también es afectado por D
+* Efecto verdadero de D sobre Y: 2
+* Sin L: ≈ 2 (correcto, si D es exógeno)
+* Con L: sesgo (mezcla efecto directo y camino espurio)
 ********************************************************************************
 
 clear all
-set seed 12345
-set obs 1000
+set more off
+set seed 99999
+set obs 2000
 
-* D y Y independientes
-gen double D = rnormal(0,1)
-gen double Y = rnormal(0,1)
+* U es el factor no observado (ej: habilidad innata)
+gen double habilidad_innata = rnormal()         // U: no observable
 
-* F causado por D y Y  ->  F es colisionador
-gen double F = 2*D - 0.5*Y + rnormal(0,1)
+* D es el tratamiento (ej: educación universitaria)
+gen double educacion = rnormal()                // D: exógeno en este DGP
 
-* (Correcto) estimar Y~D: coef(D) ≈ 0
-reg Y D, vce(robust)
+* L es el proxy contaminado (ej: test de habilidad tomado después del programa)
+* Afectado por D (la educación mejora el test) y por U (habilidad innata también)
+gen double test_tardio = 0.8 * educacion + 1.2 * habilidad_innata + rnormal()
 
-* (MAL control) estimar Y~D+F: coef(D) ≠ 0 por abrir el camino vía F
-reg Y D F, vce(robust)
+* Y es el resultado (ej: salario)
+* Afectado por D (efecto causal = 2) y por U (la habilidad también importa para el salario)
+gen double salario = 2 * educacion + 1.5 * habilidad_innata + rnormal()
 
+* ---------------------------------------------------------------
+* REGRESIÓN CORRECTA: solo D (sin el proxy contaminado)
+* Si D es exógeno (como en este DGP), recupera ≈ 2
+* ---------------------------------------------------------------
+di as text "=== Regresión correcta: efecto de educación sobre salario ==="
+reg salario educacion, vce(robust)
 
-*---------------*
-* MONTE CARLO   *
-*---------------*
-capture program drop mc_F_collider
-program define mc_F_collider, rclass
-    clear
-    set obs 1000
-    gen double D = rnormal()
-    gen double Y = rnormal()
-    gen double F = 2*D - 0.5*Y + rnormal()
-    qui reg Y D
-    return scalar b_noF = _b[D]
-    qui reg Y D F
-    return scalar b_conF = _b[D]
-end
+* ---------------------------------------------------------------
+* REGRESIÓN CON MAL CONTROL: incluimos el proxy contaminado
+* El coeficiente de educación se desvía del valor verdadero (2)
+* ---------------------------------------------------------------
+di as text "=== Regresión con MAL CONTROL (proxy contaminado) ==="
+reg salario educacion test_tardio, vce(robust)
 
-simulate b_noF=r(b_noF) b_conF=r(b_conF), reps(300): mc_F_collider
-summ b_noF b_conF
-* Esperado: mean(b_noF) ≈ 0 (insesgado); mean(b_conF) ≠ 0 (sesgo por controlar F).
-~~~
-
-**Lectura esperada:**
-
-- `Y ~ D` recupera ≈ 0 (no hay efecto causal de D sobre Y).  
-- `Y ~ D + F` produce un coeficiente de D **significativamente distinto** de 0 ⇒ **sesgo** por colisionador.
-
----
-
-### Caso B — **F descendiente de colisionador** (`D → Y ← U` y `Y → F`)  {-}
-
-**Intuición:** **Y** es colisionador entre **D** y **U** (no observado). **F** es descendiente de **Y**. Condicionar en **F** introduce dependencia entre **D** y **U** y sesga el coeficiente de **D**. Aquí el **efecto verdadero** de **D** en **Y** es **2**.
-
-~~~stata
-********************************************************************************
-* CASO B: F descendiente de colisionador — D -> Y ← U  y  Y -> F
-* Efecto verdadero de D en Y: 2. Controlar F (descendiente de Y) sesga el coef(D).
-********************************************************************************
-
-clear all
-set seed 12345
-set obs 1000
-
-* D ~ N(0,1), eY ~ N(0,1) (eY juega el papel de U no observado en Y)
-gen double D  = rnormal()
-gen double eY = rnormal()
-
-* Outcome con efecto real de 2: Y = 2*D + eY
-gen double Y  = 2*D + eY
-
-* F es descendiente de Y: F = -0.5*Y + ruido
-gen double F  = -0.5*Y + rnormal()
-
-* (Correcto) Y~D: recupera ≈ 2
-reg Y D, vce(robust)
-
-* (MAL control) Y~D+F: sesgo (condicionar en descendiente de colisionador vincula D con eY)
-reg Y D F, vce(robust)
-
-
-*---------------*
-* MONTE CARLO   *
-*---------------*
-capture program drop mc_F_desc
-program define mc_F_desc, rclass
-    clear
-    set obs 1000
-    gen double D  = rnormal()
-    gen double eY = rnormal()
-    gen double Y  = 2*D + eY
-    gen double F  = -0.5*Y + rnormal()
-    qui reg Y D
-    return scalar b_noF = _b[D]
-    qui reg Y D F
-    return scalar b_conF = _b[D]
-end
-
-simulate b_noF=r(b_noF) b_conF=r(b_conF), reps(300): mc_F_desc
-summ b_noF b_conF
-* Esperado: mean(b_noF) ≈ 2 (correcto); mean(b_conF) < 2 (sesgo por condicionar en F).
-~~~
+* Nota: si pudiéramos controlar por habilidad_innata directamente, eso sería correcto.
+* Pero test_tardio es un proxy impuro — contiene tanto U como D.
+di as text "=== (Referencia) Regresión con control CORRECTO (si tuviéramos U) ==="
+reg salario educacion habilidad_innata, vce(robust)
+```
 
 **Lectura esperada:**
 
-- `Y ~ D` ≈ 2 (efecto verdadero).  
-- `Y ~ D + F` tiende a **subestimar** (u otra distorsión) el efecto de D ⇒ **sesgo** por condicionar en un descendiente de colisionador.
+- `reg salario educacion`: coeficiente $\approx 2$ (correcto en este DGP con $D$ exógeno, pero sin controlar el confusor).
+- `reg salario educacion test_tardio`: coeficiente distorsionado — el proxy contaminado introduce sesgo.
+- `reg salario educacion habilidad_innata`: coeficiente $\approx 2$ (control correcto, si lo tuviéramos).
 
----
+### Monte Carlo: sesgo del proxy contaminado {-}
 
-### Caso C — **F post-tratamiento (mediador)** (`D → F → Y`)  {-}
-
-*(sobrecontrol si buscamos el **efecto total** de D)*
-
-**Intuición:** todo el efecto de **D** sobre **Y** pasa por **F** (no hay efecto directo adicional de D). El **efecto total** es `a*b`. Si ajustas por **F**, bloqueas la ruta causal y el coeficiente de **D** se va a ≈ 0: **sobrecontrol** (sesgo respecto del total).
-
-~~~stata
+```stata
 ********************************************************************************
-* CASO C: F post-tratamiento (mediador) — D -> F -> Y
-* Interés: EFECTO TOTAL de D en Y (= a*b). Controlar F lo bloquea (sobrecontrol).
+* MONTE CARLO: Proxy contaminado vs. control correcto vs. sin control
 ********************************************************************************
 
-clear all
-set seed 12345
-set obs 1000
-
-scalar a = 2   // D -> F
-scalar b = 3   // F -> Y
-
-* D exógeno
-gen double D = rnormal()
-
-* F mediador afectado por D
-gen double F = a*D + rnormal()
-
-* Y depende de F (sin efecto directo adicional de D en esta DGP)
-gen double Y = b*F + rnormal()
-
-* (Correcto para efecto TOTAL) Y~D: coef(D) ≈ a*b = 6
-reg Y D, vce(robust)
-
-* (MAL control para efecto TOTAL) Y~D+F: bloquea D->F->Y, coef(D) ≈ 0 (sobrecontrol)
-reg Y D F, vce(robust)
-
-
-*---------------*
-* MONTE CARLO   *
-*---------------*
-capture program drop mc_F_mediador
-program define mc_F_mediador, rclass
+capture program drop mc_proxy
+program define mc_proxy, rclass
     clear
     set obs 1000
-    scalar a = 2
-    scalar b = 3
-    gen double D = rnormal()
-    gen double F = a*D + rnormal()
-    gen double Y = b*F + rnormal()
-    qui reg Y D
-    return scalar b_total = _b[D]     // efecto total ≈ a*b
-    qui reg Y D F
-    return scalar b_conF = _b[D]      // efecto directo (≈ 0 en esta DGP)
+    gen double U   = rnormal()                        // habilidad innata
+    gen double D   = rnormal()                        // educación
+    gen double L   = 0.8 * D + 1.2 * U + rnormal()   // proxy contaminado
+    gen double Y   = 2 * D + 1.5 * U + rnormal()     // salario
+    quietly reg Y D                      // sin controlar U ni proxy
+    return scalar b_sin_control   = _b[D]
+    quietly reg Y D L               // con proxy contaminado (mal)
+    return scalar b_proxy_malo    = _b[D]
+    quietly reg Y D U               // con U directamente (correcto, infactible)
+    return scalar b_control_bueno = _b[D]
 end
 
-simulate b_total=r(b_total) b_conF=r(b_conF), reps(300): mc_F_mediador
-summ b_total b_conF
-* Esperado: mean(b_total) ≈ 6 (total); mean(b_conF) ≈ 0 (sobrecontrol al incluir F).
-~~~
+simulate b_sin_control=r(b_sin_control)     ///
+         b_proxy_malo=r(b_proxy_malo)       ///
+         b_control_bueno=r(b_control_bueno), ///
+    reps(300) seed(99999): mc_proxy
 
-**Lectura esperada:**
+* Valor verdadero de D sobre Y: 2
+summarize b_sin_control b_proxy_malo b_control_bueno
 
-- `Y ~ D` ≈ `a*b` (efecto total).  
-- `Y ~ D + F` ≈ 0 (porque bloquear F elimina la ruta causal completa de D hacia Y).
+twoway (hist b_sin_control,   width(.04) color(gray%40))   ///
+       (hist b_proxy_malo,    width(.04) color(red%50))    ///
+       (hist b_control_bueno, width(.04) color(navy%50)),  ///
+       legend(order(1 "Sin control" 2 "Proxy contaminado (mal)" 3 "Control correcto (U)")) ///
+       xline(2, lcolor(black) lpattern(dash))              ///
+       title("Proxy contaminado: distribución del coeficiente de educación") ///
+       xtitle("Estimado de educación") ytitle("Frecuencia")
+```
 
 ---
 
-### Tabla comparativa (Mediador vs Colisionador)  {-}
+## Tabla resumen: los tres casos {-}
 
 <table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:14px;">
   <thead>
-    <tr>
-      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Aspecto</th>
-      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Mediador (M)</th>
-      <th style="border-bottom:2px solid #e5e7eb; text-align:left; padding:8px;">Colisionador (C)</th>
+    <tr style="background:#1e3a5f; color:white;">
+      <th style="padding:10px; text-align:left;">Caso</th>
+      <th style="padding:10px; text-align:left;">DAG</th>
+      <th style="padding:10px; text-align:left;">Qué pasa si controlas</th>
+      <th style="padding:10px; text-align:left;">Ejemplo</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Estructura causal</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;"><code>D → M → Y</code></td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;"><code>D → C ← U → Y</code></td>
+    <tr style="border-bottom:1px solid #e5e7eb;">
+      <td style="padding:8px;"><b>1. Mediador / post-tratamiento</b></td>
+      <td style="padding:8px;"><code>D → M → Y</code></td>
+      <td style="padding:8px;">Bloqueas la ruta causal; el efecto total cae (a veces a cero)</td>
+      <td style="padding:8px;">Educación → tipo de empleo → salario</td>
+    </tr>
+    <tr style="border-bottom:1px solid #e5e7eb;">
+      <td style="padding:8px;"><b>2. Colisionador</b></td>
+      <td style="padding:8px;"><code>D → C ← U → Y</code></td>
+      <td style="padding:8px;">Abres un camino espurio entre D y U; el sesgo aparece por controlar</td>
+      <td style="padding:8px;">Conexiones → contratación ← habilidad → productividad</td>
     </tr>
     <tr>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Qué ocurre si controlas</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Bloqueas la vía <code>D→M→Y</code> ⇒ <b>sesgo</b> respecto al <b>total</b> (cambia el estimando a “directo”).</td>
-      <td style="border-bottom:1px solid #f3f4f6; padding:8px;">Abres camino espurio <code>D ⟷ U → Y</code> ⇒ <b>sesgo</b>.</td>
-    </tr>
-    <tr>
-      <td style="padding:8px;">Regla práctica</td>
-      <td style="padding:8px;"><b>No controles M</b> si buscas el <i>total</i>.</td>
-      <td style="padding:8px;"><b>Nunca</b> controles colisionadores.</td>
+      <td style="padding:8px;"><b>3. Proxy contaminado</b></td>
+      <td style="padding:8px;"><code>D → L ← U → Y</code></td>
+      <td style="padding:8px;">Mezclas efecto del tratamiento y no observables; sesgo en ambas direcciones</td>
+      <td style="padding:8px;">Educación → test tardío ← habilidad innata → salario</td>
     </tr>
   </tbody>
 </table>
 
 ---
 
-## DESCARGA LOS DOCUMENTOS {-}
+## Checklist antes de agregar un control a la regresión {-}
 
-**Descargar Stata do file**:
+Antes de incluir cualquier variable de control, hazte estas preguntas:
+
+1. **Timing:** ¿La variable fue determinada *antes* de que ocurriera el tratamiento? Si fue después, probablemente es un mal control.
+
+2. **Causalidad:** ¿Podría el tratamiento haber afectado esta variable? Si la respuesta es sí, es un mediador o un proxy contaminado.
+
+3. **Estructura DAG:** ¿Esta variable recibe flechas de dos fuentes distintas — una de ellas el tratamiento o el resultado? Si es así, puede ser un colisionador.
+
+4. **Estimando:** ¿Qué quiero medir — efecto total o efecto directo? Si quiero el efecto total, no debo controlar nada que esté en la ruta causal.
+
+5. **Selección muestral:** ¿Filtré o restringí la muestra de alguna forma que depende del tratamiento o del resultado? Si es así, introduje un colisionador implícito.
+
+6. **Proxy tentador:** ¿Este "proxy del confounder" fue medido después del tratamiento? Si fue después, está contaminado.
+
+::: {.boxcerebro}
+**Regla simple para no equivocarse:**
+
+Controla solo por variables que sean causas de $D$, causas de $Y$, o causas de ambas — **y que estén determinadas antes del tratamiento**. Nada más.
+
+Si tienes dudas, dibuja el DAG. Esa es la herramienta para decidir.
+:::
+
+---
+
+## Descarga los archivos {-}
+
+**Descargar Stata do file:**
 [Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/10_BadControls/10_stata.do)
 
-**Descargar R script**:
+**Descargar R script:**
 [Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/10_BadControls/10_R.R)
 
-**Descargar Python Notebook**:
+**Descargar Python Notebook:**
 [Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/10_BadControls/10_phyton.ipynb)
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/10_BadControls/10_phyton.ipynb)
-
-
-

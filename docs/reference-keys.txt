@@ -14,7 +14,7 @@ experimentos-aleatorizados-en-stata
 poder-estadistico-stata
 did-teoria
 bad-controls-teoria
-malos-controles-en-stata
+bad-controls-stata
 twfe-y-did-moderno-en-stata
 código-copiarpegar
 caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte
