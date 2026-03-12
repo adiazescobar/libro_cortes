@@ -108,25 +108,30 @@ reg D.y D.D
 webuse hospdd, clear
 
 * ---- Variables clave --------------------------------------------------------
-* hospital:     identificador de hospital (panel)
-* time:         año (variable temporal)
-* treatment:    1 si el hospital adoptó el nuevo procedimiento en ese año
-* satisfaction: puntaje de satisfacción de pacientes (resultado)
+* hospital:   identificador de hospital (panel)
+* month:      mes (variable temporal)
+* procedure:  1 si el hospital adoptó el nuevo procedimiento ese mes (tratamiento)
+* satis:      puntaje de satisfacción de pacientes (resultado)
 
 describe
-tab time treatment
-xtset hospital time
+tab month procedure
+
+* Nota: hospdd tiene múltiples pacientes por hospital-mes (datos de pacientes,
+* no panel hospital-mes). Se hace xtset hospital (solo panel, sin tiempo) y
+* se especifica el tiempo dentro de xtdidregress con time(month).
+xtset hospital
 
 * ---- Vistazo de la estructura: ¿cuándo adopta cada hospital? ---------------
 preserve
-collapse (max) treatment, by(hospital time)
-sort hospital time
-list, sepby(hospital) noobs abbrev(12)
+collapse (max) procedure, by(hospital month)
+sort hospital month
+* Mostrar solo primeros 10 hospitales para no saturar la pantalla
+list if hospital <= 10, sepby(hospital) noobs abbrev(12)
 restore
 
 * ---- DiD con múltiples periodos: xtdidregress -------------------------------
-* Sintaxis: xtdidregress (resultado) (tratamiento), group(id) time(año)
-xtdidregress (satisfaction) (treatment), group(hospital) time(time)
+* Sintaxis: xtdidregress (resultado) (tratamiento), group(id) time(mes)
+xtdidregress (satis) (procedure), group(hospital) time(month)
 
 * ---- Gráfico diagnóstico de tendencias -------------------------------------
 * Muestra medias observadas por grupo (tratados vs controles) a lo largo del tiempo
