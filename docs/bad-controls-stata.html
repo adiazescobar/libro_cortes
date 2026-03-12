@@ -237,20 +237,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#ejercicio-aplicado-bertrand-y-mullainathan-2004"><i class="fa fa-check"></i>Ejercicio aplicado: Bertrand y Mullainathan (2004)</a></li>
 <li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>8</b> Diferencias en Diferencias (Teoría)</a>
+<li class="chapter" data-level="8" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>8</b> Diferencias en Diferencias</a>
 <ul>
-<li class="chapter" data-level="" data-path=""><a href="#preparaci%C3%B3n-de-los-datos"><i class="fa fa-check"></i>Preparación de los datos</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#estad%C3%ADsticas-descriptivas"><i class="fa fa-check"></i>Estadísticas descriptivas</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-medias"><i class="fa fa-check"></i>Comparación de medias</a></li>
-<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#estimador-did-paso-a-paso"><i class="fa fa-check"></i>Estimador DID paso a paso</a></li>
-<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#usando-el-comando-diff"><i class="fa fa-check"></i>Usando el comando <code>diff</code></a></li>
-<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-con-regresiones"><i class="fa fa-check"></i>Implementación con regresiones</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#extensi%C3%B3n-con-panel"><i class="fa fa-check"></i>Extensión con panel</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n"><i class="fa fa-check"></i>Interpretación</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-problema-que-did-resuelve"><i class="fa fa-check"></i>El problema que DiD resuelve</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#la-tabla-22"><i class="fa fa-check"></i>La tabla 2×2</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#resultados-potenciales-y-el-att"><i class="fa fa-check"></i>Resultados potenciales y el ATT</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas"><i class="fa fa-check"></i>Identificación del ATT bajo tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-regresi%C3%B3n-did"><i class="fa fa-check"></i>La regresión DiD</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#prueba-de-tendencias-paralelas"><i class="fa fa-check"></i>Prueba de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>9</b> Malos Controles (Teoría)</a>
 <ul>
-<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
 <li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
 <li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
 <li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
@@ -401,43 +403,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ejemplo-econométrico-y-código-stata" class="section level3 unnumbered hasAnchor">
 <h3>Ejemplo econométrico y código Stata<a href="#ejemplo-econom%C3%A9trico-y-c%C3%B3digo-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Generamos datos con la estructura <span class="math inline">\(D \rightarrow M \rightarrow Y\)</span>. El parámetro que queremos recuperar es el <strong>efecto total</strong>: <span class="math inline">\(a \times b = 2 \times 1 = 2\)</span>.</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb99-1"><a href="bad-controls-stata.html#cb99-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb99-2"><a href="bad-controls-stata.html#cb99-2" tabindex="-1"></a>* CASO 1: MEDIADOR / POST-TRATAMIENTO</span>
-<span id="cb99-3"><a href="bad-controls-stata.html#cb99-3" tabindex="-1"></a>* Estructura: tratamiento -&gt; mediador -&gt; resultado</span>
-<span id="cb99-4"><a href="bad-controls-stata.html#cb99-4" tabindex="-1"></a>* Pregunta: ¿cuál es <span class="fu">el</span> efecto TOTAL del tratamiento sobre <span class="fu">el</span> resultado?</span>
-<span id="cb99-5"><a href="bad-controls-stata.html#cb99-5" tabindex="-1"></a>* Respuesta correcta: 2 (= a × b)</span>
-<span id="cb99-6"><a href="bad-controls-stata.html#cb99-6" tabindex="-1"></a>* Respuesta con mal control: ≈ 0 (bloqueamos <span class="fu">el</span> canal)</span>
-<span id="cb99-7"><a href="bad-controls-stata.html#cb99-7" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb99-8"><a href="bad-controls-stata.html#cb99-8" tabindex="-1"></a></span>
-<span id="cb99-9"><a href="bad-controls-stata.html#cb99-9" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb99-10"><a href="bad-controls-stata.html#cb99-10" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
-<span id="cb99-11"><a href="bad-controls-stata.html#cb99-11" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 2468        <span class="co">// fija la semilla para reproducibilidad</span></span>
-<span id="cb99-12"><a href="bad-controls-stata.html#cb99-12" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 10000        <span class="co">// muestra grande para ver el sesgo con claridad</span></span>
-<span id="cb99-13"><a href="bad-controls-stata.html#cb99-13" tabindex="-1"></a></span>
-<span id="cb99-14"><a href="bad-controls-stata.html#cb99-14" tabindex="-1"></a>* Definimos los parámetros verdaderos</span>
-<span id="cb99-15"><a href="bad-controls-stata.html#cb99-15" tabindex="-1"></a><span class="fu">scalar</span> a = 2         <span class="co">// efecto del tratamiento sobre el mediador</span></span>
-<span id="cb99-16"><a href="bad-controls-stata.html#cb99-16" tabindex="-1"></a><span class="fu">scalar</span> b = 1         <span class="co">// efecto del mediador sobre el resultado</span></span>
-<span id="cb99-17"><a href="bad-controls-stata.html#cb99-17" tabindex="-1"></a></span>
-<span id="cb99-18"><a href="bad-controls-stata.html#cb99-18" tabindex="-1"></a>* Generamos las variables con nombres intuitivos</span>
-<span id="cb99-19"><a href="bad-controls-stata.html#cb99-19" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span>   tratamiento = (runiform() &lt; 0.5)           <span class="co">// D: tratamiento aleatorio (0/1)</span></span>
-<span id="cb99-20"><a href="bad-controls-stata.html#cb99-20" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> mediador    = a * tratamiento + rnormal()   <span class="co">// M: afectado por D</span></span>
-<span id="cb99-21"><a href="bad-controls-stata.html#cb99-21" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> resultado   = b * mediador    + rnormal()   <span class="co">// Y: afectado por M (no por D directamente)</span></span>
-<span id="cb99-22"><a href="bad-controls-stata.html#cb99-22" tabindex="-1"></a></span>
-<span id="cb99-23"><a href="bad-controls-stata.html#cb99-23" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb99-24"><a href="bad-controls-stata.html#cb99-24" tabindex="-1"></a>* REGRESIÓN CORRECTA: solo tratamiento</span>
-<span id="cb99-25"><a href="bad-controls-stata.html#cb99-25" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> tratamiento debe ser ≈ a*b = 2</span>
-<span id="cb99-26"><a href="bad-controls-stata.html#cb99-26" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb99-27"><a href="bad-controls-stata.html#cb99-27" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión correcta: efecto TOTAL del tratamiento ===&quot;</span></span>
-<span id="cb99-28"><a href="bad-controls-stata.html#cb99-28" tabindex="-1"></a><span class="kw">reg</span> resultado tratamiento, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb99-29"><a href="bad-controls-stata.html#cb99-29" tabindex="-1"></a></span>
-<span id="cb99-30"><a href="bad-controls-stata.html#cb99-30" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb99-31"><a href="bad-controls-stata.html#cb99-31" tabindex="-1"></a>* REGRESIÓN CON MAL CONTROL: incluimos <span class="fu">el</span> mediador</span>
-<span id="cb99-32"><a href="bad-controls-stata.html#cb99-32" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> tratamiento cae a ≈ 0</span>
-<span id="cb99-33"><a href="bad-controls-stata.html#cb99-33" tabindex="-1"></a>* Interpretación: <span class="fu">el</span> tratamiento no <span class="st">&quot;causa&quot;</span> directamente <span class="fu">el</span> resultado</span>
-<span id="cb99-34"><a href="bad-controls-stata.html#cb99-34" tabindex="-1"></a>* <span class="fu">sin</span> pasar por <span class="fu">el</span> mediador → efecto directo ≈ 0</span>
-<span id="cb99-35"><a href="bad-controls-stata.html#cb99-35" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb99-36"><a href="bad-controls-stata.html#cb99-36" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión con MAL CONTROL (mediador): efecto directo ===&quot;</span></span>
-<span id="cb99-37"><a href="bad-controls-stata.html#cb99-37" tabindex="-1"></a><span class="kw">reg</span> resultado tratamiento mediador, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="bad-controls-stata.html#cb95-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb95-2"><a href="bad-controls-stata.html#cb95-2" tabindex="-1"></a>* CASO 1: MEDIADOR / POST-TRATAMIENTO</span>
+<span id="cb95-3"><a href="bad-controls-stata.html#cb95-3" tabindex="-1"></a>* Estructura: tratamiento -&gt; mediador -&gt; resultado</span>
+<span id="cb95-4"><a href="bad-controls-stata.html#cb95-4" tabindex="-1"></a>* Pregunta: ¿cuál es <span class="fu">el</span> efecto TOTAL del tratamiento sobre <span class="fu">el</span> resultado?</span>
+<span id="cb95-5"><a href="bad-controls-stata.html#cb95-5" tabindex="-1"></a>* Respuesta correcta: 2 (= a × b)</span>
+<span id="cb95-6"><a href="bad-controls-stata.html#cb95-6" tabindex="-1"></a>* Respuesta con mal control: ≈ 0 (bloqueamos <span class="fu">el</span> canal)</span>
+<span id="cb95-7"><a href="bad-controls-stata.html#cb95-7" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb95-8"><a href="bad-controls-stata.html#cb95-8" tabindex="-1"></a></span>
+<span id="cb95-9"><a href="bad-controls-stata.html#cb95-9" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb95-10"><a href="bad-controls-stata.html#cb95-10" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb95-11"><a href="bad-controls-stata.html#cb95-11" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 2468        <span class="co">// fija la semilla para reproducibilidad</span></span>
+<span id="cb95-12"><a href="bad-controls-stata.html#cb95-12" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 10000        <span class="co">// muestra grande para ver el sesgo con claridad</span></span>
+<span id="cb95-13"><a href="bad-controls-stata.html#cb95-13" tabindex="-1"></a></span>
+<span id="cb95-14"><a href="bad-controls-stata.html#cb95-14" tabindex="-1"></a>* Definimos los parámetros verdaderos</span>
+<span id="cb95-15"><a href="bad-controls-stata.html#cb95-15" tabindex="-1"></a><span class="fu">scalar</span> a = 2         <span class="co">// efecto del tratamiento sobre el mediador</span></span>
+<span id="cb95-16"><a href="bad-controls-stata.html#cb95-16" tabindex="-1"></a><span class="fu">scalar</span> b = 1         <span class="co">// efecto del mediador sobre el resultado</span></span>
+<span id="cb95-17"><a href="bad-controls-stata.html#cb95-17" tabindex="-1"></a></span>
+<span id="cb95-18"><a href="bad-controls-stata.html#cb95-18" tabindex="-1"></a>* Generamos las variables con nombres intuitivos</span>
+<span id="cb95-19"><a href="bad-controls-stata.html#cb95-19" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span>   tratamiento = (runiform() &lt; 0.5)           <span class="co">// D: tratamiento aleatorio (0/1)</span></span>
+<span id="cb95-20"><a href="bad-controls-stata.html#cb95-20" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> mediador    = a * tratamiento + rnormal()   <span class="co">// M: afectado por D</span></span>
+<span id="cb95-21"><a href="bad-controls-stata.html#cb95-21" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> resultado   = b * mediador    + rnormal()   <span class="co">// Y: afectado por M (no por D directamente)</span></span>
+<span id="cb95-22"><a href="bad-controls-stata.html#cb95-22" tabindex="-1"></a></span>
+<span id="cb95-23"><a href="bad-controls-stata.html#cb95-23" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb95-24"><a href="bad-controls-stata.html#cb95-24" tabindex="-1"></a>* REGRESIÓN CORRECTA: solo tratamiento</span>
+<span id="cb95-25"><a href="bad-controls-stata.html#cb95-25" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> tratamiento debe ser ≈ a*b = 2</span>
+<span id="cb95-26"><a href="bad-controls-stata.html#cb95-26" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb95-27"><a href="bad-controls-stata.html#cb95-27" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión correcta: efecto TOTAL del tratamiento ===&quot;</span></span>
+<span id="cb95-28"><a href="bad-controls-stata.html#cb95-28" tabindex="-1"></a><span class="kw">reg</span> resultado tratamiento, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb95-29"><a href="bad-controls-stata.html#cb95-29" tabindex="-1"></a></span>
+<span id="cb95-30"><a href="bad-controls-stata.html#cb95-30" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb95-31"><a href="bad-controls-stata.html#cb95-31" tabindex="-1"></a>* REGRESIÓN CON MAL CONTROL: incluimos <span class="fu">el</span> mediador</span>
+<span id="cb95-32"><a href="bad-controls-stata.html#cb95-32" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> tratamiento cae a ≈ 0</span>
+<span id="cb95-33"><a href="bad-controls-stata.html#cb95-33" tabindex="-1"></a>* Interpretación: <span class="fu">el</span> tratamiento no <span class="st">&quot;causa&quot;</span> directamente <span class="fu">el</span> resultado</span>
+<span id="cb95-34"><a href="bad-controls-stata.html#cb95-34" tabindex="-1"></a>* <span class="fu">sin</span> pasar por <span class="fu">el</span> mediador → efecto directo ≈ 0</span>
+<span id="cb95-35"><a href="bad-controls-stata.html#cb95-35" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb95-36"><a href="bad-controls-stata.html#cb95-36" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión con MAL CONTROL (mediador): efecto directo ===&quot;</span></span>
+<span id="cb95-37"><a href="bad-controls-stata.html#cb95-37" tabindex="-1"></a><span class="kw">reg</span> resultado tratamiento mediador, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
 <p><strong>Lectura esperada de los resultados:</strong></p>
 <ul>
 <li><code>reg resultado tratamiento</code>: coeficiente <span class="math inline">\(\approx 2\)</span> — recupera el efecto total.</li>
@@ -447,38 +449,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="mini-monte-carlo-el-sesgo-es-sistemático" class="section level3 unnumbered hasAnchor">
 <h3>Mini Monte Carlo: el sesgo es sistemático<a href="#mini-monte-carlo-el-sesgo-es-sistem%C3%A1tico" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Una sola muestra podría tener ruido. El Monte Carlo nos muestra que el sesgo ocurre en promedio, en cientos de muestras distintas.</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb100-1"><a href="bad-controls-stata.html#cb100-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb100-2"><a href="bad-controls-stata.html#cb100-2" tabindex="-1"></a>* MONTE CARLO: Mediador</span>
-<span id="cb100-3"><a href="bad-controls-stata.html#cb100-3" tabindex="-1"></a>* Verifica que <span class="fu">el</span> sesgo no es accidental — ocurre en promedio</span>
-<span id="cb100-4"><a href="bad-controls-stata.html#cb100-4" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb100-5"><a href="bad-controls-stata.html#cb100-5" tabindex="-1"></a></span>
-<span id="cb100-6"><a href="bad-controls-stata.html#cb100-6" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_mediador</span>
-<span id="cb100-7"><a href="bad-controls-stata.html#cb100-7" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_mediador, rclass</span>
-<span id="cb100-8"><a href="bad-controls-stata.html#cb100-8" tabindex="-1"></a>    <span class="kw">clear</span></span>
-<span id="cb100-9"><a href="bad-controls-stata.html#cb100-9" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 3000</span>
-<span id="cb100-10"><a href="bad-controls-stata.html#cb100-10" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">byte</span>   trat = (runiform() &lt; 0.5)</span>
-<span id="cb100-11"><a href="bad-controls-stata.html#cb100-11" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> med  = 2 * trat + rnormal()</span>
-<span id="cb100-12"><a href="bad-controls-stata.html#cb100-12" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> res  = 1 * med  + rnormal()</span>
-<span id="cb100-13"><a href="bad-controls-stata.html#cb100-13" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> res trat        <span class="co">// sin mediador</span></span>
-<span id="cb100-14"><a href="bad-controls-stata.html#cb100-14" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> efecto_total   = _b[trat]</span>
-<span id="cb100-15"><a href="bad-controls-stata.html#cb100-15" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> res trat med    <span class="co">// con mediador (mal control)</span></span>
-<span id="cb100-16"><a href="bad-controls-stata.html#cb100-16" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> efecto_directo = _b[trat]</span>
-<span id="cb100-17"><a href="bad-controls-stata.html#cb100-17" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb100-18"><a href="bad-controls-stata.html#cb100-18" tabindex="-1"></a></span>
-<span id="cb100-19"><a href="bad-controls-stata.html#cb100-19" tabindex="-1"></a><span class="kw">simulate</span> efecto_total=<span class="fu">r</span>(efecto_total) efecto_directo=<span class="fu">r</span>(efecto_directo), <span class="co">///</span></span>
-<span id="cb100-20"><a href="bad-controls-stata.html#cb100-20" tabindex="-1"></a>    reps(300) <span class="dv">seed</span>(2468): mc_mediador</span>
-<span id="cb100-21"><a href="bad-controls-stata.html#cb100-21" tabindex="-1"></a></span>
-<span id="cb100-22"><a href="bad-controls-stata.html#cb100-22" tabindex="-1"></a>* Esperado: promedio <span class="kw">de</span> efecto_total ≈ 2; promedio <span class="kw">de</span> efecto_directo ≈ 0</span>
-<span id="cb100-23"><a href="bad-controls-stata.html#cb100-23" tabindex="-1"></a><span class="kw">summarize</span> efecto_total efecto_directo</span>
-<span id="cb100-24"><a href="bad-controls-stata.html#cb100-24" tabindex="-1"></a></span>
-<span id="cb100-25"><a href="bad-controls-stata.html#cb100-25" tabindex="-1"></a>* Visualización: distribuciones <span class="kw">de</span> los dos estimadores</span>
-<span id="cb100-26"><a href="bad-controls-stata.html#cb100-26" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> efecto_total,   <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="bn">navy</span>%50))   <span class="co">///</span></span>
-<span id="cb100-27"><a href="bad-controls-stata.html#cb100-27" tabindex="-1"></a>       (<span class="kw">hist</span> efecto_directo, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="kw">red</span>%50)),   <span class="co">///</span></span>
-<span id="cb100-28"><a href="bad-controls-stata.html#cb100-28" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Efecto total (correcto)&quot;</span> 2 <span class="st">&quot;Con mediador (mal control)&quot;</span>)) <span class="co">///</span></span>
-<span id="cb100-29"><a href="bad-controls-stata.html#cb100-29" tabindex="-1"></a>       <span class="bn">xline</span>(2, lcolor(<span class="bn">navy</span>) lpattern(<span class="kw">dash</span>))              <span class="co">///</span></span>
-<span id="cb100-30"><a href="bad-controls-stata.html#cb100-30" tabindex="-1"></a>       <span class="bn">xline</span>(0, lcolor(<span class="kw">red</span>)  lpattern(<span class="kw">dash</span>))              <span class="co">///</span></span>
-<span id="cb100-31"><a href="bad-controls-stata.html#cb100-31" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Mediador: distribución del coeficiente de tratamiento&quot;</span>) <span class="co">///</span></span>
-<span id="cb100-32"><a href="bad-controls-stata.html#cb100-32" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Estimado de tratamiento&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Frecuencia&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="bad-controls-stata.html#cb96-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb96-2"><a href="bad-controls-stata.html#cb96-2" tabindex="-1"></a>* MONTE CARLO: Mediador</span>
+<span id="cb96-3"><a href="bad-controls-stata.html#cb96-3" tabindex="-1"></a>* Verifica que <span class="fu">el</span> sesgo no es accidental — ocurre en promedio</span>
+<span id="cb96-4"><a href="bad-controls-stata.html#cb96-4" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb96-5"><a href="bad-controls-stata.html#cb96-5" tabindex="-1"></a></span>
+<span id="cb96-6"><a href="bad-controls-stata.html#cb96-6" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_mediador</span>
+<span id="cb96-7"><a href="bad-controls-stata.html#cb96-7" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_mediador, rclass</span>
+<span id="cb96-8"><a href="bad-controls-stata.html#cb96-8" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb96-9"><a href="bad-controls-stata.html#cb96-9" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 3000</span>
+<span id="cb96-10"><a href="bad-controls-stata.html#cb96-10" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">byte</span>   trat = (runiform() &lt; 0.5)</span>
+<span id="cb96-11"><a href="bad-controls-stata.html#cb96-11" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> med  = 2 * trat + rnormal()</span>
+<span id="cb96-12"><a href="bad-controls-stata.html#cb96-12" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> res  = 1 * med  + rnormal()</span>
+<span id="cb96-13"><a href="bad-controls-stata.html#cb96-13" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> res trat        <span class="co">// sin mediador</span></span>
+<span id="cb96-14"><a href="bad-controls-stata.html#cb96-14" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> efecto_total   = _b[trat]</span>
+<span id="cb96-15"><a href="bad-controls-stata.html#cb96-15" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> res trat med    <span class="co">// con mediador (mal control)</span></span>
+<span id="cb96-16"><a href="bad-controls-stata.html#cb96-16" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> efecto_directo = _b[trat]</span>
+<span id="cb96-17"><a href="bad-controls-stata.html#cb96-17" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb96-18"><a href="bad-controls-stata.html#cb96-18" tabindex="-1"></a></span>
+<span id="cb96-19"><a href="bad-controls-stata.html#cb96-19" tabindex="-1"></a><span class="kw">simulate</span> efecto_total=<span class="fu">r</span>(efecto_total) efecto_directo=<span class="fu">r</span>(efecto_directo), <span class="co">///</span></span>
+<span id="cb96-20"><a href="bad-controls-stata.html#cb96-20" tabindex="-1"></a>    reps(300) <span class="dv">seed</span>(2468): mc_mediador</span>
+<span id="cb96-21"><a href="bad-controls-stata.html#cb96-21" tabindex="-1"></a></span>
+<span id="cb96-22"><a href="bad-controls-stata.html#cb96-22" tabindex="-1"></a>* Esperado: promedio <span class="kw">de</span> efecto_total ≈ 2; promedio <span class="kw">de</span> efecto_directo ≈ 0</span>
+<span id="cb96-23"><a href="bad-controls-stata.html#cb96-23" tabindex="-1"></a><span class="kw">summarize</span> efecto_total efecto_directo</span>
+<span id="cb96-24"><a href="bad-controls-stata.html#cb96-24" tabindex="-1"></a></span>
+<span id="cb96-25"><a href="bad-controls-stata.html#cb96-25" tabindex="-1"></a>* Visualización: distribuciones <span class="kw">de</span> los dos estimadores</span>
+<span id="cb96-26"><a href="bad-controls-stata.html#cb96-26" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> efecto_total,   <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="bn">navy</span>%50))   <span class="co">///</span></span>
+<span id="cb96-27"><a href="bad-controls-stata.html#cb96-27" tabindex="-1"></a>       (<span class="kw">hist</span> efecto_directo, <span class="kw">width</span>(.05) <span class="kw">color</span>(<span class="kw">red</span>%50)),   <span class="co">///</span></span>
+<span id="cb96-28"><a href="bad-controls-stata.html#cb96-28" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Efecto total (correcto)&quot;</span> 2 <span class="st">&quot;Con mediador (mal control)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb96-29"><a href="bad-controls-stata.html#cb96-29" tabindex="-1"></a>       <span class="bn">xline</span>(2, lcolor(<span class="bn">navy</span>) lpattern(<span class="kw">dash</span>))              <span class="co">///</span></span>
+<span id="cb96-30"><a href="bad-controls-stata.html#cb96-30" tabindex="-1"></a>       <span class="bn">xline</span>(0, lcolor(<span class="kw">red</span>)  lpattern(<span class="kw">dash</span>))              <span class="co">///</span></span>
+<span id="cb96-31"><a href="bad-controls-stata.html#cb96-31" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Mediador: distribución del coeficiente de tratamiento&quot;</span>) <span class="co">///</span></span>
+<span id="cb96-32"><a href="bad-controls-stata.html#cb96-32" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Estimado de tratamiento&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Frecuencia&quot;</span>)</span></code></pre></div>
 <p>El histograma azul se centra en 2 (valor verdadero). El histograma rojo se centra en 0 (sesgo severo por controlar el mediador).</p>
 <hr />
 </div>
@@ -512,41 +514,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="ejemplo-econométrico-y-código-stata-1" class="section level3 unnumbered hasAnchor">
 <h3>Ejemplo econométrico y código Stata<a href="#ejemplo-econom%C3%A9trico-y-c%C3%B3digo-stata-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>El efecto verdadero de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(Y\)</span> es <strong>cero</strong>. El colisionador <span class="math inline">\(C\)</span> es causado por <span class="math inline">\(D\)</span> y por <span class="math inline">\(Y\)</span>.</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb101-1"><a href="bad-controls-stata.html#cb101-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb101-2"><a href="bad-controls-stata.html#cb101-2" tabindex="-1"></a>* CASO 2: COLISIONADOR</span>
-<span id="cb101-3"><a href="bad-controls-stata.html#cb101-3" tabindex="-1"></a>* Estructura: D -&gt; C &lt;- U -&gt; Y  (donde U afecta tanto C como Y)</span>
-<span id="cb101-4"><a href="bad-controls-stata.html#cb101-4" tabindex="-1"></a>* Versión simplificada: D -&gt; C &lt;- Y  (D <span class="fu">y</span> Y independientes)</span>
-<span id="cb101-5"><a href="bad-controls-stata.html#cb101-5" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D sobre Y: 0</span>
-<span id="cb101-6"><a href="bad-controls-stata.html#cb101-6" tabindex="-1"></a>* Sin controlar C: estimado ≈ 0 (correcto)</span>
-<span id="cb101-7"><a href="bad-controls-stata.html#cb101-7" tabindex="-1"></a>* Controlando C: estimado ≠ 0 (sesgo inducido)</span>
-<span id="cb101-8"><a href="bad-controls-stata.html#cb101-8" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb101-9"><a href="bad-controls-stata.html#cb101-9" tabindex="-1"></a></span>
-<span id="cb101-10"><a href="bad-controls-stata.html#cb101-10" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb101-11"><a href="bad-controls-stata.html#cb101-11" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
-<span id="cb101-12"><a href="bad-controls-stata.html#cb101-12" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
-<span id="cb101-13"><a href="bad-controls-stata.html#cb101-13" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb101-14"><a href="bad-controls-stata.html#cb101-14" tabindex="-1"></a></span>
-<span id="cb101-15"><a href="bad-controls-stata.html#cb101-15" tabindex="-1"></a>* D <span class="fu">y</span> Y son independientes — no hay relación causal entre ellos</span>
-<span id="cb101-16"><a href="bad-controls-stata.html#cb101-16" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> conexiones   = rnormal()   <span class="co">// D: tratamiento (conexiones laborales)</span></span>
-<span id="cb101-17"><a href="bad-controls-stata.html#cb101-17" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> productividad = rnormal()   <span class="co">// Y: resultado (productividad)</span></span>
-<span id="cb101-18"><a href="bad-controls-stata.html#cb101-18" tabindex="-1"></a></span>
-<span id="cb101-19"><a href="bad-controls-stata.html#cb101-19" tabindex="-1"></a>* C es <span class="fu">el</span> colisionador: causado por D <span class="fu">y</span> por Y (o por un U que afecta Y)</span>
-<span id="cb101-20"><a href="bad-controls-stata.html#cb101-20" tabindex="-1"></a>* Piénsalo como <span class="st">&quot;fue contratado&quot;</span> = función <span class="kw">de</span> conexiones <span class="fu">y</span> habilidad (proxy <span class="kw">de</span> productividad)</span>
-<span id="cb101-21"><a href="bad-controls-stata.html#cb101-21" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> contratacion = 2 * conexiones - 0.5 * productividad + rnormal()</span>
-<span id="cb101-22"><a href="bad-controls-stata.html#cb101-22" tabindex="-1"></a></span>
-<span id="cb101-23"><a href="bad-controls-stata.html#cb101-23" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb101-24"><a href="bad-controls-stata.html#cb101-24" tabindex="-1"></a>* REGRESIÓN CORRECTA: solo D</span>
-<span id="cb101-25"><a href="bad-controls-stata.html#cb101-25" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> conexiones debe ser ≈ 0</span>
-<span id="cb101-26"><a href="bad-controls-stata.html#cb101-26" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb101-27"><a href="bad-controls-stata.html#cb101-27" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión correcta: sin colisionador ===&quot;</span></span>
-<span id="cb101-28"><a href="bad-controls-stata.html#cb101-28" tabindex="-1"></a><span class="kw">reg</span> productividad conexiones, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb101-29"><a href="bad-controls-stata.html#cb101-29" tabindex="-1"></a></span>
-<span id="cb101-30"><a href="bad-controls-stata.html#cb101-30" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb101-31"><a href="bad-controls-stata.html#cb101-31" tabindex="-1"></a>* REGRESIÓN CON MAL CONTROL: incluimos <span class="fu">el</span> colisionador</span>
-<span id="cb101-32"><a href="bad-controls-stata.html#cb101-32" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> conexiones se aleja <span class="kw">de</span> 0 — sesgo por abrir <span class="fu">el</span> camino espurio</span>
-<span id="cb101-33"><a href="bad-controls-stata.html#cb101-33" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb101-34"><a href="bad-controls-stata.html#cb101-34" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión con MAL CONTROL (colisionador) ===&quot;</span></span>
-<span id="cb101-35"><a href="bad-controls-stata.html#cb101-35" tabindex="-1"></a><span class="kw">reg</span> productividad conexiones contratacion, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb97-1"><a href="bad-controls-stata.html#cb97-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb97-2"><a href="bad-controls-stata.html#cb97-2" tabindex="-1"></a>* CASO 2: COLISIONADOR</span>
+<span id="cb97-3"><a href="bad-controls-stata.html#cb97-3" tabindex="-1"></a>* Estructura: D -&gt; C &lt;- U -&gt; Y  (donde U afecta tanto C como Y)</span>
+<span id="cb97-4"><a href="bad-controls-stata.html#cb97-4" tabindex="-1"></a>* Versión simplificada: D -&gt; C &lt;- Y  (D <span class="fu">y</span> Y independientes)</span>
+<span id="cb97-5"><a href="bad-controls-stata.html#cb97-5" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D sobre Y: 0</span>
+<span id="cb97-6"><a href="bad-controls-stata.html#cb97-6" tabindex="-1"></a>* Sin controlar C: estimado ≈ 0 (correcto)</span>
+<span id="cb97-7"><a href="bad-controls-stata.html#cb97-7" tabindex="-1"></a>* Controlando C: estimado ≠ 0 (sesgo inducido)</span>
+<span id="cb97-8"><a href="bad-controls-stata.html#cb97-8" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb97-9"><a href="bad-controls-stata.html#cb97-9" tabindex="-1"></a></span>
+<span id="cb97-10"><a href="bad-controls-stata.html#cb97-10" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb97-11"><a href="bad-controls-stata.html#cb97-11" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb97-12"><a href="bad-controls-stata.html#cb97-12" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 12345</span>
+<span id="cb97-13"><a href="bad-controls-stata.html#cb97-13" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb97-14"><a href="bad-controls-stata.html#cb97-14" tabindex="-1"></a></span>
+<span id="cb97-15"><a href="bad-controls-stata.html#cb97-15" tabindex="-1"></a>* D <span class="fu">y</span> Y son independientes — no hay relación causal entre ellos</span>
+<span id="cb97-16"><a href="bad-controls-stata.html#cb97-16" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> conexiones   = rnormal()   <span class="co">// D: tratamiento (conexiones laborales)</span></span>
+<span id="cb97-17"><a href="bad-controls-stata.html#cb97-17" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> productividad = rnormal()   <span class="co">// Y: resultado (productividad)</span></span>
+<span id="cb97-18"><a href="bad-controls-stata.html#cb97-18" tabindex="-1"></a></span>
+<span id="cb97-19"><a href="bad-controls-stata.html#cb97-19" tabindex="-1"></a>* C es <span class="fu">el</span> colisionador: causado por D <span class="fu">y</span> por Y (o por un U que afecta Y)</span>
+<span id="cb97-20"><a href="bad-controls-stata.html#cb97-20" tabindex="-1"></a>* Piénsalo como <span class="st">&quot;fue contratado&quot;</span> = función <span class="kw">de</span> conexiones <span class="fu">y</span> habilidad (proxy <span class="kw">de</span> productividad)</span>
+<span id="cb97-21"><a href="bad-controls-stata.html#cb97-21" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> contratacion = 2 * conexiones - 0.5 * productividad + rnormal()</span>
+<span id="cb97-22"><a href="bad-controls-stata.html#cb97-22" tabindex="-1"></a></span>
+<span id="cb97-23"><a href="bad-controls-stata.html#cb97-23" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb97-24"><a href="bad-controls-stata.html#cb97-24" tabindex="-1"></a>* REGRESIÓN CORRECTA: solo D</span>
+<span id="cb97-25"><a href="bad-controls-stata.html#cb97-25" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> conexiones debe ser ≈ 0</span>
+<span id="cb97-26"><a href="bad-controls-stata.html#cb97-26" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb97-27"><a href="bad-controls-stata.html#cb97-27" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión correcta: sin colisionador ===&quot;</span></span>
+<span id="cb97-28"><a href="bad-controls-stata.html#cb97-28" tabindex="-1"></a><span class="kw">reg</span> productividad conexiones, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb97-29"><a href="bad-controls-stata.html#cb97-29" tabindex="-1"></a></span>
+<span id="cb97-30"><a href="bad-controls-stata.html#cb97-30" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb97-31"><a href="bad-controls-stata.html#cb97-31" tabindex="-1"></a>* REGRESIÓN CON MAL CONTROL: incluimos <span class="fu">el</span> colisionador</span>
+<span id="cb97-32"><a href="bad-controls-stata.html#cb97-32" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> conexiones se aleja <span class="kw">de</span> 0 — sesgo por abrir <span class="fu">el</span> camino espurio</span>
+<span id="cb97-33"><a href="bad-controls-stata.html#cb97-33" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb97-34"><a href="bad-controls-stata.html#cb97-34" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión con MAL CONTROL (colisionador) ===&quot;</span></span>
+<span id="cb97-35"><a href="bad-controls-stata.html#cb97-35" tabindex="-1"></a><span class="kw">reg</span> productividad conexiones contratacion, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
 <p><strong>Lectura esperada:</strong></p>
 <ul>
 <li>Sin <code>contratacion</code>: coeficiente de <code>conexiones</code> <span class="math inline">\(\approx 0\)</span> (no hay efecto causal).</li>
@@ -555,35 +557,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="monte-carlo-el-sesgo-es-consistente" class="section level3 unnumbered hasAnchor">
 <h3>Monte Carlo: el sesgo es consistente<a href="bad-controls-stata.html#monte-carlo-el-sesgo-es-consistente" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb102"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb102-1"><a href="bad-controls-stata.html#cb102-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb102-2"><a href="bad-controls-stata.html#cb102-2" tabindex="-1"></a>* MONTE CARLO: Colisionador</span>
-<span id="cb102-3"><a href="bad-controls-stata.html#cb102-3" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb102-4"><a href="bad-controls-stata.html#cb102-4" tabindex="-1"></a></span>
-<span id="cb102-5"><a href="bad-controls-stata.html#cb102-5" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_colisionador</span>
-<span id="cb102-6"><a href="bad-controls-stata.html#cb102-6" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_colisionador, rclass</span>
-<span id="cb102-7"><a href="bad-controls-stata.html#cb102-7" tabindex="-1"></a>    <span class="kw">clear</span></span>
-<span id="cb102-8"><a href="bad-controls-stata.html#cb102-8" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb102-9"><a href="bad-controls-stata.html#cb102-9" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> conexiones    = rnormal()</span>
-<span id="cb102-10"><a href="bad-controls-stata.html#cb102-10" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> productividad = rnormal()</span>
-<span id="cb102-11"><a href="bad-controls-stata.html#cb102-11" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> contratacion  = 2 * conexiones - 0.5 * productividad + rnormal()</span>
-<span id="cb102-12"><a href="bad-controls-stata.html#cb102-12" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> productividad conexiones</span>
-<span id="cb102-13"><a href="bad-controls-stata.html#cb102-13" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_sin_c = _b[conexiones]</span>
-<span id="cb102-14"><a href="bad-controls-stata.html#cb102-14" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> productividad conexiones contratacion</span>
-<span id="cb102-15"><a href="bad-controls-stata.html#cb102-15" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_con_c = _b[conexiones]</span>
-<span id="cb102-16"><a href="bad-controls-stata.html#cb102-16" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb102-17"><a href="bad-controls-stata.html#cb102-17" tabindex="-1"></a></span>
-<span id="cb102-18"><a href="bad-controls-stata.html#cb102-18" tabindex="-1"></a><span class="kw">simulate</span> b_sin_c=<span class="fu">r</span>(b_sin_c) b_con_c=<span class="fu">r</span>(b_con_c), <span class="co">///</span></span>
-<span id="cb102-19"><a href="bad-controls-stata.html#cb102-19" tabindex="-1"></a>    reps(300) <span class="dv">seed</span>(12345): mc_colisionador</span>
-<span id="cb102-20"><a href="bad-controls-stata.html#cb102-20" tabindex="-1"></a></span>
-<span id="cb102-21"><a href="bad-controls-stata.html#cb102-21" tabindex="-1"></a>* Esperado: b_sin_c ≈ 0 (insesgado); b_con_c ≠ 0 (sesgo por colisionador)</span>
-<span id="cb102-22"><a href="bad-controls-stata.html#cb102-22" tabindex="-1"></a><span class="kw">summarize</span> b_sin_c b_con_c</span>
-<span id="cb102-23"><a href="bad-controls-stata.html#cb102-23" tabindex="-1"></a></span>
-<span id="cb102-24"><a href="bad-controls-stata.html#cb102-24" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> b_sin_c, <span class="kw">width</span>(.03) <span class="kw">color</span>(<span class="bn">navy</span>%50))  <span class="co">///</span></span>
-<span id="cb102-25"><a href="bad-controls-stata.html#cb102-25" tabindex="-1"></a>       (<span class="kw">hist</span> b_con_c, <span class="kw">width</span>(.03) <span class="kw">color</span>(<span class="kw">red</span>%50)),  <span class="co">///</span></span>
-<span id="cb102-26"><a href="bad-controls-stata.html#cb102-26" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Sin colisionador (correcto)&quot;</span> 2 <span class="st">&quot;Con colisionador (sesgo)&quot;</span>)) <span class="co">///</span></span>
-<span id="cb102-27"><a href="bad-controls-stata.html#cb102-27" tabindex="-1"></a>       <span class="bn">xline</span>(0, lcolor(<span class="bn">black</span>) lpattern(<span class="kw">dash</span>))     <span class="co">///</span></span>
-<span id="cb102-28"><a href="bad-controls-stata.html#cb102-28" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Colisionador: distribución del coeficiente de conexiones&quot;</span>) <span class="co">///</span></span>
-<span id="cb102-29"><a href="bad-controls-stata.html#cb102-29" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Estimado de conexiones&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Frecuencia&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb98-1"><a href="bad-controls-stata.html#cb98-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb98-2"><a href="bad-controls-stata.html#cb98-2" tabindex="-1"></a>* MONTE CARLO: Colisionador</span>
+<span id="cb98-3"><a href="bad-controls-stata.html#cb98-3" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb98-4"><a href="bad-controls-stata.html#cb98-4" tabindex="-1"></a></span>
+<span id="cb98-5"><a href="bad-controls-stata.html#cb98-5" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_colisionador</span>
+<span id="cb98-6"><a href="bad-controls-stata.html#cb98-6" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_colisionador, rclass</span>
+<span id="cb98-7"><a href="bad-controls-stata.html#cb98-7" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb98-8"><a href="bad-controls-stata.html#cb98-8" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb98-9"><a href="bad-controls-stata.html#cb98-9" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> conexiones    = rnormal()</span>
+<span id="cb98-10"><a href="bad-controls-stata.html#cb98-10" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> productividad = rnormal()</span>
+<span id="cb98-11"><a href="bad-controls-stata.html#cb98-11" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> contratacion  = 2 * conexiones - 0.5 * productividad + rnormal()</span>
+<span id="cb98-12"><a href="bad-controls-stata.html#cb98-12" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> productividad conexiones</span>
+<span id="cb98-13"><a href="bad-controls-stata.html#cb98-13" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_sin_c = _b[conexiones]</span>
+<span id="cb98-14"><a href="bad-controls-stata.html#cb98-14" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> productividad conexiones contratacion</span>
+<span id="cb98-15"><a href="bad-controls-stata.html#cb98-15" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_con_c = _b[conexiones]</span>
+<span id="cb98-16"><a href="bad-controls-stata.html#cb98-16" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb98-17"><a href="bad-controls-stata.html#cb98-17" tabindex="-1"></a></span>
+<span id="cb98-18"><a href="bad-controls-stata.html#cb98-18" tabindex="-1"></a><span class="kw">simulate</span> b_sin_c=<span class="fu">r</span>(b_sin_c) b_con_c=<span class="fu">r</span>(b_con_c), <span class="co">///</span></span>
+<span id="cb98-19"><a href="bad-controls-stata.html#cb98-19" tabindex="-1"></a>    reps(300) <span class="dv">seed</span>(12345): mc_colisionador</span>
+<span id="cb98-20"><a href="bad-controls-stata.html#cb98-20" tabindex="-1"></a></span>
+<span id="cb98-21"><a href="bad-controls-stata.html#cb98-21" tabindex="-1"></a>* Esperado: b_sin_c ≈ 0 (insesgado); b_con_c ≠ 0 (sesgo por colisionador)</span>
+<span id="cb98-22"><a href="bad-controls-stata.html#cb98-22" tabindex="-1"></a><span class="kw">summarize</span> b_sin_c b_con_c</span>
+<span id="cb98-23"><a href="bad-controls-stata.html#cb98-23" tabindex="-1"></a></span>
+<span id="cb98-24"><a href="bad-controls-stata.html#cb98-24" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> b_sin_c, <span class="kw">width</span>(.03) <span class="kw">color</span>(<span class="bn">navy</span>%50))  <span class="co">///</span></span>
+<span id="cb98-25"><a href="bad-controls-stata.html#cb98-25" tabindex="-1"></a>       (<span class="kw">hist</span> b_con_c, <span class="kw">width</span>(.03) <span class="kw">color</span>(<span class="kw">red</span>%50)),  <span class="co">///</span></span>
+<span id="cb98-26"><a href="bad-controls-stata.html#cb98-26" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Sin colisionador (correcto)&quot;</span> 2 <span class="st">&quot;Con colisionador (sesgo)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb98-27"><a href="bad-controls-stata.html#cb98-27" tabindex="-1"></a>       <span class="bn">xline</span>(0, lcolor(<span class="bn">black</span>) lpattern(<span class="kw">dash</span>))     <span class="co">///</span></span>
+<span id="cb98-28"><a href="bad-controls-stata.html#cb98-28" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Colisionador: distribución del coeficiente de conexiones&quot;</span>) <span class="co">///</span></span>
+<span id="cb98-29"><a href="bad-controls-stata.html#cb98-29" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Estimado de conexiones&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Frecuencia&quot;</span>)</span></code></pre></div>
 <p>El histograma azul se centra en 0 (verdadero efecto). El histograma rojo está desplazado — el sesgo es sistemático y no desaparece con más datos.</p>
 </div>
 <div id="selección-muestral-como-colisionador" class="section level3 unnumbered hasAnchor">
@@ -627,52 +629,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="ejemplo-econométrico-y-código-stata-2" class="section level3 unnumbered hasAnchor">
 <h3>Ejemplo econométrico y código Stata<a href="#ejemplo-econom%C3%A9trico-y-c%C3%B3digo-stata-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb103"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb103-1"><a href="bad-controls-stata.html#cb103-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb103-2"><a href="bad-controls-stata.html#cb103-2" tabindex="-1"></a>* CASO 3: PROXY CONTAMINADO</span>
-<span id="cb103-3"><a href="bad-controls-stata.html#cb103-3" tabindex="-1"></a>* Estructura: D -&gt; L &lt;- U -&gt; Y  (<span class="fu">y</span> L -&gt; Y también)</span>
-<span id="cb103-4"><a href="bad-controls-stata.html#cb103-4" tabindex="-1"></a>* L parece proxy <span class="kw">de</span> U, pero también es afectado por D</span>
-<span id="cb103-5"><a href="bad-controls-stata.html#cb103-5" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D sobre Y: 2</span>
-<span id="cb103-6"><a href="bad-controls-stata.html#cb103-6" tabindex="-1"></a>* Sin L: ≈ 2 (correcto, si D es exógeno)</span>
-<span id="cb103-7"><a href="bad-controls-stata.html#cb103-7" tabindex="-1"></a>* Con L: sesgo (mezcla efecto directo <span class="fu">y</span> camino espurio)</span>
-<span id="cb103-8"><a href="bad-controls-stata.html#cb103-8" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb103-9"><a href="bad-controls-stata.html#cb103-9" tabindex="-1"></a></span>
-<span id="cb103-10"><a href="bad-controls-stata.html#cb103-10" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb103-11"><a href="bad-controls-stata.html#cb103-11" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
-<span id="cb103-12"><a href="bad-controls-stata.html#cb103-12" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 99999</span>
-<span id="cb103-13"><a href="bad-controls-stata.html#cb103-13" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 2000</span>
-<span id="cb103-14"><a href="bad-controls-stata.html#cb103-14" tabindex="-1"></a></span>
-<span id="cb103-15"><a href="bad-controls-stata.html#cb103-15" tabindex="-1"></a>* U es <span class="fu">el</span> <span class="kw">factor</span> no observado (ej: habilidad innata)</span>
-<span id="cb103-16"><a href="bad-controls-stata.html#cb103-16" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> habilidad_innata = rnormal()         <span class="co">// U: no observable</span></span>
-<span id="cb103-17"><a href="bad-controls-stata.html#cb103-17" tabindex="-1"></a></span>
-<span id="cb103-18"><a href="bad-controls-stata.html#cb103-18" tabindex="-1"></a>* D es <span class="fu">el</span> tratamiento (ej: educación universitaria)</span>
-<span id="cb103-19"><a href="bad-controls-stata.html#cb103-19" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> educacion = rnormal()                <span class="co">// D: exógeno en este DGP</span></span>
-<span id="cb103-20"><a href="bad-controls-stata.html#cb103-20" tabindex="-1"></a></span>
-<span id="cb103-21"><a href="bad-controls-stata.html#cb103-21" tabindex="-1"></a>* L es <span class="fu">el</span> proxy contaminado (ej: <span class="kw">test</span> <span class="kw">de</span> habilidad tomado después del programa)</span>
-<span id="cb103-22"><a href="bad-controls-stata.html#cb103-22" tabindex="-1"></a>* Afectado por D (la educación mejora <span class="fu">el</span> <span class="kw">test</span>) <span class="fu">y</span> por U (habilidad innata también)</span>
-<span id="cb103-23"><a href="bad-controls-stata.html#cb103-23" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> test_tardio = 0.8 * educacion + 1.2 * habilidad_innata + rnormal()</span>
-<span id="cb103-24"><a href="bad-controls-stata.html#cb103-24" tabindex="-1"></a></span>
-<span id="cb103-25"><a href="bad-controls-stata.html#cb103-25" tabindex="-1"></a>* Y es <span class="fu">el</span> resultado (ej: salario)</span>
-<span id="cb103-26"><a href="bad-controls-stata.html#cb103-26" tabindex="-1"></a>* Afectado por D (efecto causal = 2) <span class="fu">y</span> por U (la habilidad también importa para <span class="fu">el</span> salario)</span>
-<span id="cb103-27"><a href="bad-controls-stata.html#cb103-27" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> salario = 2 * educacion + 1.5 * habilidad_innata + rnormal()</span>
-<span id="cb103-28"><a href="bad-controls-stata.html#cb103-28" tabindex="-1"></a></span>
-<span id="cb103-29"><a href="bad-controls-stata.html#cb103-29" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb103-30"><a href="bad-controls-stata.html#cb103-30" tabindex="-1"></a>* REGRESIÓN CORRECTA: solo D (<span class="fu">sin</span> <span class="fu">el</span> proxy contaminado)</span>
-<span id="cb103-31"><a href="bad-controls-stata.html#cb103-31" tabindex="-1"></a>* Si D es exógeno (como en este DGP), recupera ≈ 2</span>
-<span id="cb103-32"><a href="bad-controls-stata.html#cb103-32" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb103-33"><a href="bad-controls-stata.html#cb103-33" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión correcta: efecto de educación sobre salario ===&quot;</span></span>
-<span id="cb103-34"><a href="bad-controls-stata.html#cb103-34" tabindex="-1"></a><span class="kw">reg</span> salario educacion, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb103-35"><a href="bad-controls-stata.html#cb103-35" tabindex="-1"></a></span>
-<span id="cb103-36"><a href="bad-controls-stata.html#cb103-36" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb103-37"><a href="bad-controls-stata.html#cb103-37" tabindex="-1"></a>* REGRESIÓN CON MAL CONTROL: incluimos <span class="fu">el</span> proxy contaminado</span>
-<span id="cb103-38"><a href="bad-controls-stata.html#cb103-38" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> educación se desvía del valor verdadero (2)</span>
-<span id="cb103-39"><a href="bad-controls-stata.html#cb103-39" tabindex="-1"></a>* ---------------------------------------------------------------</span>
-<span id="cb103-40"><a href="bad-controls-stata.html#cb103-40" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión con MAL CONTROL (proxy contaminado) ===&quot;</span></span>
-<span id="cb103-41"><a href="bad-controls-stata.html#cb103-41" tabindex="-1"></a><span class="kw">reg</span> salario educacion test_tardio, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb103-42"><a href="bad-controls-stata.html#cb103-42" tabindex="-1"></a></span>
-<span id="cb103-43"><a href="bad-controls-stata.html#cb103-43" tabindex="-1"></a>* Nota: si pudiéramos controlar por habilidad_innata directamente, eso sería correcto.</span>
-<span id="cb103-44"><a href="bad-controls-stata.html#cb103-44" tabindex="-1"></a>* Pero test_tardio es un proxy impuro — contiene tanto U como D.</span>
-<span id="cb103-45"><a href="bad-controls-stata.html#cb103-45" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== (Referencia) Regresión con control CORRECTO (si tuviéramos U) ===&quot;</span></span>
-<span id="cb103-46"><a href="bad-controls-stata.html#cb103-46" tabindex="-1"></a><span class="kw">reg</span> salario educacion habilidad_innata, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb99-1"><a href="bad-controls-stata.html#cb99-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb99-2"><a href="bad-controls-stata.html#cb99-2" tabindex="-1"></a>* CASO 3: PROXY CONTAMINADO</span>
+<span id="cb99-3"><a href="bad-controls-stata.html#cb99-3" tabindex="-1"></a>* Estructura: D -&gt; L &lt;- U -&gt; Y  (<span class="fu">y</span> L -&gt; Y también)</span>
+<span id="cb99-4"><a href="bad-controls-stata.html#cb99-4" tabindex="-1"></a>* L parece proxy <span class="kw">de</span> U, pero también es afectado por D</span>
+<span id="cb99-5"><a href="bad-controls-stata.html#cb99-5" tabindex="-1"></a>* Efecto verdadero <span class="kw">de</span> D sobre Y: 2</span>
+<span id="cb99-6"><a href="bad-controls-stata.html#cb99-6" tabindex="-1"></a>* Sin L: ≈ 2 (correcto, si D es exógeno)</span>
+<span id="cb99-7"><a href="bad-controls-stata.html#cb99-7" tabindex="-1"></a>* Con L: sesgo (mezcla efecto directo <span class="fu">y</span> camino espurio)</span>
+<span id="cb99-8"><a href="bad-controls-stata.html#cb99-8" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb99-9"><a href="bad-controls-stata.html#cb99-9" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="bad-controls-stata.html#cb99-10" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
+<span id="cb99-11"><a href="bad-controls-stata.html#cb99-11" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
+<span id="cb99-12"><a href="bad-controls-stata.html#cb99-12" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 99999</span>
+<span id="cb99-13"><a href="bad-controls-stata.html#cb99-13" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 2000</span>
+<span id="cb99-14"><a href="bad-controls-stata.html#cb99-14" tabindex="-1"></a></span>
+<span id="cb99-15"><a href="bad-controls-stata.html#cb99-15" tabindex="-1"></a>* U es <span class="fu">el</span> <span class="kw">factor</span> no observado (ej: habilidad innata)</span>
+<span id="cb99-16"><a href="bad-controls-stata.html#cb99-16" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> habilidad_innata = rnormal()         <span class="co">// U: no observable</span></span>
+<span id="cb99-17"><a href="bad-controls-stata.html#cb99-17" tabindex="-1"></a></span>
+<span id="cb99-18"><a href="bad-controls-stata.html#cb99-18" tabindex="-1"></a>* D es <span class="fu">el</span> tratamiento (ej: educación universitaria)</span>
+<span id="cb99-19"><a href="bad-controls-stata.html#cb99-19" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> educacion = rnormal()                <span class="co">// D: exógeno en este DGP</span></span>
+<span id="cb99-20"><a href="bad-controls-stata.html#cb99-20" tabindex="-1"></a></span>
+<span id="cb99-21"><a href="bad-controls-stata.html#cb99-21" tabindex="-1"></a>* L es <span class="fu">el</span> proxy contaminado (ej: <span class="kw">test</span> <span class="kw">de</span> habilidad tomado después del programa)</span>
+<span id="cb99-22"><a href="bad-controls-stata.html#cb99-22" tabindex="-1"></a>* Afectado por D (la educación mejora <span class="fu">el</span> <span class="kw">test</span>) <span class="fu">y</span> por U (habilidad innata también)</span>
+<span id="cb99-23"><a href="bad-controls-stata.html#cb99-23" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> test_tardio = 0.8 * educacion + 1.2 * habilidad_innata + rnormal()</span>
+<span id="cb99-24"><a href="bad-controls-stata.html#cb99-24" tabindex="-1"></a></span>
+<span id="cb99-25"><a href="bad-controls-stata.html#cb99-25" tabindex="-1"></a>* Y es <span class="fu">el</span> resultado (ej: salario)</span>
+<span id="cb99-26"><a href="bad-controls-stata.html#cb99-26" tabindex="-1"></a>* Afectado por D (efecto causal = 2) <span class="fu">y</span> por U (la habilidad también importa para <span class="fu">el</span> salario)</span>
+<span id="cb99-27"><a href="bad-controls-stata.html#cb99-27" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> salario = 2 * educacion + 1.5 * habilidad_innata + rnormal()</span>
+<span id="cb99-28"><a href="bad-controls-stata.html#cb99-28" tabindex="-1"></a></span>
+<span id="cb99-29"><a href="bad-controls-stata.html#cb99-29" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb99-30"><a href="bad-controls-stata.html#cb99-30" tabindex="-1"></a>* REGRESIÓN CORRECTA: solo D (<span class="fu">sin</span> <span class="fu">el</span> proxy contaminado)</span>
+<span id="cb99-31"><a href="bad-controls-stata.html#cb99-31" tabindex="-1"></a>* Si D es exógeno (como en este DGP), recupera ≈ 2</span>
+<span id="cb99-32"><a href="bad-controls-stata.html#cb99-32" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb99-33"><a href="bad-controls-stata.html#cb99-33" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión correcta: efecto de educación sobre salario ===&quot;</span></span>
+<span id="cb99-34"><a href="bad-controls-stata.html#cb99-34" tabindex="-1"></a><span class="kw">reg</span> salario educacion, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb99-35"><a href="bad-controls-stata.html#cb99-35" tabindex="-1"></a></span>
+<span id="cb99-36"><a href="bad-controls-stata.html#cb99-36" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb99-37"><a href="bad-controls-stata.html#cb99-37" tabindex="-1"></a>* REGRESIÓN CON MAL CONTROL: incluimos <span class="fu">el</span> proxy contaminado</span>
+<span id="cb99-38"><a href="bad-controls-stata.html#cb99-38" tabindex="-1"></a>* El coeficiente <span class="kw">de</span> educación se desvía del valor verdadero (2)</span>
+<span id="cb99-39"><a href="bad-controls-stata.html#cb99-39" tabindex="-1"></a>* ---------------------------------------------------------------</span>
+<span id="cb99-40"><a href="bad-controls-stata.html#cb99-40" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== Regresión con MAL CONTROL (proxy contaminado) ===&quot;</span></span>
+<span id="cb99-41"><a href="bad-controls-stata.html#cb99-41" tabindex="-1"></a><span class="kw">reg</span> salario educacion test_tardio, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb99-42"><a href="bad-controls-stata.html#cb99-42" tabindex="-1"></a></span>
+<span id="cb99-43"><a href="bad-controls-stata.html#cb99-43" tabindex="-1"></a>* Nota: si pudiéramos controlar por habilidad_innata directamente, eso sería correcto.</span>
+<span id="cb99-44"><a href="bad-controls-stata.html#cb99-44" tabindex="-1"></a>* Pero test_tardio es un proxy impuro — contiene tanto U como D.</span>
+<span id="cb99-45"><a href="bad-controls-stata.html#cb99-45" tabindex="-1"></a><span class="kw">di</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;=== (Referencia) Regresión con control CORRECTO (si tuviéramos U) ===&quot;</span></span>
+<span id="cb99-46"><a href="bad-controls-stata.html#cb99-46" tabindex="-1"></a><span class="kw">reg</span> salario educacion habilidad_innata, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
 <p><strong>Lectura esperada:</strong></p>
 <ul>
 <li><code>reg salario educacion</code>: coeficiente <span class="math inline">\(\approx 2\)</span> (correcto en este DGP con <span class="math inline">\(D\)</span> exógeno, pero sin controlar el confusor).</li>
@@ -682,41 +684,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="monte-carlo-sesgo-del-proxy-contaminado" class="section level3 unnumbered hasAnchor">
 <h3>Monte Carlo: sesgo del proxy contaminado<a href="bad-controls-stata.html#monte-carlo-sesgo-del-proxy-contaminado" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb104"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb104-1"><a href="bad-controls-stata.html#cb104-1" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb104-2"><a href="bad-controls-stata.html#cb104-2" tabindex="-1"></a>* MONTE CARLO: Proxy contaminado vs. control correcto vs. <span class="fu">sin</span> control</span>
-<span id="cb104-3"><a href="bad-controls-stata.html#cb104-3" tabindex="-1"></a>********************************************************************************</span>
-<span id="cb104-4"><a href="bad-controls-stata.html#cb104-4" tabindex="-1"></a></span>
-<span id="cb104-5"><a href="bad-controls-stata.html#cb104-5" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_proxy</span>
-<span id="cb104-6"><a href="bad-controls-stata.html#cb104-6" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_proxy, rclass</span>
-<span id="cb104-7"><a href="bad-controls-stata.html#cb104-7" tabindex="-1"></a>    <span class="kw">clear</span></span>
-<span id="cb104-8"><a href="bad-controls-stata.html#cb104-8" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
-<span id="cb104-9"><a href="bad-controls-stata.html#cb104-9" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> U   = rnormal()                        <span class="co">// habilidad innata</span></span>
-<span id="cb104-10"><a href="bad-controls-stata.html#cb104-10" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D   = rnormal()                        <span class="co">// educación</span></span>
-<span id="cb104-11"><a href="bad-controls-stata.html#cb104-11" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> L   = 0.8 * D + 1.2 * U + rnormal()   <span class="co">// proxy contaminado</span></span>
-<span id="cb104-12"><a href="bad-controls-stata.html#cb104-12" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y   = 2 * D + 1.5 * U + rnormal()     <span class="co">// salario</span></span>
-<span id="cb104-13"><a href="bad-controls-stata.html#cb104-13" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> Y D                      <span class="co">// sin controlar U ni proxy</span></span>
-<span id="cb104-14"><a href="bad-controls-stata.html#cb104-14" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_sin_control   = _b[D]</span>
-<span id="cb104-15"><a href="bad-controls-stata.html#cb104-15" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> Y D L               <span class="co">// con proxy contaminado (mal)</span></span>
-<span id="cb104-16"><a href="bad-controls-stata.html#cb104-16" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_proxy_malo    = _b[D]</span>
-<span id="cb104-17"><a href="bad-controls-stata.html#cb104-17" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> Y D U               <span class="co">// con U directamente (correcto, infactible)</span></span>
-<span id="cb104-18"><a href="bad-controls-stata.html#cb104-18" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_control_bueno = _b[D]</span>
-<span id="cb104-19"><a href="bad-controls-stata.html#cb104-19" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb104-20"><a href="bad-controls-stata.html#cb104-20" tabindex="-1"></a></span>
-<span id="cb104-21"><a href="bad-controls-stata.html#cb104-21" tabindex="-1"></a><span class="kw">simulate</span> b_sin_control=<span class="fu">r</span>(b_sin_control)     <span class="co">///</span></span>
-<span id="cb104-22"><a href="bad-controls-stata.html#cb104-22" tabindex="-1"></a>         b_proxy_malo=<span class="fu">r</span>(b_proxy_malo)       <span class="co">///</span></span>
-<span id="cb104-23"><a href="bad-controls-stata.html#cb104-23" tabindex="-1"></a>         b_control_bueno=<span class="fu">r</span>(b_control_bueno), <span class="co">///</span></span>
-<span id="cb104-24"><a href="bad-controls-stata.html#cb104-24" tabindex="-1"></a>    reps(300) <span class="dv">seed</span>(99999): mc_proxy</span>
-<span id="cb104-25"><a href="bad-controls-stata.html#cb104-25" tabindex="-1"></a></span>
-<span id="cb104-26"><a href="bad-controls-stata.html#cb104-26" tabindex="-1"></a>* Valor verdadero <span class="kw">de</span> D sobre Y: 2</span>
-<span id="cb104-27"><a href="bad-controls-stata.html#cb104-27" tabindex="-1"></a><span class="kw">summarize</span> b_sin_control b_proxy_malo b_control_bueno</span>
-<span id="cb104-28"><a href="bad-controls-stata.html#cb104-28" tabindex="-1"></a></span>
-<span id="cb104-29"><a href="bad-controls-stata.html#cb104-29" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> b_sin_control,   <span class="kw">width</span>(.04) <span class="kw">color</span>(<span class="bn">gray</span>%40))   <span class="co">///</span></span>
-<span id="cb104-30"><a href="bad-controls-stata.html#cb104-30" tabindex="-1"></a>       (<span class="kw">hist</span> b_proxy_malo,    <span class="kw">width</span>(.04) <span class="kw">color</span>(<span class="kw">red</span>%50))    <span class="co">///</span></span>
-<span id="cb104-31"><a href="bad-controls-stata.html#cb104-31" tabindex="-1"></a>       (<span class="kw">hist</span> b_control_bueno, <span class="kw">width</span>(.04) <span class="kw">color</span>(<span class="bn">navy</span>%50)),  <span class="co">///</span></span>
-<span id="cb104-32"><a href="bad-controls-stata.html#cb104-32" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Sin control&quot;</span> 2 <span class="st">&quot;Proxy contaminado (mal)&quot;</span> 3 <span class="st">&quot;Control correcto (U)&quot;</span>)) <span class="co">///</span></span>
-<span id="cb104-33"><a href="bad-controls-stata.html#cb104-33" tabindex="-1"></a>       <span class="bn">xline</span>(2, lcolor(<span class="bn">black</span>) lpattern(<span class="kw">dash</span>))              <span class="co">///</span></span>
-<span id="cb104-34"><a href="bad-controls-stata.html#cb104-34" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Proxy contaminado: distribución del coeficiente de educación&quot;</span>) <span class="co">///</span></span>
-<span id="cb104-35"><a href="bad-controls-stata.html#cb104-35" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Estimado de educación&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Frecuencia&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb100-1"><a href="bad-controls-stata.html#cb100-1" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb100-2"><a href="bad-controls-stata.html#cb100-2" tabindex="-1"></a>* MONTE CARLO: Proxy contaminado vs. control correcto vs. <span class="fu">sin</span> control</span>
+<span id="cb100-3"><a href="bad-controls-stata.html#cb100-3" tabindex="-1"></a>********************************************************************************</span>
+<span id="cb100-4"><a href="bad-controls-stata.html#cb100-4" tabindex="-1"></a></span>
+<span id="cb100-5"><a href="bad-controls-stata.html#cb100-5" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> mc_proxy</span>
+<span id="cb100-6"><a href="bad-controls-stata.html#cb100-6" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> mc_proxy, rclass</span>
+<span id="cb100-7"><a href="bad-controls-stata.html#cb100-7" tabindex="-1"></a>    <span class="kw">clear</span></span>
+<span id="cb100-8"><a href="bad-controls-stata.html#cb100-8" tabindex="-1"></a>    <span class="kw">set</span> <span class="kw">obs</span> 1000</span>
+<span id="cb100-9"><a href="bad-controls-stata.html#cb100-9" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> U   = rnormal()                        <span class="co">// habilidad innata</span></span>
+<span id="cb100-10"><a href="bad-controls-stata.html#cb100-10" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> D   = rnormal()                        <span class="co">// educación</span></span>
+<span id="cb100-11"><a href="bad-controls-stata.html#cb100-11" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> L   = 0.8 * D + 1.2 * U + rnormal()   <span class="co">// proxy contaminado</span></span>
+<span id="cb100-12"><a href="bad-controls-stata.html#cb100-12" tabindex="-1"></a>    <span class="kw">gen</span> <span class="kw">double</span> Y   = 2 * D + 1.5 * U + rnormal()     <span class="co">// salario</span></span>
+<span id="cb100-13"><a href="bad-controls-stata.html#cb100-13" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> Y D                      <span class="co">// sin controlar U ni proxy</span></span>
+<span id="cb100-14"><a href="bad-controls-stata.html#cb100-14" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_sin_control   = _b[D]</span>
+<span id="cb100-15"><a href="bad-controls-stata.html#cb100-15" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> Y D L               <span class="co">// con proxy contaminado (mal)</span></span>
+<span id="cb100-16"><a href="bad-controls-stata.html#cb100-16" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_proxy_malo    = _b[D]</span>
+<span id="cb100-17"><a href="bad-controls-stata.html#cb100-17" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">reg</span> Y D U               <span class="co">// con U directamente (correcto, infactible)</span></span>
+<span id="cb100-18"><a href="bad-controls-stata.html#cb100-18" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> b_control_bueno = _b[D]</span>
+<span id="cb100-19"><a href="bad-controls-stata.html#cb100-19" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb100-20"><a href="bad-controls-stata.html#cb100-20" tabindex="-1"></a></span>
+<span id="cb100-21"><a href="bad-controls-stata.html#cb100-21" tabindex="-1"></a><span class="kw">simulate</span> b_sin_control=<span class="fu">r</span>(b_sin_control)     <span class="co">///</span></span>
+<span id="cb100-22"><a href="bad-controls-stata.html#cb100-22" tabindex="-1"></a>         b_proxy_malo=<span class="fu">r</span>(b_proxy_malo)       <span class="co">///</span></span>
+<span id="cb100-23"><a href="bad-controls-stata.html#cb100-23" tabindex="-1"></a>         b_control_bueno=<span class="fu">r</span>(b_control_bueno), <span class="co">///</span></span>
+<span id="cb100-24"><a href="bad-controls-stata.html#cb100-24" tabindex="-1"></a>    reps(300) <span class="dv">seed</span>(99999): mc_proxy</span>
+<span id="cb100-25"><a href="bad-controls-stata.html#cb100-25" tabindex="-1"></a></span>
+<span id="cb100-26"><a href="bad-controls-stata.html#cb100-26" tabindex="-1"></a>* Valor verdadero <span class="kw">de</span> D sobre Y: 2</span>
+<span id="cb100-27"><a href="bad-controls-stata.html#cb100-27" tabindex="-1"></a><span class="kw">summarize</span> b_sin_control b_proxy_malo b_control_bueno</span>
+<span id="cb100-28"><a href="bad-controls-stata.html#cb100-28" tabindex="-1"></a></span>
+<span id="cb100-29"><a href="bad-controls-stata.html#cb100-29" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">hist</span> b_sin_control,   <span class="kw">width</span>(.04) <span class="kw">color</span>(<span class="bn">gray</span>%40))   <span class="co">///</span></span>
+<span id="cb100-30"><a href="bad-controls-stata.html#cb100-30" tabindex="-1"></a>       (<span class="kw">hist</span> b_proxy_malo,    <span class="kw">width</span>(.04) <span class="kw">color</span>(<span class="kw">red</span>%50))    <span class="co">///</span></span>
+<span id="cb100-31"><a href="bad-controls-stata.html#cb100-31" tabindex="-1"></a>       (<span class="kw">hist</span> b_control_bueno, <span class="kw">width</span>(.04) <span class="kw">color</span>(<span class="bn">navy</span>%50)),  <span class="co">///</span></span>
+<span id="cb100-32"><a href="bad-controls-stata.html#cb100-32" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Sin control&quot;</span> 2 <span class="st">&quot;Proxy contaminado (mal)&quot;</span> 3 <span class="st">&quot;Control correcto (U)&quot;</span>)) <span class="co">///</span></span>
+<span id="cb100-33"><a href="bad-controls-stata.html#cb100-33" tabindex="-1"></a>       <span class="bn">xline</span>(2, lcolor(<span class="bn">black</span>) lpattern(<span class="kw">dash</span>))              <span class="co">///</span></span>
+<span id="cb100-34"><a href="bad-controls-stata.html#cb100-34" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Proxy contaminado: distribución del coeficiente de educación&quot;</span>) <span class="co">///</span></span>
+<span id="cb100-35"><a href="bad-controls-stata.html#cb100-35" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Estimado de educación&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Frecuencia&quot;</span>)</span></code></pre></div>
 <hr />
 </div>
 </div>
