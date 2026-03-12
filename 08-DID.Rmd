@@ -152,26 +152,66 @@ $$\bar{Y}_{C,0} = \hat{\alpha}, \quad \bar{Y}_{T,0} = \hat{\alpha}+\hat{\beta}, 
 
 El supuesto de tendencias paralelas **no es verificable** en el periodo de tratamiento: el contrafactual $Y_{it}(0)$ para los tratados en $t=1$ no existe. Solo podemos buscar evidencia indirecta.
 
-**Con múltiples periodos pre-tratamiento** (y un identificador individual), es posible estimar una regresión de evento (*event study*):
+**Con múltiples periodos pre-tratamiento** (y un identificador individual), Stata ofrece dos pruebas formales distintas — y es importante no confundirlas:
 
-$$Y_{it} = \alpha_i + \lambda_t + \sum_{k \neq -1} \delta_k \cdot \mathbf{1}[t = k] \cdot D_i + \varepsilon_{it}$$
+---
 
-Si los $\delta_k$ para $k < 0$ son estadísticamente indistinguibles de cero, hay evidencia de que las tendencias eran paralelas antes del tratamiento.
+### Prueba de tendencias paralelas: `estat ptrends` {-}
+
+```stata
+xtdidregress (y) (treatment), group(id) time(year)
+estat ptrends
+```
+
+**H₀:** Las tendencias lineales son paralelas en el periodo pre-tratamiento.
+
+Lo que hace internamente: estima una regresión sobre los periodos pre-tratamiento con una interacción `tratado × tiempo` (como variable continua) y prueba si ese coeficiente es cero. Si se rechaza H₀, hay evidencia de que los grupos ya tenían pendientes distintas antes del programa.
+
+Esta es la prueba de tendencias paralelas propiamente dicha.
+
+---
+
+### Prueba de anticipación: `estat granger` {-}
+
+```stata
+estat granger
+```
+
+**H₀:** No hubo efectos del tratamiento en anticipación (antes de que empezara).
+
+Lo que hace internamente: construye indicadores de "leads" — una variable por cada periodo pre-tratamiento que toma valor 1 si el grupo es tratado y el tiempo ya superó ese umbral. Incluye todos esos indicadores en una regresión y los prueba conjuntamente con un F-test acumulado.
 
 ::: {.boxcerebro}
-**Advertencia importante:** Coeficientes pre-tratamiento distintos de cero pueden indicar dos cosas distintas, y **no es posible distinguirlas solo con los datos**:
+**Diferencia clave entre las dos pruebas:**
 
-1. **Tendencias paralelas fallidas** — los grupos ya se movían de forma diferente antes del programa.
-2. **Efectos de anticipación** — los agentes cambiaron su comportamiento al enterarse del programa, *antes* de que empezara.
+| Prueba | H₀ | ¿Qué detecta si se rechaza? |
+|---|---|---|
+| `estat ptrends` | Tendencias lineales iguales antes del tratamiento | Tendencias pre-existentes distintas entre grupos |
+| `estat granger` | Sin efectos anticipados del tratamiento | Que los agentes cambiaron su comportamiento antes de que empezara el programa |
 
-Siempre se necesita un argumento teórico para separar estos dos casos.
+Son preguntas distintas. Un rechazo en `ptrends` no implica anticipación, y un rechazo en `granger` no implica que las tendencias no eran paralelas. Siempre se necesita un argumento teórico para interpretar cuál es el problema.
+:::
+
+---
+
+### Visualización: `estat trendplots` y `estat grangerplot` {-}
+
+```stata
+estat trendplots   * medias observadas + tendencias lineales ajustadas por grupo
+estat grangerplot  * event study: efectos específicos por periodo (pre y post)
+```
+
+`trendplots` es el gráfico diagnóstico de tendencias. `grangerplot` es el event study completo con los efectos por periodo y sus intervalos de confianza.
+
+---
+
+::: {.boxcerebro}
+**Restricción técnica:** el código fuente de Stata exige **al menos 2 periodos pre-tratamiento** para correr `estat ptrends` o `estat granger`. Con solo un periodo antes del tratamiento, ambas pruebas fallan con error. En nuestra base (1 periodo antes, 1 después), estas pruebas no son ejecutables.
 :::
 
 **Con solo dos periodos (como en nuestra base):**
 
-Con un único periodo antes y uno después, la prueba de pre-tendencias es **imposible**: no hay periodos previos al "antes" con qué comparar. El gráfico de tendencias medias que construimos en Stata es una *visualización del DiD*, no una prueba del supuesto. Lo que nos dice es cuánto cambiaron los grupos, no si habrían tenido la misma tendencia en ausencia del programa.
-
-Para probar tendencias paralelas se necesitan **al menos tres periodos** y un identificador de individuo.
+Con un único periodo antes y uno después, la prueba formal de pre-tendencias es **imposible**. El gráfico de tendencias medias que construimos en Stata es una *visualización del DiD*, no una prueba del supuesto. Para probar tendencias paralelas se necesitan **al menos 3 periodos** y un identificador de individuo.
 
 ---
 
