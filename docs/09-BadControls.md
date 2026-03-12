@@ -136,14 +136,111 @@ E[Y_{i}(0) \mid D=1, t=1] - E[Y_{i}(0) \mid D=1, t=0] = E[Y_{i}(0) \mid D=0, t=1
 
 ---
 
-## Sesgo de Agrupación {-}
+## La demostración formal: sesgo de agrupación {-}
 
-Otro problema común es el **sesgo de agrupación**, que ocurre cuando:  
-- Se promedian resultados sin respetar la estructura de tratamiento y control.  
-- Se incluyen controles endógenos que re-agrupan la variación.
+Esta sección desarrolla el argumento de **Angrist y Pischke** (*Mostly Harmless Econometrics*, cap. 3) que muestra exactamente qué pasa cuando incluimos un mal control. Es la demostración que vimos en clase.
 
-La moraleja es:  
-👉 Siempre analizar qué variables se incluyen y si cumplen el criterio de ser predeterminadas.
+### El escenario {-}
+
+Suponga que el tratamiento $D$ afecta **dos** cosas: el resultado de interés $Y$ **y** una variable $F$:
+
+$$D \rightarrow Y \qquad \text{y} \qquad D \rightarrow F$$
+
+Un ejemplo concreto: $D$ = acceso a educación universitaria, $Y$ = salario, $F$ = trabajar en un empleo de alta calificación (STEM). La educación sube el salario *y* aumenta la probabilidad de entrar a STEM.
+
+Como el programa es aleatorio, los resultados potenciales son independientes del tratamiento:
+
+$$Y(D=1),\; Y(D=0),\; F(D=1),\; F(D=0) \;\perp\; D$$
+
+### Sin controlar $F$: el estimador naive es el ATE {-}
+
+Con la regresión sin control:
+$$Y = \alpha + \tau D + \varepsilon$$
+
+el estimador de diferencias de medias es:
+
+$$\hat{\tau}_{\text{naive}} = E[Y \mid D=1] - E[Y \mid D=0] = E[Y(1)] - E[Y(0)] = \text{ATE}$$
+
+Es insesgado y consistente. Todo bien hasta aquí.
+
+### ¿Qué pasa si incluimos $F$ como control? {-}
+
+Ahora agregamos $F$ a la regresión:
+$$Y = \alpha + \tau D + \beta F + \varepsilon$$
+
+y comparamos tratados y controles **dentro de cada valor de $F$**. Por ejemplo, para $F=1$:
+
+$$E[Y \mid D=1,\, F=1] \;-\; E[Y \mid D=0,\, F=1] \;=\; ?$$
+
+Para calcular esto usamos la ecuación de switching:
+
+$$Y_i = D_i \cdot Y_i(1) + (1-D_i)\cdot Y_i(0), \qquad F_i = D_i \cdot F_i(1) + (1-D_i)\cdot F_i(0)$$
+
+**Término izquierdo** — entre los tratados con $F=1$:
+
+$$E[Y \mid D=1,\, F=1] = E\!\left[Y(1) \mid D=1,\; F(1)=1\right] = E\!\left[Y(1) \mid F(1)=1\right]$$
+
+El último paso usa la independencia $Y(1) \perp D$.
+
+**Término derecho** — entre los controles con $F=1$. Aquí está el truco: para los controles ($D=0$), $F=1$ significa que $F(D=0)=1$, **no** $F(D=1)=1$. Son grupos distintos.
+
+$$E[Y \mid D=0,\, F=1] = E\!\left[Y(0) \mid D=0,\; F(0)=1\right] = E\!\left[Y(0) \mid F(0)=1\right]$$
+
+### La descomposición en cuatro términos {-}
+
+Juntando los dos lados y sumando y restando $E[Y(0) \mid F(1)=1]$:
+
+$$
+E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1]
+$$
+
+$$
+= \underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}
+$$
+
+Sumamos y restamos $E[Y(0)\mid F(1)=1]$:
+
+$$
+= \Big(\underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{4}}\Big) + \Big(\underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{3}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}\Big)
+$$
+
+Lo que resulta en:
+
+$$
+\boxed{E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1] = \underbrace{E[Y(1)-Y(0) \mid F(1)=1]}_{\text{ATE}_{F=1}} + \underbrace{E[Y(0) \mid F(1)=1] - E[Y(0) \mid F(0)=1]}_{\text{Sesgo de agrupación}}}
+$$
+
+### ¿Qué significa cada término? {-}
+
+**Término 1 — $\text{ATE}_{F=1}$:** el efecto promedio del tratamiento **para las personas que habrían llegado a $F=1$ si fueran tratadas**. No es el ATE de toda la población; es un ATE condicional en un subgrupo particular.
+
+**Término 2 — Sesgo de agrupación:** compara el resultado contrafactual $Y(0)$ de dos grupos diferentes:
+
+- $E[Y(0) \mid F(1)=1]$: resultado sin tratamiento de quienes *habrían* llegado a $F=1$ **si fueran tratados**.
+- $E[Y(0) \mid F(0)=1]$: resultado sin tratamiento de quienes *habrían* llegado a $F=1$ **si no fueran tratados**.
+
+Estos son grupos distintos. El tratamiento $D$ "reorganiza" quién termina en $F=1$: con educación universitaria, más personas entran a empleos STEM (incluyendo algunas con menor habilidad innata). Sin educación, solo los más hábiles llegan a STEM. Por eso $E[Y(0)\mid F(1)=1] < E[Y(0)\mid F(0)=1]$: el sesgo de agrupación es negativo y **atenúa** el efecto estimado.
+
+::: {.boxcerebro}
+**Intuición de una línea:**
+Al condicionar en $F$, estamos comparando grupos que son diferentes no solo en $D$, sino también en características no observables correlacionadas con $F$. Eso introduce un sesgo que no desaparece aunque $D$ sea aleatorio.
+:::
+
+### El ejemplo de Angrist y Pischke {-}
+
+- $D$ = acceso a educación universitaria (aleatorio)
+- $Y$ = salario
+- $F$ = trabaja en sector STEM
+
+**Sin controlar $F$:** el estimador recupera el efecto total de la educación sobre el salario. ✓
+
+**Controlando $F$:** comparamos personas en STEM con y sin educación universitaria. Pero quienes están en STEM *sin* educación universitaria son los más talentosos (solo ellos llegan ahí sin el título). Quienes están en STEM *con* educación incluyen personas de habilidad promedio que entraron gracias al título. Al comparar los dos grupos dentro de STEM, el grupo control parece mejor, lo que hace que el efecto estimado de la educación parezca menor. El sesgo de agrupación va en la dirección contraria al efecto real.
+
+**Moraleja:**
+
+$$y = \alpha + \tau D + \beta F + \varepsilon \quad \longrightarrow \quad \hat{\tau} \text{ no mide el ATE}$$
+
+La estimación de $\tau$ ya no es ni insesgada ni consistente para el efecto causal de interés. El coeficiente de $D$ en esta regresión mezcla el $\text{ATE}_{F=1}$ (que no es el ATE de la población) con el sesgo de agrupación.
 
 ---
 

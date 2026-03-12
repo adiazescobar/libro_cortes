@@ -255,7 +255,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
 <li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
 <li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Agrupación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>La demostración formal: sesgo de agrupación</a></li>
 <li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>10</b> Malos Controles: Código y Simulaciones</a>
@@ -452,14 +452,85 @@ E[Y_{i}(0) \mid D=1, t=1] - E[Y_{i}(0) \mid D=1, t=0] = E[Y_{i}(0) \mid D=0, t=1
 </ul>
 <hr />
 </div>
-<div id="sesgo-de-agrupación" class="section level2 unnumbered hasAnchor">
-<h2>Sesgo de Agrupación<a href="#sesgo-de-agrupaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Otro problema común es el <strong>sesgo de agrupación</strong>, que ocurre cuando:<br />
-- Se promedian resultados sin respetar la estructura de tratamiento y control.<br />
-- Se incluyen controles endógenos que re-agrupan la variación.</p>
-<p>La moraleja es:<br />
-👉 Siempre analizar qué variables se incluyen y si cumplen el criterio de ser predeterminadas.</p>
+<div id="la-demostración-formal-sesgo-de-agrupación" class="section level2 unnumbered hasAnchor">
+<h2>La demostración formal: sesgo de agrupación<a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Esta sección desarrolla el argumento de <strong>Angrist y Pischke</strong> (<em>Mostly Harmless Econometrics</em>, cap. 3) que muestra exactamente qué pasa cuando incluimos un mal control. Es la demostración que vimos en clase.</p>
+<div id="el-escenario" class="section level3 unnumbered hasAnchor">
+<h3>El escenario<a href="bad-controls-teoria.html#el-escenario" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suponga que el tratamiento <span class="math inline">\(D\)</span> afecta <strong>dos</strong> cosas: el resultado de interés <span class="math inline">\(Y\)</span> <strong>y</strong> una variable <span class="math inline">\(F\)</span>:</p>
+<p><span class="math display">\[D \rightarrow Y \qquad \text{y} \qquad D \rightarrow F\]</span></p>
+<p>Un ejemplo concreto: <span class="math inline">\(D\)</span> = acceso a educación universitaria, <span class="math inline">\(Y\)</span> = salario, <span class="math inline">\(F\)</span> = trabajar en un empleo de alta calificación (STEM). La educación sube el salario <em>y</em> aumenta la probabilidad de entrar a STEM.</p>
+<p>Como el programa es aleatorio, los resultados potenciales son independientes del tratamiento:</p>
+<p><span class="math display">\[Y(D=1),\; Y(D=0),\; F(D=1),\; F(D=0) \;\perp\; D\]</span></p>
+</div>
+<div id="sin-controlar-f-el-estimador-naive-es-el-ate" class="section level3 unnumbered hasAnchor">
+<h3>Sin controlar <span class="math inline">\(F\)</span>: el estimador naive es el ATE<a href="bad-controls-teoria.html#sin-controlar-f-el-estimador-naive-es-el-ate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Con la regresión sin control:
+<span class="math display">\[Y = \alpha + \tau D + \varepsilon\]</span></p>
+<p>el estimador de diferencias de medias es:</p>
+<p><span class="math display">\[\hat{\tau}_{\text{naive}} = E[Y \mid D=1] - E[Y \mid D=0] = E[Y(1)] - E[Y(0)] = \text{ATE}\]</span></p>
+<p>Es insesgado y consistente. Todo bien hasta aquí.</p>
+</div>
+<div id="qué-pasa-si-incluimos-f-como-control" class="section level3 unnumbered hasAnchor">
+<h3>¿Qué pasa si incluimos <span class="math inline">\(F\)</span> como control?<a href="#qu%C3%A9-pasa-si-incluimos-f-como-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Ahora agregamos <span class="math inline">\(F\)</span> a la regresión:
+<span class="math display">\[Y = \alpha + \tau D + \beta F + \varepsilon\]</span></p>
+<p>y comparamos tratados y controles <strong>dentro de cada valor de <span class="math inline">\(F\)</span></strong>. Por ejemplo, para <span class="math inline">\(F=1\)</span>:</p>
+<p><span class="math display">\[E[Y \mid D=1,\, F=1] \;-\; E[Y \mid D=0,\, F=1] \;=\; ?\]</span></p>
+<p>Para calcular esto usamos la ecuación de switching:</p>
+<p><span class="math display">\[Y_i = D_i \cdot Y_i(1) + (1-D_i)\cdot Y_i(0), \qquad F_i = D_i \cdot F_i(1) + (1-D_i)\cdot F_i(0)\]</span></p>
+<p><strong>Término izquierdo</strong> — entre los tratados con <span class="math inline">\(F=1\)</span>:</p>
+<p><span class="math display">\[E[Y \mid D=1,\, F=1] = E\!\left[Y(1) \mid D=1,\; F(1)=1\right] = E\!\left[Y(1) \mid F(1)=1\right]\]</span></p>
+<p>El último paso usa la independencia <span class="math inline">\(Y(1) \perp D\)</span>.</p>
+<p><strong>Término derecho</strong> — entre los controles con <span class="math inline">\(F=1\)</span>. Aquí está el truco: para los controles (<span class="math inline">\(D=0\)</span>), <span class="math inline">\(F=1\)</span> significa que <span class="math inline">\(F(D=0)=1\)</span>, <strong>no</strong> <span class="math inline">\(F(D=1)=1\)</span>. Son grupos distintos.</p>
+<p><span class="math display">\[E[Y \mid D=0,\, F=1] = E\!\left[Y(0) \mid D=0,\; F(0)=1\right] = E\!\left[Y(0) \mid F(0)=1\right]\]</span></p>
+</div>
+<div id="la-descomposición-en-cuatro-términos" class="section level3 unnumbered hasAnchor">
+<h3>La descomposición en cuatro términos<a href="#la-descomposici%C3%B3n-en-cuatro-t%C3%A9rminos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Juntando los dos lados y sumando y restando <span class="math inline">\(E[Y(0) \mid F(1)=1]\)</span>:</p>
+<p><span class="math display">\[
+E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1]
+\]</span></p>
+<p><span class="math display">\[
+= \underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}
+\]</span></p>
+<p>Sumamos y restamos <span class="math inline">\(E[Y(0)\mid F(1)=1]\)</span>:</p>
+<p><span class="math display">\[
+= \Big(\underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{4}}\Big) + \Big(\underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{3}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}\Big)
+\]</span></p>
+<p>Lo que resulta en:</p>
+<p><span class="math display">\[
+\boxed{E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1] = \underbrace{E[Y(1)-Y(0) \mid F(1)=1]}_{\text{ATE}_{F=1}} + \underbrace{E[Y(0) \mid F(1)=1] - E[Y(0) \mid F(0)=1]}_{\text{Sesgo de agrupación}}}
+\]</span></p>
+</div>
+<div id="qué-significa-cada-término" class="section level3 unnumbered hasAnchor">
+<h3>¿Qué significa cada término?<a href="#qu%C3%A9-significa-cada-t%C3%A9rmino" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Término 1 — <span class="math inline">\(\text{ATE}_{F=1}\)</span>:</strong> el efecto promedio del tratamiento <strong>para las personas que habrían llegado a <span class="math inline">\(F=1\)</span> si fueran tratadas</strong>. No es el ATE de toda la población; es un ATE condicional en un subgrupo particular.</p>
+<p><strong>Término 2 — Sesgo de agrupación:</strong> compara el resultado contrafactual <span class="math inline">\(Y(0)\)</span> de dos grupos diferentes:</p>
+<ul>
+<li><span class="math inline">\(E[Y(0) \mid F(1)=1]\)</span>: resultado sin tratamiento de quienes <em>habrían</em> llegado a <span class="math inline">\(F=1\)</span> <strong>si fueran tratados</strong>.</li>
+<li><span class="math inline">\(E[Y(0) \mid F(0)=1]\)</span>: resultado sin tratamiento de quienes <em>habrían</em> llegado a <span class="math inline">\(F=1\)</span> <strong>si no fueran tratados</strong>.</li>
+</ul>
+<p>Estos son grupos distintos. El tratamiento <span class="math inline">\(D\)</span> “reorganiza” quién termina en <span class="math inline">\(F=1\)</span>: con educación universitaria, más personas entran a empleos STEM (incluyendo algunas con menor habilidad innata). Sin educación, solo los más hábiles llegan a STEM. Por eso <span class="math inline">\(E[Y(0)\mid F(1)=1] &lt; E[Y(0)\mid F(0)=1]\)</span>: el sesgo de agrupación es negativo y <strong>atenúa</strong> el efecto estimado.</p>
+<div class="boxcerebro">
+<p><strong>Intuición de una línea:</strong>
+Al condicionar en <span class="math inline">\(F\)</span>, estamos comparando grupos que son diferentes no solo en <span class="math inline">\(D\)</span>, sino también en características no observables correlacionadas con <span class="math inline">\(F\)</span>. Eso introduce un sesgo que no desaparece aunque <span class="math inline">\(D\)</span> sea aleatorio.</p>
+</div>
+</div>
+<div id="el-ejemplo-de-angrist-y-pischke" class="section level3 unnumbered hasAnchor">
+<h3>El ejemplo de Angrist y Pischke<a href="bad-controls-teoria.html#el-ejemplo-de-angrist-y-pischke" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><span class="math inline">\(D\)</span> = acceso a educación universitaria (aleatorio)</li>
+<li><span class="math inline">\(Y\)</span> = salario</li>
+<li><span class="math inline">\(F\)</span> = trabaja en sector STEM</li>
+</ul>
+<p><strong>Sin controlar <span class="math inline">\(F\)</span>:</strong> el estimador recupera el efecto total de la educación sobre el salario. ✓</p>
+<p><strong>Controlando <span class="math inline">\(F\)</span>:</strong> comparamos personas en STEM con y sin educación universitaria. Pero quienes están en STEM <em>sin</em> educación universitaria son los más talentosos (solo ellos llegan ahí sin el título). Quienes están en STEM <em>con</em> educación incluyen personas de habilidad promedio que entraron gracias al título. Al comparar los dos grupos dentro de STEM, el grupo control parece mejor, lo que hace que el efecto estimado de la educación parezca menor. El sesgo de agrupación va en la dirección contraria al efecto real.</p>
+<p><strong>Moraleja:</strong></p>
+<p><span class="math display">\[y = \alpha + \tau D + \beta F + \varepsilon \quad \longrightarrow \quad \hat{\tau} \text{ no mide el ATE}\]</span></p>
+<p>La estimación de <span class="math inline">\(\tau\)</span> ya no es ni insesgada ni consistente para el efecto causal de interés. El coeficiente de <span class="math inline">\(D\)</span> en esta regresión mezcla el <span class="math inline">\(\text{ATE}_{F=1}\)</span> (que no es el ATE de la población) con el sesgo de agrupación.</p>
 <hr />
+</div>
 </div>
 <div id="moraleja-final" class="section level2 unnumbered hasAnchor">
 <h2>Moraleja Final<a href="bad-controls-teoria.html#moraleja-final" class="anchor-section" aria-label="Anchor link to header"></a></h2>
