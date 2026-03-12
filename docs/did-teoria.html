@@ -249,6 +249,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#ejercicio-con-datos"><i class="fa fa-check"></i>Ejercicio con datos</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>9</b> Malos Controles (Teoría)</a>
 <ul>
@@ -768,14 +769,124 @@ Los coeficientes <span class="math inline">\(\beta\)</span> y <span class="math 
 <p>Las principales amenazas a la validez del DiD son: (1) políticas simultáneas que afectan diferencialmente a los grupos, (2) causalidad inversa o dip de Ashenfelter, (3) spillovers que contaminan el grupo de control, (4) anticipación que contamina el periodo base, y (5) atrición diferencial entre grupos.</p>
 <hr />
 <div class="boxejercicio">
-<p><strong>✍️ Ejercicio</strong></p>
+<p><strong>✍️ Preguntas de reflexión</strong></p>
 <ol style="list-style-type: decimal">
 <li>Calcula el estimador DiD a mano con las cuatro medias de la tabla y verifica que coincide con el coeficiente de la interacción en la regresión.</li>
 <li>¿Por qué no podemos interpretar causalmente la diferencia cruda entre tratados y controles en <span class="math inline">\(t=1\)</span>?</li>
-<li>En el gráfico de tendencias, ¿qué patrón esperarías ver si el supuesto de tendencias paralelas <strong>se viola</strong>?</li>
-<li>¿Qué problema introduce el dip de Ashenfelter y cómo lo detectarías con datos de múltiples periodos?</li>
+<li>¿Qué patrón esperarías ver en el gráfico de tendencias si el supuesto de tendencias paralelas <strong>se viola</strong>?</li>
+<li>¿Qué diferencia hay entre lo que prueba <code>estat ptrends</code> y lo que prueba <code>estat granger</code>? ¿Por qué importa distinguirlas?</li>
 </ol>
 </div>
+<hr />
+</div>
+<div id="ejercicio-con-datos" class="section level2 unnumbered hasAnchor">
+<h2>Ejercicio con datos<a href="did-teoria.html#ejercicio-con-datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="boxejercicio">
+<p>📁 <strong>Do-file del ejercicio</strong></p>
+<p>Descarga el do-file, córrelo en Stata y reporta tus resultados en el formulario:</p>
+<ul>
+<li><a href="dofile/08_DID/08_DID_ejercicio.do">08_DID_ejercicio.do</a> — ejercicio con <code>base3.dta</code> y <code>hospdd</code></li>
+</ul>
+<p><strong>Instrucciones:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Descarga el do-file y cambia la ruta en la línea <code>cd "..."</code> a la carpeta donde tienes <code>base3.dta</code>.</li>
+<li>Corre el do-file completo.</li>
+<li>Anota los valores que aparecen en pantalla al final de cada sección.</li>
+<li>Ingresa tus respuestas en el formulario a continuación.</li>
+</ol>
+</div>
+<p><strong>Sección A — DiD básico (<code>base3.dta</code>)</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Pregunta</th>
+<th>Tu respuesta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A1a. Media controles antes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>A1b. Media controles después</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>A1c. Media tratados antes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>A1d. Media tratados después</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>A2. Estimador DiD (manual)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>A3. Estimador DiD (regresión)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>A3b. ¿Coinciden A2 y A3? (sí/no)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>A4. P-valor del test de balance en t=0</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>A4b. ¿Eran similares los grupos antes?</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sección B — DiD múltiples periodos (<code>hospdd</code>)</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Pregunta</th>
+<th>Tu respuesta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>B1. Estimador ATET (nuevo procedimiento)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>B2. F-stat de <code>estat ptrends</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>B2b. P-valor de <code>estat ptrends</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>B2c. ¿Se rechaza H0 de tendencias paralelas?</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>B3. F-stat de <code>estat granger</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>B3b. P-valor de <code>estat granger</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>B3c. ¿Hay evidencia de anticipación?</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Envía tus respuestas aquí:</strong></p>
+<iframe src="https://docs.google.com/forms/d/e/REEMPLAZA_CON_TU_URL_DE_GOOGLE_FORM/viewform?embedded=true"
+        width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0"
+        style="border-radius: 8px; margin-top: 1em;">
+  Cargando formulario...
+</iframe>
 
 </div>
 </div>

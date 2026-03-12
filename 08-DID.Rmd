@@ -462,10 +462,65 @@ Las principales amenazas a la validez del DiD son: (1) políticas simultáneas q
 ---
 
 ::: {.boxejercicio}
-**✍️ Ejercicio**
+**✍️ Preguntas de reflexión**
 
 1. Calcula el estimador DiD a mano con las cuatro medias de la tabla y verifica que coincide con el coeficiente de la interacción en la regresión.
 2. ¿Por qué no podemos interpretar causalmente la diferencia cruda entre tratados y controles en $t=1$?
-3. En el gráfico de tendencias, ¿qué patrón esperarías ver si el supuesto de tendencias paralelas **se viola**?
-4. ¿Qué problema introduce el dip de Ashenfelter y cómo lo detectarías con datos de múltiples periodos?
+3. ¿Qué patrón esperarías ver en el gráfico de tendencias si el supuesto de tendencias paralelas **se viola**?
+4. ¿Qué diferencia hay entre lo que prueba `estat ptrends` y lo que prueba `estat granger`? ¿Por qué importa distinguirlas?
 :::
+
+---
+
+## Ejercicio con datos {-}
+
+::: {.boxejercicio}
+📁 **Do-file del ejercicio**
+
+Descarga el do-file, córrelo en Stata y reporta tus resultados en el formulario:
+
+* [08_DID_ejercicio.do](dofile/08_DID/08_DID_ejercicio.do) — ejercicio con `base3.dta` y `hospdd`
+
+**Instrucciones:**
+
+1. Descarga el do-file y cambia la ruta en la línea `cd "..."` a la carpeta donde tienes `base3.dta`.
+2. Corre el do-file completo.
+3. Anota los valores que aparecen en pantalla al final de cada sección.
+4. Ingresa tus respuestas en el formulario a continuación.
+:::
+
+**Sección A — DiD básico (`base3.dta`)**
+
+| Pregunta | Tu respuesta |
+|---|---|
+| A1a. Media controles antes | |
+| A1b. Media controles después | |
+| A1c. Media tratados antes | |
+| A1d. Media tratados después | |
+| A2. Estimador DiD (manual) | |
+| A3. Estimador DiD (regresión) | |
+| A3b. ¿Coinciden A2 y A3? (sí/no) | |
+| A4. P-valor del test de balance en t=0 | |
+| A4b. ¿Eran similares los grupos antes? | |
+
+**Sección B — DiD múltiples periodos (`hospdd`)**
+
+| Pregunta | Tu respuesta |
+|---|---|
+| B1. Estimador ATET (nuevo procedimiento) | |
+| B2. F-stat de `estat ptrends` | |
+| B2b. P-valor de `estat ptrends` | |
+| B2c. ¿Se rechaza H0 de tendencias paralelas? | |
+| B3. F-stat de `estat granger` | |
+| B3b. P-valor de `estat granger` | |
+| B3c. ¿Hay evidencia de anticipación? | |
+
+**Envía tus respuestas aquí:**
+
+```{=html}
+<iframe src="https://docs.google.com/forms/d/e/REEMPLAZA_CON_TU_URL_DE_GOOGLE_FORM/viewform?embedded=true"
+        width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0"
+        style="border-radius: 8px; margin-top: 1em;">
+  Cargando formulario...
+</iframe>
+```
