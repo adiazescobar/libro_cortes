@@ -150,40 +150,82 @@ $$\bar{Y}_{C,0} = \hat{\alpha}, \quad \bar{Y}_{T,0} = \hat{\alpha}+\hat{\beta}, 
 
 ## Prueba de tendencias paralelas {-}
 
-El supuesto de tendencias paralelas no es verificable en el periodo de tratamiento (no existe el contrafactual). Pero sí puede **ponerse a prueba en periodos previos**.
+El supuesto de tendencias paralelas **no es verificable** en el periodo de tratamiento: el contrafactual $Y_{it}(0)$ para los tratados en $t=1$ no existe. Solo podemos buscar evidencia indirecta.
 
-Si los grupos tenían tendencias paralelas *antes* del tratamiento, ganamos confianza en que las habrían tenido en el periodo de tratamiento.
-
-**Prueba de pre-tendencias (event study):**
-
-Con múltiples periodos pre-tratamiento $t = -k, \ldots, -1, 0, 1, \ldots$:
+**Con múltiples periodos pre-tratamiento** (y un identificador individual), es posible estimar una regresión de evento (*event study*):
 
 $$Y_{it} = \alpha_i + \lambda_t + \sum_{k \neq -1} \delta_k \cdot \mathbf{1}[t = k] \cdot D_i + \varepsilon_{it}$$
 
-- Los $\delta_k$ para $k < 0$ deben ser estadísticamente indistinguibles de cero.
-- Si algún $\delta_k < 0$ es significativo, hay evidencia de pre-tendencias diferenciales → el supuesto falla.
+Si los $\delta_k$ para $k < 0$ son estadísticamente indistinguibles de cero, hay evidencia de que las tendencias eran paralelas antes del tratamiento.
+
+::: {.boxcerebro}
+**Advertencia importante:** Coeficientes pre-tratamiento distintos de cero pueden indicar dos cosas distintas, y **no es posible distinguirlas solo con los datos**:
+
+1. **Tendencias paralelas fallidas** — los grupos ya se movían de forma diferente antes del programa.
+2. **Efectos de anticipación** — los agentes cambiaron su comportamiento al enterarse del programa, *antes* de que empezara.
+
+Siempre se necesita un argumento teórico para separar estos dos casos.
+:::
 
 **Con solo dos periodos (como en nuestra base):**
 
-Solo podemos verificar que el nivel inicial difiere pero no la tendencia. La prueba completa requiere al menos tres periodos.
+Con un único periodo antes y uno después, la prueba de pre-tendencias es **imposible**: no hay periodos previos al "antes" con qué comparar. El gráfico de tendencias medias que construimos en Stata es una *visualización del DiD*, no una prueba del supuesto. Lo que nos dice es cuánto cambiaron los grupos, no si habrían tenido la misma tendencia en ausencia del programa.
+
+Para probar tendencias paralelas se necesitan **al menos tres periodos** y un identificador de individuo.
 
 ---
 
 ## Amenazas adicionales a la validez {-}
 
-Además de la violación de tendencias paralelas, DiD puede fallar por:
+Además de la violación de tendencias paralelas, DiD puede fallar por cuatro razones principales:
 
-**1. El dip de Ashenfelter (*Ashenfelter's dip*)**
-Los participantes fueron seleccionados justo cuando estaban en un punto bajo transitorio. Sin el programa, habrían subido de todas formas (regresión a la media). DiD sobre-estima el efecto.
+---
 
-**2. Efectos de derrame (*spillovers*)**
-Si el tratamiento afecta también al grupo de control (por competencia, contagio, o cambios de precios), el contrafactual se contamina y DiD puede subestimar el efecto.
+**1. Políticas simultáneas**
 
-**3. Cambios en la composición de los grupos**
-Si el tratamiento cambia quién permanece en la muestra (atrición diferencial), las medias post-tratamiento ya no son comparables.
+Si durante el mismo periodo ocurre otro evento o política que afecta **solo a uno de los dos grupos**, el cambio que atribuimos al programa puede ser en realidad causado por ese otro factor.
 
-**4. SUTVA**
-El resultado potencial de cada individuo debe ser independiente del tratamiento de los demás. Si hay interacciones entre individuos, SUTVA se viola.
+*Ejemplo:* Evaluamos un programa de empleo para madres en una ciudad. Al mismo tiempo, esa ciudad anuncia una inversión en guarderías públicas. El grupo tratado mejora, pero no podemos saber cuánto fue el programa y cuánto fueron las guarderías.
+
+**¿Cómo detectarlo?** Revisando el contexto histórico y verificando que no hubo shocks diferenciales entre grupos durante el periodo de evaluación.
+
+---
+
+**2. Causalidad inversa**
+
+El supuesto de tendencias paralelas puede fallar si **la selección al tratamiento depende de la trayectoria pasada del resultado**. Si los participantes fueron elegidos (o se autoseleccionaron) precisamente porque su resultado estaba cayendo, habrían subido de todas formas sin el programa — lo que se conoce como el **dip de Ashenfelter**.
+
+*Ejemplo:* Un programa de capacitación laboral selecciona trabajadores que recientemente perdieron el empleo. Su tasa de empleo era baja antes del programa, pero habría subido naturalmente con el tiempo. DiD sobreestima el efecto.
+
+**¿Cómo detectarlo?** Con múltiples periodos pre-tratamiento: si el grupo tratado ya tenía una tendencia ascendente antes del programa, el dip es visible.
+
+---
+
+**3. Spillovers (efectos de derrame)**
+
+Si el tratamiento de algunos individuos **afecta el resultado de quienes están en el grupo de control**, el contrafactual queda contaminado. El grupo de control ya no representa lo que le habría pasado al grupo tratado sin el programa.
+
+*Ejemplo:* Un subsidio a la contratación en empresas tratadas puede desplazar trabajadores desde empresas de control hacia las tratadas. El empleo en control baja no porque el programa fracase, sino porque los trabajadores se mueven. DiD subestima el efecto real.
+
+**¿Cómo detectarlo?** Verificando que tratados y controles estén suficientemente separados geográfica o institucionalmente para que no haya interacciones.
+
+---
+
+**4. Anticipación**
+
+Si los agentes saben que el programa llegará, pueden cambiar su comportamiento **antes** de que empiece. Esto hace que el periodo "antes" del tratamiento ya esté contaminado, y el estimador DiD subestima el efecto verdadero.
+
+*Ejemplo:* Se anuncia en enero un subsidio a la inversión que entrará en vigor en julio. Las empresas tratadas empiezan a invertir desde enero. En julio, la diferencia pre-post parece pequeña, aunque el programa tuvo un efecto real desde el anuncio.
+
+**¿Cómo detectarlo y corregirlo?** Redefinir la fecha de tratamiento como la fecha del **anuncio**, no la de implementación. Con event studies, los coeficientes pre-tratamiento serán distintos de cero si hay anticipación — pero esto es observacionalmente equivalente a tendencias no paralelas (ver sección anterior).
+
+---
+
+**5. Cambios en la composición de los grupos**
+
+Si el tratamiento cambia quién permanece en la muestra (atrición diferencial), las medias post-tratamiento ya no son comparables. Por ejemplo, si el programa provoca que los participantes más débiles abandonen el programa, el promedio post-tratamiento mejora mecánicamente.
+
+**¿Cómo detectarlo?** Comparando tasas de atrición entre tratados y controles, y analizando si las características de los que se van difieren entre grupos.
 
 ---
 
@@ -249,8 +291,11 @@ twoway (connected y t if D==1, msymbol(circle) lcolor(navy)) ///
 restore
 ```
 
-**¿Qué buscamos en este gráfico?**
-Que las dos líneas sean aproximadamente paralelas en el periodo pre-tratamiento. Una pendiente diferente antes del programa ya sería evidencia de tendencias no paralelas.
+**¿Qué muestra este gráfico?**
+
+Con solo dos periodos, este gráfico **no es una prueba de tendencias paralelas** — es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y después, y permite ver intuitivamente de dónde viene el estimador. Para probar tendencias paralelas necesitaríamos al menos un periodo previo adicional y un identificador individual.
+
+Lo que sí podemos verificar con este gráfico: que los grupos se movieron de forma diferente (si las pendientes difieren, el DiD captura esa diferencia). Pero no podemos saber si esa diferencia se debe al programa o a una tendencia pre-existente que no alcanzamos a ver.
 
 ---
 
@@ -305,7 +350,20 @@ ssc install diff, replace
 diff y, t(D) p(t)
 ```
 
-El comando `diff` reporta directamente el estimador, su error estándar y el p-valor del test $H_0: \delta = 0$.
+El comando `diff` reporta la tabla 2×2 completa (medias por grupo y periodo, primeras diferencias, y el estimador DiD) con su error estándar y el p-valor del test $H_0: \delta = 0$.
+
+**La opción `test` de `diff`: prueba de balance, no de tendencias paralelas**
+
+```stata
+* test requiere especificar covariables con cov()
+diff y, t(D) p(t) test cov(orden_n)
+```
+
+La opción `test` corre **t-tests de balance en el periodo base** ($t=0$), comparando tratados y controles en la variable de resultado y en las covariables especificadas. Lo que hace internamente es una regresión de cada variable sobre el indicador de tratamiento, restringida a $t=0$.
+
+::: {.boxcerebro}
+**Importante:** Esto es una prueba de **balance pre-tratamiento** (¿eran similares los grupos antes del programa?), **no** una prueba de tendencias paralelas (¿habrían tenido la misma trayectoria sin el programa?). Son dos cosas distintas. Un p-valor grande en el test de balance dice que los grupos eran similares en el periodo base, pero no dice nada sobre sus tendencias futuras.
+:::
 
 ---
 
@@ -357,7 +415,9 @@ Los dos métodos (regresión con interacción y primeras diferencias) entregan e
 | Segunda diferencia (entre grupos) | Tendencia temporal común | Tendencias paralelas |
 | **DiD** | Ambas | **Tendencias paralelas** |
 
-**El supuesto de tendencias paralelas no es verificable en el periodo de tratamiento, pero sí en periodos previos.** Siempre reporte el gráfico de tendencias pre-tratamiento como evidencia de validez.
+**El supuesto de tendencias paralelas no es verificable en el periodo de tratamiento.** Con múltiples periodos pre-tratamiento puede buscarse evidencia indirecta vía event study, pero con solo dos periodos eso es imposible.
+
+Las principales amenazas a la validez del DiD son: (1) políticas simultáneas que afectan diferencialmente a los grupos, (2) causalidad inversa o dip de Ashenfelter, (3) spillovers que contaminan el grupo de control, (4) anticipación que contamina el periodo base, y (5) atrición diferencial entre grupos.
 
 ---
 

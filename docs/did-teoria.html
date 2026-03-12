@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-03-11" />
+<meta name="date" content="2026-03-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -483,30 +483,50 @@ Los coeficientes <span class="math inline">\(\beta\)</span> y <span class="math 
 </div>
 <div id="prueba-de-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
 <h2>Prueba de tendencias paralelas<a href="did-teoria.html#prueba-de-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El supuesto de tendencias paralelas no es verificable en el periodo de tratamiento (no existe el contrafactual). Pero sí puede <strong>ponerse a prueba en periodos previos</strong>.</p>
-<p>Si los grupos tenían tendencias paralelas <em>antes</em> del tratamiento, ganamos confianza en que las habrían tenido en el periodo de tratamiento.</p>
-<p><strong>Prueba de pre-tendencias (event study):</strong></p>
-<p>Con múltiples periodos pre-tratamiento <span class="math inline">\(t = -k, \ldots, -1, 0, 1, \ldots\)</span>:</p>
+<p>El supuesto de tendencias paralelas <strong>no es verificable</strong> en el periodo de tratamiento: el contrafactual <span class="math inline">\(Y_{it}(0)\)</span> para los tratados en <span class="math inline">\(t=1\)</span> no existe. Solo podemos buscar evidencia indirecta.</p>
+<p><strong>Con múltiples periodos pre-tratamiento</strong> (y un identificador individual), es posible estimar una regresión de evento (<em>event study</em>):</p>
 <p><span class="math display">\[Y_{it} = \alpha_i + \lambda_t + \sum_{k \neq -1} \delta_k \cdot \mathbf{1}[t = k] \cdot D_i + \varepsilon_{it}\]</span></p>
-<ul>
-<li>Los <span class="math inline">\(\delta_k\)</span> para <span class="math inline">\(k &lt; 0\)</span> deben ser estadísticamente indistinguibles de cero.</li>
-<li>Si algún <span class="math inline">\(\delta_k &lt; 0\)</span> es significativo, hay evidencia de pre-tendencias diferenciales → el supuesto falla.</li>
-</ul>
+<p>Si los <span class="math inline">\(\delta_k\)</span> para <span class="math inline">\(k &lt; 0\)</span> son estadísticamente indistinguibles de cero, hay evidencia de que las tendencias eran paralelas antes del tratamiento.</p>
+<div class="boxcerebro">
+<p><strong>Advertencia importante:</strong> Coeficientes pre-tratamiento distintos de cero pueden indicar dos cosas distintas, y <strong>no es posible distinguirlas solo con los datos</strong>:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Tendencias paralelas fallidas</strong> — los grupos ya se movían de forma diferente antes del programa.</li>
+<li><strong>Efectos de anticipación</strong> — los agentes cambiaron su comportamiento al enterarse del programa, <em>antes</em> de que empezara.</li>
+</ol>
+<p>Siempre se necesita un argumento teórico para separar estos dos casos.</p>
+</div>
 <p><strong>Con solo dos periodos (como en nuestra base):</strong></p>
-<p>Solo podemos verificar que el nivel inicial difiere pero no la tendencia. La prueba completa requiere al menos tres periodos.</p>
+<p>Con un único periodo antes y uno después, la prueba de pre-tendencias es <strong>imposible</strong>: no hay periodos previos al “antes” con qué comparar. El gráfico de tendencias medias que construimos en Stata es una <em>visualización del DiD</em>, no una prueba del supuesto. Lo que nos dice es cuánto cambiaron los grupos, no si habrían tenido la misma tendencia en ausencia del programa.</p>
+<p>Para probar tendencias paralelas se necesitan <strong>al menos tres periodos</strong> y un identificador de individuo.</p>
 <hr />
 </div>
 <div id="amenazas-adicionales-a-la-validez" class="section level2 unnumbered hasAnchor">
 <h2>Amenazas adicionales a la validez<a href="did-teoria.html#amenazas-adicionales-a-la-validez" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Además de la violación de tendencias paralelas, DiD puede fallar por:</p>
-<p><strong>1. El dip de Ashenfelter (<em>Ashenfelter’s dip</em>)</strong>
-Los participantes fueron seleccionados justo cuando estaban en un punto bajo transitorio. Sin el programa, habrían subido de todas formas (regresión a la media). DiD sobre-estima el efecto.</p>
-<p><strong>2. Efectos de derrame (<em>spillovers</em>)</strong>
-Si el tratamiento afecta también al grupo de control (por competencia, contagio, o cambios de precios), el contrafactual se contamina y DiD puede subestimar el efecto.</p>
-<p><strong>3. Cambios en la composición de los grupos</strong>
-Si el tratamiento cambia quién permanece en la muestra (atrición diferencial), las medias post-tratamiento ya no son comparables.</p>
-<p><strong>4. SUTVA</strong>
-El resultado potencial de cada individuo debe ser independiente del tratamiento de los demás. Si hay interacciones entre individuos, SUTVA se viola.</p>
+<p>Además de la violación de tendencias paralelas, DiD puede fallar por cuatro razones principales:</p>
+<hr />
+<p><strong>1. Políticas simultáneas</strong></p>
+<p>Si durante el mismo periodo ocurre otro evento o política que afecta <strong>solo a uno de los dos grupos</strong>, el cambio que atribuimos al programa puede ser en realidad causado por ese otro factor.</p>
+<p><em>Ejemplo:</em> Evaluamos un programa de empleo para madres en una ciudad. Al mismo tiempo, esa ciudad anuncia una inversión en guarderías públicas. El grupo tratado mejora, pero no podemos saber cuánto fue el programa y cuánto fueron las guarderías.</p>
+<p><strong>¿Cómo detectarlo?</strong> Revisando el contexto histórico y verificando que no hubo shocks diferenciales entre grupos durante el periodo de evaluación.</p>
+<hr />
+<p><strong>2. Causalidad inversa</strong></p>
+<p>El supuesto de tendencias paralelas puede fallar si <strong>la selección al tratamiento depende de la trayectoria pasada del resultado</strong>. Si los participantes fueron elegidos (o se autoseleccionaron) precisamente porque su resultado estaba cayendo, habrían subido de todas formas sin el programa — lo que se conoce como el <strong>dip de Ashenfelter</strong>.</p>
+<p><em>Ejemplo:</em> Un programa de capacitación laboral selecciona trabajadores que recientemente perdieron el empleo. Su tasa de empleo era baja antes del programa, pero habría subido naturalmente con el tiempo. DiD sobreestima el efecto.</p>
+<p><strong>¿Cómo detectarlo?</strong> Con múltiples periodos pre-tratamiento: si el grupo tratado ya tenía una tendencia ascendente antes del programa, el dip es visible.</p>
+<hr />
+<p><strong>3. Spillovers (efectos de derrame)</strong></p>
+<p>Si el tratamiento de algunos individuos <strong>afecta el resultado de quienes están en el grupo de control</strong>, el contrafactual queda contaminado. El grupo de control ya no representa lo que le habría pasado al grupo tratado sin el programa.</p>
+<p><em>Ejemplo:</em> Un subsidio a la contratación en empresas tratadas puede desplazar trabajadores desde empresas de control hacia las tratadas. El empleo en control baja no porque el programa fracase, sino porque los trabajadores se mueven. DiD subestima el efecto real.</p>
+<p><strong>¿Cómo detectarlo?</strong> Verificando que tratados y controles estén suficientemente separados geográfica o institucionalmente para que no haya interacciones.</p>
+<hr />
+<p><strong>4. Anticipación</strong></p>
+<p>Si los agentes saben que el programa llegará, pueden cambiar su comportamiento <strong>antes</strong> de que empiece. Esto hace que el periodo “antes” del tratamiento ya esté contaminado, y el estimador DiD subestima el efecto verdadero.</p>
+<p><em>Ejemplo:</em> Se anuncia en enero un subsidio a la inversión que entrará en vigor en julio. Las empresas tratadas empiezan a invertir desde enero. En julio, la diferencia pre-post parece pequeña, aunque el programa tuvo un efecto real desde el anuncio.</p>
+<p><strong>¿Cómo detectarlo y corregirlo?</strong> Redefinir la fecha de tratamiento como la fecha del <strong>anuncio</strong>, no la de implementación. Con event studies, los coeficientes pre-tratamiento serán distintos de cero si hay anticipación — pero esto es observacionalmente equivalente a tendencias no paralelas (ver sección anterior).</p>
+<hr />
+<p><strong>5. Cambios en la composición de los grupos</strong></p>
+<p>Si el tratamiento cambia quién permanece en la muestra (atrición diferencial), las medias post-tratamiento ya no son comparables. Por ejemplo, si el programa provoca que los participantes más débiles abandonen el programa, el promedio post-tratamiento mejora mecánicamente.</p>
+<p><strong>¿Cómo detectarlo?</strong> Comparando tasas de atrición entre tratados y controles, y analizando si las características de los que se van difieren entre grupos.</p>
 <hr />
 </div>
 <div id="implementación-en-stata" class="section level2 unnumbered hasAnchor">
@@ -579,8 +599,9 @@ El resultado potencial de cada individuo debe ser independiente del tratamiento 
 <span id="cb89-16"><a href="did-teoria.html#cb89-16" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Tendencias medias por grupo&quot;</span>) <span class="co">///</span></span>
 <span id="cb89-17"><a href="did-teoria.html#cb89-17" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Periodo&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Talla-para-edad (z-score)&quot;</span>)</span>
 <span id="cb89-18"><a href="did-teoria.html#cb89-18" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div>
-<p><strong>¿Qué buscamos en este gráfico?</strong>
-Que las dos líneas sean aproximadamente paralelas en el periodo pre-tratamiento. Una pendiente diferente antes del programa ya sería evidencia de tendencias no paralelas.</p>
+<p><strong>¿Qué muestra este gráfico?</strong></p>
+<p>Con solo dos periodos, este gráfico <strong>no es una prueba de tendencias paralelas</strong> — es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y después, y permite ver intuitivamente de dónde viene el estimador. Para probar tendencias paralelas necesitaríamos al menos un periodo previo adicional y un identificador individual.</p>
+<p>Lo que sí podemos verificar con este gráfico: que los grupos se movieron de forma diferente (si las pendientes difieren, el DiD captura esa diferencia). Pero no podemos saber si esa diferencia se debe al programa o a una tendencia pre-existente que no alcanzamos a ver.</p>
 <hr />
 </div>
 <div id="comparación-de-medias-por-periodo" class="section level3 unnumbered hasAnchor">
@@ -624,19 +645,26 @@ Que las dos líneas sean aproximadamente paralelas en el periodo pre-tratamiento
 <h3>Usando el comando <code>diff</code><a href="did-teoria.html#usando-el-comando-diff" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb92"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb92-1"><a href="did-teoria.html#cb92-1" tabindex="-1"></a><span class="kw">ssc</span> install <span class="fu">diff</span>, <span class="kw">replace</span></span>
 <span id="cb92-2"><a href="did-teoria.html#cb92-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t)</span></code></pre></div>
-<p>El comando <code>diff</code> reporta directamente el estimador, su error estándar y el p-valor del test <span class="math inline">\(H_0: \delta = 0\)</span>.</p>
+<p>El comando <code>diff</code> reporta la tabla 2×2 completa (medias por grupo y periodo, primeras diferencias, y el estimador DiD) con su error estándar y el p-valor del test <span class="math inline">\(H_0: \delta = 0\)</span>.</p>
+<p><strong>La opción <code>test</code> de <code>diff</code>: prueba de balance, no de tendencias paralelas</strong></p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb93-1"><a href="did-teoria.html#cb93-1" tabindex="-1"></a>* <span class="kw">test</span> requiere especificar covariables con cov()</span>
+<span id="cb93-2"><a href="did-teoria.html#cb93-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t) <span class="kw">test</span> cov(orden_n)</span></code></pre></div>
+<p>La opción <code>test</code> corre <strong>t-tests de balance en el periodo base</strong> (<span class="math inline">\(t=0\)</span>), comparando tratados y controles en la variable de resultado y en las covariables especificadas. Lo que hace internamente es una regresión de cada variable sobre el indicador de tratamiento, restringida a <span class="math inline">\(t=0\)</span>.</p>
+<div class="boxcerebro">
+<p><strong>Importante:</strong> Esto es una prueba de <strong>balance pre-tratamiento</strong> (¿eran similares los grupos antes del programa?), <strong>no</strong> una prueba de tendencias paralelas (¿habrían tenido la misma trayectoria sin el programa?). Son dos cosas distintas. Un p-valor grande en el test de balance dice que los grupos eran similares en el periodo base, pero no dice nada sobre sus tendencias futuras.</p>
+</div>
 <hr />
 </div>
 <div id="implementación-con-regresión" class="section level3 unnumbered hasAnchor">
 <h3>Implementación con regresión<a href="#implementaci%C3%B3n-con-regresi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb93"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb93-1"><a href="did-teoria.html#cb93-1" tabindex="-1"></a>* Regresión DiD: <span class="fu">el</span> coeficiente <span class="kw">de</span> D#t es <span class="fu">el</span> estimador</span>
-<span id="cb93-2"><a href="did-teoria.html#cb93-2" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D##t, <span class="kw">robust</span></span>
-<span id="cb93-3"><a href="did-teoria.html#cb93-3" tabindex="-1"></a></span>
-<span id="cb93-4"><a href="did-teoria.html#cb93-4" tabindex="-1"></a>* Verificación: comparar con cálculo manual</span>
-<span id="cb93-5"><a href="did-teoria.html#cb93-5" tabindex="-1"></a>* <span class="kw">alpha</span>      = y_c0</span>
-<span id="cb93-6"><a href="did-teoria.html#cb93-6" tabindex="-1"></a>* beta (D)   = y_t0 - y_c0  (diferencia pre-tratamiento)</span>
-<span id="cb93-7"><a href="did-teoria.html#cb93-7" tabindex="-1"></a>* <span class="kw">gamma</span> (t)  = y_c1 - y_c0  (tendencia <span class="kw">de</span> los controles)</span>
-<span id="cb93-8"><a href="did-teoria.html#cb93-8" tabindex="-1"></a>* delta (D#t) = DD           (estimador DiD)</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="did-teoria.html#cb94-1" tabindex="-1"></a>* Regresión DiD: <span class="fu">el</span> coeficiente <span class="kw">de</span> D#t es <span class="fu">el</span> estimador</span>
+<span id="cb94-2"><a href="did-teoria.html#cb94-2" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D##t, <span class="kw">robust</span></span>
+<span id="cb94-3"><a href="did-teoria.html#cb94-3" tabindex="-1"></a></span>
+<span id="cb94-4"><a href="did-teoria.html#cb94-4" tabindex="-1"></a>* Verificación: comparar con cálculo manual</span>
+<span id="cb94-5"><a href="did-teoria.html#cb94-5" tabindex="-1"></a>* <span class="kw">alpha</span>      = y_c0</span>
+<span id="cb94-6"><a href="did-teoria.html#cb94-6" tabindex="-1"></a>* beta (D)   = y_t0 - y_c0  (diferencia pre-tratamiento)</span>
+<span id="cb94-7"><a href="did-teoria.html#cb94-7" tabindex="-1"></a>* <span class="kw">gamma</span> (t)  = y_c1 - y_c0  (tendencia <span class="kw">de</span> los controles)</span>
+<span id="cb94-8"><a href="did-teoria.html#cb94-8" tabindex="-1"></a>* delta (D#t) = DD           (estimador DiD)</span></code></pre></div>
 <p><strong>Interpretación del resultado:</strong></p>
 <p>El coeficiente de <code>D#t</code> (la interacción) es el estimador DiD. En esta base estima un efecto de aproximadamente <strong>+0.18 desviaciones estándar</strong> en la talla-para-edad, significativo al 5%. Bajo el supuesto de tendencias paralelas, ese es el efecto causal del programa sobre los niños tratados.</p>
 <hr />
@@ -645,14 +673,14 @@ Que las dos líneas sean aproximadamente paralelas en el periodo pre-tratamiento
 <h3>Extensión con panel y primeras diferencias<a href="#extensi%C3%B3n-con-panel-y-primeras-diferencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Con datos de panel, el estimador DiD es equivalente a una regresión en <strong>primeras diferencias</strong>:</p>
 <p><span class="math display">\[\Delta Y_i = \delta D_i + \Delta \varepsilon_i\]</span></p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="did-teoria.html#cb94-1" tabindex="-1"></a>* Crear identificador individual (panel balanceado: 4000 niños x 2 periodos)</span>
-<span id="cb94-2"><a href="did-teoria.html#cb94-2" tabindex="-1"></a><span class="kw">sort</span> t orden_n</span>
-<span id="cb94-3"><a href="did-teoria.html#cb94-3" tabindex="-1"></a><span class="kw">by</span> t: <span class="kw">gen</span> id = <span class="dt">_n</span></span>
-<span id="cb94-4"><a href="did-teoria.html#cb94-4" tabindex="-1"></a></span>
-<span id="cb94-5"><a href="did-teoria.html#cb94-5" tabindex="-1"></a>xtset id t</span>
-<span id="cb94-6"><a href="did-teoria.html#cb94-6" tabindex="-1"></a></span>
-<span id="cb94-7"><a href="did-teoria.html#cb94-7" tabindex="-1"></a>* Primeras diferencias = DiD en panel balanceado <span class="kw">de</span> 2 periodos</span>
-<span id="cb94-8"><a href="did-teoria.html#cb94-8" tabindex="-1"></a><span class="kw">reg</span> D.<span class="fu">y</span> D.D</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="did-teoria.html#cb95-1" tabindex="-1"></a>* Crear identificador individual (panel balanceado: 4000 niños x 2 periodos)</span>
+<span id="cb95-2"><a href="did-teoria.html#cb95-2" tabindex="-1"></a><span class="kw">sort</span> t orden_n</span>
+<span id="cb95-3"><a href="did-teoria.html#cb95-3" tabindex="-1"></a><span class="kw">by</span> t: <span class="kw">gen</span> id = <span class="dt">_n</span></span>
+<span id="cb95-4"><a href="did-teoria.html#cb95-4" tabindex="-1"></a></span>
+<span id="cb95-5"><a href="did-teoria.html#cb95-5" tabindex="-1"></a>xtset id t</span>
+<span id="cb95-6"><a href="did-teoria.html#cb95-6" tabindex="-1"></a></span>
+<span id="cb95-7"><a href="did-teoria.html#cb95-7" tabindex="-1"></a>* Primeras diferencias = DiD en panel balanceado <span class="kw">de</span> 2 periodos</span>
+<span id="cb95-8"><a href="did-teoria.html#cb95-8" tabindex="-1"></a><span class="kw">reg</span> D.<span class="fu">y</span> D.D</span></code></pre></div>
 <p>Los dos métodos (regresión con interacción y primeras diferencias) entregan el mismo estimador cuando hay exactamente dos periodos y el panel es balanceado.</p>
 <hr />
 </div>
@@ -690,7 +718,8 @@ Que las dos líneas sean aproximadamente paralelas en el periodo pre-tratamiento
 </tr>
 </tbody>
 </table>
-<p><strong>El supuesto de tendencias paralelas no es verificable en el periodo de tratamiento, pero sí en periodos previos.</strong> Siempre reporte el gráfico de tendencias pre-tratamiento como evidencia de validez.</p>
+<p><strong>El supuesto de tendencias paralelas no es verificable en el periodo de tratamiento.</strong> Con múltiples periodos pre-tratamiento puede buscarse evidencia indirecta vía event study, pero con solo dos periodos eso es imposible.</p>
+<p>Las principales amenazas a la validez del DiD son: (1) políticas simultáneas que afectan diferencialmente a los grupos, (2) causalidad inversa o dip de Ashenfelter, (3) spillovers que contaminan el grupo de control, (4) anticipación que contamina el periodo base, y (5) atrición diferencial entre grupos.</p>
 <hr />
 <div class="boxejercicio">
 <p><strong>✍️ Ejercicio</strong></p>
