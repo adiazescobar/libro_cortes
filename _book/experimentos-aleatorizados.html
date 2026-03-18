@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 5 Experimentos Aleatorizados | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 5 Experimentos Aleatorizados | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 5 Experimentos Aleatorizados | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 5 Experimentos Aleatorizados | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2026-03-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="parametros-causales-stata.html"/>
+<link rel="next" href="experimentos-aleatorizados-en-stata.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#puntaje-automatico"><i class="fa fa-check"></i>Puntaje (automatico)</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Intro</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#formulando-una-buena-pregunta-causal"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="05-RCT.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html"><i class="fa fa-check"></i><b>3</b> Parámetros Causales (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html"><i class="fa fa-check"></i><b>4</b> Parámetros Causales en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html"><i class="fa fa-check"></i><b>5</b> Experimentos Aleatorizados</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n-m%C3%ADnima-para-todo-el-m%C3%B3dulo"><i class="fa fa-check"></i>Notación mínima para todo el módulo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto"><i class="fa fa-check"></i>¿En regresión lineal cómo se ve esto?</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>1) RCT simple, sin estratos, sin controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>2) RCT simple, sin estratos, con controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>3) RCT estratificado (bloques), sin controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>4) RCT estratificado + controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html"><i class="fa fa-check"></i><b>6</b> Experimentos Aleatorizados en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#sin-controles"><i class="fa fa-check"></i>Sin controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-puede-salir-mal-en-un-rct"><i class="fa fa-check"></i>Qué puede salir mal en un RCT</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#ejercicio-aplicado-bertrand-y-mullainathan-2004"><i class="fa fa-check"></i>Ejercicio aplicado: Bertrand y Mullainathan (2004)</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>8</b> Diferencias en Diferencias</a>
+<ul>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-problema-que-did-resuelve"><i class="fa fa-check"></i>El problema que DiD resuelve</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#la-tabla-22"><i class="fa fa-check"></i>La tabla 2×2</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#resultados-potenciales-y-el-att"><i class="fa fa-check"></i>Resultados potenciales y el ATT</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas"><i class="fa fa-check"></i>Identificación del ATT bajo tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-regresi%C3%B3n-did"><i class="fa fa-check"></i>La regresión DiD</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#prueba-de-tendencias-paralelas"><i class="fa fa-check"></i>Prueba de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#ejercicio-con-datos"><i class="fa fa-check"></i>Ejercicio con datos</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>9</b> Malos Controles (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>La demostración formal: sesgo de agrupación</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>10</b> Malos Controles: Código y Simulaciones</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#la-idea-central-controlar-no-siempre-ayuda"><i class="fa fa-check"></i>La idea central: controlar no siempre ayuda</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#buen-control-vs.-mal-control-la-diferencia-en-una-imagen"><i class="fa fa-check"></i>Buen control vs. mal control: la diferencia en una imagen</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-1-post-tratamiento-mediador"><i class="fa fa-check"></i>Caso 1: Post-tratamiento / mediador</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-2-colisionador-selecci%C3%B3n-end%C3%B3gena"><i class="fa fa-check"></i>Caso 2: Colisionador / selección endógena</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-3-proxy-contaminado"><i class="fa fa-check"></i>Caso 3: Proxy contaminado</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#tabla-resumen-los-tres-casos"><i class="fa fa-check"></i>Tabla resumen: los tres casos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-antes-de-agregar-un-control-a-la-regresi%C3%B3n"><i class="fa fa-check"></i>Checklist antes de agregar un control a la regresión</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#descarga-los-archivos"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html"><i class="fa fa-check"></i><b>11</b> TWFE y DiD Moderno en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido"><i class="fa fa-check"></i>Contexto rápido</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#modelo-b%C3%A1sico-22-did"><i class="fa fa-check"></i>Modelo básico 2×2 DiD</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-2-unidades-y-tratamiento-desde-un-a%C3%B1o-en-adelante"><i class="fa fa-check"></i>Panel largo con 2 unidades y tratamiento “desde un año en adelante”</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i>¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i>¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i>¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="11.1" data-path="05-RCT.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>11.1</b> 8) Notas prácticas de ejecución</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="experimentos-aleatorizados" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Capitulo 5</span> Experimentos Aleatorizados<a href="experimentos-aleatorizados.html#experimentos-aleatorizados" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="boxinfo">
+<p><strong>Objetivo del capítulo</strong></p>
+<ul>
+<li>Entender por qué la aleatorización elimina el sesgo de selección</li>
+<li>Formalizar la notación de resultados potenciales (ATE, CATE)</li>
+<li>Traducir resultados potenciales a regresiones lineales en cuatro escenarios de diseño</li>
+<li>Comprender cuándo y por qué incluir controles y estratos</li>
+</ul>
+<div id="lecturas" class="section level3 unnumbered hasAnchor">
+<h3>Lecturas<a href="experimentos-aleatorizados.html#lecturas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Paper Alert:</strong> <a href="https://www.nber.org/papers/w24003">When Should You Adjust Standard Errors for Clustering? (NBER)</a></li>
+<li><strong>Teoría:</strong> <a href="https://www.dropbox.com/s/vxpgxt22pvphwx3/Capitulo%204%20Bernal%20y%20Pe%C3%B1a.pdf?dl=0">Lectura 4. Capítulo 4 Bernal y Peña (PDF)</a></li>
+</ul>
+</div>
+</div>
+<div id="notación-mínima-para-todo-el-módulo" class="section level2 unnumbered hasAnchor">
+<h2>Notación mínima para todo el módulo<a href="#notaci%C3%B3n-m%C3%ADnima-para-todo-el-m%C3%B3dulo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Antes de avanzar, fijemos la notación que usaremos en todo el módulo de experimentos:</p>
+<ul>
+<li><span class="math inline">\(Y_i\)</span>: resultado (outcome).</li>
+<li><span class="math inline">\(D_i \in \{0,1\}\)</span>: asignación aleatoria al tratamiento (1 = tratado, 0 = control).</li>
+<li><span class="math inline">\(X_i\)</span>: controles <strong>pre-tratamiento</strong> (baseline).</li>
+<li><span class="math inline">\(S_i\)</span>: estrato/bloque (vector de dummies de estratificación).</li>
+</ul>
+<p><strong>Resultados potenciales:</strong></p>
+<ul>
+<li><span class="math inline">\(Y_i(D=1)\)</span>: resultado si <span class="math inline">\(i\)</span> recibe tratamiento.</li>
+<li><span class="math inline">\(Y_i(D=0)\)</span>: resultado si <span class="math inline">\(i\)</span> está en control.</li>
+</ul>
+<p>El <strong>problema fundamental</strong> de la inferencia causal es que para cada individuo solo observamos uno de los dos:</p>
+<p><span class="math display">\[
+Y_i = D_i \cdot Y_i(D=1) + (1-D_i) \cdot Y_i(D=0)
+\]</span></p>
+<p><strong>Efectos:</strong></p>
+<ul>
+<li><p><strong>ATE (Average Treatment Effect):</strong> efecto promedio en <strong>toda</strong> la población.
+<span class="math display">\[
+ATE = \mathbb{E}[Y_i(D=1)-Y_i(D=0)]
+\]</span></p></li>
+<li><p><strong>ATT (Average Treatment Effect on the Treated):</strong> efecto promedio entre quienes <strong>reciben</strong> tratamiento.
+<span class="math display">\[
+ATT = \mathbb{E}[Y_i(D=1)-Y_i(D=0) \mid D_i=1]
+\]</span></p></li>
+<li><p><strong>ATU (Average Treatment Effect on the Untreated):</strong> efecto promedio entre quienes <strong>no reciben</strong> tratamiento.
+<span class="math display">\[
+ATU = \mathbb{E}[Y_i(D=1)-Y_i(D=0) \mid D_i=0]
+\]</span></p></li>
+<li><p><strong>CATE (efecto promedio condicional):</strong>
+<span class="math display">\[
+CATE(x) = \mathbb{E}[Y_i(D=1)-Y_i(D=0) \mid X_i=x]
+\]</span></p></li>
+</ul>
+<p>Nota: en general <span class="math inline">\(ATE \neq ATT \neq ATU\)</span>. Por ejemplo, si un programa de capacitación laboral beneficia más a quienes lo eligen voluntariamente (porque están más motivados), entonces <span class="math inline">\(ATT &gt; ATU\)</span>. Sin embargo, en un <strong>RCT con asignación aleatoria</strong>, la independencia <span class="math inline">\(D_i \perp (Y_i(D=1), Y_i(D=0))\)</span> garantiza que:</p>
+<p><span class="math display">\[
+ATE = ATT = ATU
+\]</span></p>
+<p>porque los grupos de tratamiento y control son, en promedio, idénticos en todo (observable y no observable).</p>
+<hr />
+<div id="de-la-motivación-a-los-resultados-potenciales" class="section level3 unnumbered hasAnchor">
+<h3>De la motivación a los resultados potenciales<a href="#de-la-motivaci%C3%B3n-a-los-resultados-potenciales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Veamos un ejemplo concreto. Supongamos que el tratamiento es un <strong>programa de capacitación</strong> y el outcome es el <strong>salario</strong>:</p>
+<ul>
+<li><span class="math inline">\(Y_i(D=1)\)</span>: salario de <span class="math inline">\(i\)</span> si recibe capacitación.</li>
+<li><span class="math inline">\(Y_i(D=0)\)</span>: salario de <span class="math inline">\(i\)</span> si no recibe capacitación.</li>
+</ul>
+<p>Lo que observamos es la <strong>diferencia de medias</strong> entre tratados y controles:</p>
+<p><span class="math display">\[
+\underbrace{\mathbb{E}[Y_i \mid D_i=1] - \mathbb{E}[Y_i \mid D_i=0]}_{\text{diferencia observada}}
+\]</span></p>
+<p>Podemos descomponer esta diferencia sumando y restando <span class="math inline">\(\mathbb{E}[Y_i(D=0) \mid D_i=1]\)</span>:</p>
+<p><span class="math display">\[
+\mathbb{E}[Y_i(D=1) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=0]
+\]</span>
+<span class="math display">\[
+= \underbrace{\mathbb{E}[Y_i(D=1) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=1]}_{ATT} + \underbrace{\mathbb{E}[Y_i(D=0) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=0]}_{\text{sesgo de selección}}
+\]</span></p>
+<p><strong>Interpretación del sesgo de selección:</strong></p>
+<p>El término <span class="math inline">\(\mathbb{E}[Y_i(D=0) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=0]\)</span> compara el salario <strong>sin capacitación</strong> entre quienes eligen capacitarse y quienes no. En nuestro ejemplo:</p>
+<ul>
+<li>Las personas más motivadas eligen capacitarse (<span class="math inline">\(D_i=1\)</span>).</li>
+<li>Pero la motivación <strong>también</strong> aumenta el salario, incluso sin capacitación.</li>
+<li>Por lo tanto <span class="math inline">\(\mathbb{E}[Y_i(D=0) \mid D_i=1] &gt; \mathbb{E}[Y_i(D=0) \mid D_i=0]\)</span>: los tratados habrían ganado más <strong>de todas formas</strong>.</li>
+<li>Esto genera un sesgo <strong>positivo</strong>: atribuimos a la capacitación algo que en realidad es motivación.</li>
+</ul>
+<p><strong>¿Qué hace la aleatorización?</strong></p>
+<p>Al asignar <span class="math inline">\(D_i\)</span> al azar, garantizamos que los grupos sean comparables <strong>antes</strong> del tratamiento:</p>
+<p><span class="math display">\[
+D_i \perp (Y_i(D=1), Y_i(D=0)) \implies \mathbb{E}[Y_i(D=0) \mid D_i=1] = \mathbb{E}[Y_i(D=0) \mid D_i=0]
+\]</span></p>
+<p>El sesgo de selección se hace <strong>cero</strong>, y la diferencia observada identifica directamente el efecto causal:</p>
+<p><span class="math display">\[
+\mathbb{E}[Y_i \mid D_i=1] - \mathbb{E}[Y_i \mid D_i=0] = ATT = ATE
+\]</span></p>
+<p><img src="05-RCT_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+</div>
+<div id="en-regresión-lineal-cómo-se-ve-esto" class="section level2 unnumbered hasAnchor">
+<h2>¿En regresión lineal cómo se ve esto?<a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Lo que acabamos de ver con resultados potenciales (la descomposición ATT + sesgo de selección) tiene un equivalente directo en el lenguaje de regresión: el <strong>sesgo por variable omitida</strong>. Veamos cómo se conectan.</p>
+<p>Tenemos el siguiente modelo de regresión lineal:</p>
+<p><span class="math display">\[
+Y = \alpha + \tau D + \varepsilon
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(Y\)</span> es el resultado (por ejemplo, salario),</li>
+<li><span class="math inline">\(D\)</span> es una variable binaria de tratamiento,</li>
+<li><span class="math inline">\(\varepsilon\)</span> incluye <strong>motivación</strong>, que no observamos.</li>
+</ul>
+<p>Supongamos que la verdadera relación es:</p>
+<p><span class="math display">\[
+Y = \alpha + \tau D + \gamma M + u
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(M\)</span> es motivación (no observable),</li>
+<li><span class="math inline">\(u\)</span> es un nuevo error sin correlación con <span class="math inline">\(D\)</span>,</li>
+<li>Pero <strong>no incluimos</strong> <span class="math inline">\(M\)</span> en la estimación → queda absorbido en <span class="math inline">\(\varepsilon = \gamma M + u\)</span></li>
+</ul>
+<p>El modelo estimado es:</p>
+<p><span class="math display">\[
+Y = \alpha + \tau D + \varepsilon \quad \text{con} \quad \varepsilon = \gamma M + u
+\]</span></p>
+<p>Recordemos que el estimador de mínimos cuadrados ordinarios es:</p>
+<p><span class="math display">\[
+\hat{\beta} = (X&#39;X)^{-1} X&#39;Y
+\]</span></p>
+<p>Con <span class="math inline">\(X = [\mathbf{1}, D]\)</span>, tenemos:</p>
+<p><span class="math display">\[
+\hat{\beta} =
+\begin{bmatrix}
+\hat{\alpha} \\
+\hat{\tau}
+\end{bmatrix}
+=
+\left( \begin{bmatrix}
+1 &amp; D_1 \\
+\vdots &amp; \vdots \\
+1 &amp; D_n \\
+\end{bmatrix}&#39;
+\begin{bmatrix}
+1 &amp; D_1 \\
+\vdots &amp; \vdots \\
+1 &amp; D_n \\
+\end{bmatrix} \right)^{-1}
+\begin{bmatrix}
+1 &amp; D_1 \\
+\vdots &amp; \vdots \\
+1 &amp; D_n \\
+\end{bmatrix}&#39; Y
+\]</span></p>
+<p>Queremos analizar el <strong>sesgo</strong> en <span class="math inline">\(\hat{\tau}\)</span>. Sustituyendo <span class="math inline">\(Y = \alpha + \tau D + \gamma M + u\)</span></p>
+<p>Entonces:</p>
+<p><span class="math display">\[
+\hat{\tau} = \tau + \gamma \cdot \frac{\text{Cov}(D, M)}{\text{Var}(D)}
+\]</span></p>
+<p>Interpretación</p>
+<ul>
+<li>Si <span class="math inline">\(\text{Cov}(D, M) \neq 0\)</span>, es decir, <strong>si el tratamiento está correlacionado con la motivación</strong>, el estimador de <span class="math inline">\(\tau\)</span> estará <strong>sesgado</strong>.</li>
+<li>El sesgo es proporcional a:
+<ul>
+<li>El efecto de la motivación sobre <span class="math inline">\(Y\)</span>: <span class="math inline">\(\gamma\)</span></li>
+<li>La correlación entre <span class="math inline">\(D\)</span> y <span class="math inline">\(M\)</span>: <span class="math inline">\(\text{Cov}(D, M)\)</span></li>
+</ul></li>
+</ul>
+<p><strong>Resumen del sesgo</strong></p>
+<div class="table table-bordered table-striped">
+<table style="width:100%;">
+<colgroup>
+<col width="23%" />
+<col width="31%" />
+<col width="21%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Correlación entre <span class="math inline">\(D\)</span> y <span class="math inline">\(M\)</span></th>
+<th align="center">Efecto de <span class="math inline">\(M\)</span> sobre <span class="math inline">\(Y\)</span> (<span class="math inline">\(\gamma\)</span>)</th>
+<th align="center">¿Hay sesgo en <span class="math inline">\(\hat{\tau}\)</span>?</th>
+<th align="center">Dirección esperada del sesgo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Cero</td>
+<td align="center">Cualquiera</td>
+<td align="center">No</td>
+<td align="center">–</td>
+</tr>
+<tr class="even">
+<td align="center">Positiva</td>
+<td align="center">Positiva</td>
+<td align="center">Sí</td>
+<td align="center"><span class="math inline">\(\hat{\tau} &gt; \tau\)</span> (sesgo hacia arriba)</td>
+</tr>
+<tr class="odd">
+<td align="center">Positiva</td>
+<td align="center">Negativa</td>
+<td align="center">Sí</td>
+<td align="center"><span class="math inline">\(\hat{\tau} &lt; \tau\)</span> (sesgo hacia abajo)</td>
+</tr>
+<tr class="even">
+<td align="center">Negativa</td>
+<td align="center">Positiva</td>
+<td align="center">Sí</td>
+<td align="center"><span class="math inline">\(\hat{\tau} &lt; \tau\)</span> (sesgo hacia abajo)</td>
+</tr>
+<tr class="odd">
+<td align="center">Negativa</td>
+<td align="center">Negativa</td>
+<td align="center">Sí</td>
+<td align="center"><span class="math inline">\(\hat{\tau} &gt; \tau\)</span> (sesgo hacia arriba)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Lectura de la tabla</strong>:</p>
+<ul>
+<li>Si el tratamiento está <strong>correlacionado positivamente</strong> con la motivación y la motivación <strong>aumenta</strong> el resultado, el estimador de <span class="math inline">\(\tau\)</span> estará <strong>sesgado hacia arriba</strong>.</li>
+<li>Si la motivación está <strong>omitida</strong> y además está <strong>correlacionada con el tratamiento</strong>, siempre hay <strong>sesgo</strong>.</li>
+<li>Solo si la <strong>motivación no está correlacionada con el tratamiento</strong>, aunque no la observemos, <strong>no hay sesgo</strong>.</li>
+</ul>
+<div id="qué-hace-la-aleatorización" class="section level3 unnumbered hasAnchor">
+<h3>¿Qué hace la aleatorización?<a href="#qu%C3%A9-hace-la-aleatorizaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La <strong>aleatorización</strong> garantiza <span class="math inline">\(\text{Cov}(D, M) = 0\)</span>, eliminando el sesgo de selección sin necesidad de observar <span class="math inline">\(M\)</span>.</p>
+<p><em>Visualización: motivación, selección y aleatorización</em></p>
+<p><img src="05-RCT_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="densidad-de-la-motivación-por-grupo" class="section level3 unnumbered hasAnchor">
+<h3>Densidad de la motivación por grupo<a href="#densidad-de-la-motivaci%C3%B3n-por-grupo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><img src="05-RCT_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Por lo tanto ya no es necesario observar la motivación, ya que la aleatorización garantiza que los grupos sean comparables. Esto es exactamente lo mismo que vimos con resultados potenciales: el sesgo de selección <span class="math inline">\(\mathbb{E}[Y_i(D=0) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=0]\)</span> se hace cero, y en regresión <span class="math inline">\(\text{Cov}(D,M) = 0\)</span>. Son dos caras de la misma moneda.</p>
+<p>Ahora veamos cómo esto se traduce a regresión en cuatro escenarios de diseño experimental, de lo más simple a lo más completo.</p>
+<hr />
+</div>
+</div>
+<div id="rct-simple-sin-estratos-sin-controles" class="section level2 unnumbered hasAnchor">
+<h2>1) RCT simple, sin estratos, sin controles<a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-sin-controles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Objetivo:</strong> identificación “pura” por aleatorización.</p>
+<p><strong>Estimador (diferencia de medias):</strong></p>
+<p><span class="math display">\[
+\widehat{ATE} = \bar{Y}_1 - \bar{Y}_0
+\]</span></p>
+<p>donde <span class="math inline">\(\bar{Y}_1\)</span> es el promedio de <span class="math inline">\(Y\)</span> en tratados y <span class="math inline">\(\bar{Y}_0\)</span> el promedio en controles.</p>
+<p><strong>Regresión equivalente:</strong></p>
+<p><span class="math display">\[
+Y_i = \alpha + \tau D_i + u_i
+\]</span></p>
+<p>Aquí <span class="math inline">\(\hat{\tau} = \bar{Y}_1 - \bar{Y}_0\)</span>. Es decir, el coeficiente de OLS sobre la dummy de tratamiento reproduce exactamente la diferencia de medias.</p>
+<div class="boxnote">
+<p><strong>Mensaje clave:</strong> en un RCT, no “necesitas controles” para que el estimador sea causal; la aleatorización garantiza comparabilidad entre grupos. La regresión simple es suficiente para identificar el ATE.</p>
+</div>
+<p><img src="05-RCT_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="rct-simple-sin-estratos-con-controles" class="section level2 unnumbered hasAnchor">
+<h2>2) RCT simple, sin estratos, con controles<a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-con-controles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Objetivo:</strong> misma identificación causal, mayor <strong>precisión</strong>.</p>
+<p><span class="math display">\[
+Y_i = \alpha + \tau D_i + \beta&#39; X_i + u_i
+\]</span></p>
+<p><strong>Puntos clave:</strong></p>
+<ul>
+<li><span class="math inline">\(\hat{\tau}\)</span> <strong>sigue siendo causal</strong> (la asignación es aleatoria, incluir <span class="math inline">\(X_i\)</span> no cambia eso).</li>
+<li><span class="math inline">\(X_i\)</span> se incluye para <strong>reducir la varianza residual</strong>: si <span class="math inline">\(X_i\)</span> predice <span class="math inline">\(Y_i\)</span>, absorbe parte de la variación no explicada y los errores estándar de <span class="math inline">\(\hat{\tau}\)</span> se reducen.</li>
+<li>Los controles ideales son <strong>baseline</strong> (pre-tratamiento). Hay que evitar “malos controles”: variables que fueron <strong>afectadas</strong> por el tratamiento.</li>
+</ul>
+<div class="boxnote">
+<p><strong>Mensaje clave:</strong> controles en un RCT son principalmente para <strong>eficiencia</strong> (intervalos de confianza más estrechos), no para “corregir sesgo”. El sesgo ya fue eliminado por la aleatorización.</p>
+</div>
+<p><img src="05-RCT_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="rct-estratificado-bloques-sin-controles-adicionales" class="section level2 unnumbered hasAnchor">
+<h2>3) RCT estratificado (bloques), sin controles adicionales<a href="experimentos-aleatorizados.html#rct-estratificado-bloques-sin-controles-adicionales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Objetivo:</strong> respetar el diseño experimental y ganar precisión.</p>
+<p>Si la asignación fue aleatoria <strong>dentro de estratos</strong> <span class="math inline">\(S\)</span>, la especificación estándar es:</p>
+<p><span class="math display">\[
+Y_i = \alpha + \tau D_i + \delta&#39; S_i + u_i
+\]</span></p>
+<p><strong>Puntos clave:</strong></p>
+<ul>
+<li>Incluir dummies de estrato suele <strong>mejorar la precisión</strong> porque captura diferencias sistemáticas entre bloques.</li>
+<li>Alinea el análisis con el diseño: si la aleatorización fue <strong>dentro</strong> de estratos, el análisis debe <strong>condicionar</strong> en ellos.</li>
+<li>Omitir los estratos no sesga <span class="math inline">\(\hat{\tau}\)</span>, pero puede hacerlo <strong>menos preciso</strong> y los errores estándar pueden ser incorrectos.</li>
+</ul>
+<div class="boxnote">
+<p><strong>Mensaje clave:</strong> si estratificaste la asignación, <strong>controla por estratos</strong> en el análisis. Es coherencia entre diseño y estimación.</p>
+</div>
+<p><img src="05-RCT_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="rct-estratificado-controles-adicionales" class="section level2 unnumbered hasAnchor">
+<h2>4) RCT estratificado + controles adicionales<a href="experimentos-aleatorizados.html#rct-estratificado-controles-adicionales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Objetivo:</strong> máxima precisión manteniendo interpretación causal.</p>
+<p><span class="math display">\[
+Y_i = \alpha + \tau D_i + \delta&#39; S_i + \beta&#39; X_i + u_i
+\]</span></p>
+<p>Aquí combinamos:</p>
+<ul>
+<li><strong>Dummies de estrato</strong> <span class="math inline">\(S_i\)</span>: porque el diseño lo requiere (la aleatorización fue dentro de estratos).</li>
+<li><strong>Controles baseline</strong> <span class="math inline">\(X_i\)</span>: porque mejoran la precisión (absorben varianza residual).</li>
+</ul>
+<div class="boxnote">
+<p><strong>Mensaje clave:</strong> efectos fijos de estrato “por diseño” + controles baseline “por eficiencia”. Es la especificación más completa y la que típicamente se reporta en papers experimentales.</p>
+</div>
+<p><strong>Resumen de los cuatro escenarios:</strong></p>
+<div class="table table-bordered table-striped">
+<table>
+<colgroup>
+<col width="38%" />
+<col width="30%" />
+<col width="30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Escenario</th>
+<th align="left">Regresión</th>
+<th align="left">¿Por qué?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + u_i\)</span></td>
+<td align="left">Identificación pura por aleatorización</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \beta&#39; X_i + u_i\)</span></td>
+<td align="left">+ precisión con controles baseline</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \delta&#39; S_i + u_i\)</span></td>
+<td align="left">Respetar diseño estratificado</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \delta&#39; S_i + \beta&#39; X_i + u_i\)</span></td>
+<td align="left">Diseño + eficiencia (especificación completa)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>En los cuatro casos, <span class="math inline">\(\hat{\tau}\)</span> estima el <strong>ATE</strong> de forma consistente. Lo que cambia es la <strong>precisión</strong>.</p>
+<hr />
+</div>
+<div id="puente-a-heterogeneidad-efectos-diferenciados-cate" class="section level2 unnumbered hasAnchor">
+<h2>Puente a heterogeneidad: efectos diferenciados (CATE)<a href="experimentos-aleatorizados.html#puente-a-heterogeneidad-efectos-diferenciados-cate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Hasta ahora hemos estimado un efecto <strong>promedio</strong> <span class="math inline">\(\tau\)</span>. Pero en muchos contextos queremos saber si el tratamiento tiene <strong>efectos diferentes</strong> según alguna característica observable <span class="math inline">\(Z_i\)</span> (por ejemplo, género, edad, nivel educativo).</p>
+<p>Para esto usamos una <strong>interacción</strong>:</p>
+<p><span class="math display">\[
+Y_i = \alpha + \tau D_i + \theta Z_i + \gamma (D_i \cdot Z_i) + u_i
+\]</span></p>
+<p>(Si aplica, se agregan <span class="math inline">\(\delta&#39; S_i + \beta&#39; X_i\)</span> como antes.)</p>
+<p><strong>Interpretación:</strong></p>
+<ul>
+<li>Efecto para <span class="math inline">\(Z = 0\)</span>: <span class="math inline">\(\tau\)</span></li>
+<li>Efecto para <span class="math inline">\(Z = 1\)</span>: <span class="math inline">\(\tau + \gamma\)</span></li>
+<li><span class="math inline">\(\gamma\)</span> mide la <strong>diferencia</strong> en el efecto del tratamiento entre los dos grupos.</li>
+</ul>
+<p><strong>ATE (promedio):</strong> <span class="math inline">\(\tau + \gamma \cdot \mathbb{E}[Z]\)</span></p>
+<div id="el-truco-de-centrar-wooldridge" class="section level3 unnumbered hasAnchor">
+<h3>El truco de centrar (Wooldridge)<a href="experimentos-aleatorizados.html#el-truco-de-centrar-wooldridge" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Si definimos <span class="math inline">\(Z_c = Z - \bar{Z}\)</span> y estimamos la regresión con <span class="math inline">\(D_i \cdot Z_c\)</span> en lugar de <span class="math inline">\(D_i \cdot Z_i\)</span>:</p>
+<p><span class="math display">\[
+Y_i = \alpha + \tau D_i + \theta Z_{c,i} + \gamma (D_i \cdot Z_{c,i}) + u_i
+\]</span></p>
+<p>entonces el coeficiente <span class="math inline">\(\tau\)</span> <strong>es directamente el ATE</strong>, porque <span class="math inline">\(\mathbb{E}[Z_c] = 0\)</span>.</p>
+<div class="boxnote">
+<p><strong>Mensaje clave:</strong> si interactúas el tratamiento con una covariable, <strong>centra la covariable</strong> para que el coeficiente de <span class="math inline">\(D\)</span> siga siendo directamente interpretable como el ATE promedio. Sin centrar, <span class="math inline">\(\tau\)</span> solo es el efecto para el grupo con <span class="math inline">\(Z = 0\)</span>.</p>
+</div>
+<p><img src="05-RCT_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<hr />
+<div class="boxvideo green" title="Videos recomendados:">
+<ul>
+<li><a href="https://www.youtube.com/embed/eGRd8jBdNYg">Video 1</a></li>
+<li><a href="https://www.youtube.com/embed/crpuBZv6XtA">Video 2</a></li>
+<li><a href="https://www.youtube.com/embed/xlX3VtuIfQ0">Video 3</a></li>
+</ul>
+<p>Y todos los que encuentres en Google buscando: <strong>RCT Esther Duflo</strong></p>
+</div>
+<div class="boxnote">
+<p><strong>PROMPT DE CHATGPT PARA REFLEXIÓN PROFUNDA</strong></p>
+<p><strong>Instrucciones</strong>: Copia este mensaje en ChatGPT o la IA de tu preferencia. Tu objetivo no es obtener respuestas, sino <strong>reflexionar guiado por preguntas</strong>.</p>
+<hr />
+<p>Hola. Actúa como mi tutor metodológico. No quiero que me des respuestas. Quiero que me ayudes a pensar como si estuviéramos en una tutoría.</p>
+<p>Estoy estudiando diseños experimentales. Entiendo que si el tratamiento se asigna aleatoriamente, entonces <span class="math inline">\(\text{Cov}(D, X) = 0\)</span>, incluso para variables no observables.</p>
+<p>Pero sigo viendo que en muchos papers experimentales incluyen <strong>controles en la regresión</strong>. Ayúdame a pensar <strong>paso a paso</strong> si eso es necesario o no.</p>
+<p>Por favor, hazme preguntas como:</p>
+<ul>
+<li>¿Qué gana o pierde la estimación si incluyo controles?</li>
+<li>¿Qué pasa si hay desequilibrios por azar?</li>
+<li>¿Qué efecto tiene sobre la precisión del estimador?</li>
+<li>¿Los controles ayudan a mejorar algo aunque <span class="math inline">\(\hat{\tau}\)</span> ya sea insesgado?</li>
+<li>¿Hay casos en que incluir controles puede ser problemático?</li>
+</ul>
+<p>No me des respuestas. Solo nuevas preguntas que me ayuden a entender mejor este punto.</p>
+</div>
+<hr />
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="parametros-causales-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="experimentos-aleatorizados-en-stata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/05-RCT.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["econometria-avanzada.pdf", "econometria-avanzada.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection",
+    "scroll_highlight": true,
+    "depth": 2
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

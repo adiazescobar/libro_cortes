@@ -85,6 +85,30 @@ gen double productividad = rnormal()   // Y: resultado — independiente de D
 * C es colisionador: causado por D y por Y (o por U que afecta Y)
 gen double contratacion = 2 * conexiones - 0.5 * productividad + rnormal()
 
+* ── PREGUNTA A LA CLASE ANTES DE CORRER ─────────────────────────────────────
+* "Sabemos que conexiones y productividad son INDEPENDIENTES (las generamos así).
+*  Si hago una regresión de productividad sobre conexiones, ¿qué esperan obtener?"
+* → Respuesta esperada: coef ≈ 0
+* "Ahora agrego una variable más. ¿Qué creen que pasa?"
+* ─────────────────────────────────────────────────────────────────────────────
+
+* Visualización: scatter por cuartil de contratación
+* Muestra la correlación ARTIFICIAL que aparece al condicionar en el colisionador
+xtile cuartil = contratacion, nq(4)
+
+twoway ///
+  (scatter productividad conexiones if cuartil==1, mcolor(blue%40) msymbol(Oh)) ///
+  (lfit   productividad conexiones if cuartil==1, lcolor(blue) lwidth(medthick)) ///
+  (scatter productividad conexiones if cuartil==4, mcolor(red%40)  msymbol(Oh)) ///
+  (lfit   productividad conexiones if cuartil==4, lcolor(red)  lwidth(medthick)) ///
+  , ///
+  legend(order(2 "Cuartil bajo de contratación" 4 "Cuartil alto de contratación")) ///
+  title("Dentro de cada grupo de 'contratación': aparece correlación espuria") ///
+  note("Conexiones y productividad son independientes en la población" ///
+       "— la correlación surge al condicionar en el colisionador") ///
+  xtitle("Conexiones (D)") ytitle("Productividad (Y)")
+* ─────────────────────────────────────────────────────────────────────────────
+
 di as text "=== CASO 2: Sin colisionador (correcto) — coef ≈ 0 ==="
 reg productividad conexiones, vce(robust)
 

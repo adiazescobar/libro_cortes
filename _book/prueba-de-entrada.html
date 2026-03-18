@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Prueba de Entrada | Cortes Transversales</title>
+  <meta name="description" content="Prueba de Entrada | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Prueba de Entrada | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Prueba de Entrada | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2026-03-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="intro.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#puntaje-automatico"><i class="fa fa-check"></i>Puntaje (automatico)</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Intro</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#formulando-una-buena-pregunta-causal"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="00-PruebaEntrada.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html"><i class="fa fa-check"></i><b>3</b> Parámetros Causales (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html"><i class="fa fa-check"></i><b>4</b> Parámetros Causales en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html"><i class="fa fa-check"></i><b>5</b> Experimentos Aleatorizados</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n-m%C3%ADnima-para-todo-el-m%C3%B3dulo"><i class="fa fa-check"></i>Notación mínima para todo el módulo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto"><i class="fa fa-check"></i>¿En regresión lineal cómo se ve esto?</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>1) RCT simple, sin estratos, sin controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>2) RCT simple, sin estratos, con controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>3) RCT estratificado (bloques), sin controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>4) RCT estratificado + controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html"><i class="fa fa-check"></i><b>6</b> Experimentos Aleatorizados en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#sin-controles"><i class="fa fa-check"></i>Sin controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-puede-salir-mal-en-un-rct"><i class="fa fa-check"></i>Qué puede salir mal en un RCT</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#ejercicio-aplicado-bertrand-y-mullainathan-2004"><i class="fa fa-check"></i>Ejercicio aplicado: Bertrand y Mullainathan (2004)</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>8</b> Diferencias en Diferencias</a>
+<ul>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-problema-que-did-resuelve"><i class="fa fa-check"></i>El problema que DiD resuelve</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#la-tabla-22"><i class="fa fa-check"></i>La tabla 2×2</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#resultados-potenciales-y-el-att"><i class="fa fa-check"></i>Resultados potenciales y el ATT</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas"><i class="fa fa-check"></i>Identificación del ATT bajo tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-regresi%C3%B3n-did"><i class="fa fa-check"></i>La regresión DiD</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#prueba-de-tendencias-paralelas"><i class="fa fa-check"></i>Prueba de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#ejercicio-con-datos"><i class="fa fa-check"></i>Ejercicio con datos</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>9</b> Malos Controles (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>La demostración formal: sesgo de agrupación</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>10</b> Malos Controles: Código y Simulaciones</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#la-idea-central-controlar-no-siempre-ayuda"><i class="fa fa-check"></i>La idea central: controlar no siempre ayuda</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#buen-control-vs.-mal-control-la-diferencia-en-una-imagen"><i class="fa fa-check"></i>Buen control vs. mal control: la diferencia en una imagen</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-1-post-tratamiento-mediador"><i class="fa fa-check"></i>Caso 1: Post-tratamiento / mediador</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-2-colisionador-selecci%C3%B3n-end%C3%B3gena"><i class="fa fa-check"></i>Caso 2: Colisionador / selección endógena</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-3-proxy-contaminado"><i class="fa fa-check"></i>Caso 3: Proxy contaminado</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#tabla-resumen-los-tres-casos"><i class="fa fa-check"></i>Tabla resumen: los tres casos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-antes-de-agregar-un-control-a-la-regresi%C3%B3n"><i class="fa fa-check"></i>Checklist antes de agregar un control a la regresión</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#descarga-los-archivos"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html"><i class="fa fa-check"></i><b>11</b> TWFE y DiD Moderno en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido"><i class="fa fa-check"></i>Contexto rápido</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#modelo-b%C3%A1sico-22-did"><i class="fa fa-check"></i>Modelo básico 2×2 DiD</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-2-unidades-y-tratamiento-desde-un-a%C3%B1o-en-adelante"><i class="fa fa-check"></i>Panel largo con 2 unidades y tratamiento “desde un año en adelante”</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i>¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i>¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i>¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
+<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="11.1" data-path="00-PruebaEntrada.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>11.1</b> 8) Notas prácticas de ejecución</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="prueba-de-entrada" class="section level1 unnumbered hasAnchor">
+<h1>Prueba de Entrada<a href="prueba-de-entrada.html#prueba-de-entrada" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<style type="text/css">
+/* Estilos personalizados para la prueba de entrada */
+
+.quiz-section {
+  background-color: #f8f9fa;
+  border-left: 4px solid #1F77B4;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+.quiz-section h2 {
+  color: #1F77B4;
+  margin-top: 0;
+}
+
+.question-box {
+  background-color: white;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.question-number {
+  font-weight: bold;
+  color: #1F77B4;
+  font-size: 1.1em;
+}
+
+.intro-box {
+  background: linear-gradient(135deg, #1F77B4 0%, #2E86AB 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.intro-box h3 {
+  margin-top: 0;
+  color: white;
+}
+
+.scoring-guide {
+  background-color: #e8f4f8;
+  border: 2px solid #1F77B4;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+
+.resources-box {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+.webex-check {
+  margin-left: 10px;
+}
+
+/* Estilo para respuestas correctas e incorrectas (cuando ya se muestra feedback) */
+.webex-correct {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.webex-incorrect {
+  color: #dc3545;
+}
+
+.tip-box {
+  background-color: #d4edda;
+  border-left: 4px solid #28a745;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 5px;
+}
+
+.warning-box {
+  background-color: #f8d7da;
+  border-left: 4px solid #dc3545;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 5px;
+}
+
+/* ======= CLAVE 1: Desactivar feedback inmediato de webexercises hasta finalizar ======= */
+#prueba-entrada-quiz:not(.show-feedback) .webex-check,
+#prueba-entrada-quiz:not(.show-feedback) .webex-correct,
+#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect,
+#prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-correct,
+#prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-incorrect,
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-correct,
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-incorrect {
+  display: none !important;
+}
+
+/* ======= CLAVE 2: Ocultar explicaciones/soluciones hasta finalizar =======
+   hide()/unhide() generan bloques con clase .webex-solution.
+   Con esto, el estudiante no ve el botón "Ver explicación" ni el contenido
+   hasta presionar "Finalizar y calcular puntaje".
+*/
+#prueba-entrada-quiz:not(.show-feedback) .webex-solution {
+  display: none !important;
+}
+
+/* Botón de puntaje */
+.btn-score {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #1F77B4;
+  background: #1F77B4;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-score:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#score-result table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#score-result th, #score-result td {
+  border: 1px solid #dee2e6;
+  padding: 8px;
+  text-align: left;
+}
+</style>
+<div class="intro-box">
+<h3>
+Bienvenido a la Prueba de Entrada
+</h3>
+<p>Esta prueba diagnóstica tiene como objetivo evaluar tus conocimientos previos en estadística, regresión lineal, causalidad y manejo básico de Stata.</p>
+<p><strong>Instrucciones:</strong></p>
+<ul>
+<li>La prueba contiene <strong>18 preguntas</strong> divididas en 4 secciones</li>
+<li>Responde cada pregunta seleccionando la opcion correcta o escribiendo tu respuesta</li>
+<li>La retroalimentación, las explicaciones y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong></li>
+<li>No hay limite de tiempo, pero intenta responder sin consultar materiales</li>
+<li>Al final encontraras recursos para repasar</li>
+</ul>
+<p><strong>Tiempo estimado:</strong> 15-20 minutos</p>
+</div>
+<hr />
+<div id="prueba-entrada-quiz">
+<div id="seccion-1-estadistica-basica" class="section level2 unnumbered hasAnchor">
+<h2>Seccion 1: Estadistica Basica<a href="prueba-de-entrada.html#seccion-1-estadistica-basica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="quiz-section" data-section="Estadistica Basica">
+<p>Esta seccion evalua conceptos fundamentales de estadistica descriptiva e inferencial que son esenciales para el analisis econometrico.</p>
+<div class="question-box">
+<p><span class="question-number">Pregunta 1.</span> Si una variable X tiene media 50 y desviación estándar 10, y sigue una distribución normal, ¿qué porcentaje de las observaciones se encuentra entre 30 y 70?</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>68%</option><option value='answer'>95%</option><option value=''>99%</option><option value=''>50%</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>En una distribucion normal:</p>
+<ul>
+<li>El 68% de los datos esta dentro de 1 desviacion estandar de la media</li>
+<li>El 95% de los datos esta dentro de 2 desviaciones estandar de la media</li>
+<li>El 99.7% esta dentro de 3 desviaciones estandar</li>
+</ul>
+<p>Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones estandar, por lo tanto es el 95%.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 2.</span> El p-value (valor p) representa:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>La probabilidad de que la hipotesis nula sea verdadera</option><option value='answer'>La probabilidad de observar datos tan extremos o mas, dado que H0 es verdadera</option><option value=''>La probabilidad de que la hipotesis alternativa sea falsa</option><option value=''>El nivel de significancia del test</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>El p-value es la probabilidad de obtener un resultado tan extremo o mas extremo que el observado, asumiendo que la hipotesis nula es verdadera.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 3.</span> Rechazar la hipotesis nula cuando en realidad es verdadera se conoce como:</p>
+<p><select class='webex-select'><option value='blank'></option><option value='answer'>Error Tipo I</option><option value=''>Error Tipo II</option><option value=''>Sesgo de seleccion</option><option value=''>Error estandar</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<ul>
+<li>Error Tipo I: Rechazar H0 cuando es verdadera (probabilidad alpha).</li>
+<li>Error Tipo II: No rechazar H0 cuando es falsa (probabilidad beta).</li>
+</ul>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 4.</span> Un intervalo de confianza del 95% significa que:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>Hay 95% de probabilidad de que el par&lt;U+00E1&gt;metro verdadero est&lt;U+00E9&gt; en este intervalo espec&lt;U+00ED&gt;fico</option><option value='answer'>Si construy&lt;U+00E9&gt;ramos 100 intervalos de esta manera, 95 de ellos contendr&lt;U+00ED&gt;an el par&lt;U+00E1&gt;metro verdadero</option><option value=''>El 95% de los datos est&lt;U+00E1&gt; dentro del intervalo</option><option value=''>Estamos 95% seguros de nuestra estimaci&lt;U+00F3&gt;n</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>Interpretación frecuentista: si repitiéramos el muestreo muchas veces y construyéramos IC del 95% cada vez, cerca del 95% de esos intervalos contendrían el valor verdadero del parámetro.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 5.</span> La varianza mide:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>La tendencia central de los datos</option><option value='answer'>La dispersion de los datos alrededor de la media</option><option value=''>La relacion entre dos variables</option><option value=''>El valor mas frecuente</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>La varianza mide la dispersion alrededor de la media: Var(X) = E[(X - mu)^2]. La desviacion estandar es la raiz cuadrada de la varianza.</p>
+</div>
+</div>
+</div>
+<hr />
+</div>
+<div id="seccion-2-regresion-lineal" class="section level2 unnumbered hasAnchor">
+<h2>Seccion 2: Regresion Lineal<a href="prueba-de-entrada.html#seccion-2-regresion-lineal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="quiz-section" data-section="Regresion Lineal">
+<p>Esta seccion evalua tu comprension del modelo de regresion lineal, sus supuestos e interpretacion.</p>
+<div class="question-box">
+<p><span class="question-number">Pregunta 6.</span> En el modelo Y = beta0 + beta1 X + e, el coeficiente beta1 representa:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>El valor de Y cuando X = 0</option><option value='answer'>El cambio esperado en Y por cada unidad adicional de X</option><option value=''>La correlacion entre X e Y</option><option value=''>La varianza de Y explicada por X</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>beta1 es el cambio esperado en Y asociado con una unidad adicional de X (ceteris paribus).</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 7.</span> Si R2 = 0.75, esto significa que:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>El coeficiente de correlacion es 0.75</option><option value=''>El modelo tiene 75% de probabilidad de ser correcto</option><option value='answer'>El 75% de la variacion en Y es explicada por las variables independientes</option><option value=''>El 75% de las observaciones estan correctamente predichas</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>R2 es la proporcion de la varianza de Y explicada por el modelo.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 8.</span> Cual de las siguientes NO es un supuesto del modelo clasico de regresion lineal (OLS)?</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>Los errores tienen media cero</option><option value=''>Los errores son homoced&lt;U+00E1&gt;sticos</option><option value=''>No hay multicolinealidad perfecta</option><option value='answer'>Los errores deben seguir una distribuci&lt;U+00F3&gt;n uniforme</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suele asumir normalidad.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 9.</span> Si el p-value asociado a un coeficiente es 0.03, esto significa que:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>El coeficiente es significativo al 1%</option><option value='answer'>El coeficiente es significativo al 5%</option><option value=''>El coeficiente no es significativo</option><option value=''>Hay 3% de probabilidad de que el coeficiente sea correcto</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>0.03 &lt; 0.05 implica significancia al 5% (y al 10%), pero no al 1%.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 10.</span> En un modelo log(Y) = beta0 + beta1 X + e, el coeficiente beta1 se interpreta aproximadamente como:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>El cambio absoluto en Y por unidad de X</option><option value=''>El cambio en log(Y) en terminos absolutos</option><option value='answer'>El cambio porcentual en Y por cada unidad adicional de X</option><option value=''>La elasticidad de Y respecto a X</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>En un modelo semi-log, beta1 * 100 es el cambio porcentual aproximado en Y por una unidad adicional de X (para cambios pequeños).</p>
+</div>
+</div>
+</div>
+<hr />
+</div>
+<div id="seccion-3-causalidad" class="section level2 unnumbered hasAnchor">
+<h2>Seccion 3: Causalidad<a href="prueba-de-entrada.html#seccion-3-causalidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="quiz-section" data-section="Causalidad">
+<p>Esta seccion evalua la diferencia entre correlacion y causalidad, y conceptos basicos de inferencia causal.</p>
+<div class="question-box">
+<p><span class="question-number">Pregunta 11.</span> La observacion de que “los paises con mayor consumo de chocolate tienen mas premios Nobel per capita” es un ejemplo de:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>Causalidad directa</option><option value=''>Causalidad inversa</option><option value='answer'>Correlacion espuria (correlacion sin causalidad)</option><option value=''>Efecto placebo</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>Ejemplo de correlacion espuria: puede haber una tercera variable (p. ej. desarrollo) que explique ambos.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 12.</span> El sesgo de seleccion ocurre cuando:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>La muestra es muy pequena</option><option value=''>Los datos tienen errores de medicion</option><option value='answer'>Los individuos tratados son sistematicamente diferentes de los no tratados</option><option value=''>El modelo tiene muchas variables</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>Sesgo de seleccion: E[Y0|D=1] != E[Y0|D=0].</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 13.</span> La asignacion aleatoria del tratamiento es importante porque:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>Aumenta el tamano de la muestra</option><option value=''>Reduce los costos del estudio</option><option value='answer'>Hace que los grupos de tratamiento y control sean comparables en expectativa</option><option value=''>Elimina los errores de medicion</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>Aleatorizacion: balancea (en expectativa) observables y no observables.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 14.</span> El contrafactual se refiere a:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>Los datos que se perdieron en el estudio</option><option value=''>El grupo de control</option><option value='answer'>Lo que habria ocurrido en ausencia del tratamiento</option><option value=''>Los efectos secundarios del tratamiento</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>Contrafactual: el resultado potencial en el estado no observado.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 15.</span> El principal problema al comparar simplemente participantes vs. no participantes es:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>La diferencia en tamano de los grupos</option><option value=''>Los errores de medicion en los datos</option><option value='answer'>La autoseleccion (los que participan pueden ser diferentes de los que no)</option><option value=''>La falta de datos</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>Autoseleccion: diferencias previas (motivacion, habilidad, redes) contaminan la comparacion.</p>
+</div>
+</div>
+</div>
+<hr />
+</div>
+<div id="seccion-4-stata" class="section level2 unnumbered hasAnchor">
+<h2>Seccion 4: Stata<a href="prueba-de-entrada.html#seccion-4-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="quiz-section" data-section="Stata">
+<p>Esta seccion evalua tu familiaridad basica con Stata.</p>
+<div class="question-box">
+<p><span class="question-number">Pregunta 16.</span> En Stata, cual comando usarias para ver las primeras observaciones de tu base de datos?</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>view</option><option value='answer'>browse o list</option><option value=''>show</option><option value=''>display</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p><code>browse</code> abre el visor de datos. <code>list</code> imprime observaciones en Results (por ejemplo: <code>list in 1/10</code>).</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 17.</span> En una regresion en Stata, si el coeficiente de x es 2.35, esto significa que:</p>
+<p><select class='webex-select'><option value='blank'></option><option value=''>La variable x tiene un p-value de 2.35</option><option value='answer'>Por cada unidad adicional de x, Y aumenta en 2.35 unidades (en promedio)</option><option value=''>El R-cuadrado del modelo es 2.35</option><option value=''>Hay 2.35 observaciones con esa variable</option></select></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>El coeficiente es el cambio promedio en Y asociado con una unidad adicional en X, ceteris paribus.</p>
+</div>
+</div>
+<div class="question-box">
+<p><span class="question-number">Pregunta 18.</span> Cual es el comando correcto en Stata para realizar una regresion de Y sobre X1 y X2?</p>
+<p><input class='webex-solveme nospaces ignorecase' size='25' data-answer='["reg Y X1 X2","regress Y X1 X2"]'/></p>
+<div class="webex-solution">
+<button>
+Ver explicacion
+</button>
+<p>Comando: <code>regress Y X1 X2</code> (abreviado: <code>reg Y X1 X2</code>).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- cierre prueba-entrada-quiz --></p>
+<hr />
+<div id="puntaje-automatico" class="section level2 unnumbered hasAnchor">
+<h2>Puntaje (automatico)<a href="prueba-de-entrada.html#puntaje-automatico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="scoring-guide">
+<p><button type="button" id="btn-finalizar" class="btn-score">
+Finalizar y calcular puntaje
+</button></p>
+<div id="score-result" style="display:none; margin-top: 15px;">
+
+</div>
+<p style="margin-top: 12px;">
+Nota: el puntaje se calcula en tu navegador (HTML).
+</p>
+</div>
+<script>
+(function () {
+
+  function normalizeText(s, ignoreCase, noSpaces) {
+    let out = (s ?? "").toString().trim();
+    if (noSpaces) out = out.replace(/\s+/g, "");
+    if (ignoreCase) out = out.toLowerCase();
+    return out;
+  }
+
+  function fitbCorrect(input) {
+    const raw = (input.value ?? "").toString();
+    const answered = raw.trim().length > 0;
+
+    const ignoreCase =
+      input.classList.contains("ignorecase") ||
+      input.classList.contains("ignore_case") ||
+      input.classList.contains("ignore-case");
+
+    const noSpaces = input.classList.contains("nospaces");
+
+    if (!answered) return { answered: false, correct: false };
+
+    let answers = [];
+    if (input.dataset && input.dataset.answer) {
+      try { answers = JSON.parse(input.dataset.answer); }
+      catch (e) { answers = [input.dataset.answer]; }
+    }
+
+    const isNum = input.classList.contains("num");
+    const tol = (input.dataset && input.dataset.tol) ? parseFloat(input.dataset.tol) : null;
+    const isRegex = input.classList.contains("regex");
+
+    if (isNum) {
+      const v = parseFloat(raw);
+      if (Number.isNaN(v)) return { answered: true, correct: false };
+      for (const a of answers) {
+        const af = parseFloat(a);
+        if (Number.isNaN(af)) continue;
+        if (tol !== null) {
+          if (Math.abs(v - af) <= tol) return { answered: true, correct: true };
+        } else {
+          if (v === af) return { answered: true, correct: true };
+        }
+      }
+      return { answered: true, correct: false };
+    }
+
+    if (isRegex) {
+      for (const a of answers) {
+        try {
+          const re = new RegExp(a);
+          if (re.test(raw.trim())) return { answered: true, correct: true };
+        } catch (e) {}
+      }
+      return { answered: true, correct: false };
+    }
+
+    const val = normalizeText(raw, ignoreCase, noSpaces);
+    for (const a of answers) {
+      const ans = normalizeText(a, ignoreCase, noSpaces);
+      if (val === ans) return { answered: true, correct: true };
+    }
+    return { answered: true, correct: false };
+  }
+
+  function selectCorrect(sel) {
+    const v = (sel.value ?? "").toString();
+    if (v === "" || v === "blank") return { answered: false, correct: false };
+    return { answered: true, correct: v === "answer" };
+  }
+
+  function radioCorrect(group) {
+    const checked = group.querySelector("input[type='radio']:checked");
+    if (!checked) return { answered: false, correct: false };
+    return { answered: true, correct: checked.value === "answer" };
+  }
+
+  function scoreQuestionBox(box) {
+    const inputs = Array.from(box.querySelectorAll("input.webex-solveme"));
+    const selects = Array.from(box.querySelectorAll("select.webex-select"));
+    const radios  = Array.from(box.querySelectorAll(".webex-radiogroup"));
+
+    const widgets = inputs.length + selects.length + radios.length;
+    if (widgets === 0) return { answered: false, correct: false };
+
+    let answeredAny = false;
+    let allCorrect = true;
+
+    inputs.forEach(i => {
+      const r = fitbCorrect(i);
+      answeredAny = answeredAny || r.answered;
+      allCorrect = allCorrect && r.correct;
+    });
+
+    selects.forEach(s => {
+      const r = selectCorrect(s);
+      answeredAny = answeredAny || r.answered;
+      allCorrect = allCorrect && r.correct;
+    });
+
+    radios.forEach(g => {
+      const r = radioCorrect(g);
+      answeredAny = answeredAny || r.answered;
+      allCorrect = allCorrect && r.correct;
+    });
+
+    return { answered: answeredAny, correct: allCorrect };
+  }
+
+  function computeScores(root) {
+    const qBoxes = Array.from(root.querySelectorAll(".question-box"));
+    const sections = Array.from(root.querySelectorAll(".quiz-section"));
+
+    let total = 0, correct = 0, answered = 0;
+
+    qBoxes.forEach(box => {
+      total += 1;
+      const r = scoreQuestionBox(box);
+      if (r.answered) answered += 1;
+      if (r.correct) correct += 1;
+    });
+
+    const bySection = sections.map(sec => {
+      const name = sec.getAttribute("data-section") || "Seccion";
+      const boxes = Array.from(sec.querySelectorAll(".question-box"));
+      let t = boxes.length, c = 0;
+      boxes.forEach(b => { if (scoreQuestionBox(b).correct) c += 1; });
+      return { name, total: t, correct: c };
+    });
+
+    return { total, correct, answered, bySection };
+  }
+
+  function levelMessage(nCorrect) {
+    if (nCorrect >= 16) return "Excelente: base muy solida para el curso.";
+    if (nCorrect >= 13) return "Buen nivel: repasa los temas con errores.";
+    if (nCorrect >= 10) return "Nivel aceptable: conviene repasar prerequisitos.";
+    return "Reforzar prerequisitos: revisa los recursos sugeridos.";
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const root = document.getElementById("prueba-entrada-quiz");
+    const btn = document.getElementById("btn-finalizar");
+    const out = document.getElementById("score-result");
+
+    if (!root || !btn || !out) return;
+
+    btn.addEventListener("click", () => {
+      const s = computeScores(root);
+      const pct = s.total > 0 ? Math.round(100 * s.correct / s.total) : 0;
+
+      const rows = s.bySection.map(x =>
+        `<tr><td>${x.name}</td><td>${x.correct} / ${x.total}</td></tr>`
+      ).join("");
+
+      out.innerHTML = `
+        <h3>Resultados</h3>
+        <p><strong>Puntaje total:</strong> ${s.correct} / ${s.total} (${pct}%)</p>
+        <p><strong>Preguntas respondidas:</strong> ${s.answered} / ${s.total}</p>
+        <p><strong>Diagnostico:</strong> ${levelMessage(s.correct)}</p>
+
+        <h4>Desglose por seccion</h4>
+        <table>
+          <thead><tr><th>Seccion</th><th>Puntaje</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+
+      out.style.display = "block";
+      root.classList.add("show-feedback"); // ahora sí se muestran correct/incorrect y explicaciones
+      out.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+})();
+</script>
+<hr />
+</div>
+<div id="recursos-para-repasar" class="section level2 unnumbered hasAnchor">
+<h2>Recursos para Repasar<a href="prueba-de-entrada.html#recursos-para-repasar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="resources-box">
+<div id="si-necesitas-repasar-estadistica-basica" class="section level3 unnumbered hasAnchor">
+<h3>Si necesitas repasar Estadistica Basica<a href="prueba-de-entrada.html#si-necesitas-repasar-estadistica-basica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Khan Academy - Estadistica y Probabilidad</li>
+</ul>
+<pre class="text"><code>https://es.khanacademy.org/math/statistics-probability</code></pre>
+<ul>
+<li>OpenIntro Statistics (libro gratuito)</li>
+</ul>
+<pre class="text"><code>https://www.openintro.org/book/os/</code></pre>
+</div>
+<div id="si-necesitas-repasar-regresion-lineal" class="section level3 unnumbered hasAnchor">
+<h3>Si necesitas repasar Regresion Lineal<a href="prueba-de-entrada.html#si-necesitas-repasar-regresion-lineal" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Wooldridge, “Introductory Econometrics” (Caps 1-4)</p></li>
+<li><p>Khan Academy - Regresion</p></li>
+</ul>
+<pre class="text"><code>https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data</code></pre>
+<ul>
+<li>Ben Lambert (playlist)</li>
+</ul>
+<pre class="text"><code>https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU</code></pre>
+<ul>
+<li>Pablo Adrián Garlati-Bertoldi (Pontificia Universidad Javeriana) – Econometría básica (canal y playlist)</li>
+</ul>
+<pre class="text"><code>Canal: https://www.youtube.com/@adriangarlati
+Playlist Econometría básica: https://www.youtube.com/playlist?list=PLOhc9wF2hQxFhTw2qvS6hd3RiezOh4tBl</code></pre>
+</div>
+<div id="si-necesitas-repasar-causalidad" class="section level3 unnumbered hasAnchor">
+<h3>Si necesitas repasar Causalidad<a href="prueba-de-entrada.html#si-necesitas-repasar-causalidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Cunningham, “Causal Inference: The Mixtape” (Caps 1-3)</li>
+</ul>
+<pre class="text"><code>https://mixtape.scunning.com/</code></pre>
+<ul>
+<li>Nick Huntington-Klein (playlist)</li>
+</ul>
+<pre class="text"><code>https://www.youtube.com/playlist?list=PLcTBLulJV_AIuXCxr__V8XAzWZosMQIfW</code></pre>
+</div>
+<div id="si-necesitas-aprenderrepasar-stata" class="section level3 unnumbered hasAnchor">
+<h3>Si necesitas aprender/repasar Stata<a href="prueba-de-entrada.html#si-necesitas-aprenderrepasar-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>UCLA IDRE Stata Modules</li>
+</ul>
+<pre class="text"><code>https://stats.oarc.ucla.edu/stata/modules/</code></pre>
+<ul>
+<li>Stata Video Tutorials</li>
+</ul>
+<pre class="text"><code>https://www.stata.com/links/video-tutorials/</code></pre>
+</div>
+</div>
+<div id="consejos-para-el-curso" class="section level3 unnumbered hasAnchor tip-box">
+<h3>Consejos para el Curso<a href="prueba-de-entrada.html#consejos-para-el-curso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>Practica con datos reales.</li>
+<li>No memorices: entiende.</li>
+<li>Haz los ejercicios.</li>
+<li>Pregunta en clase u horas de oficina.</li>
+<li>Forma grupos de estudio.</li>
+</ol>
+</div>
+<center>
+<strong>Buena suerte en el curso</strong>
+</center>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="intro.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/00-PruebaEntrada.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["econometria-avanzada.pdf", "econometria-avanzada.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection",
+    "scroll_highlight": true,
+    "depth": 2
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
