@@ -1,6 +1,201 @@
-# TWFE y DiD Moderno en Stata
+# Datos de Panel, DiD y TWFE en Stata
 
-##  Contexto rápido {-}
+## Introducción a datos de panel {-}
+
+### ¿Qué es un panel? {-}
+
+Un **panel** (o datos longitudinales) sigue a las **mismas unidades** (individuos, firmas, municipios) a lo largo de **múltiples períodos de tiempo**. La estructura básica es:
+
+$$Y_{it} = \alpha_i + \lambda_t + \beta X_{it} + \varepsilon_{it}$$
+
+donde $\alpha_i$ es un **efecto fijo individual** (todo lo que es constante para la unidad $i$ y que puede estar correlacionado con $X_{it}$) y $\lambda_t$ es un **efecto fijo temporal** (shocks comunes a todas las unidades en el período $t$).
+
+### Comandos básicos en Stata {-}
+
+```stata
+xtset id t          // declara el panel: id = unidad, t = tiempo
+xtdes               // describe la estructura: ¿balanceado? ¿T mínimo/máximo?
+xtsum Y X           // descompone varianza en within y between
+xtline Y, overlay   // spaghetti plot: trayectoria de Y por unidad
+```
+
+La descomposición de `xtsum` es fundamental:
+
+| Variación | Qué mide | La explota... |
+|-----------|----------|---------------|
+| **between** | Diferencias entre las medias de cada unidad | OLS pooled |
+| **within** | Cambios de cada unidad alrededor de su propia media | FE, FD |
+| **overall** | Ambas juntas | — |
+
+### Los cuatro estimadores y cuándo usarlos {-}
+
+| Estimador | Comando Stata | Consistente si... | Observaciones |
+|-----------|--------------|-------------------|---------------|
+| **OLS pooled** | `reg Y X, cluster(id)` | $\text{Cov}(X_{it}, \alpha_i) = 0$ **y** exog. estricta | Ignora estructura de panel |
+| **Efectos fijos (FE)** | `xtreg Y X, fe` | Exog. estricta (aunque $\text{Cov}(X_{it}, \alpha_i) \neq 0$) | Elimina $\alpha_i$ por within; inconsistente si $X_{it}$ endógeno |
+| **Primeras diferencias (FD)** | `reg D.Y D.X` | Exog. estricta (aunque $\text{Cov}(X_{it}, \alpha_i) \neq 0$) | Elimina $\alpha_i$ por diferencia; inconsistente si $X_{it}$ endógeno |
+| **Efectos aleatorios (RE)** | `xtreg Y X, re` | $\text{Cov}(X_{it}, \alpha_i) = 0$ **y** exog. estricta | Más eficiente que FE si supuesto OK |
+
+**Exogeneidad estricta**: $E[\varepsilon_{it} \mid X_{i1}, \ldots, X_{iT}, \alpha_i] = 0$ — el error idiosincrático no puede estar correlacionado con $X$ en *ningún* período. Si hay endogeneidad en $X_{it}$ (reverse causality, panel dinámico con $Y_{it-1}$), FE y FD también son inconsistentes.
+
+**Test de Hausman** para elegir entre FE y RE:
+
+```stata
+xtreg Y X i.t, fe
+estimates store fe
+xtreg Y X i.t, re
+hausman fe ., sigmamore
+* p < 0.05 → rechazamos H0 (RE inconsistente) → usar FE
+* p > 0.05 → RE es eficiente (no hay correlación entre X y α_i)
+```
+
+### La transformación within a mano {-}
+
+FE funciona restando la media individual de cada variable ("demeaning"):
+
+```stata
+bysort id: egen media_Y = mean(Y)
+bysort id: egen media_X = mean(X)
+gen Y_within = Y - media_Y
+gen X_within = X - media_X
+reg Y_within X_within     // idéntico a xtreg Y X, fe (sin efectos de tiempo)
+```
+
+Esto ilustra por qué FE **elimina** cualquier variable constante en el tiempo (no puedes estimar el efecto de género, país de nacimiento, etc. con FE).
+
+### FE vs. FD con T = 2 {-}
+
+Con exactamente **dos períodos**, FE y FD son **algebraicamente idénticos**:
+
+$$\Delta Y_i = \beta \cdot \Delta X_i + \Delta\varepsilon_i$$
+
+es exactamente la regresión within con $T=2$. Esta equivalencia es la base de la conexión entre **DiD y datos de panel** que exploramos a continuación.
+
+---
+
+## DiD = FD = TWFE: la equivalencia en el caso 2×2 {-}
+
+### La equivalencia algebraica {-}
+
+En el caso más simple — **2 grupos** (tratado/control) y **2 períodos** (antes/después) — los siguientes cuatro estimadores producen **exactamente el mismo número**:
+
+1. **DiD manual**: $\hat{\tau} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})$
+2. **Regresión DiD**: `reg Y trat post D` — coeficiente de $D$ (interacción)
+3. **Primeras diferencias**: `reg D.Y D.D` — coeficiente de $\Delta D$
+4. **TWFE**: `reghdfe Y D, absorb(id t)` — coeficiente de $D$
+
+No es una aproximación ni un resultado asintótico — es una **identidad algebraica** que se cumple en cada muestra.
+
+```stata
+* Verificación con datos sintéticos (τ verdadero = 3)
+clear
+set seed 1234
+set obs 400
+gen id   = ceil(_n / 2)
+gen t    = mod(_n - 1, 2)
+gen trat = (id > 100)
+gen D    = trat * (t == 1)
+gen Y    = id/50 + 1.5*t + 3*D + rnormal(0, 1)
+xtset id t
+
+* 1. DiD manual
+quietly sum Y if trat==1 & t==0 \n scalar y_t0 = r(mean)
+quietly sum Y if trat==1 & t==1 \n scalar y_t1 = r(mean)
+quietly sum Y if trat==0 & t==0 \n scalar y_c0 = r(mean)
+quietly sum Y if trat==0 & t==1 \n scalar y_c1 = r(mean)
+di "DiD manual = " (y_t1 - y_t0) - (y_c1 - y_c0)
+
+* 2. Regresión DiD
+reg Y trat t D, robust
+di "Regresión DiD = " _b[D]
+
+* 3. Primeras diferencias
+reg D.Y D.D, robust
+di "FD = " _b[D.D]
+
+* 4. TWFE
+reghdfe Y D, absorb(id t) vce(robust)
+di "TWFE = " _b[D]
+* → los cuatro imprimen el mismo número ✓
+```
+
+### Panel largo, adopción simultánea {-}
+
+Con **T > 2** períodos pero todos los tratados adoptando **al mismo tiempo** ($t_0$):
+
+- **DiD manual** (media pre vs. post) = **TWFE** — mismo estimador, mismos pesos
+- **FD** ≠ TWFE — FD solo usa las diferencias consecutivas $\Delta Y_t = Y_t - Y_{t-1}$, por lo que solo el período de adopción ($t_0 - 1 \to t_0$) aporta $\Delta D \neq 0$. Con $T$ grande, FD usa mucho menos información y es menos eficiente, aunque sigue siendo consistente para el mismo $\tau$.
+
+```stata
+* Panel largo: T=11 (1980–1990), adopción simultánea en 1985
+clear
+set obs 33     // 3 unidades × 11 periodos
+gen id = ceil(_n / 11)
+gen t  = 1980 + mod(_n - 1, 11)
+gen D  = (id >= 2) * (t >= 1985)
+gen Y  = id + 3*(t-1980) + 5*D + rnormal(0, 1)
+xtset id t
+
+* DiD manual
+quietly sum Y if id >= 2 & t >= 1985 \n scalar post_t = r(mean)
+quietly sum Y if id >= 2 & t <  1985 \n scalar pre_t  = r(mean)
+quietly sum Y if id == 1 & t >= 1985 \n scalar post_c = r(mean)
+quietly sum Y if id == 1 & t <  1985 \n scalar pre_c  = r(mean)
+di "DiD manual = " (post_t - pre_t) - (post_c - pre_c)   // ≈ 5
+
+reghdfe Y D, absorb(id t) vce(robust)
+di "TWFE      = " _b[D]                                   // = DiD manual
+
+reg D.Y D.D, robust
+di "FD        = " _b[D.D]                                 // ≠ TWFE (más disperso)
+```
+
+---
+
+## El supuesto de tendencias paralelas {-}
+
+### ¿Qué dice el supuesto? {-}
+
+DiD identifica el efecto causal $\tau$ bajo el supuesto de **tendencias paralelas**:
+
+> En ausencia de tratamiento, la diferencia entre tratados y controles habría permanecido constante en el tiempo.
+
+Formalmente: $E[Y_{it}(0) - Y_{it-1}(0) \mid D_i = 1] = E[Y_{it}(0) - Y_{it-1}(0) \mid D_i = 0]$
+
+Si el tratado tenía una **tendencia diferente** (crecía más rápido o más lento) antes del tratamiento, DiD captura $\tau$ **más** esa diferencia de tendencias → **sesgo**.
+
+### Diagnóstico en Stata {-}
+
+```stata
+* Diagnóstico visual: medias observadas + tendencias lineales pre
+xtdidregress (Y) (D), group(id) time(t)
+estat trendplots          // gráfico con líneas pre-tratamiento
+estat trendplots, omeans  // solo medias observadas
+estat trendplots, ltrends // solo tendencias lineales
+
+* Test formal (H0: pendientes pre-tratamiento son iguales)
+estat ptrends
+* p > 0.05 → no rechazamos H0 → tendencias paralelas plausibles ✓
+* p < 0.05 → evidencia contra el supuesto ✗
+```
+
+### ¿Qué hacer si se viola? {-}
+
+Opciones en orden de menor a mayor complejidad:
+
+1. **Controlar tendencias lineales por grupo**: `reg Y D i.t c.t#i.trat` — asume que las tendencias pre son lineales y extrapolables
+2. **Event study**: estima el efecto en cada período; los coeficientes pre-tratamiento deben ser ≈ 0 si el supuesto se cumple
+3. **Diseño alternativo**: buscar un grupo de control más comparable (matching + DiD)
+
+```stata
+* Controlar tendencias diferenciales (si se viola levemente)
+gen trend = t - t0          // tiempo centrado en adopción
+reghdfe Y D c.trend#i.trat, absorb(id t) vce(cluster id)
+```
+
+---
+
+##  Contexto rápido: TWFE con adopción escalonada {-}
 
 * **¿Qué verás?** Cómo se comporta el estimador **TWFE** (two-way fixed effects) en distintos escenarios de DiD: 2×2, panel largo, más de dos unidades con **heterogeneidad de efectos**, y **adopción escalonada**.
 * **¿Por qué importa?** Con heterogeneidad y/o timing escalonado, TWFE puede promediar **mal** (incluso con **pesos negativos**), sesgando el estimador.

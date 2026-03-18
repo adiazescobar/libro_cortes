@@ -272,17 +272,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#checklist-antes-de-agregar-un-control-a-la-regresi%C3%B3n"><i class="fa fa-check"></i>Checklist antes de agregar un control a la regresión</a></li>
 <li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#descarga-los-archivos"><i class="fa fa-check"></i>Descarga los archivos</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html"><i class="fa fa-check"></i><b>11</b> TWFE y DiD Moderno en Stata</a>
+<li class="chapter" data-level="11" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html"><i class="fa fa-check"></i><b>11</b> Datos de Panel, DiD y TWFE en Stata</a>
 <ul>
-<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido"><i class="fa fa-check"></i>Contexto rápido</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n-a-datos-de-panel"><i class="fa fa-check"></i>Introducción a datos de panel</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-twfe-la-equivalencia-en-el-caso-22"><i class="fa fa-check"></i>DiD = FD = TWFE: la equivalencia en el caso 2×2</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#el-supuesto-de-tendencias-paralelas-2"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido-twfe-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Contexto rápido: TWFE con adopción escalonada</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#modelo-b%C3%A1sico-22-did"><i class="fa fa-check"></i>Modelo básico 2×2 DiD</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-2-unidades-y-tratamiento-desde-un-a%C3%B1o-en-adelante"><i class="fa fa-check"></i>Panel largo con 2 unidades y tratamiento “desde un año en adelante”</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a></li>
 <li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
-<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
-<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
@@ -293,7 +296,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
-<li class="chapter" data-level="" data-path="twfe-y-did-moderno-en-stata.html"><a href="twfe-y-did-moderno-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
 <li class="chapter" data-level="11.1" data-path="index.html"><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i><b>11.1</b> 8) Notas prácticas de ejecución</a></li>
 </ul></li>
 <li class="divider"></li>
