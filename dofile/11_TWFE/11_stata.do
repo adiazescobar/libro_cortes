@@ -380,3 +380,278 @@ di "  2. Usa estat ptrends (H0: tendencias paralelas) — p>0.05 es buena señal
 di "  3. Si falla: controla tendencias lineales por grupo (trend×tratado)"
 di "  4. Si hay adopción escalonada + efectos dinámicos: csdid / Sun-Abraham"
 di "=" * 70
+
+
+********************************************************************************
+* SECCIÓN 4: MÁS UNIDADES, MISMO AÑO DE ADOPCIÓN, EFECTOS HETEROGÉNEOS
+*
+* DGP: 3 unidades (id=1 control, id=2 y 3 tratados desde 1985)
+*      Efectos distintos: id=2 → τ=2, id=3 → τ=4
+* Objetivo: mostrar qué promedia TWFE con heterogeneidad entre tratados
+********************************************************************************
+
+clear
+local unidades = 3
+local inicio   = 1980
+local fin      = 1989
+local tiempo   = `fin' - `inicio' + 1
+local obs      = `unidades' * `tiempo'
+set obs `obs'
+
+gen id = .
+gen t  = .
+forvalues i = 1/`unidades' {
+    forvalues j = 0/`=`tiempo'-1' {
+        local obsnum = (`i' - 1)*`tiempo' + `j' + 1
+        replace id = `i' in `obsnum'
+        replace t  = `inicio' + `j' in `obsnum'
+    }
+}
+sort id t
+xtset id t
+label variable id "Unidad"
+label variable t  "Año"
+
+gen D = 0
+replace D = 1 if id >= 2 & t >= 1985
+label variable D "Tratamiento desde 1985 (id≥2)"
+
+gen Y = 0
+replace Y = id + t + cond(D==1, 0, 0) if id == 1
+replace Y = id + t + cond(D==1, 2, 0) if id == 2
+replace Y = id + t + cond(D==1, 4, 0) if id == 3
+label variable Y "Variable dependiente"
+
+twoway ///
+    (connected Y t if id==1, msymbol(circle)   lcolor(blue)   lwidth(medium)) ///
+    (connected Y t if id==2, msymbol(triangle)  lcolor(red)    lwidth(medium)) ///
+    (connected Y t if id==3, msymbol(square)    lcolor(orange) lwidth(medium)) ///
+    , xline(1984.5, lpattern(dash) lcolor(gray)) ///
+      xlabel(`inicio'(1)`fin') ///
+      legend(order(1 "id=1 (Control)" 2 "id=2 (Tratado, τ=2)" 3 "id=3 (Tratado, τ=4)") pos(6) row(1)) ///
+      title("Caso 4: heterogeneidad entre tratados, mismo timing") ///
+      xtitle("Año") ytitle("Y") name(g4_hetero, replace)
+
+xtreg Y D i.t, fe
+reghdfe Y D, absorb(id t) vce(robust)
+
+* ATT verdadero (promedio ponderado entre obs. tratadas):
+* (5 periodos post × τ=2) + (5 periodos post × τ=4) / 10 = 3
+* TWFE coincide porque los efectos son constantes en el tiempo (no hay heterogeneidad dinámica)
+di _n "ATT verdadero (ponderado) = 3 — TWFE debería dar ≈ 3"
+
+
+********************************************************************************
+* SECCIÓN 5: ADOPCIÓN ESCALONADA (STAGGERED DiD) + DESCOMPOSICIÓN DE BACON
+*
+* DGP: id=2 se trata desde 1985 (τ=2), id=3 desde 1988 (τ=4)
+* Objetivo: ver el sesgo de TWFE + entender los 3 tipos de comparaciones 2×2
+* Referencia: Goodman-Bacon (2021), Journal of Econometrics
+********************************************************************************
+
+clear
+local unidades = 3
+local inicio   = 1980
+local fin      = 1989
+local tiempo   = `fin' - `inicio' + 1
+local obs      = `unidades' * `tiempo'
+set obs `obs'
+
+gen id = .
+gen t  = .
+forvalues i = 1/`unidades' {
+    forvalues j = 0/`=`tiempo'-1' {
+        local obsnum = (`i' - 1)*`tiempo' + `j' + 1
+        replace id = `i' in `obsnum'
+        replace t  = `inicio' + `j' in `obsnum'
+    }
+}
+sort id t
+xtset id t
+label variable id "Unidad"
+label variable t  "Año"
+
+* Tratamiento escalonado: id=2 desde 1985, id=3 desde 1988
+gen D = 0
+replace D = 1 if id==2 & t >= 1985
+replace D = 1 if id==3 & t >= 1988
+label variable D "Tratamiento escalonado"
+
+gen Y = id + t + D * 2 * (id==2) + D * 4 * (id==3)
+label variable Y "Variable dependiente"
+
+twoway ///
+    (connected Y t if id==1, msymbol(circle)   lcolor(blue)   lwidth(medium)) ///
+    (connected Y t if id==2, msymbol(triangle)  lcolor(red)    lwidth(medium)) ///
+    (connected Y t if id==3, msymbol(square)    lcolor(orange) lwidth(medium)) ///
+    , xline(1984.5 1987.5, lpattern(dash) lcolor(gray)) ///
+      xlabel(`inicio'(1)`fin') ///
+      legend(order(1 "id=1 (Control)" 2 "id=2 (trata 1985, τ=2)" 3 "id=3 (trata 1988, τ=4)") pos(6) row(1)) ///
+      title("Caso 5: adopción escalonada") ///
+      xtitle("Año") ytitle("Y") name(g5_staggered, replace)
+
+* TWFE y comparaciones por par
+reghdfe Y D, absorb(id t) vce(robust)
+xtreg Y D i.t if (id==1 | id==2), fe robust   // par 1-2 (limpio)
+xtreg Y D i.t if (id==1 | id==3), fe robust   // par 1-3 (limpio)
+
+* Descomposición de Bacon
+* ssc install bacondecomp, replace   // instalar si no está
+bacondecomp Y D, ddetail
+
+
+********************************************************************************
+* SECCIÓN 6: ESTIMADORES MODERNOS — SIMULACIÓN GRANDE (30 unidades × 60 períodos)
+*
+* Objetivo: comparar TWFE vs csdid, did_imputation, eventstudyinteract, did2s,
+*           did_multiplegt_dyn y stackedev con un event-study comparativo
+* Referencias: Callaway-Sant'Anna 2021, Borusyak-Jaravel-Spiess 2022,
+*              Sun-Abraham 2021, Gardner 2022, Cengiz et al. 2019
+********************************************************************************
+
+clear
+local units = 30
+local start = 1
+local end   = 60
+local time  = `end' - `start' + 1
+local obsv  = `units' * `time'
+set obs `obsv'
+
+egen id = seq(), b(`time')
+egen t  = seq(), f(`start') t(`end')
+sort id t
+xtset id t
+
+set seed 20211222
+
+gen Y           = 0
+gen D           = 0
+gen cohort      = .
+gen effect      = .
+gen first_treat = .
+gen rel_time    = .
+
+levelsof id, local(lvls)
+foreach x of local lvls {
+    local chrt = runiformint(0,5)
+    replace cohort = `chrt' if id==`x'
+}
+
+levelsof cohort, local(lvls)
+foreach x of local lvls {
+    local eff    = runiformint(2,10)
+    replace effect = `eff' if cohort==`x'
+    local timing = runiformint(`start', `end' + 20)
+    replace first_treat = `timing' if cohort==`x'
+    replace first_treat = . if first_treat > `end'
+    replace D = 1 if cohort==`x' & t >= `timing'
+}
+
+replace rel_time = t - first_treat
+replace Y = id + t + cond(D==1, effect * rel_time, 0) + rnormal()
+
+* ── Leads y lags para event study ─────────────────────────────────────────────
+summ rel_time
+local relmin = abs(r(min))
+local relmax = abs(r(max))
+
+cap drop F_* L_*
+forval x = 2/`relmin' {
+    gen F_`x' = rel_time == -`x'
+}
+forval x = 0/`relmax' {
+    gen L_`x' = rel_time == `x'
+}
+
+gen never_treat = first_treat == .
+sum first_treat
+gen last_cohort = first_treat == r(max)
+gen gvar        = first_treat
+recode gvar (. = 0)
+
+* ── Instalar paquetes (una sola vez — comentar después) ──────────────────────
+/*
+ssc install schemepack,         replace
+ssc install avar,               replace
+ssc install reghdfe,            replace
+ssc install event_plot,         replace
+ssc install palettes,           replace
+ssc install colrspace,          replace
+ssc install drdid,              replace
+ssc install csdid,              replace
+ssc install did_imputation,     replace
+ssc install eventstudyinteract, replace
+ssc install did_multiplegt_dyn, replace
+ssc install stackedev,          replace
+ssc install did2s,              replace
+*/
+
+* ── TWFE ──────────────────────────────────────────────────────────────────────
+reghdfe Y L_* F_*, absorb(id t) cluster(id)
+estimates store twfe
+
+* ── csdid — Callaway & Sant'Anna (2021) ───────────────────────────────────────
+csdid Y, ivar(id) time(t) gvar(gvar) notyet
+estat event, window(-10 10) estore(csdd)
+
+* ── did_imputation — Borusyak, Jaravel & Spiess (2022) ───────────────────────
+did_imputation Y id t first_treat, horizons(0/10) pretrend(10) minn(0)
+estimates store didimp
+
+* ── did_multiplegt_dyn — de Chaisemartin & D'Haultfœuille ────────────────────
+did_multiplegt_dyn Y id t D, effects(10) placebo(10) cluster(id)
+matrix didmgt_b = e(estimates)
+matrix didmgt_v = e(variances)
+
+* ── eventstudyinteract — Sun & Abraham (2021) ────────────────────────────────
+eventstudyinteract Y L_* F_*, vce(cluster id) absorb(id t) ///
+    cohort(first_treat) control_cohort(never_treat)
+matrix evtstint_b = e(b_iw)
+matrix evtstint_v = e(V_iw)
+
+* ── did2s — Gardner (2022) ────────────────────────────────────────────────────
+did2s Y, first_stage(id t) second_stage(F_* L_*) treatment(D) cluster(id)
+matrix did2s_b = e(b)
+matrix did2s_v = e(V)
+
+* ── stackedev — Cengiz et al. (2019) ─────────────────────────────────────────
+stackedev Y F_* L_* ref, cohort(first_treat) time(t) ///
+    never_treat(never_treat) unit_fe(id) clust_unit(id)
+matrix stackedev_b = e(b)
+matrix stackedev_v = e(V)
+
+* ── Event study plot comparativo ─────────────────────────────────────────────
+colorpalette tableau, nograph
+
+event_plot    twfe          csdd           didimp                           ///
+              dcdh_b#dcdh_v  sa_b#sa_v      stackedev_b#stackedev_v         ///
+              did2s_b#did2s_v,                                               ///
+    stub_lag( L_#   Tp#    tau#   Effect_#  L_#  L_#  L_#)                  ///
+    stub_lead(F_#   Tm#    pre#   Placebo_# F_#  F_#  F_#)                  ///
+    together perturb(-0.30(0.10)0.30) trimlead(20) trimlag(20) noautolegend ///
+    plottype(scatter) ciplottype(rspike)                                     ///
+        lag_opt1(msymbol(+)   msize(1.2) mlwidth(0.3) color(black))         ///
+        lag_ci_opt1(color(black) lw(0.15))                                   ///
+        lag_opt2(msymbol(lgx) msize(1.2) mlwidth(0.3) color("`r(p1)'"))     ///
+        lag_ci_opt2(color("`r(p1)'") lw(0.15))                              ///
+        lag_opt3(msymbol(Dh)  msize(1.2) mlwidth(0.3) color("`r(p2)'"))     ///
+        lag_ci_opt3(color("`r(p2)'") lw(0.15))                              ///
+        lag_opt4(msymbol(Th)  msize(1.2) mlwidth(0.3) color("`r(p3)'"))     ///
+        lag_ci_opt4(color("`r(p3)'") lw(0.15))                              ///
+        lag_opt5(msymbol(Sh)  msize(1.2) mlwidth(0.3) color("`r(p4)'"))     ///
+        lag_ci_opt5(color("`r(p4)'") lw(0.15))                              ///
+        lag_opt6(msymbol(Oh)  msize(1.2) mlwidth(0.3) color("`r(p5)'"))     ///
+        lag_ci_opt6(color("`r(p5)'") lw(0.15))                              ///
+        lag_opt7(msymbol(V)   msize(1.2) mlwidth(0.3) color("`r(p6)'"))     ///
+        lag_ci_opt7(color("`r(p6)'") lw(0.15))                              ///
+    graph_opt(                                                                ///
+        title("Event study: TWFE vs estimadores modernos")                   ///
+        xtitle("Períodos desde el tratamiento") ytitle("Efecto promedio")    ///
+        xlabel(-20(2)20)                                                     ///
+        legend(order(1 "TWFE" 3 "csdid (CS 2021)"                           ///
+               5 "did_imputation (BJS 2022)" 7 "did_multiplegt_dyn"          ///
+               9 "eventstudyinteract (SA 2021)"                              ///
+               11 "stackedev (CDLZ 2019)" 13 "did2s (G 2022)")              ///
+               pos(6) rows(3) region(style(none)))                            ///
+        xline(-0.5, lc(gs8) lp(dash)) yline(0, lc(gs8) lp(dash))           ///
+    )
