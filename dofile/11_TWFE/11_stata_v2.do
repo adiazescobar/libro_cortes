@@ -2,7 +2,9 @@
 * Datos de Panel, DiD, TWFE y Estimadores Modernos
 * Econometría Avanzada — Ana María Díaz Escobar — Javeriana 2026-I
 *
-* VERSIÓN 2 (2026-03-26) — mejorada para clase
+* VERSIÓN 2.1 (2026-03-26) — correcciones post-clase:
+*   Sec.1: X→D, DGP sin tendencia de tiempo (solo EF individuo)
+*   Sec.3: ampliada a N=40 (20+20) para que estat ptrends funcione
 *
 * SECCIONES:
 *  0.  Instalar paquetes (ejecutar UNA sola vez; luego dejar comentado)
@@ -63,8 +65,10 @@ ssc install jwdid,              replace   // Wooldridge (2021), pooled OLS inter
 * SECCIÓN 1: INTRODUCCIÓN A DATOS DE PANEL
 *
 * DGP: 100 individuos, 6 periodos
-*   Y_it = alpha_i + lambda_t + beta*X_it + eps_it
-*   alpha_i correlacionado con X_it → FE necesario
+*   Y_it = alpha_i + beta*D_it + eps_it
+*   alpha_i correlacionado con D_it → FE necesario
+* NOTA: sin tendencia de tiempo en el DGP para que la transformación within
+*       (one-way: Y - Ȳ_i) sea exactamente igual a xtreg Y D, fe
 ********************************************************************************
 
 set seed 9999
@@ -81,17 +85,17 @@ label variable id "Individuo"
 label variable t  "Periodo (1–6)"
 
 * ── DGP ────────────────────────────────────────────────────────────────────
-gen alpha_i = 2 * id / `N' + rnormal(0, 0.5)   // EF individual, correlacionado con X
-gen X = 0.5 * alpha_i + 0.3 * t + rnormal(0, 1)
-label variable X "Variable de interés"
+gen alpha_i = 2 * id / `N' + rnormal(0, 0.5)   // EF individual, correlacionado con D
+gen D = 0.5 * alpha_i + rnormal(0, 1)            // D correlacionado con alpha_i
+label variable D "Variable de interés"
 scalar beta_true = 3
-gen Y = alpha_i + 0.8 * t + beta_true * X + rnormal(0, 1)
+gen Y = alpha_i + beta_true * D + rnormal(0, 1)  // sin tendencia de tiempo
 label variable Y "Variable resultado"
 
 * ── Descripción del panel ──────────────────────────────────────────────────
 di _n "=== DESCRIPCIÓN DEL PANEL ==="
 xtdes
-xtsum Y X
+xtsum Y D
 * LECTURA: between = diferencias entre medias individuales
 *          within  = variación de cada individuo alrededor de su propia media
 *          FE/FD explotan solo la variación WITHIN
@@ -102,49 +106,54 @@ xtline Y if id <= 10, overlay ///
     xtitle("Periodo") ytitle("Y") legend(off) ///
     name(g0_xtline, replace)
 
-* ── OLS pooled (incorrecto porque Cov(X, alpha_i) ≠ 0) ───────────────────
+* ── OLS pooled (incorrecto porque Cov(D, alpha_i) ≠ 0) ───────────────────
 di _n "=== OLS Pooled (INCORRECTO) ==="
-reg Y X, vce(cluster id)
-di "Beta verdadero = `= scalar(beta_true)'. OLS estará sesgado hacia arriba."
+reg Y D, vce(cluster id)
+di "Beta verdadero = `= scalar(beta_true)'. OLS sesgado (Cov(D,alpha_i) ≠ 0)."
 
 * ── Efectos fijos: xtreg fe ────────────────────────────────────────────────
 di _n "=== EFECTOS FIJOS ==="
-xtreg Y X i.t, fe vce(cluster id)
-di "Beta verdadero = `= scalar(beta_true)'. FE lo recupera. ✓"
+xtreg Y D, fe vce(cluster id)
+di "  → One-way FE (sin tiempo). Beta verdadero = `= scalar(beta_true)' ✓"
+xtreg Y D i.t, fe vce(cluster id)
+di "  → Two-way FE (TWFE con tiempo). Beta verdadero = `= scalar(beta_true)' ✓"
 
 * ── FE a mano: transformación within ──────────────────────────────────────
 di _n "=== FE A MANO (transformación within) ==="
 bysort id: egen mean_Y = mean(Y)
-bysort id: egen mean_X = mean(X)
-gen Y_within = Y - mean_Y
-gen X_within = X - mean_X
-reg Y_within X_within, nocons
-di "Debe coincidir con xtreg ,fe (sin i.t para simplificar)"
-drop mean_Y mean_X Y_within X_within
+bysort id: egen mean_D = mean(D)
+gen Y_within = Y - mean_Y   // desviación de la media individual de Y
+gen D_within = D - mean_D   // desviación de la media individual de D
+reg Y_within D_within, nocons
+di "  → Idéntico a 'xtreg Y D, fe' (one-way). Beta = `= scalar(beta_true)' ✓"
+* NOTA: one-way (Y-Ȳ_i) coincide con xtreg sin i.t.
+*       Con tendencia de tiempo en el DGP habría que hacer two-way demeaning.
+drop mean_Y mean_D Y_within D_within
 
 * ── Efectos aleatorios ─────────────────────────────────────────────────────
 di _n "=== EFECTOS ALEATORIOS (incorrecto aquí) ==="
-xtreg Y X i.t, re vce(cluster id)
+xtreg Y D i.t, re vce(cluster id)
 
 * ── Test de Hausman ────────────────────────────────────────────────────────
 di _n "=== HAUSMAN: ¿FE o RE? ==="
-xtreg Y X i.t, fe
+xtreg Y D i.t, fe
 estimates store fe_hausman
-xtreg Y X i.t, re
+xtreg Y D i.t, re
 hausman fe_hausman ., sigmamore
-* H0: RE consistente (Cov(X,alpha_i)=0). Si p<0.05 → usar FE.
+* H0: RE consistente (Cov(D,alpha_i)=0). Si p<0.05 → usar FE.
 
 * ── Primeras diferencias ───────────────────────────────────────────────────
 di _n "=== PRIMERAS DIFERENCIAS ==="
-reg D.Y D.X ibn.t, noconstant vce(cluster id)
+reg D.Y D.D ibn.t, noconstant vce(cluster id)
+* NOTA: D. es el operador de primera diferencia de Stata. D.D = ΔD (cambio en D).
 di "FD elimina alpha_i por diferencia (usa T-1 periodos por individuo)"
 
 di _n "=" * 65
 di "RESUMEN ESTIMADORES"
 di "=" * 65
-di "  Cov(X, alpha_i)=0  →  RE eficiente    (Hausman no rechaza)"
-di "  Cov(X, alpha_i)≠0  →  FE consistente  (Hausman rechaza)"
-di "  X endógeno en eps  →  TODOS sesgan     (necesitas IV)"
+di "  Cov(D, alpha_i)=0  →  RE eficiente    (Hausman no rechaza)"
+di "  Cov(D, alpha_i)≠0  →  FE consistente  (Hausman rechaza)"
+di "  D endógeno en eps  →  TODOS sesgan     (necesitas IV)"
 di "  T=2               →  FD = FE = DiD   (identidad algebraica)"
 di "  T>2               →  FE más eficiente que FD"
 di "=" * 65
@@ -210,8 +219,11 @@ di "=" * 60
 ********************************************************************************
 * SECCIÓN 3: PANEL LARGO, ADOPCIÓN SIMULTÁNEA — TENDENCIAS PARALELAS
 *
-* DGP: 3 unidades, T=11. Adopción en t=1985. Dos casos:
+* DGP: 40 unidades (20 control + 20 tratadas), T=11 (1980–1990)
+*      Adopción en t=1985. Efecto τ=5.
 *   A: tendencias paralelas ✓     B: tendencias NO paralelas ✗
+* NOTA: se necesitan al menos ~20 unidades por grupo para que
+*       xtdidregress / estat ptrends tenga suficientes grados de libertad.
 ********************************************************************************
 
 * ─────────────────────────────────────────────────────────────────────────────
@@ -220,38 +232,44 @@ di "=" * 60
 
 clear
 set seed 5678
+local N_grp  = 20       // 20 control + 20 tratados
 local inicio = 1980
 local fin    = 1990
 local tiempo = `fin' - `inicio' + 1
-set obs `= 3 * `tiempo''
+set obs `= 2 * `N_grp' * `tiempo''
 
 gen id = ceil(_n / `tiempo')
 gen t  = `inicio' + mod(_n - 1, `tiempo')
 sort id t
 xtset id t
 
-gen D = (id >= 2) * (t >= 1985)
-gen Y = id + 3 * (t - 1980) + 5 * D + rnormal(0, 0.5)
+gen trat = (id > `N_grp')
+gen D    = trat * (t >= 1985)
+label variable D "Tratamiento (adopción en 1985)"
+
+* DGP: EF individuales aleatorios, tendencia común, τ=5
+gen alpha_raw = rnormal(0, 2)
+bysort id (t): replace alpha_raw = alpha_raw[1]   // constante dentro del individuo
+gen Y = alpha_raw + 3 * (t - `inicio') + 5 * D + rnormal(0, 0.5)
 label variable Y "Y (tendencias paralelas ✓)"
 
 twoway ///
-    (connected Y t if id==1, msymbol(circle)  lcolor(blue)   lwidth(medium)) ///
-    (connected Y t if id==2, msymbol(triangle) lcolor(red)    lwidth(medium)) ///
-    (connected Y t if id==3, msymbol(square)   lcolor(orange) lwidth(medium)) ///
+    (connected Y t if trat==0, lcolor(blue%30) lwidth(thin) msymbol(none)) ///
+    (connected Y t if trat==1, lcolor(red%30)  lwidth(thin) msymbol(none)) ///
     , xline(1984.5, lpattern(dash) lcolor(gray)) ///
       xlabel(`inicio'(1)`fin') ///
-      legend(order(1 "Control (id=1)" 2 "Tratado id=2" 3 "Tratado id=3") pos(6) row(1)) ///
+      legend(order(1 "Control" 2 "Tratado") pos(6) row(1)) ///
       title("Caso 3A: tendencias paralelas ✓") ///
       xtitle("Año") ytitle("Y") name(g3a_trends, replace)
 
 * DiD manual
-quietly sum Y if id >= 2 & t >= 1985
+quietly sum Y if trat==1 & t >= 1985
 scalar y_t_post = r(mean)
-quietly sum Y if id >= 2 & t < 1985
+quietly sum Y if trat==1 & t < 1985
 scalar y_t_pre  = r(mean)
-quietly sum Y if id == 1 & t >= 1985
+quietly sum Y if trat==0 & t >= 1985
 scalar y_c_post = r(mean)
-quietly sum Y if id == 1 & t < 1985
+quietly sum Y if trat==0 & t < 1985
 scalar y_c_pre  = r(mean)
 scalar DiD3a = (y_t_post - y_t_pre) - (y_c_post - y_c_pre)
 
@@ -259,7 +277,6 @@ reghdfe Y D, absorb(id t) vce(robust)
 scalar TWFE3a = _b[D]
 
 * Test formal de tendencias paralelas (Stata 17+)
-gen trat_grupo = (id >= 2)
 xtdidregress (Y) (D), group(id) time(t)
 estat trendplots, title("Tendencias pre — Caso 3A") name(g3a_trendplots, replace)
 estat ptrends
@@ -275,31 +292,37 @@ di "  → DiD = TWFE con adopción simultánea y T.P. ✓"
 
 clear
 set seed 5678
+local N_grp  = 20
 local inicio = 1980
 local fin    = 1990
 local tiempo = `fin' - `inicio' + 1
-set obs `= 3 * `tiempo''
+set obs `= 2 * `N_grp' * `tiempo''
 
 gen id = ceil(_n / `tiempo')
 gen t  = `inicio' + mod(_n - 1, `tiempo')
 sort id t
 xtset id t
 
-gen D = (id >= 2) * (t >= 1985)
+gen trat = (id > `N_grp')
+gen D    = trat * (t >= 1985)
+label variable D "Tratamiento (adopción en 1985)"
+
+gen alpha_raw = rnormal(0, 2)
+bysort id (t): replace alpha_raw = alpha_raw[1]
+
 * DIFERENCIA: tratados tienen tendencia pre más pronunciada (+2/año)
-gen tendencia_extra = (id >= 2) * (t - `inicio') * 2
-gen Y = id + 3 * (t - 1980) + tendencia_extra + 5 * D + rnormal(0, 0.5)
+gen Y = alpha_raw + (3 + 2*trat) * (t - `inicio') + 5 * D + rnormal(0, 0.5)
+* Control: pendiente = 3.  Tratado: pendiente = 5.  → NO paralelas.
 label variable Y "Y (tendencias NO paralelas ✗)"
 
 twoway ///
-    (connected Y t if id==1, msymbol(circle)  lcolor(blue)   lwidth(medium)) ///
-    (connected Y t if id==2, msymbol(triangle) lcolor(red)    lwidth(medium)) ///
-    (connected Y t if id==3, msymbol(square)   lcolor(orange) lwidth(medium)) ///
+    (connected Y t if trat==0, lcolor(blue%30) lwidth(thin) msymbol(none)) ///
+    (connected Y t if trat==1, lcolor(red%30)  lwidth(thin) msymbol(none)) ///
     , xline(1984.5, lpattern(dash) lcolor(gray)) ///
       xlabel(`inicio'(1)`fin') ///
-      legend(order(1 "Control (id=1)" 2 "Tratado id=2" 3 "Tratado id=3") pos(6) row(1)) ///
+      legend(order(1 "Control" 2 "Tratado") pos(6) row(1)) ///
       title("Caso 3B: tendencias NO paralelas ✗") ///
-      note("Tratados crecen más rápido antes del tratamiento") ///
+      note("Tratados crecen más rápido antes del tratamiento (+2/año)") ///
       xtitle("Año") ytitle("Y") name(g3b_trends, replace)
 
 reghdfe Y D, absorb(id t) vce(robust)
@@ -315,11 +338,10 @@ di _n "=== CASO 3B: Tendencias NO paralelas ✗ ==="
 di "TWFE = " %6.3f TWFE3b "   (τ = 5 → sesgo ≈ " %6.3f TWFE3b - 5 ")"
 di "  → TWFE captura τ + diferencia de tendencias = SESGO positivo"
 
-di _n "  Mecánica del sesgo (primeras diferencias):"
-di "  ΔY_control  (1984→1985) = tendencia común = 3"
-di "  ΔY_tratado  (1984→1985) = tendencia común + tendencia_extra + τ"
-di "                           = 3 + 2 + 5 = 10"
-di "  DiD 1-paso = 10 - 3 = 7  ≠  τ = 5 (sesgo = 2)"
+di _n "  Mecánica del sesgo (diferencia de pendientes pre-tratamiento):"
+di "  Control: pendiente = 3/año"
+di "  Tratado: pendiente = 5/año antes de 1985"
+di "  TWFE estima τ + componente de tendencia diferencial ≠ τ = 5"
 
 
 ********************************************************************************
