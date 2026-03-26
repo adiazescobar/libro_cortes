@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 11 Datos de Panel, DiD y TWFE en Stata | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 11 Datos de Panel, DiD y TWFE en Stata | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 11 Datos de Panel, DiD y TWFE en Stata | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 11 Datos de Panel, DiD y TWFE en Stata | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2026-03-26" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="bad-controls-stata.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#puntaje-automatico"><i class="fa fa-check"></i>Puntaje (automatico)</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Intro</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#formulando-una-buena-pregunta-causal"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="11-TWFE.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html"><i class="fa fa-check"></i><b>3</b> Parámetros Causales (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html"><i class="fa fa-check"></i><b>4</b> Parámetros Causales en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html"><i class="fa fa-check"></i><b>5</b> Experimentos Aleatorizados</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n-m%C3%ADnima-para-todo-el-m%C3%B3dulo"><i class="fa fa-check"></i>Notación mínima para todo el módulo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto"><i class="fa fa-check"></i>¿En regresión lineal cómo se ve esto?</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>1) RCT simple, sin estratos, sin controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>2) RCT simple, sin estratos, con controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>3) RCT estratificado (bloques), sin controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>4) RCT estratificado + controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html"><i class="fa fa-check"></i><b>6</b> Experimentos Aleatorizados en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#sin-controles"><i class="fa fa-check"></i>Sin controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-puede-salir-mal-en-un-rct"><i class="fa fa-check"></i>Qué puede salir mal en un RCT</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#ejercicio-aplicado-bertrand-y-mullainathan-2004"><i class="fa fa-check"></i>Ejercicio aplicado: Bertrand y Mullainathan (2004)</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>8</b> Diferencias en Diferencias</a>
+<ul>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-problema-que-did-resuelve"><i class="fa fa-check"></i>El problema que DiD resuelve</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#la-tabla-22"><i class="fa fa-check"></i>La tabla 2×2</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#resultados-potenciales-y-el-att"><i class="fa fa-check"></i>Resultados potenciales y el ATT</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas"><i class="fa fa-check"></i>Identificación del ATT bajo tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-regresi%C3%B3n-did"><i class="fa fa-check"></i>La regresión DiD</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#prueba-de-tendencias-paralelas"><i class="fa fa-check"></i>Prueba de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#ejercicio-con-datos"><i class="fa fa-check"></i>Ejercicio con datos</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>9</b> Malos Controles (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>La demostración formal: sesgo de agrupación</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>10</b> Malos Controles: Código y Simulaciones</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#la-idea-central-controlar-no-siempre-ayuda"><i class="fa fa-check"></i>La idea central: controlar no siempre ayuda</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#buen-control-vs.-mal-control-la-diferencia-en-una-imagen"><i class="fa fa-check"></i>Buen control vs. mal control: la diferencia en una imagen</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-1-post-tratamiento-mediador"><i class="fa fa-check"></i>Caso 1: Post-tratamiento / mediador</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-2-colisionador-selecci%C3%B3n-end%C3%B3gena"><i class="fa fa-check"></i>Caso 2: Colisionador / selección endógena</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-3-proxy-contaminado"><i class="fa fa-check"></i>Caso 3: Proxy contaminado</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#tabla-resumen-los-tres-casos"><i class="fa fa-check"></i>Tabla resumen: los tres casos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-antes-de-agregar-un-control-a-la-regresi%C3%B3n"><i class="fa fa-check"></i>Checklist antes de agregar un control a la regresión</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#descarga-los-archivos"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html"><i class="fa fa-check"></i><b>11</b> Datos de Panel, DiD y TWFE en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n-a-datos-de-panel"><i class="fa fa-check"></i>Introducción a datos de panel</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-twfe-la-equivalencia-en-el-caso-22"><i class="fa fa-check"></i>DiD = FD = TWFE: la equivalencia en el caso 2×2</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#el-supuesto-de-tendencias-paralelas-2"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido-twfe-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Contexto rápido: TWFE con adopción escalonada</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i>¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i>¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i>¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i>Notas prácticas de ejecución</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#descarga-los-archivos-1"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="datos-de-panel-did-y-twfe-en-stata" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Capitulo 11</span> Datos de Panel, DiD y TWFE en Stata<a href="datos-de-panel-did-y-twfe-en-stata.html#datos-de-panel-did-y-twfe-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introducción-a-datos-de-panel" class="section level2 unnumbered hasAnchor">
+<h2>Introducción a datos de panel<a href="#introducci%C3%B3n-a-datos-de-panel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="qué-es-un-panel" class="section level3 unnumbered hasAnchor">
+<h3>¿Qué es un panel?<a href="#qu%C3%A9-es-un-panel" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un <strong>panel</strong> (o datos longitudinales) sigue a las <strong>mismas unidades</strong> (individuos, firmas, municipios) a lo largo de <strong>múltiples períodos de tiempo</strong>. La estructura básica es:</p>
+<p><span class="math display">\[Y_{it} = \alpha_i + \lambda_t + \beta X_{it} + \varepsilon_{it}\]</span></p>
+<p>donde <span class="math inline">\(\alpha_i\)</span> es un <strong>efecto fijo individual</strong> (todo lo que es constante para la unidad <span class="math inline">\(i\)</span> y que puede estar correlacionado con <span class="math inline">\(X_{it}\)</span>) y <span class="math inline">\(\lambda_t\)</span> es un <strong>efecto fijo temporal</strong> (shocks comunes a todas las unidades en el período <span class="math inline">\(t\)</span>).</p>
+</div>
+<div id="comandos-básicos-en-stata" class="section level3 unnumbered hasAnchor">
+<h3>Comandos básicos en Stata<a href="#comandos-b%C3%A1sicos-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb105"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb105-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb105-1" tabindex="-1"></a>xtset id t          <span class="co">// declara el panel: id = unidad, t = tiempo</span></span>
+<span id="cb105-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb105-2" tabindex="-1"></a><span class="kw">xtdes</span>               <span class="co">// describe la estructura: ¿balanceado? ¿T mínimo/máximo?</span></span>
+<span id="cb105-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb105-3" tabindex="-1"></a><span class="kw">xtsum</span> Y X           <span class="co">// descompone varianza en within y between</span></span>
+<span id="cb105-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb105-4" tabindex="-1"></a><span class="kw">xtline</span> Y, overlay   <span class="co">// spaghetti plot: trayectoria de Y por unidad</span></span></code></pre></div>
+<p>La descomposición de <code>xtsum</code> es fundamental:</p>
+<table>
+<colgroup>
+<col width="30%" />
+<col width="27%" />
+<col width="41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variación</th>
+<th>Qué mide</th>
+<th>La explota…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>between</strong></td>
+<td>Diferencias entre las medias de cada unidad</td>
+<td>OLS pooled</td>
+</tr>
+<tr class="even">
+<td><strong>within</strong></td>
+<td>Cambios de cada unidad alrededor de su propia media</td>
+<td>FE, FD</td>
+</tr>
+<tr class="odd">
+<td><strong>overall</strong></td>
+<td>Ambas juntas</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="los-cuatro-estimadores-y-cuándo-usarlos" class="section level3 unnumbered hasAnchor">
+<h3>Los cuatro estimadores y cuándo usarlos<a href="#los-cuatro-estimadores-y-cu%C3%A1ndo-usarlos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="23%" />
+<col width="32%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Estimador</th>
+<th>Comando Stata</th>
+<th>Consistente si…</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>OLS pooled</strong></td>
+<td><code>reg Y X, cluster(id)</code></td>
+<td><span class="math inline">\(\text{Cov}(X_{it}, \alpha_i) = 0\)</span> <strong>y</strong> exog. estricta</td>
+<td>Ignora estructura de panel</td>
+</tr>
+<tr class="even">
+<td><strong>Efectos fijos (FE)</strong></td>
+<td><code>xtreg Y X, fe</code></td>
+<td>Exog. estricta (aunque <span class="math inline">\(\text{Cov}(X_{it}, \alpha_i) \neq 0\)</span>)</td>
+<td>Elimina <span class="math inline">\(\alpha_i\)</span> por within; inconsistente si <span class="math inline">\(X_{it}\)</span> endógeno</td>
+</tr>
+<tr class="odd">
+<td><strong>Primeras diferencias (FD)</strong></td>
+<td><code>reg D.Y D.X</code></td>
+<td>Exog. estricta (aunque <span class="math inline">\(\text{Cov}(X_{it}, \alpha_i) \neq 0\)</span>)</td>
+<td>Elimina <span class="math inline">\(\alpha_i\)</span> por diferencia; inconsistente si <span class="math inline">\(X_{it}\)</span> endógeno</td>
+</tr>
+<tr class="even">
+<td><strong>Efectos aleatorios (RE)</strong></td>
+<td><code>xtreg Y X, re</code></td>
+<td><span class="math inline">\(\text{Cov}(X_{it}, \alpha_i) = 0\)</span> <strong>y</strong> exog. estricta</td>
+<td>Más eficiente que FE si supuesto OK</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exogeneidad estricta</strong>: <span class="math inline">\(E[\varepsilon_{it} \mid X_{i1}, \ldots, X_{iT}, \alpha_i] = 0\)</span> — el error idiosincrático no puede estar correlacionado con <span class="math inline">\(X\)</span> en <em>ningún</em> período. Si hay endogeneidad en <span class="math inline">\(X_{it}\)</span> (reverse causality, panel dinámico con <span class="math inline">\(Y_{it-1}\)</span>), FE y FD también son inconsistentes.</p>
+<p><strong>Test de Hausman</strong> para elegir entre FE y RE:</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb106-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb106-1" tabindex="-1"></a><span class="kw">xtreg</span> Y X i.t, <span class="kw">fe</span></span>
+<span id="cb106-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb106-2" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> <span class="kw">fe</span></span>
+<span id="cb106-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb106-3" tabindex="-1"></a><span class="kw">xtreg</span> Y X i.t, re</span>
+<span id="cb106-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb106-4" tabindex="-1"></a><span class="kw">hausman</span> <span class="kw">fe</span> ., sigmamore</span>
+<span id="cb106-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb106-5" tabindex="-1"></a>* <span class="kw">p</span> &lt; 0.05 → rechazamos H0 (RE inconsistente) → usar FE</span>
+<span id="cb106-6"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb106-6" tabindex="-1"></a>* <span class="kw">p</span> &gt; 0.05 → RE es eficiente (no hay correlación entre X <span class="fu">y</span> α_i)</span></code></pre></div>
+</div>
+<div id="la-transformación-within-a-mano" class="section level3 unnumbered hasAnchor">
+<h3>La transformación within a mano<a href="#la-transformaci%C3%B3n-within-a-mano" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>FE funciona restando la media individual de cada variable (“demeaning”):</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb107-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb107-1" tabindex="-1"></a><span class="kw">bysort</span> id: <span class="kw">egen</span> media_Y = <span class="kw">mean</span>(Y)</span>
+<span id="cb107-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb107-2" tabindex="-1"></a><span class="kw">bysort</span> id: <span class="kw">egen</span> media_X = <span class="kw">mean</span>(X)</span>
+<span id="cb107-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb107-3" tabindex="-1"></a><span class="kw">gen</span> Y_within = Y - media_Y</span>
+<span id="cb107-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb107-4" tabindex="-1"></a><span class="kw">gen</span> X_within = X - media_X</span>
+<span id="cb107-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb107-5" tabindex="-1"></a><span class="kw">reg</span> Y_within X_within     <span class="co">// idéntico a xtreg Y X, fe (sin efectos de tiempo)</span></span></code></pre></div>
+<p>Esto ilustra por qué FE <strong>elimina</strong> cualquier variable constante en el tiempo (no puedes estimar el efecto de género, país de nacimiento, etc. con FE).</p>
+</div>
+<div id="fe-vs.-fd-con-t-2" class="section level3 unnumbered hasAnchor">
+<h3>FE vs. FD con T = 2<a href="datos-de-panel-did-y-twfe-en-stata.html#fe-vs.-fd-con-t-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Con exactamente <strong>dos períodos</strong>, FE y FD son <strong>algebraicamente idénticos</strong>:</p>
+<p><span class="math display">\[\Delta Y_i = \beta \cdot \Delta X_i + \Delta\varepsilon_i\]</span></p>
+<p>es exactamente la regresión within con <span class="math inline">\(T=2\)</span>. Esta equivalencia es la base de la conexión entre <strong>DiD y datos de panel</strong> que exploramos a continuación.</p>
+<hr />
+</div>
+</div>
+<div id="did-fd-twfe-la-equivalencia-en-el-caso-22" class="section level2 unnumbered hasAnchor">
+<h2>DiD = FD = TWFE: la equivalencia en el caso 2×2<a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-twfe-la-equivalencia-en-el-caso-22" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="la-equivalencia-algebraica" class="section level3 unnumbered hasAnchor">
+<h3>La equivalencia algebraica<a href="datos-de-panel-did-y-twfe-en-stata.html#la-equivalencia-algebraica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el caso más simple — <strong>2 grupos</strong> (tratado/control) y <strong>2 períodos</strong> (antes/después) — los siguientes cuatro estimadores producen <strong>exactamente el mismo número</strong>:</p>
+<ol style="list-style-type: decimal">
+<li><strong>DiD manual</strong>: <span class="math inline">\(\hat{\tau} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})\)</span></li>
+<li><strong>Regresión DiD</strong>: <code>reg Y trat post D</code> — coeficiente de <span class="math inline">\(D\)</span> (interacción)</li>
+<li><strong>Primeras diferencias</strong>: <code>reg D.Y D.D</code> — coeficiente de <span class="math inline">\(\Delta D\)</span></li>
+<li><strong>TWFE</strong>: <code>reghdfe Y D, absorb(id t)</code> — coeficiente de <span class="math inline">\(D\)</span></li>
+</ol>
+<p>No es una aproximación ni un resultado asintótico — es una <strong>identidad algebraica</strong> que se cumple en cada muestra.</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb108-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb108-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1234</span>
+<span id="cb108-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 400</span>
+<span id="cb108-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-4" tabindex="-1"></a></span>
+<span id="cb108-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-5" tabindex="-1"></a><span class="kw">gen</span> id   = <span class="fu">ceil</span>(<span class="dt">_n</span> / 2)           <span class="co">// 200 individuos</span></span>
+<span id="cb108-6"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-6" tabindex="-1"></a><span class="kw">gen</span> t    = <span class="fu">mod</span>(<span class="dt">_n</span> - 1, 2)         <span class="co">// t=0 (antes), t=1 (después)</span></span>
+<span id="cb108-7"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-7" tabindex="-1"></a><span class="kw">gen</span> trat = (id &gt; 100)             <span class="co">// grupo tratado: id 101–200</span></span>
+<span id="cb108-8"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-8" tabindex="-1"></a><span class="kw">gen</span> D    = trat * (t == 1)        <span class="co">// indicador de tratamiento efectivo</span></span>
+<span id="cb108-9"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-9" tabindex="-1"></a></span>
+<span id="cb108-10"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-10" tabindex="-1"></a><span class="kw">gen</span> alpha_i = 2 * id / 200 + rnormal(0, 0.5)</span>
+<span id="cb108-11"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-11" tabindex="-1"></a><span class="kw">gen</span> eps     = rnormal(0, 1)</span>
+<span id="cb108-12"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-12" tabindex="-1"></a><span class="kw">gen</span> Y = alpha_i + 1.5 * t + 3 * D + eps    <span class="co">// τ = 3</span></span>
+<span id="cb108-13"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-13" tabindex="-1"></a>xtset id t</span>
+<span id="cb108-14"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-14" tabindex="-1"></a></span>
+<span id="cb108-15"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-15" tabindex="-1"></a>* ── DiD manual (4 medias) ──────────────────────────────────────────────────────</span>
+<span id="cb108-16"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-16" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> Y <span class="kw">if</span> trat==1 &amp; t==0</span>
+<span id="cb108-17"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-17" tabindex="-1"></a><span class="fu">scalar</span> y_t0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb108-18"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-18" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> Y <span class="kw">if</span> trat==1 &amp; t==1</span>
+<span id="cb108-19"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-19" tabindex="-1"></a><span class="fu">scalar</span> y_t1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb108-20"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-20" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> Y <span class="kw">if</span> trat==0 &amp; t==0</span>
+<span id="cb108-21"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-21" tabindex="-1"></a><span class="fu">scalar</span> y_c0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb108-22"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-22" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> Y <span class="kw">if</span> trat==0 &amp; t==1</span>
+<span id="cb108-23"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-23" tabindex="-1"></a><span class="fu">scalar</span> y_c1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb108-24"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-24" tabindex="-1"></a><span class="fu">scalar</span> DiD_manual = (y_t1 - y_t0) - (y_c1 - y_c0)</span>
+<span id="cb108-25"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-25" tabindex="-1"></a></span>
+<span id="cb108-26"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-26" tabindex="-1"></a>* ── Regresión DiD clásica: Y = α + βD_i + γt + τ(D_i×t) ──────────────────────</span>
+<span id="cb108-27"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-27" tabindex="-1"></a><span class="kw">reg</span> Y trat t D, <span class="kw">robust</span></span>
+<span id="cb108-28"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-28" tabindex="-1"></a><span class="fu">scalar</span> DiD_reg = _b[D]</span>
+<span id="cb108-29"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-29" tabindex="-1"></a></span>
+<span id="cb108-30"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-30" tabindex="-1"></a>* ── Primeras Diferencias (T=2): ΔY_i = a + τ·ΔD_i + Δε_i ─────────────────────</span>
+<span id="cb108-31"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-31" tabindex="-1"></a><span class="kw">reg</span> D.Y D.D, <span class="kw">robust</span></span>
+<span id="cb108-32"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-32" tabindex="-1"></a><span class="fu">scalar</span> FD_2x2 = _b[D.D]</span>
+<span id="cb108-33"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-33" tabindex="-1"></a></span>
+<span id="cb108-34"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-34" tabindex="-1"></a>* ── TWFE: absorbe efectos fijos individual + temporal ──────────────────────────</span>
+<span id="cb108-35"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-35" tabindex="-1"></a>reghdfe Y D, absorb(id t) <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb108-36"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-36" tabindex="-1"></a><span class="fu">scalar</span> TWFE_2x2 = _b[D]</span>
+<span id="cb108-37"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-37" tabindex="-1"></a></span>
+<span id="cb108-38"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-38" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;DiD manual    = &quot;</span> %7.4f DiD_manual</span>
+<span id="cb108-39"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-39" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Regresión DiD = &quot;</span> %7.4f DiD_reg</span>
+<span id="cb108-40"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-40" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;FD            = &quot;</span> %7.4f FD_2x2</span>
+<span id="cb108-41"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-41" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;TWFE          = &quot;</span> %7.4f TWFE_2x2</span>
+<span id="cb108-42"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb108-42" tabindex="-1"></a>* → los cuatro deben ser IDÉNTICOS — equivalencia algebraica ✓</span></code></pre></div>
+</div>
+<div id="panel-largo-adopción-simultánea" class="section level3 unnumbered hasAnchor">
+<h3>Panel largo, adopción simultánea<a href="#panel-largo-adopci%C3%B3n-simult%C3%A1nea" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Con <strong>T &gt; 2</strong> períodos pero todos los tratados adoptando <strong>al mismo tiempo</strong> (<span class="math inline">\(t_0\)</span>):</p>
+<ul>
+<li><strong>DiD manual</strong> (media pre vs. post) = <strong>TWFE</strong> — mismo estimador, mismos pesos</li>
+<li><strong>FD</strong> ≠ TWFE — FD solo usa las diferencias consecutivas <span class="math inline">\(\Delta Y_t = Y_t - Y_{t-1}\)</span>, por lo que solo el período de adopción (<span class="math inline">\(t_0 - 1 \to t_0\)</span>) aporta <span class="math inline">\(\Delta D \neq 0\)</span>. Con <span class="math inline">\(T\)</span> grande, FD usa mucho menos información y es menos eficiente, aunque sigue siendo consistente para el mismo <span class="math inline">\(\tau\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb109"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb109-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb109-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 5678</span>
+<span id="cb109-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-3" tabindex="-1"></a><span class="kw">local</span> inicio = 1980</span>
+<span id="cb109-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-4" tabindex="-1"></a><span class="kw">local</span> fin    = 1990</span>
+<span id="cb109-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-5" tabindex="-1"></a><span class="kw">local</span> tiempo = <span class="ot">`fin&#39;</span> - <span class="ot">`inicio&#39;</span> + 1</span>
+<span id="cb109-6"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-6" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`= 3 * `tiempo&#39;</span>&#39;</span>
+<span id="cb109-7"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-7" tabindex="-1"></a></span>
+<span id="cb109-8"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-8" tabindex="-1"></a><span class="kw">gen</span> id = <span class="fu">ceil</span>(<span class="dt">_n</span> / <span class="ot">`tiempo&#39;</span>)</span>
+<span id="cb109-9"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-9" tabindex="-1"></a><span class="kw">gen</span> t  = <span class="ot">`inicio&#39;</span> + <span class="fu">mod</span>(<span class="dt">_n</span> - 1, <span class="ot">`tiempo&#39;</span>)</span>
+<span id="cb109-10"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-10" tabindex="-1"></a><span class="kw">sort</span> id t</span>
+<span id="cb109-11"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-11" tabindex="-1"></a>xtset id t</span>
+<span id="cb109-12"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-12" tabindex="-1"></a></span>
+<span id="cb109-13"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-13" tabindex="-1"></a><span class="kw">gen</span> D = (id &gt;= 2) * (t &gt;= 1985)   <span class="co">// tratado desde 1985 para id 2 y 3</span></span>
+<span id="cb109-14"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-14" tabindex="-1"></a><span class="kw">gen</span> Y = id + 3 * (t - 1980) + 5 * D + rnormal(0, 0.5)</span>
+<span id="cb109-15"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-15" tabindex="-1"></a></span>
+<span id="cb109-16"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-16" tabindex="-1"></a>* DiD manual</span>
+<span id="cb109-17"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-17" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> Y <span class="kw">if</span> id &gt;= 2 &amp; t &gt;= 1985</span>
+<span id="cb109-18"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-18" tabindex="-1"></a><span class="fu">scalar</span> post_t = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb109-19"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-19" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> Y <span class="kw">if</span> id &gt;= 2 &amp; t &lt;  1985</span>
+<span id="cb109-20"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-20" tabindex="-1"></a><span class="fu">scalar</span> pre_t  = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb109-21"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-21" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> Y <span class="kw">if</span> id == 1 &amp; t &gt;= 1985</span>
+<span id="cb109-22"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-22" tabindex="-1"></a><span class="fu">scalar</span> post_c = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb109-23"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-23" tabindex="-1"></a><span class="kw">quietly</span> <span class="kw">sum</span> Y <span class="kw">if</span> id == 1 &amp; t &lt;  1985</span>
+<span id="cb109-24"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-24" tabindex="-1"></a><span class="fu">scalar</span> pre_c  = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb109-25"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-25" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;DiD manual = &quot;</span> %6.3f (post_t - pre_t) - (post_c - pre_c)   <span class="co">// ≈ 5</span></span>
+<span id="cb109-26"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-26" tabindex="-1"></a></span>
+<span id="cb109-27"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-27" tabindex="-1"></a>reghdfe Y D, absorb(id t) <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb109-28"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-28" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;TWFE       = &quot;</span> %6.3f _b[D]     <span class="co">// = DiD manual (equivalencia exacta)</span></span>
+<span id="cb109-29"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-29" tabindex="-1"></a></span>
+<span id="cb109-30"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-30" tabindex="-1"></a><span class="kw">reg</span> D.Y D.D, <span class="kw">robust</span></span>
+<span id="cb109-31"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb109-31" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;FD         = &quot;</span> %6.3f _b[D.D]   <span class="co">// ≠ TWFE con T&gt;2 (menos eficiente)</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="el-supuesto-de-tendencias-paralelas-2" class="section level2 unnumbered hasAnchor">
+<h2>El supuesto de tendencias paralelas<a href="datos-de-panel-did-y-twfe-en-stata.html#el-supuesto-de-tendencias-paralelas-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="qué-dice-el-supuesto" class="section level3 unnumbered hasAnchor">
+<h3>¿Qué dice el supuesto?<a href="#qu%C3%A9-dice-el-supuesto" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>DiD identifica el efecto causal <span class="math inline">\(\tau\)</span> bajo el supuesto de <strong>tendencias paralelas</strong>:</p>
+<blockquote>
+<p>En ausencia de tratamiento, la diferencia entre tratados y controles habría permanecido constante en el tiempo.</p>
+</blockquote>
+<p>Formalmente: <span class="math inline">\(E[Y_{it}(0) - Y_{it-1}(0) \mid D_i = 1] = E[Y_{it}(0) - Y_{it-1}(0) \mid D_i = 0]\)</span></p>
+<p>Si el tratado tenía una <strong>tendencia diferente</strong> (crecía más rápido o más lento) antes del tratamiento, DiD captura <span class="math inline">\(\tau\)</span> <strong>más</strong> esa diferencia de tendencias → <strong>sesgo</strong>.</p>
+</div>
+<div id="diagnóstico-en-stata" class="section level3 unnumbered hasAnchor">
+<h3>Diagnóstico en Stata<a href="#diagn%C3%B3stico-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb110"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb110-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-1" tabindex="-1"></a>* Diagnóstico visual: medias observadas + tendencias lineales pre</span>
+<span id="cb110-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-2" tabindex="-1"></a>xtdidregress (Y) (D), <span class="fu">group</span>(id) time(t)</span>
+<span id="cb110-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-3" tabindex="-1"></a><span class="kw">estat</span> trendplots          <span class="co">// gráfico con líneas pre-tratamiento</span></span>
+<span id="cb110-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-4" tabindex="-1"></a><span class="kw">estat</span> trendplots, omeans  <span class="co">// solo medias observadas</span></span>
+<span id="cb110-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-5" tabindex="-1"></a><span class="kw">estat</span> trendplots, ltrends <span class="co">// solo tendencias lineales</span></span>
+<span id="cb110-6"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-6" tabindex="-1"></a></span>
+<span id="cb110-7"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-7" tabindex="-1"></a>* Test formal (H0: pendientes pre-tratamiento son iguales)</span>
+<span id="cb110-8"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-8" tabindex="-1"></a><span class="kw">estat</span> ptrends</span>
+<span id="cb110-9"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-9" tabindex="-1"></a>* <span class="kw">p</span> &gt; 0.05 → no rechazamos H0 → tendencias paralelas plausibles ✓</span>
+<span id="cb110-10"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb110-10" tabindex="-1"></a>* <span class="kw">p</span> &lt; 0.05 → evidencia contra <span class="fu">el</span> supuesto ✗</span></code></pre></div>
+</div>
+<div id="qué-hacer-si-se-viola" class="section level3 unnumbered hasAnchor">
+<h3>¿Qué hacer si se viola?<a href="#qu%C3%A9-hacer-si-se-viola" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Opciones en orden de menor a mayor complejidad:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Controlar tendencias lineales por grupo</strong>: <code>reg Y D i.t c.t#i.trat</code> — asume que las tendencias pre son lineales y extrapolables</li>
+<li><strong>Event study</strong>: estima el efecto en cada período; los coeficientes pre-tratamiento deben ser ≈ 0 si el supuesto se cumple</li>
+<li><strong>Diseño alternativo</strong>: buscar un grupo de control más comparable (matching + DiD)</li>
+</ol>
+<div class="sourceCode" id="cb111"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb111-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb111-1" tabindex="-1"></a>* Controlar tendencias diferenciales (si se viola levemente)</span>
+<span id="cb111-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb111-2" tabindex="-1"></a><span class="kw">gen</span> trend = t - t0          <span class="co">// tiempo centrado en adopción</span></span>
+<span id="cb111-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb111-3" tabindex="-1"></a>reghdfe Y D c.trend#i.trat, absorb(id t) <span class="kw">vce</span>(<span class="kw">cluster</span> id)</span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="contexto-rápido-twfe-con-adopción-escalonada" class="section level2 unnumbered hasAnchor">
+<h2>Contexto rápido: TWFE con adopción escalonada<a href="#contexto-r%C3%A1pido-twfe-con-adopci%C3%B3n-escalonada" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>¿Qué verás?</strong> Cómo se comporta el estimador <strong>TWFE</strong> (two-way fixed effects) en distintos escenarios de DiD: 2×2, panel largo, más de dos unidades con <strong>heterogeneidad de efectos</strong>, y <strong>adopción escalonada</strong>.</li>
+<li><strong>¿Por qué importa?</strong> Con heterogeneidad y/o timing escalonado, TWFE puede promediar <strong>mal</strong> (incluso con <strong>pesos negativos</strong>), sesgando el estimador.</li>
+<li><strong>¿Cómo lo detectamos?</strong> Con la <strong>descomposición de Bacon</strong> y estudios de eventos.</li>
+<li><strong>¿Qué alternativas hay?</strong> Estimadores modernos: <strong>CSDID (Callaway &amp; Sant’Anna)</strong>, <strong>did_imputation (BJS)</strong>, <strong>eventstudyinteract (Sun &amp; Abraham)</strong>, <strong>did_multiplegt</strong>, <strong>did2s</strong>, <strong>stackedev</strong>, etc.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Nota de ejecución</strong>: Algunas secciones usan comandos/paquetes de SSC. Debes instalarlos al menos una vez (abajo incluyo la instalación con <code>ssc install …, replace</code>).</p>
+</blockquote>
+<hr />
+</div>
+<div id="más-unidades-mismo-año-de-inicio-efectos-heterogéneos" class="section level2 unnumbered hasAnchor">
+<h2>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>3 unidades</strong> (id=1 control; id=2 y 3 tratados desde 1985), con <strong>distinto tamaño de efecto</strong>: id=2 → τ=2, id=3 → τ=4.</li>
+<li>Muestra qué promedia TWFE cuando los efectos difieren entre tratados: el <strong>ATT verdadero</strong> (ponderado por obs. tratadas) = 3, y TWFE coincide porque no hay heterogeneidad dinámica.</li>
+</ul>
+<div class="sourceCode" id="cb112"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb112-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb112-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-2" tabindex="-1"></a><span class="kw">local</span> unidades = 3</span>
+<span id="cb112-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-3" tabindex="-1"></a><span class="kw">local</span> inicio   = 1980</span>
+<span id="cb112-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-4" tabindex="-1"></a><span class="kw">local</span> fin      = 1989</span>
+<span id="cb112-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-5" tabindex="-1"></a><span class="kw">local</span> tiempo   = <span class="ot">`fin&#39;</span> - <span class="ot">`inicio&#39;</span> + 1</span>
+<span id="cb112-6"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-6" tabindex="-1"></a><span class="kw">local</span> <span class="kw">obs</span>      = <span class="ot">`unidades&#39;</span> * <span class="ot">`tiempo&#39;</span></span>
+<span id="cb112-7"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-7" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obs&#39;</span></span>
+<span id="cb112-8"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-8" tabindex="-1"></a></span>
+<span id="cb112-9"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-9" tabindex="-1"></a><span class="kw">gen</span> id = .</span>
+<span id="cb112-10"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-10" tabindex="-1"></a><span class="kw">gen</span> t  = .</span>
+<span id="cb112-11"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-11" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/<span class="ot">`unidades&#39;</span> {</span>
+<span id="cb112-12"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-12" tabindex="-1"></a>    <span class="kw">forvalues</span> j = 0/<span class="ot">`=`tiempo&#39;</span>-1&#39; {</span>
+<span id="cb112-13"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-13" tabindex="-1"></a>        <span class="kw">local</span> obsnum = (<span class="ot">`i&#39;</span> - 1)*<span class="ot">`tiempo&#39;</span> + <span class="ot">`j&#39;</span> + 1</span>
+<span id="cb112-14"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-14" tabindex="-1"></a>        <span class="kw">replace</span> id = <span class="ot">`i&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb112-15"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-15" tabindex="-1"></a>        <span class="kw">replace</span> t  = <span class="ot">`inicio&#39;</span> + <span class="ot">`j&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb112-16"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-16" tabindex="-1"></a>    }</span>
+<span id="cb112-17"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-17" tabindex="-1"></a>}</span>
+<span id="cb112-18"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-18" tabindex="-1"></a><span class="kw">sort</span> id t</span>
+<span id="cb112-19"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-19" tabindex="-1"></a>xtset id t</span>
+<span id="cb112-20"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-20" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> id <span class="st">&quot;Unidad&quot;</span></span>
+<span id="cb112-21"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-21" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> t  <span class="st">&quot;Año&quot;</span></span>
+<span id="cb112-22"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-22" tabindex="-1"></a></span>
+<span id="cb112-23"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-23" tabindex="-1"></a><span class="kw">gen</span> D = 0</span>
+<span id="cb112-24"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-24" tabindex="-1"></a><span class="kw">replace</span> D = 1 <span class="kw">if</span> id &gt;= 2 &amp; t &gt;= 1985</span>
+<span id="cb112-25"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-25" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> D <span class="st">&quot;Tratamiento desde 1985 (id≥2)&quot;</span></span>
+<span id="cb112-26"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-26" tabindex="-1"></a></span>
+<span id="cb112-27"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-27" tabindex="-1"></a><span class="kw">gen</span> Y = 0</span>
+<span id="cb112-28"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-28" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D==1, 0, 0) <span class="kw">if</span> id == 1</span>
+<span id="cb112-29"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-29" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D==1, 2, 0) <span class="kw">if</span> id == 2</span>
+<span id="cb112-30"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-30" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D==1, 4, 0) <span class="kw">if</span> id == 3</span>
+<span id="cb112-31"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-31" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> Y <span class="st">&quot;Variable dependiente&quot;</span></span>
+<span id="cb112-32"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-32" tabindex="-1"></a></span>
+<span id="cb112-33"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-33" tabindex="-1"></a><span class="kw">twoway</span> <span class="co">///</span></span>
+<span id="cb112-34"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-34" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id==1, <span class="bn">msymbol</span>(<span class="bn">circle</span>)   lcolor(<span class="bn">blue</span>)   lwidth(medium)) <span class="co">///</span></span>
+<span id="cb112-35"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-35" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id==2, <span class="bn">msymbol</span>(triangle)  lcolor(<span class="kw">red</span>)    lwidth(medium)) <span class="co">///</span></span>
+<span id="cb112-36"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-36" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id==3, <span class="bn">msymbol</span>(square)    lcolor(<span class="bn">orange</span>) lwidth(medium)) <span class="co">///</span></span>
+<span id="cb112-37"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-37" tabindex="-1"></a>    , <span class="bn">xline</span>(1984.5, lpattern(<span class="kw">dash</span>) lcolor(<span class="bn">gray</span>)) <span class="co">///</span></span>
+<span id="cb112-38"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-38" tabindex="-1"></a>      <span class="kw">xlabel</span>(<span class="ot">`inicio&#39;</span>(1)<span class="ot">`fin&#39;</span>) <span class="co">///</span></span>
+<span id="cb112-39"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-39" tabindex="-1"></a>      <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;id=1 (Control)&quot;</span> 2 <span class="st">&quot;id=2 (Tratado, τ=2)&quot;</span> 3 <span class="st">&quot;id=3 (Tratado, τ=4)&quot;</span>) pos(6) <span class="ot">row</span>(1)) <span class="co">///</span></span>
+<span id="cb112-40"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-40" tabindex="-1"></a>      <span class="bn">title</span>(<span class="st">&quot;Caso 4: heterogeneidad entre tratados, mismo timing&quot;</span>) <span class="co">///</span></span>
+<span id="cb112-41"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-41" tabindex="-1"></a>      <span class="bn">xtitle</span>(<span class="st">&quot;Año&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Y&quot;</span>) <span class="bn">name</span>(g4_hetero, <span class="kw">replace</span>)</span>
+<span id="cb112-42"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-42" tabindex="-1"></a></span>
+<span id="cb112-43"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-43" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t, <span class="kw">fe</span></span>
+<span id="cb112-44"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-44" tabindex="-1"></a>reghdfe Y D, absorb(id t) <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb112-45"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-45" tabindex="-1"></a>* ATT verdadero = (5×2 + 5×4) / 10 = 3</span>
+<span id="cb112-46"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb112-46" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;ATT verdadero (ponderado) = 3 — TWFE debería dar ≈ 3&quot;</span></span></code></pre></div>
+<div class="float">
+<img src="dofile/11_TWFE/g5.png" alt="Grafico" />
+<div class="figcaption">Grafico</div>
+</div>
+</div>
+<div id="más-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto" class="section level2 unnumbered hasAnchor">
+<h2>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>id=2</strong> se trata desde <strong>1985</strong>; <strong>id=3</strong> desde <strong>1988</strong> (escalonado).</li>
+<li>Los <strong>tamaños de efecto</strong> difieren (2 vs 4).</li>
+<li>Estimamos varias especificaciones y usamos <strong>Bacon decomposition</strong> para ver <strong>qué comparaciones</strong> y <strong>con qué peso</strong> componen el β̂ TWFE.</li>
+<li>Finalmente, estimamos pares 2×2 (id 1–2 e id 1–3) para ver los <strong>componentes</strong> del promedio.</li>
+</ul>
+<div class="sourceCode" id="cb113"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb113-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb113-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-2" tabindex="-1"></a><span class="kw">local</span> unidades = 3</span>
+<span id="cb113-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-3" tabindex="-1"></a><span class="kw">local</span> inicio   = 1980</span>
+<span id="cb113-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-4" tabindex="-1"></a><span class="kw">local</span> fin      = 1989</span>
+<span id="cb113-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-5" tabindex="-1"></a><span class="kw">local</span> tiempo   = <span class="ot">`fin&#39;</span> - <span class="ot">`inicio&#39;</span> + 1</span>
+<span id="cb113-6"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-6" tabindex="-1"></a><span class="kw">local</span> <span class="kw">obs</span>      = <span class="ot">`unidades&#39;</span> * <span class="ot">`tiempo&#39;</span></span>
+<span id="cb113-7"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-7" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obs&#39;</span></span>
+<span id="cb113-8"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-8" tabindex="-1"></a></span>
+<span id="cb113-9"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-9" tabindex="-1"></a><span class="kw">gen</span> id = .</span>
+<span id="cb113-10"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-10" tabindex="-1"></a><span class="kw">gen</span> t  = .</span>
+<span id="cb113-11"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-11" tabindex="-1"></a><span class="kw">forvalues</span> i = 1/<span class="ot">`unidades&#39;</span> {</span>
+<span id="cb113-12"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-12" tabindex="-1"></a>    <span class="kw">forvalues</span> j = 0/<span class="ot">`=`tiempo&#39;</span>-1&#39; {</span>
+<span id="cb113-13"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-13" tabindex="-1"></a>        <span class="kw">local</span> obsnum = (<span class="ot">`i&#39;</span> - 1)*<span class="ot">`tiempo&#39;</span> + <span class="ot">`j&#39;</span> + 1</span>
+<span id="cb113-14"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-14" tabindex="-1"></a>        <span class="kw">replace</span> id = <span class="ot">`i&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb113-15"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-15" tabindex="-1"></a>        <span class="kw">replace</span> t  = <span class="ot">`inicio&#39;</span> + <span class="ot">`j&#39;</span> <span class="kw">in</span> <span class="ot">`obsnum&#39;</span></span>
+<span id="cb113-16"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-16" tabindex="-1"></a>    }</span>
+<span id="cb113-17"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-17" tabindex="-1"></a>}</span>
+<span id="cb113-18"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-18" tabindex="-1"></a><span class="kw">sort</span> id t</span>
+<span id="cb113-19"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-19" tabindex="-1"></a>xtset id t</span>
+<span id="cb113-20"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-20" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> id <span class="st">&quot;Unidad&quot;</span></span>
+<span id="cb113-21"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-21" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> t  <span class="st">&quot;Año&quot;</span></span>
+<span id="cb113-22"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-22" tabindex="-1"></a></span>
+<span id="cb113-23"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-23" tabindex="-1"></a>* Tratamiento escalonado: id=2 desde 1985 (τ=2), id=3 desde 1988 (τ=4)</span>
+<span id="cb113-24"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-24" tabindex="-1"></a><span class="kw">gen</span> D = 0</span>
+<span id="cb113-25"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-25" tabindex="-1"></a><span class="kw">replace</span> D = 1 <span class="kw">if</span> id==2 &amp; t &gt;= 1985</span>
+<span id="cb113-26"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-26" tabindex="-1"></a><span class="kw">replace</span> D = 1 <span class="kw">if</span> id==3 &amp; t &gt;= 1988</span>
+<span id="cb113-27"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-27" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> D <span class="st">&quot;Tratamiento escalonado&quot;</span></span>
+<span id="cb113-28"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-28" tabindex="-1"></a></span>
+<span id="cb113-29"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-29" tabindex="-1"></a><span class="kw">gen</span> Y = 0</span>
+<span id="cb113-30"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-30" tabindex="-1"></a><span class="kw">replace</span> Y = D * 2 <span class="kw">if</span> id==2 &amp; D==1   <span class="co">// τ=2 cuando id=2 está tratado</span></span>
+<span id="cb113-31"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-31" tabindex="-1"></a><span class="kw">replace</span> Y = D * 4 <span class="kw">if</span> id==3 &amp; D==1   <span class="co">// τ=4 cuando id=3 está tratado</span></span>
+<span id="cb113-32"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-32" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> Y <span class="st">&quot;Variable dependiente (Y=0 sin tratar; Y=τ con tratar)&quot;</span></span>
+<span id="cb113-33"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-33" tabindex="-1"></a></span>
+<span id="cb113-34"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-34" tabindex="-1"></a><span class="kw">twoway</span> <span class="co">///</span></span>
+<span id="cb113-35"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-35" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id==1, <span class="bn">msymbol</span>(<span class="bn">circle</span>)   lcolor(<span class="bn">blue</span>)   lwidth(medium)) <span class="co">///</span></span>
+<span id="cb113-36"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-36" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id==2, <span class="bn">msymbol</span>(triangle)  lcolor(<span class="kw">red</span>)    lwidth(medium)) <span class="co">///</span></span>
+<span id="cb113-37"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-37" tabindex="-1"></a>    (connected Y t <span class="kw">if</span> id==3, <span class="bn">msymbol</span>(square)    lcolor(<span class="bn">orange</span>) lwidth(medium)) <span class="co">///</span></span>
+<span id="cb113-38"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-38" tabindex="-1"></a>    , <span class="bn">xline</span>(1984.5 1987.5, lpattern(<span class="kw">dash</span>) lcolor(<span class="bn">gray</span>)) <span class="co">///</span></span>
+<span id="cb113-39"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-39" tabindex="-1"></a>      <span class="kw">xlabel</span>(<span class="ot">`inicio&#39;</span>(1)<span class="ot">`fin&#39;</span>) <span class="co">///</span></span>
+<span id="cb113-40"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-40" tabindex="-1"></a>      <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;id=1 (Control)&quot;</span> 2 <span class="st">&quot;id=2 (trata 1985, τ=2)&quot;</span> 3 <span class="st">&quot;id=3 (trata 1988, τ=4)&quot;</span>) pos(6) <span class="ot">row</span>(1)) <span class="co">///</span></span>
+<span id="cb113-41"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-41" tabindex="-1"></a>      <span class="bn">title</span>(<span class="st">&quot;Caso 5: adopción escalonada&quot;</span>) <span class="co">///</span></span>
+<span id="cb113-42"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-42" tabindex="-1"></a>      <span class="bn">xtitle</span>(<span class="st">&quot;Año&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Y&quot;</span>) <span class="bn">name</span>(g5_staggered, <span class="kw">replace</span>)</span>
+<span id="cb113-43"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-43" tabindex="-1"></a></span>
+<span id="cb113-44"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-44" tabindex="-1"></a>* TWFE <span class="fu">y</span> comparaciones por par</span>
+<span id="cb113-45"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-45" tabindex="-1"></a>reghdfe Y D, absorb(id t) <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb113-46"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-46" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t <span class="kw">if</span> (id==1 | id==2), <span class="kw">fe</span> <span class="kw">robust</span>   <span class="co">// par 1-2 (limpio)</span></span>
+<span id="cb113-47"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-47" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t <span class="kw">if</span> (id==1 | id==3), <span class="kw">fe</span> <span class="kw">robust</span>   <span class="co">// par 1-3 (limpio)</span></span>
+<span id="cb113-48"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-48" tabindex="-1"></a></span>
+<span id="cb113-49"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-49" tabindex="-1"></a>* Descomposición <span class="kw">de</span> Bacon</span>
+<span id="cb113-50"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-50" tabindex="-1"></a>* <span class="kw">ssc</span> install bacondecomp, <span class="kw">replace</span>   <span class="co">// instalar si no está</span></span>
+<span id="cb113-51"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-51" tabindex="-1"></a>bacondecomp Y D, ddetail</span>
+<span id="cb113-52"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb113-52" tabindex="-1"></a>* Ref: Goodman-Bacon (2021), Journal <span class="kw">of</span> Econometrics</span></code></pre></div>
+<div class="float">
+<img src="dofile/11_TWFE/g6.png" alt="Grafico" />
+<div class="figcaption">Grafico</div>
+</div>
+<p>##Descomposición de Bacon y “efecto real” en DiD con adopción escalonada {-}</p>
+<p>Cuando el tratamiento se <strong>adopta en momentos distintos</strong> (staggered DiD), el coeficiente de un modelo <strong>TWFE</strong> (efectos fijos de unidad y tiempo) <strong>no</strong> es un simple DiD clásico.<br />
+Goodman-Bacon muestra que ese coeficiente es un <strong>promedio ponderado de muchos DiD 2×2</strong> construidos a partir de las comparaciones disponibles en tus datos.</p>
+<p>En concreto, TWFE se puede escribir (a nivel intuitivo) como:</p>
+<p><span class="math display">\[
+\widehat\beta^{\text{TWFE}} \;=\; \sum_{k} w_k \,\widehat\beta^{(2\times2)}_k,
+\]</span></p>
+<p>donde cada <span class="math inline">\(\widehat\beta^{(2\times2)}_k\)</span> es un DiD “pequeño” entre dos grupos y dos periodos relevantes, y <span class="math inline">\(w_k\)</span> es su <strong>peso</strong> (depende de tamaños muestrales y de cuánta variación en tratamiento aporta esa comparación).</p>
+</div>
+<div id="las-tres-familias-de-comparaciones-22" class="section level2 unnumbered hasAnchor">
+<h2>Las tres familias de comparaciones 2×2<a href="datos-de-panel-did-y-twfe-en-stata.html#las-tres-familias-de-comparaciones-22" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><strong>Tratados vs. nunca tratados (T vs. U)</strong>
+<ul>
+<li>Comparas una cohorte <strong>tratada</strong> con una <strong>nunca tratada</strong> (usando pre vs. post del tratado).</li>
+</ul></li>
+<li><strong>Tratados temprano vs. tratados tarde (Te vs. Cl)</strong> — <em>antes</em> de que los tardíos reciban el tratamiento
+<ul>
+<li>Los <strong>tardíos</strong> (aún no tratados) actúan como <strong>control provisional</strong> para los <strong>tempranos</strong>.</li>
+</ul></li>
+<li><strong>Tratados tarde vs. tratados temprano (Tl vs. Ce)</strong> — <em>después</em> de que los tempranos ya están tratados
+<ul>
+<li>Los <strong>tempranos</strong> (ya tratados) sirven como “control” <strong>no válido</strong> para los <strong>tardíos</strong> porque ya tienen efecto del tratamiento.</li>
+</ul></li>
+</ol>
+<blockquote>
+<p><strong>Clave:</strong> En (2) y (3) estás comparando <strong>tratados con tratados</strong> en momentos distintos.<br />
+Si el <strong>efecto varía por cohorte</strong> (entre unidades) o <strong>en el tiempo desde la adopción</strong> (dinámico), esas comparaciones <strong>no</strong> miden el efecto causal que normalmente te interesa.</p>
+</blockquote>
+</div>
+<div id="cuál-es-el-efecto-real-que-queremos-reportar" class="section level2 unnumbered hasAnchor">
+<h2>¿Cuál es “el efecto real” que queremos reportar?<a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En DiD moderno, el objetivo suele ser el <strong>promedio de efectos entre las observaciones tratadas</strong> en los periodos post, ponderando por su tamaño:</p>
+<p><span class="math display">\[
+\textbf{ATT}_{\text{overall}}
+\;=\;
+\frac{\displaystyle\sum_{g,t:\,D=1} N_{g,t}\cdot \text{ATT}(g,t)}
+     {\displaystyle\sum_{g,t:\,D=1} N_{g,t}},
+\]</span></p>
+<p>donde:
+- <span class="math inline">\(g\)</span> es la <strong>cohorte</strong> (grupo que adopta en un mismo momento),
+- <span class="math inline">\(t\)</span> es el <strong>periodo</strong>,
+- <span class="math inline">\(\text{ATT}(g,t)\)</span> es el efecto en la cohorte-tiempo,
+- <span class="math inline">\(N_{g,t}\)</span> es el número de observaciones tratadas en esa celda.</p>
+<p>A esto lo llamamos aquí el <strong>“promedio del tratamiento”</strong> (o <strong>ATT overall</strong>).<br />
+<strong>TWFE</strong> coincide con este promedio <strong>solo si</strong> el efecto <strong>no varía</strong> ni por cohorte ni en el tiempo (homogeneidad).</p>
+</div>
+<div id="por-qué-twfe-puede-fallar-con-heterogeneidad" class="section level2 unnumbered hasAnchor">
+<h2>¿Por qué TWFE puede fallar con heterogeneidad?<a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Heterogeneidad entre cohortes</strong>: el tamaño del efecto <strong>difiere por unidad/grupo</strong> (p. ej., id=2 tiene +2; id=3 tiene +4).<br />
+</li>
+<li><strong>Heterogeneidad dinámica</strong>: el efecto <strong>cambia con el tiempo desde la adopción</strong> (p. ej., crece cada periodo post).</li>
+</ul>
+<p>En ambos casos, TWFE <strong>mezcla</strong> comparaciones de tipo <strong>Te vs Cl</strong> y <strong>Tl vs Ce</strong>, que <strong>no</strong> capturan el <span class="math inline">\(\text{ATT}(g,t)\)</span> “puro” porque los “controles” ya tienen (o tendrán) efecto en parte de la ventana.<br />
+El promedio ponderado resultante puede <strong>alejarse</strong> del <strong>ATT overall</strong> que quieres reportar.</p>
+</div>
+<div id="mini-ejemplos-para-fijar-ideas" class="section level2 unnumbered hasAnchor">
+<h2>Mini-ejemplos para fijar ideas<a href="datos-de-panel-did-y-twfe-en-stata.html#mini-ejemplos-para-fijar-ideas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte" class="section level3 hasAnchor" number="11.0.1">
+<h3><span class="header-section-number">11.0.1</span> Caso 3 (tu ejemplo con tres unidades, mismo inicio y efecto por cohorte)<a href="datos-de-panel-did-y-twfe-en-stata.html#caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Cohortes tratadas desde 1985:
+<ul>
+<li>id=2 con efecto <strong>+2</strong> (constante post)<br />
+</li>
+<li>id=3 con efecto <strong>+4</strong> (constante post)<br />
+</li>
+</ul></li>
+<li>Ambos tienen <strong>el mismo número de periodos post</strong> (1985–1989: 5 cada uno).</li>
+</ul>
+<p><strong>ATT overall (promedio del tratamiento)</strong><br />
+Promedio entre todas las <strong>observaciones tratadas post</strong>:
+<span class="math display">\[
+\frac{5\cdot 2 \;+\; 5\cdot 4}{5+5} \;=\; \frac{10+20}{10} \;=\; \mathbf{3}.
+\]</span></p>
+<blockquote>
+<p>Aquí el promedio “intuitivo” <strong>sí</strong> es 3.<br />
+TWFE puede aproximarlo cuando solo hay heterogeneidad entre cohortes pero no dinámica y las ventanas son simétricas. Aun así, <strong>Bacon</strong> te dirá qué pesos están usando tus comparaciones.</p>
+</blockquote>
+<hr />
+</div>
+<div id="caso-con-adopción-escalonada-y-efectos-dinámicos" class="section level3 unnumbered hasAnchor">
+<h3>Caso con <strong>adopción escalonada</strong> y <strong>efectos dinámicos</strong><a href="#caso-con-adopci%C3%B3n-escalonada-y-efectos-din%C3%A1micos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>id=2 adopta en 1985 y su efecto <strong>crece</strong> con <span class="math inline">\(t-\text{timing}\)</span>.<br />
+</li>
+<li>id=3 adopta en 1988 y su efecto también <strong>crece</strong> con <span class="math inline">\(t-\text{timing}\)</span>.</li>
+</ul>
+<p><strong>ATT overall correcto</strong>:<br />
+haz el promedio de <span class="math inline">\(\text{ATT}(g,t)\)</span> solo sobre <strong>celdas tratadas</strong> <span class="math inline">\((g,t)\)</span>, ponderado por <span class="math inline">\(N_{g,t}\)</span>.</p>
+<p><strong>TWFE</strong>:<br />
+promedia <strong>también</strong> comparaciones <strong>tratado vs tratado</strong> (tempranos vs tardíos y viceversa) ⇒ si los efectos crecen, esas comparaciones <strong>miden diferencias de efectos</strong>, no el efecto verdadero, y el promedio puede <strong>sesgarse</strong> (incluso con <strong>pesos negativos</strong> en ciertas descomposiciones).</p>
+<hr />
+</div>
+</div>
+<div id="cómo-leer-la-salida-intuición" class="section level2 unnumbered hasAnchor">
+<h2>Cómo leer la salida (intuición)<a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong><code>T vs U</code></strong>: comparaciones “limpias” (tratados vs nunca tratados).<br />
+</li>
+<li><strong><code>Te vs Cl</code></strong> y <strong><code>Tl vs Ce</code></strong>: comparaciones <strong>entre tratados</strong> en distintos momentos.<br />
+</li>
+<li>Si los pesos se concentran en estas dos últimas y sospechas <strong>heterogeneidad</strong>, <strong>no confíes</strong> en TWFE como estimador del ATT overall.</li>
+</ul>
+</div>
+<div id="buenas-prácticas-en-una-lista-corta" class="section level2 unnumbered hasAnchor">
+<h2>Buenas prácticas (en una lista corta)<a href="#buenas-pr%C3%A1cticas-en-una-lista-corta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Define tu parámetro objetivo</strong>: normalmente, <strong>ATT </strong> (promedio sobre celdas tratadas).<br />
+</li>
+<li><strong>Estima <span class="math inline">\(\text{ATT}(g,t)\)</span></strong> con métodos modernos (p. ej., Callaway-Sant’Anna, Sun-Abraham, did-imputation, did2s).<br />
+</li>
+<li><strong>Promedia correctamente</strong>: construye el <strong>ATT </strong> ponderando por <span class="math inline">\(N_{g,t}\)</span> solo sobre celdas tratadas.<br />
+</li>
+<li><strong>Usa Bacon como diagnóstico</strong>: revisa qué comparaciones y pesos aporta TWFE; si domina “tratado vs tratado” y hay heterogeneidad, reporta el estimador moderno.</li>
+</ul>
+<hr />
+<ul>
+<li><strong>Qué quieres</strong>: el <strong>promedio del tratamiento</strong> entre las observaciones tratadas (ATT overall).<br />
+</li>
+<li><strong>Qué hace TWFE</strong>: un <strong>promedio ponderado</strong> de múltiples DiD 2×2, incluyendo <strong>tratado vs tratado</strong>.<br />
+</li>
+<li><strong>Cuándo coincide</strong>: solo con <strong>efectos homogéneos</strong> (sin variación por cohorte ni en el tiempo).<br />
+</li>
+<li><strong>Qué hacer</strong>: estima <span class="math inline">\(\text{ATT}(g,t)\)</span> y promedia <strong>sobre tratadas</strong>; usa Bacon para <strong>auditar</strong> a TWFE.</li>
+</ul>
+</div>
+<div id="cómo-interpretar-la-salida-de-bacondecomp" class="section level2 unnumbered hasAnchor">
+<h2>¿Cómo interpretar la salida de <code>bacondecomp</code>?<a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre><code>
+Computing decomposition across 3 timing groups
+including a never-treated group
+-------------------------------
+</code></pre>
+<pre><code>   Y | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]</code></pre>
+<p>————-+—————————————————————-
+D | 2.709677 .3030118 8.94 0.000 2.115785 3.30357</p>
+<pre><code>
+**Bacon Decomposition:**
+
+| Tipo                | Beta         | TotalWeight   |
+|---------------------|--------------|---------------|
+| Early_v_Late        | 2            | 0.2419354906  |
+| Late_v_Early        | 4            | 0.0967741935  |
+| Never_v_timing      | 2.780487813  | 0.6612903158  |
+</code></pre>
+<hr />
+</div>
+<div id="qué-significa-cada-fila" class="section level2 unnumbered hasAnchor">
+<h2>¿Qué significa cada fila?<a href="#qu%C3%A9-significa-cada-fila" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><p><strong>Early_v_Late (β=2, peso=0.2419)</strong><br />
+Compara <strong>tratados tempranos</strong> vs <strong>tratados tardíos</strong> <strong>en los períodos en que los tardíos aún no están tratados</strong>.<br />
+→ Identifica el efecto de la cohorte <strong>temprana</strong> (≈ 2 en tu simulación).</p></li>
+<li><p><strong>Late_v_Early (β=4, peso=0.0968)</strong><br />
+Compara <strong>tratados tardíos</strong> vs <strong>tratados tempranos</strong> <strong>cuando los tempranos ya están tratados</strong>.<br />
+→ Usa <strong>tratados</strong> como “control” (no ideal si hay heterogeneidad). En tu caso rinde ≈ <strong>4</strong> (efecto de la cohorte tardía).</p></li>
+<li><p><strong>Never_v_timing (β≈2.7805, peso=0.6613)</strong><br />
+Compara <strong>cohortes tratadas</strong> (temprana y tardía) vs <strong>nunca tratados</strong>.<br />
+→ Es un promedio (con pesos internos) de las comparaciones “tratados vs nunca tratados” a través de los distintos timings; por eso el β cae <strong>entre 2 y 4</strong> y está más cerca de 2 porque la cohorte temprana aporta más periodos post.</p></li>
+</ul>
+<blockquote>
+<p><strong>Idea clave</strong>: El coeficiente <strong>TWFE</strong> final es la <strong>media ponderada</strong> de estos DiD 2×2.</p>
+</blockquote>
+<hr />
+</div>
+<div id="cuadra-el-promedio-ponderado-con-el-β-de-twfe" class="section level2 unnumbered hasAnchor">
+<h2>¿Cuadra el promedio ponderado con el β de TWFE?<a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sí. Los <strong>pesos</strong> suman 1:
+- 0.2419354906 + 0.0967741935 + 0.6612903158 = <strong>1.0000</strong> (≈)</p>
+<p>Promedio ponderado:
+- Aporte Early_v_Late: 2 × 0.2419354906 = <strong>0.483871</strong>
+- Aporte Late_v_Early: 4 × 0.0967741935 = <strong>0.387097</strong>
+- Aporte Never_v_timing: 2.780487813 × 0.6612903158 = <strong>1.838710</strong></p>
+<p><strong>Suma</strong>: 0.483871 + 0.387097 + 1.838710 = <strong>2.709677</strong><br />
+→ Coincide con el <strong>β̂ de TWFE = 2.709677</strong>.</p>
+<hr />
+</div>
+<div id="por-qué-este-β-puede-no-ser-el-efecto-real-promedio" class="section level2 unnumbered hasAnchor">
+<h2>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?<a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Lo que normalmente quieres reportar es el <strong>ATT overall</strong>: el <strong>promedio del efecto entre las observaciones tratadas</strong> (cohorte-tiempo) ponderado por su tamaño:</p>
+<p><span class="math display">\[
+\text{ATT}_{\text{overall}}
+=
+\frac{\sum_{g,t: D=1} N_{g,t}\cdot \text{ATT}(g,t)}
+     {\sum_{g,t: D=1} N_{g,t}}.
+\]</span></p>
+<ul>
+<li>En <strong>adopción escalonada</strong> (tempranos con más años post que tardíos) y/o con <strong>efectos que difieren por cohorte</strong> o en el <strong>tiempo desde el tratamiento</strong>, <strong>TWFE</strong> mezcla <strong>tres tipos de comparaciones</strong> (incluyendo <strong>tratado vs tratado</strong>), y su promedio ponderado <strong>puede alejarse</strong> del <strong>ATT overall</strong>.</li>
+</ul>
+<p><strong>Ejemplo mental (ilustrativo):</strong><br />
+Si la cohorte temprana vale <strong>2</strong> (más años post) y la tardía <strong>4</strong> (menos años post), el <strong>promedio correcto entre celdas tratadas</strong> puede ser algo como<br />
+<span class="math display">\[
+\frac{5\cdot 2 + 2\cdot 4}{5+2} = \frac{18}{7} \approx 2.571,
+\]</span>
+mientras que <strong>TWFE</strong> te dio <strong>2.7097</strong> porque <strong>incluye</strong> las comparaciones <strong>Early_v_Late</strong> y <strong>Late_v_Early</strong> con pesos 24% y 9.7%.</p>
+</div>
+<div id="cómo-usar-esta-descomposición-en-la-práctica" class="section level2 unnumbered hasAnchor">
+<h2>¿Cómo usar esta descomposición en la práctica?<a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Si <strong>Never_v_timing</strong> concentra <strong>casi todo el peso</strong> y los efectos son <strong>homogéneos</strong>, <strong>TWFE</strong> suele estar cerca del <strong>ATT overall</strong>.<br />
+</li>
+<li>Si hay <strong>peso relevante</strong> en <strong>Early_v_Late</strong> o <strong>Late_v_Early</strong> <strong>y</strong> sospechas <strong>heterogeneidad</strong> (por cohorte o dinámica), <strong>no</strong> confíes en TWFE para el efecto promedio.</li>
+</ul>
+<p><strong>Recomendación</strong>: Estima <span class="math inline">\(\text{ATT}(g,t)\)</span> con métodos modernos (p. ej., <strong>csdid</strong>, <strong>eventstudyinteract</strong>, <strong>did_imputation</strong>, <strong>did2s</strong>) y luego construye el <strong>ATT overall</strong> promediando <strong>solo sobre celdas tratadas</strong> con pesos <span class="math inline">\(N_{g,t}\)</span>.</p>
+</div>
+<div id="resumen-en-una-línea" class="section level2 unnumbered hasAnchor">
+<h2>Resumen en una línea<a href="#resumen-en-una-l%C3%ADnea" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Tu tabla dice</strong>: el β̂ de TWFE (=<strong>2.7097</strong>) es un <strong>promedio ponderado</strong> de tres DiD 2×2; la mayor parte (66.1%) viene de <strong>tratados vs nunca tratados</strong> (≈2.78), y el resto de <strong>tratados vs tratados</strong> (2 y 4).<br />
+<strong>Conclusión</strong>: Para reportar “el efecto real promedio”, usa el <strong>ATT overall</strong> (promedio sobre observaciones tratadas), no el β̂ de TWFE cuando hay heterogeneidad o adopción escalonada.</p>
+</div>
+<div id="simulación-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes" class="section level2 unnumbered hasAnchor">
+<h2>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Asignamos a cada unidad una <strong>cohorte</strong> (0–5), un <strong>timing de adopción</strong> aleatorio, y un <strong>tamaño de efecto</strong> aleatorio.</li>
+<li>El outcome <code>Y</code> crece con el tiempo y <strong>acumula</strong> efecto post-tratamiento: <code>effect * (t - timing)</code>.</li>
+<li>Graficamos las trayectorias y estimamos <strong>TWFE</strong> + <strong>Bacon</strong>.</li>
+</ul>
+<div class="sourceCode" id="cb117"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb117-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-1" tabindex="-1"></a>*********************************************************</span>
+<span id="cb117-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-2" tabindex="-1"></a></span>
+<span id="cb117-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-3" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb117-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-4" tabindex="-1"></a><span class="kw">local</span> units = 30</span>
+<span id="cb117-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-5" tabindex="-1"></a><span class="kw">local</span> <span class="bn">start</span> = 1</span>
+<span id="cb117-6"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-6" tabindex="-1"></a><span class="kw">local</span> <span class="kw">end</span>   = 60</span>
+<span id="cb117-7"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-7" tabindex="-1"></a></span>
+<span id="cb117-8"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-8" tabindex="-1"></a><span class="kw">local</span> time = <span class="ot">`end&#39;</span> - <span class="ot">`start&#39;</span> + 1</span>
+<span id="cb117-9"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-9" tabindex="-1"></a><span class="kw">local</span> obsv = <span class="ot">`units&#39;</span> * <span class="ot">`time&#39;</span></span>
+<span id="cb117-10"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-10" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obsv&#39;</span></span>
+<span id="cb117-11"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-11" tabindex="-1"></a></span>
+<span id="cb117-12"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-12" tabindex="-1"></a><span class="kw">egen</span> id    = <span class="fu">seq</span>(), b(<span class="ot">`time&#39;</span>)  </span>
+<span id="cb117-13"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-13" tabindex="-1"></a><span class="kw">egen</span> t     = <span class="fu">seq</span>(), f(<span class="ot">`start&#39;</span>) t(<span class="ot">`end&#39;</span>)     </span>
+<span id="cb117-14"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-14" tabindex="-1"></a></span>
+<span id="cb117-15"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-15" tabindex="-1"></a><span class="kw">sort</span>  id t</span>
+<span id="cb117-16"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-16" tabindex="-1"></a>xtset id t</span>
+<span id="cb117-17"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-17" tabindex="-1"></a></span>
+<span id="cb117-18"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-18" tabindex="-1"></a>lab <span class="kw">var</span> id <span class="st">&quot;Panel variable&quot;</span></span>
+<span id="cb117-19"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-19" tabindex="-1"></a>lab <span class="kw">var</span> t  <span class="st">&quot;Time  variable&quot;</span></span>
+<span id="cb117-20"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-20" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 13082021</span>
+<span id="cb117-21"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-21" tabindex="-1"></a></span>
+<span id="cb117-22"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-22" tabindex="-1"></a></span>
+<span id="cb117-23"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-23" tabindex="-1"></a>cap <span class="kw">drop</span> Y</span>
+<span id="cb117-24"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-24" tabindex="-1"></a>cap <span class="kw">drop</span> D</span>
+<span id="cb117-25"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-25" tabindex="-1"></a>cap <span class="kw">drop</span> cohort</span>
+<span id="cb117-26"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-26" tabindex="-1"></a>cap <span class="kw">drop</span> effect</span>
+<span id="cb117-27"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-27" tabindex="-1"></a>cap <span class="kw">drop</span> timing</span>
+<span id="cb117-28"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-28" tabindex="-1"></a></span>
+<span id="cb117-29"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-29" tabindex="-1"></a><span class="kw">gen</span> Y      = 0      <span class="co">// outcome variable </span></span>
+<span id="cb117-30"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-30" tabindex="-1"></a><span class="kw">gen</span> D      = 0      <span class="co">// intervention variable</span></span>
+<span id="cb117-31"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-31" tabindex="-1"></a><span class="kw">gen</span> cohort = .      <span class="co">// total treatment variables</span></span>
+<span id="cb117-32"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-32" tabindex="-1"></a><span class="kw">gen</span> effect = .      <span class="co">// treatment effect size</span></span>
+<span id="cb117-33"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-33" tabindex="-1"></a><span class="kw">gen</span> timing = .      <span class="co">// when the treatment happens for each cohort</span></span>
+<span id="cb117-34"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-34" tabindex="-1"></a><span class="kw">levelsof</span> id, <span class="kw">local</span>(lvls)</span>
+<span id="cb117-35"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-35" tabindex="-1"></a><span class="kw">foreach</span> x <span class="kw">of</span> <span class="kw">local</span> lvls {</span>
+<span id="cb117-36"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-36" tabindex="-1"></a>    <span class="kw">local</span> chrt = runiformint(0,5)   </span>
+<span id="cb117-37"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-37" tabindex="-1"></a>    <span class="kw">replace</span> cohort = <span class="ot">`chrt&#39;</span> <span class="kw">if</span> id==<span class="ot">`x&#39;</span></span>
+<span id="cb117-38"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-38" tabindex="-1"></a>}</span>
+<span id="cb117-39"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-39" tabindex="-1"></a></span>
+<span id="cb117-40"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-40" tabindex="-1"></a><span class="kw">levelsof</span> cohort , <span class="kw">local</span>(lvls)  <span class="co">//  let all cohorts be treated for now</span></span>
+<span id="cb117-41"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-41" tabindex="-1"></a><span class="kw">foreach</span> x <span class="kw">of</span> <span class="kw">local</span> lvls {</span>
+<span id="cb117-42"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-42" tabindex="-1"></a>    </span>
+<span id="cb117-43"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-43" tabindex="-1"></a>    <span class="co">// (a) effect</span></span>
+<span id="cb117-44"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-44" tabindex="-1"></a>    </span>
+<span id="cb117-45"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-45" tabindex="-1"></a>    <span class="kw">local</span> eff = runiformint(2,10)</span>
+<span id="cb117-46"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-46" tabindex="-1"></a>        <span class="kw">replace</span> effect = <span class="ot">`eff&#39;</span> <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span></span>
+<span id="cb117-47"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-47" tabindex="-1"></a>        </span>
+<span id="cb117-48"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-48" tabindex="-1"></a>    <span class="co">// (b) timing   </span></span>
+<span id="cb117-49"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-49" tabindex="-1"></a>    </span>
+<span id="cb117-50"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-50" tabindex="-1"></a>    <span class="kw">local</span> timing = runiformint(<span class="ot">`start&#39;</span> + 5,<span class="ot">`end&#39;</span> - 5)   </span>
+<span id="cb117-51"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-51" tabindex="-1"></a>    <span class="kw">replace</span> timing = <span class="ot">`timing&#39;</span> <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span></span>
+<span id="cb117-52"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-52" tabindex="-1"></a>        <span class="kw">replace</span> D = 1 <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span> &amp; t&gt;= <span class="ot">`timing&#39;</span> </span>
+<span id="cb117-53"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-53" tabindex="-1"></a>}</span>
+<span id="cb117-54"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-54" tabindex="-1"></a></span>
+<span id="cb117-55"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-55" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D==1, effect * (t - timing), 0)</span>
+<span id="cb117-56"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-56" tabindex="-1"></a></span>
+<span id="cb117-57"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-57" tabindex="-1"></a></span>
+<span id="cb117-58"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-58" tabindex="-1"></a><span class="kw">levelsof</span> cohort</span>
+<span id="cb117-59"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-59" tabindex="-1"></a><span class="kw">local</span> items = <span class="ot">`r(r)&#39;</span></span>
+<span id="cb117-60"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-60" tabindex="-1"></a></span>
+<span id="cb117-61"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-61" tabindex="-1"></a><span class="kw">local</span> lines</span>
+<span id="cb117-62"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-62" tabindex="-1"></a><span class="kw">levelsof</span> id</span>
+<span id="cb117-63"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-63" tabindex="-1"></a></span>
+<span id="cb117-64"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-64" tabindex="-1"></a>forval x = 1/<span class="ot">`r(r)&#39;</span> {</span>
+<span id="cb117-65"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-65" tabindex="-1"></a>    </span>
+<span id="cb117-66"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-66" tabindex="-1"></a>    <span class="kw">qui</span> summ cohort <span class="kw">if</span> id==<span class="ot">`x&#39;</span></span>
+<span id="cb117-67"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-67" tabindex="-1"></a>    <span class="kw">local</span> <span class="kw">color</span> = <span class="ot">`r(mean)&#39;</span> + 1</span>
+<span id="cb117-68"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-68" tabindex="-1"></a>    colorpalette tableau, nograph</span>
+<span id="cb117-69"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-69" tabindex="-1"></a>        </span>
+<span id="cb117-70"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-70" tabindex="-1"></a>    <span class="kw">local</span> lines <span class="ot">`lines&#39;</span> (<span class="kw">line</span> Y t <span class="kw">if</span> id==<span class="ot">`x&#39;</span>, lc(<span class="st">&quot;`r(p`color&#39;)&#39;&quot;</span>) lw(vthin))    ||</span>
+<span id="cb117-71"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-71" tabindex="-1"></a>}</span>
+<span id="cb117-72"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-72" tabindex="-1"></a></span>
+<span id="cb117-73"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-73" tabindex="-1"></a><span class="kw">twoway</span> <span class="co">///</span></span>
+<span id="cb117-74"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-74" tabindex="-1"></a>    <span class="ot">`lines&#39;</span>, <span class="bn">legend</span>(<span class="kw">off</span>)</span>
+<span id="cb117-75"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-75" tabindex="-1"></a>    </span>
+<span id="cb117-76"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-76" tabindex="-1"></a>    </span>
+<span id="cb117-77"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-77" tabindex="-1"></a>    <span class="kw">xtreg</span> Y i.t D, <span class="kw">fe</span></span>
+<span id="cb117-78"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-78" tabindex="-1"></a>    reghdfe Y D, absorb(id t)  </span>
+<span id="cb117-79"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-79" tabindex="-1"></a></span>
+<span id="cb117-80"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-80" tabindex="-1"></a></span>
+<span id="cb117-81"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb117-81" tabindex="-1"></a>bacondecomp Y D, ddetail</span></code></pre></div>
+<blockquote>
+<p>🔍 <strong>Claves</strong>: Este es el entorno “realista” donde TWFE más sufre: <strong>heterogeneidad + escalonamiento</strong> + <strong>dinámicas</strong> → pesos complicados (a veces negativos).</p>
+</blockquote>
+</div>
+<div id="soluciones-estimadores-modernos-y-gráfico-comparativo-de-estudios-de-evento" class="section level2 unnumbered hasAnchor">
+<h2>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento<a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="explicación-didáctica" class="section level3 unnumbered hasAnchor">
+<h3>Explicación didáctica<a href="#explicaci%C3%B3n-did%C3%A1ctica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Simulamos nuevamente con <strong>first_treat</strong> y <strong>rel_time</strong> para construir <strong>leads</strong> (<code>F_#</code>) y <strong>lags</strong> (<code>L_#</code>).</p></li>
+<li><p>Definimos cohortes de <strong>nunca tratados</strong> y variables de <strong>cohorte/gvar</strong> para los métodos que lo requieren.</p></li>
+<li><p><strong>Instalamos</strong> paquetes (hazlo una sola vez; luego puedes comentar estas líneas).</p></li>
+<li><p>Estimamos:</p>
+<ul>
+<li><strong>TWFE</strong> (con <code>reghdfe</code>),</li>
+<li><strong>csdid</strong>,</li>
+<li><strong>did_imputation</strong>,</li>
+<li><strong>did_multiplegt_dyn</strong>,</li>
+<li><strong>eventstudyinteract</strong>,</li>
+<li><strong>did2s</strong>,</li>
+<li><strong>stackedev</strong>;
+y graficamos todos juntos con <code>event_plot</code>.</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>Detalle técnico</strong>: en <code>reghdfe Y L_* F_*, absorb(id t) cluster(i)</code>, tu código agrupa por <code>i</code>. Si tu panel es <code>id</code>, lo más habitual es <code>cluster(id)</code>. <strong>Mantengo tu comando exactamente</strong> (como pediste), pero sugiero revisar el cluster según tu diseño.</p>
+</blockquote>
+<div class="sourceCode" id="cb118"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb118-1"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-1" tabindex="-1"></a>**********************************************************************************************</span>
+<span id="cb118-2"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-2" tabindex="-1"></a>*Soluciones</span>
+<span id="cb118-3"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-3" tabindex="-1"></a></span>
+<span id="cb118-4"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-4" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb118-5"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-5" tabindex="-1"></a></span>
+<span id="cb118-6"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-6" tabindex="-1"></a><span class="kw">local</span> units = 30</span>
+<span id="cb118-7"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-7" tabindex="-1"></a><span class="kw">local</span> <span class="bn">start</span> = 1</span>
+<span id="cb118-8"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-8" tabindex="-1"></a><span class="kw">local</span> <span class="kw">end</span>   = 60</span>
+<span id="cb118-9"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-9" tabindex="-1"></a></span>
+<span id="cb118-10"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-10" tabindex="-1"></a><span class="kw">local</span> time = <span class="ot">`end&#39;</span> - <span class="ot">`start&#39;</span> + 1</span>
+<span id="cb118-11"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-11" tabindex="-1"></a><span class="kw">local</span> obsv = <span class="ot">`units&#39;</span> * <span class="ot">`time&#39;</span></span>
+<span id="cb118-12"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-12" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> <span class="ot">`obsv&#39;</span></span>
+<span id="cb118-13"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-13" tabindex="-1"></a></span>
+<span id="cb118-14"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-14" tabindex="-1"></a><span class="kw">egen</span> id    = <span class="fu">seq</span>(), b(<span class="ot">`time&#39;</span>)  </span>
+<span id="cb118-15"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-15" tabindex="-1"></a><span class="kw">egen</span> t     = <span class="fu">seq</span>(), f(<span class="ot">`start&#39;</span>) t(<span class="ot">`end&#39;</span>)     </span>
+<span id="cb118-16"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-16" tabindex="-1"></a></span>
+<span id="cb118-17"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-17" tabindex="-1"></a><span class="kw">sort</span>  id t</span>
+<span id="cb118-18"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-18" tabindex="-1"></a>xtset id t</span>
+<span id="cb118-19"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-19" tabindex="-1"></a></span>
+<span id="cb118-20"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-20" tabindex="-1"></a></span>
+<span id="cb118-21"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-21" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20211222</span>
+<span id="cb118-22"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-22" tabindex="-1"></a></span>
+<span id="cb118-23"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-23" tabindex="-1"></a><span class="kw">gen</span> Y           = 0     <span class="co">// outcome variable </span></span>
+<span id="cb118-24"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-24" tabindex="-1"></a><span class="kw">gen</span> D           = 0     <span class="co">// intervention variable</span></span>
+<span id="cb118-25"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-25" tabindex="-1"></a><span class="kw">gen</span> cohort      = .     <span class="co">// treatment cohort</span></span>
+<span id="cb118-26"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-26" tabindex="-1"></a><span class="kw">gen</span> effect      = .     <span class="co">// treatment effect size</span></span>
+<span id="cb118-27"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-27" tabindex="-1"></a><span class="kw">gen</span> first_treat = .     <span class="co">// when the treatment happens for each cohort</span></span>
+<span id="cb118-28"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-28" tabindex="-1"></a><span class="kw">gen</span> rel_time    = .     <span class="co">// time - first_treat</span></span>
+<span id="cb118-29"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-29" tabindex="-1"></a></span>
+<span id="cb118-30"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-30" tabindex="-1"></a><span class="kw">levelsof</span> id, <span class="kw">local</span>(lvls)</span>
+<span id="cb118-31"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-31" tabindex="-1"></a><span class="kw">foreach</span> x <span class="kw">of</span> <span class="kw">local</span> lvls {</span>
+<span id="cb118-32"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-32" tabindex="-1"></a>    <span class="kw">local</span> chrt = runiformint(0,5)   </span>
+<span id="cb118-33"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-33" tabindex="-1"></a>    <span class="kw">replace</span> cohort = <span class="ot">`chrt&#39;</span> <span class="kw">if</span> id==<span class="ot">`x&#39;</span></span>
+<span id="cb118-34"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-34" tabindex="-1"></a>}</span>
+<span id="cb118-35"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-35" tabindex="-1"></a></span>
+<span id="cb118-36"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-36" tabindex="-1"></a></span>
+<span id="cb118-37"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-37" tabindex="-1"></a><span class="kw">levelsof</span> cohort , <span class="kw">local</span>(lvls) </span>
+<span id="cb118-38"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-38" tabindex="-1"></a><span class="kw">foreach</span> x <span class="kw">of</span> <span class="kw">local</span> lvls {</span>
+<span id="cb118-39"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-39" tabindex="-1"></a>    </span>
+<span id="cb118-40"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-40" tabindex="-1"></a>    <span class="kw">local</span> eff = runiformint(2,10)</span>
+<span id="cb118-41"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-41" tabindex="-1"></a>        <span class="kw">replace</span> effect = <span class="ot">`eff&#39;</span> <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span></span>
+<span id="cb118-42"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-42" tabindex="-1"></a>            </span>
+<span id="cb118-43"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-43" tabindex="-1"></a>    <span class="kw">local</span> timing = runiformint(<span class="ot">`start&#39;</span>,<span class="ot">`end&#39;</span> + 20)  <span class="co">// </span></span>
+<span id="cb118-44"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-44" tabindex="-1"></a>    <span class="kw">replace</span> first_treat = <span class="ot">`timing&#39;</span> <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span></span>
+<span id="cb118-45"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-45" tabindex="-1"></a>    <span class="kw">replace</span> first_treat = . <span class="kw">if</span> first_treat &gt; <span class="ot">`end&#39;</span></span>
+<span id="cb118-46"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-46" tabindex="-1"></a>        <span class="kw">replace</span> D = 1 <span class="kw">if</span> cohort==<span class="ot">`x&#39;</span> &amp; t&gt;= <span class="ot">`timing&#39;</span> </span>
+<span id="cb118-47"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-47" tabindex="-1"></a>}</span>
+<span id="cb118-48"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-48" tabindex="-1"></a></span>
+<span id="cb118-49"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-49" tabindex="-1"></a><span class="kw">replace</span> rel_time = t - first_treat</span>
+<span id="cb118-50"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-50" tabindex="-1"></a><span class="kw">replace</span> Y = id + t + <span class="fu">cond</span>(D==1, effect * rel_time, 0) + rnormal()</span>
+<span id="cb118-51"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-51" tabindex="-1"></a></span>
+<span id="cb118-52"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-52" tabindex="-1"></a></span>
+<span id="cb118-53"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-53" tabindex="-1"></a></span>
+<span id="cb118-54"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-54" tabindex="-1"></a><span class="co">// generate leads and lags (used in some commands)</span></span>
+<span id="cb118-55"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-55" tabindex="-1"></a></span>
+<span id="cb118-56"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-56" tabindex="-1"></a>summ rel_time</span>
+<span id="cb118-57"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-57" tabindex="-1"></a><span class="kw">local</span> relmin = <span class="fu">abs</span>(<span class="fu">r</span>(<span class="fu">min</span>))</span>
+<span id="cb118-58"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-58" tabindex="-1"></a><span class="kw">local</span> relmax = <span class="fu">abs</span>(<span class="fu">r</span>(<span class="fu">max</span>))</span>
+<span id="cb118-59"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-59" tabindex="-1"></a></span>
+<span id="cb118-60"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-60" tabindex="-1"></a>    <span class="co">// leads</span></span>
+<span id="cb118-61"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-61" tabindex="-1"></a>    cap <span class="kw">drop</span> F_*</span>
+<span id="cb118-62"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-62" tabindex="-1"></a>    forval x = 2/<span class="ot">`relmin&#39;</span> {  <span class="co">// drop the first lead</span></span>
+<span id="cb118-63"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-63" tabindex="-1"></a>        <span class="kw">gen</span> F_<span class="ot">`x&#39;</span> = rel_time == -<span class="ot">`x&#39;</span></span>
+<span id="cb118-64"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-64" tabindex="-1"></a>    }</span>
+<span id="cb118-65"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-65" tabindex="-1"></a></span>
+<span id="cb118-66"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-66" tabindex="-1"></a>    </span>
+<span id="cb118-67"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-67" tabindex="-1"></a>    <span class="co">//lags</span></span>
+<span id="cb118-68"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-68" tabindex="-1"></a>    cap <span class="kw">drop</span> L_*</span>
+<span id="cb118-69"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-69" tabindex="-1"></a>    forval x = 0/<span class="ot">`relmax&#39;</span> {</span>
+<span id="cb118-70"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-70" tabindex="-1"></a>        <span class="kw">gen</span> L_<span class="ot">`x&#39;</span> = rel_time ==  <span class="ot">`x&#39;</span></span>
+<span id="cb118-71"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-71" tabindex="-1"></a>    }</span>
+<span id="cb118-72"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-72" tabindex="-1"></a>    </span>
+<span id="cb118-73"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-73" tabindex="-1"></a>    </span>
+<span id="cb118-74"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-74" tabindex="-1"></a><span class="co">// generate the control_cohort variables  (used in some commands)</span></span>
+<span id="cb118-75"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-75" tabindex="-1"></a></span>
+<span id="cb118-76"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-76" tabindex="-1"></a><span class="kw">gen</span> never_treat = first_treat==.</span>
+<span id="cb118-77"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-77" tabindex="-1"></a></span>
+<span id="cb118-78"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-78" tabindex="-1"></a><span class="kw">sum</span> first_treat</span>
+<span id="cb118-79"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-79" tabindex="-1"></a><span class="kw">gen</span> last_cohort = first_treat==<span class="fu">r</span>(<span class="fu">max</span>) <span class="co">// dummy for the latest- or never-treated cohort</span></span>
+<span id="cb118-80"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-80" tabindex="-1"></a></span>
+<span id="cb118-81"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-81" tabindex="-1"></a></span>
+<span id="cb118-82"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-82" tabindex="-1"></a><span class="co">// generate the gvar variabls (used in some commands)</span></span>
+<span id="cb118-83"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-83" tabindex="-1"></a><span class="kw">gen</span> gvar = first_treat</span>
+<span id="cb118-84"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-84" tabindex="-1"></a><span class="kw">recode</span> gvar (. = 0)</span>
+<span id="cb118-85"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-85" tabindex="-1"></a>*************************************</span>
+<span id="cb118-86"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-86" tabindex="-1"></a></span>
+<span id="cb118-87"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-87" tabindex="-1"></a>*Los colegas creativos</span>
+<span id="cb118-88"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-88" tabindex="-1"></a><span class="co">// supporting packages</span></span>
+<span id="cb118-89"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-89" tabindex="-1"></a><span class="kw">ssc</span> install schemepack, <span class="kw">replace</span></span>
+<span id="cb118-90"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-90" tabindex="-1"></a><span class="kw">ssc</span> install avar, <span class="kw">replace</span> </span>
+<span id="cb118-91"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-91" tabindex="-1"></a><span class="kw">ssc</span> install reghdfe, <span class="kw">replace</span></span>
+<span id="cb118-92"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-92" tabindex="-1"></a><span class="kw">ssc</span> install event_plot, <span class="kw">replace</span></span>
+<span id="cb118-93"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-93" tabindex="-1"></a><span class="kw">ssc</span> install palettes, <span class="kw">replace</span></span>
+<span id="cb118-94"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-94" tabindex="-1"></a><span class="kw">ssc</span> install colrspace, <span class="kw">replace</span></span>
+<span id="cb118-95"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-95" tabindex="-1"></a></span>
+<span id="cb118-96"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-96" tabindex="-1"></a><span class="co">// DiD packages</span></span>
+<span id="cb118-97"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-97" tabindex="-1"></a><span class="kw">ssc</span> install drdid, <span class="kw">replace</span></span>
+<span id="cb118-98"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-98" tabindex="-1"></a><span class="kw">ssc</span> install csdid, <span class="kw">replace</span></span>
+<span id="cb118-99"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-99" tabindex="-1"></a><span class="kw">ssc</span> install did_imputation, <span class="kw">replace</span></span>
+<span id="cb118-100"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-100" tabindex="-1"></a><span class="kw">ssc</span> install eventstudyinteract, <span class="kw">replace</span></span>
+<span id="cb118-101"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-101" tabindex="-1"></a><span class="kw">ssc</span> install did_multiplegt, <span class="kw">replace</span></span>
+<span id="cb118-102"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-102" tabindex="-1"></a><span class="kw">ssc</span> install stackedev, <span class="kw">replace</span></span>
+<span id="cb118-103"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-103" tabindex="-1"></a><span class="kw">ssc</span> install did2s, <span class="kw">replace</span></span>
+<span id="cb118-104"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-104" tabindex="-1"></a></span>
+<span id="cb118-105"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-105" tabindex="-1"></a></span>
+<span id="cb118-106"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-106" tabindex="-1"></a>************</span>
+<span id="cb118-107"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-107" tabindex="-1"></a>*** TWFE ***</span>
+<span id="cb118-108"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-108" tabindex="-1"></a>************</span>
+<span id="cb118-109"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-109" tabindex="-1"></a></span>
+<span id="cb118-110"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-110" tabindex="-1"></a>reghdfe Y L_* F_*, absorb(id t) <span class="kw">cluster</span>(i)</span>
+<span id="cb118-111"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-111" tabindex="-1"></a></span>
+<span id="cb118-112"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-112" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> twfe </span>
+<span id="cb118-113"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-113" tabindex="-1"></a></span>
+<span id="cb118-114"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-114" tabindex="-1"></a>*************</span>
+<span id="cb118-115"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-115" tabindex="-1"></a>*** csdid ***</span>
+<span id="cb118-116"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-116" tabindex="-1"></a>*************</span>
+<span id="cb118-117"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-117" tabindex="-1"></a></span>
+<span id="cb118-118"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-118" tabindex="-1"></a>csdid Y, ivar(id) time(t) gvar(gvar) notyet</span>
+<span id="cb118-119"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-119" tabindex="-1"></a></span>
+<span id="cb118-120"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-120" tabindex="-1"></a><span class="kw">estat</span> event, <span class="kw">window</span>(-10 10) estore(csdd) </span>
+<span id="cb118-121"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-121" tabindex="-1"></a></span>
+<span id="cb118-122"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-122" tabindex="-1"></a>***********************</span>
+<span id="cb118-123"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-123" tabindex="-1"></a>*** did_imputation  ***</span>
+<span id="cb118-124"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-124" tabindex="-1"></a>***********************</span>
+<span id="cb118-125"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-125" tabindex="-1"></a></span>
+<span id="cb118-126"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-126" tabindex="-1"></a>did_imputation Y i t first_treat, horizons(0/10) pretrend(10) minn(0) </span>
+<span id="cb118-127"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-127" tabindex="-1"></a></span>
+<span id="cb118-128"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-128" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> didimp  </span>
+<span id="cb118-129"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-129" tabindex="-1"></a>    </span>
+<span id="cb118-130"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-130" tabindex="-1"></a>***********************</span>
+<span id="cb118-131"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-131" tabindex="-1"></a>*** did_multiplegt  ***</span>
+<span id="cb118-132"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-132" tabindex="-1"></a>***********************</span>
+<span id="cb118-133"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-133" tabindex="-1"></a></span>
+<span id="cb118-134"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-134" tabindex="-1"></a>did_multiplegt_dyn Y id t D, <span class="kw">effects</span>(10) placebo(10) <span class="kw">cluster</span>(id)</span>
+<span id="cb118-135"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-135" tabindex="-1"></a></span>
+<span id="cb118-136"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-136" tabindex="-1"></a><span class="fu">matrix</span> didmgt_b = <span class="fu">e</span>(<span class="kw">estimates</span>) </span>
+<span id="cb118-137"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-137" tabindex="-1"></a><span class="fu">matrix</span> didmgt_v = <span class="fu">e</span>(variances)</span>
+<span id="cb118-138"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-138" tabindex="-1"></a></span>
+<span id="cb118-139"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-139" tabindex="-1"></a>*****************************</span>
+<span id="cb118-140"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-140" tabindex="-1"></a>***  eventstudyinteract   ***</span>
+<span id="cb118-141"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-141" tabindex="-1"></a>*****************************</span>
+<span id="cb118-142"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-142" tabindex="-1"></a></span>
+<span id="cb118-143"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-143" tabindex="-1"></a>eventstudyinteract Y L_* F_*, <span class="kw">vce</span>(<span class="kw">cluster</span> id) absorb(id t) cohort(first_treat) control_cohort(never_treat)  </span>
+<span id="cb118-144"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-144" tabindex="-1"></a></span>
+<span id="cb118-145"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-145" tabindex="-1"></a><span class="fu">matrix</span> evtstint_b = <span class="fu">e</span>(b_iw) </span>
+<span id="cb118-146"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-146" tabindex="-1"></a><span class="fu">matrix</span> evtstint_v = <span class="fu">e</span>(V_iw)</span>
+<span id="cb118-147"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-147" tabindex="-1"></a></span>
+<span id="cb118-148"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-148" tabindex="-1"></a>***************     </span>
+<span id="cb118-149"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-149" tabindex="-1"></a>*** did2s   ***</span>
+<span id="cb118-150"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-150" tabindex="-1"></a>***************</span>
+<span id="cb118-151"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-151" tabindex="-1"></a></span>
+<span id="cb118-152"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-152" tabindex="-1"></a>did2s Y, first_stage(id t) second_stage(F_* L_*) treatment(D) <span class="kw">cluster</span>(id)</span>
+<span id="cb118-153"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-153" tabindex="-1"></a></span>
+<span id="cb118-154"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-154" tabindex="-1"></a><span class="fu">matrix</span> did2s_b = <span class="fu">e</span>(b)</span>
+<span id="cb118-155"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-155" tabindex="-1"></a><span class="fu">matrix</span> did2s_v = <span class="fu">e</span>(<span class="kw">V</span>)</span>
+<span id="cb118-156"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-156" tabindex="-1"></a></span>
+<span id="cb118-157"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-157" tabindex="-1"></a>******************</span>
+<span id="cb118-158"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-158" tabindex="-1"></a>*** stackedev  ***</span>
+<span id="cb118-159"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-159" tabindex="-1"></a>******************</span>
+<span id="cb118-160"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-160" tabindex="-1"></a></span>
+<span id="cb118-161"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-161" tabindex="-1"></a>    </span>
+<span id="cb118-162"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-162" tabindex="-1"></a>stackedev Y F_* L_* ref, cohort(first_treat) time(t) never_treat(never_treat) unit_fe(id) clust_unit(id)</span>
+<span id="cb118-163"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-163" tabindex="-1"></a>    </span>
+<span id="cb118-164"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-164" tabindex="-1"></a><span class="fu">matrix</span> stackedev_b = <span class="fu">e</span>(b)</span>
+<span id="cb118-165"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-165" tabindex="-1"></a><span class="fu">matrix</span> stackedev_v = <span class="fu">e</span>(<span class="kw">V</span>)</span>
+<span id="cb118-166"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-166" tabindex="-1"></a></span>
+<span id="cb118-167"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-167" tabindex="-1"></a></span>
+<span id="cb118-168"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-168" tabindex="-1"></a></span>
+<span id="cb118-169"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-169" tabindex="-1"></a>colorpalette tableau, nograph   </span>
+<span id="cb118-170"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-170" tabindex="-1"></a></span>
+<span id="cb118-171"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-171" tabindex="-1"></a>event_plot    twfe  csdd    didimp  dcdh_b#dcdh_v   sa_b#sa_v   stackedev_b#stackedev_v did2s_b#did2s_v ,   <span class="co">///</span></span>
+<span id="cb118-172"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-172" tabindex="-1"></a>    stub_lag( L_#   Tp#     tau#    Effect_#        L_#         L_#                     L_#             )       <span class="co">///</span></span>
+<span id="cb118-173"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-173" tabindex="-1"></a>    stub_lead(F_#   Tm#     pre#    Placebo_#       F_#         F_#                     F_#             )       <span class="co">///</span></span>
+<span id="cb118-174"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-174" tabindex="-1"></a>        together perturb(-0.30(0.10)0.30) trimlead(20) trimlag(20) noautolegend                                     <span class="co">///</span></span>
+<span id="cb118-175"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-175" tabindex="-1"></a>        plottype(<span class="kw">scatter</span>) ciplottype(rspike)                                                                        <span class="co">///</span></span>
+<span id="cb118-176"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-176" tabindex="-1"></a>            lag_opt1(<span class="bn">msymbol</span>(+)   msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="bn">black</span>))     lag_ci_opt1(<span class="kw">color</span>(<span class="bn">black</span>)     lw(0.15))  <span class="co">///</span></span>
+<span id="cb118-177"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-177" tabindex="-1"></a>            lag_opt2(<span class="bn">msymbol</span>(lgx) msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p1)&#39;&quot;</span>)) lag_ci_opt2(<span class="kw">color</span>(<span class="st">&quot;`r(p1)&#39;&quot;</span>) lw(0.15))  <span class="co">///</span></span>
+<span id="cb118-178"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-178" tabindex="-1"></a>            lag_opt3(<span class="bn">msymbol</span>(Dh)  msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p2)&#39;&quot;</span>)) lag_ci_opt3(<span class="kw">color</span>(<span class="st">&quot;`r(p2)&#39;&quot;</span>) lw(0.15))  <span class="co">///</span></span>
+<span id="cb118-179"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-179" tabindex="-1"></a>            lag_opt4(<span class="bn">msymbol</span>(Th)  msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p3)&#39;&quot;</span>)) lag_ci_opt4(<span class="kw">color</span>(<span class="st">&quot;`r(p3)&#39;&quot;</span>) lw(0.15))  <span class="co">///</span></span>
+<span id="cb118-180"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-180" tabindex="-1"></a>            lag_opt5(<span class="bn">msymbol</span>(Sh)  msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p4)&#39;&quot;</span>)) lag_ci_opt5(<span class="kw">color</span>(<span class="st">&quot;`r(p4)&#39;&quot;</span>) lw(0.15))  <span class="co">///</span></span>
+<span id="cb118-181"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-181" tabindex="-1"></a>            lag_opt6(<span class="bn">msymbol</span>(Oh)  msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p5)&#39;&quot;</span>)) lag_ci_opt6(<span class="kw">color</span>(<span class="st">&quot;`r(p5)&#39;&quot;</span>) lw(0.15))  <span class="co">///  </span></span>
+<span id="cb118-182"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-182" tabindex="-1"></a>            lag_opt7(<span class="bn">msymbol</span>(<span class="kw">V</span>)   msize(1.2) mlwidth(0.3) <span class="kw">color</span>(<span class="st">&quot;`r(p6)&#39;&quot;</span>)) lag_ci_opt7(<span class="kw">color</span>(<span class="st">&quot;`r(p6)&#39;&quot;</span>) lw(0.15))  <span class="co">///     </span></span>
+<span id="cb118-183"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-183" tabindex="-1"></a>                    graph_opt(                                              <span class="co">///</span></span>
+<span id="cb118-184"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-184" tabindex="-1"></a>                                <span class="bn">title</span>(<span class="st">&quot;DiD event study plot&quot;</span>)                       <span class="co">///</span></span>
+<span id="cb118-185"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-185" tabindex="-1"></a>                                <span class="bn">xtitle</span>(<span class="st">&quot;&quot;</span>)                                  <span class="co">///</span></span>
+<span id="cb118-186"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-186" tabindex="-1"></a>                                <span class="bn">ytitle</span>(<span class="st">&quot;Average effect&quot;</span>) <span class="kw">xlabel</span>(-20(2)20)   <span class="co">///</span></span>
+<span id="cb118-187"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-187" tabindex="-1"></a>                                <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;TWFE&quot;</span> 3 <span class="st">&quot;csdid (CS 2020)&quot;</span> 5 <span class="st">&quot;did_imputation (BJS 2021)&quot;</span> 7 <span class="st">&quot;did_multiplegt (CD 2020)&quot;</span>  9 <span class="st">&quot;eventstudyinteract (SA 2020)&quot;</span> 11 <span class="st">&quot;stackedev (CDLZ 2019)&quot;</span> 13 <span class="st">&quot;did2s (G 2021)&quot;</span>) pos(6) <span class="bn">rows</span>(3) region(style(<span class="kw">none</span>)))  <span class="co">///</span></span>
+<span id="cb118-188"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-188" tabindex="-1"></a>                                <span class="bn">xline</span>(-0.5, lc(gs8) lp(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb118-189"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-189" tabindex="-1"></a>                                <span class="kw">yline</span>(   0, lc(gs8) lp(<span class="kw">dash</span>)) <span class="co">///</span></span>
+<span id="cb118-190"><a href="datos-de-panel-did-y-twfe-en-stata.html#cb118-190" tabindex="-1"></a>                             ) </span></code></pre></div>
+</div>
+</div>
+<div id="puntos-de-aprendizaje-resumen" class="section level2 unnumbered hasAnchor">
+<h2>Puntos de aprendizaje (resumen)<a href="datos-de-panel-did-y-twfe-en-stata.html#puntos-de-aprendizaje-resumen" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><p><strong>TWFE</strong> funciona bien en <strong>2×2</strong> simples, pero con <strong>heterogeneidad</strong> y <strong>timing escalonado</strong> puede:</p>
+<ul>
+<li>Promediar comparaciones no deseadas,</li>
+<li>Asignar <strong>pesos negativos</strong>,</li>
+<li>Usar como “controles” unidades ya tratadas.</li>
+</ul></li>
+<li><p>La <strong>descomposición de Bacon</strong> ayuda a entender <strong>quién compara con quién</strong> y <strong>con qué peso</strong>.</p></li>
+<li><p>Estimadores modernos (<strong>csdid, eventstudyinteract, did_imputation, did2s, did_multiplegt, stackedev</strong>) estiman <strong>ATT(g,t)</strong> y permiten <strong>event studies</strong> consistentes, evitando sesgos típicos de TWFE en estos contextos.</p></li>
+</ul>
+<hr />
+</div>
+<div id="notas-prácticas-de-ejecución" class="section level2 unnumbered hasAnchor">
+<h2>Notas prácticas de ejecución<a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Instalación</strong>: Ejecuta una vez las líneas <code>ssc install …, replace</code> (están comentadas en el do-file para no reinstalar cada vez).</li>
+<li><strong>Clustering</strong>: El cluster correcto es el nivel donde varía el tratamiento — normalmente <code>cluster(id)</code> en DiD con unidades de panel.</li>
+<li><strong><code>xtdidregress</code></strong>: En Stata 17/18 el comando oficial es <code>xtdidregress</code> (no <code>xtdidreg</code>).</li>
+<li><strong>Semillas</strong>: Todos los DGPs del do-file incluyen <code>set seed</code> para garantizar replicabilidad.</li>
+</ul>
+<hr />
+</div>
+<div id="descarga-los-archivos-1" class="section level2 unnumbered hasAnchor">
+<h2>Descarga los archivos<a href="datos-de-panel-did-y-twfe-en-stata.html#descarga-los-archivos-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los tres archivos replican los mismos ejemplos con <strong>el mismo DGP</strong> (<span class="math inline">\(Y = \tau \cdot D\)</span>, máximo <span class="math inline">\(Y = 4\)</span>).</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Lenguaje</th>
+<th>Archivo</th>
+<th>Descarga</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Stata</strong></td>
+<td><code>11_stata_v2.do</code></td>
+<td><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_stata_v2.do">Descargar Stata</a></td>
+</tr>
+<tr class="even">
+<td><strong>R</strong></td>
+<td><code>11_twfe.R</code></td>
+<td><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.R">Descargar R</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Python</strong></td>
+<td><code>11_twfe.py</code></td>
+<td><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.py">Descargar Python</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Paquetes necesarios:</strong></p>
+<ul>
+<li><strong>Stata:</strong> <code>ssc install reghdfe bacondecomp csdid drdid eventstudyinteract did_imputation did2s jwdid, replace</code></li>
+<li><strong>R:</strong> <code>install.packages(c("fixest", "bacondecomp", "did", "ggplot2", "dplyr"))</code></li>
+<li><strong>Python:</strong> <code>pip install pyfixest pandas numpy matplotlib</code></li>
+</ul>
+
+</div>
+</div>
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="bad-controls-stata.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/11-TWFE.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["econometria-avanzada.pdf", "econometria-avanzada.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection",
+    "scroll_highlight": true,
+    "depth": 2
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,211 @@
+# Pesos en TWFE: de la intuición al álgebra {-}
+
+> **Esta sección responde la pregunta:** *"¿Cómo se dieron cuenta de que los pesos eran negativos, y cómo se construyen?"*
+>
+> Antes de leerla, asegúrate de haber visto la **descomposición de Bacon** (sección anterior). Este texto va un paso más allá.
+
+---
+
+## ¿De qué pesos estamos hablando? Hay dos conceptos distintos {-}
+
+Esta es la confusión más frecuente en el tema. Hay **dos objetos distintos** que involucran pesos en el contexto de TWFE con adopción escalonada. Mezclarlos es un error común:
+
+| Objeto | ¿Dónde aparece? | ¿Son negativos? | Referencia |
+|--------|----------------|-----------------|-----------|
+| **Pesos de Bacon** | $\hat\beta^{TWFE} = \sum_k w_k \hat\beta_k^{(2\times2)}$ | **Nunca** — todos $> 0$ y suman 1 | Goodman-Bacon (2021) |
+| **Pesos implícitos sobre ATT(g,t)** | $\hat\beta^{TWFE} = \sum_{g,t: D=1} \pi_{g,t} \, \text{ATT}(g,t)$ | **Pueden ser negativos** | de Chaisemartin & D'Haultfœuille (2020) |
+
+Goodman-Bacon muestra que TWFE es un promedio ponderado de comparaciones 2×2 (todos los pesos positivos). De Chaisemartin y D'Haultfœuille muestran que, **si se reescribe** ese mismo estimador como un promedio sobre los efectos causales por celda $\text{ATT}(g,t)$, algunos de esos pesos **sí pueden ser negativos**.
+
+La pregunta en clase —"¿cómo se dieron cuenta?"— se refiere al segundo objeto: los pesos implícitos sobre $\text{ATT}(g,t)$.
+
+---
+
+## Paso 1: cómo funciona TWFE — la transformación within {-}
+
+TWFE estima la regresión:
+
+$$Y_{it} = \alpha_i + \lambda_t + \beta \, D_{it} + \varepsilon_{it}$$
+
+El estimador de efectos fijos de doble vía (FE de unidad y tiempo) es **equivalente** a una regresión OLS de la **versión within-transformada** de $Y_{it}$ sobre la **versión within-transformada** de $D_{it}$:
+
+$$\tilde Y_{it} \equiv Y_{it} - \bar Y_i - \bar Y_t + \bar Y$$
+$$\tilde D_{it} \equiv D_{it} - \bar D_i - \bar D_t + \bar D$$
+
+donde $\bar Y_i = T^{-1}\sum_t Y_{it}$, $\bar Y_t = N^{-1}\sum_i Y_{it}$, $\bar Y = (NT)^{-1}\sum_{i,t} Y_{it}$ (y análogo para $D$).
+
+El estimador TWFE queda como:
+
+$$\hat\beta^{TWFE} = \frac{\sum_{i,t} \tilde D_{it}\, \tilde Y_{it}}{\sum_{i,t} \tilde D_{it}^2}$$
+
+Esto es una regresión OLS simple después de "limpiar" tanto la variación individual como la temporal.
+
+---
+
+## Paso 2: $\tilde D_{it}$ puede ser negativo aunque $D_{it} = 1$ {-}
+
+Aquí está el corazón del asunto. La clave es que $\tilde D_{it}$ no es simplemente $D_{it}$ recentrado alrededor de 0; puede ser **negativo para observaciones tratadas**.
+
+**¿Cuándo?** Cuando:
+
+$$D_{it} - \bar D_i - \bar D_t + \bar D < 0 \quad \text{con} \quad D_{it} = 1$$
+
+Esto ocurre cuando $\bar D_t$ es grande (muchas unidades están tratadas en ese período) y $\bar D_i$ también es grande (la unidad lleva muchos períodos tratada). En términos intuitivos: una unidad que **lleva mucho tiempo tratada** en un período cuando **casi todos ya están tratados** tiene una $\tilde D_{it}$ negativa, porque la transformación within "ve" que esa unidad no se distingue del promedio en ese período.
+
+---
+
+## Paso 3: el peso implícito sobre ATT(g,t) {-}
+
+Si el DGP verdadero es $Y_{it} = \alpha_i + \lambda_t + \text{ATT}(g,t) \cdot D_{it} + \varepsilon_{it}$ con efectos potencialmente distintos por cohorte-tiempo, entonces:
+
+$$\hat\beta^{TWFE} = \sum_{\{i,t: D_{it}=1\}} \pi_{it} \cdot \text{ATT}(g,t) + \text{ruido}$$
+
+donde el **peso implícito** de la observación $(i,t)$ tratada es:
+
+$$\boxed{\pi_{it} = \frac{\tilde D_{it}}{\sum_{j,s} \tilde D_{js}^2}}$$
+
+Si $\tilde D_{it} < 0$ para alguna observación tratada, el peso $\pi_{it}$ es **negativo**: TWFE le asigna un peso negativo al $\text{ATT}(g,t)$ de esa celda.
+
+---
+
+## Ejemplo numérico mínimo: 2 unidades, 4 períodos {-}
+
+Construimos el ejemplo más pequeño donde aparecen pesos negativos. Usamos un DGP **sin nunca-tratados**, porque ese es el caso más limpio para ilustrar el problema.
+
+### El diseño {-}
+
+| | $t=1$ | $t=2$ | $t=3$ | $t=4$ |
+|---|---|---|---|---|
+| **Unidad 1** (trata en $t=2$, $\tau=2$) | $D=0$ | $D=1$ | $D=1$ | $D=1$ |
+| **Unidad 2** (trata en $t=4$, $\tau=4$) | $D=0$ | $D=0$ | $D=0$ | $D=1$ |
+
+Resultados sin ruido ($Y_{it} = \text{id}_i + t + \tau_i \cdot D_{it}$):
+
+| | $t=1$ | $t=2$ | $t=3$ | $t=4$ | $\bar Y_i$ |
+|---|---|---|---|---|---|
+| **Unidad 1** | 2 | 5 | 6 | 7 | 5.00 |
+| **Unidad 2** | 3 | 4 | 5 | 10 | 5.50 |
+| $\bar Y_t$ | 2.5 | 4.5 | 5.5 | 8.5 | $\bar Y=5.25$ |
+
+### Calculamos $\tilde D_{it}$ {-}
+
+Medias: $\bar D_1 = 3/4$, $\bar D_2 = 1/4$; $\bar D_{t=1}=0$, $\bar D_{t=2}=1/2$, $\bar D_{t=3}=1/2$, $\bar D_{t=4}=1$; $\bar D = 1/2$.
+
+| | $t=1$ | $t=2$ | $t=3$ | $t=4$ |
+|---|---|---|---|---|
+| **Unidad 1** | $0-\frac34-0+\frac12 = -\frac14$ | $1-\frac34-\frac12+\frac12=+\frac14$ | $1-\frac34-\frac12+\frac12=+\frac14$ | $1-\frac34-1+\frac12=\mathbf{-\frac14}$ |
+| **Unidad 2** | $0-\frac14-0+\frac12 = +\frac14$ | $0-\frac14-\frac12+\frac12=-\frac14$ | $0-\frac14-\frac12+\frac12=-\frac14$ | $1-\frac14-1+\frac12=+\frac14$ |
+
+> **Observación crítica:** En el período $t=4$, la Unidad 1 está **tratada** ($D_{1,4}=1$) pero tiene $\tilde D_{1,4} = -1/4 < 0$.
+
+### Los pesos implícitos {-}
+
+Denominador: $\sum_{i,t} \tilde D_{it}^2 = 8 \times (1/4)^2 = 8 \times 1/16 = 1/2$.
+
+| Celda | $D_{it}$ | $\tilde D_{it}$ | $\pi_{it} = \tilde D_{it}/\frac{1}{2}$ | ATT verdadero |
+|-------|----------|-----------------|----------------------------------------|---------------|
+| (1, $t=1$) | 0 | $-1/4$ | $-1/2$ | — (no tratada) |
+| (1, $t=2$) | **1** | $+1/4$ | $\mathbf{+1/2}$ | **ATT(1,2)=2** |
+| (1, $t=3$) | **1** | $+1/4$ | $\mathbf{+1/2}$ | **ATT(1,3)=2** |
+| (1, $t=4$) | **1** | $-1/4$ | $\mathbf{-1/2}$ | **ATT(1,4)=2** |
+| (2, $t=1$) | 0 | $+1/4$ | $+1/2$ | — (no tratada) |
+| (2, $t=2$) | 0 | $-1/4$ | $-1/2$ | — (no tratada) |
+| (2, $t=3$) | 0 | $-1/4$ | $-1/2$ | — (no tratada) |
+| (2, $t=4$) | **1** | $+1/4$ | $\mathbf{+1/2}$ | **ATT(2,4)=4** |
+
+Suma de pesos sobre **celdas tratadas**: $1/2 + 1/2 + (-1/2) + 1/2 = 1$ ✓
+
+### ¿Qué estima TWFE? {-}
+
+$$\hat\beta^{TWFE} = \frac{1}{2}\underbrace{\text{ATT}(1,2)}_{2} + \frac{1}{2}\underbrace{\text{ATT}(1,3)}_{2} + \left(-\frac{1}{2}\right)\underbrace{\text{ATT}(1,4)}_{2} + \frac{1}{2}\underbrace{\text{ATT}(2,4)}_{4}$$
+
+$$= 1 + 1 - 1 + 2 = \mathbf{3}$$
+
+El **ATT overall verdadero** (promedio simple sobre celdas tratadas con $N_{g,t}=1$):
+
+$$\text{ATT}_{overall} = \frac{2 + 2 + 2 + 4}{4} = \frac{10}{4} = \mathbf{2.5}$$
+
+**TWFE = 3 ≠ ATT overall = 2.5**. El sesgo viene del peso negativo sobre ATT(1,4).
+
+### ¿Por qué el peso negativo en (1, $t=4$)? — la intuición {-}
+
+En $t=4$, **todos** están tratados (Unidad 1 y Unidad 2). El tiempo FE captura el nivel promedio de $Y$ en $t=4$. La Unidad 1, que lleva **tres períodos** de tratamiento, tiene un efecto acumulado que ya está "incorporado" en su media individual. Al hacer within, TWFE ve que la Unidad 1 en $t=4$ no aporta variación en $D$ por encima del promedio; de hecho, está **por debajo del promedio**, porque en $t=4$ la Unidad 2 también pasa a $D=1$ pero la Unidad 1 ya lo era hace tiempo.
+
+En términos más directos: TWFE usa a la Unidad 1 como *control implícito* para la Unidad 2 en $t=4$. Compara $(Y_{2,4} - Y_{2,3}) - (Y_{1,4} - Y_{1,3})$. Pero $Y_{1,4} - Y_{1,3}$ no es cero (no es un control puro) — es el cambio en el efecto de la Unidad 1, que ya estaba tratada. Si el efecto de la Unidad 1 es constante ($\text{ATT}=2$ siempre), este cambio es cero, y TWFE funciona. Pero si el efecto **crece** en el tiempo ($\text{ATT}(1,4) > \text{ATT}(1,3)$), entonces $Y_{1,4} - Y_{1,3}$ es positivo, TWFE lo descuenta, y ATT(1,4) queda subponderado (peso negativo).
+
+---
+
+## Paso 4: ¿cuándo importan los pesos negativos? {-}
+
+Los pesos negativos por sí solos no causan sesgo. **Lo que causa sesgo es la combinación de pesos negativos con efectos heterogéneos**.
+
+**Caso A: efectos homogéneos** ($\text{ATT}(g,t) = \tau$ constante para todo $g, t$):
+
+$$\hat\beta^{TWFE} = \tau \cdot \underbrace{\sum_{g,t: D=1} \pi_{g,t}}_{=1} = \tau$$
+
+Sin sesgo, aunque haya pesos negativos.
+
+**Caso B: efectos heterogéneos** (como en el ejemplo anterior, con $\tau_1=2$ y $\tau_2=4$):
+
+El peso negativo sobre ATT(1,4) hace que TWFE **sobrepondera** ATT(2,4)=4 y **subpondera** ATT(1,4)=2, dando 3 en lugar de 2.5.
+
+**Caso extremo:** Si el efecto de la unidad early-treated crece con el tiempo y es muy grande en períodos tardíos, TWFE puede dar un resultado incluso con **signo incorrecto**. Por ejemplo, si $\text{ATT}(1,4) = 100$ y los demás efectos son 2:
+$$\hat\beta^{TWFE} = 1 + 1 - 50 + 2 = -46 \quad \text{mientras} \quad \text{ATT}_{overall} = 26.5$$
+
+---
+
+## Paso 5: la distinción con Goodman-Bacon {-}
+
+Ahora podemos aclarar la distinción definitiva:
+
+**Goodman-Bacon (2021)** — descomposición en DiD 2×2:
+
+$$\hat\beta^{TWFE} = w_{TU}\,\hat\beta_{TU}^{(2\times2)} + w_{TeC}\,\hat\beta_{TeC}^{(2\times2)} + w_{TlC}\,\hat\beta_{TlC}^{(2\times2)}$$
+
+- $w_k > 0$ siempre (son proporciones de varianza, no pueden ser negativos)
+- El problema de Bacon **no es pesos negativos**; es que las comparaciones "Late vs Early" ($\hat\beta_{TlC}^{(2\times2)}$) usan unidades ya tratadas como control, **contaminando** esas estimaciones 2×2
+- Con efectos heterogéneos, esas comparaciones contaminadas no identifican el $\text{ATT}(g,t)$ correcto, y el promedio ponderado $\hat\beta^{TWFE}$ se desvía del $\text{ATT}_{overall}$
+
+**De Chaisemartin & D'Haultfœuille (2020)** — pesos sobre ATT(g,t):
+
+$$\hat\beta^{TWFE} = \sum_{g,t: D=1} \pi_{g,t} \cdot \text{ATT}(g,t)$$
+
+- Algunos $\pi_{g,t}$ **pueden ser negativos** cuando $\tilde D_{g,t} < 0$
+- Con efectos homogéneos: suma correctamente a ATT
+- Con efectos heterogéneos: el resultado puede ser sesgado o incluso tener signo incorrecto
+
+> **Resumen en una oración:** Bacon explica *quién compara con quién* (y hay comparaciones contaminadas); de Chaisemartin explica *cómo se ponderan los efectos causales individuales* (y algunos pesos son negativos).
+
+---
+
+## Cómo detectar pesos negativos: el comando `ddtiming` {-}
+
+Puedes diagnosticar la severidad del problema con el paquete `bacondecomp` (Goodman-Bacon) y con `xtevent` o revisando manualmente el porcentaje de observaciones con peso negativo:
+
+```stata
+* Instalar si no está
+* ssc install bacondecomp, replace
+
+* 1. Descomposición de Bacon: ver cuánto peso tienen las comparaciones contaminadas
+bacondecomp Y D, ddetail
+
+* 2. Si el peso en "Late_v_Early" o "Early_v_Late" es grande (> 20–30%)
+*    Y sospechas heterogeneidad: TWFE puede estar sesgado
+*    → usa csdid o eventstudyinteract
+
+* 3. Verificación directa de la proporción de observaciones con π < 0
+* (manual: calcula D̃_it y cuenta negativos donde D_it=1)
+```
+
+---
+
+## La solución: ATT(g,t) con Callaway & Sant'Anna {-}
+
+El estimador de Callaway & Sant'Anna (2021) **evita exactamente este problema** porque:
+
+1. **No mezcla** comparaciones entre cohortes tratadas en distintos momentos
+2. Estima $\text{ATT}(g,t)$ **cohorte por cohorte**, usando solo controles no-tratados (o no-aún-tratados) como comparación
+3. No hay comparaciones Late vs Early → no hay contaminación
+4. El peso implícito de cada $\text{ATT}(g,t)$ en la estimación es **siempre positivo**
+
+Ver sección siguiente (Callaway & Sant'Anna) para la implementación completa en Stata con `csdid`.

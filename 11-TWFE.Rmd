@@ -322,8 +322,10 @@ replace D = 1 if id==2 & t >= 1985
 replace D = 1 if id==3 & t >= 1988
 label variable D "Tratamiento escalonado"
 
-gen Y = id + t + D * 2 * (id==2) + D * 4 * (id==3)
-label variable Y "Variable dependiente"
+gen Y = 0
+replace Y = D * 2 if id==2 & D==1   // τ=2 cuando id=2 está tratado
+replace Y = D * 4 if id==3 & D==1   // τ=4 cuando id=3 está tratado
+label variable Y "Variable dependiente (Y=0 sin tratar; Y=τ con tratar)"
 
 twoway ///
     (connected Y t if id==1, msymbol(circle)   lcolor(blue)   lwidth(medium)) ///
@@ -901,6 +903,17 @@ event_plot    twfe	csdd    didimp  dcdh_b#dcdh_v   sa_b#sa_v   stackedev_b#stack
 
 ## Descarga los archivos {-}
 
-**Descargar Stata do file:**
-[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_stata.do)
+Los tres archivos replican los mismos ejemplos con **el mismo DGP** ($Y = \tau \cdot D$, máximo $Y = 4$).
+
+| Lenguaje | Archivo | Descarga |
+|---|---|---|
+| **Stata** | `11_stata_v2.do` | [Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_stata_v2.do) |
+| **R** | `11_twfe.R` | [Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.R) |
+| **Python** | `11_twfe.py` | [Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.py) |
+
+**Paquetes necesarios:**
+
+- **Stata:** `ssc install reghdfe bacondecomp csdid drdid eventstudyinteract did_imputation did2s jwdid, replace`
+- **R:** `install.packages(c("fixest", "bacondecomp", "did", "ggplot2", "dplyr"))`
+- **Python:** `pip install pyfixest pandas numpy matplotlib`
 

@@ -1,6 +1,223 @@
-# TWFE y DiD Moderno en Stata
+# Datos de Panel, DiD y TWFE en Stata
 
-##  Contexto rápido {-}
+## Introducción a datos de panel {-}
+
+### ¿Qué es un panel? {-}
+
+Un **panel** (o datos longitudinales) sigue a las **mismas unidades** (individuos, firmas, municipios) a lo largo de **múltiples períodos de tiempo**. La estructura básica es:
+
+$$Y_{it} = \alpha_i + \lambda_t + \beta X_{it} + \varepsilon_{it}$$
+
+donde $\alpha_i$ es un **efecto fijo individual** (todo lo que es constante para la unidad $i$ y que puede estar correlacionado con $X_{it}$) y $\lambda_t$ es un **efecto fijo temporal** (shocks comunes a todas las unidades en el período $t$).
+
+### Comandos básicos en Stata {-}
+
+```stata
+xtset id t          // declara el panel: id = unidad, t = tiempo
+xtdes               // describe la estructura: ¿balanceado? ¿T mínimo/máximo?
+xtsum Y X           // descompone varianza en within y between
+xtline Y, overlay   // spaghetti plot: trayectoria de Y por unidad
+```
+
+La descomposición de `xtsum` es fundamental:
+
+| Variación | Qué mide | La explota... |
+|-----------|----------|---------------|
+| **between** | Diferencias entre las medias de cada unidad | OLS pooled |
+| **within** | Cambios de cada unidad alrededor de su propia media | FE, FD |
+| **overall** | Ambas juntas | — |
+
+### Los cuatro estimadores y cuándo usarlos {-}
+
+| Estimador | Comando Stata | Consistente si... | Observaciones |
+|-----------|--------------|-------------------|---------------|
+| **OLS pooled** | `reg Y X, cluster(id)` | $\text{Cov}(X_{it}, \alpha_i) = 0$ **y** exog. estricta | Ignora estructura de panel |
+| **Efectos fijos (FE)** | `xtreg Y X, fe` | Exog. estricta (aunque $\text{Cov}(X_{it}, \alpha_i) \neq 0$) | Elimina $\alpha_i$ por within; inconsistente si $X_{it}$ endógeno |
+| **Primeras diferencias (FD)** | `reg D.Y D.X` | Exog. estricta (aunque $\text{Cov}(X_{it}, \alpha_i) \neq 0$) | Elimina $\alpha_i$ por diferencia; inconsistente si $X_{it}$ endógeno |
+| **Efectos aleatorios (RE)** | `xtreg Y X, re` | $\text{Cov}(X_{it}, \alpha_i) = 0$ **y** exog. estricta | Más eficiente que FE si supuesto OK |
+
+**Exogeneidad estricta**: $E[\varepsilon_{it} \mid X_{i1}, \ldots, X_{iT}, \alpha_i] = 0$ — el error idiosincrático no puede estar correlacionado con $X$ en *ningún* período. Si hay endogeneidad en $X_{it}$ (reverse causality, panel dinámico con $Y_{it-1}$), FE y FD también son inconsistentes.
+
+**Test de Hausman** para elegir entre FE y RE:
+
+```stata
+xtreg Y X i.t, fe
+estimates store fe
+xtreg Y X i.t, re
+hausman fe ., sigmamore
+* p < 0.05 → rechazamos H0 (RE inconsistente) → usar FE
+* p > 0.05 → RE es eficiente (no hay correlación entre X y α_i)
+```
+
+### La transformación within a mano {-}
+
+FE funciona restando la media individual de cada variable ("demeaning"):
+
+```stata
+bysort id: egen media_Y = mean(Y)
+bysort id: egen media_X = mean(X)
+gen Y_within = Y - media_Y
+gen X_within = X - media_X
+reg Y_within X_within     // idéntico a xtreg Y X, fe (sin efectos de tiempo)
+```
+
+Esto ilustra por qué FE **elimina** cualquier variable constante en el tiempo (no puedes estimar el efecto de género, país de nacimiento, etc. con FE).
+
+### FE vs. FD con T = 2 {-}
+
+Con exactamente **dos períodos**, FE y FD son **algebraicamente idénticos**:
+
+$$\Delta Y_i = \beta \cdot \Delta X_i + \Delta\varepsilon_i$$
+
+es exactamente la regresión within con $T=2$. Esta equivalencia es la base de la conexión entre **DiD y datos de panel** que exploramos a continuación.
+
+---
+
+## DiD = FD = TWFE: la equivalencia en el caso 2×2 {-}
+
+### La equivalencia algebraica {-}
+
+En el caso más simple — **2 grupos** (tratado/control) y **2 períodos** (antes/después) — los siguientes cuatro estimadores producen **exactamente el mismo número**:
+
+1. **DiD manual**: $\hat{\tau} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})$
+2. **Regresión DiD**: `reg Y trat post D` — coeficiente de $D$ (interacción)
+3. **Primeras diferencias**: `reg D.Y D.D` — coeficiente de $\Delta D$
+4. **TWFE**: `reghdfe Y D, absorb(id t)` — coeficiente de $D$
+
+No es una aproximación ni un resultado asintótico — es una **identidad algebraica** que se cumple en cada muestra.
+
+```stata
+clear
+set seed 1234
+set obs 400
+
+gen id   = ceil(_n / 2)           // 200 individuos
+gen t    = mod(_n - 1, 2)         // t=0 (antes), t=1 (después)
+gen trat = (id > 100)             // grupo tratado: id 101–200
+gen D    = trat * (t == 1)        // indicador de tratamiento efectivo
+
+gen alpha_i = 2 * id / 200 + rnormal(0, 0.5)
+gen eps     = rnormal(0, 1)
+gen Y = alpha_i + 1.5 * t + 3 * D + eps    // τ = 3
+xtset id t
+
+* ── DiD manual (4 medias) ──────────────────────────────────────────────────────
+quietly sum Y if trat==1 & t==0
+scalar y_t0 = r(mean)
+quietly sum Y if trat==1 & t==1
+scalar y_t1 = r(mean)
+quietly sum Y if trat==0 & t==0
+scalar y_c0 = r(mean)
+quietly sum Y if trat==0 & t==1
+scalar y_c1 = r(mean)
+scalar DiD_manual = (y_t1 - y_t0) - (y_c1 - y_c0)
+
+* ── Regresión DiD clásica: Y = α + βD_i + γt + τ(D_i×t) ──────────────────────
+reg Y trat t D, robust
+scalar DiD_reg = _b[D]
+
+* ── Primeras Diferencias (T=2): ΔY_i = a + τ·ΔD_i + Δε_i ─────────────────────
+reg D.Y D.D, robust
+scalar FD_2x2 = _b[D.D]
+
+* ── TWFE: absorbe efectos fijos individual + temporal ──────────────────────────
+reghdfe Y D, absorb(id t) vce(robust)
+scalar TWFE_2x2 = _b[D]
+
+di "DiD manual    = " %7.4f DiD_manual
+di "Regresión DiD = " %7.4f DiD_reg
+di "FD            = " %7.4f FD_2x2
+di "TWFE          = " %7.4f TWFE_2x2
+* → los cuatro deben ser IDÉNTICOS — equivalencia algebraica ✓
+```
+
+### Panel largo, adopción simultánea {-}
+
+Con **T > 2** períodos pero todos los tratados adoptando **al mismo tiempo** ($t_0$):
+
+- **DiD manual** (media pre vs. post) = **TWFE** — mismo estimador, mismos pesos
+- **FD** ≠ TWFE — FD solo usa las diferencias consecutivas $\Delta Y_t = Y_t - Y_{t-1}$, por lo que solo el período de adopción ($t_0 - 1 \to t_0$) aporta $\Delta D \neq 0$. Con $T$ grande, FD usa mucho menos información y es menos eficiente, aunque sigue siendo consistente para el mismo $\tau$.
+
+```stata
+clear
+set seed 5678
+local inicio = 1980
+local fin    = 1990
+local tiempo = `fin' - `inicio' + 1
+set obs `= 3 * `tiempo''
+
+gen id = ceil(_n / `tiempo')
+gen t  = `inicio' + mod(_n - 1, `tiempo')
+sort id t
+xtset id t
+
+gen D = (id >= 2) * (t >= 1985)   // tratado desde 1985 para id 2 y 3
+gen Y = id + 3 * (t - 1980) + 5 * D + rnormal(0, 0.5)
+
+* DiD manual
+quietly sum Y if id >= 2 & t >= 1985
+scalar post_t = r(mean)
+quietly sum Y if id >= 2 & t <  1985
+scalar pre_t  = r(mean)
+quietly sum Y if id == 1 & t >= 1985
+scalar post_c = r(mean)
+quietly sum Y if id == 1 & t <  1985
+scalar pre_c  = r(mean)
+di "DiD manual = " %6.3f (post_t - pre_t) - (post_c - pre_c)   // ≈ 5
+
+reghdfe Y D, absorb(id t) vce(robust)
+di "TWFE       = " %6.3f _b[D]     // = DiD manual (equivalencia exacta)
+
+reg D.Y D.D, robust
+di "FD         = " %6.3f _b[D.D]   // ≠ TWFE con T>2 (menos eficiente)
+```
+
+---
+
+## El supuesto de tendencias paralelas {-}
+
+### ¿Qué dice el supuesto? {-}
+
+DiD identifica el efecto causal $\tau$ bajo el supuesto de **tendencias paralelas**:
+
+> En ausencia de tratamiento, la diferencia entre tratados y controles habría permanecido constante en el tiempo.
+
+Formalmente: $E[Y_{it}(0) - Y_{it-1}(0) \mid D_i = 1] = E[Y_{it}(0) - Y_{it-1}(0) \mid D_i = 0]$
+
+Si el tratado tenía una **tendencia diferente** (crecía más rápido o más lento) antes del tratamiento, DiD captura $\tau$ **más** esa diferencia de tendencias → **sesgo**.
+
+### Diagnóstico en Stata {-}
+
+```stata
+* Diagnóstico visual: medias observadas + tendencias lineales pre
+xtdidregress (Y) (D), group(id) time(t)
+estat trendplots          // gráfico con líneas pre-tratamiento
+estat trendplots, omeans  // solo medias observadas
+estat trendplots, ltrends // solo tendencias lineales
+
+* Test formal (H0: pendientes pre-tratamiento son iguales)
+estat ptrends
+* p > 0.05 → no rechazamos H0 → tendencias paralelas plausibles ✓
+* p < 0.05 → evidencia contra el supuesto ✗
+```
+
+### ¿Qué hacer si se viola? {-}
+
+Opciones en orden de menor a mayor complejidad:
+
+1. **Controlar tendencias lineales por grupo**: `reg Y D i.t c.t#i.trat` — asume que las tendencias pre son lineales y extrapolables
+2. **Event study**: estima el efecto en cada período; los coeficientes pre-tratamiento deben ser ≈ 0 si el supuesto se cumple
+3. **Diseño alternativo**: buscar un grupo de control más comparable (matching + DiD)
+
+```stata
+* Controlar tendencias diferenciales (si se viola levemente)
+gen trend = t - t0          // tiempo centrado en adopción
+reghdfe Y D c.trend#i.trat, absorb(id t) vce(cluster id)
+```
+
+---
+
+##  Contexto rápido: TWFE con adopción escalonada {-}
 
 * **¿Qué verás?** Cómo se comporta el estimador **TWFE** (two-way fixed effects) en distintos escenarios de DiD: 2×2, panel largo, más de dos unidades con **heterogeneidad de efectos**, y **adopción escalonada**.
 * **¿Por qué importa?** Con heterogeneidad y/o timing escalonado, TWFE puede promediar **mal** (incluso con **pesos negativos**), sesgando el estimador.
@@ -11,46 +228,22 @@
 
 ---
 
-## Modelo básico 2×2 DiD {-}
+## Más unidades, **mismo** año de inicio, **efectos heterogéneos** {-}
 
-### Explicación didáctica {-}
-
-* Construimos un panel simple con **2 unidades** (`id = 1,2`) y **2 periodos** (`t = 1979, 1980`).
-* Tratamiento **solo** para `id==2` en el **año final** (`D = 1` si `id==2 & t==fin`).
-* Generamos un outcome `Y` con nivel por unidad (`id`), tendencia temporal (`3*t`) y un “empujón” de tratamiento cuando `D==1` (`tau=2`).
-* Graficamos la evolución de `Y` por grupo (control vs tratado).
-* Estimamos DiD con:
-
-  * `xtreg Y D t, fe` (FE de unidad + control lineal por `t`), y
-  * `reghdfe Y D, absorb(id t)` (FE completos de unidad y de tiempo).
-
-### Código (copiar/pegar)
+* **3 unidades** (id=1 control; id=2 y 3 tratados desde 1985), con **distinto tamaño de efecto**: id=2 → τ=2, id=3 → τ=4.
+* Muestra qué promedia TWFE cuando los efectos difieren entre tratados: el **ATT verdadero** (ponderado por obs. tratadas) = 3, y TWFE coincide porque no hay heterogeneidad dinámica.
 
 ```stata
-*----------------------------------------------------------
-* Archivo DO: TWFE y Diferencias en Diferencias (DiD)
-*  modelo TWFE, DiD y Triple DiD
-* Autor: Ana Maria Diaz
-* ----------------------------------------------------------
-
-* -------------------------
-* 1. Modelo básico 2x2 DiD
-* -------------------------
-
 clear
-* Definir parámetros flexibles
-local unidades = 2
-local inicio = 1979
-local fin    = 1980
-
-local tiempo = `fin' - `inicio' + 1
-local obs    = `unidades' * `tiempo'
+local unidades = 3
+local inicio   = 1980
+local fin      = 1989
+local tiempo   = `fin' - `inicio' + 1
+local obs      = `unidades' * `tiempo'
 set obs `obs'
 
-* Crear variables id y t (compatibles con años)
 gen id = .
 gen t  = .
-
 forvalues i = 1/`unidades' {
     forvalues j = 0/`=`tiempo'-1' {
         local obsnum = (`i' - 1)*`tiempo' + `j' + 1
@@ -58,277 +251,36 @@ forvalues i = 1/`unidades' {
         replace t  = `inicio' + `j' in `obsnum'
     }
 }
-
 sort id t
 xtset id t
-
 label variable id "Unidad"
 label variable t  "Año"
 
-* Generar tratamiento (id==2 tratado en año final)
-gen D = id==2 & t==`fin'
-label variable D "Tratamiento (id==2 en año final)"
-
-* Efecto del tratamiento
-gen tau = cond(D==1, 2, 0)
-gen Y = id + 3*t + tau*D 
-*gen Y = id + 3*t + tau*D + rnormal()
-label variable Y "Variable dependiente"
-
-twoway ///
-  (connected Y t if id==1, msymbol(circle) lcolor(blue)) ///
-  (connected Y t if id==2, msymbol(triangle) lcolor(red)) ///
-  , ///
-  title("Evolución de Y: Control vs Tratado") ///
-  xtitle("Año") ytitle("Y") ///
-  xlabel(`inicio'(1)`fin') ///
-  legend(order(1 "Control (id=1)" 2 "Tratado (id=2)")) ///
-  name(grafico1, replace)
-
-```
-![Evolución de Y](dofile/11_TWFE/g1.png)
-
-```stata
-* Estimar DiD con efectos fijos
-xtreg Y D t, fe
-
-* Alternativa con reghdfe
-reghdfe Y D, absorb(id t)
-```
-
----
-
-## Panel largo con 2 unidades y tratamiento “desde un año en adelante” {-}
-
-* Mantenemos **2 unidades**, pero ampliamos a **1980–1990** (11 años).
-* Tratamiento para `id==2` **desde 1985 en adelante** (escalón).
-* Outcome `Y` con nivel por unidad + tendencia temporal + efecto de tratamiento (`tau=5`).
-* Estimamos `xtreg`/`reghdfe` y **DiD oficial** (`xtdidreg`) con diagnósticos de tendencias (`estat trendplots`, `estat ptrends`).
-
-
-```stata
-* ---------------------------------------------
-* 2. Añadir más periodos de tiempo (10 por unidad)
-* ---------------------------------------------
-
-clear
-local unidades = 2
-local inicio = 1980
-local fin    = 1990
-
-local tiempo = `fin' - `inicio' + 1
-local obs    = `unidades' * `tiempo'
-set obs `obs'
-
-* Crear variables id y t (funciona con años)
-gen id = .
-gen t  = .
-
-forvalues i = 1/`unidades' {
-    forvalues j = 0/`=`tiempo'-1' {
-        local obsnum = (`i' - 1)*`tiempo' + `j' + 1
-        replace id = `i' in `obsnum'
-        replace t  = `inicio' + `j' in `obsnum'
-    }
-}
-
-sort id t
-xtset id t
-
-* Tratamiento desde cierto año en adelante para id==2
-gen D = id==2 & t >= 1985  // ejemplo: tratamiento inicia en 1985
-label variable D "Tratado"
-
-* Efecto del tratamiento
-gen tau = cond(D==1, 5, 0)
-gen Y = id + 3*t + tau*D
-label variable Y "Variable dependiente"
-
-*Visualizar
-twoway ///
-  (connected Y t if id==1, msymbol(circle) lcolor(blue)) ///
-  (connected Y t if id==2, msymbol(triangle) lcolor(red)) ///
-  , ///
-  title("Evolución de Y: Tratado vs. Control") ///
-  xlabel(`inicio'(1)`fin') ///
-  ylabel(, angle(horizontal)) ///
-  xtitle("Año") ///
-  ytitle("Y") ///
-  legend(order(1 "Control (id=1)" 2 "Tratado (id=2)")) ///
-  name(graficoY, replace)
-
-
-xtreg Y D t, fe
-reghdfe Y D, absorb(id t)
-
-xtdidreg (Y) (D), group(id) time(t)
-estat trendplots
-estat ptrends
-```
-
-![Evolución de Y](dofile/11_TWFE/g2.png)
-![TendeciasParalelas](dofile/11_TWFE/g3.png)
-
----
-
-## Más unidades, **mismo** año de inicio, **efectos heterogéneos** {-}
-
-### Versión donde `Y` refleja solo el tamaño del efecto por tratado {-}
-
-* **3 unidades** (id 1=control; id 2 y 3 tratados desde 1985), con **distinto tamaño de efecto**: 2 vs 4.
-* Muestra que TWFE hace un **promedio no trivial** de estos efectos.
-
-```stata
-* --------------------------------------------------
-* 3. Más unidades, mismo tiempo de tratamiento, distinto efecto
-* --------------------------------------------------
-
-clear
-* Parámetros flexibles
-local unidades = 3
-local inicio = 1980
-local fin    = 1989
-
-local tiempo = `fin' - `inicio' + 1
-local obs = `unidades' * `tiempo'
-set obs `obs'
-
-* Crear variables id y t (con años reales)
-gen id = .
-gen t  = .
-
-forvalues i = 1/`unidades' {
-    forvalues j = 0/`=`tiempo'-1' {
-        local obsnum = (`i' - 1)*`tiempo' + `j' + 1
-        replace id = `i' in `obsnum'
-        replace t  = `inicio' + `j' in `obsnum'
-    }
-}
-
-sort id t
-xtset id t
-
-* Tratamiento para id >= 2 desde t >= 1985
 gen D = 0
 replace D = 1 if id >= 2 & t >= 1985
-label variable D "Tratado desde 1985 para id>=2"
+label variable D "Tratamiento desde 1985 (id≥2)"
 
-* Variable dependiente con diferentes intensidades de tratamiento
-cap drop Y
 gen Y = 0
-replace Y = cond(D == 1, 2, 0) if id == 2
-replace Y = cond(D == 1, 4, 0) if id == 3
+replace Y = id + t + cond(D==1, 0, 0) if id == 1
+replace Y = id + t + cond(D==1, 2, 0) if id == 2
+replace Y = id + t + cond(D==1, 4, 0) if id == 3
 label variable Y "Variable dependiente"
-sum Y if  D == 1
 
-* -------------------------------
-* Visualización
-* -------------------------------
 twoway ///
-  (connected Y t if id == 1, msymbol(circle)) ///
-  (connected Y t if id == 2, msymbol(triangle)) ///
-  (connected Y t if id == 3, msymbol(square)) ///
-  , ///
-  xline(1985, lpattern(dash)) ///
-  xlabel(`inicio'(1)`fin') ///
-  legend(order(1 "id=1 (Control)" 2 "id=2 (Tratado - efecto 2)" 3 "id=3 (Tratado - efecto 4)")) ///
-  title("Efectos de distinto tamaño") ///
-  xtitle("Año") ///
-  ytitle("Y")
+    (connected Y t if id==1, msymbol(circle)   lcolor(blue)   lwidth(medium)) ///
+    (connected Y t if id==2, msymbol(triangle)  lcolor(red)    lwidth(medium)) ///
+    (connected Y t if id==3, msymbol(square)    lcolor(orange) lwidth(medium)) ///
+    , xline(1984.5, lpattern(dash) lcolor(gray)) ///
+      xlabel(`inicio'(1)`fin') ///
+      legend(order(1 "id=1 (Control)" 2 "id=2 (Tratado, τ=2)" 3 "id=3 (Tratado, τ=4)") pos(6) row(1)) ///
+      title("Caso 4: heterogeneidad entre tratados, mismo timing") ///
+      xtitle("Año") ytitle("Y") name(g4_hetero, replace)
 
-* -------------------------------
-* Estimación
-* -------------------------------
-xtreg Y D t, fe
-
-* Comparación con especificaciones alternativas
-reg Y D                       // sin efectos fijos
-reg Y D i.t                   // solo efectos fijos de tiempo
-reg Y D i.id                  // solo efectos fijos de unidad
-reg Y D i.t i.id              // ambos (especificación correcta)
+xtreg Y D i.t, fe
+reghdfe Y D, absorb(id t) vce(robust)
+* ATT verdadero = (5×2 + 5×4) / 10 = 3
+di "ATT verdadero (ponderado) = 3 — TWFE debería dar ≈ 3"
 ```
-![Grafico](dofile/11_TWFE/g4.png)
-
-
-
-### 3B) Versión con `Y = id + t + efecto_heterogéneo` {-}
-
-
-* Añadimos **nivel por unidad** y **tendencia temporal** a `Y`, además de heterogeneidad en el efecto (`2` y `4`).
-* Refuerza la idea: **β̂ TWFE** no necesariamente es el ATT promedio.
-
-
-```stata
-*-----------------------------------------------
-clear
-* Parámetros flexibles
-local units = 3
-local start = 1980
-local end   = 1989
-
-local time = `end' - `start' + 1
-local obsv = `units' * `time'
-set obs `obsv'
-
-* Crear variables de panel y tiempo
-gen id = .
-gen t  = .
-
-forvalues i = 1/`units' {
-    forvalues j = 0/`=`time'-1' {
-        local obsnum = (`i' - 1)*`time' + `j' + 1
-        replace id = `i' in `obsnum'
-        replace t  = `start' + `j' in `obsnum'
-    }
-}
-
-sort id t
-xtset id t
-
-label variable id "Unidad (panel)"
-label variable t  "Año"
-
-* Tratamiento para id >= 2 desde t >= 1985
-gen D = 0
-replace D = 1 if id >= 2 & t >= 1985
-label variable D "Tratamiento desde 1985 para id >= 2"
-
-* Generar outcome con efectos heterogéneos
-cap drop Y
-gen Y = 0
-replace Y = id + t + cond(D == 1, 0, 0) if id == 1
-replace Y = id + t + cond(D == 1, 2, 0) if id == 2
-replace Y = id + t + cond(D == 1, 4, 0) if id == 3
-label variable Y "Variable dependiente (Y)"
-
-* ----------------------------------
-* Gráfico adaptado para años reales
-* ----------------------------------
-twoway ///
-	(connected Y t if id == 1, msymbol(circle)) ///
-	(connected Y t if id == 2, msymbol(triangle)) ///
-	(connected Y t if id == 3, msymbol(square)) ///
-	, ///
-	xline(1985, lpattern(dash)) ///
-	xlabel(`start'(1)`end') ///
-	legend(order(1 "id=1 (Control)" 2 "id=2 (Tratado - efecto 2)" 3 "id=3 (Tratado - efecto 4)")) ///
-	title("Evolución de Y con tratamiento heterogéneo") ///
-	xtitle("Año") ///
-	ytitle("Y")
-
-
-* -------------------------------
-* Estimación
-* -------------------------------
-xtreg Y D t, fe
-
-* Comparación con especificaciones alternativas
-reg Y D                       // sin efectos fijos
-reg Y D i.t                   // solo efectos fijos de tiempo
-reg Y D i.id                  // solo efectos fijos de unidad
-reg Y D i.t i.id              // ambos (especificación correcta)
-```
-
 ![Grafico](dofile/11_TWFE/g5.png)
 
 
@@ -342,24 +294,16 @@ reg Y D i.t i.id              // ambos (especificación correcta)
 
 
 ```stata
-* --------------------------------------------------
-* 4. Más unidades, distinto tiempo de tratamiento y distinto efecto
-* --------------------------------------------------
-
 clear
-* Parámetros flexibles
 local unidades = 3
-local inicio = 1980
-local fin    = 1989
-
-local tiempo = `fin' - `inicio' + 1
-local obs = `unidades' * `tiempo'
+local inicio   = 1980
+local fin      = 1989
+local tiempo   = `fin' - `inicio' + 1
+local obs      = `unidades' * `tiempo'
 set obs `obs'
 
-* Crear variables id y t con años reales
 gen id = .
 gen t  = .
-
 forvalues i = 1/`unidades' {
     forvalues j = 0/`=`tiempo'-1' {
         local obsnum = (`i' - 1)*`tiempo' + `j' + 1
@@ -367,66 +311,44 @@ forvalues i = 1/`unidades' {
         replace t  = `inicio' + `j' in `obsnum'
     }
 }
-
 sort id t
 xtset id t
+label variable id "Unidad"
+label variable t  "Año"
 
-* Tratamiento escalonado: id 2 desde 1985, id 3 desde 1988
+* Tratamiento escalonado: id=2 desde 1985 (τ=2), id=3 desde 1988 (τ=4)
 gen D = 0
-replace D = 1 if id == 2 & t >= 1985
-replace D = 1 if id == 3 & t >= 1988
+replace D = 1 if id==2 & t >= 1985
+replace D = 1 if id==3 & t >= 1988
 label variable D "Tratamiento escalonado"
 
-* Efectos distintos por grupo y tiempo
 gen Y = 0
-replace Y = D * 2 if id == 2 & t >= 1985
-replace Y = D * 4 if id == 3 & t >= 1988
-label variable Y "Variable dependiente"
+replace Y = D * 2 if id==2 & D==1   // τ=2 cuando id=2 está tratado
+replace Y = D * 4 if id==3 & D==1   // τ=4 cuando id=3 está tratado
+label variable Y "Variable dependiente (Y=0 sin tratar; Y=τ con tratar)"
 
-* ----------------------------------
-* Gráfico adaptado para años reales
-* ----------------------------------
 twoway ///
-  (connected Y t if id == 1, msymbol(circle)) ///
-  (connected Y t if id == 2, msymbol(triangle)) ///
-  (connected Y t if id == 3, msymbol(square)) ///
-  , ///
-  xline(1985 1988, lpattern(dash)) ///
-  xlabel(`inicio'(1)`fin') ///
-  legend(order(1 "id=1 (Control)" 2 "id=2 (Tratado desde 1985)" 3 "id=3 (Tratado desde 1988)")) ///
-  title("Tratamiento con distintos tiempos y efectos") ///
-  xtitle("Año") ///
-  ytitle("Y")
+    (connected Y t if id==1, msymbol(circle)   lcolor(blue)   lwidth(medium)) ///
+    (connected Y t if id==2, msymbol(triangle)  lcolor(red)    lwidth(medium)) ///
+    (connected Y t if id==3, msymbol(square)    lcolor(orange) lwidth(medium)) ///
+    , xline(1984.5 1987.5, lpattern(dash) lcolor(gray)) ///
+      xlabel(`inicio'(1)`fin') ///
+      legend(order(1 "id=1 (Control)" 2 "id=2 (trata 1985, τ=2)" 3 "id=3 (trata 1988, τ=4)") pos(6) row(1)) ///
+      title("Caso 5: adopción escalonada") ///
+      xtitle("Año") ytitle("Y") name(g5_staggered, replace)
 
+* TWFE y comparaciones por par
+reghdfe Y D, absorb(id t) vce(robust)
+xtreg Y D i.t if (id==1 | id==2), fe robust   // par 1-2 (limpio)
+xtreg Y D i.t if (id==1 | id==3), fe robust   // par 1-3 (limpio)
+
+* Descomposición de Bacon
+* ssc install bacondecomp, replace   // instalar si no está
+bacondecomp Y D, ddetail
+* Ref: Goodman-Bacon (2021), Journal of Econometrics
 ```
 
 ![Grafico](dofile/11_TWFE/g6.png)
-
-```stata
-* ----------------------------------
-* Estimaciones
-* ----------------------------------
-reg Y D
-reg Y D i.t
-reg Y D i.id
-reg Y D i.t i.id
-
-xtreg Y D i.t, fe
-reghdfe Y D, absorb(id t)
-
-```
-
-* Descomposición de Bacon
-
-```stata
-ssc install bacondecomp, replace
-bacondecomp Y D, ddetail
-
-*LEER: Goodman-Bacon, A. (2021). Difference-in-differences with variation in treatment timing. Journal of Econometrics.
-
-xtreg Y D i.t if (id==1 | id==2), fe robust
-xtreg Y D i.t if (id==1 | id==3), fe robust	
-```
 
 ##Descomposición de Bacon y “efecto real” en DiD con adopción escalonada {-}
 
@@ -970,10 +892,28 @@ event_plot    twfe	csdd    didimp  dcdh_b#dcdh_v   sa_b#sa_v   stackedev_b#stack
 
 ---
 
-## 8) Notas prácticas de ejecución
+## Notas prácticas de ejecución {-}
 
-* **Instalación**: Ejecuta una vez las líneas `ssc install …, replace`.
-* **Clustering**: Revisa la variable correcta según tu panel (en tu bloque TWFE final usas `cluster(i)`; si la unidad es `id`, suele ser `cluster(id)`).
-* **`xtdidreg`**: Tu comando está como `xtdidreg`. En Stata 17/18 el oficial es `xtdidregress`. Si tu Stata no reconoce `xtdidreg`, usa `xtdidregress` con la sintaxis correspondiente.
-* **Semillas**: Mantengo tus `set seed` donde aplican para replicabilidad.
+* **Instalación**: Ejecuta una vez las líneas `ssc install …, replace` (están comentadas en el do-file para no reinstalar cada vez).
+* **Clustering**: El cluster correcto es el nivel donde varía el tratamiento — normalmente `cluster(id)` en DiD con unidades de panel.
+* **`xtdidregress`**: En Stata 17/18 el comando oficial es `xtdidregress` (no `xtdidreg`).
+* **Semillas**: Todos los DGPs del do-file incluyen `set seed` para garantizar replicabilidad.
+
+---
+
+## Descarga los archivos {-}
+
+Los tres archivos replican los mismos ejemplos con **el mismo DGP** ($Y = \tau \cdot D$, máximo $Y = 4$).
+
+| Lenguaje | Archivo | Descarga |
+|---|---|---|
+| **Stata** | `11_stata_v2.do` | [Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_stata_v2.do) |
+| **R** | `11_twfe.R` | [Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.R) |
+| **Python** | `11_twfe.py` | [Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.py) |
+
+**Paquetes necesarios:**
+
+- **Stata:** `ssc install reghdfe bacondecomp csdid drdid eventstudyinteract did_imputation did2s jwdid, replace`
+- **R:** `install.packages(c("fixest", "bacondecomp", "did", "ggplot2", "dplyr"))`
+- **Python:** `pip install pyfixest pandas numpy matplotlib`
 
