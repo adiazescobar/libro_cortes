@@ -20,3 +20,7 @@ rmd_files:
   - 09-BadControls.Rmd        # Este será Cap 9
   - 10-BadControlsStata.Rmd   # Este será Cap 10
   - 11-TWFE.Rmd               # Este será Cap 11
+  - 12-ExactMatching.Rmd      # Este será Cap 12
+  - 13-PSM.Rmd                # Este será Cap 13
+  - 14-PSMStata.Rmd           # Este será Cap 14
+  - 15-IPW.Rmd                # Este será Cap 15
