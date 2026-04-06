@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 9 Malos Controles (Teoría) | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
+  <title>Capitulo 14 PSM en Stata: psmatch2 | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 14 PSM en Stata: psmatch2 | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
+  <meta property="og:title" content="Capitulo 14 PSM en Stata: psmatch2 | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
+  <meta name="twitter:title" content="Capitulo 14 PSM en Stata: psmatch2 | Cortes Transversales" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="did-teoria.html"/>
-<link rel="next" href="bad-controls-stata.html"/>
+<link rel="prev" href="psm.html"/>
+<link rel="next" href="ipw.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,7 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
-<li class="chapter" data-level="1.1" data-path="09-BadControls.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="1.1" data-path="14-PSMStata.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
@@ -371,248 +371,445 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="bad-controls-teoria" class="section level1 hasAnchor" number="9">
-<h1><span class="header-section-number">Capitulo 9</span> Malos Controles (Teoría)<a href="bad-controls-teoria.html#bad-controls-teoria" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div class="boxinfo">
-<p><strong>🎯 Metas de aprendizaje</strong></p>
-<ul>
-<li>Comprender el <strong>supuesto de tendencias paralelas</strong> en Diferencias en Diferencias (DID).<br />
-</li>
-<li>Entender la diferencia entre <strong>buenos y malos controles</strong>.<br />
-</li>
-<li>Relacionar los <strong>resultados potenciales</strong> con la validez de las estimaciones.<br />
-</li>
-<li>Analizar las implicaciones de usar (o no usar) controles en una regresión.<br />
-</li>
-</ul>
-</div>
-<div id="el-supuesto-de-tendencias-paralelas-1" class="section level2 unnumbered hasAnchor">
-<h2>El supuesto de Tendencias Paralelas<a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El corazón de la estrategia de <strong>Diferencias en Diferencias (DID)</strong> es el supuesto de que, en ausencia del tratamiento, la evolución de los grupos tratados y de control habría sido <strong>paralela</strong> en el tiempo.</p>
-<p><span class="math display">\[
-Y_{it} = \alpha + \beta D_i + \delta T_t + \gamma (D_i \times T_t) + \varepsilon_{it}
-\]</span></p>
-<p>donde:<br />
-- <span class="math inline">\(D_i\)</span>: indicador de tratamiento,<br />
-- <span class="math inline">\(T_t\)</span>: indicador de post-tratamiento,<br />
-- <span class="math inline">\(\gamma\)</span>: estimador DID.</p>
-<p>El supuesto clave es:</p>
-<p><span class="math display">\[
-E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=1] = E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=0]
-\]</span></p>
-<p>Si esto se cumple, la estimación DID es <strong>insesgada</strong>.</p>
-</div>
-<div id="resultados-potenciales-2" class="section level2 unnumbered hasAnchor">
-<h2>Resultados Potenciales<a href="bad-controls-teoria.html#resultados-potenciales-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Recordemos la notación:</p>
-<ul>
-<li><span class="math inline">\(Y_i(D=1)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> si recibe tratamiento.</li>
-<li><span class="math inline">\(Y_i(D=0)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> si no recibe tratamiento.</li>
-</ul>
-<p>El <strong>ATE</strong> se define como:</p>
-<p><span class="math display">\[
-ATE = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
-\]</span></p>
-<p>En DID, el estimador busca identificar justamente esa diferencia, bajo el supuesto de tendencias paralelas.</p>
-</div>
-<div id="primeras-diferencias-y-did" class="section level2 unnumbered hasAnchor">
-<h2>Primeras Diferencias y DID<a href="bad-controls-teoria.html#primeras-diferencias-y-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>En primeras diferencias:</p>
-<p><span class="math display">\[
-\Delta Y_i = Y_{i,t=1} - Y_{i,t=0}
-\]</span></p>
-<p>y en DID:</p>
-<p><span class="math display">\[
-DID = \big( E[\Delta Y_i \mid D=1] - E[\Delta Y_i \mid D=0] \big)
-\]</span></p>
-</div>
-<div id="controles-en-did" class="section level2 unnumbered hasAnchor">
-<h2>Controles en DID<a href="bad-controls-teoria.html#controles-en-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="buenos-controles" class="section level3 unnumbered hasAnchor">
-<h3>Buenos controles<a href="bad-controls-teoria.html#buenos-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li>Características <strong>predeterminadas</strong>, no afectadas por el tratamiento.<br />
-</li>
-<li>Ejemplo: educación, experiencia laboral previa, género, edad.<br />
-</li>
-<li>Se pueden incluir para:
-<ul>
-<li>Mejorar la <strong>precisión</strong> de la estimación.<br />
-</li>
-<li>Aumentar la potencia estadística.<br />
-</li>
-<li>Reducir varianza residual.</li>
-</ul></li>
-</ul>
-<div class="boxcerebro">
-<p><strong>Definición formal:</strong><br />
-Un <strong>buen control</strong> es toda característica observable que <strong>no cambia como consecuencia del tratamiento</strong>.<br />
-Son variables predeterminadas que ayudan a explicar el resultado pero no están mediadas por el programa.</p>
-</div>
-<p><strong>Ejemplo informal:</strong><br />
-Si evaluamos el efecto de un programa de formación laboral:<br />
-- <strong>Buen control</strong>: nivel educativo alcanzado antes del programa.<br />
-- <strong>Buen control</strong>: años de experiencia previa.</p>
-</div>
-<div id="malos-controles" class="section level3 unnumbered hasAnchor">
-<h3>Malos controles<a href="bad-controls-teoria.html#malos-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li>Variables que <strong>sí son afectadas por el tratamiento</strong> (variables de resultado o mediadoras).</li>
-<li>Incluirlas rompe la interpretación causal porque introducen <strong>endogeneidad</strong>.<br />
-</li>
-<li>Al condicionar en una variable que está “en el camino causal”, se elimina parte del efecto verdadero.</li>
-</ul>
-<div class="boxcerebro">
-<p><strong>Definición formal:</strong><br />
-Un <strong>mal control</strong> es toda variable que se encuentra <strong>dentro del mecanismo causal</strong> que conecta el tratamiento con el resultado.<br />
-Condicionar en ella genera <strong>sesgo de post-tratamiento</strong>.</p>
-</div>
-<p><strong>Ejemplo informal:</strong><br />
-Siguiendo el programa de formación laboral:<br />
-- <strong>Mal control</strong>: salario después de haber recibido la capacitación.<br />
-- <strong>Mal control</strong>: horas trabajadas después del programa.<br />
-- <strong>Mal control</strong>: sector de empleo obtenido gracias al programa.</p>
-<p>👉 Todas estas variables son consecuencias (directas o indirectas) del tratamiento. Si las incluimos como controles, estamos <strong>borrando</strong> parte del impacto que queremos medir.</p>
+<div id="psm-stata" class="section level1 hasAnchor" number="14">
+<h1><span class="header-section-number">Capitulo 14</span> PSM en Stata: <code>psmatch2</code><a href="psm-stata.html#psm-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="instalación-y-estructura-del-comando" class="section level2 unnumbered hasAnchor">
+<h2>Instalación y estructura del comando<a href="#instalaci%C3%B3n-y-estructura-del-comando" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El comando estándar para PSM en Stata es <code>psmatch2</code>, disponible en SSC:</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb124-1"><a href="psm-stata.html#cb124-1" tabindex="-1"></a><span class="kw">ssc</span> install psmatch2</span></code></pre></div>
+<p>La sintaxis completa es:</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb125-1"><a href="psm-stata.html#cb125-1" tabindex="-1"></a>psmatch2 depvar [indepvars] [<span class="kw">if</span> <span class="fu">exp</span>] [<span class="kw">in</span> <span class="kw">range</span>] [,</span>
+<span id="cb125-2"><a href="psm-stata.html#cb125-2" tabindex="-1"></a>    outcome(<span class="kw">varlist</span>)</span>
+<span id="cb125-3"><a href="psm-stata.html#cb125-3" tabindex="-1"></a>    pscore(varname)   <span class="kw">logit</span> odds <span class="fu">index</span></span>
+<span id="cb125-4"><a href="psm-stata.html#cb125-4" tabindex="-1"></a>    neighbor(integer) ties</span>
+<span id="cb125-5"><a href="psm-stata.html#cb125-5" tabindex="-1"></a>    noreplacement descending</span>
+<span id="cb125-6"><a href="psm-stata.html#cb125-6" tabindex="-1"></a>    caliper(<span class="fu">real</span>)</span>
+<span id="cb125-7"><a href="psm-stata.html#cb125-7" tabindex="-1"></a>    radius</span>
+<span id="cb125-8"><a href="psm-stata.html#cb125-8" tabindex="-1"></a>    kernel</span>
+<span id="cb125-9"><a href="psm-stata.html#cb125-9" tabindex="-1"></a>    llr</span>
+<span id="cb125-10"><a href="psm-stata.html#cb125-10" tabindex="-1"></a>    kerneltype(<span class="dv">type</span>) bwidth(<span class="fu">real</span>)</span>
+<span id="cb125-11"><a href="psm-stata.html#cb125-11" tabindex="-1"></a>    spline nknots(integer)</span>
+<span id="cb125-12"><a href="psm-stata.html#cb125-12" tabindex="-1"></a>    mahalanobis(<span class="kw">varlist</span>) add pcaliper(<span class="fu">real</span>)</span>
+<span id="cb125-13"><a href="psm-stata.html#cb125-13" tabindex="-1"></a>    common <span class="kw">trim</span>(<span class="fu">real</span>)</span>
+<span id="cb125-14"><a href="psm-stata.html#cb125-14" tabindex="-1"></a>    ate</span>
+<span id="cb125-15"><a href="psm-stata.html#cb125-15" tabindex="-1"></a>    ai(#)]</span></code></pre></div>
+<p>Los comandos complementarios son <code>psgraph</code> (gráfica del propensity score) y <code>pstest</code> (balance de covariables).</p>
 <hr />
 </div>
-<div id="implicaciones-prácticas" class="section level3 unnumbered hasAnchor">
-<h3>Implicaciones prácticas<a href="#implicaciones-pr%C3%A1cticas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li><strong>Con buenos controles</strong>:
-<ul>
-<li>El coeficiente del DID mantiene <strong>interpretación causal</strong>.<br />
-</li>
-<li>Mejora la precisión de la estimación.</li>
-</ul></li>
-<li><strong>Con malos controles</strong>:
-<ul>
-<li>El estimador se <strong>vuelve inconsistente</strong>.<br />
-</li>
-<li>Perdemos la interpretación causal → ya no estamos midiendo el efecto del programa, sino algo condicionado en una consecuencia del mismo.</li>
-</ul></li>
-</ul>
-<p>En palabras simples:<br />
-&gt; “Un buen control aclara la foto, un mal control la distorsiona”.</p>
-</div>
-</div>
-<div id="supuestos-y-consistencia" class="section level2 unnumbered hasAnchor">
-<h2>Supuestos y Consistencia<a href="bad-controls-teoria.html#supuestos-y-consistencia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El estimador DID será insesgado si:</p>
-<p><span class="math display">\[
-E[Y_{i}(0) \mid D=1, t=1] - E[Y_{i}(0) \mid D=1, t=0] = E[Y_{i}(0) \mid D=0, t=1] - E[Y_{i}(0) \mid D=0, t=0]
-\]</span></p>
-<ul>
-<li>Si los grupos no siguen tendencias paralelas → <strong>sesgo</strong>.<br />
-</li>
-<li>Si incluimos malos controles → <strong>sesgo adicional</strong>.<br />
-</li>
-<li>Con buenos controles → <strong>más precisión</strong>, pero no cambia la interpretación causal.</li>
-</ul>
+<div id="variables-auxiliares-que-genera-psmatch2" class="section level2 unnumbered hasAnchor">
+<h2>Variables auxiliares que genera <code>psmatch2</code><a href="psm-stata.html#variables-auxiliares-que-genera-psmatch2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Después de correr <code>psmatch2</code>, el comando crea las siguientes variables en la base de datos:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>_pscore</code></td>
+<td>Propensity Score estimado</td>
+</tr>
+<tr class="even">
+<td><code>_treated</code></td>
+<td>Indicador de asignación al tratamiento</td>
+</tr>
+<tr class="odd">
+<td><code>_support</code></td>
+<td>Indicador de soporte común</td>
+</tr>
+<tr class="even">
+<td><code>_weight</code></td>
+<td>Peso del control emparejado</td>
+</tr>
+<tr class="odd">
+<td><code>_y2</code></td>
+<td>Valor de <code>outcome</code> del match</td>
+</tr>
+<tr class="even">
+<td><code>_id</code></td>
+<td>Identificador (ID)</td>
+</tr>
+<tr class="odd">
+<td><code>_n1</code></td>
+<td>ID del vecino más cercano (vecino 1)</td>
+</tr>
+<tr class="even">
+<td><code>_nn</code></td>
+<td>Número de controles emparejados</td>
+</tr>
+<tr class="odd">
+<td><code>_pdif</code></td>
+<td><span class="math inline">\(|\hat{p}(\text{pscore}) - \hat{p}(\text{neighbor})|\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Para inspeccionar los resultados del emparejamiento:</p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb126-1"><a href="psm-stata.html#cb126-1" tabindex="-1"></a><span class="kw">sum</span> pscore1 _pscore</span>
+<span id="cb126-2"><a href="psm-stata.html#cb126-2" tabindex="-1"></a>edit D y2 pscore1 _pscore _treated _support _weight _y2 _id _n1 _nn _pdif</span></code></pre></div>
 <hr />
 </div>
-<div id="la-demostración-formal-sesgo-de-agrupación" class="section level2 unnumbered hasAnchor">
-<h2>La demostración formal: sesgo de agrupación<a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Esta sección desarrolla el argumento de <strong>Angrist y Pischke</strong> (<em>Mostly Harmless Econometrics</em>, cap. 3) que muestra exactamente qué pasa cuando incluimos un mal control. Es la demostración que vimos en clase.</p>
-<div id="el-escenario" class="section level3 unnumbered hasAnchor">
-<h3>El escenario<a href="bad-controls-teoria.html#el-escenario" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Suponga que el tratamiento <span class="math inline">\(D\)</span> afecta <strong>dos</strong> cosas: el resultado de interés <span class="math inline">\(Y\)</span> <strong>y</strong> una variable <span class="math inline">\(F\)</span>:</p>
-<p><span class="math display">\[D \rightarrow Y \qquad \text{y} \qquad D \rightarrow F\]</span></p>
-<p>Un ejemplo concreto: <span class="math inline">\(D\)</span> = acceso a educación universitaria, <span class="math inline">\(Y\)</span> = salario, <span class="math inline">\(F\)</span> = trabajar en un empleo de alta calificación (STEM). La educación sube el salario <em>y</em> aumenta la probabilidad de entrar a STEM.</p>
-<p>Como el programa es aleatorio, los resultados potenciales son independientes del tratamiento:</p>
-<p><span class="math display">\[Y(D=1),\; Y(D=0),\; F(D=1),\; F(D=0) \;\perp\; D\]</span></p>
+<div id="el-propensity-score-y-el-soporte-común" class="section level2 unnumbered hasAnchor">
+<h2>El propensity score y el soporte común<a href="#el-propensity-score-y-el-soporte-com%C3%BAn" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Antes de emparejar, es útil calcular y guardar el PS con distintas restricciones de soporte común:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>pscore1</code></td>
+<td>PS sin restricción de soporte común</td>
+</tr>
+<tr class="even">
+<td><code>pscore1_sc</code></td>
+<td>PS para el ATE (min de tratados y max de controles)</td>
+</tr>
+<tr class="odd">
+<td><code>pscore2_sc</code></td>
+<td>PS para el ATT (min y max del PS de los controles)</td>
+</tr>
+</tbody>
+</table>
+<hr />
 </div>
-<div id="sin-controlar-f-el-estimador-naive-es-el-ate" class="section level3 unnumbered hasAnchor">
-<h3>Sin controlar <span class="math inline">\(F\)</span>: el estimador naive es el ATE<a href="bad-controls-teoria.html#sin-controlar-f-el-estimador-naive-es-el-ate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Con la regresión sin control:
-<span class="math display">\[Y = \alpha + \tau D + \varepsilon\]</span></p>
-<p>el estimador de diferencias de medias es:</p>
-<p><span class="math display">\[\hat{\tau}_{\text{naive}} = E[Y \mid D=1] - E[Y \mid D=0] = E[Y(1)] - E[Y(0)] = \text{ATE}\]</span></p>
-<p>Es insesgado y consistente. Todo bien hasta aquí.</p>
+<div id="a.-nn1-sin-reemplazo" class="section level2 unnumbered hasAnchor">
+<h2>1a. NN(1) sin reemplazo<a href="psm-stata.html#a.-nn1-sin-reemplazo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El caso más simple: cada tratado se empareja con el control más cercano en PS, sin que ningún control pueda usarse dos veces.</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb127-1"><a href="psm-stata.html#cb127-1" tabindex="-1"></a>* Preparar orden aleatorio (importante para NN <span class="fu">sin</span> reemplazo)</span>
+<span id="cb127-2"><a href="psm-stata.html#cb127-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1298</span>
+<span id="cb127-3"><a href="psm-stata.html#cb127-3" tabindex="-1"></a><span class="kw">drawnorm</span> orden</span>
+<span id="cb127-4"><a href="psm-stata.html#cb127-4" tabindex="-1"></a><span class="kw">sort</span> orden</span>
+<span id="cb127-5"><a href="psm-stata.html#cb127-5" tabindex="-1"></a></span>
+<span id="cb127-6"><a href="psm-stata.html#cb127-6" tabindex="-1"></a>* NN(1) <span class="fu">sin</span> reemplazo</span>
+<span id="cb127-7"><a href="psm-stata.html#cb127-7" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) pscore(pscore1) noreplacement</span>
+<span id="cb127-8"><a href="psm-stata.html#cb127-8" tabindex="-1"></a>psgraph</span>
+<span id="cb127-9"><a href="psm-stata.html#cb127-9" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
+<p><strong>Resultado típico:</strong></p>
+<pre><code>Variable   Sample       Treated    Controls   Difference   S.E.    T-stat
+y2         Unmatched   -.6440      -.9765      .3325        .0338    9.84
+           ATT         -.6440      -.9736      .3297        .0342    9.63
+
+Note: S.E. does not take into account that the propensity score is estimated.</code></pre>
+<p>La diferencia en la muestra sin emparejar (<em>Unmatched</em>) es el sesgo bruto; la diferencia <em>ATT</em> es el efecto estimado del tratamiento sobre los tratados después del emparejamiento.</p>
+<hr />
 </div>
-<div id="qué-pasa-si-incluimos-f-como-control" class="section level3 unnumbered hasAnchor">
-<h3>¿Qué pasa si incluimos <span class="math inline">\(F\)</span> como control?<a href="#qu%C3%A9-pasa-si-incluimos-f-como-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Ahora agregamos <span class="math inline">\(F\)</span> a la regresión:
-<span class="math display">\[Y = \alpha + \tau D + \beta F + \varepsilon\]</span></p>
-<p>y comparamos tratados y controles <strong>dentro de cada valor de <span class="math inline">\(F\)</span></strong>. Por ejemplo, para <span class="math inline">\(F=1\)</span>:</p>
-<p><span class="math display">\[E[Y \mid D=1,\, F=1] \;-\; E[Y \mid D=0,\, F=1] \;=\; ?\]</span></p>
-<p>Para calcular esto usamos la ecuación de switching:</p>
-<p><span class="math display">\[Y_i = D_i \cdot Y_i(1) + (1-D_i)\cdot Y_i(0), \qquad F_i = D_i \cdot F_i(1) + (1-D_i)\cdot F_i(0)\]</span></p>
-<p><strong>Término izquierdo</strong> — entre los tratados con <span class="math inline">\(F=1\)</span>:</p>
-<p><span class="math display">\[E[Y \mid D=1,\, F=1] = E\!\left[Y(1) \mid D=1,\; F(1)=1\right] = E\!\left[Y(1) \mid F(1)=1\right]\]</span></p>
-<p>El último paso usa la independencia <span class="math inline">\(Y(1) \perp D\)</span>.</p>
-<p><strong>Término derecho</strong> — entre los controles con <span class="math inline">\(F=1\)</span>. Aquí está el truco: para los controles (<span class="math inline">\(D=0\)</span>), <span class="math inline">\(F=1\)</span> significa que <span class="math inline">\(F(D=0)=1\)</span>, <strong>no</strong> <span class="math inline">\(F(D=1)=1\)</span>. Son grupos distintos.</p>
-<p><span class="math display">\[E[Y \mid D=0,\, F=1] = E\!\left[Y(0) \mid D=0,\; F(0)=1\right] = E\!\left[Y(0) \mid F(0)=1\right]\]</span></p>
+<div id="b.-nn1-con-soporte-común" class="section level2 unnumbered hasAnchor">
+<h2>1b. NN(1) con soporte común<a href="#b.-nn1-con-soporte-com%C3%BAn" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La opción <code>com</code> (o <code>common</code>) restringe el análisis a la región de soporte común, descartando los tratados cuyo PS cae fuera del rango del PS de los controles.</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb129-1"><a href="psm-stata.html#cb129-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) noreplacement com</span>
+<span id="cb129-2"><a href="psm-stata.html#cb129-2" tabindex="-1"></a>psgraph</span>
+<span id="cb129-3"><a href="psm-stata.html#cb129-3" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
+<hr />
 </div>
-<div id="la-descomposición-en-cuatro-términos" class="section level3 unnumbered hasAnchor">
-<h3>La descomposición en cuatro términos<a href="#la-descomposici%C3%B3n-en-cuatro-t%C3%A9rminos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Juntando los dos lados y sumando y restando <span class="math inline">\(E[Y(0) \mid F(1)=1]\)</span>:</p>
-<p><span class="math display">\[
-E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1]
-\]</span></p>
-<p><span class="math display">\[
-= \underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}
-\]</span></p>
-<p>Sumamos y restamos <span class="math inline">\(E[Y(0)\mid F(1)=1]\)</span>:</p>
-<p><span class="math display">\[
-= \Big(\underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{4}}\Big) + \Big(\underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{3}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}\Big)
-\]</span></p>
-<p>Lo que resulta en:</p>
-<p><span class="math display">\[
-\boxed{E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1] = \underbrace{E[Y(1)-Y(0) \mid F(1)=1]}_{\text{ATE}_{F=1}} + \underbrace{E[Y(0) \mid F(1)=1] - E[Y(0) \mid F(0)=1]}_{\text{Sesgo de agrupación}}}
-\]</span></p>
+<div id="c.-soporte-común-vía-trimming" class="section level2 unnumbered hasAnchor">
+<h2>1c. Soporte común vía trimming<a href="#c.-soporte-com%C3%BAn-v%C3%ADa-trimming" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Otra forma de imponer soporte común es <code>trim(#)</code>, que descarta el #% de observaciones tratadas con el PS más alto (zona donde hay menos controles disponibles).</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb130-1"><a href="psm-stata.html#cb130-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) noreplacement <span class="kw">trim</span>(20)</span>
+<span id="cb130-2"><a href="psm-stata.html#cb130-2" tabindex="-1"></a>psgraph</span>
+<span id="cb130-3"><a href="psm-stata.html#cb130-3" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
+<p><strong>Comparación de variantes NN(1):</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Especificación</th>
+<th>ATT</th>
+<th>Tratados</th>
+<th>Controles</th>
+<th>Fuera SC</th>
+<th>Balanceado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>nn(1)</td>
+<td>0.330</td>
+<td>1,952</td>
+<td>2,048</td>
+<td>0</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>nn(1) sc</td>
+<td>0.329</td>
+<td>1,950</td>
+<td>2,048</td>
+<td>2</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td>nn(1) trim</td>
+<td>0.337</td>
+<td>1,562</td>
+<td>2,048</td>
+<td>390</td>
+<td>Casi</td>
+</tr>
+<tr class="even">
+<td>nn(1) con reemplazo</td>
+<td>0.353</td>
+<td>1,952</td>
+<td>2,048</td>
+<td>0</td>
+<td>Sí</td>
+</tr>
+</tbody>
+</table>
+<hr />
 </div>
-<div id="qué-significa-cada-término" class="section level3 unnumbered hasAnchor">
-<h3>¿Qué significa cada término?<a href="#qu%C3%A9-significa-cada-t%C3%A9rmino" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Término 1 — <span class="math inline">\(\text{ATE}_{F=1}\)</span>:</strong> el efecto promedio del tratamiento <strong>para las personas que habrían llegado a <span class="math inline">\(F=1\)</span> si fueran tratadas</strong>. No es el ATE de toda la población; es un ATE condicional en un subgrupo particular.</p>
-<p><strong>Término 2 — Sesgo de agrupación:</strong> compara el resultado contrafactual <span class="math inline">\(Y(0)\)</span> de dos grupos diferentes:</p>
-<ul>
-<li><span class="math inline">\(E[Y(0) \mid F(1)=1]\)</span>: resultado sin tratamiento de quienes <em>habrían</em> llegado a <span class="math inline">\(F=1\)</span> <strong>si fueran tratados</strong>.</li>
-<li><span class="math inline">\(E[Y(0) \mid F(0)=1]\)</span>: resultado sin tratamiento de quienes <em>habrían</em> llegado a <span class="math inline">\(F=1\)</span> <strong>si no fueran tratados</strong>.</li>
-</ul>
-<p>Estos son grupos distintos. El tratamiento <span class="math inline">\(D\)</span> “reorganiza” quién termina en <span class="math inline">\(F=1\)</span>: con educación universitaria, más personas entran a empleos STEM (incluyendo algunas con menor habilidad innata). Sin educación, solo los más hábiles llegan a STEM. Por eso <span class="math inline">\(E[Y(0)\mid F(1)=1] &lt; E[Y(0)\mid F(0)=1]\)</span>: el sesgo de agrupación es negativo y <strong>atenúa</strong> el efecto estimado.</p>
-<div class="boxcerebro">
-<p><strong>Intuición de una línea:</strong>
-Al condicionar en <span class="math inline">\(F\)</span>, estamos comparando grupos que son diferentes no solo en <span class="math inline">\(D\)</span>, sino también en características no observables correlacionadas con <span class="math inline">\(F\)</span>. Eso introduce un sesgo que no desaparece aunque <span class="math inline">\(D\)</span> sea aleatorio.</p>
+<div id="verificar-el-balance-pstest" class="section level2 unnumbered hasAnchor">
+<h2>Verificar el balance: <code>pstest</code><a href="psm-stata.html#verificar-el-balance-pstest" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="interpretación-de-la-tabla-pstest" class="section level3 unnumbered hasAnchor">
+<h3>Interpretación de la tabla <code>pstest</code><a href="#interpretaci%C3%B3n-de-la-tabla-pstest" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb131"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb131-1"><a href="psm-stata.html#cb131-1" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
+<table>
+<colgroup>
+<col width="40%" />
+<col width="59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Columna</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Unmatched</strong></td>
+<td>Medias antes del emparejamiento</td>
+</tr>
+<tr class="even">
+<td><strong>Matched</strong></td>
+<td>Medias después del emparejamiento</td>
+</tr>
+<tr class="odd">
+<td><strong>%Bias</strong></td>
+<td>Diferencia estandarizada: <span class="math inline">\(B = \frac{\bar{X}_T - \bar{X}_C}{\sqrt{(\hat{V}_T + \hat{V}_C)/2}} \times 100\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>t-test</strong></td>
+<td>Prueba t de diferencia de medias antes y después</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regla práctica:</strong> <span class="math inline">\(|B| &lt; 5\%\)</span> es excelente; <span class="math inline">\(|B| &lt; 20\%\)</span> es aceptable.</p>
 </div>
-</div>
-<div id="el-ejemplo-de-angrist-y-pischke" class="section level3 unnumbered hasAnchor">
-<h3>El ejemplo de Angrist y Pischke<a href="bad-controls-teoria.html#el-ejemplo-de-angrist-y-pischke" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li><span class="math inline">\(D\)</span> = acceso a educación universitaria (aleatorio)</li>
-<li><span class="math inline">\(Y\)</span> = salario</li>
-<li><span class="math inline">\(F\)</span> = trabaja en sector STEM</li>
-</ul>
-<p><strong>Sin controlar <span class="math inline">\(F\)</span>:</strong> el estimador recupera el efecto total de la educación sobre el salario. ✓</p>
-<p><strong>Controlando <span class="math inline">\(F\)</span>:</strong> comparamos personas en STEM con y sin educación universitaria. Pero quienes están en STEM <em>sin</em> educación universitaria son los más talentosos (solo ellos llegan ahí sin el título). Quienes están en STEM <em>con</em> educación incluyen personas de habilidad promedio que entraron gracias al título. Al comparar los dos grupos dentro de STEM, el grupo control parece mejor, lo que hace que el efecto estimado de la educación parezca menor. El sesgo de agrupación va en la dirección contraria al efecto real.</p>
-<p><strong>Moraleja:</strong></p>
-<p><span class="math display">\[y = \alpha + \tau D + \beta F + \varepsilon \quad \longrightarrow \quad \hat{\tau} \text{ no mide el ATE}\]</span></p>
-<p>La estimación de <span class="math inline">\(\tau\)</span> ya no es ni insesgada ni consistente para el efecto causal de interés. El coeficiente de <span class="math inline">\(D\)</span> en esta regresión mezcla el <span class="math inline">\(\text{ATE}_{F=1}\)</span> (que no es el ATE de la población) con el sesgo de agrupación.</p>
+<div id="indicadores-globales" class="section level3 unnumbered hasAnchor">
+<h3>Indicadores globales<a href="psm-stata.html#indicadores-globales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>pstest</code> también reporta indicadores de balance global:</p>
+<table>
+<colgroup>
+<col width="45%" />
+<col width="54%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Indicador</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Pseudo R²</strong></td>
+<td>Re-estima el PS en la muestra emparejada — debe ser muy pequeño (idealmente <span class="math inline">\(\approx 0\)</span>)</td>
+</tr>
+<tr class="even">
+<td><strong>LR chi²</strong></td>
+<td>Prueba de significancia conjunta de todos los regresores en el probit del PS. <strong>Antes</strong> del matching: debe rechazarse. <strong>Después</strong> del matching: no debe rechazarse</td>
+</tr>
+<tr class="odd">
+<td><strong>MeanBias / MedBias</strong></td>
+<td>Sesgo promedio y mediano en las covariables</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo de salida:</p>
+<pre><code>Sample    Pseudo R2   LR chi2   p&gt;chi2   MeanBias   MedBias
+Raw       0.011       63.52     0.000    9.5        10.0
+Matched   0.005       27.36     0.000    6.2        7.2</code></pre>
+<p>Si el balance es insuficiente (Pseudo R² todavía alto, LR chi² significativo), hay que re-especificar el modelo del PS o cambiar el algoritmo.</p>
 <hr />
 </div>
 </div>
-<div id="moraleja-final" class="section level2 unnumbered hasAnchor">
-<h2>Moraleja Final<a href="bad-controls-teoria.html#moraleja-final" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li>El supuesto de tendencias paralelas es <strong>fundamental</strong>.<br />
-</li>
-<li>Los buenos controles ayudan; los malos controles dañan.<br />
-</li>
-<li>DID se entiende mejor desde los <strong>resultados potenciales</strong>.<br />
-</li>
-<li>La interpretación causal depende estrictamente de los <strong>supuestos</strong>.</li>
-</ol>
+<div id="nn-con-reemplazo-y-errores-estándar-analíticos" class="section level2 unnumbered hasAnchor">
+<h2>2. NN con reemplazo y errores estándar analíticos<a href="#nn-con-reemplazo-y-errores-est%C3%A1ndar-anal%C3%ADticos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Con reemplazo, el mismo control puede emparejarse con múltiples tratados. La opción <code>ai(#)</code> calcula errores estándar analíticos de Abadie &amp; Imbens (2006), donde <code>#</code> es el número de vecinos usados para estimar la varianza:</p>
+<p><span class="math display">\[\hat{\sigma}^2(X_i, W_i) = \frac{J}{J+1}\left(Y_i - \frac{1}{J}\sum_{m=1}^{J} Y_{\ell_m(i)}\right)^2\]</span></p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb133-1"><a href="psm-stata.html#cb133-1" tabindex="-1"></a>* NN(1) con reemplazo, soporte común <span class="fu">y</span> ES analíticos</span>
+<span id="cb133-2"><a href="psm-stata.html#cb133-2" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) com ai(1)</span>
+<span id="cb133-3"><a href="psm-stata.html#cb133-3" tabindex="-1"></a>psgraph</span>
+<span id="cb133-4"><a href="psm-stata.html#cb133-4" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
+<p><strong>NN(5) con reemplazo</strong> (reduce varianza a costa de algo de sesgo):</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb134-1"><a href="psm-stata.html#cb134-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(5) com ai(4)</span></code></pre></div>
+<p><strong>Comparación con reemplazo:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Especificación</th>
+<th>ATT</th>
+<th>Tratados</th>
+<th>Controles</th>
+<th>Fuera SC</th>
+<th>Balanceado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>nn(1) sc</td>
+<td>0.356</td>
+<td>1,950</td>
+<td>2,048</td>
+<td>2</td>
+<td>Sí</td>
+</tr>
+<tr class="even">
+<td>nn(5) sc</td>
+<td>0.325</td>
+<td>1,950</td>
+<td>2,048</td>
+<td>2</td>
+<td>Sí</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<div class="boxejercicio">
-<p><strong>✍️ Ejercicio para reflexionar</strong></p>
-<ol style="list-style-type: decimal">
-<li>Da un ejemplo de <strong>buen control</strong> y de <strong>mal control</strong> en la evaluación de un programa de transferencias condicionadas.<br />
-</li>
-<li>¿Por qué incluir el nivel de ingreso post-programa sería un mal control en DID?<br />
-</li>
-<li>¿Cómo verificarías gráficamente el supuesto de tendencias paralelas antes de correr la regresión?<br />
-</li>
-</ol>
 </div>
+<div id="ate-con-nn1" class="section level2 unnumbered hasAnchor">
+<h2>3. ATE con NN(1)<a href="psm-stata.html#ate-con-nn1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para estimar el ATE (efecto sobre toda la población, no solo los tratados) se agrega la opción <code>ate</code>:</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb135-1"><a href="psm-stata.html#cb135-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) noreplacement com ai(1) ate</span>
+<span id="cb135-2"><a href="psm-stata.html#cb135-2" tabindex="-1"></a>psgraph</span>
+<span id="cb135-3"><a href="psm-stata.html#cb135-3" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
+<p>El soporte común para el ATE es más estricto: se requiere superposición en ambas colas de la distribución del PS.</p>
+<hr />
+</div>
+<div id="caliper-1" class="section level2 unnumbered hasAnchor">
+<h2>4. Caliper<a href="psm-stata.html#caliper-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Impone una distancia máxima <span class="math inline">\(\kappa\)</span> en el PS. Los tratados sin un control dentro del caliper se descartan:</p>
+<p><span class="math display">\[C(i) = \{j \in D=0 \mid |P_i(X) - P_j(X)| &lt; \kappa\}\]</span></p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb136-1"><a href="psm-stata.html#cb136-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) caliper(0.001) com ai(1)</span>
+<span id="cb136-2"><a href="psm-stata.html#cb136-2" tabindex="-1"></a>psgraph</span>
+<span id="cb136-3"><a href="psm-stata.html#cb136-3" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
+<hr />
+</div>
+<div id="radio" class="section level2 unnumbered hasAnchor">
+<h2>5. Radio<a href="psm-stata.html#radio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En lugar de usar solo el vecino más cercano, el radio empareja con <strong>todos</strong> los controles dentro del caliper:</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb137-1"><a href="psm-stata.html#cb137-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) radius caliper(0.001) com ai(1)</span>
+<span id="cb137-2"><a href="psm-stata.html#cb137-2" tabindex="-1"></a>psgraph</span>
+<span id="cb137-3"><a href="psm-stata.html#cb137-3" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
+<p><strong>Comparación caliper vs. radio:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Especificación</th>
+<th>ATT</th>
+<th>Tratados</th>
+<th>Controles</th>
+<th>Fuera SC</th>
+<th>Balanceado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>nn(1) sc</td>
+<td>0.356</td>
+<td>1,950</td>
+<td>2,048</td>
+<td>2</td>
+<td>Sí</td>
+</tr>
+<tr class="even">
+<td>nn(5) sc</td>
+<td>0.325</td>
+<td>1,950</td>
+<td>2,048</td>
+<td>2</td>
+<td>Sí</td>
+</tr>
+<tr class="odd">
+<td>caliper(0.001) sc</td>
+<td>0.349</td>
+<td>1,903</td>
+<td>2,048</td>
+<td>49</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>radius(0.001) sc</td>
+<td>0.333</td>
+<td>1,903</td>
+<td>2,048</td>
+<td>49</td>
+<td>Sí</td>
+</tr>
+</tbody>
+</table>
+<p>El radio mejora el balance al usar más información de los controles cercanos.</p>
+<hr />
+</div>
+<div id="kernel-1" class="section level2 unnumbered hasAnchor">
+<h2>6. Kernel<a href="psm-stata.html#kernel-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El emparejamiento por kernel usa <strong>todos</strong> los controles, ponderados por su distancia al tratado. Los controles más cercanos en PS reciben mayor peso.</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb138-1"><a href="psm-stata.html#cb138-1" tabindex="-1"></a>* Kernel Epanechnikov (por defecto) con bandwidth 0.06</span>
+<span id="cb138-2"><a href="psm-stata.html#cb138-2" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) kernel kerneltype(epan) bwidth(0.06) com</span>
+<span id="cb138-3"><a href="psm-stata.html#cb138-3" tabindex="-1"></a>psgraph</span>
+<span id="cb138-4"><a href="psm-stata.html#cb138-4" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span>
+<span id="cb138-5"><a href="psm-stata.html#cb138-5" tabindex="-1"></a></span>
+<span id="cb138-6"><a href="psm-stata.html#cb138-6" tabindex="-1"></a>* Kernel Gaussiano</span>
+<span id="cb138-7"><a href="psm-stata.html#cb138-7" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) kernel kerneltype(<span class="fu">normal</span>) bwidth(0.06) com</span></code></pre></div>
+<p>Los kernels disponibles en <code>psmatch2</code> son: <code>epan</code> (Epanechnikov, por defecto), <code>normal</code> (Gaussiano), <code>biweight</code>, <code>uniform</code>, <code>tricube</code>.</p>
+<hr />
+</div>
+<div id="alternativa-teffects-psmatch-stata-nativo" class="section level2 unnumbered hasAnchor">
+<h2>7. Alternativa: <code>teffects psmatch</code> (Stata nativo)<a href="psm-stata.html#alternativa-teffects-psmatch-stata-nativo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Stata 13+ incluye <code>teffects psmatch</code>, que estima el PS y el efecto del tratamiento en un solo paso con errores estándar correctamente calculados:</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb139-1"><a href="psm-stata.html#cb139-1" tabindex="-1"></a>* ATT con NN(1)</span>
+<span id="cb139-2"><a href="psm-stata.html#cb139-2" tabindex="-1"></a>teffects psmatch (y2) (D <span class="ot">$X</span>, <span class="kw">probit</span>), atet</span>
+<span id="cb139-3"><a href="psm-stata.html#cb139-3" tabindex="-1"></a></span>
+<span id="cb139-4"><a href="psm-stata.html#cb139-4" tabindex="-1"></a>* ATE con NN(4)</span>
+<span id="cb139-5"><a href="psm-stata.html#cb139-5" tabindex="-1"></a>teffects psmatch (y2) (D <span class="ot">$X</span>, <span class="kw">probit</span>), ate nn(4)</span></code></pre></div>
+<p>La ventaja de <code>teffects</code> es que los errores estándar toman en cuenta la estimación del PS (a diferencia de <code>psmatch2</code> sin <code>ai()</code>). La desventaja es que no produce <code>psgraph</code> ni <code>pstest</code> directamente.</p>
+<hr />
+</div>
+<div id="resumen-de-la-secuencia-completa" class="section level2 unnumbered hasAnchor">
+<h2>Resumen de la secuencia completa<a href="psm-stata.html#resumen-de-la-secuencia-completa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb140"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb140-1"><a href="psm-stata.html#cb140-1" tabindex="-1"></a>* 1. Estimar <span class="fu">el</span> PS</span>
+<span id="cb140-2"><a href="psm-stata.html#cb140-2" tabindex="-1"></a><span class="kw">logit</span> D <span class="ot">$X</span></span>
+<span id="cb140-3"><a href="psm-stata.html#cb140-3" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> pscore1, pr</span>
+<span id="cb140-4"><a href="psm-stata.html#cb140-4" tabindex="-1"></a></span>
+<span id="cb140-5"><a href="psm-stata.html#cb140-5" tabindex="-1"></a>* 2. Verificar soporte común</span>
+<span id="cb140-6"><a href="psm-stata.html#cb140-6" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">kdensity</span> pscore1 <span class="kw">if</span> D==1, lcolor(<span class="bn">blue</span>)) <span class="co">///</span></span>
+<span id="cb140-7"><a href="psm-stata.html#cb140-7" tabindex="-1"></a>       (<span class="kw">kdensity</span> pscore1 <span class="kw">if</span> D==0, lcolor(<span class="kw">red</span>)), <span class="co">///</span></span>
+<span id="cb140-8"><a href="psm-stata.html#cb140-8" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
+<span id="cb140-9"><a href="psm-stata.html#cb140-9" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Distribución del propensity score&quot;</span>)</span>
+<span id="cb140-10"><a href="psm-stata.html#cb140-10" tabindex="-1"></a></span>
+<span id="cb140-11"><a href="psm-stata.html#cb140-11" tabindex="-1"></a>* 3. Emparejar (especificación principal: NN1 con reemplazo, SC)</span>
+<span id="cb140-12"><a href="psm-stata.html#cb140-12" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1298</span>
+<span id="cb140-13"><a href="psm-stata.html#cb140-13" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) com ai(1)</span>
+<span id="cb140-14"><a href="psm-stata.html#cb140-14" tabindex="-1"></a></span>
+<span id="cb140-15"><a href="psm-stata.html#cb140-15" tabindex="-1"></a>* 4. Verificar balance</span>
+<span id="cb140-16"><a href="psm-stata.html#cb140-16" tabindex="-1"></a>psgraph</span>
+<span id="cb140-17"><a href="psm-stata.html#cb140-17" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span>
+<span id="cb140-18"><a href="psm-stata.html#cb140-18" tabindex="-1"></a></span>
+<span id="cb140-19"><a href="psm-stata.html#cb140-19" tabindex="-1"></a>* 5. Robustez: kernel Epanechnikov</span>
+<span id="cb140-20"><a href="psm-stata.html#cb140-20" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) kernel kerneltype(epan) bwidth(0.06) com</span>
+<span id="cb140-21"><a href="psm-stata.html#cb140-21" tabindex="-1"></a></span>
+<span id="cb140-22"><a href="psm-stata.html#cb140-22" tabindex="-1"></a>* 6. Robustez: NN(5) con reemplazo</span>
+<span id="cb140-23"><a href="psm-stata.html#cb140-23" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(5) com ai(4)</span></code></pre></div>
+<hr />
+</div>
+<div id="lecturas-recomendadas-3" class="section level2 unnumbered hasAnchor">
+<h2>Lecturas recomendadas<a href="psm-stata.html#lecturas-recomendadas-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Leuven &amp; Sianesi (2003)</strong> — “PSMATCH2: Stata module to perform full Mahalanobis and propensity score matching, common support graphing, and covariate imbalance testing”, SSC</li>
+<li><strong>Caliendo &amp; Kopeinig (2008)</strong> — “Some practical guidance for the implementation of propensity score matching”, <em>Journal of Economic Surveys</em> — referencia principal</li>
+<li><strong>Abadie &amp; Imbens (2006)</strong> — “Large sample properties of matching estimators for average treatment effects”, <em>Econometrica</em> — fundamento teórico de los ES analíticos</li>
+</ul>
 
 </div>
 </div>
@@ -621,8 +818,8 @@ Al condicionar en <span class="math inline">\(F\)</span>, estamos comparando gru
           </div>
         </div>
       </div>
-<a href="did-teoria.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="bad-controls-stata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="psm.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ipw.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -653,7 +850,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/09-BadControls.Rmd",
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/14-PSMStata.Rmd",
     "text": "Edit"
   },
   "history": {

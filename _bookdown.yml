@@ -1,5 +1,5 @@
 book_filename: "econometria-avanzada"
-output_dir: "_book"
+output_dir: "docs"
 delete_merged_file: true
 new_session: true
 language:

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 9 Malos Controles (Teoría) | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
+  <title>Capitulo 12 Emparejamiento Exacto | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 12 Emparejamiento Exacto | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
+  <meta property="og:title" content="Capitulo 12 Emparejamiento Exacto | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 9 Malos Controles (Teoría) | Cortes Transversales" />
+  <meta name="twitter:title" content="Capitulo 12 Emparejamiento Exacto | Cortes Transversales" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="did-teoria.html"/>
-<link rel="next" href="bad-controls-stata.html"/>
+<link rel="prev" href="datos-de-panel-did-y-twfe-en-stata.html"/>
+<link rel="next" href="psm.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,7 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
-<li class="chapter" data-level="1.1" data-path="09-BadControls.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="1.1" data-path="12-ExactMatching.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
@@ -371,248 +371,138 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="bad-controls-teoria" class="section level1 hasAnchor" number="9">
-<h1><span class="header-section-number">Capitulo 9</span> Malos Controles (Teoría)<a href="bad-controls-teoria.html#bad-controls-teoria" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div class="boxinfo">
-<p><strong>🎯 Metas de aprendizaje</strong></p>
-<ul>
-<li>Comprender el <strong>supuesto de tendencias paralelas</strong> en Diferencias en Diferencias (DID).<br />
-</li>
-<li>Entender la diferencia entre <strong>buenos y malos controles</strong>.<br />
-</li>
-<li>Relacionar los <strong>resultados potenciales</strong> con la validez de las estimaciones.<br />
-</li>
-<li>Analizar las implicaciones de usar (o no usar) controles en una regresión.<br />
-</li>
-</ul>
-</div>
-<div id="el-supuesto-de-tendencias-paralelas-1" class="section level2 unnumbered hasAnchor">
-<h2>El supuesto de Tendencias Paralelas<a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El corazón de la estrategia de <strong>Diferencias en Diferencias (DID)</strong> es el supuesto de que, en ausencia del tratamiento, la evolución de los grupos tratados y de control habría sido <strong>paralela</strong> en el tiempo.</p>
-<p><span class="math display">\[
-Y_{it} = \alpha + \beta D_i + \delta T_t + \gamma (D_i \times T_t) + \varepsilon_{it}
-\]</span></p>
-<p>donde:<br />
-- <span class="math inline">\(D_i\)</span>: indicador de tratamiento,<br />
-- <span class="math inline">\(T_t\)</span>: indicador de post-tratamiento,<br />
-- <span class="math inline">\(\gamma\)</span>: estimador DID.</p>
-<p>El supuesto clave es:</p>
-<p><span class="math display">\[
-E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=1] = E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=0]
-\]</span></p>
-<p>Si esto se cumple, la estimación DID es <strong>insesgada</strong>.</p>
-</div>
-<div id="resultados-potenciales-2" class="section level2 unnumbered hasAnchor">
-<h2>Resultados Potenciales<a href="bad-controls-teoria.html#resultados-potenciales-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Recordemos la notación:</p>
-<ul>
-<li><span class="math inline">\(Y_i(D=1)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> si recibe tratamiento.</li>
-<li><span class="math inline">\(Y_i(D=0)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> si no recibe tratamiento.</li>
-</ul>
-<p>El <strong>ATE</strong> se define como:</p>
-<p><span class="math display">\[
-ATE = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
-\]</span></p>
-<p>En DID, el estimador busca identificar justamente esa diferencia, bajo el supuesto de tendencias paralelas.</p>
-</div>
-<div id="primeras-diferencias-y-did" class="section level2 unnumbered hasAnchor">
-<h2>Primeras Diferencias y DID<a href="bad-controls-teoria.html#primeras-diferencias-y-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>En primeras diferencias:</p>
-<p><span class="math display">\[
-\Delta Y_i = Y_{i,t=1} - Y_{i,t=0}
-\]</span></p>
-<p>y en DID:</p>
-<p><span class="math display">\[
-DID = \big( E[\Delta Y_i \mid D=1] - E[\Delta Y_i \mid D=0] \big)
-\]</span></p>
-</div>
-<div id="controles-en-did" class="section level2 unnumbered hasAnchor">
-<h2>Controles en DID<a href="bad-controls-teoria.html#controles-en-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="buenos-controles" class="section level3 unnumbered hasAnchor">
-<h3>Buenos controles<a href="bad-controls-teoria.html#buenos-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li>Características <strong>predeterminadas</strong>, no afectadas por el tratamiento.<br />
-</li>
-<li>Ejemplo: educación, experiencia laboral previa, género, edad.<br />
-</li>
-<li>Se pueden incluir para:
-<ul>
-<li>Mejorar la <strong>precisión</strong> de la estimación.<br />
-</li>
-<li>Aumentar la potencia estadística.<br />
-</li>
-<li>Reducir varianza residual.</li>
-</ul></li>
-</ul>
-<div class="boxcerebro">
-<p><strong>Definición formal:</strong><br />
-Un <strong>buen control</strong> es toda característica observable que <strong>no cambia como consecuencia del tratamiento</strong>.<br />
-Son variables predeterminadas que ayudan a explicar el resultado pero no están mediadas por el programa.</p>
-</div>
-<p><strong>Ejemplo informal:</strong><br />
-Si evaluamos el efecto de un programa de formación laboral:<br />
-- <strong>Buen control</strong>: nivel educativo alcanzado antes del programa.<br />
-- <strong>Buen control</strong>: años de experiencia previa.</p>
-</div>
-<div id="malos-controles" class="section level3 unnumbered hasAnchor">
-<h3>Malos controles<a href="bad-controls-teoria.html#malos-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li>Variables que <strong>sí son afectadas por el tratamiento</strong> (variables de resultado o mediadoras).</li>
-<li>Incluirlas rompe la interpretación causal porque introducen <strong>endogeneidad</strong>.<br />
-</li>
-<li>Al condicionar en una variable que está “en el camino causal”, se elimina parte del efecto verdadero.</li>
-</ul>
-<div class="boxcerebro">
-<p><strong>Definición formal:</strong><br />
-Un <strong>mal control</strong> es toda variable que se encuentra <strong>dentro del mecanismo causal</strong> que conecta el tratamiento con el resultado.<br />
-Condicionar en ella genera <strong>sesgo de post-tratamiento</strong>.</p>
-</div>
-<p><strong>Ejemplo informal:</strong><br />
-Siguiendo el programa de formación laboral:<br />
-- <strong>Mal control</strong>: salario después de haber recibido la capacitación.<br />
-- <strong>Mal control</strong>: horas trabajadas después del programa.<br />
-- <strong>Mal control</strong>: sector de empleo obtenido gracias al programa.</p>
-<p>👉 Todas estas variables son consecuencias (directas o indirectas) del tratamiento. Si las incluimos como controles, estamos <strong>borrando</strong> parte del impacto que queremos medir.</p>
+<div id="emparejamiento-exacto" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">Capitulo 12</span> Emparejamiento Exacto<a href="emparejamiento-exacto.html#emparejamiento-exacto" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="el-problema-identificación-sin-aleatorización" class="section level2 unnumbered hasAnchor">
+<h2>El problema: identificación sin aleatorización<a href="#el-problema-identificaci%C3%B3n-sin-aleatorizaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En un experimento aleatorizado (RCT), la asignación al tratamiento garantiza que los grupos tratado y control son, en promedio, idénticos en todas las características — observables <strong>y no observables</strong>. El estimador de diferencia de medias produce el efecto causal del tratamiento.</p>
+<p>En datos <strong>observacionales</strong>, esto no está garantizado. Los individuos se autoseleccionan al tratamiento: las personas que deciden estudiar un posgrado, adoptar una tecnología o participar en un programa social son <strong>sistemáticamente distintas</strong> a quienes no lo hacen. Comparar sus resultados directamente mezcla el efecto del tratamiento con diferencias preexistentes.</p>
+<p><span class="math display">\[\underbrace{E[Y_i \mid D_i = 1] - E[Y_i \mid D_i = 0]}_{\text{Diferencia de medias observada}} = \underbrace{ATT}_{\text{Efecto causal}} + \underbrace{E[Y_i(0) \mid D_i = 1] - E[Y_i(0) \mid D_i = 0]}_{\text{Sesgo de selección}}\]</span></p>
+<p>El término de sesgo de selección refleja que los tratados y los controles tendrían resultados distintos <strong>incluso en ausencia del tratamiento</strong>. El objetivo de los métodos de emparejamiento es eliminar este sesgo controlando por las características observables que generan la selección.</p>
 <hr />
 </div>
-<div id="implicaciones-prácticas" class="section level3 unnumbered hasAnchor">
-<h3>Implicaciones prácticas<a href="#implicaciones-pr%C3%A1cticas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li><strong>Con buenos controles</strong>:
-<ul>
-<li>El coeficiente del DID mantiene <strong>interpretación causal</strong>.<br />
-</li>
-<li>Mejora la precisión de la estimación.</li>
-</ul></li>
-<li><strong>Con malos controles</strong>:
-<ul>
-<li>El estimador se <strong>vuelve inconsistente</strong>.<br />
-</li>
-<li>Perdemos la interpretación causal → ya no estamos midiendo el efecto del programa, sino algo condicionado en una consecuencia del mismo.</li>
-</ul></li>
-</ul>
-<p>En palabras simples:<br />
-&gt; “Un buen control aclara la foto, un mal control la distorsiona”.</p>
-</div>
-</div>
-<div id="supuestos-y-consistencia" class="section level2 unnumbered hasAnchor">
-<h2>Supuestos y Consistencia<a href="bad-controls-teoria.html#supuestos-y-consistencia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El estimador DID será insesgado si:</p>
-<p><span class="math display">\[
-E[Y_{i}(0) \mid D=1, t=1] - E[Y_{i}(0) \mid D=1, t=0] = E[Y_{i}(0) \mid D=0, t=1] - E[Y_{i}(0) \mid D=0, t=0]
-\]</span></p>
-<ul>
-<li>Si los grupos no siguen tendencias paralelas → <strong>sesgo</strong>.<br />
-</li>
-<li>Si incluimos malos controles → <strong>sesgo adicional</strong>.<br />
-</li>
-<li>Con buenos controles → <strong>más precisión</strong>, pero no cambia la interpretación causal.</li>
-</ul>
+<div id="la-idea-del-emparejamiento-exacto" class="section level2 unnumbered hasAnchor">
+<h2>La idea del emparejamiento exacto<a href="emparejamiento-exacto.html#la-idea-del-emparejamiento-exacto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La intuición es simple: <strong>construir un clon</strong> para cada individuo tratado.</p>
+<p>Si encontramos, para cada persona tratada <span class="math inline">\(i\)</span>, un individuo no tratado <span class="math inline">\(j\)</span> que tiene exactamente las mismas características observables <span class="math inline">\(X\)</span> (edad, educación, género, región, etc.), entonces la única diferencia restante entre <span class="math inline">\(i\)</span> y <span class="math inline">\(j\)</span> es el tratamiento. La comparación de sus resultados aproxima el efecto causal.</p>
+<pre><code>Tratado i:  X = (35 años, universitario, mujer, Bogotá) → Y_i(1)
+Control j:  X = (35 años, universitario, mujer, Bogotá) → Y_j(0)
+
+ATT ≈ Y_i(1) - Y_j(0)</code></pre>
+<p>El emparejamiento exacto replica, de forma no paramétrica, el principio del experimento: dentro de cada “celda” definida por los valores de <span class="math inline">\(X\)</span>, la asignación al tratamiento es como si fuera aleatoria.</p>
 <hr />
 </div>
-<div id="la-demostración-formal-sesgo-de-agrupación" class="section level2 unnumbered hasAnchor">
-<h2>La demostración formal: sesgo de agrupación<a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Esta sección desarrolla el argumento de <strong>Angrist y Pischke</strong> (<em>Mostly Harmless Econometrics</em>, cap. 3) que muestra exactamente qué pasa cuando incluimos un mal control. Es la demostración que vimos en clase.</p>
-<div id="el-escenario" class="section level3 unnumbered hasAnchor">
-<h3>El escenario<a href="bad-controls-teoria.html#el-escenario" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Suponga que el tratamiento <span class="math inline">\(D\)</span> afecta <strong>dos</strong> cosas: el resultado de interés <span class="math inline">\(Y\)</span> <strong>y</strong> una variable <span class="math inline">\(F\)</span>:</p>
-<p><span class="math display">\[D \rightarrow Y \qquad \text{y} \qquad D \rightarrow F\]</span></p>
-<p>Un ejemplo concreto: <span class="math inline">\(D\)</span> = acceso a educación universitaria, <span class="math inline">\(Y\)</span> = salario, <span class="math inline">\(F\)</span> = trabajar en un empleo de alta calificación (STEM). La educación sube el salario <em>y</em> aumenta la probabilidad de entrar a STEM.</p>
-<p>Como el programa es aleatorio, los resultados potenciales son independientes del tratamiento:</p>
-<p><span class="math display">\[Y(D=1),\; Y(D=0),\; F(D=1),\; F(D=0) \;\perp\; D\]</span></p>
+<div id="los-tres-requisitos-del-emparejamiento" class="section level2 unnumbered hasAnchor">
+<h2>Los tres requisitos del emparejamiento<a href="emparejamiento-exacto.html#los-tres-requisitos-del-emparejamiento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para que el emparejamiento exacto sea válido se necesitan tres condiciones:</p>
+<div id="observabilidad" class="section level3 unnumbered hasAnchor">
+<h3>1. Observabilidad<a href="emparejamiento-exacto.html#observabilidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Todas las variables que determinan simultáneamente la selección al tratamiento <strong>y</strong> el resultado deben ser <strong>observables y medibles</strong>. Esto es el supuesto de <strong>Independencia Condicional (CIA)</strong>:</p>
+<p><span class="math display">\[\{Y_i(1), Y_i(0)\} \perp D_i \mid X_i\]</span></p>
+<p>Una vez controlamos por <span class="math inline">\(X\)</span>, el tratamiento es “como si fuera” aleatorio. Si hay variables no observadas que afectan tanto la selección como el resultado (por ejemplo, habilidad no medida, motivación, conexiones sociales), el emparejamiento no resuelve el problema de identificación.</p>
 </div>
-<div id="sin-controlar-f-el-estimador-naive-es-el-ate" class="section level3 unnumbered hasAnchor">
-<h3>Sin controlar <span class="math inline">\(F\)</span>: el estimador naive es el ATE<a href="bad-controls-teoria.html#sin-controlar-f-el-estimador-naive-es-el-ate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Con la regresión sin control:
-<span class="math display">\[Y = \alpha + \tau D + \varepsilon\]</span></p>
-<p>el estimador de diferencias de medias es:</p>
-<p><span class="math display">\[\hat{\tau}_{\text{naive}} = E[Y \mid D=1] - E[Y \mid D=0] = E[Y(1)] - E[Y(0)] = \text{ATE}\]</span></p>
-<p>Es insesgado y consistente. Todo bien hasta aquí.</p>
+<div id="soporte-común" class="section level3 unnumbered hasAnchor">
+<h3>2. Soporte común<a href="#soporte-com%C3%BAn" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para cada valor posible de <span class="math inline">\(X\)</span>, debe haber individuos tanto en el grupo tratado como en el grupo de control:</p>
+<p><span class="math display">\[0 &lt; P(D_i = 1 \mid X_i = x) &lt; 1 \quad \forall x\]</span></p>
+<p>Si hay valores de <span class="math inline">\(X\)</span> donde solo hay tratados (o solo hay controles), no podemos construir el clon y el ATT no está identificado en esa región del soporte.</p>
 </div>
-<div id="qué-pasa-si-incluimos-f-como-control" class="section level3 unnumbered hasAnchor">
-<h3>¿Qué pasa si incluimos <span class="math inline">\(F\)</span> como control?<a href="#qu%C3%A9-pasa-si-incluimos-f-como-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Ahora agregamos <span class="math inline">\(F\)</span> a la regresión:
-<span class="math display">\[Y = \alpha + \tau D + \beta F + \varepsilon\]</span></p>
-<p>y comparamos tratados y controles <strong>dentro de cada valor de <span class="math inline">\(F\)</span></strong>. Por ejemplo, para <span class="math inline">\(F=1\)</span>:</p>
-<p><span class="math display">\[E[Y \mid D=1,\, F=1] \;-\; E[Y \mid D=0,\, F=1] \;=\; ?\]</span></p>
-<p>Para calcular esto usamos la ecuación de switching:</p>
-<p><span class="math display">\[Y_i = D_i \cdot Y_i(1) + (1-D_i)\cdot Y_i(0), \qquad F_i = D_i \cdot F_i(1) + (1-D_i)\cdot F_i(0)\]</span></p>
-<p><strong>Término izquierdo</strong> — entre los tratados con <span class="math inline">\(F=1\)</span>:</p>
-<p><span class="math display">\[E[Y \mid D=1,\, F=1] = E\!\left[Y(1) \mid D=1,\; F(1)=1\right] = E\!\left[Y(1) \mid F(1)=1\right]\]</span></p>
-<p>El último paso usa la independencia <span class="math inline">\(Y(1) \perp D\)</span>.</p>
-<p><strong>Término derecho</strong> — entre los controles con <span class="math inline">\(F=1\)</span>. Aquí está el truco: para los controles (<span class="math inline">\(D=0\)</span>), <span class="math inline">\(F=1\)</span> significa que <span class="math inline">\(F(D=0)=1\)</span>, <strong>no</strong> <span class="math inline">\(F(D=1)=1\)</span>. Son grupos distintos.</p>
-<p><span class="math display">\[E[Y \mid D=0,\, F=1] = E\!\left[Y(0) \mid D=0,\; F(0)=1\right] = E\!\left[Y(0) \mid F(0)=1\right]\]</span></p>
-</div>
-<div id="la-descomposición-en-cuatro-términos" class="section level3 unnumbered hasAnchor">
-<h3>La descomposición en cuatro términos<a href="#la-descomposici%C3%B3n-en-cuatro-t%C3%A9rminos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Juntando los dos lados y sumando y restando <span class="math inline">\(E[Y(0) \mid F(1)=1]\)</span>:</p>
-<p><span class="math display">\[
-E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1]
-\]</span></p>
-<p><span class="math display">\[
-= \underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}
-\]</span></p>
-<p>Sumamos y restamos <span class="math inline">\(E[Y(0)\mid F(1)=1]\)</span>:</p>
-<p><span class="math display">\[
-= \Big(\underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{4}}\Big) + \Big(\underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{3}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}\Big)
-\]</span></p>
-<p>Lo que resulta en:</p>
-<p><span class="math display">\[
-\boxed{E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1] = \underbrace{E[Y(1)-Y(0) \mid F(1)=1]}_{\text{ATE}_{F=1}} + \underbrace{E[Y(0) \mid F(1)=1] - E[Y(0) \mid F(0)=1]}_{\text{Sesgo de agrupación}}}
-\]</span></p>
-</div>
-<div id="qué-significa-cada-término" class="section level3 unnumbered hasAnchor">
-<h3>¿Qué significa cada término?<a href="#qu%C3%A9-significa-cada-t%C3%A9rmino" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Término 1 — <span class="math inline">\(\text{ATE}_{F=1}\)</span>:</strong> el efecto promedio del tratamiento <strong>para las personas que habrían llegado a <span class="math inline">\(F=1\)</span> si fueran tratadas</strong>. No es el ATE de toda la población; es un ATE condicional en un subgrupo particular.</p>
-<p><strong>Término 2 — Sesgo de agrupación:</strong> compara el resultado contrafactual <span class="math inline">\(Y(0)\)</span> de dos grupos diferentes:</p>
-<ul>
-<li><span class="math inline">\(E[Y(0) \mid F(1)=1]\)</span>: resultado sin tratamiento de quienes <em>habrían</em> llegado a <span class="math inline">\(F=1\)</span> <strong>si fueran tratados</strong>.</li>
-<li><span class="math inline">\(E[Y(0) \mid F(0)=1]\)</span>: resultado sin tratamiento de quienes <em>habrían</em> llegado a <span class="math inline">\(F=1\)</span> <strong>si no fueran tratados</strong>.</li>
-</ul>
-<p>Estos son grupos distintos. El tratamiento <span class="math inline">\(D\)</span> “reorganiza” quién termina en <span class="math inline">\(F=1\)</span>: con educación universitaria, más personas entran a empleos STEM (incluyendo algunas con menor habilidad innata). Sin educación, solo los más hábiles llegan a STEM. Por eso <span class="math inline">\(E[Y(0)\mid F(1)=1] &lt; E[Y(0)\mid F(0)=1]\)</span>: el sesgo de agrupación es negativo y <strong>atenúa</strong> el efecto estimado.</p>
-<div class="boxcerebro">
-<p><strong>Intuición de una línea:</strong>
-Al condicionar en <span class="math inline">\(F\)</span>, estamos comparando grupos que son diferentes no solo en <span class="math inline">\(D\)</span>, sino también en características no observables correlacionadas con <span class="math inline">\(F\)</span>. Eso introduce un sesgo que no desaparece aunque <span class="math inline">\(D\)</span> sea aleatorio.</p>
-</div>
-</div>
-<div id="el-ejemplo-de-angrist-y-pischke" class="section level3 unnumbered hasAnchor">
-<h3>El ejemplo de Angrist y Pischke<a href="bad-controls-teoria.html#el-ejemplo-de-angrist-y-pischke" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li><span class="math inline">\(D\)</span> = acceso a educación universitaria (aleatorio)</li>
-<li><span class="math inline">\(Y\)</span> = salario</li>
-<li><span class="math inline">\(F\)</span> = trabaja en sector STEM</li>
-</ul>
-<p><strong>Sin controlar <span class="math inline">\(F\)</span>:</strong> el estimador recupera el efecto total de la educación sobre el salario. ✓</p>
-<p><strong>Controlando <span class="math inline">\(F\)</span>:</strong> comparamos personas en STEM con y sin educación universitaria. Pero quienes están en STEM <em>sin</em> educación universitaria son los más talentosos (solo ellos llegan ahí sin el título). Quienes están en STEM <em>con</em> educación incluyen personas de habilidad promedio que entraron gracias al título. Al comparar los dos grupos dentro de STEM, el grupo control parece mejor, lo que hace que el efecto estimado de la educación parezca menor. El sesgo de agrupación va en la dirección contraria al efecto real.</p>
-<p><strong>Moraleja:</strong></p>
-<p><span class="math display">\[y = \alpha + \tau D + \beta F + \varepsilon \quad \longrightarrow \quad \hat{\tau} \text{ no mide el ATE}\]</span></p>
-<p>La estimación de <span class="math inline">\(\tau\)</span> ya no es ni insesgada ni consistente para el efecto causal de interés. El coeficiente de <span class="math inline">\(D\)</span> en esta regresión mezcla el <span class="math inline">\(\text{ATE}_{F=1}\)</span> (que no es el ATE de la población) con el sesgo de agrupación.</p>
+<div id="suficientes-controles" class="section level3 unnumbered hasAnchor">
+<h3>3. Suficientes controles<a href="emparejamiento-exacto.html#suficientes-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El grupo de control debe ser suficientemente grande para encontrar un clon para cada tratado. En la práctica esto significa que necesitamos un grupo de control mucho mayor que el grupo de tratados — la regla general es al menos 5:1.</p>
 <hr />
 </div>
 </div>
-<div id="moraleja-final" class="section level2 unnumbered hasAnchor">
-<h2>Moraleja Final<a href="bad-controls-teoria.html#moraleja-final" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="la-maldición-de-las-dimensiones" class="section level2 unnumbered hasAnchor">
+<h2>La maldición de las dimensiones<a href="#la-maldici%C3%B3n-de-las-dimensiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El emparejamiento exacto enfrenta un problema fundamental cuando el vector <span class="math inline">\(X\)</span> tiene muchas dimensiones: la <strong>maldición de las dimensiones</strong> (<em>curse of dimensionality</em>).</p>
+<p>Considera el siguiente ejemplo. Si cada variable de control tiene solo dos valores posibles (por ejemplo, hombre/mujer, universitario/no universitario, urbano/rural), el número de celdas crece exponencialmente con el número de variables:</p>
+<table>
+<colgroup>
+<col width="32%" />
+<col width="26%" />
+<col width="40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variables de control</th>
+<th>Celdas posibles</th>
+<th>Observaciones necesarias</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 variable binaria</td>
+<td><span class="math inline">\(2^1 = 2\)</span></td>
+<td>Manejable</td>
+</tr>
+<tr class="even">
+<td>2 variables binarias</td>
+<td><span class="math inline">\(2^2 = 4\)</span></td>
+<td>Manejable</td>
+</tr>
+<tr class="odd">
+<td>5 variables binarias</td>
+<td><span class="math inline">\(2^5 = 32\)</span></td>
+<td>Manejable</td>
+</tr>
+<tr class="even">
+<td>10 variables binarias</td>
+<td><span class="math inline">\(2^{10} = 1{,}024\)</span></td>
+<td>Muy exigente</td>
+</tr>
+<tr class="odd">
+<td>20 variables binarias</td>
+<td><span class="math inline">\(2^{20} = 1{,}048{,}576\)</span></td>
+<td>Imposible en la práctica</td>
+</tr>
+</tbody>
+</table>
+<p>Con variables continuas (edad en años, salario, puntaje de prueba) el problema es aún más severo: la probabilidad de encontrar dos individuos con exactamente el mismo valor en todas las dimensiones es prácticamente cero.</p>
+<p>El resultado es que con muchas variables de control, la mayoría de los individuos tratados <strong>no tienen ningún clon exacto</strong> en el grupo de control, y el método se vuelve inaplicable.</p>
+<p>Esta limitación motiva el Propensity Score Matching, que colapsa todas las dimensiones de <span class="math inline">\(X\)</span> en un único número escalar.</p>
+<hr />
+</div>
+<div id="estimación-del-att-con-emparejamiento-exacto" class="section level2 unnumbered hasAnchor">
+<h2>Estimación del ATT con emparejamiento exacto<a href="#estimaci%C3%B3n-del-att-con-emparejamiento-exacto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cuando el emparejamiento exacto es viable (pocas variables, discretas), el estimador del efecto promedio sobre los tratados (<strong>ATT</strong>) es:</p>
+<p><span class="math display">\[\hat{\tau}_{ATT} = \frac{1}{N_T} \sum_{i: D_i=1} \left( Y_i - \frac{1}{|M_i|} \sum_{j \in M_i} Y_j \right)\]</span></p>
+<p>donde <span class="math inline">\(M_i\)</span> es el conjunto de controles que son “clones exactos” del tratado <span class="math inline">\(i\)</span> (mismo valor de <span class="math inline">\(X\)</span>), y <span class="math inline">\(|M_i|\)</span> es el número de controles en ese conjunto.</p>
+<p>La lógica es: para cada tratado, calcula la diferencia entre su resultado y el promedio de sus clones exactos, luego promedia esas diferencias sobre todos los tratados.</p>
+<hr />
+</div>
+<div id="en-la-práctica-nnmatch-en-stata" class="section level2 unnumbered hasAnchor">
+<h2>En la práctica: <code>nnmatch</code> en Stata<a href="#en-la-pr%C3%A1ctica-nnmatch-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para emparejamiento exacto (o casi exacto) en Stata, el comando <code>nnmatch</code> permite especificar variables de exactitud obligatoria:</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb120-1"><a href="emparejamiento-exacto.html#cb120-1" tabindex="-1"></a>* Instalar si no está disponible</span>
+<span id="cb120-2"><a href="emparejamiento-exacto.html#cb120-2" tabindex="-1"></a><span class="kw">ssc</span> install nnmatch</span>
+<span id="cb120-3"><a href="emparejamiento-exacto.html#cb120-3" tabindex="-1"></a></span>
+<span id="cb120-4"><a href="emparejamiento-exacto.html#cb120-4" tabindex="-1"></a>* Emparejamiento exacto en &#39;genero&#39; <span class="fu">y</span> &#39;educacion&#39;,</span>
+<span id="cb120-5"><a href="emparejamiento-exacto.html#cb120-5" tabindex="-1"></a>* vecino más cercano en &#39;edad&#39; <span class="fu">e</span> &#39;ingreso&#39;</span>
+<span id="cb120-6"><a href="emparejamiento-exacto.html#cb120-6" tabindex="-1"></a>nnmatch outcome treat edad ingreso, <span class="co">///</span></span>
+<span id="cb120-7"><a href="emparejamiento-exacto.html#cb120-7" tabindex="-1"></a>    exact(genero educacion)         <span class="co">///</span></span>
+<span id="cb120-8"><a href="emparejamiento-exacto.html#cb120-8" tabindex="-1"></a>    tc(att)                         <span class="co">///</span></span>
+<span id="cb120-9"><a href="emparejamiento-exacto.html#cb120-9" tabindex="-1"></a>    <span class="fu">m</span>(1)</span></code></pre></div>
+<p>La opción <code>exact()</code> impone que el emparejamiento sea exacto en las variables listadas, y aproximado (vecino más cercano) en las demás. Cuando no hay ningún control con los valores exactos requeridos, la observación se descarta del análisis.</p>
+<hr />
+</div>
+<div id="resumen-y-limitaciones" class="section level2 unnumbered hasAnchor">
+<h2>Resumen y limitaciones<a href="emparejamiento-exacto.html#resumen-y-limitaciones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El emparejamiento exacto es conceptualmente transparente y no hace supuestos de forma funcional, pero tiene dos limitaciones prácticas importantes:</p>
 <ol style="list-style-type: decimal">
-<li>El supuesto de tendencias paralelas es <strong>fundamental</strong>.<br />
-</li>
-<li>Los buenos controles ayudan; los malos controles dañan.<br />
-</li>
-<li>DID se entiende mejor desde los <strong>resultados potenciales</strong>.<br />
-</li>
-<li>La interpretación causal depende estrictamente de los <strong>supuestos</strong>.</li>
+<li><strong>Maldición de las dimensiones</strong>: inviable con muchas variables de control</li>
+<li><strong>Pérdida de muestra</strong>: los tratados sin clon exacto quedan fuera del análisis</li>
 </ol>
+<p>Estas limitaciones motivan el Propensity Score Matching (Capítulo <a href="psm.html#psm">13</a>), que reduce el vector <span class="math inline">\(X\)</span> a un único escalar — la probabilidad estimada de recibir el tratamiento — preservando las propiedades de identificación del emparejamiento exacto bajo los mismos supuestos (CIA y soporte común).</p>
 <hr />
-<div class="boxejercicio">
-<p><strong>✍️ Ejercicio para reflexionar</strong></p>
-<ol style="list-style-type: decimal">
-<li>Da un ejemplo de <strong>buen control</strong> y de <strong>mal control</strong> en la evaluación de un programa de transferencias condicionadas.<br />
-</li>
-<li>¿Por qué incluir el nivel de ingreso post-programa sería un mal control en DID?<br />
-</li>
-<li>¿Cómo verificarías gráficamente el supuesto de tendencias paralelas antes de correr la regresión?<br />
-</li>
-</ol>
 </div>
+<div id="lecturas-recomendadas-1" class="section level2 unnumbered hasAnchor">
+<h2>Lecturas recomendadas<a href="emparejamiento-exacto.html#lecturas-recomendadas-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Angrist &amp; Pischke (2009)</strong> — <em>Mostly Harmless Econometrics</em>, Cap. 3: covariates and regression</li>
+<li><strong>Imbens &amp; Rubin (2015)</strong> — <em>Causal Inference for Statistics, Social, and Biomedical Sciences</em>, Cap. 15</li>
+<li><strong>Caliendo &amp; Kopeinig (2008)</strong> — “Some practical guidance for the implementation of propensity score matching”, <em>Journal of Economic Surveys</em> — referencia principal para la implementación práctica</li>
+</ul>
 
 </div>
 </div>
@@ -621,8 +511,8 @@ Al condicionar en <span class="math inline">\(F\)</span>, estamos comparando gru
           </div>
         </div>
       </div>
-<a href="did-teoria.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="bad-controls-stata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="datos-de-panel-did-y-twfe-en-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="psm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -653,7 +543,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/09-BadControls.Rmd",
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/12-ExactMatching.Rmd",
     "text": "Edit"
   },
   "history": {

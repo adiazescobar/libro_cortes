@@ -17,3 +17,7 @@ bad-controls-teoria
 bad-controls-stata
 datos-de-panel-did-y-twfe-en-stata
 caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte
+emparejamiento-exacto
+psm
+psm-stata
+ipw
