@@ -605,29 +605,45 @@ bacondecomp Y D, ddetail
 
 
 * ─────────────────────────────────────────────────────────────────────────────
-* 5.C — DGP EXPANDIDO (30 UNIDADES)
-
-* La misma estructura conceptual (dos cohortes + control puro) pero con
-* 10 unidades por grupo → csdid necesita suficientes obs por cohorte.
-
-* CAMBIO CLAVE: efectos CRECIENTES con tiempo desde tratamiento (rel_time).
-*   τ(g=1985, k) = 2 × (k+1):  τ=2 en k=0, τ=4 en k=1, τ=6 en k=2, ...
-*   τ(g=1988, k) = 3 × (k+1):  τ=3 en k=0, τ=6 en k=1
-
-* CONSECUENCIAS:
-*   (a) TWFE está sesgado (heterogeneidad dinámica + comparaciones sucias)
-*   (b) Event study de TWFE muestra "pre-trends falsos" (contaminación)
-*   (c) csdid estima ATT(g,t) correctamente
-*   (d) Pre-trends de csdid son ≈ 0 (validación del supuesto)
+* 5.C — DGP EXPANDIDO (33 UNIDADES): COMPARACIÓN SUCIA DOMINANTE
+*
+* DISEÑO PARA HACER LA COMPARACIÓN SUCIA DOMINANTE EN BACON:
+*
+*   (1) Pocos nunca-tratados (3) frente a 15+15 tratados.
+*       Con 1/3 de la muestra como never-treated (DGP anterior) los pesos
+*       "never_v_timing" consumían ~80% de Bacon. Con solo 3/33 (9%) el
+*       grueso del peso pasa a "timing_v_timing".
+*
+*   (2) Early muy anterior: g=1982 (3er año del panel de 10).
+*       Ventana sucia = 1982-1989 (8 periodos). El early lleva su tau
+*       incorporado en Y durante casi todo el panel → contamina mas.
+*
+*   (3) Escalas de tau MUY distintas entre cohortes:
+*         tau(g=1982, k) = 1*(k+1)   efecto pequeño y lento
+*         tau(g=1988, k) = 8*(k+1)   efecto grande y rapido
+*       El beta_sucio (~3-5) quedara muy lejos del ATT_late verdadero (~12).
+*
+* ATT_overall verdadero (exacto):
+*   g=1982: k=0,...,7; tau_prom=(1+2+...+8)/8=4.5; obs=15x8=120
+*   g=1988: k=0,1;     tau_prom=(8+16)/2=12;       obs=15x2=30
+*   ATT_overall = (120*4.5 + 30*12) / 150 = 6.0
+*
+* QUÉ ESPERAR DE BACONDECOMP:
+*   timing_v_timing  > 60% del peso total
+*   beta_sucio (Late_v_Early) muy menor que ATT_late = 12
+*   beta_TWFE < 6  (sesgado hacia abajo)
 * ─────────────────────────────────────────────────────────────────────────────
 
 clear
 set seed 2025
-local N_grp = 10       // 10 unidades por grupo
-local inicio = 1980
-local fin    = 1989
-local tiempo = `fin' - `inicio' + 1
-set obs `= 3 * `N_grp' * `tiempo''
+local N_ctrl  = 3    // pocos nunca-tratados: timing_v_timing domina Bacon
+local N_early = 15   // cohorte temprana g=1982
+local N_late  = 15   // cohorte tardia   g=1988
+local N_total = `N_ctrl' + `N_early' + `N_late'
+local inicio  = 1980
+local fin     = 1989
+local tiempo  = `fin' - `inicio' + 1
+set obs `= `N_total' * `tiempo''
 
 gen id = ceil(_n / `tiempo')
 gen t  = `inicio' + mod(_n-1, `tiempo')
@@ -636,31 +652,26 @@ xtset id t
 label variable id "Unidad"
 label variable t  "Año"
 
-* Grupos:  id=1-10 → nunca tratados
-*          id=11-20 → cohorte g=1985
-*          id=21-30 → cohorte g=1988
+* id=1-3:   nunca tratados
+* id=4-18:  cohorte g=1982 (early, trata desde el anio 3 del panel)
+* id=19-33: cohorte g=1988 (late,  trata desde el anio 9 del panel)
 gen first_treat = .
-replace first_treat = 1985 if id > 10 & id <= 20
-replace first_treat = 1988 if id > 20
+replace first_treat = 1982 if id > `N_ctrl' & id <= `N_ctrl' + `N_early'
+replace first_treat = 1988 if id > `N_ctrl' + `N_early'
 
 gen D = 0
-replace D = 1 if id > 10 & id <= 20 & t >= 1985
-replace D = 1 if id > 20              & t >= 1988
+replace D = 1 if id > `N_ctrl' & id <= `N_ctrl' + `N_early' & t >= 1982
+replace D = 1 if id > `N_ctrl' + `N_early'                  & t >= 1988
 label variable D "Tratamiento escalonado"
 
-* Tiempo relativo al tratamiento (missing para nunca-tratados)
 gen rel_time = t - first_treat
 
-* Efectos crecientes con el tiempo desde tratamiento
+* Escalas de tau muy distintas: early lento (x1), late rapido (x8)
 gen tau_it = 0
-replace tau_it = 2 * (rel_time + 1) if id > 10 & id <= 20 & D == 1
-replace tau_it = 3 * (rel_time + 1) if id > 20              & D == 1
-* Ejemplos:
-*   id=11, t=1985 → k=0 → τ=2×1=2
-*   id=11, t=1986 → k=1 → τ=2×2=4
-*   id=11, t=1987 → k=2 → τ=2×3=6
-*   id=21, t=1988 → k=0 → τ=3×1=3
-*   id=21, t=1989 → k=1 → τ=3×2=6
+replace tau_it = 1 * (rel_time + 1) if id > `N_ctrl' & id <= `N_ctrl' + `N_early' & D == 1
+replace tau_it = 8 * (rel_time + 1) if id > `N_ctrl' + `N_early'                  & D == 1
+* id=4  (g=1982): k=0 -> tau=1, k=1 -> tau=2, ..., k=7 -> tau=8
+* id=19 (g=1988): k=0 -> tau=8, k=1 -> tau=16
 
 * Efectos fijos individuales + tendencia temporal + ruido
 gen alpha_raw = rnormal(0, 1)
@@ -673,45 +684,41 @@ preserve
     collapse (mean) Y, by(t first_treat)
     twoway ///
         (line Y t if first_treat == .,    lcolor(blue)   lwidth(medthick)) ///
-        (line Y t if first_treat == 1985, lcolor(red)    lwidth(medthick)) ///
+        (line Y t if first_treat == 1982, lcolor(red)    lwidth(medthick)) ///
         (line Y t if first_treat == 1988, lcolor(orange) lwidth(medthick)) ///
-        , xline(1984.5, lpattern(dash) lcolor(gray)) ///
+        , xline(1981.5, lpattern(dash) lcolor(gray)) ///
           xline(1987.5, lpattern(dash) lcolor(gray)) ///
           xlabel(`inicio'(1)`fin') ///
-          legend(order(1 "Nunca tratado" 2 "g=1985 (τ creciente)" ///
-                 3 "g=1988 (τ creciente)") pos(6) row(1)) ///
-          title("5.C: DGP expandido — medias por cohorte") ///
+          legend(order(1 "Nunca tratado (n=3)" ///
+                       2 "g=1982, tau=1x(k+1) lento" ///
+                       3 "g=1988, tau=8x(k+1) rapido") pos(6) row(1)) ///
+          title("5.C: DGP expandido — escalas de tau muy distintas") ///
+          note("Early (rojo): pendiente suave. Late (naranja): sube bruscamente.") ///
           xtitle("Año") ytitle("Media de Y") name(g5c_dgp, replace)
-    * Leer: las pendientes post-tratamiento suben cada año (τ crece)
+    * La pendiente post-tto del early es casi plana comparada con el late.
+    * Eso hace que cuando el early actua como "control" del late (comparacion
+    * sucia), la diferencia de tendencias subestima el efecto del late.
 restore
 
-* ── ATT verdadero del DGP expandido ───────────────────────────────────────
-* g=1985: t=1985(k=0)→τ=2, t=1986(k=1)→τ=4, t=1987(k=2)→τ=6,
-*         t=1988(k=3)→τ=8, t=1989(k=4)→τ=10.  Suma=30.  Obs=10×5=50.
-* g=1988: t=1988(k=0)→τ=3, t=1989(k=1)→τ=6.  Suma=9.   Obs=10×2=20.
-* ATT_overall = (50×promedio_g1985 + 20×promedio_g1988) / 70
-*             = (50×6 + 20×4.5) / 70 = (300 + 90) / 70 ≈ 5.57
-
 * =================================================================
-* 5.C — DGP EXPANDIDO: TWFE SESGADO CON EFECTOS CRECIENTES
+* 5.C — TWFE SESGADO Y DESCOMPOSICIÓN DE BACON
+* ATT_overall verdadero = (120*4.5 + 30*12) / 150 = 6.0
+* ATT(g=1982) promedio = 4.5  |  ATT(g=1988) promedio = 12.0
 * =================================================================
-* ATT_overall verdadero = (50*6 + 20*4.5)/70 = 5.57
-* (promedio ponderado de todas las celdas tratadas)
 
 reghdfe Y D, absorb(id t) vce(cluster id)
-* Ver: b_TWFE en la salida de reghdfe (debe diferir de 5.57)
-* Diferencia (b_TWFE - ATT_verdadero) = sesgo por comparaciones sucias
+* Ver b_TWFE en salida. Deberia ser notablemente menor que 6.0.
+* Sesgo = b_TWFE - 6.0  (negativo: TWFE subestima el ATT verdadero)
+* Causa: timing_v_timing Late_v_Early usa early (tau lento) como control
+* del late (tau rapido) -> la diferencia de niveles subestima el efecto late.
 
-* Con tau creciente, TWFE mezcla comparaciones de distintos rel_time.
-* La comparación sucia (g=1988 vs g=1985 ya-tratado) contamina β̂.
-
-* -- Descomposicion de Bacon (DGP expandido, 30 unidades) ---------------
-* Con efectos crecientes (heterogeneidad dinamica), la comparacion sucia
-* (late vs. early-ya-tratado) contamina b_TWFE mas que en el DGP de 3 unidades.
-* Leer la tabla: el peso de "timing_v_timing Late_v_Early" sigue siendo positivo
-* pero el b_2x2 correspondiente ahora difiere mas del ATT verdadero.
-* Comparar con el resultado de 5.B: ahi tau era constante -> Bacon decia ok.
-* Aqui tau es creciente -> la comparacion sucia distorsiona b_TWFE.
+* -- Descomposicion de Bacon: peso de comparacion sucia mucho mayor -------
+* Con 3 nunca-tratados y escalas muy distintas:
+*   - timing_v_timing deberia representar >60% del peso total
+*     (vs ~18% en el DGP anterior con 10 nunca-tratados)
+*   - El beta_2x2 sucio (Late_v_Early) estara muy por debajo del ATT_late=12
+*   - Comparar: never_v_timing (pequeno peso) vs timing_v_timing (grande)
+*   - La dispersion entre los beta_2x2 es la clave: cuanto mayor, mayor sesgo TWFE
 bacondecomp Y D, ddetail
 
 
