@@ -21,3 +21,4 @@ emparejamiento-exacto
 psm
 psm-stata
 ipw
+psm-practica

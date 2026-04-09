@@ -24,3 +24,4 @@ rmd_files:
   - 13-PSM.Rmd                # Este será Cap 13
   - 14-PSMStata.Rmd           # Este será Cap 14
   - 15-IPW.Rmd                # Este será Cap 15
+  - 16-PSMSimulacion.Rmd      # Este será Cap 16
