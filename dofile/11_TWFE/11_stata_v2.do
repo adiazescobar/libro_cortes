@@ -1,11 +1,11 @@
 ********************************************************************************
 * Datos de Panel, DiD, TWFE y Estimadores Modernos
 * Econometría Avanzada — Ana María Díaz Escobar — Javeriana 2026-I
-*
+
 * VERSIÓN 3.0 (2026-04-09) — reorganización pedagógica Sección 5:
 *   Secciones 6 y 7 eliminadas; Sección 5 reescrita como bloque central
 *   de la clase sobre Bacon → Callaway-Sant'Anna → event study
-*
+
 * SECCIONES:
 *  0.  Instalar paquetes (ejecutar UNA sola vez; luego dejar comentado)
 *  1.  Datos de panel: xtset, within, FE / FD / RE / Hausman
@@ -19,14 +19,14 @@
 *        5.D  Callaway & Sant'Anna: ATT(g,t), agregaciones, csdid_plot
 *        5.E  Event study: leads, lags, confusión de nombres, TWFE vs. CS
 *  8.  [REVISIÓN AUTÓNOMA] Comparativo de estimadores modernos (sim. grande)
-*
+
 * CAMBIOS v3.0 vs v2.1:
 *  - Sec.5 completamente reescrita (era solo Bacon + 3 unidades)
 *  - Secciones 6 (pesos negativos) y 7 (pausa) eliminadas
 *  - Sec.8 conservada como revisión autónoma
 *  - DGP expandido (30 unidades) con efectos dinámicos para csdid
 *  - Explicación detallada de leads/lags y la confusión de nombres
-*
+
 * NOTA: Todo el do-file es replicable (set seed en cada sección).
 *       Cada sección limpia los datos con 'clear' antes de empezar.
 ********************************************************************************
@@ -63,7 +63,7 @@ ssc install jwdid,              replace   // Wooldridge (2021), pooled OLS inter
 
 ********************************************************************************
 * SECCIÓN 1: INTRODUCCIÓN A DATOS DE PANEL
-*
+
 * DGP: 100 individuos, 6 periodos
 *   Y_it = alpha_i + beta*D_it + eps_it
 *   alpha_i correlacionado con D_it → FE necesario
@@ -161,7 +161,7 @@ di "=" * 65
 
 ********************************************************************************
 * SECCIÓN 2: 2×2 — DiD = FD = TWFE (EQUIVALENCIA ALGEBRAICA EXACTA)
-*
+
 * DGP: 200 individuos, 2 periodos, 2 grupos. Efecto causal τ = 3.
 * OBJETIVO: mostrar que los 4 estimadores dan EXACTAMENTE el mismo número.
 ********************************************************************************
@@ -218,7 +218,7 @@ di "=" * 60
 
 ********************************************************************************
 * SECCIÓN 3: PANEL LARGO, ADOPCIÓN SIMULTÁNEA — TENDENCIAS PARALELAS
-*
+
 * DGP: 40 unidades (20 control + 20 tratadas), T=11 (1980–1990)
 *      Adopción en t=1985. Efecto τ=5.
 *   A: tendencias paralelas ✓     B: tendencias NO paralelas ✗
@@ -346,7 +346,7 @@ di "  TWFE estima τ + componente de tendencia diferencial ≠ τ = 5"
 
 ********************************************************************************
 * SECCIÓN 4: ADOPCIÓN SIMULTÁNEA, EFECTOS HETEROGÉNEOS
-*
+
 * DGP: id=2 τ=2, id=3 τ=4, ambos tratados desde 1985.
 * OBJETIVO: mostrar que TWFE promedia bien cuando los efectos son constantes
 *           (sin heterogeneidad dinámica). ATT verdadero = 3, TWFE ≈ 3.
@@ -397,38 +397,38 @@ xtreg Y D i.t, fe
 reghdfe Y D, absorb(id t) vce(robust)
 
 * ATT verdadero = (5×2 + 5×4) / 10 = 3
-di _n "  ATT verdadero (ponderado por obs tratadas) = (5×2 + 5×4)/10 = 3"
-di "  TWFE debe dar ≈ 3 ✓ (con efectos constantes en el tiempo, funciona)"
-di "  CUIDADO: si los efectos crecieran con el tiempo, TWFE ya fallaría aquí."
+* ATT verdadero (ponderado por obs tratadas) = (52 + 54)/10 = 3
+* TWFE debe dar ≈ 3 (con efectos constantes en el tiempo, funciona)
+* CUIDADO: si los efectos crecieran con el tiempo, TWFE ya fallaría aquí.
 
 
 ********************************************************************************
 * SECCIÓN 5: ADOPCIÓN ESCALONADA — DE BACON A CALLAWAY & SANT'ANNA
-*
+
 * PROBLEMA CENTRAL:
 *   Con adopción escalonada, unidades distintas reciben el tratamiento en
 *   distintos momentos. TWFE combina automáticamente dos tipos de comparaciones:
 *   (a) LIMPIAS:  tratado vs. nunca-tratado (o aún-no-tratado)
 *   (b) SUCIAS:   tratado-tarde vs. tratado-temprano (que ya tiene τ en su Y)
-*
+
 *   Las comparaciones sucias son problemáticas cuando los efectos varían en
 *   el tiempo: el "control" ya-tratado lleva su propio τ incorporado en Y,
 *   lo que contamina la estimación del grupo que acaba de adoptar.
-*
+
 * ESTRUCTURA:
 *   5.A  DGP mínimo (3 unidades) + TWFE: mostrar el problema
 *   5.B  Descomposición de Bacon: diagnosticar qué mezcla TWFE
 *   5.C  DGP expandido (30 unidades): necesario para csdid y event study
 *   5.D  Callaway & Sant'Anna (2021): estimar ATT(g,t) limpiamente
 *   5.E  Event study — leads y lags: dinámica del efecto
-*
+
 * DGP:
 *   Cohorte g=1985 (adopción temprana): τ = 2 × (rel_time + 1)  [creciente]
 *   Cohorte g=1988 (adopción tardía):  τ = 3 × (rel_time + 1)  [creciente]
 *   Grupo de control: nunca tratado
 *   Efectos CRECIENTES → garantizan que TWFE esté sesgado y que el event study
 *   de TWFE muestre "pre-trends falsos" (contaminación de staggered).
-*
+
 * REFERENCIAS:
 *   Goodman-Bacon (2021) J. of Econometrics 225(2):254-277
 *   Callaway & Sant'Anna (2021) J. of Econometrics 225(2):200-230
@@ -437,7 +437,7 @@ di "  CUIDADO: si los efectos crecieran con el tiempo, TWFE ya fallaría aquí."
 
 * ─────────────────────────────────────────────────────────────────────────────
 * 5.A — DGP MÍNIMO (3 UNIDADES) + TWFE: EL PROBLEMA
-*
+
 * Usamos datos determinísticos (sin ruido, sin EF individuales) para ver
 * exactamente qué pesos asigna TWFE a cada comparación 2×2.
 * DGP: Y = τ_i × D_it  →  Y=0 antes del tratamiento; Y=τ_i después.
@@ -490,45 +490,41 @@ twoway ///
 * ── ATT verdadero ──────────────────────────────────────────────────────────
 * Celdas tratadas: id=2 en 1985-1989 (5 obs) + id=3 en 1988-1989 (2 obs) = 7
 * ATT_overall = promedio ponderado de τ sobre las 7 celdas
-di _n "=" * 65
-di "  5.A — TWFE CON ADOPCIÓN ESCALONADA"
-di "=" * 65
-di "  Celdas tratadas: 5 × τ=2 (id=2) + 2 × τ=4 (id=3) = 7 en total"
-di "  ATT_overall verdadero = (5×2 + 2×4)/7 = " %6.4f (5*2 + 2*4)/7
-di ""
+* =================================================================
+* 5.A — TWFE CON ADOPCIÓN ESCALONADA
+* =================================================================
+* Celdas tratadas: 5 x tau=2 (id=2) + 2 x tau=4 (id=3) = 7 en total
+* ATT_overall verdadero = (5*2 + 2*4)/7 = 2.857
 
 reghdfe Y D, absorb(id t) vce(robust)
-di ""
-di "  β̂_TWFE = " %6.4f _b[D]
-di "  ATT_overall = " %6.4f (5*2 + 2*4)/7
-di "  Sesgo = " %6.4f _b[D] - (5*2 + 2*4)/7
-di ""
-di "  ¿Por qué TWFE ≠ ATT_overall?"
-di "  → TWFE usa id=2 como 'control' de id=3 en el período 1988-1989."
-di "    Pero id=2 ya está tratada desde 1985 y tiene τ=2 en su Y."
-di "    Si τ(id=2) ≠ τ(id=3), esa comparación es 'sucia'."
-di "    (ver Sección 5.B para el diagnóstico detallado)"
+* Ver b_TWFE en salida de reghdfe. Con tau constante deberia ser ~2.857.
+
+* ¿Por qué TWFE puede diferir del ATT_overall?
+* TWFE usa id=2 como 'control' de id=3 en el período 1988-1989.
+* Pero id=2 ya está tratada desde 1985 y tiene tau=2 en su Y.
+* Si tau(id=2) ≠ tau(id=3), esa comparación es 'sucia'.
+* (ver Sección 5.B para el diagnóstico detallado)
 
 
 * ─────────────────────────────────────────────────────────────────────────────
 * 5.B — DESCOMPOSICIÓN DE BACON: DIAGNÓSTICO DEL PROBLEMA
-*
+
 * Goodman-Bacon (2021) demuestra:
 *   β̂_TWFE = Σ_{k,l} w_{kl} × β̂_{2×2,kl}
-*
+
 * donde la suma recorre todos los pares de grupos (k,l), β̂_{2×2,kl} es el
 * estimador DiD en la submuestra {k,l}, y los pesos w_{kl} suman a 1.
-*
+
 * CON 3 UNIDADES (id=1,2,3) Y 2 COHORTES (g=1985, g=1988):
-*
+
 * TIPO 1: Cohorte vs. Nunca Tratado  →  LIMPIAS ✓
 *   id=2 vs id=1 (todo el período): id=1 nunca se trata → control puro ✓
 *   id=3 vs id=1 (todo el período): ídem ✓
-*
+
 * TIPO 2: Early vs. Late en ventana PRE-late  →  LIMPIA ✓
 *   id=2 (early) como tratada, id=3 (late) como control, VENTANA: 1980–1987
 *   id=3 aún no se ha tratado → sirve como control limpio en esa ventana ✓
-*
+
 * TIPO 3: Late vs. Early en ventana POST-early  →  SUCIA ✗
 *   id=3 (late) como nueva tratada, id=2 (early) como "control", VENTANA: 1985–1989
 *   PROBLEMA: id=2 lleva tratada desde 1985 y tiene τ=2 incorporado en Y.
@@ -538,86 +534,86 @@ di "    (ver Sección 5.B para el diagnóstico detallado)"
 *   Pero esa diferencia ya incluye el τ de id=2 → CONTAMINADA ✗
 * ─────────────────────────────────────────────────────────────────────────────
 
-di _n "=" * 65
-di "  5.B — DESCOMPOSICIÓN DE BACON"
-di "=" * 65
-di ""
-di "  β̂_TWFE = suma ponderada de los β̂ 2×2 en el panel"
-di ""
-di "  ┌───────────────────────────────────────────────────────────┐"
-di "  │ Comparación        │ Control usado      │ ¿Limpia? │"
-di "  ├───────────────────────────────────────────────────────────┤"
-di "  │ id=2 vs id=1       │ nunca tratado      │    ✓     │"
-di "  │ id=3 vs id=1       │ nunca tratado      │    ✓     │"
-di "  │ id=2 vs id=3 *     │ aún-no-tratado     │    ✓     │"
-di "  │ id=3 vs id=2 †     │ YA TRATADO         │    ✗     │"
-di "  └───────────────────────────────────────────────────────────┘"
-di "  * ventana 1980-1987  (antes que id=3 se trate)"
-di "  † ventana 1985-1989  (id=2 lleva tratada desde 1985 = SUCIA)"
-di ""
+* =================================================================
+* 5.B — DESCOMPOSICIÓN DE BACON
+* =================================================================
+
+* β̂_TWFE = suma ponderada de los β̂ 2x2 en el panel
+
+
+* Comparación Control usado ¿Limpia?
+
+* id=2 vs id=1 nunca tratado
+* id=3 vs id=1 nunca tratado
+* id=2 vs id=3 * aún-no-tratado
+* id=3 vs id=2 † YA TRATADO
+
+* * ventana 1980-1987 (antes que id=3 se trate)
+* † ventana 1985-1989 (id=2 lleva tratada desde 1985 = SUCIA)
+
 
 * ── Verificar cada 2×2 manualmente ────────────────────────────────────────
-di "  [Limpia 1] id=2 vs id=1 — todo el período:"
+* [Limpia 1] id=2 vs id=1 — todo el período:
 xtreg Y D i.t if inlist(id, 1, 2), fe robust
-di "    β̂ = " %6.4f _b[D] "   (debe ser ≈ 2 = τ de id=2)"
+* β̂ = (debe ser ≈ 2 = tau de id=2)
 
-di ""
-di "  [Limpia 2] id=3 vs id=1 — todo el período:"
+
+* [Limpia 2] id=3 vs id=1 — todo el período:
 xtreg Y D i.t if inlist(id, 1, 3), fe robust
-di "    β̂ = " %6.4f _b[D] "   (debe ser ≈ 4 = τ de id=3)"
+* β̂ = (debe ser ≈ 4 = tau de id=3)
 
-di ""
-di "  [Limpia 3] id=2 (early) vs id=3 (late, aún no tratado) — ventana 1980-1987:"
+
+* [Limpia 3] id=2 (early) vs id=3 (late, aún no tratado) — ventana 1980-1987:
 preserve
     keep if inlist(id, 2, 3) & t <= 1987
     xtreg Y D i.t, fe robust
-    di "    β̂ = " %6.4f _b[D] "   (debe ser ≈ 2 = τ de id=2)"
+* β̂ = (debe ser ≈ 2 = tau de id=2)
 restore
 
-di ""
-di "  [Sucia] id=3 (late) vs id=2 (early, YA TRATADO) — ventana 1985-1989:"
+
+* [Sucia] id=3 (late) vs id=2 (early, YA TRATADO) — ventana 1985-1989:
 preserve
     keep if inlist(id, 2, 3) & t >= 1985
     gen D_late = (id == 3 & t >= 1988)
     xtreg Y D_late i.t, fe robust
-    di "    β̂ = " %6.4f _b[D_late]
-    di "    Con τ CONSTANTE → da ≈ τ(id=3)=4 ✓  [el problema no se ve aquí]"
-    di "    Con τ CRECIENTE → β̂ distorsionado ✗  [ver DGP expandido 5.C-5.D]"
+* Ver b_D_late en salida xtreg
+* Con CONSTANTE da ≈ (id=3)=4 [el problema no se ve aquí]
+* Con CRECIENTE β̂ distorsionado [ver DGP expandido 5.C-5.D]
 restore
 
-di ""
-di "  BACONDECOMP — descomposición automática:"
+
+* BACONDECOMP — descomposición automática:
 bacondecomp Y D, ddetail
 * LEER LA TABLA:
 *   never_v_timing:     cohortes vs id=1 (nunca tratado) — LIMPIAS ✓
 *   timing_v_timing:    Early vs Late y Late vs Early
 *                       La fila "Late vs Early" es la SUCIA
-*
+
 * NOTA: los pesos de Bacon son SIEMPRE POSITIVOS.
 * El problema del TWFE NO son pesos negativos en la descomposición de Bacon.
 * Los pesos negativos aparecen en la regresión D demeanada (D̃_it), no en Bacon.
 * El problema aquí es que la comparación "Late vs Early" usa un ya-tratado
 * como control. Con τ constante, no importa; con τ variable, sí importa.
 
-di ""
-di "  CONCLUSIÓN DE BACON:"
-di "  β̂_TWFE = promedio ponderado de 4 comparaciones 2×2."
-di "  Bacon ayuda a DIAGNOSTICAR qué mezcla TWFE y cuánto pesa cada parte."
-di "  La comparación sucia (Late vs Early) no contamina con τ CONSTANTE."
-di "  Con τ CRECIENTE (como en el DGP expandido), TWFE se aleja del ATT."
-di "  → SOLUCIÓN: Callaway & Sant'Anna (Sección 5.D)."
+
+* CONCLUSIÓN DE BACON:
+* β̂_TWFE = promedio ponderado de 4 comparaciones 22.
+* Bacon ayuda a DIAGNOSTICAR qué mezcla TWFE y cuánto pesa cada parte.
+* La comparación sucia (Late vs Early) no contamina con CONSTANTE.
+* Con CRECIENTE (como en el DGP expandido), TWFE se aleja del ATT.
+* SOLUCIÓN: Callaway & Sant'Anna (Sección 5.D).
 
 
 * ─────────────────────────────────────────────────────────────────────────────
 * 5.C — DGP EXPANDIDO (30 UNIDADES)
-*
+
 * La misma estructura conceptual (dos cohortes + control puro) pero con
 * 10 unidades por grupo → csdid necesita suficientes obs por cohorte.
-*
+
 * CAMBIO CLAVE: efectos CRECIENTES con tiempo desde tratamiento (rel_time).
 *   τ(g=1985, k) = 2 × (k+1):  τ=2 en k=0, τ=4 en k=1, τ=6 en k=2, ...
 *   τ(g=1988, k) = 3 × (k+1):  τ=3 en k=0, τ=6 en k=1
-*
+
 * CONSECUENCIAS:
 *   (a) TWFE está sesgado (heterogeneidad dinámica + comparaciones sucias)
 *   (b) Event study de TWFE muestra "pre-trends falsos" (contaminación)
@@ -696,18 +692,28 @@ restore
 * ATT_overall = (50×promedio_g1985 + 20×promedio_g1988) / 70
 *             = (50×6 + 20×4.5) / 70 = (300 + 90) / 70 ≈ 5.57
 
-di _n "=" * 65
-di "  5.C — DGP EXPANDIDO: TWFE SESGADO CON EFECTOS CRECIENTES"
-di "=" * 65
-di "  ATT_overall verdadero ≈ " %6.4f (50*6 + 20*4.5)/70
-di "  (promedio ponderado de todas las celdas tratadas)"
-di ""
+* =================================================================
+* 5.C — DGP EXPANDIDO: TWFE SESGADO CON EFECTOS CRECIENTES
+* =================================================================
+* ATT_overall verdadero = (50*6 + 20*4.5)/70 = 5.57
+* (promedio ponderado de todas las celdas tratadas)
+
 reghdfe Y D, absorb(id t) vce(cluster id)
-di "  β̂_TWFE = " %6.4f _b[D]
-di "  Diferencia (sesgo) = " %6.4f _b[D] - (50*6 + 20*4.5)/70
-di ""
-di "  Con τ creciente, TWFE mezcla comparaciones de distintos rel_time."
-di "  La comparación sucia (g=1988 vs g=1985 ya-tratado) contamina β̂."
+* Ver: b_TWFE en la salida de reghdfe (debe diferir de 5.57)
+* Diferencia (b_TWFE - ATT_verdadero) = sesgo por comparaciones sucias
+
+* Con tau creciente, TWFE mezcla comparaciones de distintos rel_time.
+* La comparación sucia (g=1988 vs g=1985 ya-tratado) contamina β̂.
+
+* -- Descomposicion de Bacon (DGP expandido, 30 unidades) ---------------
+* Con efectos crecientes (heterogeneidad dinamica), la comparacion sucia
+* (late vs. early-ya-tratado) contamina b_TWFE mas que en el DGP de 3 unidades.
+* Leer la tabla: el peso de "timing_v_timing Late_v_Early" sigue siendo positivo
+* pero el b_2x2 correspondiente ahora difiere mas del ATT verdadero.
+* Comparar con el resultado de 5.B: ahi tau era constante -> Bacon decia ok.
+* Aqui tau es creciente -> la comparacion sucia distorsiona b_TWFE.
+bacondecomp Y D, ddetail
+
 
 * Variable gvar para csdid: 0=nunca tratado, o el año de primer tratamiento
 gen gvar = first_treat
@@ -717,68 +723,68 @@ label variable gvar "Grupo de adopción (0=nunca tratado)"
 
 * ─────────────────────────────────────────────────────────────────────────────
 * 5.D — CALLAWAY & SANT'ANNA (2021): LA SOLUCIÓN
-*
+
 * IDEAS FUNDAMENTALES:
-*
+
 * 1. PARÁMETRO: ATT(g, t)
 *    CS estima UN CUADRO COMPLETO de efectos — no un único β̂.
 *    ATT(g, t) = E[Y_t(1) - Y_t(0) | G = g]
 *    donde g = año de primer tratamiento (cohorte) y Y_t(0) es el
 *    resultado contrafactual en el período t sin tratamiento.
 *    Solo se estima para t ≥ g (la unidad ya recibió el tratamiento).
-*
+
 * 2. CONTROLES LIMPIOS: not-yet-treated vs. never-treated
 *    CS identifica ATT(g,t) comparando la cohorte g contra un grupo
 *    que en el período t NO ha recibido el tratamiento:
-*
+
 *    (a) Never-treated (sin la opción 'notyet'):
 *        solo unidades que nunca se tratan en todo el panel.
 *        Ventaja: siempre limpios. Desventaja: pueden ser pocos.
-*
+
 *    (b) Not-yet-treated (opción 'notyet'):
 *        incluye unidades que en el período t aún no se han tratado,
 *        aunque puedan hacerlo en el futuro.
 *        Ventaja: más observaciones → estimaciones más precisas.
 *        Supuesto extra: los no-aún-tratados no anticipan el tratamiento
 *        (su Y no se mueve antes de que traten).
-*
+
 *    REGLA: usar 'notyet' cuando los never-treated son pocos.
-*
+
 * 3. ESTIMACIÓN COHORTE POR COHORTE (DiD 2×2 por celda)
 *    Para cada (g, t) con t ≥ g, CS estima:
 *    ATT(g, t) = E[Y_t - Y_{g-1} | G=g] - E[Y_t - Y_{g-1} | control limpio]
 *    donde g-1 es el período justo anterior al tratamiento.
 *    → Es un DiD 2×2 puro: solo esa cohorte vs. ese grupo de control.
 *    → No hay mezcla entre cohortes → no hay comparaciones sucias.
-*
+
 * 4. AGREGACIONES DEL CUADRO ATT(g, t)
 *    Una vez estimados los ATT(g,t), CS puede agregarlos:
-*
+
 *    estat simple   → ATT_overall: promedio sobre todos los (g,t) tratados
 *                     (comparable a β̂_TWFE pero sin sesgo)
-*
+
 *    estat group    → ATT por cohorte: promedio dentro de cada g
 *                     (¿qué cohorte se beneficia más del tratamiento?)
-*
+
 *    estat calendar → ATT por período calendario: promedio en cada año t
 *                     (¿cómo evoluciona el efecto en el tiempo del calendario?)
-*
+
 *    estat event    → ATT por tiempo relativo k=t-g
 *                     (dinámica del tratamiento — ver Sección 5.E)
 *                     También sirve como test de pre-trends
 * ─────────────────────────────────────────────────────────────────────────────
 
-di _n "=" * 65
-di "  5.D — CALLAWAY & SANT'ANNA (2021)"
-di "=" * 65
-di ""
-di "  Sintaxis del comando csdid:"
-di "  csdid depvar, ivar(panel_id) time(time_var) gvar(group_var) [notyet]"
-di "    ivar(id)  : identificador del individuo/panel"
-di "    time(t)   : variable de tiempo"
-di "    gvar(gvar): primer período de tratamiento (0 = nunca tratado)"
-di "    notyet    : usar no-aún-tratados como controles (más eficiente)"
-di ""
+* =================================================================
+* 5.D — CALLAWAY & SANT'ANNA (2021)
+* =================================================================
+
+* Sintaxis del comando csdid:
+* csdid depvar, ivar(panel_id) time(time_var) gvar(group_var) [notyet]
+* ivar(id) : identificador del individuo/panel
+* time(t) : variable de tiempo
+* gvar(gvar): primer período de tratamiento (0 = nunca tratado)
+* notyet : usar no-aún-tratados como controles (más eficiente)
+
 
 * ── Estimación principal ────────────────────────────────────────────────────
 * La salida muestra ATT(g,t) para cada celda tratada.
@@ -786,20 +792,20 @@ di ""
 * Pre-períodos (t < g): son PRE-TRENDS — deben ser ≈ 0 bajo CIA.
 csdid Y, ivar(id) time(t) gvar(gvar) notyet
 
-di ""
-di "  LECTURA DE LA SALIDA:"
-di "  Cada fila es ATT(g,t) para una combinación (cohorte, año)."
-di "  Pre-períodos (los 't < g'): son el test de pretrends — deben ser ≈ 0."
-di "  Los IC son SIMULTÁNEOS (corrección de Bonferroni)."
+
+* LECTURA DE LA SALIDA:
+* Cada fila es ATT(g,t) para una combinación (cohorte, año).
+* Pre-períodos (los 't < g'): son el test de pretrends — deben ser ≈ 0.
+* Los IC son SIMULTÁNEOS (corrección de Bonferroni).
 
 * ── Agregaciones ────────────────────────────────────────────────────────────
-di _n "  --- AGREGACIÓN 1: ATT_simple ---"
+* --- AGREGACIÓN 1: ATT_simple ---
 estat simple
 * Interpreta: promedio de todos los ATT(g,t) ponderado por el tamaño de celda.
 * Es el número comparable a β̂_TWFE (pero sin sesgo).
 * Si β̂_TWFE ≠ ATT_simple: hay sesgo por comparaciones sucias + heterogeneidad.
 
-di _n "  --- AGREGACIÓN 2: ATT por cohorte ---"
+* --- AGREGACIÓN 2: ATT por cohorte ---
 estat group
 * Una fila por cohorte g.
 * Promedio de los ATT(g,t) sobre todos los t ≥ g de esa cohorte.
@@ -807,7 +813,7 @@ estat group
 * g=1985 acumula 5 períodos de τ creciente → efecto promedio más alto
 * g=1988 solo tiene 2 períodos → efecto promedio menor
 
-di _n "  --- AGREGACIÓN 3: ATT por período calendario ---"
+* --- AGREGACIÓN 3: ATT por período calendario ---
 estat calendar
 * Una fila por período t.
 * Para t < 1985: nadie está tratado → no aplica.
@@ -815,7 +821,7 @@ estat calendar
 * Para 1988-1989: ambas cohortes están tratadas (promedio sobre las dos).
 * Responde: en el año t, ¿cuánto han ganado en promedio los ya-tratados?
 
-di _n "  --- AGREGACIÓN 4: Event study (ATT por tiempo relativo k = t - g) ---"
+* --- AGREGACIÓN 4: Event study (ATT por tiempo relativo k = t - g) ---
 estat event, window(-4 4) estore(cs_event)
 * window(-4 4): muestra 4 períodos antes (k=-4,...,-1) y 4 después (k=0,...,4)
 * k=-1: período de referencia (normalizado a 0 — omitido del gráfico)
@@ -836,18 +842,18 @@ csdid_plot, title("Event study: Callaway & Sant'Anna (2021)") ///
 
 * ─────────────────────────────────────────────────────────────────────────────
 * 5.E — EVENT STUDY: LEADS Y LAGS — DINÁMICA DEL EFECTO
-*
+
 * ¿QUÉ ES UN EVENT STUDY?
 *   En lugar de un único β̂, estimamos un coeficiente para cada "distancia
 *   al tratamiento": ¿cuánto cambia Y en el período k relativo al momento
 *   en que ocurrió el tratamiento?
-*
+
 *   Permite responder dos preguntas con el mismo modelo:
 *   (1) ¿Había diferencias PRE-existentes entre tratados y controles?
 *       → test de tendencias paralelas (usando los coeficientes pre-tratamiento)
 *   (2) ¿Cómo evoluciona el efecto del tratamiento a lo largo del tiempo?
 *       → dinámica del efecto (usando los coeficientes post-tratamiento)
-*
+
 * ─────────────────────────────────────────────────────────────────────────────
 * ¿QUÉ ES rel_time?
 *   rel_time_it = t - first_treat_i
@@ -857,7 +863,7 @@ csdid_plot, title("Event study: Callaway & Sant'Anna (2021)") ///
 *   Nunca-tratados (id=1-10): rel_time = missing (first_treat=.)
 * ─────────────────────────────────────────────────────────────────────────────
 * ¿QUÉ SON "LEADS" Y "LAGS" EN EVENT STUDY (Y POR QUÉ GENERA CONFUSIÓN)?
-*
+
 *   F_k  (k=2, 3, ...):  indicadores pre-tratamiento, llamados "leads"
 *     F_k = 1  si  rel_time = -k  (k períodos ANTES del tratamiento)
 *     NOMBRE: "leads" porque estos períodos CONDUCEN HACIA el evento —
@@ -865,33 +871,33 @@ csdid_plot, title("Event study: Callaway & Sant'Anna (2021)") ///
 *     REFERENCIA: F_1 (1 período antes) se OMITE — es la normalización.
 *     INTERPRETACIÓN: bajo tendencias paralelas, todos deben ser ≈ 0.
 *                     Si F_k ≠ 0 → hay diferencias pre-tratamiento.
-*
+
 *   L_k  (k=0, 1, 2, ...):  indicadores post-tratamiento, llamados "lags"
 *     L_k = 1  si  rel_time = k   (k períodos DESPUÉS del tratamiento)
 *     NOMBRE: "lags" porque el efecto del evento SE ARRASTRA hacia adelante —
 *              tarda k períodos en manifestarse (o k períodos después).
 *     INTERPRETACIÓN: L_0 = impacto instantáneo (en el período de adopción).
 *                     L_1, L_2, ... = evolución del efecto en el tiempo.
-*
+
 * ─────────────────────────────────────────────────────────────────────────────
 * FUENTE DE CONFUSIÓN (importante para entender a Cunningham):
-*
+
 *   En series de tiempo y en Stata:
 *     L.Y  = lag (pasado):    valor de Y en t-1
 *     F.Y  = forward (futuro): valor de Y en t+1
-*
+
 *   En event studies:
 *     "lead" F_k  → período ANTERIOR al evento (en tiempo calendario: pasado)
 *     "lag"  L_k  → período POSTERIOR al evento (en tiempo calendario: futuro)
-*
+
 *   Las etiquetas están INVERTIDAS respecto a la convención de series de tiempo:
 *     El "lead" del event study = el "lag" de series de tiempo (es el pasado)
 *     El "lag" del event study  = el "lead" de series de tiempo (es el futuro)
-*
+
 *   MNEMÓNICA (Cunningham, "The Mixtape"):
 *     Lead = "conduce hacia el tratamiento" (viene antes, apunta hacia él)
 *     Lag  = "queda rezagado del tratamiento" (viene después, lo sigue)
-*
+
 *   Reglas prácticas:
 *     F_k: rel_time = -k  → pre-evento (negativo → pasado relativo)
 *     L_k: rel_time = +k  → post-evento (positivo → futuro relativo)
@@ -899,21 +905,21 @@ csdid_plot, title("Event study: Callaway & Sant'Anna (2021)") ///
 *     L_0 NUNCA se omite (es el impacto en el período de adopción)
 * ─────────────────────────────────────────────────────────────────────────────
 
-di _n "=" * 65
-di "  5.E — EVENT STUDY: LEADS Y LAGS"
-di "=" * 65
+* =================================================================
+* 5.E — EVENT STUDY: LEADS Y LAGS
+* =================================================================
 
 * ── Generar leads y lags ────────────────────────────────────────────────────
 summ rel_time
 local rel_min = abs(r(min))    // períodos pre máximos (como positivo)
 local rel_max = r(max)         // períodos post máximos
 
-di ""
-di "  Distribución de rel_time en la muestra:"
+
+* Distribución de rel_time en la muestra:
 tab rel_time, missing
-di ""
-di "  Ventana disponible: " -`rel_min' " a +" `rel_max' " períodos"
-di "  (nunca tratados: rel_time = missing → sus F_k y L_k serán 0)"
+
+* Ventana disponible: -`rel_min' a +`rel_max' períodos
+* (nunca tratados: rel_time = missing sus F_k y L_k serán 0)
 
 cap drop F_* L_*
 
@@ -929,52 +935,52 @@ forval k = 0/`rel_max' {
     label variable L_`k' "`k' períodos DESPUÉS (lag)"
 }
 
-di ""
-di "  Variables creadas:"
-di "  Leads: F_2, F_3, ..., F_`rel_min'  (pre-tratamiento; F_1=ref, omitida)"
-di "  Lags:  L_0, L_1, ..., L_`rel_max'  (post-tratamiento)"
-di ""
-di "  Interpretación:"
-di "  F_2: la unidad está 2 años antes de tratar (rel_time=-2)"
-di "  L_0: la unidad está en su año de adopción (rel_time=0)"
-di "  L_1: la unidad lleva 1 año tratada (rel_time=1)"
+
+* Variables creadas:
+* Leads: F_2, F_3, ..., F_`rel_min' (pre-tratamiento; F_1=ref, omitida)
+* Lags: L_0, L_1, ..., L_`rel_max' (post-tratamiento)
+
+* Interpretación:
+* F_2: la unidad está 2 años antes de tratar (rel_time=-2)
+* L_0: la unidad está en su año de adopción (rel_time=0)
+* L_1: la unidad lleva 1 año tratada (rel_time=1)
 
 * ── TWFE Event Study ────────────────────────────────────────────────────────
-di _n "  TWFE EVENT STUDY"
-di "  Ecuación: Y_it = α_i + λ_t + Σ_k δ_k F_k + Σ_k γ_k L_k + ε_it"
-di "  Referencia: F_1 (un período antes del tratamiento)"
-di ""
-di "  CUIDADO con adopción escalonada:"
-di "  Con staggered adoption + efectos heterogéneos entre cohortes,"
-di "  los coeficientes del TWFE event study son promedios ponderados"
-di "  que incluyen las comparaciones sucias (ya-tratados como control)."
-di "  Los F_k pueden ser ≠ 0 AUN CON TENDENCIAS PARALELAS porque la"
-di "  contaminación de staggered altera los coeficientes pre-tratamiento."
-di "  → NO interpretes F_k ≠ 0 en TWFE como violación de paralelas."
-di "    Interpreta como señal de heterogeneidad + comparaciones sucias."
-di ""
+* TWFE EVENT STUDY
+* Ecuación: Y_it = α_i + λ_t + Σ_k δ_k F_k + Σ_k γ_k L_k + ε_it
+* Referencia: F_1 (un período antes del tratamiento)
+
+* CUIDADO con adopción escalonada:
+* Con staggered adoption + efectos heterogéneos entre cohortes,
+* los coeficientes del TWFE event study son promedios ponderados
+* que incluyen las comparaciones sucias (ya-tratados como control).
+* Los F_k pueden ser ≠ 0 AUN CON TENDENCIAS PARALELAS porque la
+* contaminación de staggered altera los coeficientes pre-tratamiento.
+* NO interpretes F_k ≠ 0 en TWFE como violación de paralelas.
+* Interpreta como señal de heterogeneidad + comparaciones sucias.
+
 
 reghdfe Y F_2 F_3 F_4 L_0 L_1 L_2 L_3 L_4, ///
     absorb(id t) cluster(id)
 estimates store twfe_es
 
-di ""
-di "  Leer los coeficientes:"
-di "  F_2, F_3, F_4: períodos 2, 3, 4 años ANTES del tratamiento"
-di "    Bajo tendencias paralelas puras → deben ser ≈ 0"
-di "    Con staggered + dirty comparisons → pueden ≠ 0 (falsos pre-trends)"
-di "  L_0: impacto en el año de adopción"
-di "  L_1, L_2, L_3, L_4: dinámica post-tratamiento"
-di "    Con τ creciente → la secuencia L_0 < L_1 < L_2 < ... (ascendente)"
+
+* Leer los coeficientes:
+* F_2, F_3, F_4: períodos 2, 3, 4 años ANTES del tratamiento
+* Bajo tendencias paralelas puras deben ser ≈ 0
+* Con staggered + dirty comparisons pueden ≠ 0 (falsos pre-trends)
+* L_0: impacto en el año de adopción
+* L_1, L_2, L_3, L_4: dinámica post-tratamiento
+* Con tau creciente, la secuencia L_0 < L_1 < L_2 < ... (ascendente)
 
 * ── Gráfico comparativo: TWFE vs. Callaway & Sant'Anna ─────────────────────
-di _n "  COMPARACIÓN VISUAL: TWFE vs. Callaway & Sant'Anna"
-di ""
-di "  El gráfico mostrará:"
-di "  TWFE (rojo): pre-trends pueden ser ≠ 0 (contaminación de staggered)"
-di "  CS   (azul): pre-trends deben ser ≈ 0 (estimación limpia por cohorte)"
-di "  En post-tratamiento: ambos suben, pero CS refleja el τ verdadero"
-di ""
+* COMPARACIÓN VISUAL: TWFE vs. Callaway & Sant'Anna
+
+* El gráfico mostrará:
+* TWFE (rojo): pre-trends pueden ser ≠ 0 (contaminación de staggered)
+* CS (azul): pre-trends deben ser ≈ 0 (estimación limpia por cohorte)
+* En post-tratamiento: ambos suben, pero CS refleja el tau verdadero
+
 
 cap noisily {
     event_plot twfe_es cs_event, ///
@@ -1000,40 +1006,40 @@ cap noisily {
 }
 
 * ── Resumen de la sección ────────────────────────────────────────────────────
-di _n "=" * 65
-di "  RESUMEN SECCIÓN 5"
-di "=" * 65
-di ""
-di "  TWFE con adopción escalonada:"
-di "    β̂_TWFE ≠ ATT_overall cuando hay efectos heterogéneos"
-di "    Bacon (2021) diagnostica cuánto pesa cada comparación 2×2"
-di "    La comparación sucia (ya-tratado como control) contamina β̂"
-di ""
-di "  Callaway & Sant'Anna (2021):"
-di "    Estima ATT(g,t) cohorte por cohorte — sin comparaciones sucias"
-di "    Controles: not-yet-treated ('notyet') o solo never-treated"
-di "    4 agregaciones: simple, group, calendar, event"
-di ""
-di "  Event study — leads y lags:"
-di "    F_k (leads): k períodos ANTES del evento → test de pretrends"
-di "    L_k (lags):  k períodos DESPUÉS del evento → dinámica del efecto"
-di "    F_1 = referencia (omitida). L_0 nunca se omite."
-di "    Con staggered: TWFE event study puede tener falsos pre-trends."
-di "    Usar CS event study para una estimación limpia."
-di "=" * 65
+* =================================================================
+* RESUMEN SECCIÓN 5
+* =================================================================
+
+* TWFE con adopción escalonada:
+* β̂_TWFE ≠ ATT_overall cuando hay efectos heterogéneos
+* Bacon (2021) diagnostica cuánto pesa cada comparación 2x2
+* La comparación sucia (ya-tratado como control) contamina β̂
+
+* Callaway & Sant'Anna (2021):
+* Estima ATT(g,t) cohorte por cohorte — sin comparaciones sucias
+* Controles: not-yet-treated ('notyet') o solo never-treated
+* 4 agregaciones: simple, group, calendar, event
+
+* Event study — leads y lags:
+* F_k (leads): k períodos ANTES del evento test de pretrends
+* L_k (lags): k períodos DESPUÉS del evento dinámica del efecto
+* F_1 = referencia (omitida). L_0 nunca se omite.
+* Con staggered: TWFE event study puede tener falsos pre-trends.
+* Usar CS event study para una estimación limpia.
+* =================================================================
 
 
 
 ********************************************************************************
 * SECCIÓN 8: ESTIMADORES MODERNOS — SIMULACIÓN GRANDE
-*
+
 * DGP: 30 unidades × 60 períodos, timing y efectos aleatorios por cohorte,
 *       efectos que CRECEN con el tiempo (heterogeneidad dinámica)
-*
+
 * OBJETIVO: comparar TWFE vs csdid, did_imputation, eventstudyinteract,
 *            did2s, did_multiplegt_dyn, stackedev y jwdid
 *            en un event-study gráfico comparativo.
-*
+
 * NOTA: Algunos paquetes deben estar instalados (ver Sección 0).
 ********************************************************************************
 
