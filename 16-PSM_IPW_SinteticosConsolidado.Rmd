@@ -504,24 +504,24 @@ Si el efecto placebo es cercano a cero, el método es creíble.
 
 ---
 
-## Descargar los archivos {#descargas-sec}
+## Descarga los archivos {-}
 
-**Descargar Stata do-file (PSM - recomendado para clase):**
-[Descargar PSM Classroom](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/01_psm_stata_CLASSROOM.do)
+**Descargar Stata do file (PSM - recomendado para clase):**
+[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/01_psm_stata_CLASSROOM.do)
 
-**Descargar Stata do-file (IPW - construcción de pesos):**
-[Descargar IPW](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do)
+**Descargar Stata do file (IPW):**
+[Descargar IPW Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do)
 
-**Descargar Stata do-file (Controles Sintéticos):**
-[Descargar Sintéticos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/03_synthetic_controls_stata.do)
+**Descargar Stata do file (Controles Sintéticos):**
+[Descargar Sintéticos Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/03_synthetic_controls_stata.do)
 
-**Descargar Python:**
+**Descargar Python Notebook:**
 [Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/04_psm_ipw_python.py)
 
-**Descargar base6.dta (PSM + IPW):**
+**Descargar base6.dta:**
 [Descargar base6.dta](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/base6.dta)
 
-**Descargar synth_smoking.dta (Controles Sintéticos):**
+**Descargar synth_smoking.dta:**
 [Descargar synth_smoking.dta](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta)
 
 ---
