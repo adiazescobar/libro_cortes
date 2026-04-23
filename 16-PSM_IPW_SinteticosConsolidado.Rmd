@@ -495,6 +495,58 @@ Si el efecto placebo es cercano a cero, el método es creíble.
 
 ---
 
+## Descargar los archivos {#descargas-sec}
+
+### Do-files de Stata
+
+| Archivo | Descripción | Descargar |
+|---------|-------------|-----------|
+| **01_psm_stata_CLASSROOM.do** | PSM con pauses (para clase en vivo) | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/01_psm_stata_CLASSROOM.do) |
+| **01_psm_stata.do** | PSM versión rápida (sin pauses) | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/01_psm_stata.do) |
+| **02_ipw_stata.do** | IPW completo: construcción de pesos + regresión | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/02_ipw_stata.do) |
+| **03_synthetic_controls_stata.do** | Controles sintéticos: Prop 99 California | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/03_synthetic_controls_stata.do) |
+| **00_quick_check.do** | Verificación rápida (datos + comandos) | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/00_quick_check.do) |
+
+### Bases de Datos
+
+| Archivo | Observaciones | Variables | Descargar |
+|---------|---------------|-----------|-----------|
+| **base6.dta** | 4,000 | 12 | [Descargar](https://github.com/adiazescobar/adiazescobar.github.io/raw/main/EjerciciosClase/base6.dta) |
+| **synth_smoking.dta** | 1,170 | 3 | [Descargar](https://github.com/adiazescobar/adiazescobar.github.io/raw/main/EjerciciosClase/synth_smoking.dta) |
+
+### Script de Python
+
+| Archivo | Descripción | Descargar |
+|---------|-------------|-----------|
+| **04_psm_ipw_python.py** | Demostración en Python (dataset simulado) | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/04_psm_ipw_python.py) |
+
+### Documentación Complementaria
+
+| Archivo | Descripción | Descargar |
+|---------|-------------|-----------|
+| **README.md** | Instrucciones de uso | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/README.md) |
+| **CLASS_PRESENTATION_GUIDE.md** | Guía para presentación en clase | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/CLASS_PRESENTATION_GUIDE.md) |
+| **VALIDATION_REPORT.md** | Reporte de verificación | [Descargar](https://raw.githubusercontent.com/adiazescobar/adiazescobar.github.io/main/EjerciciosClase/VALIDATION_REPORT.md) |
+
+### Descargar Todo (Recomendado)
+
+Para descargar todos los archivos de una vez, clona el repositorio:
+
+```bash
+git clone https://github.com/adiazescobar/adiazescobar.github.io.git
+cd adiazescobar.github.io/EjerciciosClase
+
+# Luego ejecuta en Stata:
+do "00_quick_check.do"
+do "01_psm_stata_CLASSROOM.do"
+```
+
+O descarga como ZIP:
+https://github.com/adiazescobar/adiazescobar.github.io/archive/refs/heads/main.zip
+(Luego ve a `EjerciciosClase/`)
+
+---
+
 ## Resumen comparativo {#resumen-sec}
 
 | Estimador | Ventaja | Desventaja | Cuándo usar |
