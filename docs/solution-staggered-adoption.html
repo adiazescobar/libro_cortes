@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 12 Emparejamiento Exacto | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 12 Emparejamiento Exacto | Cortes Transversales" />
+  <title>Solution: Staggered Adoption | Cortes Transversales</title>
+  <meta name="description" content="Solution: Staggered Adoption | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 12 Emparejamiento Exacto | Cortes Transversales" />
+  <meta property="og:title" content="Solution: Staggered Adoption | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 12 Emparejamiento Exacto | Cortes Transversales" />
+  <meta name="twitter:title" content="Solution: Staggered Adoption | Cortes Transversales" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="solution-staggered-adoption.html"/>
-<link rel="next" href="psm.html"/>
+<link rel="prev" href="datos-de-panel-did-y-twfe-en-stata.html"/>
+<link rel="next" href="emparejamiento-exacto.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,7 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
-<li class="chapter" data-level="1.1" data-path="12-ExactMatching.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="1.1" data-path="11b-TWFE-solution-pause.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
@@ -358,139 +358,225 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="emparejamiento-exacto" class="section level1 hasAnchor" number="12">
-<h1><span class="header-section-number">Capitulo 12</span> Emparejamiento Exacto<a href="emparejamiento-exacto.html#emparejamiento-exacto" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="el-problema-identificación-sin-aleatorización" class="section level2 unnumbered hasAnchor">
-<h2>El problema: identificación sin aleatorización<a href="#el-problema-identificaci%C3%B3n-sin-aleatorizaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>En un experimento aleatorizado (RCT), la asignación al tratamiento garantiza que los grupos tratado y control son, en promedio, idénticos en todas las características — observables <strong>y no observables</strong>. El estimador de diferencia de medias produce el efecto causal del tratamiento.</p>
-<p>En datos <strong>observacionales</strong>, esto no está garantizado. Los individuos se autoseleccionan al tratamiento: las personas que deciden estudiar un posgrado, adoptar una tecnología o participar en un programa social son <strong>sistemáticamente distintas</strong> a quienes no lo hacen. Comparar sus resultados directamente mezcla el efecto del tratamiento con diferencias preexistentes.</p>
-<p><span class="math display">\[\underbrace{E[Y_i \mid D_i = 1] - E[Y_i \mid D_i = 0]}_{\text{Diferencia de medias observada}} = \underbrace{ATT}_{\text{Efecto causal}} + \underbrace{E[Y_i(0) \mid D_i = 1] - E[Y_i(0) \mid D_i = 0]}_{\text{Sesgo de selección}}\]</span></p>
-<p>El término de sesgo de selección refleja que los tratados y los controles tendrían resultados distintos <strong>incluso en ausencia del tratamiento</strong>. El objetivo de los métodos de emparejamiento es eliminar este sesgo controlando por las características observables que generan la selección.</p>
+<div id="solution-staggered-adoption" class="section level1 unnumbered hasAnchor">
+<h1>Solution: Staggered Adoption<a href="solution-staggered-adoption.html#solution-staggered-adoption" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<blockquote>
+<p><strong>Solution to the pause</strong> — <em>Econometria Avanzada · Javeriana 2026-I</em></p>
+</blockquote>
 <hr />
-</div>
-<div id="la-idea-del-emparejamiento-exacto" class="section level2 unnumbered hasAnchor">
-<h2>La idea del emparejamiento exacto<a href="emparejamiento-exacto.html#la-idea-del-emparejamiento-exacto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>La intuición es simple: <strong>construir un clon</strong> para cada individuo tratado.</p>
-<p>Si encontramos, para cada persona tratada <span class="math inline">\(i\)</span>, un individuo no tratado <span class="math inline">\(j\)</span> que tiene exactamente las mismas características observables <span class="math inline">\(X\)</span> (edad, educación, género, región, etc.), entonces la única diferencia restante entre <span class="math inline">\(i\)</span> y <span class="math inline">\(j\)</span> es el tratamiento. La comparación de sus resultados aproxima el efecto causal.</p>
-<pre><code>Tratado i:  X = (35 años, universitario, mujer, Bogotá) → Y_i(1)
-Control j:  X = (35 años, universitario, mujer, Bogotá) → Y_j(0)
-
-ATT ≈ Y_i(1) - Y_j(0)</code></pre>
-<p>El emparejamiento exacto replica, de forma no paramétrica, el principio del experimento: dentro de cada “celda” definida por los valores de <span class="math inline">\(X\)</span>, la asignación al tratamiento es como si fuera aleatoria.</p>
-<hr />
-</div>
-<div id="los-tres-requisitos-del-emparejamiento" class="section level2 unnumbered hasAnchor">
-<h2>Los tres requisitos del emparejamiento<a href="emparejamiento-exacto.html#los-tres-requisitos-del-emparejamiento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Para que el emparejamiento exacto sea válido se necesitan tres condiciones:</p>
-<div id="observabilidad" class="section level3 unnumbered hasAnchor">
-<h3>1. Observabilidad<a href="emparejamiento-exacto.html#observabilidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Todas las variables que determinan simultáneamente la selección al tratamiento <strong>y</strong> el resultado deben ser <strong>observables y medibles</strong>. Esto es el supuesto de <strong>Independencia Condicional (CIA)</strong>:</p>
-<p><span class="math display">\[\{Y_i(1), Y_i(0)\} \perp D_i \mid X_i\]</span></p>
-<p>Una vez controlamos por <span class="math inline">\(X\)</span>, el tratamiento es “como si fuera” aleatorio. Si hay variables no observadas que afectan tanto la selección como el resultado (por ejemplo, habilidad no medida, motivación, conexiones sociales), el emparejamiento no resuelve el problema de identificación.</p>
-</div>
-<div id="soporte-común" class="section level3 unnumbered hasAnchor">
-<h3>2. Soporte común<a href="#soporte-com%C3%BAn" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Para cada valor posible de <span class="math inline">\(X\)</span>, debe haber individuos tanto en el grupo tratado como en el grupo de control:</p>
-<p><span class="math display">\[0 &lt; P(D_i = 1 \mid X_i = x) &lt; 1 \quad \forall x\]</span></p>
-<p>Si hay valores de <span class="math inline">\(X\)</span> donde solo hay tratados (o solo hay controles), no podemos construir el clon y el ATT no está identificado en esa región del soporte.</p>
-</div>
-<div id="suficientes-controles" class="section level3 unnumbered hasAnchor">
-<h3>3. Suficientes controles<a href="emparejamiento-exacto.html#suficientes-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>El grupo de control debe ser suficientemente grande para encontrar un clon para cada tratado. En la práctica esto significa que necesitamos un grupo de control mucho mayor que el grupo de tratados — la regla general es al menos 5:1.</p>
-<hr />
-</div>
-</div>
-<div id="la-maldición-de-las-dimensiones" class="section level2 unnumbered hasAnchor">
-<h2>La maldición de las dimensiones<a href="#la-maldici%C3%B3n-de-las-dimensiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El emparejamiento exacto enfrenta un problema fundamental cuando el vector <span class="math inline">\(X\)</span> tiene muchas dimensiones: la <strong>maldición de las dimensiones</strong> (<em>curse of dimensionality</em>).</p>
-<p>Considera el siguiente ejemplo. Si cada variable de control tiene solo dos valores posibles (por ejemplo, hombre/mujer, universitario/no universitario, urbano/rural), el número de celdas crece exponencialmente con el número de variables:</p>
+<div id="panel-structure" class="section level2 unnumbered hasAnchor">
+<h2>Panel structure<a href="solution-staggered-adoption.html#panel-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <table>
-<colgroup>
-<col width="32%" />
-<col width="26%" />
-<col width="40%" />
-</colgroup>
 <thead>
 <tr class="header">
-<th>Variables de control</th>
-<th>Celdas posibles</th>
-<th>Observaciones necesarias</th>
+<th>Group</th>
+<th>id</th>
+<th>Treatment onset</th>
+<th><span class="math inline">\(\tau\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>1 variable binaria</td>
-<td><span class="math inline">\(2^1 = 2\)</span></td>
-<td>Manejable</td>
+<td>Never treated</td>
+<td>1, 2</td>
+<td>—</td>
+<td>0</td>
 </tr>
 <tr class="even">
-<td>2 variables binarias</td>
-<td><span class="math inline">\(2^2 = 4\)</span></td>
-<td>Manejable</td>
+<td>EARLY</td>
+<td>3, 4</td>
+<td><span class="math inline">\(t = 2\)</span></td>
+<td>2</td>
 </tr>
 <tr class="odd">
-<td>5 variables binarias</td>
-<td><span class="math inline">\(2^5 = 32\)</span></td>
-<td>Manejable</td>
+<td>MEDIUM</td>
+<td>5, 6</td>
+<td><span class="math inline">\(t = 4\)</span></td>
+<td>3</td>
 </tr>
 <tr class="even">
-<td>10 variables binarias</td>
-<td><span class="math inline">\(2^{10} = 1{,}024\)</span></td>
-<td>Muy exigente</td>
-</tr>
-<tr class="odd">
-<td>20 variables binarias</td>
-<td><span class="math inline">\(2^{20} = 1{,}048{,}576\)</span></td>
-<td>Imposible en la práctica</td>
+<td>LATE</td>
+<td>7, 8</td>
+<td><span class="math inline">\(t = 6\)</span></td>
+<td>5</td>
 </tr>
 </tbody>
 </table>
-<p>Con variables continuas (edad en años, salario, puntaje de prueba) el problema es aún más severo: la probabilidad de encontrar dos individuos con exactamente el mismo valor en todas las dimensiones es prácticamente cero.</p>
-<p>El resultado es que con muchas variables de control, la mayoría de los individuos tratados <strong>no tienen ningún clon exacto</strong> en el grupo de control, y el método se vuelve inaplicable.</p>
-<p>Esta limitación motiva el Propensity Score Matching, que colapsa todas las dimensiones de <span class="math inline">\(X\)</span> en un único número escalar.</p>
 <hr />
 </div>
-<div id="estimación-del-att-con-emparejamiento-exacto" class="section level2 unnumbered hasAnchor">
-<h2>Estimación del ATT con emparejamiento exacto<a href="#estimaci%C3%B3n-del-att-con-emparejamiento-exacto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Cuando el emparejamiento exacto es viable (pocas variables, discretas), el estimador del efecto promedio sobre los tratados (<strong>ATT</strong>) es:</p>
-<p><span class="math display">\[\hat{\tau}_{ATT} = \frac{1}{N_T} \sum_{i: D_i=1} \left( Y_i - \frac{1}{|M_i|} \sum_{j \in M_i} Y_j \right)\]</span></p>
-<p>donde <span class="math inline">\(M_i\)</span> es el conjunto de controles que son “clones exactos” del tratado <span class="math inline">\(i\)</span> (mismo valor de <span class="math inline">\(X\)</span>), y <span class="math inline">\(|M_i|\)</span> es el número de controles en ese conjunto.</p>
-<p>La lógica es: para cada tratado, calcula la diferencia entre su resultado y el promedio de sus clones exactos, luego promedia esas diferencias sobre todos los tratados.</p>
+<div id="part-a-true-att" class="section level2 unnumbered hasAnchor">
+<h2>Part A — True ATT<a href="solution-staggered-adoption.html#part-a-true-att" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><span class="math display">\[\text{ATT} = \frac{\sum_g (\text{periods treated}_g \times n_g \times \tau_g)}{\text{total treated obs.}}\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Periods treated</th>
+<th>Units</th>
+<th><span class="math inline">\(\tau\)</span></th>
+<th>Contribution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>EARLY</td>
+<td>5 (<span class="math inline">\(t=2\ldots6\)</span>)</td>
+<td>2</td>
+<td>2</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>MEDIUM</td>
+<td>3 (<span class="math inline">\(t=4\ldots6\)</span>)</td>
+<td>2</td>
+<td>3</td>
+<td>18</td>
+</tr>
+<tr class="odd">
+<td>LATE</td>
+<td>1 (<span class="math inline">\(t=6\)</span>)</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>18 treated obs.</strong></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[\boxed{\text{ATT} = \frac{48}{18} = \frac{8}{3} \approx 2.667}\]</span></p>
 <hr />
 </div>
-<div id="en-la-práctica-nnmatch-en-stata" class="section level2 unnumbered hasAnchor">
-<h2>En la práctica: <code>nnmatch</code> en Stata<a href="#en-la-pr%C3%A1ctica-nnmatch-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Para emparejamiento exacto (o casi exacto) en Stata, el comando <code>nnmatch</code> permite especificar variables de exactitud obligatoria:</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb122-1"><a href="emparejamiento-exacto.html#cb122-1" tabindex="-1"></a>* Instalar si no está disponible</span>
-<span id="cb122-2"><a href="emparejamiento-exacto.html#cb122-2" tabindex="-1"></a><span class="kw">ssc</span> install nnmatch</span>
-<span id="cb122-3"><a href="emparejamiento-exacto.html#cb122-3" tabindex="-1"></a></span>
-<span id="cb122-4"><a href="emparejamiento-exacto.html#cb122-4" tabindex="-1"></a>* Emparejamiento exacto en &#39;genero&#39; <span class="fu">y</span> &#39;educacion&#39;,</span>
-<span id="cb122-5"><a href="emparejamiento-exacto.html#cb122-5" tabindex="-1"></a>* vecino más cercano en &#39;edad&#39; <span class="fu">e</span> &#39;ingreso&#39;</span>
-<span id="cb122-6"><a href="emparejamiento-exacto.html#cb122-6" tabindex="-1"></a>nnmatch outcome treat edad ingreso, <span class="co">///</span></span>
-<span id="cb122-7"><a href="emparejamiento-exacto.html#cb122-7" tabindex="-1"></a>    exact(genero educacion)         <span class="co">///</span></span>
-<span id="cb122-8"><a href="emparejamiento-exacto.html#cb122-8" tabindex="-1"></a>    tc(att)                         <span class="co">///</span></span>
-<span id="cb122-9"><a href="emparejamiento-exacto.html#cb122-9" tabindex="-1"></a>    <span class="fu">m</span>(1)</span></code></pre></div>
-<p>La opción <code>exact()</code> impone que el emparejamiento sea exacto en las variables listadas, y aproximado (vecino más cercano) en las demás. Cuando no hay ningún control con los valores exactos requeridos, la observación se descarta del análisis.</p>
+<div id="part-b-clean-comparisons" class="section level2 unnumbered hasAnchor">
+<h2>Part B — Clean comparisons<a href="solution-staggered-adoption.html#part-b-clean-comparisons" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Each DiD restricted to {cohort + never treated} recovers <span class="math inline">\(\tau\)</span> exactly because the control group never receives treatment in any period.</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb119-1"><a href="solution-staggered-adoption.html#cb119-1" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t <span class="kw">if</span> <span class="fu">inlist</span>(id,1,2,3,4), <span class="kw">fe</span> <span class="kw">robust</span>   <span class="co">// --&gt; 2.000</span></span>
+<span id="cb119-2"><a href="solution-staggered-adoption.html#cb119-2" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t <span class="kw">if</span> <span class="fu">inlist</span>(id,1,2,5,6), <span class="kw">fe</span> <span class="kw">robust</span>   <span class="co">// --&gt; 3.000</span></span>
+<span id="cb119-3"><a href="solution-staggered-adoption.html#cb119-3" tabindex="-1"></a><span class="kw">xtreg</span> Y D i.t <span class="kw">if</span> <span class="fu">inlist</span>(id,1,2,7,8), <span class="kw">fe</span> <span class="kw">robust</span>   <span class="co">// --&gt; 5.000</span></span></code></pre></div>
 <hr />
 </div>
-<div id="resumen-y-limitaciones" class="section level2 unnumbered hasAnchor">
-<h2>Resumen y limitaciones<a href="emparejamiento-exacto.html#resumen-y-limitaciones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El emparejamiento exacto es conceptualmente transparente y no hace supuestos de forma funcional, pero tiene dos limitaciones prácticas importantes:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Maldición de las dimensiones</strong>: inviable con muchas variables de control</li>
-<li><strong>Pérdida de muestra</strong>: los tratados sin clon exacto quedan fuera del análisis</li>
-</ol>
-<p>Estas limitaciones motivan el Propensity Score Matching (Capítulo <a href="psm.html#psm">13</a>), que reduce el vector <span class="math inline">\(X\)</span> a un único escalar — la probabilidad estimada de recibir el tratamiento — preservando las propiedades de identificación del emparejamiento exacto bajo los mismos supuestos (CIA y soporte común).</p>
-<hr />
+<div id="part-c-all-possible-comparisons" class="section level2 unnumbered hasAnchor">
+<h2>Part C — All possible comparisons<a href="solution-staggered-adoption.html#part-c-all-possible-comparisons" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>With 3 treated cohorts + 1 never-treated group, TWFE is a weighted average of <strong>9 pairwise 2x2 comparisons</strong> (Bacon decomposition). Key question: which are <strong>clean</strong> and which are <strong>contaminated</strong>?</p>
+<div id="when-is-a-comparison-clean" class="section level3 unnumbered hasAnchor">
+<h3>When is a comparison clean?<a href="solution-staggered-adoption.html#when-is-a-comparison-clean" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A comparison is <strong>clean</strong> when the control group <strong>has not received treatment</strong> in the relevant period. It is <strong>contaminated</strong> when the control is already treated — in that case, the observed change in the control is not zero even without new treatment; it reflects its own prior effect.</p>
 </div>
-<div id="lecturas-recomendadas-1" class="section level2 unnumbered hasAnchor">
-<h2>Lecturas recomendadas<a href="emparejamiento-exacto.html#lecturas-recomendadas-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ul>
-<li><strong>Angrist &amp; Pischke (2009)</strong> — <em>Mostly Harmless Econometrics</em>, Cap. 3: covariates and regression</li>
-<li><strong>Imbens &amp; Rubin (2015)</strong> — <em>Causal Inference for Statistics, Social, and Biomedical Sciences</em>, Cap. 15</li>
-<li><strong>Caliendo &amp; Kopeinig (2008)</strong> — “Some practical guidance for the implementation of propensity score matching”, <em>Journal of Economic Surveys</em> — referencia principal para la implementación práctica</li>
-</ul>
+<div id="the-9-comparisons" class="section level3 unnumbered hasAnchor">
+<h3>The 9 comparisons<a href="solution-staggered-adoption.html#the-9-comparisons" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="27%" />
+<col width="27%" />
+<col width="15%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Treated</th>
+<th>Control</th>
+<th align="center">Contaminated?</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>EARLY</td>
+<td>Never treated</td>
+<td align="center">✅ Clean</td>
+<td>Control never treated</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>MEDIUM</td>
+<td>Never treated</td>
+<td align="center">✅ Clean</td>
+<td>Control never treated</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>LATE</td>
+<td>Never treated</td>
+<td align="center">✅ Clean</td>
+<td>Control never treated</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>EARLY</td>
+<td>MEDIUM (before <span class="math inline">\(t=4\)</span>)</td>
+<td align="center">✅ Clean</td>
+<td>MEDIUM not yet treated at <span class="math inline">\(t=1,2,3\)</span></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>EARLY</td>
+<td>LATE (before <span class="math inline">\(t=6\)</span>)</td>
+<td align="center">✅ Clean</td>
+<td>LATE not yet treated at <span class="math inline">\(t=1\ldots5\)</span></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>MEDIUM</td>
+<td>LATE (before <span class="math inline">\(t=6\)</span>)</td>
+<td align="center">✅ Clean</td>
+<td>LATE not yet treated at <span class="math inline">\(t=1\ldots5\)</span></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>MEDIUM</td>
+<td>EARLY (after <span class="math inline">\(t=2\)</span>)</td>
+<td align="center">❌ Contaminated</td>
+<td>EARLY <strong>already treated</strong> when measuring MEDIUM effect</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>LATE</td>
+<td>EARLY (after <span class="math inline">\(t=2\)</span>)</td>
+<td align="center">❌ Contaminated</td>
+<td>EARLY <strong>already treated</strong> when measuring LATE effect</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>LATE</td>
+<td>MEDIUM (after <span class="math inline">\(t=4\)</span>)</td>
+<td align="center">❌ Contaminated</td>
+<td>MEDIUM <strong>already treated</strong> when measuring LATE effect</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Summary:</strong> 6 clean comparisons, 3 contaminated.</p>
+</div>
+<div id="are-contaminated-always-biased" class="section level3 unnumbered hasAnchor">
+<h3>Are contaminated always biased?<a href="solution-staggered-adoption.html#are-contaminated-always-biased" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Not necessarily. In this DGP the effects are <strong>constant over time</strong> — EARLY always has <span class="math inline">\(Y=2\)</span> after <span class="math inline">\(t=2\)</span>, no changes. So when MEDIUM enters treatment at <span class="math inline">\(t=4\)</span> and we compare with EARLY (already treated), the “control” doesn’t change (<span class="math inline">\(\Delta Y_\text{EARLY}=0\)</span>), which means the comparison still recovers <span class="math inline">\(\tau_\text{MEDIUM}=3\)</span>.</p>
+<p>The problem arises when effects are <strong>dynamic</strong> (growing or shrinking after treatment). In that case, the already-treated group continues changing, contaminates the DiD, and the comparison fails to recover the correct <span class="math inline">\(\tau\)</span>.</p>
+</div>
+<div id="diagnosis-in-stata" class="section level3 unnumbered hasAnchor">
+<h3>Diagnosis in Stata<a href="solution-staggered-adoption.html#diagnosis-in-stata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb120"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb120-1"><a href="solution-staggered-adoption.html#cb120-1" tabindex="-1"></a>* Full TWFE</span>
+<span id="cb120-2"><a href="solution-staggered-adoption.html#cb120-2" tabindex="-1"></a>reghdfe Y D, absorb(id t) <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb120-3"><a href="solution-staggered-adoption.html#cb120-3" tabindex="-1"></a>* --&gt; coefficient != ATT (because Bacon weights != ATT weights)</span>
+<span id="cb120-4"><a href="solution-staggered-adoption.html#cb120-4" tabindex="-1"></a></span>
+<span id="cb120-5"><a href="solution-staggered-adoption.html#cb120-5" tabindex="-1"></a>* See <span class="ot">all</span> comparisons and their weights</span>
+<span id="cb120-6"><a href="solution-staggered-adoption.html#cb120-6" tabindex="-1"></a>bacondecomp Y D, ddetail</span>
+<span id="cb120-7"><a href="solution-staggered-adoption.html#cb120-7" tabindex="-1"></a></span>
+<span id="cb120-8"><a href="solution-staggered-adoption.html#cb120-8" tabindex="-1"></a>* Robust estimator (uses only <span class="kw">clean</span> comparisons)</span>
+<span id="cb120-9"><a href="solution-staggered-adoption.html#cb120-9" tabindex="-1"></a>xtdidregress (Y) (D), <span class="fu">group</span>(id) time(t)</span>
+<span id="cb120-10"><a href="solution-staggered-adoption.html#cb120-10" tabindex="-1"></a>* --&gt; recovers ATT = 2.667</span></code></pre></div>
+<p><code>xtdidregress</code> and <code>csdid</code> avoid contaminated comparisons by constructing each DiD using only units that <strong>have not yet been treated</strong> as controls.</p>
+<hr />
+<blockquote>
+<p><strong>Reference:</strong> Goodman-Bacon, A. (2021). Difference-in-differences with variation in treatment timing. <em>Journal of Econometrics</em>, 225(2), 254–277.</p>
+</blockquote>
 
+</div>
 </div>
 </div>
             </section>
@@ -498,8 +584,8 @@ ATT ≈ Y_i(1) - Y_j(0)</code></pre>
           </div>
         </div>
       </div>
-<a href="solution-staggered-adoption.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="psm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="datos-de-panel-did-y-twfe-en-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="emparejamiento-exacto.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -530,7 +616,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/12-ExactMatching.Rmd",
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/11b-TWFE-solution-pause.Rmd",
     "text": "Edit"
   },
   "history": {
