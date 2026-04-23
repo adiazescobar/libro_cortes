@@ -19,6 +19,8 @@ datos-de-panel-did-y-twfe-en-stata
 caso-3-tu-ejemplo-con-tres-unidades-mismo-inicio-y-efecto-por-cohorte
 emparejamiento-exacto
 psm
+psm-stata
+ipw
 psm-ipw-sinteticos
 psm-sec
 paso-0-preparación
@@ -35,7 +37,7 @@ f.-kernel-matching
 g.-regresión-local-lineal-llr
 paso-5-verificación-del-balance
 tabla-pstest
-indicadores-globales
+indicadores-globales-1
 paso-6-errores-estándar-correctos
 bootstrap
 errores-analíticos-abadie-imbens
@@ -65,5 +67,5 @@ placebo
 paso-6-interpretación
 resumen-sec
 psm-1
-ipw
+ipw-1
 synthetic-control

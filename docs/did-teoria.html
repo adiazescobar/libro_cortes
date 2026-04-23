@@ -321,15 +321,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica-1"><i class="fa fa-check"></i>Inferencia estadística</a></li>
 <li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#lecturas-recomendadas-2"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html"><i class="fa fa-check"></i><b>14</b> Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata</a>
+<li class="chapter" data-level="14" data-path="psm-stata.html"><a href="psm-stata.html"><i class="fa fa-check"></i><b>14</b> PSM en Stata: <code>psmatch2</code></a>
 <ul>
-<li class="chapter" data-level="14.1" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#psm-sec"><i class="fa fa-check"></i><b>14.1</b> Parte I: Propensity Score Matching (PSM)</a></li>
-<li class="chapter" data-level="14.2" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#ipw-sec"><i class="fa fa-check"></i><b>14.2</b> Parte II: Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="14.3" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#synth-sec"><i class="fa fa-check"></i><b>14.3</b> Parte III: Synthetic Control Method</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-y-estructura-del-comando"><i class="fa fa-check"></i>Instalación y estructura del comando</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#variables-auxiliares-que-genera-psmatch2"><i class="fa fa-check"></i>Variables auxiliares que genera <code>psmatch2</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-y-el-soporte-com%C3%BAn"><i class="fa fa-check"></i>El propensity score y el soporte común</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#a.-nn1-sin-reemplazo"><i class="fa fa-check"></i>1a. NN(1) sin reemplazo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#b.-nn1-con-soporte-com%C3%BAn"><i class="fa fa-check"></i>1b. NN(1) con soporte común</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c.-soporte-com%C3%BAn-v%C3%ADa-trimming"><i class="fa fa-check"></i>1c. Soporte común vía trimming</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#verificar-el-balance-pstest"><i class="fa fa-check"></i>Verificar el balance: <code>pstest</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#nn-con-reemplazo-y-errores-est%C3%A1ndar-anal%C3%ADticos"><i class="fa fa-check"></i>2. NN con reemplazo y errores estándar analíticos</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#ate-con-nn1"><i class="fa fa-check"></i>3. ATE con NN(1)</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#caliper-1"><i class="fa fa-check"></i>4. Caliper</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#radio"><i class="fa fa-check"></i>5. Radio</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#kernel-1"><i class="fa fa-check"></i>6. Kernel</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#alternativa-teffects-psmatch-stata-nativo"><i class="fa fa-check"></i>7. Alternativa: <code>teffects psmatch</code> (Stata nativo)</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#resumen-de-la-secuencia-completa"><i class="fa fa-check"></i>Resumen de la secuencia completa</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#lecturas-recomendadas-3"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="ipw.html"><a href="ipw.html"><i class="fa fa-check"></i><b>15</b> Ponderación por Probabilidad Inversa (IPW)</a>
+<ul>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#la-idea-combinar-mco-y-psm"><i class="fa fa-check"></i>La idea: combinar MCO y PSM</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#el-estimador-ipw"><i class="fa fa-check"></i>El estimador IPW</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#los-ponderadores-ipw"><i class="fa fa-check"></i>Los ponderadores IPW</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata-1"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ipw-vs.-psm-cu%C3%A1l-usar"><i class="fa fa-check"></i>IPW vs. PSM: ¿cuál usar?</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#doble-robustez-doubly-robust"><i class="fa fa-check"></i>Doble robustez (<em>Doubly Robust</em>)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ipwra-ipw-con-ajuste-de-regresi%C3%B3n"><i class="fa fa-check"></i>IPWRA: IPW con ajuste de regresión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-estimadores-bajo-cia"><i class="fa fa-check"></i>Comparación de estimadores bajo CIA</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#lecturas-recomendadas-4"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html"><i class="fa fa-check"></i><b>16</b> Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#psm-sec"><i class="fa fa-check"></i><b>16.1</b> Parte I: Propensity Score Matching (PSM)</a></li>
+<li class="chapter" data-level="16.2" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#ipw-sec"><i class="fa fa-check"></i><b>16.2</b> Parte II: Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="16.3" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#synth-sec"><i class="fa fa-check"></i><b>16.3</b> Parte III: Synthetic Control Method</a></li>
 <li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#descarga-los-archivos-2"><i class="fa fa-check"></i>Descarga los archivos</a></li>
-<li class="chapter" data-level="14.4" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#resumen-sec"><i class="fa fa-check"></i><b>14.4</b> Resumen comparativo</a></li>
+<li class="chapter" data-level="16.4" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#resumen-sec"><i class="fa fa-check"></i><b>16.4</b> Resumen comparativo</a></li>
 <li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#do-files-disponibles"><i class="fa fa-check"></i>Do-files disponibles</a></li>
-<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#lecturas-recomendadas-3"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
