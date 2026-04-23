@@ -20,7 +20,6 @@ rmd_files:
   - 09-BadControls.Rmd        # Este será Cap 9
   - 10-BadControlsStata.Rmd   # Este será Cap 10
   - 11-TWFE.Rmd               # Este será Cap 11
-  - 11b-TWFE-solution-pause.Rmd  # Solution: staggered adoption pause
   - 12-ExactMatching.Rmd      # Este será Cap 12
   - 13-PSM.Rmd                # Este será Cap 13
   - 16-PSM_IPW_SinteticosConsolidado.Rmd      # Este será Cap 16 (consolidado: PSM Stata + IPW + Controles Sintéticos)

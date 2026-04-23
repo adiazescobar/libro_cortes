@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="solution-staggered-adoption.html"/>
+<link rel="prev" href="datos-de-panel-did-y-twfe-en-stata.html"/>
 <link rel="next" href="psm.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -298,13 +298,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i>Notas prácticas de ejecución</a></li>
 <li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#descarga-los-archivos-1"><i class="fa fa-check"></i>Descarga los archivos</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html"><i class="fa fa-check"></i>Solution: Staggered Adoption</a>
-<ul>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html#panel-structure"><i class="fa fa-check"></i>Panel structure</a></li>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html#part-a-true-att"><i class="fa fa-check"></i>Part A — True ATT</a></li>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html#part-b-clean-comparisons"><i class="fa fa-check"></i>Part B — Clean comparisons</a></li>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html#part-c-all-possible-comparisons"><i class="fa fa-check"></i>Part C — All possible comparisons</a></li>
-</ul></li>
 <li class="chapter" data-level="12" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html"><i class="fa fa-check"></i><b>12</b> Emparejamiento Exacto</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#el-problema-identificaci%C3%B3n-sin-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>El problema: identificación sin aleatorización</a></li>
@@ -461,15 +454,15 @@ ATT ≈ Y_i(1) - Y_j(0)</code></pre>
 <div id="en-la-práctica-nnmatch-en-stata" class="section level2 unnumbered hasAnchor">
 <h2>En la práctica: <code>nnmatch</code> en Stata<a href="#en-la-pr%C3%A1ctica-nnmatch-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Para emparejamiento exacto (o casi exacto) en Stata, el comando <code>nnmatch</code> permite especificar variables de exactitud obligatoria:</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb122-1"><a href="emparejamiento-exacto.html#cb122-1" tabindex="-1"></a>* Instalar si no está disponible</span>
-<span id="cb122-2"><a href="emparejamiento-exacto.html#cb122-2" tabindex="-1"></a><span class="kw">ssc</span> install nnmatch</span>
-<span id="cb122-3"><a href="emparejamiento-exacto.html#cb122-3" tabindex="-1"></a></span>
-<span id="cb122-4"><a href="emparejamiento-exacto.html#cb122-4" tabindex="-1"></a>* Emparejamiento exacto en &#39;genero&#39; <span class="fu">y</span> &#39;educacion&#39;,</span>
-<span id="cb122-5"><a href="emparejamiento-exacto.html#cb122-5" tabindex="-1"></a>* vecino más cercano en &#39;edad&#39; <span class="fu">e</span> &#39;ingreso&#39;</span>
-<span id="cb122-6"><a href="emparejamiento-exacto.html#cb122-6" tabindex="-1"></a>nnmatch outcome treat edad ingreso, <span class="co">///</span></span>
-<span id="cb122-7"><a href="emparejamiento-exacto.html#cb122-7" tabindex="-1"></a>    exact(genero educacion)         <span class="co">///</span></span>
-<span id="cb122-8"><a href="emparejamiento-exacto.html#cb122-8" tabindex="-1"></a>    tc(att)                         <span class="co">///</span></span>
-<span id="cb122-9"><a href="emparejamiento-exacto.html#cb122-9" tabindex="-1"></a>    <span class="fu">m</span>(1)</span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb120-1"><a href="emparejamiento-exacto.html#cb120-1" tabindex="-1"></a>* Instalar si no está disponible</span>
+<span id="cb120-2"><a href="emparejamiento-exacto.html#cb120-2" tabindex="-1"></a><span class="kw">ssc</span> install nnmatch</span>
+<span id="cb120-3"><a href="emparejamiento-exacto.html#cb120-3" tabindex="-1"></a></span>
+<span id="cb120-4"><a href="emparejamiento-exacto.html#cb120-4" tabindex="-1"></a>* Emparejamiento exacto en &#39;genero&#39; <span class="fu">y</span> &#39;educacion&#39;,</span>
+<span id="cb120-5"><a href="emparejamiento-exacto.html#cb120-5" tabindex="-1"></a>* vecino más cercano en &#39;edad&#39; <span class="fu">e</span> &#39;ingreso&#39;</span>
+<span id="cb120-6"><a href="emparejamiento-exacto.html#cb120-6" tabindex="-1"></a>nnmatch outcome treat edad ingreso, <span class="co">///</span></span>
+<span id="cb120-7"><a href="emparejamiento-exacto.html#cb120-7" tabindex="-1"></a>    exact(genero educacion)         <span class="co">///</span></span>
+<span id="cb120-8"><a href="emparejamiento-exacto.html#cb120-8" tabindex="-1"></a>    tc(att)                         <span class="co">///</span></span>
+<span id="cb120-9"><a href="emparejamiento-exacto.html#cb120-9" tabindex="-1"></a>    <span class="fu">m</span>(1)</span></code></pre></div>
 <p>La opción <code>exact()</code> impone que el emparejamiento sea exacto en las variables listadas, y aproximado (vecino más cercano) en las demás. Cuando no hay ningún control con los valores exactos requeridos, la observación se descarta del análisis.</p>
 <hr />
 </div>
@@ -498,7 +491,7 @@ ATT ≈ Y_i(1) - Y_j(0)</code></pre>
           </div>
         </div>
       </div>
-<a href="solution-staggered-adoption.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="datos-de-panel-did-y-twfe-en-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="psm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

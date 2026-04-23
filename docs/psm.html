@@ -298,13 +298,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i>Notas prácticas de ejecución</a></li>
 <li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#descarga-los-archivos-1"><i class="fa fa-check"></i>Descarga los archivos</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html"><i class="fa fa-check"></i>Solution: Staggered Adoption</a>
-<ul>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html#panel-structure"><i class="fa fa-check"></i>Panel structure</a></li>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html#part-a-true-att"><i class="fa fa-check"></i>Part A — True ATT</a></li>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html#part-b-clean-comparisons"><i class="fa fa-check"></i>Part B — Clean comparisons</a></li>
-<li class="chapter" data-level="" data-path="solution-staggered-adoption.html"><a href="solution-staggered-adoption.html#part-c-all-possible-comparisons"><i class="fa fa-check"></i>Part C — All possible comparisons</a></li>
-</ul></li>
 <li class="chapter" data-level="12" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html"><i class="fa fa-check"></i><b>12</b> Emparejamiento Exacto</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#el-problema-identificaci%C3%B3n-sin-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>El problema: identificación sin aleatorización</a></li>
@@ -376,13 +369,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="estimación" class="section level3 unnumbered hasAnchor">
 <h3>Estimación<a href="#estimaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>En la práctica, <span class="math inline">\(p(X)\)</span> no se conoce y debe estimarse. Los modelos estándar son:</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb123-1"><a href="psm.html#cb123-1" tabindex="-1"></a>* Logit (más común)</span>
-<span id="cb123-2"><a href="psm.html#cb123-2" tabindex="-1"></a><span class="kw">logit</span> D <span class="ot">$X</span></span>
-<span id="cb123-3"><a href="psm.html#cb123-3" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> pscore, pr</span>
-<span id="cb123-4"><a href="psm.html#cb123-4" tabindex="-1"></a></span>
-<span id="cb123-5"><a href="psm.html#cb123-5" tabindex="-1"></a>* Probit (alternativa)</span>
-<span id="cb123-6"><a href="psm.html#cb123-6" tabindex="-1"></a><span class="kw">probit</span> D <span class="ot">$X</span></span>
-<span id="cb123-7"><a href="psm.html#cb123-7" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> pscore, pr</span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb121-1"><a href="psm.html#cb121-1" tabindex="-1"></a>* Logit (más común)</span>
+<span id="cb121-2"><a href="psm.html#cb121-2" tabindex="-1"></a><span class="kw">logit</span> D <span class="ot">$X</span></span>
+<span id="cb121-3"><a href="psm.html#cb121-3" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> pscore, pr</span>
+<span id="cb121-4"><a href="psm.html#cb121-4" tabindex="-1"></a></span>
+<span id="cb121-5"><a href="psm.html#cb121-5" tabindex="-1"></a>* Probit (alternativa)</span>
+<span id="cb121-6"><a href="psm.html#cb121-6" tabindex="-1"></a><span class="kw">probit</span> D <span class="ot">$X</span></span>
+<span id="cb121-7"><a href="psm.html#cb121-7" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> pscore, pr</span></code></pre></div>
 <p>La elección entre logit y probit generalmente no cambia los resultados. Lo que importa más es la <strong>especificación</strong>: incluir todas las variables que determinan tanto la selección (<span class="math inline">\(D\)</span>) como el resultado (<span class="math inline">\(Y\)</span>), posiblemente con términos cuadráticos e interacciones si la relación no es lineal en el índice.</p>
 <hr />
 </div>
@@ -398,11 +391,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Supuesto 2: Soporte común (Overlap)<a href="#supuesto-2-soporte-com%C3%BAn-overlap" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><span class="math display">\[0 &lt; P(D_i = 1 \mid X_i = x) &lt; 1 \quad \forall x \text{ en el soporte de } X\]</span></p>
 <p>Debe haber individuos tratados y no tratados para cada valor de <span class="math inline">\(X\)</span>. En términos del propensity score, esto significa que la distribución de <span class="math inline">\(\hat{p}(X)\)</span> para los tratados y la distribución para los controles deben solaparse.</p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb124-1"><a href="psm.html#cb124-1" tabindex="-1"></a>* Verificar soporte común visualmente</span>
-<span id="cb124-2"><a href="psm.html#cb124-2" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">kdensity</span> pscore <span class="kw">if</span> D==1, lcolor(<span class="bn">blue</span>)) <span class="co">///</span></span>
-<span id="cb124-3"><a href="psm.html#cb124-3" tabindex="-1"></a>       (<span class="kw">kdensity</span> pscore <span class="kw">if</span> D==0, lcolor(<span class="kw">red</span>)),  <span class="co">///</span></span>
-<span id="cb124-4"><a href="psm.html#cb124-4" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
-<span id="cb124-5"><a href="psm.html#cb124-5" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Distribución del propensity score&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb122-1"><a href="psm.html#cb122-1" tabindex="-1"></a>* Verificar soporte común visualmente</span>
+<span id="cb122-2"><a href="psm.html#cb122-2" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">kdensity</span> pscore <span class="kw">if</span> D==1, lcolor(<span class="bn">blue</span>)) <span class="co">///</span></span>
+<span id="cb122-3"><a href="psm.html#cb122-3" tabindex="-1"></a>       (<span class="kw">kdensity</span> pscore <span class="kw">if</span> D==0, lcolor(<span class="kw">red</span>)),  <span class="co">///</span></span>
+<span id="cb122-4"><a href="psm.html#cb122-4" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
+<span id="cb122-5"><a href="psm.html#cb122-5" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Distribución del propensity score&quot;</span>)</span></code></pre></div>
 <p>Cuando hay poca superposición (tratados con <span class="math inline">\(\hat{p} &gt; 0.9\)</span> sin controles equivalentes), se restringe el análisis a la región de soporte común: se descartan los tratados con propensity score fuera del rango <span class="math inline">\([\min(\hat{p}_{D=0}), \max(\hat{p}_{D=0})]\)</span>.</p>
 <hr />
 </div>
@@ -579,11 +572,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Después del matching, hay que verificar que los grupos tratado y control están <strong>balanceados</strong> en las covariables. El indicador estándar es la diferencia estandarizada (<em>standardized bias</em>):</p>
 <p><span class="math display">\[SB_k = \frac{\bar{X}_{kT} - \bar{X}_{kC}}{\sqrt{(\hat{V}_{kT} + \hat{V}_{kC})/2}} \times 100\]</span></p>
 <p>La regla de Rosenbaum &amp; Rubin: un <span class="math inline">\(|SB_k| &lt; 20\%\)</span> indica balance aceptable; <span class="math inline">\(|SB_k| &lt; 5\%\)</span> es excelente.</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb125-1"><a href="psm.html#cb125-1" tabindex="-1"></a>* pstest verifica <span class="fu">el</span> balance antes <span class="fu">y</span> después del matching</span>
-<span id="cb125-2"><a href="psm.html#cb125-2" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) mweight(_weight) both</span>
-<span id="cb125-3"><a href="psm.html#cb125-3" tabindex="-1"></a>* before: diferencia antes del matching</span>
-<span id="cb125-4"><a href="psm.html#cb125-4" tabindex="-1"></a>* after:  diferencia después del matching</span>
-<span id="cb125-5"><a href="psm.html#cb125-5" tabindex="-1"></a>* %bias:  diferencia estandarizada</span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb123-1"><a href="psm.html#cb123-1" tabindex="-1"></a>* pstest verifica <span class="fu">el</span> balance antes <span class="fu">y</span> después del matching</span>
+<span id="cb123-2"><a href="psm.html#cb123-2" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) mweight(_weight) both</span>
+<span id="cb123-3"><a href="psm.html#cb123-3" tabindex="-1"></a>* before: diferencia antes del matching</span>
+<span id="cb123-4"><a href="psm.html#cb123-4" tabindex="-1"></a>* after:  diferencia después del matching</span>
+<span id="cb123-5"><a href="psm.html#cb123-5" tabindex="-1"></a>* %bias:  diferencia estandarizada</span></code></pre></div>
 <p>Si el balance es insuficiente, hay que re-especificar el modelo del PS (agregar interacciones, términos cuadráticos) o cambiar el algoritmo de matching.</p>
 <hr />
 </div>
