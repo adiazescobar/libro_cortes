@@ -260,6 +260,9 @@ IPW es un estimador alternativo al matching que **re-pondera** la muestra en lug
 - **Más eficiente que matching:** menos pérdida de varianza
 - **Fácil combinar con otros estimadores:** se puede usar en regresión, DiD, etc.
 
+**Descargar do-file IPW:**
+[Descargar 02_ipw_stata.do](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do)
+
 ---
 
 ### Paso 1: Estimar el propensity score
@@ -378,6 +381,12 @@ El Synthetic Control Method es un estimador para cuando el tratamiento afecta a 
 - ¿Cuánto costó el Pico y Placa a la calidad del aire de Bogotá?
 - ¿Cuál fue el efecto de la Prop 99 (impuesto al tabaco) en California en 1988?
 - ¿Qué efecto tuvo el Brexit en el PIB del Reino Unido?
+
+**Descargar do-file Controles Sintéticos:**
+[Descargar 03_synthetic_controls_stata.do](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/03_synthetic_controls_stata.do)
+
+**Descargar datos (caso Prop 99):**
+[synth_smoking.dta](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta)
 
 ---
 
