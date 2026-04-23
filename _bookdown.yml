@@ -22,4 +22,4 @@ rmd_files:
   - 11-TWFE.Rmd               # Este será Cap 11
   - 12-ExactMatching.Rmd      # Este será Cap 12
   - 13-PSM.Rmd                # Este será Cap 13
-  - 16-PSM_IPW_SinteticosConsolidado.Rmd      # Este será Cap 16 (consolidado: PSM Stata + IPW + Controles Sintéticos)
+  - 14-PSM_IPW_SinteticosConsolidado.Rmd      # Este será Cap 14 (consolidado: PSM Stata + IPW + Controles Sintéticos)
