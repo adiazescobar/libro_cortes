@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 17 Variables Instrumentales y LATE | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 17 Variables Instrumentales y LATE | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 17 Variables Instrumentales y LATE | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 17 Variables Instrumentales y LATE | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2026-05-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="psm-ipw-sinteticos.html"/>
+<link rel="next" href="iv-stata.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#puntaje-automatico"><i class="fa fa-check"></i>Puntaje (automatico)</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Intro</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#formulando-una-buena-pregunta-causal"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="18-IV.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html"><i class="fa fa-check"></i><b>3</b> Parámetros Causales (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#objetivos-de-aprendizaje-1"><i class="fa fa-check"></i>Objetivos de aprendizaje</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#lecturas-recomendadas"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#resultados-potenciales-1"><i class="fa fa-check"></i>Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>Parámetros de interés</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>¿Por qué no es suficiente el estimador naïve?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#el-supuesto-de-independencia-o-ignorabilidad"><i class="fa fa-check"></i>El supuesto de independencia (o ignorabilidad)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Ejercicio en clase: resultados potenciales y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#sutva-supuesto-de-valor-estable-del-tratamiento-unitario"><i class="fa fa-check"></i>SUTVA: Supuesto de Valor Estable del Tratamiento Unitario</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html"><i class="fa fa-check"></i><b>4</b> Parámetros Causales en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html"><i class="fa fa-check"></i><b>5</b> Experimentos Aleatorizados</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n-m%C3%ADnima-para-todo-el-m%C3%B3dulo"><i class="fa fa-check"></i>Notación mínima para todo el módulo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto"><i class="fa fa-check"></i>¿En regresión lineal cómo se ve esto?</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>1) RCT simple, sin estratos, sin controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>2) RCT simple, sin estratos, con controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>3) RCT estratificado (bloques), sin controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>4) RCT estratificado + controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html"><i class="fa fa-check"></i><b>6</b> Experimentos Aleatorizados en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#sin-controles"><i class="fa fa-check"></i>Sin controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-puede-salir-mal-en-un-rct"><i class="fa fa-check"></i>Qué puede salir mal en un RCT</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#ejercicio-aplicado-bertrand-y-mullainathan-2004"><i class="fa fa-check"></i>Ejercicio aplicado: Bertrand y Mullainathan (2004)</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>8</b> Diferencias en Diferencias</a>
+<ul>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-problema-que-did-resuelve"><i class="fa fa-check"></i>El problema que DiD resuelve</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#la-tabla-22"><i class="fa fa-check"></i>La tabla 2×2</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#resultados-potenciales-y-el-att"><i class="fa fa-check"></i>Resultados potenciales y el ATT</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas"><i class="fa fa-check"></i>Identificación del ATT bajo tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-regresi%C3%B3n-did"><i class="fa fa-check"></i>La regresión DiD</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#prueba-de-tendencias-paralelas"><i class="fa fa-check"></i>Prueba de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#ejercicio-con-datos"><i class="fa fa-check"></i>Ejercicio con datos</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>9</b> Malos Controles (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>La demostración formal: sesgo de agrupación</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>10</b> Malos Controles: Código y Simulaciones</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#la-idea-central-controlar-no-siempre-ayuda"><i class="fa fa-check"></i>La idea central: controlar no siempre ayuda</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#buen-control-vs.-mal-control-la-diferencia-en-una-imagen"><i class="fa fa-check"></i>Buen control vs. mal control: la diferencia en una imagen</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-1-post-tratamiento-mediador"><i class="fa fa-check"></i>Caso 1: Post-tratamiento / mediador</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-2-colisionador-selecci%C3%B3n-end%C3%B3gena"><i class="fa fa-check"></i>Caso 2: Colisionador / selección endógena</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-3-proxy-contaminado"><i class="fa fa-check"></i>Caso 3: Proxy contaminado</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#tabla-resumen-los-tres-casos"><i class="fa fa-check"></i>Tabla resumen: los tres casos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-antes-de-agregar-un-control-a-la-regresi%C3%B3n"><i class="fa fa-check"></i>Checklist antes de agregar un control a la regresión</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#descarga-los-archivos"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html"><i class="fa fa-check"></i><b>11</b> Datos de Panel, DiD y TWFE en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n-a-datos-de-panel"><i class="fa fa-check"></i>Introducción a datos de panel</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-twfe-la-equivalencia-en-el-caso-22"><i class="fa fa-check"></i>DiD = FD = TWFE: la equivalencia en el caso 2×2</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#el-supuesto-de-tendencias-paralelas-2"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido-twfe-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Contexto rápido: TWFE con adopción escalonada</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i>¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i>¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i>¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i>Notas prácticas de ejecución</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#descarga-los-archivos-1"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html"><i class="fa fa-check"></i><b>12</b> Emparejamiento Exacto</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#el-problema-identificaci%C3%B3n-sin-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>El problema: identificación sin aleatorización</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#la-idea-del-emparejamiento-exacto"><i class="fa fa-check"></i>La idea del emparejamiento exacto</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#los-tres-requisitos-del-emparejamiento"><i class="fa fa-check"></i>Los tres requisitos del emparejamiento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-maldici%C3%B3n-de-las-dimensiones"><i class="fa fa-check"></i>La maldición de las dimensiones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-del-att-con-emparejamiento-exacto"><i class="fa fa-check"></i>Estimación del ATT con emparejamiento exacto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-la-pr%C3%A1ctica-nnmatch-en-stata"><i class="fa fa-check"></i>En la práctica: <code>nnmatch</code> en Stata</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#resumen-y-limitaciones"><i class="fa fa-check"></i>Resumen y limitaciones</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#lecturas-recomendadas-1"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="psm.html"><a href="psm.html"><i class="fa fa-check"></i><b>13</b> Propensity Score Matching</a>
+<ul>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#del-emparejamiento-exacto-al-propensity-score"><i class="fa fa-check"></i>Del emparejamiento exacto al propensity score</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-definici%C3%B3n-y-estimaci%C3%B3n"><i class="fa fa-check"></i>El propensity score: definición y estimación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#los-dos-supuestos-de-identificaci%C3%B3n"><i class="fa fa-check"></i>Los dos supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#la-receta-del-psm-en-7-pasos"><i class="fa fa-check"></i>La receta del PSM en 7 pasos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A9todos-de-emparejamiento-no-param%C3%A9tricos"><i class="fa fa-check"></i>Métodos de emparejamiento no paramétricos</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#att-vs.-ate"><i class="fa fa-check"></i>ATT vs. ATE</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#verificaci%C3%B3n-del-balance"><i class="fa fa-check"></i>Verificación del balance</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica-1"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#lecturas-recomendadas-2"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="psm-stata.html"><a href="psm-stata.html"><i class="fa fa-check"></i><b>14</b> PSM en Stata: <code>psmatch2</code></a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-y-estructura-del-comando"><i class="fa fa-check"></i>Instalación y estructura del comando</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#variables-auxiliares-que-genera-psmatch2"><i class="fa fa-check"></i>Variables auxiliares que genera <code>psmatch2</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-y-el-soporte-com%C3%BAn"><i class="fa fa-check"></i>El propensity score y el soporte común</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#a.-nn1-sin-reemplazo"><i class="fa fa-check"></i>1a. NN(1) sin reemplazo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#b.-nn1-con-soporte-com%C3%BAn"><i class="fa fa-check"></i>1b. NN(1) con soporte común</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c.-soporte-com%C3%BAn-v%C3%ADa-trimming"><i class="fa fa-check"></i>1c. Soporte común vía trimming</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#verificar-el-balance-pstest"><i class="fa fa-check"></i>Verificar el balance: <code>pstest</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#nn-con-reemplazo-y-errores-est%C3%A1ndar-anal%C3%ADticos"><i class="fa fa-check"></i>2. NN con reemplazo y errores estándar analíticos</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#ate-con-nn1"><i class="fa fa-check"></i>3. ATE con NN(1)</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#caliper-1"><i class="fa fa-check"></i>4. Caliper</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#radio"><i class="fa fa-check"></i>5. Radio</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#kernel-1"><i class="fa fa-check"></i>6. Kernel</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#alternativa-teffects-psmatch-stata-nativo"><i class="fa fa-check"></i>7. Alternativa: <code>teffects psmatch</code> (Stata nativo)</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#resumen-de-la-secuencia-completa"><i class="fa fa-check"></i>Resumen de la secuencia completa</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#lecturas-recomendadas-3"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="ipw.html"><a href="ipw.html"><i class="fa fa-check"></i><b>15</b> Ponderación por Probabilidad Inversa (IPW)</a>
+<ul>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#la-idea-combinar-mco-y-psm"><i class="fa fa-check"></i>La idea: combinar MCO y PSM</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#el-estimador-ipw"><i class="fa fa-check"></i>El estimador IPW</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#los-ponderadores-ipw"><i class="fa fa-check"></i>Los ponderadores IPW</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata-1"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ipw-vs.-psm-cu%C3%A1l-usar"><i class="fa fa-check"></i>IPW vs. PSM: ¿cuál usar?</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#doble-robustez-doubly-robust"><i class="fa fa-check"></i>Doble robustez (<em>Doubly Robust</em>)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ipwra-ipw-con-ajuste-de-regresi%C3%B3n"><i class="fa fa-check"></i>IPWRA: IPW con ajuste de regresión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-estimadores-bajo-cia"><i class="fa fa-check"></i>Comparación de estimadores bajo CIA</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#lecturas-recomendadas-4"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html"><i class="fa fa-check"></i><b>16</b> Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#psm-sec"><i class="fa fa-check"></i><b>16.1</b> Parte I: Propensity Score Matching (PSM)</a></li>
+<li class="chapter" data-level="16.2" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#ipw-sec"><i class="fa fa-check"></i><b>16.2</b> Parte II: Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="16.3" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#synth-sec"><i class="fa fa-check"></i><b>16.3</b> Parte III: Synthetic Control Method</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#descarga-los-archivos-2"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+<li class="chapter" data-level="16.4" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#resumen-sec"><i class="fa fa-check"></i><b>16.4</b> Resumen comparativo</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#do-files-disponibles"><i class="fa fa-check"></i>Do-files disponibles</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="iv.html"><a href="iv.html"><i class="fa fa-check"></i><b>17</b> Variables Instrumentales y LATE</a>
+<ul>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-problema-de-endogeneidad"><i class="fa fa-check"></i>El problema de endogeneidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-soluci%C3%B3n-una-variable-instrumental"><i class="fa fa-check"></i>La solución: una variable instrumental</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplos-cl%C3%A1sicos"><i class="fa fa-check"></i>Ejemplos clásicos</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#fuentes-de-variables-instrumentales"><i class="fa fa-check"></i>Fuentes de variables instrumentales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-cu%C3%A1ntos-instrumentos-hacen-falta"><i class="fa fa-check"></i>Identificación: ¿cuántos instrumentos hacen falta?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#derivaci%C3%B3n-del-estimador-iv"><i class="fa fa-check"></i>Derivación del estimador IV</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-estimador-de-wald-caso-d-y-z-binarios"><i class="fa fa-check"></i>El estimador de Wald (caso <span class="math inline">\(D\)</span> y <span class="math inline">\(Z\)</span> binarios)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%ADnimos-cuadrados-en-dos-etapas-mco2e"><i class="fa fa-check"></i>Mínimos Cuadrados en Dos Etapas (MCO2E)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-muestra-finita-la-intuici%C3%B3n"><i class="fa fa-check"></i>Sesgo de muestra finita: la intuición</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#instrumentos-d%C3%A9biles"><i class="fa fa-check"></i>Instrumentos débiles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-evaluar-la-validez"><i class="fa fa-check"></i>¿Cómo evaluar la validez?</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-el-efecto-promedio-local-de-tratamiento"><i class="fa fa-check"></i>LATE: el efecto promedio local de tratamiento</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-con-varios-instrumentos"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#variables-de-control"><i class="fa fa-check"></i>Variables de control</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#lecturas-recomendadas-6"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="iv-stata.html"><a href="iv-stata.html"><i class="fa fa-check"></i><b>18</b> IV y LATE en Stata: simulación</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa"><i class="fa fa-check"></i>Instalación previa</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><i class="fa fa-check"></i>Parte A — Muestras finitas: OLS sesgado vs IV consistente</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#el-proceso-generador-de-datos"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#monte-carlo-el-programa"><i class="fa fa-check"></i>Monte Carlo: el programa</a></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#resultados-esperados"><i class="fa fa-check"></i>Resultados esperados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#visualizaci%C3%B3n"><i class="fa fa-check"></i>Visualización</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html"><i class="fa fa-check"></i>Parte B — LATE paso a paso</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#la-idea"><i class="fa fa-check"></i>La idea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#construcci%C3%B3n-del-experimento"><i class="fa fa-check"></i>Construcción del experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-de-los-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Asignación de los efectos heterogéneos</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resultados-potenciales-y-resultado-observado"><i class="fa fa-check"></i>Resultados potenciales y resultado observado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-lo-que-cada-m%C3%A9todo-recupera"><i class="fa fa-check"></i>Estimación: lo que cada método recupera</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#y-si-el-efecto-fuera-homog%C3%A9neo"><i class="fa fa-check"></i>¿Y si el efecto fuera homogéneo?</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#late-con-varios-instrumentos-1"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#lecturas-recomendadas-7"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="iv" class="section level1 hasAnchor" number="17">
+<h1><span class="header-section-number">Capitulo 17</span> Variables Instrumentales y LATE<a href="iv.html#iv" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="boxinfo">
+<p><strong>Metas de aprendizaje</strong></p>
+<ul>
+<li>Identificar el problema de endogeneidad y por qué OLS es inconsistente</li>
+<li>Definir las dos condiciones del instrumento (relevancia y validez)</li>
+<li>Derivar el estimador IV y entender por qué es sesgado pero consistente</li>
+<li>Distinguir IV exactamente identificado, sobre-identificado y sub-identificado</li>
+<li>Derivar MCO2E y mostrar su equivalencia con IV</li>
+<li>Demostrar que el estimador de Wald identifica el LATE</li>
+<li>Reconocer las amenazas de instrumentos débiles y los tests de diagnóstico</li>
+</ul>
+</div>
+<hr />
+<div id="el-problema-de-endogeneidad" class="section level2 unnumbered hasAnchor">
+<h2>El problema de endogeneidad<a href="iv.html#el-problema-de-endogeneidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Considere el modelo</p>
+<p><span class="math display">\[y_i = \alpha + \tau D_i + X_i \beta + W_i \delta + \varepsilon_i, \qquad \varepsilon_i \sim \text{iid}(0, \sigma_\varepsilon^2)\]</span></p>
+<p>donde <span class="math inline">\(D_i\)</span> es el tratamiento (<span class="math inline">\(1\)</span> si participa, <span class="math inline">\(0\)</span> si no), <span class="math inline">\(X_i\)</span> son covariables pre-determinadas que <strong>no</strong> son influenciadas por <span class="math inline">\(D\)</span>, y <span class="math inline">\(W_i\)</span> son características <strong>no observadas</strong> potencialmente correlacionadas con <span class="math inline">\(D\)</span> y <span class="math inline">\(y\)</span>. Para simplificar la notación excluimos <span class="math inline">\(X\)</span> del análisis (en aplicaciones siempre hay que controlar por ellas):</p>
+<p><span class="math display">\[y = \alpha + \tau D + W\delta + \varepsilon\]</span></p>
+<p>Si tomamos diferencias entre tratados y no tratados:</p>
+<p><span class="math display">\[\frac{\Delta y}{\Delta D} = \tau + \underbrace{\frac{\Delta W}{\Delta D}\delta}_{\text{sesgo de selección}}\]</span></p>
+<p>Cuando <span class="math inline">\(W\)</span> está correlacionado con <span class="math inline">\(D\)</span>, OLS no recupera <span class="math inline">\(\tau\)</span>. Este es el problema central: la “regla de oro” <span class="math inline">\(E[D\,\varepsilon^*]=0\)</span> se rompe, donde <span class="math inline">\(\varepsilon^* = W\delta + \varepsilon\)</span> es el error compuesto.</p>
+<hr />
+</div>
+<div id="la-solución-una-variable-instrumental" class="section level2 unnumbered hasAnchor">
+<h2>La solución: una variable instrumental<a href="#la-soluci%C3%B3n-una-variable-instrumental" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Una variable <span class="math inline">\(Z_i\)</span> es un <strong>instrumento válido</strong> para <span class="math inline">\(D_i\)</span> si y solo si cumple dos condiciones:</p>
+<div class="boxinfo">
+<p><strong>Condiciones del instrumento</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Relevancia:</strong> <span class="math inline">\(\text{Cov}(D, Z) \neq 0\)</span>. <em>El instrumento está correlacionado con la variable endógena.</em></li>
+<li><strong>Validez (exogeneidad):</strong> <span class="math inline">\(\text{Cov}(Z, \mu) = 0\)</span>, donde <span class="math inline">\(\mu = W\delta + \varepsilon\)</span>. <em>El instrumento es “tan bueno como aleatorio”: la única vía por la que <span class="math inline">\(Z\)</span> afecta a <span class="math inline">\(y\)</span> es a través de <span class="math inline">\(D\)</span>.</em></li>
+</ol>
+</div>
+<p>Gráficamente:</p>
+<p><span class="math display">\[Z \longrightarrow D \longrightarrow y \qquad \text{con} \qquad Z \not\!\!\longleftrightarrow \mu\]</span></p>
+<p><strong>Cuándo se rompe la validez:</strong> cuando existe alguna relación entre <span class="math inline">\(Z\)</span> y <span class="math inline">\(y\)</span> que no pasa por <span class="math inline">\(D\)</span> — por ejemplo <span class="math inline">\(Z \leftrightarrow W\)</span>, o un canal directo <span class="math inline">\(Z \to y\)</span>. La validez <strong>no es testeable</strong>: se argumenta con teoría e institucionalidad.</p>
+<hr />
+</div>
+<div id="ejemplos-clásicos" class="section level2 unnumbered hasAnchor">
+<h2>Ejemplos clásicos<a href="#ejemplos-cl%C3%A1sicos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="37%" />
+<col width="37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Estudio</th>
+<th>Tratamiento</th>
+<th>Instrumento</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Angrist &amp; Krueger (1991, 1992)</td>
+<td>Años de educación</td>
+<td>Trimestre de nacimiento / Lotería del draft de Vietnam</td>
+</tr>
+<tr class="even">
+<td>Angrist &amp; Evans (1998)</td>
+<td>Tener un tercer hijo</td>
+<td>Sexo de los primeros dos hijos</td>
+</tr>
+<tr class="odd">
+<td>Evans &amp; Lien (2005)</td>
+<td>Visitas prenatales</td>
+<td>Huelga del transporte público (PAT)</td>
+</tr>
+<tr class="even">
+<td>PACES (Colombia)</td>
+<td>Educación privada</td>
+<td>Lotería de adjudicación de la beca</td>
+</tr>
+<tr class="odd">
+<td>Acemoglu, García-Jimeno &amp; Robinson (2015)</td>
+<td>Capacidad estatal</td>
+<td>Carreteras coloniales</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ejemplo paradigmático — PACES:</strong> se quiere estimar el efecto de la educación privada (<span class="math inline">\(D\)</span>) sobre los aprendizajes (<span class="math inline">\(y\)</span>). El problema es que las familias que matriculan en privado se diferencian en motivación, capital cultural y aspiraciones (todo dentro de <span class="math inline">\(\mu\)</span>). La lotería de PACES sortea cupos: <span class="math inline">\(Z=1\)</span> si ganó la lotería, <span class="math inline">\(Z=0\)</span> si la perdió. La aleatorización garantiza la validez; la relevancia se verifica empíricamente porque los ganadores tienen mucha mayor probabilidad de matricularse en privado.</p>
+<hr />
+</div>
+<div id="fuentes-de-variables-instrumentales" class="section level2 unnumbered hasAnchor">
+<h2>Fuentes de variables instrumentales<a href="iv.html#fuentes-de-variables-instrumentales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><strong>Teoría combinada con datos inteligentes</strong> (ej. distancia al centro de capacitación como instrumento del costo de participar).</li>
+<li><strong>Variación exógena en políticas o programas</strong> a lo largo del tiempo o el espacio (ej. lotería de Vietnam para servicio militar y salarios).</li>
+<li><strong>Naturaleza</strong> (ej. clima como variación exógena en la oferta de pescado).</li>
+<li><strong>Roll your own</strong> — un experimento aleatorio de estímulo cuando el experimento directo no es factible o ético.</li>
+</ol>
+<hr />
+</div>
+<div id="identificación-cuántos-instrumentos-hacen-falta" class="section level2 unnumbered hasAnchor">
+<h2>Identificación: ¿cuántos instrumentos hacen falta?<a href="#identificaci%C3%B3n-cu%C3%A1ntos-instrumentos-hacen-falta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sea <span class="math inline">\(r\)</span> el número de variables endógenas (<span class="math inline">\(D_1, D_2, \ldots\)</span>) y <span class="math inline">\(p\)</span> el número de instrumentos disponibles:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Caso</th>
+<th>Nombre</th>
+<th>Estimador</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(r = p\)</span></td>
+<td><strong>Perfectamente identificado</strong></td>
+<td><span class="math inline">\(\hat{\tau}_{IV}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r &lt; p\)</span></td>
+<td><strong>Sobre-identificado</strong></td>
+<td><span class="math inline">\(\hat{\tau}_{MCO2E}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(r &gt; p\)</span></td>
+<td><strong>Sub-identificado</strong></td>
+<td>(no hay solución)</td>
+</tr>
+</tbody>
+</table>
+<p>Las <span class="math inline">\(X\)</span> (controles exógenos) no entran en la cuenta.</p>
+<hr />
+</div>
+<div id="derivación-del-estimador-iv" class="section level2 unnumbered hasAnchor">
+<h2>Derivación del estimador IV<a href="#derivaci%C3%B3n-del-estimador-iv" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Considere el modelo en notación matricial <span class="math inline">\(y = D\tau + \varepsilon\)</span> donde <span class="math inline">\(\text{Cov}(\varepsilon, D) \neq 0\)</span> (sesgo de selección). Suponga que tiene un instrumento <span class="math inline">\(Z\)</span> tal que:</p>
+<p><span class="math display">\[\text{Cov}(Z, D) \neq 0 \quad \text{(testeable)}, \qquad \text{Cov}(Z, \varepsilon) = 0 \quad \text{(no testeable)}\]</span></p>
+<p>De la condición de momentos <span class="math inline">\(E[Z&#39;\varepsilon \mid X] = 0\)</span>:</p>
+<p><span class="math display">\[Z&#39;\varepsilon = 0 \;\Rightarrow\; Z&#39;(y - D\tau) = 0 \;\Rightarrow\; Z&#39;y - Z&#39;D\,\tau = 0\]</span></p>
+<p>Despejando:</p>
+<p><span class="math display">\[\boxed{\;\hat{\tau}_{IV} = (Z&#39;D)^{-1} Z&#39;y\;} \;\approx\; \frac{\text{Cov}(Z, y)}{\text{Cov}(Z, D)}\]</span></p>
+<div id="propiedades" class="section level3 unnumbered hasAnchor">
+<h3>Propiedades<a href="iv.html#propiedades" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[E[\hat{\tau}_{IV}] \neq \tau \quad \text{(sesgado en muestra finita)}\]</span></p>
+<p><span class="math display">\[\text{plim}[\hat{\tau}_{IV}] = \tau \quad \text{(consistente)}\]</span></p>
+<p><strong>Intuición del sesgo y la consistencia:</strong> sustituyendo <span class="math inline">\(y = D\tau + \varepsilon\)</span> en el estimador:</p>
+<p><span class="math display">\[\hat{\tau}_{IV} = \tau + (Z&#39;D)^{-1} Z&#39;\varepsilon\]</span></p>
+<p>Tomando límites en probabilidad y dividiendo por <span class="math inline">\(n\)</span>:</p>
+<p><span class="math display">\[\text{plim}\,\hat{\tau}_{IV} = \tau + \underbrace{E[Z&#39;D]^{-1}}_{\neq 0 \text{ por relevancia}} \cdot \underbrace{E[Z&#39;\varepsilon]}_{=0 \text{ por validez}} = \tau\]</span></p>
+<p>En <strong>muestra finita</strong>, <span class="math inline">\(\frac{1}{n}Z&#39;\varepsilon \neq 0\)</span>, por lo que <span class="math inline">\(\hat{\tau}_{IV}\)</span> se desvía de <span class="math inline">\(\tau\)</span>. Cuando <span class="math inline">\(n \to \infty\)</span>, <span class="math inline">\(\frac{1}{n}Z&#39;\varepsilon \to 0\)</span> y el estimador converge.</p>
+</div>
+<div id="varianza" class="section level3 unnumbered hasAnchor">
+<h3>Varianza<a href="iv.html#varianza" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\text{Var}[\hat{\tau}_{IV}] = \sigma_\varepsilon^2 (Z&#39;D)^{-1} Z&#39;Z (Z&#39;D)^{-1\prime} \quad \text{(homocedasticidad)}\]</span></p>
+<p>Bajo heterocedasticidad (<span class="math inline">\(\varepsilon \sim d(0, \sigma_\varepsilon^2 \Psi)\)</span>):</p>
+<p><span class="math display">\[\text{Var}[\hat{\tau}_{IV}] = \sigma_\varepsilon^2 (Z&#39;D)^{-1} Z&#39; \Psi Z (Z&#39;D)^{-1\prime}\]</span></p>
+<hr />
+</div>
+</div>
+<div id="el-estimador-de-wald-caso-d-y-z-binarios" class="section level2 unnumbered hasAnchor">
+<h2>El estimador de Wald (caso <span class="math inline">\(D\)</span> y <span class="math inline">\(Z\)</span> binarios)<a href="iv.html#el-estimador-de-wald-caso-d-y-z-binarios" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cuando <span class="math inline">\(D \in \{0,1\}\)</span> y <span class="math inline">\(Z \in \{0,1\}\)</span>, el estimador IV tiene una forma particularmente simple. Considere las dos formas reducidas:</p>
+<p><span class="math display">\[y = \pi_0 + \pi_1 Z + \mu_y, \qquad \pi_1 = E[y \mid Z=1] - E[y \mid Z=0]\]</span></p>
+<p><span class="math display">\[D = \pi_2 + \pi_3 Z + \mu_D, \qquad \pi_3 = E[D \mid Z=1] - E[D \mid Z=0]\]</span></p>
+<p>Entonces:</p>
+<p><span class="math display">\[\boxed{\;\hat{\tau}_{Wald} = \frac{\hat{\pi}_1}{\hat{\pi}_3} = \frac{E[y \mid Z=1] - E[y \mid Z=0]}{E[D \mid Z=1] - E[D \mid Z=0]}\;}\]</span></p>
+<p>El numerador es la <strong>forma reducida</strong> (efecto de <span class="math inline">\(Z\)</span> sobre <span class="math inline">\(y\)</span>); el denominador es la <strong>primera etapa</strong> (efecto de <span class="math inline">\(Z\)</span> sobre <span class="math inline">\(D\)</span>). Este estimador será central para la interpretación del LATE más adelante.</p>
+<hr />
+</div>
+<div id="mínimos-cuadrados-en-dos-etapas-mco2e" class="section level2 unnumbered hasAnchor">
+<h2>Mínimos Cuadrados en Dos Etapas (MCO2E)<a href="#m%C3%ADnimos-cuadrados-en-dos-etapas-mco2e" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cuando hay más instrumentos que variables endógenas (<span class="math inline">\(p &gt; r\)</span>), no se puede usar <span class="math inline">\((Z&#39;D)^{-1}\)</span> directamente porque <span class="math inline">\(Z&#39;D\)</span> no es cuadrada. La solución es <strong>MCO2E</strong>:</p>
+<div id="primera-etapa" class="section level3 unnumbered hasAnchor">
+<h3>Primera etapa<a href="iv.html#primera-etapa" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Estimar la proyección de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(Z\)</span>:</p>
+<p><span class="math display">\[D = Z\delta + \nu \;\Rightarrow\; \hat{\delta} = (Z&#39;Z)^{-1} Z&#39;D\]</span></p>
+<p>Calcular el valor predicho:</p>
+<p><span class="math display">\[\hat{D} = Z\hat{\delta} = Z(Z&#39;Z)^{-1} Z&#39;D = P_Z D\]</span></p>
+<p>donde <span class="math inline">\(P_Z\)</span> es la matriz proyección sobre el espacio columna de <span class="math inline">\(Z\)</span>.</p>
+</div>
+<div id="segunda-etapa" class="section level3 unnumbered hasAnchor">
+<h3>Segunda etapa<a href="iv.html#segunda-etapa" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Reemplazar <span class="math inline">\(D\)</span> por <span class="math inline">\(\hat{D}\)</span> en la ecuación principal y estimar por OLS:</p>
+<p><span class="math display">\[y = \hat{D}\tau + \varepsilon \;\Rightarrow\; \boxed{\;\hat{\tau}_{MCO2E} = (D&#39; P_Z D)^{-1} D&#39; P_Z y\;}\]</span></p>
+</div>
+<div id="equivalencia-con-iv-cuando-p-r" class="section level3 unnumbered hasAnchor">
+<h3>Equivalencia con IV cuando <span class="math inline">\(p = r\)</span><a href="iv.html#equivalencia-con-iv-cuando-p-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Cuando el modelo está exactamente identificado, MCO2E = IV. Demostración:</p>
+<p><span class="math display">\[\hat{\tau}_{MCO2E} = (D&#39;Z(Z&#39;Z)^{-1}Z&#39;D)^{-1} D&#39;Z(Z&#39;Z)^{-1}Z&#39;y\]</span></p>
+<p>Aplicando <span class="math inline">\((ABC)^{-1} = C^{-1}B^{-1}A^{-1}\)</span> y usando que <span class="math inline">\(Z&#39;Z\)</span> es invertible:</p>
+<p><span class="math display">\[= (Z&#39;D)^{-1}(Z&#39;Z) \underbrace{(D&#39;Z)^{-1} D&#39;Z}_{I} (Z&#39;Z)^{-1} Z&#39;y = (Z&#39;D)^{-1} Z&#39;y = \hat{\tau}_{IV}\]</span></p>
+<p><strong>Implicación práctica:</strong> independientemente de si el modelo está perfectamente identificado o sobre-identificado, <strong>siempre se puede usar MCO2E</strong>.</p>
+</div>
+<div id="varianza-de-mco2e" class="section level3 unnumbered hasAnchor">
+<h3>Varianza de MCO2E<a href="iv.html#varianza-de-mco2e" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\text{Var}[\hat{\tau}_{MCO2E}] = \sigma_\varepsilon^2 (D&#39; P_Z D)^{-1} \quad \text{(homocedasticidad)}\]</span></p>
+<p><span class="math display">\[\text{Var}[\hat{\tau}_{MCO2E}] = \sigma_\varepsilon^2 (D&#39; P_Z D)^{-1} D&#39; P_Z \Psi P_Z&#39; D (D&#39; P_Z D)^{-1} \quad \text{(heterocedasticidad)}\]</span></p>
+<hr />
+</div>
+</div>
+<div id="sesgo-de-muestra-finita-la-intuición" class="section level2 unnumbered hasAnchor">
+<h2>Sesgo de muestra finita: la intuición<a href="#sesgo-de-muestra-finita-la-intuici%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El estimador MCO2E reemplaza <span class="math inline">\(D\)</span> por su proyección <span class="math inline">\(\hat{D} = Z\hat{\delta}\)</span>. Si <span class="math inline">\(Z\)</span> fuera ortogonal al error en términos poblacionales, el estimador sería <strong>insesgado</strong>. El problema es que, en muestra finita, <span class="math inline">\(\hat{\delta}\)</span> se estima con error muestral, así que <span class="math inline">\(\hat{D}\)</span> no es exactamente la proyección poblacional. Sin embargo:</p>
+<p><span class="math display">\[\text{plim}\,\hat{\tau}_{MCO2E} = \tau + \text{plim}\!\left(\frac{Z&#39;D}{n}\right)^{-1} \underbrace{\text{plim}\!\left(\frac{Z&#39;\varepsilon}{n}\right)}_{=0} = \tau\]</span></p>
+<p>Por eso decimos: <strong>sesgado en muestra finita, consistente asintóticamente</strong>.</p>
+<div class="boxinfo">
+<p><strong>Sesgo de muestra finita y dirección hacia OLS</strong></p>
+<p>Bound, Jaeger &amp; Baker (1995) demostraron una propiedad incómoda de IV: cuando el instrumento es <strong>débil</strong> y el tamaño muestral es <strong>pequeño</strong>, el sesgo de muestra finita del IV <strong>se inclina en la dirección del sesgo de OLS</strong>. La aproximación analítica es:</p>
+<p><span class="math display">\[E[\hat{\tau}_{IV} - \tau] \;\approx\; \frac{1}{F + 1} \cdot E[\hat{\tau}_{OLS} - \tau]\]</span></p>
+<p>donde <span class="math inline">\(F\)</span> es el estadístico <span class="math inline">\(F\)</span> de la primera etapa. Cuando <span class="math inline">\(F\)</span> es bajo, el sesgo del IV se aproxima al del OLS, y “la cura” puede resultar peor que la enfermedad. Este resultado motiva la regla práctica de Stock &amp; Yogo (2005): exigir <span class="math inline">\(F &gt; 10\)</span> para que el sesgo relativo del IV sea menor al 10%. En el capítulo siguiente verificaremos este fenómeno con simulaciones.</p>
+</div>
+<hr />
+</div>
+<div id="instrumentos-débiles" class="section level2 unnumbered hasAnchor">
+<h2>Instrumentos débiles<a href="#instrumentos-d%C3%A9biles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Buscamos instrumentos que <strong>no sean débiles</strong> (estén altamente correlacionados con la variable endógena). Señales de debilidad:</p>
+<ul>
+<li>Correlación baja entre <span class="math inline">\(D\)</span> y <span class="math inline">\(Z\)</span></li>
+<li><span class="math inline">\(R^2\)</span> bajo en la regresión de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(Z\)</span> (primera etapa)</li>
+<li>Los instrumentos no son significativos individual ni conjuntamente en la primera etapa</li>
+<li><span class="math inline">\(F\)</span> de la primera etapa <span class="math inline">\(&lt; 10\)</span> (regla práctica de Stock &amp; Yogo, 2005)</li>
+</ul>
+<p>Cuando el instrumento es débil, el sesgo de muestra finita del IV se amplifica y puede acercarse al sesgo del OLS — paradójicamente, en algunos casos OLS resulta preferible.</p>
+<hr />
+</div>
+<div id="cómo-evaluar-la-validez" class="section level2 unnumbered hasAnchor">
+<h2>¿Cómo evaluar la validez?<a href="#c%C3%B3mo-evaluar-la-validez" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>No existe una prueba definitiva, pero hay aproximaciones:</p>
+<div id="test-de-hausman" class="section level3 unnumbered hasAnchor">
+<h3>Test de Hausman<a href="iv.html#test-de-hausman" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Pone a prueba si <span class="math inline">\(D\)</span> es endógena o exógena:</p>
+<p><span class="math display">\[H_0: E[D&#39;\mu] = 0 \quad (D \text{ exógena}) \qquad H_1: E[D&#39;\mu] \neq 0 \quad (D \text{ endógena})\]</span></p>
+<p>Estadístico:</p>
+<p><span class="math display">\[H = \frac{(\hat{\beta}_{MCO2E} - \hat{\beta}_{OLS})^2}{\widehat{\text{Var}}(\hat{\beta}_{MCO2E}) - \widehat{\text{Var}}(\hat{\beta}_{OLS})} \sim \chi^2(K)\]</span></p>
+<p>donde <span class="math inline">\(K\)</span> es el número de variables endógenas. Si rechazamos, OLS es inconsistente y vale la pena usar IV.</p>
+</div>
+<div id="test-de-sargan-hansen-sobre-identificación" class="section level3 unnumbered hasAnchor">
+<h3>Test de Sargan-Hansen (sobre-identificación)<a href="#test-de-sargan-hansen-sobre-identificaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Disponible solo cuando hay más instrumentos que variables endógenas. Bajo <span class="math inline">\(H_0\)</span> todos los instrumentos son válidos. No se puede usar cuando el modelo está exactamente identificado.</p>
+<hr />
+</div>
+</div>
+<div id="late-el-efecto-promedio-local-de-tratamiento" class="section level2 unnumbered hasAnchor">
+<h2>LATE: el efecto promedio local de tratamiento<a href="iv.html#late-el-efecto-promedio-local-de-tratamiento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cuando los efectos del tratamiento son <strong>heterogéneos</strong> entre individuos, el estimador IV ya no recupera el ATE — recupera un objeto distinto: el <strong>Local Average Treatment Effect (LATE)</strong>, el efecto promedio sobre los <strong>compliers</strong> (cooperadores).</p>
+<div id="marco-de-resultados-potenciales-con-instrumento" class="section level3 unnumbered hasAnchor">
+<h3>Marco de resultados potenciales con instrumento<a href="iv.html#marco-de-resultados-potenciales-con-instrumento" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para cada individuo <span class="math inline">\(i\)</span>, definimos:</p>
+<ul>
+<li><span class="math inline">\(D_i(z)\)</span> = tratamiento que tomaría si <span class="math inline">\(Z_i = z\)</span>, para <span class="math inline">\(z \in \{0,1\}\)</span></li>
+<li><span class="math inline">\(Y_i(d, z)\)</span> = resultado potencial si <span class="math inline">\(D_i = d\)</span> y <span class="math inline">\(Z_i = z\)</span></li>
+</ul>
+</div>
+<div id="tipologías" class="section level3 unnumbered hasAnchor">
+<h3>Tipologías<a href="#tipolog%C3%ADas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Según los valores de <span class="math inline">\((D_i(0), D_i(1))\)</span>:</p>
+<table>
+<colgroup>
+<col width="15%" />
+<col width="25%" />
+<col width="25%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th><span class="math inline">\(D_i(0)\)</span></th>
+<th><span class="math inline">\(D_i(1)\)</span></th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Never-takers</strong></td>
+<td>0</td>
+<td>0</td>
+<td>Nunca toman el tratamiento, sin importar <span class="math inline">\(Z\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>Always-takers</strong></td>
+<td>1</td>
+<td>1</td>
+<td>Siempre toman el tratamiento</td>
+</tr>
+<tr class="odd">
+<td><strong>Compliers</strong></td>
+<td>0</td>
+<td>1</td>
+<td>Toman el tratamiento si y solo si <span class="math inline">\(Z = 1\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>Defiers</strong></td>
+<td>1</td>
+<td>0</td>
+<td>Hacen lo contrario al instrumento</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="los-cuatro-supuestos" class="section level3 unnumbered hasAnchor">
+<h3>Los cuatro supuestos<a href="iv.html#los-cuatro-supuestos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="boxinfo">
+<ol style="list-style-type: decimal">
+<li><strong>Independencia (A1):</strong> <span class="math inline">\(\{Y_i(d,z), D_i(z)\} \perp Z_i\)</span>. El instrumento es como si fuera aleatorio.</li>
+<li><strong>Restricción de exclusión (A2):</strong> <span class="math inline">\(Y_i(d, 1) = Y_i(d, 0) \equiv Y_i(d)\)</span>. El instrumento solo afecta <span class="math inline">\(y\)</span> a través de <span class="math inline">\(D\)</span>.</li>
+<li><strong>Relevancia (A3):</strong> <span class="math inline">\(E[D_i(1) - D_i(0)] \neq 0\)</span>. El instrumento mueve el tratamiento.</li>
+<li><strong>Monotonicidad (A4):</strong> <span class="math inline">\(D_i(1) \geq D_i(0)\)</span> para todo <span class="math inline">\(i\)</span>. <strong>No hay defiers.</strong></li>
+</ol>
+</div>
+</div>
+<div id="demostración-wald-late" class="section level3 unnumbered hasAnchor">
+<h3>Demostración: Wald = LATE<a href="#demostraci%C3%B3n-wald-late" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recordemos el estimador de Wald:</p>
+<p><span class="math display">\[\theta_{Wald} = \frac{E[Y_i \mid Z_i=1] - E[Y_i \mid Z_i=0]}{E[D_i \mid Z_i=1] - E[D_i \mid Z_i=0]}\]</span></p>
+<p>Bajo el supuesto de exclusión (A2), <span class="math inline">\(Y_i(d,z) = Y_i(d)\)</span>, así que el resultado observado se puede escribir como:</p>
+<p><span class="math display">\[Y_i = Y_i(0) + \big[Y_i(1) - Y_i(0)\big] D_i\]</span></p>
+<div id="numerador" class="section level4 unnumbered hasAnchor">
+<h4>Numerador<a href="iv.html#numerador" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Por independencia (A1) y exclusión (A2):</p>
+<p><span class="math display">\[E[Y_i \mid Z_i = 1] = E\big[Y_i(0) + (Y_i(1) - Y_i(0)) D_i(1)\big]\]</span></p>
+<p><span class="math display">\[E[Y_i \mid Z_i = 0] = E\big[Y_i(0) + (Y_i(1) - Y_i(0)) D_i(0)\big]\]</span></p>
+<p>Restando:</p>
+<p><span class="math display">\[E[Y_i \mid Z=1] - E[Y_i \mid Z=0] = E\big[(Y_i(1) - Y_i(0))(D_i(1) - D_i(0))\big]\]</span></p>
+<p>Por monotonicidad (A4), <span class="math inline">\(D_i(1) - D_i(0) \in \{0, 1\}\)</span>, así que:</p>
+<p><span class="math display">\[\text{Num} = P(D_i(1) - D_i(0) &gt; 0) \cdot E\big[Y_i(1) - Y_i(0) \mid D_i(1) - D_i(0) &gt; 0\big]\]</span></p>
+</div>
+<div id="denominador" class="section level4 unnumbered hasAnchor">
+<h4>Denominador<a href="iv.html#denominador" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[E[D_i \mid Z=1] - E[D_i \mid Z=0] = E[D_i(1) - D_i(0)]\]</span></p>
+<p>Por monotonicidad:</p>
+<p><span class="math display">\[\text{Den} = P(D_i(1) - D_i(0) &gt; 0)\]</span></p>
+</div>
+<div id="cociente" class="section level4 unnumbered hasAnchor">
+<h4>Cociente<a href="iv.html#cociente" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[\theta_{Wald} = \frac{\text{Num}}{\text{Den}} = E\big[Y_i(1) - Y_i(0) \mid D_i(1) - D_i(0) &gt; 0\big] = \tau_{LATE}\]</span></p>
+<div class="boxinfo">
+<p><strong>Conclusión:</strong> el estimador de variables instrumentales <strong>identifica el LATE</strong>: el efecto promedio del tratamiento sobre el subgrupo de <strong>compliers</strong> (los que cambian su decisión según el instrumento).</p>
+</div>
+</div>
+</div>
+<div id="quiénes-quedan-fuera-del-late" class="section level3 unnumbered hasAnchor">
+<h3>¿Quiénes quedan fuera del LATE?<a href="#qui%C3%A9nes-quedan-fuera-del-late" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Always-takers:</strong> <span class="math inline">\(D_i(1) - D_i(0) = 0\)</span>; el instrumento no los mueve.</li>
+<li><strong>Never-takers:</strong> <span class="math inline">\(D_i(1) - D_i(0) = 0\)</span>; tampoco los mueve.</li>
+<li><strong>Defiers:</strong> excluidos por el supuesto de monotonicidad.</li>
+</ul>
+<p>El LATE no informa sobre el efecto en always-takers ni never-takers — para ellos el efecto causal <strong>no es identificable</strong> con este instrumento.</p>
+</div>
+<div id="es-late-una-medida-interesante" class="section level3 unnumbered hasAnchor">
+<h3>¿Es LATE una medida interesante?<a href="iv.html#es-late-una-medida-interesante" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Tal vez. Depende de quiénes sean los compliers. En el ejemplo de PACES, los compliers son las familias que matriculan a sus hijos en privado <strong>gracias a la beca</strong> — es decir, las familias <em>marginales</em> sensibles al precio. Esto es relevante para el diseño de política, pero no necesariamente representa el efecto promedio de la educación privada para toda la población.</p>
+<hr />
+</div>
+</div>
+<div id="late-con-varios-instrumentos" class="section level2 unnumbered hasAnchor">
+<h2>LATE con varios instrumentos<a href="iv.html#late-con-varios-instrumentos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Diferentes instrumentos identifican diferentes LATEs, porque mueven a diferentes subpoblaciones de compliers. Por ejemplo, si <span class="math inline">\(Z_1\)</span> es “nació entre mayo y agosto” y <span class="math inline">\(Z_2\)</span> es “nació entre septiembre y abril”, cada uno tiene compliers distintos.</p>
+<p>Si se usan ambos en MCO2E, el estimador es un <strong>promedio ponderado</strong>:</p>
+<p><span class="math display">\[\hat{\rho}_{MCO2E} = \psi \rho_1 + (1 - \psi) \rho_2\]</span></p>
+<p>donde <span class="math inline">\(\rho_j = \text{Cov}(Y, Z_j) / \text{Cov}(D, Z_j)\)</span> es el LATE asociado al instrumento <span class="math inline">\(j\)</span>, y <span class="math inline">\(\psi\)</span> depende de la fuerza relativa de cada instrumento en la primera etapa.</p>
+<hr />
+</div>
+<div id="variables-de-control" class="section level2 unnumbered hasAnchor">
+<h2>Variables de control<a href="iv.html#variables-de-control" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Si los instrumentos están <strong>asignados aleatoriamente</strong>, no hace falta controlar por covariables <span class="math inline">\(X\)</span>. Pero a menudo el instrumento varía con características <span class="math inline">\(X\)</span> que también afectan los resultados potenciales (por ejemplo, una huelga afecta más a unas zonas que a otras). En esos casos hay que <strong>incluir las <span class="math inline">\(X\)</span> como controles exógenos</strong> en ambas etapas para preservar la validez.</p>
+<hr />
+</div>
+<div id="lecturas-recomendadas-6" class="section level2 unnumbered hasAnchor">
+<h2>Lecturas recomendadas<a href="iv.html#lecturas-recomendadas-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Angrist, Imbens &amp; Rubin (1996)</strong> — “Identification of causal effects using instrumental variables”, <em>JASA</em> — el paper fundacional del LATE.</li>
+<li><strong>Imbens &amp; Angrist (1994)</strong> — “Identification and estimation of local average treatment effects”, <em>Econometrica</em> — la demostración original.</li>
+<li><strong>Angrist &amp; Pischke (2009)</strong> — <em>Mostly Harmless Econometrics</em>, capítulos 4 y 6 — exposición pedagógica de IV y LATE.</li>
+<li><strong>Stock &amp; Yogo (2005)</strong> — “Testing for weak instruments in linear IV regression” — referencia obligatoria para diagnóstico de instrumentos débiles.</li>
+<li><strong>Wooldridge (2010)</strong> — <em>Econometric Analysis of Cross Section and Panel Data</em>, capítulo 5 — tratamiento matricial detallado de IV y MCO2E.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="psm-ipw-sinteticos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="iv-stata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/18-IV.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["econometria-avanzada.pdf", "econometria-avanzada.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection",
+    "scroll_highlight": true,
+    "depth": 2
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

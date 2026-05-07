@@ -1,15 +1,33 @@
 /*
-PSM en Stata: Propensity Score Matching
-Clase 16 - EconometriaAV 2026-1
-Basado en base6.dta
+Título: PSM en Stata: Propensity Score Matching
+Autor: Ana María Díaz Escobar
+Fecha: 2026-04-23
+
+Objetivos:
+  1. Estimar el propensity score con covariables observadas.
+  2. Comparar algoritmos de matching en Stata.
+  3. Verificar soporte común y balance post-matching.
+
+Datos requeridos: base6.dta en esta carpeta o en dofile/16_PSM_IPW_Sinteticos/
+Paquetes requeridos: psmatch2 (incluye pstest y psgraph)
 */
 
 clear all
 set seed 1298
 set more off
+set linesize 100
 
-* Directorio de trabajo
-cd ~/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/EjerciciosClase
+* Resolver ruta de datos sin depender de un computador específico
+capture confirm file "base6.dta"
+if _rc {
+    capture confirm file "dofile/16_PSM_IPW_Sinteticos/base6.dta"
+    if !_rc cd "dofile/16_PSM_IPW_Sinteticos"
+}
+capture confirm file "base6.dta"
+if _rc {
+    di as error "No se encontró base6.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    exit 601
+}
 
 * Cargar datos
 use base6.dta, clear

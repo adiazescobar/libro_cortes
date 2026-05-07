@@ -148,15 +148,15 @@ reg D.Y D.D ibn.t, noconstant vce(cluster id)
 * NOTA: D. es el operador de primera diferencia de Stata. D.D = ΔD (cambio en D).
 di "FD elimina alpha_i por diferencia (usa T-1 periodos por individuo)"
 
-di _n "=" * 65
+di _n "{hline 65}"
 di "RESUMEN ESTIMADORES"
-di "=" * 65
+di "{hline 65}"
 di "  Cov(D, alpha_i)=0  →  RE eficiente    (Hausman no rechaza)"
 di "  Cov(D, alpha_i)≠0  →  FE consistente  (Hausman rechaza)"
 di "  D endógeno en eps  →  TODOS sesgan     (necesitas IV)"
 di "  T=2               →  FD = FE = DiD   (identidad algebraica)"
 di "  T>2               →  FE más eficiente que FD"
-di "=" * 65
+di "{hline 65}"
 
 
 ********************************************************************************
@@ -202,18 +202,18 @@ scalar FD_2x2 = _b[D.D]
 reghdfe Y D, absorb(id t) vce(robust)
 scalar TWFE_2x2 = _b[D]
 
-di _n "=" * 60
+di _n "{hline 60}"
 di "  SECCIÓN 2: 2×2 — EQUIVALENCIA ALGEBRAICA EXACTA"
-di "=" * 60
+di "{hline 60}"
 di "  Valor verdadero de τ            = 3"
 di "  DiD manual (4 medias)           = " %7.4f DiD_manual
 di "  Regresión DiD (Y~trat+t+D)      = " %7.4f DiD_reg
 di "  Primeras diferencias (ΔY~ΔD)    = " %7.4f FD_2x2
 di "  TWFE (reghdfe absorb id t)      = " %7.4f TWFE_2x2
-di "-" * 60
+di "{hline 60}"
 di "  Los cuatro deben ser IDÉNTICOS — equivalencia algebraica ✓"
 di "  Con T=2 grupos, 2 períodos, no hay escogencia posible."
-di "=" * 60
+di "{hline 60}"
 
 
 ********************************************************************************
@@ -1236,9 +1236,9 @@ event_plot    twfe             csdd               didimp           ///
         xline(-0.5, lc(gs8) lp(dash)) yline(0, lc(gs8) lp(dash))          ///
     )
 
-di _n "=" * 70
+di _n "{hline 70}"
 di "  TABLA DE COMANDOS DE STATA PARA TWFE Y DiD MODERNO"
-di "=" * 70
+di "{hline 70}"
 di ""
 di "  A. DIAGNÓSTICO Y EQUIVALENCIA BÁSICA"
 di "  ─────────────────────────────────────────────────────────────"
@@ -1283,4 +1283,4 @@ di "  D. GRÁFICO COMPARATIVO (una vez que tienes los estimates)"
 di "  ─────────────────────────────────────────────────────────────"
 di "  event_plot twfe csdd didimp ..., stub_lag(L_# Tp# tau# ...)"
 di "             stub_lead(F_# Tm# pre# ...) together"
-di "=" * 70
+di "{hline 70}"

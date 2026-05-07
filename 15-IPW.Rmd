@@ -1,5 +1,16 @@
 # Ponderación por Probabilidad Inversa (IPW) {#ipw}
 
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Derivar la intuición del estimador IPW desde el propensity score
+- Construir pesos IPW para ATE y ATT
+- Comparar cálculos manuales con `teffects ipw`
+- Diagnosticar soporte común, pesos extremos y sensibilidad
+:::
+
+---
+
 ## La idea: combinar MCO y PSM {-}
 
 Hirano & Imbens proponen un estimador que usa una versión flexible del propensity score como ponderador en una regresión MCO. La intuición es simple: en lugar de descartar observaciones (como en el matching), **re-ponderamos** cada observación para que la muestra ponderada se comporte como si el tratamiento fuera aleatorio.

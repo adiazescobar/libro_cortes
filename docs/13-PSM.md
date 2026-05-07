@@ -1,5 +1,16 @@
 # Propensity Score Matching {#psm}
 
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Definir el propensity score y su relación con la CIA
+- Verificar soporte común de forma visual y conceptual
+- Comparar algoritmos de emparejamiento no paramétricos
+- Interpretar balance, ATT/ATE y sensibilidad después del matching
+:::
+
+---
+
 ## Del emparejamiento exacto al propensity score {-}
 
 El capítulo anterior mostró que el emparejamiento exacto se vuelve impracticable cuando el vector de controles $X$ tiene muchas dimensiones. Rosenbaum y Rubin (1983) demostraron un resultado fundamental que resuelve este problema:

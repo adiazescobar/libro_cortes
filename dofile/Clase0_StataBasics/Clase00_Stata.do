@@ -1,3 +1,16 @@
+*******************************************************************************
+* Titulo: Introduccion a Stata
+* Autor: Adria Diaz Escobar
+* Fecha: 2026-04-23
+* Objetivo: Repasar comandos basicos, estadistica descriptiva y manejo simple
+*           de datos con la base hh_98.dta.
+* Nota: Ejecuta este do-file desde la carpeta donde esta guardado hh_98.dta.
+*******************************************************************************
+
+clear all
+set more off
+set linesize 100
+
 *Introduccion a Stata
 
 /*Tipos de archivos
@@ -32,10 +45,10 @@ hh_9198.dta este es un datos de panel con 826 hogares
 *****************************************************************************
 *update all
 *cd		    cambiar el directorio
-*set mem	modificar la memoria empleada
+*set mem	modificar la memoria empleada (obsoleto en versiones recientes)
 *use		abrir el documento
 *insheet	importar datos de otros documentos
-*edit 		puede importar los datos desde la ventana (copiar pegar)
+*edit 		comando interactivo; evita usarlo en ejecucion por lotes
 *compress	si necesita más memoria
 *clear  	limpiar la base
 *log using  guarda los resultados en un archivo de texto
@@ -47,28 +60,19 @@ hh_9198.dta este es un datos de panel con 826 hogares
 *exit 		cierra el programa
 *****************************************************************************
 *Ejemplos
-clear
-cd  "C:\Users\a.diaze\Dropbox\" 
-set logtype text, perm
-log using resultados.txt
-use hh_98.dta, clear
-
-set mem 30m
-use hh_98.dta, clear
-
-set mem 10m
-
-clear
-
-set mem 10m
+* Trabajar desde la carpeta donde está este do-file y hh_98.dta.
+* Si quieres usar otra carpeta, cambia el directorio manualmente antes de correrlo.
+cd "."
+capture log close
+log using resultados.txt, replace text
 use hh_98.dta, clear
 compress
 save hh_98c.dta, replace /* si quiere remplazar su base de datos puede escribir simplemente save,replace */
 
 help memory
 help reg
-search _all psmatch2
-findit psmatch2
+* search _all psmatch2
+* findit psmatch2
 display "HOLA MUNDO"
 display 2+2
 display "2+2"
@@ -98,7 +102,6 @@ log close
 *correlate	correlaciones
 *****************************************************************************
 clear
-set mem 10m
 use hh_98.dta, clear
 
 describe 
@@ -106,7 +109,7 @@ des nh villid
 describe nh-famsize
 describe exp*
 
-edit
+* edit es interactivo y no corre en modo batch
 
 list in 1/3
 list famsize educhead if (sexhead == 0 & agehead<45)
@@ -139,12 +142,12 @@ tab educhead sexhead
 tab dfmfd sexhead, col row
 tab dfmfd sexhead, miss
 
-table dfmfd, c(mean famsize mean educhead)
+table (dfmfd), statistic(mean famsize) statistic(mean educhead)
 des educhead
 
 format educhead %3.2f
-table dfmfd, c(mean famsize mean educhead)
-table dfmfd sexhead, c(mean famsize mean educhead)
+table (dfmfd), statistic(mean famsize) statistic(mean educhead)
+table (dfmfd sexhead), statistic(mean famsize) statistic(mean educhead)
 
 histogram agehead
 kdensity agehead
@@ -207,8 +210,6 @@ para ver todas las funciones help math functions
 
 *Labeling
 label data "Base de Datos Bangladesh 1998"
-label variable oldhead "Jefe de Hogar mayor a 50: 1=Si 0=No"
-des oldhead
 
 tab sexhead
 
@@ -220,13 +221,15 @@ tab sexhead, nolabel
 
 gen oldhead = 1 if agehead >50
 replace oldhead = 0 if agehead <=50
+label variable oldhead "Jefe de Hogar mayor a 50: 1=Si 0=No"
+des oldhead
 
 gen oldhead2 = [agehead>50] if agehead !=.
 
 tab oldhead
 tab oldhead2
 
-egen avgage = mean(avgage)
+egen avgage = mean(agehead)
 egen avgagemf = mean(agehead), by(sexhead)
 
 
@@ -251,15 +254,15 @@ drop in 1/20
 restore
 
 *Combinar bases de datos
-use hh_98, clear
+use hh_98.dta, clear
 drop dmmfd dfmfd
 save hh_98_1.dta, replace
 
-use hh_98, clear
+use hh_98.dta, clear
 keep nh dmmfd dfmfd
 save hh_98_2.dta, replace
 
-use hh_98_1, clear
+use hh_98_1.dta, clear
 merge 1:1 nh using hh_98_2
 
 tab _merge
@@ -396,8 +399,8 @@ Puedes usar macros locales para almacenar listas de variables, lo cual
 es muy útil para regresiones y comandos repetitivos.
 */
 
-local control1 per001 per011
-local control2 `control1' per019
+local control1 famsize educhead
+local control2 `control1' agehead
 
 * Nota: para combinar macros locales, usa la sintaxis `nombre'
 

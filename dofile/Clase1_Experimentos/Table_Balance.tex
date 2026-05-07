@@ -1,0 +1,29 @@
+%%% Table created in Stata by command iebaltab
+%%% (https://github.com/worldbank/ietoolkit)
+%%% (https://dimewiki.worldbank.org/iebaltab)
+%%% The command was specified exactly like this: 
+%%% iebaltab edad mujer libros pregrado maestria, grpvar(D) control(0) rowvarlabels ftest savetex("Table_Balance.tex") savexlsx("Table_Balance.xlsx") replace format(%9.3f)
+
+\begin{tabular}{@{\extracolsep{5pt}}lcccccc}
+\\[-1.8ex]\hline \hline \\[-1.8ex]
+ & \multicolumn{2}{c}{(1)}  & \multicolumn{2}{c}{(2)}  & \multicolumn{2}{c}{(2)-(1)} \\
+ & \multicolumn{2}{c}{Control}  & \multicolumn{2}{c}{Tratado}  & \multicolumn{2}{c}{Pairwise t-test}  \\
+Variable & N & Mean/(SE) & N & Mean/(SE) & N & Mean difference \\ \hline \\[-1.8ex] 
+edad   & 31    & 23.548    & 39    & 26.513    & 70    & 2.964*   \\
+ &   & (0.664)  &   & (1.466)  &   &  \\ [1ex]
+mujer   & 31    & 0.258    & 39    & 0.282    & 70    & 0.024   \\
+ &   & (0.080)  &   & (0.073)  &   &  \\ [1ex]
+libros   & 31    & 2.726    & 39    & 3.674    & 70    & 0.949   \\
+ &   & (0.507)  &   & (0.634)  &   &  \\ [1ex]
+pregrado   & 31    & 0.355    & 39    & 0.513    & 70    & 0.158   \\
+ &   & (0.087)  &   & (0.081)  &   &  \\ [1ex]
+maestria   & 31    & 0.645    & 39    & 0.487    & 70    & -0.158   \\
+ &   & (0.087)  &   & (0.081)  &   &  \\ [1ex]
+\hline \\[-1.8ex]
+F-test of joint significance (F-stat) & &   & &     & &  .o  \\
+F-test, number of observations & &   & &   & &  .o  \\
+\hline \hline \\[-1.8ex]
+%%% This is the note. If it does not have the correct margins, use texnotewidth() option or change the number before '\textwidth' in line below to fit it to table size.
+\multicolumn{6}{@{} p{\textwidth}}{If the table includes missing values (.n, .o, .v etc.) see the Missing values section in the help file for the Stata command iebaltab for definitions of these values. Significance: ***=.01, **=.05, *=.1. Full user input as written by user: [iebaltab edad mujer libros pregrado maestria, grpvar(D) control(0) rowvarlabels ftest savetex("Table\_Balance.tex") savexlsx("Table\_Balance.xlsx") replace format(\%9.3f)] }
+
+\end{tabular}

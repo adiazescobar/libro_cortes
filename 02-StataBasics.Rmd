@@ -1,8 +1,19 @@
 
-# Stata para Principiantes 
+# Stata para Principiantes
 
 ::: {.boxinfo}
-Puedes consultar el **Stata Cheat Sheet** completo aquí: [https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf](https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf)
+### Objetivos de aprendizaje {-}
+
+Al finalizar este capitulo podras:
+
+- reconocer la logica basica de trabajo en Stata
+- usar macros, loops y comandos descriptivos sencillos
+- modificar bases de datos con operaciones elementales
+- descargar y ejecutar los archivos de apoyo del capitulo
+:::
+
+::: {.boxnote}
+Puedes consultar el **Stata Cheat Sheet** aqui: [https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf](https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf)
 :::
 
 ## Macros en Stata {-}
@@ -543,11 +554,12 @@ resultados_df = pd.DataFrame(resultados)
 **Descargar Python Notebook**:
 [Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
 
+El notebook de Python esta pensado para **Google Colab**. Si lo corres localmente, ajusta la ruta del archivo `hh_98.dta` en la primera celda.
+
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
 
 **Descarga los Datos**
 [Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
-
 
 
 

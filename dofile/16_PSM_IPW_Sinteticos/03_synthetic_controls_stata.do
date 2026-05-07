@@ -1,45 +1,36 @@
 /*
-Synthetic Control Method en Stata
-Clase 16 - EconometriaAV 2026-1
-Basado en synth_smoking.dta: Caso Prop 99 (California 1988)
+Título: Controles sintéticos en Stata
+Autor: Ana María Díaz Escobar
+Fecha: 2026-04-23
+
+Objetivos:
+  1. Preparar el caso Prop 99 de California.
+  2. Construir una comparación sintética simple.
+  3. Evaluar brechas post-tratamiento y placebos.
+
+Datos requeridos: synth_smoking.dta en esta carpeta o en dofile/16_PSM_IPW_Sinteticos/
+Paquetes requeridos: synth (opcional para extensiones)
 */
 
 clear all
+set seed 1298
 set more off
+set linesize 100
 
-* Directorio de trabajo
-cd ~/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/EjerciciosClase
+* Resolver ruta de datos sin depender de un computador específico
+capture confirm file "synth_smoking.dta"
+if _rc {
+    capture confirm file "dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta"
+    if !_rc cd "dofile/16_PSM_IPW_Sinteticos"
+}
+capture confirm file "synth_smoking.dta"
+if _rc {
+    di as error "No se encontró synth_smoking.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    exit 601
+}
 
 * Cargar datos
-capture use synth_smoking.dta, clear
-
-* Si el archivo no existe, crear dataset simulado para demostración
-if _rc != 0 {
-    di "Creando dataset simulado para demostración (synth_smoking.dta no encontrado)..."
-    clear
-
-    * Crear dataset simulado: Prop 99 California
-    set obs 39
-    gen state = _n
-    gen state_name = "Other"
-    replace state_name = "California" if state==1
-
-    * Años 1970-2000
-    expand 31
-    bys state: gen year = 1969 + _n
-
-    * Variables: consumo de cigarrillos per capita (paquetes/año)
-    gen treated = (state==1)
-    gen post_1988 = (year >= 1988)
-    gen trend = year - 1970
-
-    * Simulación simple
-    set seed 1234
-    gen y = 120 - 0.3*trend + rnormal(0, 5)
-    replace y = y - 20*post_1988 if state==1  // Efecto Prop 99
-
-    sort state year
-}
+use synth_smoking.dta, clear
 
 * Normalizar nombres del dataset clásico de smoking para el resto de la demo
 capture confirm new variable y

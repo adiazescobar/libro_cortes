@@ -1,14 +1,15 @@
 # Parámetros Causales (Teoría) {#parametros-causales-teoria}
 
 ::: {.boxinfo}
-## 🎯 Metas de aprendizaje {-}
+## Objetivos de aprendizaje {-}
 
 - Entender qué es un **resultado potencial**  
 - Diferenciar entre **ATE**, **ATT**, **ATU** y el **estimador naïve**  
 - Comprender la lógica del **sesgo de selección** y su relación con los **contrafactuales**
+:::
 
-
-## 📚 Lecturas recomendadas  {-}
+::: {.boxnote}
+## Lecturas recomendadas {-}
 
 - **Lectura 1:** *The Credibility Revolution* - Angrist y Pischke (2010)  
   [Enlace al artículo](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)  
@@ -16,7 +17,7 @@
 - **Lectura 3:** Bernal y Peña – Capítulo 3  
 :::
 
-### 🔹 Resultados potenciales  {-}
+## Resultados potenciales {-}
 
 Para cada unidad \( i \), existen dos posibles resultados:
 
@@ -35,15 +36,15 @@ Donde:
 
 ---
 
-### 🔹 Parámetros de interés  {-}
+## Parámetros de interés {-}
 
-#### 📌 Efecto Promedio del Tratamiento (ATE)  {-}
+### Efecto Promedio del Tratamiento (ATE) {-}
 
 \[
 ATE = \mathbb{E}[Y_i(D=1) - Y_i(D=0)]
 \]
 
-#### 📌 Efecto Promedio del Tratamiento sobre los Tratados (ATT)  {-}
+### Efecto Promedio del Tratamiento sobre los Tratados (ATT) {-}
 
 \[
 ATT = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 1]
@@ -51,13 +52,13 @@ ATT = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 1]
 
 > **Nota:** No confundir ATT con **ITT (Intention-to-Treat)**^[El ITT (Intention-to-Treat) es el efecto promedio del **tratamiento asignado**, sin importar si la unidad efectivamente recibió el tratamiento. Se calcula como: \(ITT = \mathbb{E}[Y_i \mid Z_i = 1] - \mathbb{E}[Y_i \mid Z_i = 0]\), donde \(Z_i\) es la asignación al tratamiento. Es especialmente útil en experimentos con incumplimiento (non-compliance), donde algunos asignados al tratamiento no lo reciben, o viceversa.]
 
-#### 📌 Efecto Promedio del Tratamiento sobre los No Tratados (ATU)  {-}
+### Efecto Promedio del Tratamiento sobre los No Tratados (ATU) {-}
 
 \[
 ATU = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 0]
 \]
 
-#### 📌 Estimador naïve (comparación directa de medias)  {-}
+### Estimador naïve (comparación directa de medias) {-}
 
 \[
 \mathbb{E}[Y_i \mid D_i = 1] - \mathbb{E}[Y_i \mid D_i = 0]
@@ -65,7 +66,7 @@ ATU = \mathbb{E}[Y_i(D=1) - Y_i(D=0) \mid D_i = 0]
 
 ---
 
-### 🔹 ¿Por qué no es suficiente el estimador naïve?  {-}
+## ¿Por qué no es suficiente el estimador naïve? {-}
 
 El estimador naïve asume implícitamente que:
 
@@ -78,7 +79,7 @@ Este supuesto es **poco realista** si la asignación al tratamiento está relaci
 
 ---
 
-### 🔹 Sesgo de selección  {-}
+## Sesgo de selección {-}
 
 El estimador naïve se puede descomponer como:
 
@@ -92,11 +93,11 @@ El **sesgo de selección** mide si los tratados y controles eran diferentes **an
 \text{Sesgo} = \mathbb{E}[Y_i(D=0) \mid D_i = 1] - \mathbb{E}[Y_i(D=0) \mid D_i = 0]
 \]
 
-> Si los tratados habrían tenido mejores resultados **incluso sin tratamiento** (por ejemplo, por mayor motivación), entonces el sesgo es **positivo** y el estimador naïve **sobreestima** el verdadero efecto del tratamiento. {-}
+> Si los tratados habrían tenido mejores resultados **incluso sin tratamiento** (por ejemplo, por mayor motivación), entonces el sesgo es **positivo** y el estimador naïve **sobreestima** el verdadero efecto del tratamiento.
 
 ---
 
-### 🔹 El supuesto de independencia (o ignorabilidad)  {-}
+## El supuesto de independencia (o ignorabilidad) {-}
 
 Para que el estimador naïve identifique correctamente el efecto causal, necesitamos que se cumpla el **supuesto de independencia**:
 
@@ -110,7 +111,7 @@ Este supuesto establece que los **resultados potenciales son independientes de l
 - Los grupos tratados y no tratados son **comparables** en todos los aspectos relevantes
 - No hay **selección** en quién recibe el tratamiento basada en características que también afectan el resultado
 
-#### 📌 Independencia condicional  {-}
+### Independencia condicional {-}
 
 En la práctica, rara vez tenemos independencia incondicional. Más comúnmente trabajamos con **independencia condicional** (o ignorabilidad condicional):
 
@@ -120,7 +121,7 @@ En la práctica, rara vez tenemos independencia incondicional. Más comúnmente 
 
 Esto significa que, **condicionando en ciertas variables observables** \(X_i\), la asignación al tratamiento es independiente de los resultados potenciales.
 
-#### 📌 ¿Cuándo se cumple independencia?  {-}
+### ¿Cuándo se cumple independencia? {-}
 
 El supuesto de independencia se cumple automáticamente cuando:
 
@@ -136,7 +137,7 @@ El supuesto de independencia se cumple automáticamente cuando:
    - Si controlamos por **todas** las variables que afectan tanto \(D_i\) como \(Y_i\)
    - Requiere tener datos muy completos y conocer el proceso de selección
 
-#### 📌 ¿Cuándo se viola?  {-}
+### ¿Cuándo se viola? {-}
 
 El supuesto de independencia se viola cuando hay **selección** en el tratamiento:
 
@@ -149,13 +150,13 @@ El supuesto de independencia se viola cuando hay **selección** en el tratamient
 - **Variables omitidas**: Hay factores no observados que afectan tanto \(D_i\) como \(Y_i\)
   - Ejemplo: Habilidad innata afecta tanto la probabilidad de ir a la universidad como los ingresos futuros
 
-> **Recordatorio:** Cuando se viola independencia, el estimador naïve produce estimaciones sesgadas. Por eso la econometría moderna se enfoca en diseños que garanticen (o aproximen) este supuesto. {-}
+> **Recordatorio:** Cuando se viola independencia, el estimador naïve produce estimaciones sesgadas. Por eso la econometría moderna se enfoca en diseños que garanticen (o aproximen) este supuesto.
 
 ---
 
 ::: {.boxejercicio .green title="🧠 Pausa activa: ¿Dónde está el contrafactual?"}
 
-## 🔢 Ejercicio en clase: Resultados potenciales y sesgo de selección {-}
+## Ejercicio en clase: resultados potenciales y sesgo de selección {-}
 
 Supongamos que tenemos una muestra de 8 individuos. Algunos recibieron tratamiento (\(D = 1\)) y otros no (\(D = 0\)). Cada persona tiene dos resultados potenciales:
 
@@ -200,37 +201,37 @@ Los individuos tratados tienen mejores valores de \(Y(0)\) (lo que habrían obte
 :::
 
 
-### 🔹 Sesgo en comparaciones antes-después (sin grupo de control) {-}
+## Sesgo en comparaciones antes-después (sin grupo de control) {-}
 
 Una estrategia común es comparar el **resultado promedio antes y después del tratamiento** en el mismo grupo de individuos tratados:
 
 \[
-\text{Estimador Antes-Después} = \mathbb{E}[Y_{t=1} \mid D = 1] - \mathbb{E}[Y_{t=0} \mid D = 1]
+\text{Estimador Antes-Después} = \mathbb{E}[Y_{t = 1} \mid D = 1] - \mathbb{E}[Y_{t = 0} \mid D = 1]
 \]
 
 Este estimador es observable, pero **no necesariamente causal**, porque no tenemos el contrafactual de lo que habría pasado en \( t = 1 \) sin tratamiento.
 
 ¿Qué observamos?
 
-- En \( t = 1 \), observamos \( Y(d=1) \): el resultado **con tratamiento**  
-- En \( t = 0 \), observamos \( Y(d=0) \): el resultado **sin tratamiento**
+- En \( t = 1 \), observamos \( Y(D=1) \): el resultado **con tratamiento**  
+- En \( t = 0 \), observamos \( Y(D=0) \): el resultado **sin tratamiento**
 
 Para identificar el efecto del tratamiento, lo que quisiéramos conocer es:
 
 \[
-Y(d=0) \text{ en } t = 1
+Y(D=0) \text{ en } t = 1
 \]
 
-Es decir, **¿qué habría pasado en el periodo \( t=1 \) si no hubiéramos tratado a nadie?** 💡 El efecto causal real para una unidad sería:
+Es decir, **¿qué habría pasado en el periodo \( t = 1 \) si no hubiéramos tratado a nadie?** El efecto causal real para una unidad sería:
 
 \[
-Y(d=1) - Y(d=0) \text{ en el mismo periodo } t=1
+Y(D=1) - Y(D=0) \text{ en el mismo periodo } t = 1
 \]
 
-Pero en el diseño antes-después usamos \( Y(d=0) \) del periodo anterior como sustituto de ese contrafactual. Entonces, el sesgo es:
+Pero en el diseño antes-después usamos \( Y(D=0) \) del periodo anterior como sustituto de ese contrafactual. Entonces, el sesgo es:
 
 \[
-\text{Sesgo} = \underbrace{\mathbb{E}[Y(d=0) \text{ en } t = 1]}_{\text{contrafactual deseado}} - \underbrace{\mathbb{E}[Y(d=0) \text{ en } t = 0]}_{\text{valor observado como "antes"}}
+\text{Sesgo} = \underbrace{\mathbb{E}[Y(D=0) \text{ en } t = 1]}_{\text{contrafactual deseado}} - \underbrace{\mathbb{E}[Y(D=0) \text{ en } t = 0]}_{\text{valor observado como "antes"}}
 \]
 
 Este sesgo aparece si el resultado habría cambiado con el tiempo incluso sin el tratamiento.
@@ -248,7 +249,7 @@ Este sesgo aparece si el resultado habría cambiado con el tiempo incluso sin el
   \]
 - Pero supongamos que, sin tratamiento, el resultado en 2020 habría sido 8  
   \[
-  \Rightarrow Y(d=0) \text{ en } 2020 = 8
+  \Rightarrow Y(D=0) \text{ en } 2020 = 8
   \]
 - Entonces el efecto causal verdadero es:  
   \[
@@ -261,13 +262,13 @@ Este sesgo aparece si el resultado habría cambiado con el tiempo incluso sin el
 
 
 
-El diseño antes-después asume que no habría cambio en el tiempo sin tratamiento. Este supuesto es **muy fuerte** y raramente cierto. Por eso, necesitamos un grupo de control que nos ayude a estimar \( \mathbb{E}[Y(d=0) \text{ en } t=1] \).
+El diseño antes-después asume que no habría cambio en el tiempo sin tratamiento. Este supuesto es **muy fuerte** y raramente cierto. Por eso, necesitamos un grupo de control que nos ayude a estimar \( \mathbb{E}[Y(D=0) \text{ en } t = 1] \).
 
 > En otras palabras, sin grupo de control **no podemos saber si el cambio fue por el tratamiento o por el tiempo**.
 
 ---
 
-### 🔹 SUTVA: Supuesto de Valor Estable del Tratamiento Unitario  {-}
+## SUTVA: Supuesto de Valor Estable del Tratamiento Unitario {-}
 
 El **SUTVA (Stable Unit Treatment Value Assumption)** es un supuesto fundamental en inferencia causal que establece dos condiciones:
 
@@ -279,14 +280,14 @@ El **SUTVA (Stable Unit Treatment Value Assumption)** es un supuesto fundamental
    - Es decir: Si \(D_i = 1\), entonces \(Y_i = Y_i(1)\)
    - Un curso online de 8 semanas debe ser el mismo para todos los tratados
 
-#### ¿Por qué es importante SUTVA?  {-}
+### ¿Por qué es importante SUTVA? {-}
 
 SUTVA nos permite:
 - Definir claramente los resultados potenciales \(Y_i(1)\) y \(Y_i(0)\)
 - Comparar grupos de forma válida
 - Estimar efectos causales sin ambigüedad
 
-#### ¿Cuándo se viola SUTVA?  {-}
+### ¿Cuándo se viola SUTVA? {-}
 
 **Ejemplos de violación por interferencia:**
 - Vacunación: si mis vecinos están vacunados, mi riesgo de contagio disminuye
@@ -324,7 +325,7 @@ Estos videos ayudan a reforzar visualmente los conceptos de **resultados potenci
 
 ---
 
-::: {.boxnote }
+::: {.boxnote}
 
 🛠️ 💬 **PROMPT DE CHATGPT PARA REFLEXIÓN PROFUNDA**
 
@@ -356,4 +357,3 @@ Quiero que me ayudes a pensar críticamente si esta estrategia identifica un efe
 
 
 ---
-

@@ -1,0 +1,54 @@
+----------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/libro_cortes/dof
+> ile/Clase0_StataBasics/resultados.txt
+  log type:  text
+ opened on:  24 Apr 2026, 07:27:41
+
+. use hh_98.dta, clear
+
+. compress
+  variable year was float now byte
+  variable agehead was float now byte
+  variable sexhead was float now byte
+  variable educhead was float now byte
+  variable famsize was float now byte
+  variable vaccess was float now byte
+  variable nh was double now long
+  variable villid was double now byte
+  variable thanaid was double now byte
+  (40,644 bytes saved)
+
+. save hh_98c.dta, replace /* si quiere remplazar su base de datos puede escribir simplemente save,r
+> eplace */
+file hh_98c.dta saved
+
+. 
+. help memory
+request ignored because of batch mode
+
+. help reg
+request ignored because of batch mode
+
+. * search _all psmatch2
+. * findit psmatch2
+. display "HOLA MUNDO"
+HOLA MUNDO
+
+. display 2+2
+4
+
+. display "2+2"
+2+2
+
+. 
+. *Salir de Stata
+. *exit
+. *exit, clear
+. log close
+      name:  <unnamed>
+       log:  /Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/libro_cortes/dof
+> ile/Clase0_StataBasics/resultados.txt
+  log type:  text
+ closed on:  24 Apr 2026, 07:27:41
+----------------------------------------------------------------------------------------------------

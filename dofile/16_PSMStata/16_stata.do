@@ -10,11 +10,28 @@
 ********************************************************************************
 
 clear all
+set seed 1298
 set more off
+set linesize 100
 capture log close
 
-* ---- Ajusta esta ruta a tu carpeta de trabajo ----------------------------
-* cd "ruta_a_tu_carpeta"
+* Resolver ruta de datos sin depender de un computador específico
+capture confirm file "base6.dta"
+if _rc {
+    capture confirm file "../16_PSM_IPW_Sinteticos/base6.dta"
+    if !_rc cd "../16_PSM_IPW_Sinteticos"
+}
+capture confirm file "base6.dta"
+if _rc {
+    capture confirm file "dofile/16_PSM_IPW_Sinteticos/base6.dta"
+    if !_rc cd "dofile/16_PSM_IPW_Sinteticos"
+}
+capture confirm file "base6.dta"
+if _rc {
+    di as error "No se encontró base6.dta. Corre este do-file desde su carpeta, desde 16_PSMStata, o desde la raíz del libro."
+    exit 601
+}
+
 use "base6.dta", clear
 log using "log_psm.txt", replace
 

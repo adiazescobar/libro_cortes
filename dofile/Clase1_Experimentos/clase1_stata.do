@@ -2,7 +2,10 @@
 * CLASE: Experimentos controlados, controles y heterogeneidad
 * Usando datos del experimento (data.dta)
 *******************************************************
-clear all 
+clear all
+set seed 1298
+set more off
+set linesize 100
 capture log close
 log using "clase_experimentos.log", text replace
 
@@ -17,6 +20,16 @@ if _rc ssc install ietoolkit, replace
 *------------------------------------------------------
 * 1. Cargar base REAL
 *------------------------------------------------------
+capture confirm file "data.dta"
+if _rc {
+    capture confirm file "dofile/Clase1_Experimentos/data.dta"
+    if !_rc cd "dofile/Clase1_Experimentos"
+}
+capture confirm file "data.dta"
+if _rc {
+    di as error "No se encontró data.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    exit 601
+}
 use "data.dta", clear
 
 *------------------------------------------------------
@@ -98,16 +111,25 @@ end
 *------------------------------------------------------
 * 4. Balance de covariables (dos salidas: propia y iebaltab)
 *------------------------------------------------------
-difmedias $X, by(D) savepost("Table_Balance_raw.dta")
+tempfile balance_raw
+capture noisily difmedias $X, by(D) savepost("`balance_raw'")
+if _rc {
+    di as text "La rutina difmedias no corrió; se omite Table_Balance_raw.xlsx en esta ejecución."
+}
 
-iebaltab $X, grpvar(D) control(0) rowvarlabels ftest ///
-    savetex("Table_Balance.tex") save("Table_Balance.xlsx") replace format(%9.3f)
+capture noisily iebaltab $X, grpvar(D) control(0) rowvarlabels ftest ///
+    savetex("Table_Balance.tex") savexlsx("Table_Balance.xlsx") replace format(%9.3f)
+if _rc {
+    di as text "iebaltab no generó Table_Balance.xlsx; se conserva Table_Balance_raw.xlsx."
+}
 
 * (Opcional) versión Excel de nuestra tabla
-preserve
-use "Table_Balance_raw.dta", clear
-order variable mean_T mean_C diff tstat pval se sd_T sd_C N_T N_C
-export excel using "Table_Balance_raw.xlsx", firstrow(variables) replace
+capture preserve
+capture use "`balance_raw'", clear
+if !_rc {
+    order variable mean_T mean_C diff tstat pval se sd_T sd_C N_T N_C
+    export excel using "Table_Balance_raw.xlsx", firstrow(variables) replace
+}
 restore
 
 *------------------------------------------------------
@@ -140,13 +162,18 @@ esttab m1 m2, se star(* 0.10 ** 0.05 *** 0.01) ///
 * 7. Guardar medias T/C y diff para y y X en un solo archivo
 *------------------------------------------------------
 local cols y $X
-difmedias `cols', by(D) savepost("means_yX.dta")
-
-preserve
-use "means_yX.dta", clear
-order variable mean_T mean_C diff tstat pval se sd_T sd_C N_T N_C
-export excel using "means_yX.xlsx", firstrow(variables) replace
-restore
+tempfile means_yx
+capture noisily difmedias `cols', by(D) savepost("`means_yx'")
+if _rc {
+    di as text "La rutina difmedias no corrió para y+X; se omite means_yX.xlsx en esta ejecución."
+}
+else {
+    preserve
+    use "`means_yx'", clear
+    order variable mean_T mean_C diff tstat pval se sd_T sd_C N_T N_C
+    export excel using "means_yX.xlsx", firstrow(variables) replace
+    restore
+}
 
 *------------------------------------------------------
 * 8. Efectos heterogéneos
@@ -250,4 +277,3 @@ end
 *------------------------------------------------------
 log close
 di as res "Listo. Archivos clave: Table_Balance.{tex,xlsx}, Table_Balance_raw.{dta,xlsx}, means_yX.{dta,xlsx}, gráficos PDF."
-

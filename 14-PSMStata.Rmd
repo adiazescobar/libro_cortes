@@ -1,5 +1,16 @@
 # PSM en Stata: `psmatch2` {#psm-stata}
 
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Instalar y usar `psmatch2`, `psgraph` y `pstest`
+- Estimar el propensity score y restringir el análisis al soporte común
+- Comparar NN, caliper, radio, kernel y LLR en Stata
+- Leer los resultados de `pstest` y discutir errores estándar apropiados
+:::
+
+---
+
 ## Instalación y estructura del comando {-}
 
 El comando estándar para PSM en Stata es `psmatch2`, disponible en SSC:
@@ -87,7 +98,7 @@ pstest $X, treated(D) both graph
 
 **Resultado típico:**
 
-```
+```text
 Variable   Sample       Treated    Controls   Difference   S.E.    T-stat
 y2         Unmatched   -.6440      -.9765      .3325        .0338    9.84
            ATT         -.6440      -.9736      .3297        .0342    9.63

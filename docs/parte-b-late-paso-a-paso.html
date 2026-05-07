@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Parte B — LATE paso a paso | Cortes Transversales</title>
+  <meta name="description" content="Parte B — LATE paso a paso | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Parte B — LATE paso a paso | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Parte B — LATE paso a paso | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2026-05-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#puntaje-automatico"><i class="fa fa-check"></i>Puntaje (automatico)</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Intro</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal"><i class="fa fa-check"></i>Motivación para el análisis causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#motivaci%C3%B3n-para-el-an%C3%A1lisis-causal---por-qu%C3%A9-es-importante"><i class="fa fa-check"></i>Motivación para el análisis causal - ¿Por qué es importante?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-pol%C3%ADtica-p%C3%BAblica"><i class="fa fa-check"></i>Microeconometría y política pública</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#microeconometr%C3%ADa-y-teor%C3%ADa-econ%C3%B3mica"><i class="fa fa-check"></i>Microeconometría y teoría económica</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#formulando-una-buena-pregunta-causal"><i class="fa fa-check"></i>Formulando una buena pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#el-experimento-ideal"><i class="fa fa-check"></i>El experimento ideal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-all%C3%A1-del-dise%C3%B1o-relevancia-y-aporte-cient%C3%ADfico"><i class="fa fa-check"></i>Más allá del diseño: relevancia y aporte científico</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-para-una-buena-pregunta-de-investigaci%C3%B3n-causal"><i class="fa fa-check"></i>🧰 Checklist para una buena pregunta de investigación causal</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#conceptos-importantes"><i class="fa fa-check"></i>Conceptos Importantes</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#ceteris-paribus"><i class="fa fa-check"></i>Ceteris Paribus</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
+<li class="chapter" data-level="1.1" data-path="19-IVStata.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#comparaciones-prohibidas"><i class="fa fa-check"></i>Comparaciones Prohibidas</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#y-entonces"><i class="fa fa-check"></i>¿Y Entonces?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-podemos-estimar-efectos-causales"><i class="fa fa-check"></i>¿Cómo podemos estimar efectos causales?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#descarga-los-documentos"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html"><i class="fa fa-check"></i><b>3</b> Parámetros Causales (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#objetivos-de-aprendizaje-1"><i class="fa fa-check"></i>Objetivos de aprendizaje</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#lecturas-recomendadas"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#resultados-potenciales-1"><i class="fa fa-check"></i>Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metros-de-inter%C3%A9s"><i class="fa fa-check"></i>Parámetros de interés</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-no-es-suficiente-el-estimador-na%C3%AFve"><i class="fa fa-check"></i>¿Por qué no es suficiente el estimador naïve?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#el-supuesto-de-independencia-o-ignorabilidad"><i class="fa fa-check"></i>El supuesto de independencia (o ignorabilidad)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejercicio-en-clase-resultados-potenciales-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Ejercicio en clase: resultados potenciales y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-en-comparaciones-antes-despu%C3%A9s-sin-grupo-de-control"><i class="fa fa-check"></i>Sesgo en comparaciones antes-después (sin grupo de control)</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#sutva-supuesto-de-valor-estable-del-tratamiento-unitario"><i class="fa fa-check"></i>SUTVA: Supuesto de Valor Estable del Tratamiento Unitario</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html"><i class="fa fa-check"></i><b>4</b> Parámetros Causales en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#lecturas-obligatorias"><i class="fa fa-check"></i>📚 Lecturas obligatorias</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#descarga-los-documentos-1"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html"><i class="fa fa-check"></i><b>5</b> Experimentos Aleatorizados</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n-m%C3%ADnima-para-todo-el-m%C3%B3dulo"><i class="fa fa-check"></i>Notación mínima para todo el módulo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto"><i class="fa fa-check"></i>¿En regresión lineal cómo se ve esto?</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>1) RCT simple, sin estratos, sin controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>2) RCT simple, sin estratos, con controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>3) RCT estratificado (bloques), sin controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>4) RCT estratificado + controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados.html"><a href="experimentos-aleatorizados.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html"><i class="fa fa-check"></i><b>6</b> Experimentos Aleatorizados en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#paso-a-paso-para-un-rct"><i class="fa fa-check"></i>Paso a Paso para un RCT</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1ndo-incluir-controles"><i class="fa fa-check"></i>¿Cuándo incluir controles?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#efectos-heterog%C3%A9neos-het"><i class="fa fa-check"></i>Efectos heterogéneos (HET)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-en-stata.html"><a href="experimentos-aleatorizados-en-stata.html#descarga-los-documentos-2"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html"><i class="fa fa-check"></i><b>7</b> Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#sin-controles"><i class="fa fa-check"></i>Sin controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tama%C3%B1o-de-muestra-con-cumplimiento-parcial-take-up"><i class="fa fa-check"></i>Tamaño de muestra con cumplimiento parcial (take-up)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-puede-salir-mal-en-un-rct"><i class="fa fa-check"></i>Qué puede salir mal en un RCT</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#ejercicio-aplicado-bertrand-y-mullainathan-2004"><i class="fa fa-check"></i>Ejercicio aplicado: Bertrand y Mullainathan (2004)</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#descarga-los-documentos-3"><i class="fa fa-check"></i>DESCARGA LOS DOCUMENTOS</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>8</b> Diferencias en Diferencias</a>
+<ul>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-problema-que-did-resuelve"><i class="fa fa-check"></i>El problema que DiD resuelve</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#la-tabla-22"><i class="fa fa-check"></i>La tabla 2×2</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#resultados-potenciales-y-el-att"><i class="fa fa-check"></i>Resultados potenciales y el ATT</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas"><i class="fa fa-check"></i>Identificación del ATT bajo tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-regresi%C3%B3n-did"><i class="fa fa-check"></i>La regresión DiD</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#prueba-de-tendencias-paralelas"><i class="fa fa-check"></i>Prueba de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#ejercicio-con-datos"><i class="fa fa-check"></i>Ejercicio con datos</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>9</b> Malos Controles (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#resultados-potenciales-2"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>La demostración formal: sesgo de agrupación</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>10</b> Malos Controles: Código y Simulaciones</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#la-idea-central-controlar-no-siempre-ayuda"><i class="fa fa-check"></i>La idea central: controlar no siempre ayuda</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#buen-control-vs.-mal-control-la-diferencia-en-una-imagen"><i class="fa fa-check"></i>Buen control vs. mal control: la diferencia en una imagen</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-1-post-tratamiento-mediador"><i class="fa fa-check"></i>Caso 1: Post-tratamiento / mediador</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-2-colisionador-selecci%C3%B3n-end%C3%B3gena"><i class="fa fa-check"></i>Caso 2: Colisionador / selección endógena</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-3-proxy-contaminado"><i class="fa fa-check"></i>Caso 3: Proxy contaminado</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#tabla-resumen-los-tres-casos"><i class="fa fa-check"></i>Tabla resumen: los tres casos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-antes-de-agregar-un-control-a-la-regresi%C3%B3n"><i class="fa fa-check"></i>Checklist antes de agregar un control a la regresión</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#descarga-los-archivos"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html"><i class="fa fa-check"></i><b>11</b> Datos de Panel, DiD y TWFE en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n-a-datos-de-panel"><i class="fa fa-check"></i>Introducción a datos de panel</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-twfe-la-equivalencia-en-el-caso-22"><i class="fa fa-check"></i>DiD = FD = TWFE: la equivalencia en el caso 2×2</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#el-supuesto-de-tendencias-paralelas-2"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido-twfe-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Contexto rápido: TWFE con adopción escalonada</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i>¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i>¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i>¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i>Notas prácticas de ejecución</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#descarga-los-archivos-1"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html"><i class="fa fa-check"></i><b>12</b> Emparejamiento Exacto</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#el-problema-identificaci%C3%B3n-sin-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>El problema: identificación sin aleatorización</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#la-idea-del-emparejamiento-exacto"><i class="fa fa-check"></i>La idea del emparejamiento exacto</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#los-tres-requisitos-del-emparejamiento"><i class="fa fa-check"></i>Los tres requisitos del emparejamiento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-maldici%C3%B3n-de-las-dimensiones"><i class="fa fa-check"></i>La maldición de las dimensiones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-del-att-con-emparejamiento-exacto"><i class="fa fa-check"></i>Estimación del ATT con emparejamiento exacto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-la-pr%C3%A1ctica-nnmatch-en-stata"><i class="fa fa-check"></i>En la práctica: <code>nnmatch</code> en Stata</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#resumen-y-limitaciones"><i class="fa fa-check"></i>Resumen y limitaciones</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#lecturas-recomendadas-1"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="psm.html"><a href="psm.html"><i class="fa fa-check"></i><b>13</b> Propensity Score Matching</a>
+<ul>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#del-emparejamiento-exacto-al-propensity-score"><i class="fa fa-check"></i>Del emparejamiento exacto al propensity score</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-definici%C3%B3n-y-estimaci%C3%B3n"><i class="fa fa-check"></i>El propensity score: definición y estimación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#los-dos-supuestos-de-identificaci%C3%B3n"><i class="fa fa-check"></i>Los dos supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#la-receta-del-psm-en-7-pasos"><i class="fa fa-check"></i>La receta del PSM en 7 pasos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A9todos-de-emparejamiento-no-param%C3%A9tricos"><i class="fa fa-check"></i>Métodos de emparejamiento no paramétricos</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#att-vs.-ate"><i class="fa fa-check"></i>ATT vs. ATE</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#verificaci%C3%B3n-del-balance"><i class="fa fa-check"></i>Verificación del balance</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica-1"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#lecturas-recomendadas-2"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="psm-stata.html"><a href="psm-stata.html"><i class="fa fa-check"></i><b>14</b> PSM en Stata: <code>psmatch2</code></a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-y-estructura-del-comando"><i class="fa fa-check"></i>Instalación y estructura del comando</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#variables-auxiliares-que-genera-psmatch2"><i class="fa fa-check"></i>Variables auxiliares que genera <code>psmatch2</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-y-el-soporte-com%C3%BAn"><i class="fa fa-check"></i>El propensity score y el soporte común</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#a.-nn1-sin-reemplazo"><i class="fa fa-check"></i>1a. NN(1) sin reemplazo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#b.-nn1-con-soporte-com%C3%BAn"><i class="fa fa-check"></i>1b. NN(1) con soporte común</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c.-soporte-com%C3%BAn-v%C3%ADa-trimming"><i class="fa fa-check"></i>1c. Soporte común vía trimming</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#verificar-el-balance-pstest"><i class="fa fa-check"></i>Verificar el balance: <code>pstest</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#nn-con-reemplazo-y-errores-est%C3%A1ndar-anal%C3%ADticos"><i class="fa fa-check"></i>2. NN con reemplazo y errores estándar analíticos</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#ate-con-nn1"><i class="fa fa-check"></i>3. ATE con NN(1)</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#caliper-1"><i class="fa fa-check"></i>4. Caliper</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#radio"><i class="fa fa-check"></i>5. Radio</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#kernel-1"><i class="fa fa-check"></i>6. Kernel</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#alternativa-teffects-psmatch-stata-nativo"><i class="fa fa-check"></i>7. Alternativa: <code>teffects psmatch</code> (Stata nativo)</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#resumen-de-la-secuencia-completa"><i class="fa fa-check"></i>Resumen de la secuencia completa</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#lecturas-recomendadas-3"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="ipw.html"><a href="ipw.html"><i class="fa fa-check"></i><b>15</b> Ponderación por Probabilidad Inversa (IPW)</a>
+<ul>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#la-idea-combinar-mco-y-psm"><i class="fa fa-check"></i>La idea: combinar MCO y PSM</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#el-estimador-ipw"><i class="fa fa-check"></i>El estimador IPW</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#los-ponderadores-ipw"><i class="fa fa-check"></i>Los ponderadores IPW</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata-1"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ipw-vs.-psm-cu%C3%A1l-usar"><i class="fa fa-check"></i>IPW vs. PSM: ¿cuál usar?</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#doble-robustez-doubly-robust"><i class="fa fa-check"></i>Doble robustez (<em>Doubly Robust</em>)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ipwra-ipw-con-ajuste-de-regresi%C3%B3n"><i class="fa fa-check"></i>IPWRA: IPW con ajuste de regresión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-estimadores-bajo-cia"><i class="fa fa-check"></i>Comparación de estimadores bajo CIA</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#lecturas-recomendadas-4"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html"><i class="fa fa-check"></i><b>16</b> Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#psm-sec"><i class="fa fa-check"></i><b>16.1</b> Parte I: Propensity Score Matching (PSM)</a></li>
+<li class="chapter" data-level="16.2" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#ipw-sec"><i class="fa fa-check"></i><b>16.2</b> Parte II: Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="16.3" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#synth-sec"><i class="fa fa-check"></i><b>16.3</b> Parte III: Synthetic Control Method</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#descarga-los-archivos-2"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+<li class="chapter" data-level="16.4" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#resumen-sec"><i class="fa fa-check"></i><b>16.4</b> Resumen comparativo</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#do-files-disponibles"><i class="fa fa-check"></i>Do-files disponibles</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="iv.html"><a href="iv.html"><i class="fa fa-check"></i><b>17</b> Variables Instrumentales y LATE</a>
+<ul>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-problema-de-endogeneidad"><i class="fa fa-check"></i>El problema de endogeneidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-soluci%C3%B3n-una-variable-instrumental"><i class="fa fa-check"></i>La solución: una variable instrumental</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplos-cl%C3%A1sicos"><i class="fa fa-check"></i>Ejemplos clásicos</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#fuentes-de-variables-instrumentales"><i class="fa fa-check"></i>Fuentes de variables instrumentales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-cu%C3%A1ntos-instrumentos-hacen-falta"><i class="fa fa-check"></i>Identificación: ¿cuántos instrumentos hacen falta?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#derivaci%C3%B3n-del-estimador-iv"><i class="fa fa-check"></i>Derivación del estimador IV</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-estimador-de-wald-caso-d-y-z-binarios"><i class="fa fa-check"></i>El estimador de Wald (caso <span class="math inline">\(D\)</span> y <span class="math inline">\(Z\)</span> binarios)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%ADnimos-cuadrados-en-dos-etapas-mco2e"><i class="fa fa-check"></i>Mínimos Cuadrados en Dos Etapas (MCO2E)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-muestra-finita-la-intuici%C3%B3n"><i class="fa fa-check"></i>Sesgo de muestra finita: la intuición</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#instrumentos-d%C3%A9biles"><i class="fa fa-check"></i>Instrumentos débiles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-evaluar-la-validez"><i class="fa fa-check"></i>¿Cómo evaluar la validez?</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-el-efecto-promedio-local-de-tratamiento"><i class="fa fa-check"></i>LATE: el efecto promedio local de tratamiento</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-con-varios-instrumentos"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#variables-de-control"><i class="fa fa-check"></i>Variables de control</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#lecturas-recomendadas-6"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="iv-stata.html"><a href="iv-stata.html"><i class="fa fa-check"></i><b>18</b> IV y LATE en Stata: simulación</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa"><i class="fa fa-check"></i>Instalación previa</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><i class="fa fa-check"></i>Parte A — Muestras finitas: OLS sesgado vs IV consistente</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#el-proceso-generador-de-datos"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#monte-carlo-el-programa"><i class="fa fa-check"></i>Monte Carlo: el programa</a></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#resultados-esperados"><i class="fa fa-check"></i>Resultados esperados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#visualizaci%C3%B3n"><i class="fa fa-check"></i>Visualización</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html"><i class="fa fa-check"></i>Parte B — LATE paso a paso</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#la-idea"><i class="fa fa-check"></i>La idea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#construcci%C3%B3n-del-experimento"><i class="fa fa-check"></i>Construcción del experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-de-los-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Asignación de los efectos heterogéneos</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resultados-potenciales-y-resultado-observado"><i class="fa fa-check"></i>Resultados potenciales y resultado observado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-lo-que-cada-m%C3%A9todo-recupera"><i class="fa fa-check"></i>Estimación: lo que cada método recupera</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#y-si-el-efecto-fuera-homog%C3%A9neo"><i class="fa fa-check"></i>¿Y si el efecto fuera homogéneo?</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#late-con-varios-instrumentos-1"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#lecturas-recomendadas-7"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="parte-b-late-paso-a-paso" class="section level1 unnumbered hasAnchor">
+<h1>Parte B — LATE paso a paso<a href="parte-b-late-paso-a-paso.html#parte-b-late-paso-a-paso" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="la-idea" class="section level2 unnumbered hasAnchor">
+<h2>La idea<a href="parte-b-late-paso-a-paso.html#la-idea" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Vamos a construir una población artificial con tres tipos de individuos y <strong>efectos heterogéneos</strong> del tratamiento, para verificar que el IV identifica el LATE de los compliers — no el ATE poblacional.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th><span class="math inline">\(D_i(0)\)</span></th>
+<th><span class="math inline">\(D_i(1)\)</span></th>
+<th>LATE individual</th>
+<th>Fracción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Never-takers</td>
+<td>0</td>
+<td>0</td>
+<td><span class="math inline">\(-0.5\)</span></td>
+<td>25%</td>
+</tr>
+<tr class="even">
+<td>Always-takers</td>
+<td>1</td>
+<td>1</td>
+<td><span class="math inline">\(0\)</span></td>
+<td>25%</td>
+</tr>
+<tr class="odd">
+<td>Compliers</td>
+<td>0</td>
+<td>1</td>
+<td><span class="math inline">\(+1.0\)</span></td>
+<td>50%</td>
+</tr>
+<tr class="even">
+<td>Defiers</td>
+<td>—</td>
+<td>—</td>
+<td>(excluidos por monotonicidad)</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ATE poblacional:</strong> <span class="math inline">\(0.25 \cdot (-0.5) + 0.25 \cdot 0 + 0.50 \cdot 1.0 = 0.375\)</span></p>
+<p><strong>LATE de compliers:</strong> <span class="math inline">\(1.0\)</span> ← <strong>es lo que IV debe recuperar</strong></p>
+<hr />
+</div>
+<div id="construcción-del-experimento" class="section level2 unnumbered hasAnchor">
+<h2>Construcción del experimento<a href="#construcci%C3%B3n-del-experimento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb182"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb182-1"><a href="parte-b-late-paso-a-paso.html#cb182-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb182-2"><a href="parte-b-late-paso-a-paso.html#cb182-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 54687</span>
+<span id="cb182-3"><a href="parte-b-late-paso-a-paso.html#cb182-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 20000</span>
+<span id="cb182-4"><a href="parte-b-late-paso-a-paso.html#cb182-4" tabindex="-1"></a></span>
+<span id="cb182-5"><a href="parte-b-late-paso-a-paso.html#cb182-5" tabindex="-1"></a>* Instrumento aleatorio: 50% recibe Z=1, 50% recibe Z=0</span>
+<span id="cb182-6"><a href="parte-b-late-paso-a-paso.html#cb182-6" tabindex="-1"></a><span class="kw">gen</span> Z = uniform() &gt; 0.5</span>
+<span id="cb182-7"><a href="parte-b-late-paso-a-paso.html#cb182-7" tabindex="-1"></a><span class="kw">tab</span> Z</span>
+<span id="cb182-8"><a href="parte-b-late-paso-a-paso.html#cb182-8" tabindex="-1"></a></span>
+<span id="cb182-9"><a href="parte-b-late-paso-a-paso.html#cb182-9" tabindex="-1"></a>* Tipos: 5,000 never, 5,000 always, 10,000 compliers</span>
+<span id="cb182-10"><a href="parte-b-late-paso-a-paso.html#cb182-10" tabindex="-1"></a><span class="kw">gen</span> d00 = (<span class="dt">_n</span> &lt;= 5000)                       <span class="co">// never-takers</span></span>
+<span id="cb182-11"><a href="parte-b-late-paso-a-paso.html#cb182-11" tabindex="-1"></a><span class="kw">gen</span> d11 = (<span class="dt">_n</span> &gt;  5000 &amp; <span class="dt">_n</span> &lt;= 10000)         <span class="co">// always-takers</span></span>
+<span id="cb182-12"><a href="parte-b-late-paso-a-paso.html#cb182-12" tabindex="-1"></a><span class="kw">gen</span> d01 = (<span class="dt">_n</span> &gt; 10000)                       <span class="co">// compliers</span></span></code></pre></div>
+<p>Inspeccionamos las construcciones:</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb183-1"><a href="parte-b-late-paso-a-paso.html#cb183-1" tabindex="-1"></a><span class="kw">tab</span> d00</span>
+<span id="cb183-2"><a href="parte-b-late-paso-a-paso.html#cb183-2" tabindex="-1"></a><span class="kw">tab</span> d11</span>
+<span id="cb183-3"><a href="parte-b-late-paso-a-paso.html#cb183-3" tabindex="-1"></a><span class="kw">tab</span> d01</span></code></pre></div>
+<hr />
+</div>
+<div id="asignación-de-los-efectos-heterogéneos" class="section level2 unnumbered hasAnchor">
+<h2>Asignación de los efectos heterogéneos<a href="#asignaci%C3%B3n-de-los-efectos-heterog%C3%A9neos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb184"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb184-1"><a href="parte-b-late-paso-a-paso.html#cb184-1" tabindex="-1"></a><span class="kw">gen</span> late = -0.5 <span class="kw">if</span> d00 == 1</span>
+<span id="cb184-2"><a href="parte-b-late-paso-a-paso.html#cb184-2" tabindex="-1"></a><span class="kw">replace</span> late = 0  <span class="kw">if</span> d11 == 1</span>
+<span id="cb184-3"><a href="parte-b-late-paso-a-paso.html#cb184-3" tabindex="-1"></a><span class="kw">replace</span> late = 1  <span class="kw">if</span> d01 == 1</span>
+<span id="cb184-4"><a href="parte-b-late-paso-a-paso.html#cb184-4" tabindex="-1"></a><span class="kw">tab</span> late</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">LATE individual</th>
+<th align="right">Frecuencia</th>
+<th align="right">%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-0.5</td>
+<td align="right">5,000</td>
+<td align="right">25.00</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">5,000</td>
+<td align="right">25.00</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">10,000</td>
+<td align="right">50.00</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="resultados-potenciales-y-resultado-observado" class="section level2 unnumbered hasAnchor">
+<h2>Resultados potenciales y resultado observado<a href="parte-b-late-paso-a-paso.html#resultados-potenciales-y-resultado-observado" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb185"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb185-1"><a href="parte-b-late-paso-a-paso.html#cb185-1" tabindex="-1"></a>* Resultado potencial <span class="fu">sin</span> tratamiento: pequeño ruido base</span>
+<span id="cb185-2"><a href="parte-b-late-paso-a-paso.html#cb185-2" tabindex="-1"></a><span class="kw">gen</span> y0 = 0.25 * <span class="fu">invnormal</span>(uniform())</span>
+<span id="cb185-3"><a href="parte-b-late-paso-a-paso.html#cb185-3" tabindex="-1"></a><span class="kw">gen</span> y1 = y0 + late                          <span class="co">// Y(1) = Y(0) + efecto individual</span></span>
+<span id="cb185-4"><a href="parte-b-late-paso-a-paso.html#cb185-4" tabindex="-1"></a></span>
+<span id="cb185-5"><a href="parte-b-late-paso-a-paso.html#cb185-5" tabindex="-1"></a>* Tratamiento observado (regla <span class="kw">de</span> monotonicidad):</span>
+<span id="cb185-6"><a href="parte-b-late-paso-a-paso.html#cb185-6" tabindex="-1"></a>*   never-takers:  D = 0 siempre</span>
+<span id="cb185-7"><a href="parte-b-late-paso-a-paso.html#cb185-7" tabindex="-1"></a>*   always-takers: D = 1 siempre</span>
+<span id="cb185-8"><a href="parte-b-late-paso-a-paso.html#cb185-8" tabindex="-1"></a>*   compliers:     D = Z</span>
+<span id="cb185-9"><a href="parte-b-late-paso-a-paso.html#cb185-9" tabindex="-1"></a><span class="kw">gen</span> D = d11 + Z*d01</span>
+<span id="cb185-10"><a href="parte-b-late-paso-a-paso.html#cb185-10" tabindex="-1"></a><span class="kw">tab</span> D</span>
+<span id="cb185-11"><a href="parte-b-late-paso-a-paso.html#cb185-11" tabindex="-1"></a></span>
+<span id="cb185-12"><a href="parte-b-late-paso-a-paso.html#cb185-12" tabindex="-1"></a>* Resultado observado</span>
+<span id="cb185-13"><a href="parte-b-late-paso-a-paso.html#cb185-13" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span> = D*y1 + (1-D)*y0</span></code></pre></div>
+<hr />
+</div>
+<div id="estimación-lo-que-cada-método-recupera" class="section level2 unnumbered hasAnchor">
+<h2>Estimación: lo que cada método recupera<a href="#estimaci%C3%B3n-lo-que-cada-m%C3%A9todo-recupera" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ols-no-recupera-nada" class="section level3 unnumbered hasAnchor">
+<h3>OLS — no recupera nada<a href="parte-b-late-paso-a-paso.html#ols-no-recupera-nada" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb186"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb186-1"><a href="parte-b-late-paso-a-paso.html#cb186-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D</span></code></pre></div>
+<p>OLS no recupera ni el ATE (0.375) ni el LATE (1.0). Está sesgado por la selección no aleatoria en el tratamiento (los always-takers tienen <span class="math inline">\(D = 1\)</span> por razones distintas a las del instrumento).</p>
+</div>
+<div id="iv-recupera-el-late-de-compliers" class="section level3 unnumbered hasAnchor">
+<h3>IV — recupera el LATE de compliers<a href="parte-b-late-paso-a-paso.html#iv-recupera-el-late-de-compliers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb187"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb187-1"><a href="parte-b-late-paso-a-paso.html#cb187-1" tabindex="-1"></a>ivreg2 <span class="fu">y</span> (D = Z)</span></code></pre></div>
+<p>El coeficiente del IV debe estar muy cerca de <strong>1.0</strong> — el LATE de los compliers, <strong>no</strong> el ATE poblacional (0.375). Los always-takers y never-takers no contribuyen al estimador porque el instrumento no los mueve.</p>
+</div>
+<div id="wald-manual" class="section level3 unnumbered hasAnchor">
+<h3>Wald manual<a href="parte-b-late-paso-a-paso.html#wald-manual" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb188"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb188-1"><a href="parte-b-late-paso-a-paso.html#cb188-1" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> Z==1</span>
+<span id="cb188-2"><a href="parte-b-late-paso-a-paso.html#cb188-2" tabindex="-1"></a><span class="kw">local</span> EyZ1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb188-3"><a href="parte-b-late-paso-a-paso.html#cb188-3" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> Z==0</span>
+<span id="cb188-4"><a href="parte-b-late-paso-a-paso.html#cb188-4" tabindex="-1"></a><span class="kw">local</span> EyZ0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb188-5"><a href="parte-b-late-paso-a-paso.html#cb188-5" tabindex="-1"></a><span class="kw">sum</span> D <span class="kw">if</span> Z==1</span>
+<span id="cb188-6"><a href="parte-b-late-paso-a-paso.html#cb188-6" tabindex="-1"></a><span class="kw">local</span> EDZ1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb188-7"><a href="parte-b-late-paso-a-paso.html#cb188-7" tabindex="-1"></a><span class="kw">sum</span> D <span class="kw">if</span> Z==0</span>
+<span id="cb188-8"><a href="parte-b-late-paso-a-paso.html#cb188-8" tabindex="-1"></a><span class="kw">local</span> EDZ0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb188-9"><a href="parte-b-late-paso-a-paso.html#cb188-9" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Wald = &quot;</span> (<span class="ot">`EyZ1&#39;</span> - <span class="ot">`EyZ0&#39;</span>) / (<span class="ot">`EDZ1&#39;</span> - <span class="ot">`EDZ0&#39;</span>)</span></code></pre></div>
+<p>El estimador de Wald y el IV coinciden por construcción cuando <span class="math inline">\(Z\)</span> y <span class="math inline">\(D\)</span> son binarios.</p>
+<hr />
+</div>
+</div>
+<div id="y-si-el-efecto-fuera-homogéneo" class="section level2 unnumbered hasAnchor">
+<h2>¿Y si el efecto fuera homogéneo?<a href="#y-si-el-efecto-fuera-homog%C3%A9neo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Si todos los individuos tuvieran el mismo efecto <span class="math inline">\(\tau\)</span>, entonces:</p>
+<p><span class="math display">\[\text{LATE} = \text{ATE} = \tau\]</span></p>
+<p>y la distinción se vuelve irrelevante. La importancia del LATE aparece solo cuando hay <strong>heterogeneidad</strong> en los efectos. En la práctica casi siempre la hay, así que la lectura correcta de un coeficiente de IV es: <em>“el efecto promedio en el subgrupo de individuos cuya decisión cambia con el instrumento”</em>.</p>
+<hr />
+</div>
+<div id="late-con-varios-instrumentos-1" class="section level2 unnumbered hasAnchor">
+<h2>LATE con varios instrumentos<a href="parte-b-late-paso-a-paso.html#late-con-varios-instrumentos-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Si tuviéramos dos instrumentos <span class="math inline">\(Z_1\)</span> y <span class="math inline">\(Z_2\)</span> que mueven a poblaciones distintas (por ejemplo, <span class="math inline">\(Z_1 = 1\)</span> si nació entre mayo y agosto; <span class="math inline">\(Z_2 = 1\)</span> si nació entre septiembre y abril), cada uno identifica un LATE distinto:</p>
+<p><span class="math display">\[\rho_j = \frac{\text{Cov}(Y, Z_j)}{\text{Cov}(D, Z_j)}, \qquad j = 1, 2\]</span></p>
+<p>MCO2E con ambos instrumentos en simultáneo recupera un <strong>promedio ponderado</strong>:</p>
+<p><span class="math display">\[\hat{\rho}_{MCO2E} = \psi \rho_1 + (1 - \psi) \rho_2\]</span></p>
+<p>donde el peso <span class="math inline">\(\psi\)</span> depende de la fuerza relativa de cada instrumento en la primera etapa. Es decir, MCO2E con varios instrumentos no estima un objeto único — estima una mezcla de LATEs cuya interpretación depende de qué instrumentos haya en el modelo.</p>
+<hr />
+</div>
+<div id="resumen" class="section level2 unnumbered hasAnchor">
+<h2>Resumen<a href="parte-b-late-paso-a-paso.html#resumen" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table style="width:100%;">
+<colgroup>
+<col width="45%" />
+<col width="20%" />
+<col width="16%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resultado</th>
+<th>OLS</th>
+<th>IV</th>
+<th>Verdad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Parte A (efecto homogéneo τ=0.5)</td>
+<td>0.99 (inconsistente)</td>
+<td>0.50 si <span class="math inline">\(N\)</span> grande</td>
+<td>0.50</td>
+</tr>
+<tr class="even">
+<td>Parte B (efectos heterogéneos)</td>
+<td>0.50 (no es ATE ni LATE)</td>
+<td>1.00</td>
+<td>LATE = 1.00; ATE = 0.375</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dos lecciones clave:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>OLS no se arregla con más datos.</strong> Si hay endogeneidad, OLS es inconsistente para cualquier tamaño muestral.</li>
+<li><strong>IV no es magia.</strong> Es consistente solo si el instrumento es válido y suficientemente fuerte. Y en presencia de heterogeneidad, identifica un parámetro distinto al ATE: el LATE de los compliers, una subpoblación que depende del instrumento elegido.</li>
+</ol>
+<hr />
+</div>
+<div id="lecturas-recomendadas-7" class="section level2 unnumbered hasAnchor">
+<h2>Lecturas recomendadas<a href="parte-b-late-paso-a-paso.html#lecturas-recomendadas-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Bound, Jaeger &amp; Baker (1995)</strong> — “Problems with instrumental variables estimation when the correlation between the instruments and the endogenous explanatory variable is weak”, <em>JASA</em> — el paper canónico sobre instrumentos débiles.</li>
+<li><strong>Imbens &amp; Angrist (1994)</strong> — la demostración original Wald = LATE.</li>
+<li><strong>Stock &amp; Yogo (2005)</strong> — valores críticos para el test de instrumentos débiles.</li>
+<li><strong>Angrist &amp; Pischke (2009)</strong> — <em>Mostly Harmless Econometrics</em>, capítulo 4.</li>
+</ul>
+
+</div>
+</div>
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/19-IVStata.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["econometria-avanzada.pdf", "econometria-avanzada.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection",
+    "scroll_highlight": true,
+    "depth": 2
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

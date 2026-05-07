@@ -3,7 +3,7 @@ PSM, IPW y Synthetic Control en Python
 Clase 16 - EconometriaAV 2026-1
 
 Librerías necesarias:
-    pip install numpy pandas scikit-learn matplotlib seaborn statsmodels
+    pip install numpy pandas scikit-learn matplotlib seaborn statsmodels scipy
 """
 
 import numpy as np
@@ -13,7 +13,10 @@ import seaborn as sns
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from scipy import stats
 import warnings
+from pathlib import Path
 warnings.filterwarnings('ignore')
+
+OUTPUT_DIR = Path(__file__).resolve().parent
 
 # Configurar estilo
 sns.set_style("whitegrid")
@@ -86,7 +89,7 @@ ax.set_ylabel('Frecuencia')
 ax.set_title('Distribución del Propensity Score: Verificar Soporte Común')
 ax.legend()
 plt.tight_layout()
-plt.savefig('/Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/EjerciciosClase/py_pscore_dist.png', dpi=100)
+plt.savefig(OUTPUT_DIR / 'py_pscore_dist.png', dpi=100)
 print("\nGráfica de soporte común guardada: py_pscore_dist.png")
 
 # Implementar NN(1) matching
@@ -162,7 +165,7 @@ ax.set_title('Distribución de Pesos IPW (Controles)')
 ax.axvline(data.loc[data['D']==0, 'w_att'].mean(), color='red', linestyle='--', linewidth=2, label='Media')
 ax.legend()
 plt.tight_layout()
-plt.savefig('/Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/EjerciciosClase/py_ipw_weights.png', dpi=100)
+plt.savefig(OUTPUT_DIR / 'py_ipw_weights.png', dpi=100)
 print("\nGráfica de pesos IPW guardada: py_ipw_weights.png")
 
 # ============================================================
@@ -234,7 +237,7 @@ ax.set_title('Synthetic Control Method: Treated Unit vs. Synthetic Control')
 ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
-plt.savefig('/Users/adiazescobar/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/EjerciciosClase/py_synth_control.png', dpi=100)
+plt.savefig(OUTPUT_DIR / 'py_synth_control.png', dpi=100)
 print("\nGráfica de control sintético guardada: py_synth_control.png")
 
 # Calcular efecto

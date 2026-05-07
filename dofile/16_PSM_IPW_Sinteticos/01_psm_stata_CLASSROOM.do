@@ -1,19 +1,35 @@
 /*
-PSM en Stata: Propensity Score Matching - CLASSROOM VERSION
-Clase 16 - EconometriaAV 2026-1
-MOSTRANDO COMANDOS Y RESULTADOS (set echo on)
+Título: PSM en Stata: Propensity Score Matching - versión de clase
+Autor: Ana María Díaz Escobar
+Fecha: 2026-04-23
 
-USO: Corre esto durante la clase para que los estudiantes vean paso a paso
+Objetivos:
+  1. Mostrar una secuencia guiada de PSM para discusión en clase.
+  2. Comparar diferencia cruda, NN y kernel matching.
+  3. Interpretar soporte común y balance.
+
+Datos requeridos: base6.dta en esta carpeta o en dofile/16_PSM_IPW_Sinteticos/
+Paquetes requeridos: psmatch2
+
+Nota: no usa set echo on porque en clase puede ocultar/duplicar salida de forma poco estable.
 */
 
 clear all
 set seed 1298
 set more off
-set echo on
 set linesize 100
 
-* Directorio de trabajo
-cd ~/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/EjerciciosClase
+* Resolver ruta de datos sin depender de un computador específico
+capture confirm file "base6.dta"
+if _rc {
+    capture confirm file "dofile/16_PSM_IPW_Sinteticos/base6.dta"
+    if !_rc cd "dofile/16_PSM_IPW_Sinteticos"
+}
+capture confirm file "base6.dta"
+if _rc {
+    di as error "No se encontró base6.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    exit 601
+}
 
 * Cargar datos
 use base6.dta, clear

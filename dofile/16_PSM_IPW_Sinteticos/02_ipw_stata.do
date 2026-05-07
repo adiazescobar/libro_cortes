@@ -1,21 +1,38 @@
 /*
-IPW (Inverse Probability Weighting) en Stata
-Clase 16 - EconometriaAV 2026-1
-Basado en base6.dta
+Título: IPW (Inverse Probability Weighting) en Stata
+Autor: Ana María Díaz Escobar
+Fecha: 2026-04-23
+
+Objetivos:
+  1. Estimar propensity scores para construir ponderadores IPW.
+  2. Comparar IPW manual con teffects ipw.
+  3. Diagnosticar soporte común y pesos extremos.
+
+Datos requeridos: base6.dta en esta carpeta o en dofile/16_PSM_IPW_Sinteticos/
+Paquetes requeridos: ninguno adicional (teffects viene con Stata 13+)
 */
 
 clear all
 set seed 1298
 set more off
+set linesize 100
 
-* Directorio de trabajo
-cd ~/Library/CloudStorage/Dropbox/ClasesR/EconometriaAV/EjerciciosClase
+* Resolver ruta de datos sin depender de un computador específico
+capture confirm file "base6.dta"
+if _rc {
+    capture confirm file "dofile/16_PSM_IPW_Sinteticos/base6.dta"
+    if !_rc cd "dofile/16_PSM_IPW_Sinteticos"
+}
+capture confirm file "base6.dta"
+if _rc {
+    di as error "No se encontró base6.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    exit 601
+}
 
 * Cargar datos
 use base6.dta, clear
 
-* Instalar comandos necesarios
-* ssc install teffects (ya vienen con Stata 13+)
+* teffects viene con Stata 13+
 
 * Definir variables
 global X "personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre"

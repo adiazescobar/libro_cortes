@@ -9,6 +9,7 @@
 
 clear all
 set more off
+set linesize 100
 
 ********************************************************************************
 * PARTE 1: DiD BÁSICO (2 periodos, sin ID individual)
@@ -17,7 +18,16 @@ set more off
 * Tratamiento: programa de nutrición (D=1)
 ********************************************************************************
 
-cd "`c(sysdir_personal)'"  // ajusta a tu carpeta
+capture confirm file "base3.dta"
+if _rc {
+    capture confirm file "dofile/08_DID/base3.dta"
+    if !_rc cd "dofile/08_DID"
+}
+capture confirm file "base3.dta"
+if _rc {
+    di as error "No se encontró base3.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    exit 601
+}
 use "base3.dta", clear
 
 * ---- Estructura de los datos ------------------------------------------------

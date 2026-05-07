@@ -10,6 +10,7 @@
 
 clear all
 set more off
+set linesize 100
 
 * ============================================================
 * CARGA DE DATOS
@@ -54,17 +55,17 @@ El experimento aleatorio envía hojas de vida IDÉNTICAS (excepto el nombre),
 eliminando la selección: cualquier diferencia en callback se debe solo al nombre.
 */
 
-di as result "=" * 70
+di as result "{hline 70}"
 di as result "PREGUNTA 1 — RESPUESTA CONCEPTUAL (ver comentarios en el do-file)"
-di as result "=" * 70
+di as result "{hline 70}"
 
 ********************************************************************************
 ** PREGUNTA 2: ¿La asignación aleatoria fue exitosa? (BALANCE)
 ********************************************************************************
 
-di as result "=" * 70
+di as result "{hline 70}"
 di as result "PREGUNTA 2 — TABLA DE BALANCE"
-di as result "=" * 70
+di as result "{hline 70}"
 
 * Variables de control disponibles en esta versión de la base
 local controls yearsexp education ofjobs computerskills female
@@ -90,9 +91,9 @@ test `controls'   // si p > 0.05 → balance exitoso
 ** PREGUNTA 3: Efecto del tratamiento sobre la probabilidad de recibir una llamada
 ********************************************************************************
 
-di as result "=" * 70
+di as result "{hline 70}"
 di as result "PREGUNTA 3 — EFECTO PROMEDIO DEL TRATAMIENTO"
-di as result "=" * 70
+di as result "{hline 70}"
 
 * --- Tasas crudas por grupo ---
 di as result _newline "Tasa de callback por grupo:"
@@ -111,7 +112,7 @@ estimates store m_con_controles
 * --- Tabla comparativa ---
 di as result _newline "Comparación de modelos:"
 estimates table m_sin_controles m_con_controles, ///
-    keep(black) b(%8.5f) se star stats(N r2) ///
+    keep(black) b(%8.5f) se stats(N r2) ///
     title("Efecto de tener nombre afroamericano sobre P(callback)")
 
 /*
@@ -132,9 +133,9 @@ margins, dydx(black)
 ** PREGUNTA 4: EFECTOS HETEROGÉNEOS
 ********************************************************************************
 
-di as result "=" * 70
+di as result "{hline 70}"
 di as result "PREGUNTA 4 — EFECTOS HETEROGÉNEOS"
-di as result "=" * 70
+di as result "{hline 70}"
 
 * --- 4a. Variable BINARIA: género del nombre (female) ---
 di as result _newline "Heterogeneidad por género (variable binaria):"
@@ -175,9 +176,9 @@ marginsplot, ///
 ** PREGUNTA 5: PODER ESTADÍSTICO
 ********************************************************************************
 
-di as result "=" * 70
+di as result "{hline 70}"
 di as result "PREGUNTA 5 — CÁLCULO DE PODER ESTADÍSTICO"
-di as result "=" * 70
+di as result "{hline 70}"
 
 * --- Estadísticas base ---
 quietly sum call if black == 0
@@ -215,11 +216,7 @@ di as result "Se necesitarían aproximadamente " %6.0f `N_mitad' " observaciones
 
 * --- 5d. Gráfico: poder vs diferencia en proporción ---
 di as result _newline "5d. Gráfico: curvas de poder:"
-power twoproportions `p_white' (`p_black'(0.005)`p_white'), n(4870) alpha(0.05) graph ///
-    title("Poder estadístico dado N=4870") ///
-    xtitle("Tasa de callback en grupo afroamericano (p2)") ///
-    ytitle("Poder") ///
-    xline(`p_black', lcolor(red) lpattern(dash))
+power twoproportions `p_white' (`p_black'(0.005)`p_white'), n(4870) alpha(0.05) graph
 
 /*
 Interpretación de la Pregunta 5:
@@ -232,6 +229,6 @@ Conclusión: la muestra de 4870 es suficiente para el efecto que encontraron.
 Si el efecto real fuera más pequeño (ej. 1pp), serían insuficientes.
 */
 
-di as result _newline "=" * 70
+di as result _newline "{hline 70}"
 di as result "FIN DEL EJERCICIO — Bertrand & Mullainathan (2004)"
-di as result "=" * 70
+di as result "{hline 70}"

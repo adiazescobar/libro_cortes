@@ -6,6 +6,9 @@
 *   semestre = estrato (1-4)
 ***************************************************************
 clear all
+set seed 1298
+set more off
+set linesize 100
 capture log close
 log using "clase6_experimentos.log", text replace
 
@@ -20,6 +23,16 @@ if _rc ssc install ietoolkit, replace
 *--------------------------------------------------------------
 * PASO 1: Cargar base y crear variables
 *--------------------------------------------------------------
+capture confirm file "data.dta"
+if _rc {
+    capture confirm file "dofile/06_RCT_Stata/data.dta"
+    if !_rc cd "dofile/06_RCT_Stata"
+}
+capture confirm file "data.dta"
+if _rc {
+    di as error "No se encontró data.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    exit 601
+}
 use "data.dta", clear
 
 * Tratamiento: B = definiciones (1), A = texto crítico (0)
@@ -121,17 +134,25 @@ program define difmedias, rclass
 end
 
 * 3.2 Balance univariado
-difmedias $X, by(D) savepost("Table_Balance_raw.dta")
-
-preserve
-use "Table_Balance_raw.dta", clear
-order variable mean_T mean_C diff tstat pval se sd_T sd_C N_T N_C
-export excel using "Table_Balance_raw.xlsx", firstrow(variables) replace
-restore
+tempfile balance_raw
+capture noisily difmedias $X, by(D) savepost("`balance_raw'")
+if _rc {
+    di as text "La rutina difmedias no corrió; se omite Table_Balance_raw.xlsx en esta ejecución."
+}
+else {
+    preserve
+    use "`balance_raw'", clear
+    order variable mean_T mean_C diff tstat pval se sd_T sd_C N_T N_C
+    export excel using "Table_Balance_raw.xlsx", firstrow(variables) replace
+    restore
+}
 
 * 3.3 Balance con iebaltab
-iebaltab $X, grpvar(D) control(0) rowvarlabels ftest ///
+capture noisily iebaltab $X, grpvar(D) control(0) rowvarlabels ftest ///
     savexlsx("Table_Balance.xlsx") replace format(%9.3f)
+if _rc {
+    di as text "iebaltab no generó Table_Balance.xlsx; se conserva Table_Balance_raw.xlsx."
+}
 
 * 3.4 Pruebas multivariadas: D ~ X
 eststo clear

@@ -10,12 +10,22 @@
 
 clear all
 set more off
+set linesize 100
 
 ********************************************************************************
 * SECCIÓN A: DiD básico con base3.dta
 ********************************************************************************
 
-cd "ESCRIBE_AQUI_LA_RUTA_DE_TU_CARPETA"   // <--- cambia esto
+capture confirm file "base3.dta"
+if _rc {
+    capture confirm file "dofile/08_DID/base3.dta"
+    if !_rc cd "dofile/08_DID"
+}
+capture confirm file "base3.dta"
+if _rc {
+    di as error "No se encontró base3.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    exit 601
+}
 use "base3.dta", clear
 
 * A1. Calcula las cuatro medias de la tabla 2×2
@@ -54,9 +64,11 @@ ttest y if t == 0, by(D)
 webuse hospdd, clear
 xtset hospital
 xtdidregress (satis) (procedure), group(hospital) time(month)
+matrix b = e(b)
+scalar atet = el(b, 1, 1)
 
 di _n "=== SECCIÓN B: ANOTA ESTOS VALORES ==="
-di "B1. Estimador ATET (efecto del nuevo procedimiento): " %8.4f _b[1bn.procedure]
+di "B1. Estimador ATET (efecto del nuevo procedimiento): " %8.4f atet
 
 * B2. Prueba de tendencias paralelas
 estat ptrends

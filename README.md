@@ -1,13 +1,20 @@
-Welcome! 
+# Cortes Transversales
 
-This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). 
+Libro de apoyo para el curso avanzado de microeconometría aplicada.
 
-This template provides a skeleton file structure that you can edit to create your book. 
+## Estructura
 
-The contents inside the .Rmd files provide some pointers to help you get started, but feel free to also delete the content in each file and start fresh.
+- Capítulos fuente: archivos `*.Rmd` en la raíz del proyecto.
+- Configuración de compilación: `_bookdown.yml` y `_output.yml`.
+- Material computacional: `dofile/`, organizado por capítulo o sesión.
+- Sitio compilado: `docs/`.
 
-Additional resources:
+## Reproducibilidad
 
-The **bookdown** book: https://bookdown.org/yihui/bookdown/
+Los do-files deben poder ejecutarse desde su propia carpeta o desde la raíz del libro. Las bases usadas en clase están en `dofile/` y los scripts evitan rutas absolutas a computadores específicos.
 
-The **bookdown** package reference site: https://pkgs.rstudio.com/bookdown
+Para compilar el libro:
+
+```r
+bookdown::render_book("index.Rmd")
+```

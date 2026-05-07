@@ -518,9 +518,11 @@ Descarga el do-file, córrelo en Stata y reporta tus resultados en el formulario
 **Envía tus respuestas aquí:**
 
 ```{=html}
-<iframe src="https://docs.google.com/forms/d/e/REEMPLAZA_CON_TU_URL_DE_GOOGLE_FORM/viewform?embedded=true"
+<!-- Reemplazar FORM_ID por el formulario activo antes de publicar el ejercicio.
+<iframe src="https://docs.google.com/forms/d/e/FORM_ID/viewform?embedded=true"
         width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0"
         style="border-radius: 8px; margin-top: 1em;">
   Cargando formulario...
 </iframe>
+-->
 ```

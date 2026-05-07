@@ -69,3 +69,5 @@ resumen-sec
 psm-1
 ipw-1
 synthetic-control
+iv
+iv-stata

@@ -111,9 +111,9 @@ di "Con T=6: usa 5 periodos de diferencias por individuo (pierde t=1)."
 drop mean_Y mean_X Y_within X_within
 
 * ── Resumen comparativo ───────────────────────────────────────────────────────
-di _n "=" * 65
+di _n "{hline 65}"
 di "  RESUMEN: ¿qué estimador usar?"
-di "=" * 65
+di "{hline 65}"
 di "  TODOS los estimadores requieren exogeneidad de X_it en eps_it"
 di "  La ventaja de FE/FD es específica: son consistentes aunque"
 di "  Cov(X_it, alpha_i) ≠ 0  (OLS y RE no lo son en ese caso)"
@@ -125,7 +125,7 @@ di "  Panel dinámico (Y_t-1) → FE inconsistente → Arellano-Bond"
 di "  T=2, errores i.i.d.    → FD = FE (algebraicamente idénticos)"
 di "  T>2, errores i.i.d.    → FE más eficiente que FD"
 di "  DiD 2×2                → FD = FE = DiD (equivalencia exacta)"
-di "=" * 65
+di "{hline 65}"
 
 
 ********************************************************************************
@@ -172,17 +172,17 @@ scalar FD_2x2 = _b[D.D]
 reghdfe Y D, absorb(id t) vce(robust)
 scalar TWFE_2x2 = _b[D]
 
-di _n "=" * 60
+di _n "{hline 60}"
 di "  SECCIÓN 1: 2×2 — EQUIVALENCIA ALGEBRAICA EXACTA"
-di "=" * 60
+di "{hline 60}"
 di "  Valor verdadero de τ            = 3"
 di "  DiD manual (4 medias)           = " %7.4f DiD_manual
 di "  Regresión DiD (Y~trat×t)        = " %7.4f DiD_reg
 di "  Primeras diferencias (ΔY~ΔD)    = " %7.4f FD_2x2
 di "  TWFE (reghdfe absorb id t)      = " %7.4f TWFE_2x2
-di "-" * 60
+di "{hline 60}"
 di "  Los cuatro deben ser IDÉNTICOS — equivalencia algebraica ✓"
-di "=" * 60
+di "{hline 60}"
 
 
 ********************************************************************************
@@ -316,9 +316,9 @@ di "TWFE = " %6.3f TWFE2b "   (τ verdadero = 5 — sesgo ≈ " %6.3f TWFE2b - 5
 * usando primeras diferencias para ver por qué falla
 ********************************************************************************
 
-di _n "=" * 65
+di _n "{hline 65}"
 di "  SECCIÓN 3: MECANISMO DEL SESGO POR VIOLACIÓN DE T. PARALELAS"
-di "=" * 65
+di "{hline 65}"
 di ""
 di "  DiD identifica τ comparando: Δ(tratado) - Δ(control)"
 di "  Si la tendencia pre del tratado > tendencia pre del control:"
@@ -339,7 +339,7 @@ di "    'DiD 1-paso' = 10 - 3 = 7 ≠ τ = 5"
 di ""
 di "  CONCLUSIÓN: si hay diferencia de tendencias pre-tratamiento,"
 di "  DiD = TWFE captura τ + diferencia de tendencias (SESGO)."
-di "=" * 65
+di "{hline 65}"
 
 * Primera diferencia en el período de adopción (ilustración)
 di _n "  Comprobación: ΔY por grupo en t=1985 (año de adopción)"
@@ -362,9 +362,9 @@ di "  DiD en ese año           = " %6.3f DY_t - DY_c "  (τ=5, tendencia_extra=
 * TABLA RESUMEN FINAL
 ********************************************************************************
 
-di _n "=" * 70
+di _n "{hline 70}"
 di "  RESUMEN: equivalencia DiD = FD = TWFE — ¿cuándo y cuánto importa?"
-di "=" * 70
+di "{hline 70}"
 di ""
 di "  Situación                 │ DiD=FD?  │ DiD=TWFE? │ T. paralelas?"
 di "  ─────────────────────────┼──────────┼───────────┼───────────────"
@@ -379,7 +379,7 @@ di "  1. Siempre dibuja xtline y estat trendplots antes de reportar DiD"
 di "  2. Usa estat ptrends (H0: tendencias paralelas) — p>0.05 es buena señal"
 di "  3. Si falla: controla tendencias lineales por grupo (trend×tratado)"
 di "  4. Si hay adopción escalonada + efectos dinámicos: csdid / Sun-Abraham"
-di "=" * 70
+di "{hline 70}"
 
 
 ********************************************************************************

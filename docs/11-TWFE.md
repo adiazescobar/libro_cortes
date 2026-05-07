@@ -1,5 +1,16 @@
 # Datos de Panel, DiD y TWFE en Stata
 
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Reconocer la estructura básica de un panel y declararla en Stata con `xtset`
+- Comparar estimadores pooled OLS, efectos fijos, efectos aleatorios y primeras diferencias
+- Entender por qué TWFE puede fallar con adopción escalonada y efectos heterogéneos
+- Conectar la intuición de DiD con diagnósticos modernos y alternativas recientes
+:::
+
+---
+
 ## Introducción a datos de panel {-}
 
 ### ¿Qué es un panel? {-}
@@ -916,4 +927,3 @@ Los tres archivos replican los mismos ejemplos con **el mismo DGP** ($Y = \tau \
 - **Stata:** `ssc install reghdfe bacondecomp csdid drdid eventstudyinteract did_imputation did2s jwdid, replace`
 - **R:** `install.packages(c("fixest", "bacondecomp", "did", "ggplot2", "dplyr"))`
 - **Python:** `pip install pyfixest pandas numpy matplotlib`
-

@@ -1,5 +1,16 @@
 # Emparejamiento Exacto
 
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Explicar por qué la comparación directa en datos observacionales puede estar sesgada
+- Definir el ATT bajo emparejamiento exacto
+- Identificar los supuestos de observabilidad, soporte común y suficientes controles
+- Entender la maldición de las dimensiones y la motivación para PSM
+:::
+
+---
+
 ## El problema: identificación sin aleatorización {-}
 
 En un experimento aleatorizado (RCT), la asignación al tratamiento garantiza que los grupos tratado y control son, en promedio, idénticos en todas las características — observables **y no observables**. El estimador de diferencia de medias produce el efecto causal del tratamiento.
@@ -18,7 +29,7 @@ La intuición es simple: **construir un clon** para cada individuo tratado.
 
 Si encontramos, para cada persona tratada $i$, un individuo no tratado $j$ que tiene exactamente las mismas características observables $X$ (edad, educación, género, región, etc.), entonces la única diferencia restante entre $i$ y $j$ es el tratamiento. La comparación de sus resultados aproxima el efecto causal.
 
-```
+```text
 Tratado i:  X = (35 años, universitario, mujer, Bogotá) → Y_i(1)
 Control j:  X = (35 años, universitario, mujer, Bogotá) → Y_j(0)
 
