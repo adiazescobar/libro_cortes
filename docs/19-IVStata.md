@@ -18,7 +18,15 @@ ssc install ivreg2
 ssc install ranktest
 ```
 
-El archivo completo de esta clase está en `notebooks/IV_LATE_simulacion.do` (versiones equivalentes en `IV_LATE_simulacion.py` y `IV_LATE_simulacion.R`).
+**Descargar archivos ejecutables:**
+
+[Descargar do-file Stata (IV_LATE_simulacion.do)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.do)
+
+[Descargar versión Python (IV_LATE_simulacion.py)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.py)
+
+[Descargar versión R (IV_LATE_simulacion.R)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.R)
+
+Los tres archivos contienen el mismo experimento (Parte A: muestras finitas; Parte B: LATE paso a paso) y producen los mismos resultados — usen el lenguaje de su preferencia.
 
 ---
 
@@ -292,6 +300,30 @@ donde el peso $\psi$ depende de la fuerza relativa de cada instrumento en la pri
 
 1. **OLS no se arregla con más datos.** Si hay endogeneidad, OLS es inconsistente para cualquier tamaño muestral.
 2. **IV no es magia.** Es consistente solo si el instrumento es válido y suficientemente fuerte. Y en presencia de heterogeneidad, identifica un parámetro distinto al ATE: el LATE de los compliers, una subpoblación que depende del instrumento elegido.
+
+---
+
+## Materiales para la clase {-}
+
+Los archivos ejecutables están en `dofile/18_IV_LATE/`:
+
+- **IV_LATE_simulacion.do** — Stata: programa Monte Carlo + simulación LATE
+- **IV_LATE_simulacion.py** — Python (numpy/pandas/statsmodels)
+- **IV_LATE_simulacion.R** — R (paquete `AER` para `ivreg`)
+
+Ejecución directa en Stata:
+
+```stata
+do "IV_LATE_simulacion.do"
+```
+
+**Descargas directas:**
+
+[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.do)
+
+[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.py)
+
+[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.R)
 
 ---
 
