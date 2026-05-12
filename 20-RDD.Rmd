@@ -1,0 +1,447 @@
+# Regresión Discontinua {#rdd}
+
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Reconocer cuándo un problema admite un diseño de regresión discontinua (RD) y por qué identifica un efecto causal
+- Distinguir **Regresión Discontinua Nítida (RDN)** y **Regresión Discontinua Borrosa (RDB)**, y entender por qué RDB es un caso particular de IV
+- Derivar la forma de regresión paso a paso: lineal con misma pendiente, lineal con pendientes distintas y cuadrática con interacciones
+- Estimar el salto siguiendo la **receta** (centrar $Z$, elegir ancho de banda $h$, modelar $E[Y \mid Z]$)
+- Elegir el ancho de banda por **validación cruzada** o reglas automáticas (IK 2012, CCT 2014)
+- Aplicar las 4 pruebas de robustez: **sensibilidad**, **balance**, **placebo**, **sorting** (McCrary 2008)
+- Identificar amenazas cuando la variable de asignación es **discreta** (Kolesár & Rothe 2018)
+- Reconocer extensiones útiles: kink design (RKD), donut RD y geographic RD
+:::
+
+---
+
+## La idea de RD {-}
+
+Muchos programas, políticas y decisiones administrativas se asignan según una **regla determinística** basada en una variable continua $Z$ que cruza un umbral $c$:
+
+- Una beca se otorga si el puntaje del examen supera $c$
+- Una transferencia condicionada se entrega si el índice de pobreza está por debajo de $c$
+- La pensión mínima se activa al cumplir $c=57$ años (mujeres) o $c=62$ (hombres)
+- Un partido gana una elección si obtiene más del 50% de los votos
+
+La **regresión discontinua** explota esa regla. Individuos justo por encima y justo por debajo de $c$ son, en promedio, **similares en todo lo demás** (observables y no observables) pero **diferentes en el tratamiento**. Si en el cutoff aparece un salto en el resultado $y$, ese salto identifica el efecto causal del tratamiento — **localmente**, cerca del umbral.
+
+::: {.boxinfo}
+**Ventaja y desventaja**
+
+- **Ventaja:** validez interna alta — la asignación cerca del umbral funciona como un experimento controlado local.
+- **Desventaja:** validez externa limitada — el efecto identificado es un **LATE en $c$**, no informa de subpoblaciones lejos del umbral.
+:::
+
+El diseño se debe a **Thistlethwaite & Campbell (1960)**, quienes estudiaron el efecto de recibir un certificado de mérito académico sobre las aspiraciones de carrera de estudiantes en EE.UU. Permaneció marginal hasta que Hahn, Todd & van der Klaauw (2001) lo formalizaron en *Econometrica*. Hoy es uno de los caballos de batalla de la inferencia causal.
+
+---
+
+## Notación {-}
+
+::: {.boxinfo}
+**Variables del diseño**
+
+- $Z_i$ = **variable de asignación** (continua, observable, también llamada *running variable* o *score*)
+- $c$ = **umbral** (*cutoff*)
+- $D_i$ = **tratamiento** efectivo (0/1)
+- $\tilde Z_i = Z_i - c$ = variable de asignación **centrada** en el umbral
+- $h$ = **ancho de banda** (bandwidth)
+- En RDB, $W_i = \mathbb{1}[Z_i \geq c]$ = **elegibilidad** (instrumento)
+:::
+
+Dos casos según la dirección de la regla:
+
+$$D_i = \mathbb{1}[Z_i \geq c] = \begin{cases} 1 & \text{si } Z_i \geq c \\ 0 & \text{si } Z_i < c \end{cases}, \qquad
+  D_i = \mathbb{1}[Z_i \leq c] = \begin{cases} 1 & \text{si } Z_i \leq c \\ 0 & \text{si } Z_i > c \end{cases}$$
+
+---
+
+## Ejemplos clásicos {-}
+
+| Estudio | Variable de asignación $Z$ | Umbral $c$ | Tratamiento $D$ | Resultado $y$ |
+|---|---|---|---|---|
+| Thistlethwaite & Campbell (1960) | Puntaje examen | umbral mérito | Certificado de mérito | Aspiraciones académicas |
+| Angrist & Lavy (1999) | Tamaño de la cohorte | múltiplos de 40 (regla de Maimónides) | Tamaño de clase reducido | Aprendizajes |
+| Lee (2008) | % de votos del partido | 50% | Ganar reelección | Probabilidad de reelección futura |
+| Carrell, Hoekstra & Kuka (2018) | GPA | umbral de mérito | Beca universitaria | Graduación |
+| Card, Dobkin & Maestas (2008) | Edad | 65 años | Medicare | Mortalidad / utilización |
+| Saavedra (2009), PACES Colombia | Puntaje SABER 11 | umbral SPP | Acceso a educación superior subsidiada | Asistencia universitaria |
+
+**Ejemplo paradigmático — pensión mínima en Colombia:** la pensión por vejez se activa al cumplir 62/57 años (hombres/mujeres). Personas con 61 años 11 meses y 62 años 1 mes son casi idénticas en salud, capital humano y trayectoria laboral, pero difieren bruscamente en si reciben la pensión. El salto en consumo, salud o oferta laboral en $c=62$ identifica el efecto causal de la transferencia.
+
+---
+
+## RDN: identificación {-}
+
+En la **Regresión Discontinua Nítida (RDN)**, el tratamiento se asigna **determinísticamente** según $Z$:
+
+$$D_i = \mathbb{1}[Z_i \geq c]$$
+
+Todos los que cruzan el umbral reciben el tratamiento, ninguno por debajo lo recibe. El problema de identificación se plantea sobre los resultados potenciales $Y_i(1), Y_i(0)$.
+
+::: {.boxinfo}
+**Supuesto clave — continuidad local (Hahn, Todd & van der Klaauw 2001):**
+
+$$E[Y(d) \mid Z = z] \text{ es continuo en } z = c \text{ para } d = 0, 1$$
+
+Es decir, en ausencia del tratamiento, el resultado esperado **no salta** en el umbral. Cualquier discontinuidad observada en $E[Y \mid Z]$ en $c$ es atribuible al tratamiento.
+:::
+
+Bajo continuidad local, el **efecto promedio del tratamiento en el umbral** está identificado como:
+
+$$\tau_{RDN} = E[Y(1) - Y(0) \mid Z = c] = \lim_{z \downarrow c} E[Y \mid Z = z] - \lim_{z \uparrow c} E[Y \mid Z = z]$$
+
+**Lectura:** $\tau_{RDN}$ es el ATE *local en $c$* — el efecto promedio para individuos cuya $Z$ es exactamente $c$. Esta es la principal limitación de validez externa del diseño.
+
+---
+
+## La receta: cómo estimar $\tau_{RDN}$ {-}
+
+::: {.boxinfo}
+**Receta de estimación**
+
+1. **Recorte la muestra** a una ventana razonable alrededor del umbral: $c - h \leq Z_i \leq c + h$. El parámetro $h$ es el **ancho de banda**.
+2. **Recodifique** la variable de asignación en desviaciones del umbral: $\tilde Z_i = Z_i - c$.
+   - $\tilde Z_i = 0$ si $Z_i$ está exactamente en el umbral
+   - $\tilde Z_i > 0$ si $D_i = 1$ (o $\tilde Z_i > 0$ si $D_i = 0$, según la dirección de la regla)
+   - $\tilde Z_i < 0$ si $D_i = 0$ (o al revés)
+3. **Decida un modelo** para $E[Y \mid Z, D]$ — derivación abajo.
+4. **Estime** por MCO con la muestra recortada. El coeficiente de $D$ es $\hat\tau_{RDN}$.
+:::
+
+### Caso más simple — comparación de medias en la ventana {-}
+
+Si solo nos quedamos con datos en una ventana muy estrecha $[c-h, c+h]$, $\tau_{RDN}$ se aproxima por la diferencia simple de medias:
+
+$$\hat\tau_{RDN} = \bar y_{\text{der}} - \bar y_{\text{izq}}$$
+
+donde $\bar y_{\text{der}}$ es el promedio del resultado para observaciones con $Z_i \geq c$ dentro de la ventana, y $\bar y_{\text{izq}}$ es el promedio para $Z_i < c$. Es el equivalente a regresar dos interceptos:
+
+- A la izquierda: $y = \alpha_{\text{izq}} + \beta_{\text{izq}} \tilde Z + \varepsilon \;\Rightarrow\; E[Y \mid \tilde Z = 0, D = 0] = \alpha_{\text{izq}}$
+- A la derecha: $y = \alpha_{\text{der}} + \beta_{\text{der}} \tilde Z + \varepsilon \;\Rightarrow\; E[Y \mid \tilde Z = 0, D = 1] = \alpha_{\text{der}}$
+- $\hat\tau_{RDN} = \hat\alpha_{\text{der}} - \hat\alpha_{\text{izq}}$
+
+---
+
+## Derivación de la forma de regresión {-}
+
+### Caso 1 — lineal con la **misma pendiente** a ambos lados {-}
+
+Supongamos que $E[Y(0) \mid Z]$ es lineal en $Z$ y que el efecto del programa $\tau$ **no depende de $Z$**:
+
+$$E[Y(0) \mid Z] = \delta + \beta Z$$
+$$E[Y(1) - Y(0) \mid Z] = \tau$$
+
+Entonces:
+
+$$E[Y(1) \mid Z] = \tau + E[Y(0) \mid Z] = \tau + \delta + \beta Z$$
+
+Usando $Y = D \cdot Y(1) + (1-D) Y(0)$:
+
+\begin{align*}
+E[Y \mid Z, D] &= D \cdot E[Y(1) \mid Z] + (1-D) \cdot E[Y(0) \mid Z] \\
+&= D \cdot (\tau + \delta + \beta Z) + (1-D)(\delta + \beta Z) \\
+&= \delta + \beta Z + \tau D
+\end{align*}
+
+Centrando $\tilde Z = Z - c$:
+
+$$\boxed{\; E[Y \mid \tilde Z, D] = \alpha + \beta \tilde Z + \tau D \;}$$
+
+donde $\alpha = \delta + \beta c$ es el intercepto al umbral. **El coeficiente de $D$ es el salto $\tau_{RDN}$.**
+
+### Caso 2 — lineal con **pendientes distintas** a cada lado {-}
+
+Si $E[Y(0) \mid Z]$ y $E[Y(1) \mid Z]$ son lineales pero con pendientes diferentes:
+
+$$E[Y(0) \mid Z] = \delta_0 + \beta_0 Z, \qquad E[Y(1) \mid Z] = \delta_1 + \beta_1 Z$$
+
+El efecto causal depende de $Z$:
+
+$$\tau(Z) = E[Y(1) - Y(0) \mid Z] = (\delta_1 - \delta_0) + (\beta_1 - \beta_0) Z$$
+
+Combinando como antes:
+
+$$E[Y \mid Z, D] = (\delta_1 - \delta_0) D + \tau \cdot D + \beta_0 Z + (\beta_1 - \beta_0) D \cdot Z$$
+
+Centrando en $\tilde Z = Z - c$, el coeficiente del indicador $D$ se interpreta directamente como el **salto en $c$**:
+
+$$\boxed{\; E[Y \mid \tilde Z, D] = \alpha + \tau D + \beta_0 \tilde Z + \beta_1 (D \cdot \tilde Z) \;}$$
+
+donde la pendiente a la izquierda es $\beta_0$ y la pendiente a la derecha es $\beta_0 + \beta_1$.
+
+### Caso 3 — cuadrático con interacciones {-}
+
+Si la relación es curva, agregamos $\tilde Z^2$ y su interacción con $D$:
+
+$$\boxed{\; E[Y \mid \tilde Z, D] = \alpha + \tau D + \beta_0 \tilde Z + \beta_1 (D \cdot \tilde Z) + \beta_2 \tilde Z^2 + \beta_3 (D \cdot \tilde Z^2) \;}$$
+
+Cada lado del umbral tiene su propia parábola, y $\tau$ sigue siendo el salto vertical en $c$ (porque al evaluar en $\tilde Z = 0$, todos los términos polinómicos se anulan).
+
+::: {.boxinfo}
+**Por qué hay que centrar $Z$ en $c$:** sin centrar, $\alpha$ es el resultado esperado en $Z = 0$, un punto arbitrario del soporte. Con $\tilde Z = Z - c$, el coeficiente de $D$ se interpreta **directamente** como el salto en el umbral.
+:::
+
+::: {.boxwarning}
+**Advertencia de Gelman & Imbens (2019, JBES):** polinomios globales de orden alto ($p \geq 3$) son una **mala idea**. Dan demasiado peso a observaciones lejanas al umbral, son sensibles al orden y los CIs no tienen buena cobertura. La práctica moderna recomienda lineal o cuadrático global, o mejor aún, regresión **local lineal con kernel** (sección siguiente).
+:::
+
+---
+
+## Regresión local lineal con kernel {-}
+
+La estimación local difiere del polinomio global en dos cosas:
+
+1. **Solo usa observaciones en la ventana** $[c-h, c+h]$ alrededor del umbral.
+2. Dentro de esa ventana, corre una regresión lineal **ponderada** por un **kernel** $K(\cdot)$ que da más peso a observaciones cercanas a $c$.
+
+El estimador resuelve, separadamente a cada lado:
+
+$$\min_{\alpha, \beta} \sum_{i:\, Z_i \in [c,\, c+h]} K\!\left(\frac{Z_i - c}{h}\right) \left(y_i - \alpha - \beta (Z_i - c)\right)^2$$
+
+y análogo a la izquierda. El salto estimado es $\hat\tau_{RDN} = \hat\alpha_{\text{der}} - \hat\alpha_{\text{izq}}$.
+
+::: {.boxinfo}
+**¿Qué kernel?** El **kernel triangular** $K(u) = (1 - |u|) \cdot \mathbb{1}[|u| \leq 1]$ es óptimo para estimación en el borde (Cheng, Fan & Marron 1997) y es el default de `rdrobust`. También se usa el uniforme (regresión OLS simple sin pesos diferenciales) y el Epanechnikov.
+:::
+
+---
+
+## Selección del ancho de banda $h$ {-}
+
+El bandwidth $h$ gobierna el trade-off sesgo–varianza:
+
+- **$h$ pequeño** → poco sesgo (la aproximación lineal local es buena en una vecindad pequeña) pero **mucha varianza** (pocas observaciones).
+- **$h$ grande** → poca varianza (más datos) pero **mucho sesgo** (la aproximación lineal puede ser pobre lejos de $c$).
+
+Dos enfoques generales:
+
+### 1. Validación cruzada (cross-validation) {-}
+
+Procedimiento intuitivo, atribuido a Ludwig & Miller (2007):
+
+1. Elija un ancho candidato $h_1$.
+2. Para cada observación $i$ del lado izquierdo del umbral: corra una regresión lineal local con $h_1$ usando **todas las observaciones a la izquierda de $i$** en la ventana $[Z_i - h_1, Z_i)$ (sin incluir a $i$).
+3. Prediga $\hat y_i$ a partir de esa regresión.
+4. Repita por la derecha.
+5. Calcule $\text{CV}(h_1) = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat y_i)^2$.
+6. Repita para otros valores candidatos de $h$.
+7. Elija el $h$ que **minimiza** $\text{CV}(h)$.
+
+### 2. Reglas automáticas {-}
+
+| Bandwidth | Referencia | Idea |
+|---|---|---|
+| **IK** | Imbens & Kalyanaraman (2012, *RES*) | Minimiza el MSE asintótico del estimador del salto |
+| **CCT (MSE)** | Calonico, Cattaneo & Titiunik (2014, *Econometrica*) | MSE-óptimo con corrección de sesgo robusta; default de `rdrobust` |
+| **CER** | Calonico, Cattaneo & Farrell (2018) | Coverage-error-rate óptimo (mejor cobertura del CI a costa de más sesgo) |
+
+::: {.boxinfo}
+**Inferencia robusta con corrección de sesgo (CCT):** Calonico et al. mostraron que los CIs convencionales con bandwidth MSE-óptimo subcubren. Solución: estimar puntualmente con $h$ MSE-óptimo, **pero** construir el CI con corrección de sesgo y SE robustos. `rdrobust` reporta tres estimadores: conventional, bias-corrected y **robust** — usen siempre el robust.
+:::
+
+---
+
+## RDB: identificación {-}
+
+En la **Regresión Discontinua Borrosa (RDB)**, cruzar el umbral **aumenta la probabilidad** de recibir el tratamiento, pero no lo determina:
+
+$$P(D_i = 1 \mid Z_i = z) \text{ salta en } c, \text{ pero el salto es menor que } 1$$
+
+Casos típicos:
+
+- Becas otorgadas por puntaje, pero no todos los elegibles aceptan
+- Programa con focalización imperfecta o substitución
+- Edad de jubilación efectiva difiere de la legal
+
+### Notación de RDB {-}
+
+Sea $W_i = \mathbb{1}[Z_i \geq c]$ la **elegibilidad** (siempre determinada por $Z$) y $D_i$ la **toma efectiva** del tratamiento. La elegibilidad $W$ es el **instrumento**.
+
+### Supuestos de identificación {-}
+
+::: {.boxinfo}
+**Supuestos**
+
+1. **Continuidad local:** $D(W=0), D(W=1), Y(W=0), Y(W=1)$ son continuos alrededor del umbral.
+2. **Supuestos de variables instrumentales** (sobre $W$): monotonicidad, restricción de exclusión y relevancia.
+:::
+
+Bajo estos supuestos, RDB identifica el **LATE de los cooperadores en el umbral** (Local² ATE):
+
+$$\tau_{RDB} = E\big[Y(W=1) - Y(W=0) \mid \text{unidad } i \text{ es cooperador},\; Z_i = c\big]$$
+
+### Estimador de Wald local {-}
+
+$$\hat\tau_{RDB} = \frac{\lim_{z \downarrow c} E[Y \mid Z = z] - \lim_{z \uparrow c} E[Y \mid Z = z]}{\lim_{z \downarrow c} E[D \mid Z = z] - \lim_{z \uparrow c} E[D \mid Z = z]} = \frac{\text{Discontinuidad en } Y}{\text{Discontinuidad en } D}$$
+
+O equivalentemente, en una ventana suficientemente estrecha:
+
+$$\hat\tau_{RDB} = \frac{E[Y \mid W = 1] - E[Y \mid W = 0]}{E[D \mid W = 1] - E[D \mid W = 0]}$$
+
+::: {.boxinfo}
+**Conexión con IV:** RDB es **IV local**. La elegibilidad $W_i$ es el instrumento; el tratamiento $D_i$ es la variable endógena. Bajo monotonicidad local (nadie deja de tratarse al cruzar el umbral), $\tau_{RDB}$ identifica el **LATE de los cooperadores** en una vecindad de $c$ — los que pasan a tratarse *porque* cruzan el umbral.
+:::
+
+### Receta para RDB {-}
+
+::: {.boxinfo}
+**Pasos**
+
+0. **Centrar** la variable de asignación: $\tilde Z = Z - c$.
+1. **Seleccionar la muestra**: ancho de banda $h$.
+2. **Crear el instrumento**: $W = \mathbb{1}[Z \geq c]$.
+3. **Estimar** por MC2E (2SLS):
+   - **Primera etapa:** $D = W\alpha + \mu$, $\hat D = W\hat\alpha$
+   - **Segunda etapa:** $y = \delta + \tau \hat D + f(\tilde Z) + \varepsilon$
+
+   donde $f(\tilde Z)$ puede ser lineal, lineal con interacciones o cuadrática (los tres casos derivados arriba).
+:::
+
+`rdrobust` admite RDB directamente: `rdrobust y Z, c(c) fuzzy(D)`. También se puede estimar como 2SLS dentro de la ventana óptima:
+
+```stata
+ivregress 2sls y Zt (D = W) WZt if abs(Zt) < h
+```
+
+donde `Zt` es $\tilde Z$ y `WZt` la interacción.
+
+---
+
+## Polinomio global vs local lineal — comparación {-}
+
+| Característica | Polinomio global | Local lineal con kernel |
+|---|---|---|
+| Datos usados | Toda la muestra | Solo $Z \in [c-h, c+h]$ |
+| Pesos | Iguales | Kernel (triangular) |
+| Hiperparámetro | Orden del polinomio $p$ | Ancho de banda $h$ |
+| Tendencia | Sensible a observaciones lejanas | Robusta a colas |
+| Inferencia | OLS estándar | Bias-corrected robusta (CCT) |
+| Comando Stata | `reg y D Zt DZt Zt2 DZt2` | `rdrobust y Z, c(c)` |
+| Recomendado para | Visualización + intuición | Estimación final del paper |
+
+**Práctica estándar:** reportar ambos en el paper, con el local lineal como **especificación principal** y el polinomio global como **robustez**. La intuición se enseña con el polinomio; los resultados se publican con el local.
+
+---
+
+## Pruebas de robustez {-}
+
+Antes de creer un resultado RD, hay cuatro pruebas obligatorias:
+
+### 1. Sensibilidad {-}
+
+¿Qué tan sensibles son sus resultados a cambios en la especificación? Pruebe:
+
+- Distintos órdenes de polinomio (lineal vs cuadrático)
+- Distintos anchos de banda ($h/2$, $h$, $2h$)
+- Distintos kernels (triangular vs uniforme)
+
+El resultado no debe cambiar drásticamente. Reportar todas las variantes en una tabla de robustez.
+
+### 2. Balance {-}
+
+¿Alguna de las variables de control salta en el umbral? Las covariables **fijadas antes** del tratamiento (sexo, edad de los padres, año de nacimiento) **no** deben saltar en $c$. Si lo hacen, las observaciones a cada lado no son comparables.
+
+Implementación: correr el estimador RD con cada covariable $X$ como "resultado":
+
+$$E[X \mid Z, D] = \beta_0 + \beta_1 \tilde Z + \tau D + \beta_3 \tilde Z \cdot D$$
+
+El coeficiente $\tau$ debe ser **cero** y no significativo en todas las covariables. Apoyar con gráficos visuales.
+
+### 3. Placebo {-}
+
+Estimar el "salto" en valores **placebo** del umbral — puntos donde **no** hay tratamiento real. Por ejemplo, si el verdadero $c = 50$, repita el análisis con $c_{\text{placebo}} \in \{46, 48, 52, 54\}$.
+
+No debe aparecer ningún efecto significativo en los placebos. Si aparece, sospechar que la forma funcional está mal especificada o que hay otra discontinuidad oculta.
+
+### 4. Sorting (test de McCrary 2008) {-}
+
+¿Los participantes **cambian su comportamiento** en el umbral para caer del lado deseado? Ejemplos: un estudiante repite el examen, un funcionario es sobornado para subir el puntaje, una empresa sub-reporta utilidades para evitar un impuesto.
+
+Síntoma observable: **discontinuidad en la densidad de $Z$ en $c$** — acumulación sospechosa de observaciones de un solo lado.
+
+- **McCrary (2008):** test formal de discontinuidad en la densidad. Stata: `rddensity` (Cattaneo, Jansson & Ma 2018, *JASA*) — versión moderna sin tuning subjetivo.
+- $H_0$: continuidad de la densidad en $c$ (no hay manipulación detectable).
+
+::: {.boxinfo}
+**El gráfico que siempre acompaña al test:** la densidad estimada de $Z$ a cada lado del umbral. Una densidad continua (panel C de McCrary) sugiere no manipulación; una salto visible (panel D) es evidencia de sorting.
+:::
+
+---
+
+## Variable de asignación discreta {-}
+
+Hasta acá asumimos $Z$ continua. En la práctica, $Z$ suele ser discreta: puntajes redondeados al entero, edad en años, número de hijos, montos en pesos. Lee & Card (2008) y **Kolesár & Rothe (2018, AER)** demostraron que con $Z$ discreta:
+
+- Los CIs convencionales y los CIs robustos de CCT **subcubren**: la cobertura nominal del 95% puede ser <70% en simulaciones.
+- El problema viene de la **especificación incorrecta**: con valores discretos, ya no se puede tomar un límite $z \downarrow c$ — solo se observan los valores discretos. La diferencia entre el valor en $Z=c$ y la extrapolación lineal desde otros puntos es **sesgo**, y los CIs estándar lo ignoran.
+
+::: {.boxwarning}
+**Si $Z$ es discreta — qué NO hacer:** correr `rdrobust` sin más y reportar el CI tal cual. Los SE pueden subestimar la incertidumbre por un factor de 2 o más.
+:::
+
+### Tres alternativas {-}
+
+1. **Honest CIs (Kolesár & Rothe 2018):** asumir una cota explícita en la segunda derivada de $E[Y \mid Z]$ y construir CIs que cubran uniformemente sobre todas las funciones que respetan la cota. Implementado en el package R `RDHonest`.
+2. **Clustering en los valores de $Z$ (Lee & Card 2008):** agrupar SE por cada valor único de $Z$. Conservador, fácil de implementar: `rdrobust y Z, c(c) cluster(Z)`.
+3. **Bandwidth grande deliberado y polinomio:** si $Z$ tiene pocos valores discretos, tratarlo como variable categórica y reportar el coeficiente del indicador $\mathbb{1}[Z \geq c]$ con SE clusterizados.
+
+### Heaping {-}
+
+Caso especial: $Z$ continua pero con **acumulación en valores redondos** (peso al nacer en gramos redondeados a 50, ingresos auto-reportados redondeados a múltiplos de 100K). Si el redondeo se correlaciona con el tratamiento o el resultado, el diseño se rompe. **Donut RD** (siguiente sección) es una solución parcial.
+
+---
+
+## Extensiones {-}
+
+### Regression Kink Design (RKD) {-}
+
+En vez de un **salto** en el nivel del tratamiento, el umbral genera un **cambio en la pendiente** de cómo $Z$ afecta $D$. Ejemplos: beneficios de desempleo que dependen del salario previo con tope, impuestos progresivos. Card, Lee, Pei & Weber (2015, *Econometrica*) formalizaron el RKD; identificación requiere continuidad de la primera derivada.
+
+Estimación: igual que RD pero el estimando es el **cambio en la pendiente** en $c$. `rdrobust` lo soporta con la opción `deriv(1)`.
+
+### Donut RD {-}
+
+Si se sospecha manipulación o heaping **exactamente en $c$**, se omite una pequeña ventana $[c-\delta, c+\delta]$ y se estima RD con las observaciones restantes. Trade-off: pierde poder y sesga la interpretación (ya no es "en el umbral" sino "extrapolado al umbral"). Útil como robustez.
+
+### Geographic RD {-}
+
+La variable de asignación es la **distancia a una frontera** (administrativa, política, climática). Cada lado de la frontera tiene una política o tratamiento distinto. Dell (2010, *Econometrica*) usa la frontera del trabajo forzoso colonial peruano (mita) como ejemplo paradigmático.
+
+Complicaciones: la "distancia" puede medirse en múltiples direcciones; covariables geográficas (suelo, altitud, clima) deben balancear; spillovers entre lados son más probables.
+
+### Multi-cutoff y multi-score RD {-}
+
+Variantes para umbrales múltiples (varias becas con umbrales distintos) o para reglas con varias dimensiones (puntaje **y** SISBEN). Ver Cattaneo, Idrobo & Titiunik (2020) para una guía moderna.
+
+---
+
+## Checklist final {-}
+
+::: {.boxwarning}
+**Antes de creer un resultado RD, exija:**
+
+1. **Gráfico binned scatter** del resultado vs $Z$ con el ajuste local lineal a cada lado.
+2. **Sorting / McCrary** (`rddensity`) — debe **no rechazar**.
+3. **Balance de covariables predeterminadas** — coeficientes RD cercanos a cero y no significativos.
+4. **Placebos en umbrales falsos** — no encuentra efectos donde no debería.
+5. **Sensibilidad al ancho de banda** — el resultado no debe cambiar drásticamente cuando $h$ varía $\pm 50\%$.
+6. **Sensibilidad al orden del polinomio** — lineal y cuadrático deben dar respuestas parecidas; cúbico no se reporta como principal.
+7. **Si $Z$ es discreta** — SE clusterizados en valores de $Z$ o "honest CIs".
+8. **Interpretación honesta:** el efecto es **local en $c$**, no es ATE. Hay que decirlo en el abstract.
+:::
+
+---
+
+## Lecturas recomendadas {-}
+
+- **Hahn, Todd & van der Klaauw (2001)** — "Identification and estimation of treatment effects with a regression-discontinuity design", *Econometrica* — el paper fundacional moderno.
+- **Imbens & Lemieux (2008)** — "Regression discontinuity designs: a guide to practice", *Journal of Econometrics* — la guía clásica.
+- **Lee & Lemieux (2010)** — "Regression discontinuity designs in economics", *Journal of Economic Literature* — survey exhaustivo con ejemplos.
+- **Cattaneo, Idrobo & Titiunik (2020)** — *A Practical Introduction to Regression Discontinuity Designs* (Cambridge Elements, dos volúmenes). El manual moderno; cubre `rdrobust`, `rddensity`, `rdmulti`. **Lectura obligada.**
+- **Calonico, Cattaneo & Titiunik (2014)** — "Robust nonparametric confidence intervals for regression-discontinuity designs", *Econometrica* — base teórica de `rdrobust`.
+- **Kolesár & Rothe (2018)** — "Inference in regression discontinuity designs with a discrete running variable", *AER* — lectura obligada cuando $Z$ es discreta.
+- **Gelman & Imbens (2019)** — "Why high-order polynomials should not be used in regression discontinuity designs", *JBES* — por qué no usar polinomios de orden alto.
+- **McCrary (2008)** — "Manipulation of the running variable in the regression discontinuity design", *J. Econometrics* — el test de sorting.
+- **Ludwig & Miller (2007)** — "Does Head Start improve children's life chances?", *QJE* — fuente del procedimiento de cross-validation para bandwidth.

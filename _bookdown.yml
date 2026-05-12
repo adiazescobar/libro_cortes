@@ -27,3 +27,5 @@ rmd_files:
   - 16-PSM_IPW_SinteticosConsolidado.Rmd      # Este será Cap 16 (consolidado: PSM Stata + IPW + Controles Sintéticos)
   - 18-IV.Rmd                 # Cap 17 — Variables Instrumentales y LATE (teórico)
   - 19-IVStata.Rmd            # Cap 18 — IV y LATE en Stata (simulación)
+  - 20-RDD.Rmd                # Cap 19 — Regresión Discontinua (teórico)
+  - 21-RDDStata.Rmd           # Cap 20 — RDD en Stata (simulación)

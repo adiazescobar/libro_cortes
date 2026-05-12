@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 8 Diferencias en Diferencias | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 8 Diferencias en Diferencias | Cortes Transversales" />
+  <title>Capitulo 19 Regresión Discontinua | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 19 Regresión Discontinua | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 8 Diferencias en Diferencias | Cortes Transversales" />
+  <meta property="og:title" content="Capitulo 19 Regresión Discontinua | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 8 Diferencias en Diferencias | Cortes Transversales" />
+  <meta name="twitter:title" content="Capitulo 19 Regresión Discontinua | Cortes Transversales" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="poder-estadistico-stata.html"/>
-<link rel="next" href="bad-controls-teoria.html"/>
+<link rel="prev" href="parte-b-late-paso-a-paso.html"/>
+<link rel="next" href="rdd-stata.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,7 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
-<li class="chapter" data-level="1.1" data-path="08-DID.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="1.1" data-path="20-RDD.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
@@ -498,579 +498,519 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="did-teoria" class="section level1 hasAnchor" number="8">
-<h1><span class="header-section-number">Capitulo 8</span> Diferencias en Diferencias<a href="did-teoria.html#did-teoria" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="rdd" class="section level1 hasAnchor" number="19">
+<h1><span class="header-section-number">Capitulo 19</span> Regresión Discontinua<a href="rdd.html#rdd" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="boxinfo">
-<p><strong>🎯 Metas de aprendizaje</strong></p>
+<p><strong>Metas de aprendizaje</strong></p>
 <ul>
-<li>Entender el problema de identificación que DiD resuelve.</li>
-<li>Comprender el supuesto de <strong>tendencias paralelas</strong> y por qué es el corazón de la estrategia.</li>
-<li>Derivar el estimador DiD desde los resultados potenciales.</li>
-<li>Interpretar cada coeficiente de la regresión DiD.</li>
-<li>Saber cómo probar (y cómo fallar) el supuesto de tendencias paralelas.</li>
-<li>Implementar DiD en Stata: manualmente, con <code>diff</code>, y con regresión.</li>
+<li>Reconocer cuándo un problema admite un diseño de regresión discontinua (RD) y por qué identifica un efecto causal</li>
+<li>Distinguir <strong>Regresión Discontinua Nítida (RDN)</strong> y <strong>Regresión Discontinua Borrosa (RDB)</strong>, y entender por qué RDB es un caso particular de IV</li>
+<li>Derivar la forma de regresión paso a paso: lineal con misma pendiente, lineal con pendientes distintas y cuadrática con interacciones</li>
+<li>Estimar el salto siguiendo la <strong>receta</strong> (centrar <span class="math inline">\(Z\)</span>, elegir ancho de banda <span class="math inline">\(h\)</span>, modelar <span class="math inline">\(E[Y \mid Z]\)</span>)</li>
+<li>Elegir el ancho de banda por <strong>validación cruzada</strong> o reglas automáticas (IK 2012, CCT 2014)</li>
+<li>Aplicar las 4 pruebas de robustez: <strong>sensibilidad</strong>, <strong>balance</strong>, <strong>placebo</strong>, <strong>sorting</strong> (McCrary 2008)</li>
+<li>Identificar amenazas cuando la variable de asignación es <strong>discreta</strong> (Kolesár &amp; Rothe 2018)</li>
+<li>Reconocer extensiones útiles: kink design (RKD), donut RD y geographic RD</li>
 </ul>
 </div>
 <hr />
-<div id="el-problema-que-did-resuelve" class="section level2 unnumbered hasAnchor">
-<h2>El problema que DiD resuelve<a href="did-teoria.html#el-problema-que-did-resuelve" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Suponga que quiere evaluar el efecto de un programa (subsidio, política, capacitación). El problema fundamental es que <strong>no podemos observar al mismo individuo tratado y no tratado al mismo tiempo</strong>.</p>
-<p>La comparación más ingenua sería:</p>
-<p><span class="math display">\[\text{Efecto aparente} = \underbrace{\bar{Y}_{\text{tratados}} - \bar{Y}_{\text{controles}}}_{\text{diferencia cruda}}\]</span></p>
-<p>Pero esa diferencia puede existir incluso sin programa, simplemente porque los grupos eran distintos desde antes. Eso es <strong>sesgo de selección</strong>.</p>
-<p>Una segunda idea: comparar el grupo tratado antes y después del programa:</p>
-<p><span class="math display">\[\text{Efecto aparente} = \bar{Y}_{\text{tratados},\, t=1} - \bar{Y}_{\text{tratados},\, t=0}\]</span></p>
-<p>Pero eso puede capturar cualquier cambio que hubiera ocurrido en ese periodo, con o sin programa (una recesión, una reforma, la maduración de los niños). Eso es el <strong>problema de la tendencia temporal</strong>.</p>
-<p><strong>DiD resuelve ambos problemas a la vez</strong> usando dos grupos (tratados y controles) y dos periodos (antes y después):</p>
-<p><span class="math display">\[\widehat{\delta}_{DD} = \underbrace{(\bar{Y}_{T,1} - \bar{Y}_{T,0})}_{\text{cambio en tratados}} - \underbrace{(\bar{Y}_{C,1} - \bar{Y}_{C,0})}_{\text{cambio en controles}}\]</span></p>
-<p>La lógica es: el cambio en el grupo de control nos dice cuánto habrían cambiado los tratados <strong>en ausencia del programa</strong>. La diferencia entre los dos cambios es el efecto del programa.</p>
+<div id="la-idea-de-rd" class="section level2 unnumbered hasAnchor">
+<h2>La idea de RD<a href="rdd.html#la-idea-de-rd" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Muchos programas, políticas y decisiones administrativas se asignan según una <strong>regla determinística</strong> basada en una variable continua <span class="math inline">\(Z\)</span> que cruza un umbral <span class="math inline">\(c\)</span>:</p>
+<ul>
+<li>Una beca se otorga si el puntaje del examen supera <span class="math inline">\(c\)</span></li>
+<li>Una transferencia condicionada se entrega si el índice de pobreza está por debajo de <span class="math inline">\(c\)</span></li>
+<li>La pensión mínima se activa al cumplir <span class="math inline">\(c=57\)</span> años (mujeres) o <span class="math inline">\(c=62\)</span> (hombres)</li>
+<li>Un partido gana una elección si obtiene más del 50% de los votos</li>
+</ul>
+<p>La <strong>regresión discontinua</strong> explota esa regla. Individuos justo por encima y justo por debajo de <span class="math inline">\(c\)</span> son, en promedio, <strong>similares en todo lo demás</strong> (observables y no observables) pero <strong>diferentes en el tratamiento</strong>. Si en el cutoff aparece un salto en el resultado <span class="math inline">\(y\)</span>, ese salto identifica el efecto causal del tratamiento — <strong>localmente</strong>, cerca del umbral.</p>
+<div class="boxinfo">
+<p><strong>Ventaja y desventaja</strong></p>
+<ul>
+<li><strong>Ventaja:</strong> validez interna alta — la asignación cerca del umbral funciona como un experimento controlado local.</li>
+<li><strong>Desventaja:</strong> validez externa limitada — el efecto identificado es un <strong>LATE en <span class="math inline">\(c\)</span></strong>, no informa de subpoblaciones lejos del umbral.</li>
+</ul>
+</div>
+<p>El diseño se debe a <strong>Thistlethwaite &amp; Campbell (1960)</strong>, quienes estudiaron el efecto de recibir un certificado de mérito académico sobre las aspiraciones de carrera de estudiantes en EE.UU. Permaneció marginal hasta que Hahn, Todd &amp; van der Klaauw (2001) lo formalizaron en <em>Econometrica</em>. Hoy es uno de los caballos de batalla de la inferencia causal.</p>
 <hr />
 </div>
-<div id="la-tabla-22" class="section level2 unnumbered hasAnchor">
-<h2>La tabla 2×2<a href="did-teoria.html#la-tabla-22" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>La estructura de datos de DiD siempre se puede organizar en una tabla:</p>
+<div id="notación" class="section level2 unnumbered hasAnchor">
+<h2>Notación<a href="#notaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="boxinfo">
+<p><strong>Variables del diseño</strong></p>
+<ul>
+<li><span class="math inline">\(Z_i\)</span> = <strong>variable de asignación</strong> (continua, observable, también llamada <em>running variable</em> o <em>score</em>)</li>
+<li><span class="math inline">\(c\)</span> = <strong>umbral</strong> (<em>cutoff</em>)</li>
+<li><span class="math inline">\(D_i\)</span> = <strong>tratamiento</strong> efectivo (0/1)</li>
+<li><span class="math inline">\(\tilde Z_i = Z_i - c\)</span> = variable de asignación <strong>centrada</strong> en el umbral</li>
+<li><span class="math inline">\(h\)</span> = <strong>ancho de banda</strong> (bandwidth)</li>
+<li>En RDB, <span class="math inline">\(W_i = \mathbb{1}[Z_i \geq c]\)</span> = <strong>elegibilidad</strong> (instrumento)</li>
+</ul>
+</div>
+<p>Dos casos según la dirección de la regla:</p>
+<p><span class="math display">\[D_i = \mathbb{1}[Z_i \geq c] = \begin{cases} 1 &amp; \text{si } Z_i \geq c \\ 0 &amp; \text{si } Z_i &lt; c \end{cases}, \qquad
+  D_i = \mathbb{1}[Z_i \leq c] = \begin{cases} 1 &amp; \text{si } Z_i \leq c \\ 0 &amp; \text{si } Z_i &gt; c \end{cases}\]</span></p>
+<hr />
+</div>
+<div id="ejemplos-clásicos-1" class="section level2 unnumbered hasAnchor">
+<h2>Ejemplos clásicos<a href="#ejemplos-cl%C3%A1sicos-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <table>
 <colgroup>
-<col width="25%" />
-<col width="25%" />
-<col width="25%" />
-<col width="25%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th></th>
-<th>Antes (<span class="math inline">\(t=0\)</span>)</th>
-<th>Después (<span class="math inline">\(t=1\)</span>)</th>
-<th><strong>Primera diferencia</strong></th>
+<th>Estudio</th>
+<th>Variable de asignación <span class="math inline">\(Z\)</span></th>
+<th>Umbral <span class="math inline">\(c\)</span></th>
+<th>Tratamiento <span class="math inline">\(D\)</span></th>
+<th>Resultado <span class="math inline">\(y\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Controles</strong> (<span class="math inline">\(D=0\)</span>)</td>
-<td><span class="math inline">\(\bar{Y}_{C,0}\)</span></td>
-<td><span class="math inline">\(\bar{Y}_{C,1}\)</span></td>
-<td><span class="math inline">\(\bar{Y}_{C,1} - \bar{Y}_{C,0}\)</span></td>
+<td>Thistlethwaite &amp; Campbell (1960)</td>
+<td>Puntaje examen</td>
+<td>umbral mérito</td>
+<td>Certificado de mérito</td>
+<td>Aspiraciones académicas</td>
 </tr>
 <tr class="even">
-<td><strong>Tratados</strong> (<span class="math inline">\(D=1\)</span>)</td>
-<td><span class="math inline">\(\bar{Y}_{T,0}\)</span></td>
-<td><span class="math inline">\(\bar{Y}_{T,1}\)</span></td>
-<td><span class="math inline">\(\bar{Y}_{T,1} - \bar{Y}_{T,0}\)</span></td>
+<td>Angrist &amp; Lavy (1999)</td>
+<td>Tamaño de la cohorte</td>
+<td>múltiplos de 40 (regla de Maimónides)</td>
+<td>Tamaño de clase reducido</td>
+<td>Aprendizajes</td>
 </tr>
 <tr class="odd">
-<td><strong>Segunda diferencia</strong></td>
-<td>—</td>
-<td>—</td>
-<td><span class="math inline">\(\widehat{\delta}_{DD}\)</span></td>
+<td>Lee (2008)</td>
+<td>% de votos del partido</td>
+<td>50%</td>
+<td>Ganar reelección</td>
+<td>Probabilidad de reelección futura</td>
+</tr>
+<tr class="even">
+<td>Carrell, Hoekstra &amp; Kuka (2018)</td>
+<td>GPA</td>
+<td>umbral de mérito</td>
+<td>Beca universitaria</td>
+<td>Graduación</td>
+</tr>
+<tr class="odd">
+<td>Card, Dobkin &amp; Maestas (2008)</td>
+<td>Edad</td>
+<td>65 años</td>
+<td>Medicare</td>
+<td>Mortalidad / utilización</td>
+</tr>
+<tr class="even">
+<td>Saavedra (2009), PACES Colombia</td>
+<td>Puntaje SABER 11</td>
+<td>umbral SPP</td>
+<td>Acceso a educación superior subsidiada</td>
+<td>Asistencia universitaria</td>
 </tr>
 </tbody>
 </table>
-<p>La <strong>primera diferencia por fila</strong> elimina diferencias fijas entre grupos.
-La <strong>segunda diferencia</strong> (entre filas) elimina la tendencia temporal común.</p>
+<p><strong>Ejemplo paradigmático — pensión mínima en Colombia:</strong> la pensión por vejez se activa al cumplir 62/57 años (hombres/mujeres). Personas con 61 años 11 meses y 62 años 1 mes son casi idénticas en salud, capital humano y trayectoria laboral, pero difieren bruscamente en si reciben la pensión. El salto en consumo, salud o oferta laboral en <span class="math inline">\(c=62\)</span> identifica el efecto causal de la transferencia.</p>
 <hr />
 </div>
-<div id="resultados-potenciales-y-el-att" class="section level2 unnumbered hasAnchor">
-<h2>Resultados potenciales y el ATT<a href="did-teoria.html#resultados-potenciales-y-el-att" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Formalizamos con la notación de resultados potenciales:</p>
-<ul>
-<li><span class="math inline">\(Y_{it}(1)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> en el periodo <span class="math inline">\(t\)</span> <strong>si es tratado</strong>.</li>
-<li><span class="math inline">\(Y_{it}(0)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> en el periodo <span class="math inline">\(t\)</span> <strong>si no es tratado</strong>.</li>
-</ul>
-<p>El efecto del tratamiento sobre los tratados (<strong>ATT</strong>) en <span class="math inline">\(t=1\)</span> es:</p>
-<p><span class="math display">\[\text{ATT} = E\!\left[Y_{i,1}(1) - Y_{i,1}(0) \mid D_i = 1\right]\]</span></p>
-<p>El problema: <span class="math inline">\(Y_{i,1}(0)\)</span> no se observa para los tratados después del tratamiento. Necesitamos un contrafactual.</p>
-<p>DiD propone usar el cambio observado en los controles como estimación del cambio contrafactual en los tratados:</p>
-<p><span class="math display">\[E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 1\right] \approx E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 0\right]\]</span></p>
-<p>Esa igualdad es exactamente el <strong>supuesto de tendencias paralelas</strong>.</p>
+<div id="rdn-identificación" class="section level2 unnumbered hasAnchor">
+<h2>RDN: identificación<a href="#rdn-identificaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En la <strong>Regresión Discontinua Nítida (RDN)</strong>, el tratamiento se asigna <strong>determinísticamente</strong> según <span class="math inline">\(Z\)</span>:</p>
+<p><span class="math display">\[D_i = \mathbb{1}[Z_i \geq c]\]</span></p>
+<p>Todos los que cruzan el umbral reciben el tratamiento, ninguno por debajo lo recibe. El problema de identificación se plantea sobre los resultados potenciales <span class="math inline">\(Y_i(1), Y_i(0)\)</span>.</p>
+<div class="boxinfo">
+<p><strong>Supuesto clave — continuidad local (Hahn, Todd &amp; van der Klaauw 2001):</strong></p>
+<p><span class="math display">\[E[Y(d) \mid Z = z] \text{ es continuo en } z = c \text{ para } d = 0, 1\]</span></p>
+<p>Es decir, en ausencia del tratamiento, el resultado esperado <strong>no salta</strong> en el umbral. Cualquier discontinuidad observada en <span class="math inline">\(E[Y \mid Z]\)</span> en <span class="math inline">\(c\)</span> es atribuible al tratamiento.</p>
+</div>
+<p>Bajo continuidad local, el <strong>efecto promedio del tratamiento en el umbral</strong> está identificado como:</p>
+<p><span class="math display">\[\tau_{RDN} = E[Y(1) - Y(0) \mid Z = c] = \lim_{z \downarrow c} E[Y \mid Z = z] - \lim_{z \uparrow c} E[Y \mid Z = z]\]</span></p>
+<p><strong>Lectura:</strong> <span class="math inline">\(\tau_{RDN}\)</span> es el ATE <em>local en <span class="math inline">\(c\)</span></em> — el efecto promedio para individuos cuya <span class="math inline">\(Z\)</span> es exactamente <span class="math inline">\(c\)</span>. Esta es la principal limitación de validez externa del diseño.</p>
 <hr />
 </div>
-<div id="el-supuesto-de-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
-<h2>El supuesto de tendencias paralelas<a href="did-teoria.html#el-supuesto-de-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="boxcerebro">
-<p><strong>Supuesto de tendencias paralelas (formal):</strong></p>
-<p><span class="math display">\[E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 1\right] = E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 0\right]\]</span></p>
-<p>En ausencia del tratamiento, la evolución media del resultado en el grupo tratado habría sido <strong>idéntica</strong> a la del grupo de control.</p>
-</div>
-<p><strong>¿Qué dice en palabras?</strong></p>
-<p>No se exige que tratados y controles sean iguales en el periodo base — pueden tener niveles diferentes. Lo que se exige es que sus <strong>tendencias</strong> habrían sido las mismas si el programa no hubiera existido.</p>
-<p><strong>¿Por qué es creíble?</strong></p>
-<p>El supuesto es más plausible cuando:</p>
-<ul>
-<li>Los grupos son similares en características observables.</li>
-<li>El programa no fue asignado en función de la tendencia reciente de <span class="math inline">\(Y\)</span> (<em>Ashenfelter’s dip</em>: cuidado si los tratados fueron seleccionados porque estaban en declive).</li>
-<li>Los periodos pre-tratamiento muestran tendencias paralelas (evidencia empírica).</li>
-</ul>
-<p><strong>¿Qué lo viola?</strong></p>
-<ul>
-<li>Diferencias en la tendencia de crecimiento entre grupos (ej: los tratados tenían un crecimiento más rápido de antemano).</li>
-<li>Shocks simultáneos que afectan solo a un grupo.</li>
-<li>Selección de participantes basada en la trayectoria reciente de <span class="math inline">\(Y\)</span>.</li>
-</ul>
-<hr />
-</div>
-<div id="identificación-del-att-bajo-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
-<h2>Identificación del ATT bajo tendencias paralelas<a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Bajo el supuesto de tendencias paralelas, el estimador DiD recupera el ATT:</p>
-<p><span class="math display">\[
-\widehat{\delta}_{DD} = \underbrace{E[Y_{i,1} \mid D_i=1]}_{\bar{Y}_{T,1}} - \underbrace{E[Y_{i,0} \mid D_i=1]}_{\bar{Y}_{T,0}} - \underbrace{\Big(E[Y_{i,1} \mid D_i=0] - E[Y_{i,0} \mid D_i=0]\Big)}_{\text{tendencia de los controles}}
-\]</span></p>
-<p>Sustituyendo resultados potenciales y usando independencia e igualdad de tendencias:</p>
-<p><span class="math display">\[
-= E[Y(1) - Y(0) \mid D=1] = \text{ATT}
-\]</span></p>
-<p>El estimador es insesgado para el ATT <strong>si y solo si</strong> el supuesto de tendencias paralelas se cumple.</p>
-<hr />
-</div>
-<div id="la-regresión-did" class="section level2 unnumbered hasAnchor">
-<h2>La regresión DiD<a href="#la-regresi%C3%B3n-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El estimador de las cuatro medias se puede recuperar exactamente con:</p>
-<p><span class="math display">\[Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon_{it}\]</span></p>
-<p>Interpretación de cada coeficiente:</p>
-<table>
-<colgroup>
-<col width="50%" />
-<col width="50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Coeficiente</th>
-<th>Significado</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(\alpha\)</span></td>
-<td>Media de los controles en el periodo base (<span class="math inline">\(\bar{Y}_{C,0}\)</span>)</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\beta\)</span></td>
-<td>Diferencia pre-tratamiento entre grupos (<span class="math inline">\(\bar{Y}_{T,0} - \bar{Y}_{C,0}\)</span>)</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\gamma\)</span></td>
-<td>Cambio temporal en los controles (<span class="math inline">\(\bar{Y}_{C,1} - \bar{Y}_{C,0}\)</span>)</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\delta\)</span></td>
-<td><strong>Estimador DiD</strong> = efecto causal del programa (bajo tendencias paralelas)</td>
-</tr>
-</tbody>
-</table>
-<div class="boxcerebro">
-<p><strong>El coeficiente que importa es <span class="math inline">\(\delta\)</span></strong>, el de la interacción <span class="math inline">\(D \times t\)</span>.
-Los coeficientes <span class="math inline">\(\beta\)</span> y <span class="math inline">\(\gamma\)</span> por sí solos no tienen interpretación causal.</p>
-</div>
-<p><strong>Equivalencia algebraica:</strong> Los cuatro promedios se recuperan así:</p>
-<p><span class="math display">\[\bar{Y}_{C,0} = \hat{\alpha}, \quad \bar{Y}_{T,0} = \hat{\alpha}+\hat{\beta}, \quad \bar{Y}_{C,1} = \hat{\alpha}+\hat{\gamma}, \quad \bar{Y}_{T,1} = \hat{\alpha}+\hat{\beta}+\hat{\gamma}+\hat{\delta}\]</span></p>
-<hr />
-</div>
-<div id="prueba-de-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
-<h2>Prueba de tendencias paralelas<a href="did-teoria.html#prueba-de-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El supuesto de tendencias paralelas <strong>no es verificable</strong> en el periodo de tratamiento: el contrafactual <span class="math inline">\(Y_{it}(0)\)</span> para los tratados en <span class="math inline">\(t=1\)</span> no existe. Solo podemos buscar evidencia indirecta.</p>
-<p><strong>Con múltiples periodos pre-tratamiento</strong> (y un identificador individual), Stata ofrece dos pruebas formales distintas — y es importante no confundirlas:</p>
-<hr />
-<div id="prueba-de-tendencias-paralelas-estat-ptrends" class="section level3 unnumbered hasAnchor">
-<h3>Prueba de tendencias paralelas: <code>estat ptrends</code><a href="did-teoria.html#prueba-de-tendencias-paralelas-estat-ptrends" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb87"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb87-1"><a href="did-teoria.html#cb87-1" tabindex="-1"></a>xtdidregress (<span class="fu">y</span>) (treatment), <span class="fu">group</span>(id) time(<span class="fu">year</span>)</span>
-<span id="cb87-2"><a href="did-teoria.html#cb87-2" tabindex="-1"></a><span class="kw">estat</span> ptrends</span></code></pre></div>
-<p><strong>H₀:</strong> Las tendencias lineales son paralelas en el periodo pre-tratamiento.</p>
-<p>Lo que hace internamente: estima una regresión sobre los periodos pre-tratamiento con una interacción <code>tratado × tiempo</code> (como variable continua) y prueba si ese coeficiente es cero. Si se rechaza H₀, hay evidencia de que los grupos ya tenían pendientes distintas antes del programa.</p>
-<p>Esta es la prueba de tendencias paralelas propiamente dicha.</p>
-<hr />
-</div>
-<div id="prueba-de-anticipación-estat-granger" class="section level3 unnumbered hasAnchor">
-<h3>Prueba de anticipación: <code>estat granger</code><a href="#prueba-de-anticipaci%C3%B3n-estat-granger" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb88"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb88-1"><a href="did-teoria.html#cb88-1" tabindex="-1"></a><span class="kw">estat</span> granger</span></code></pre></div>
-<p><strong>H₀:</strong> No hubo efectos del tratamiento en anticipación (antes de que empezara).</p>
-<p>Lo que hace internamente: construye indicadores de “leads” — una variable por cada periodo pre-tratamiento que toma valor 1 si el grupo es tratado y el tiempo ya superó ese umbral. Incluye todos esos indicadores en una regresión y los prueba conjuntamente con un F-test acumulado.</p>
-<div class="boxcerebro">
-<p><strong>Diferencia clave entre las dos pruebas:</strong></p>
-<table>
-<colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Prueba</th>
-<th>H₀</th>
-<th>¿Qué detecta si se rechaza?</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>estat ptrends</code></td>
-<td>Tendencias lineales iguales antes del tratamiento</td>
-<td>Tendencias pre-existentes distintas entre grupos</td>
-</tr>
-<tr class="even">
-<td><code>estat granger</code></td>
-<td>Sin efectos anticipados del tratamiento</td>
-<td>Que los agentes cambiaron su comportamiento antes de que empezara el programa</td>
-</tr>
-</tbody>
-</table>
-<p>Son preguntas distintas. Un rechazo en <code>ptrends</code> no implica anticipación, y un rechazo en <code>granger</code> no implica que las tendencias no eran paralelas. Siempre se necesita un argumento teórico para interpretar cuál es el problema.</p>
-</div>
-<hr />
-</div>
-<div id="visualización-estat-trendplots-y-estat-grangerplot" class="section level3 unnumbered hasAnchor">
-<h3>Visualización: <code>estat trendplots</code> y <code>estat grangerplot</code><a href="#visualizaci%C3%B3n-estat-trendplots-y-estat-grangerplot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb89"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb89-1"><a href="did-teoria.html#cb89-1" tabindex="-1"></a><span class="kw">estat</span> trendplots   * medias observadas + tendencias lineales ajustadas por grupo</span>
-<span id="cb89-2"><a href="did-teoria.html#cb89-2" tabindex="-1"></a><span class="kw">estat</span> grangerplot  * event study: efectos específicos por periodo (pre <span class="fu">y</span> <span class="kw">post</span>)</span></code></pre></div>
-<p><code>trendplots</code> es el gráfico diagnóstico de tendencias. <code>grangerplot</code> es el event study completo con los efectos por periodo y sus intervalos de confianza.</p>
-<hr />
-<div class="boxcerebro">
-<p><strong>Restricción técnica:</strong> el código fuente de Stata exige <strong>al menos 2 periodos pre-tratamiento</strong> para correr <code>estat ptrends</code> o <code>estat granger</code>. Con solo un periodo antes del tratamiento, ambas pruebas fallan con error. En nuestra base (1 periodo antes, 1 después), estas pruebas no son ejecutables.</p>
-</div>
-<p><strong>Con solo dos periodos (como en nuestra base):</strong></p>
-<p>Con un único periodo antes y uno después, la prueba formal de pre-tendencias es <strong>imposible</strong>. El gráfico de tendencias medias que construimos en Stata es una <em>visualización del DiD</em>, no una prueba del supuesto. Para probar tendencias paralelas se necesitan <strong>al menos 3 periodos</strong> y un identificador de individuo.</p>
-<hr />
-</div>
-</div>
-<div id="amenazas-adicionales-a-la-validez" class="section level2 unnumbered hasAnchor">
-<h2>Amenazas adicionales a la validez<a href="did-teoria.html#amenazas-adicionales-a-la-validez" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Además de la violación de tendencias paralelas, DiD puede fallar por cuatro razones principales:</p>
-<hr />
-<p><strong>1. Políticas simultáneas</strong></p>
-<p>Si durante el mismo periodo ocurre otro evento o política que afecta <strong>solo a uno de los dos grupos</strong>, el cambio que atribuimos al programa puede ser en realidad causado por ese otro factor.</p>
-<p><em>Ejemplo:</em> Evaluamos un programa de empleo para madres en una ciudad. Al mismo tiempo, esa ciudad anuncia una inversión en guarderías públicas. El grupo tratado mejora, pero no podemos saber cuánto fue el programa y cuánto fueron las guarderías.</p>
-<p><strong>¿Cómo detectarlo?</strong> Revisando el contexto histórico y verificando que no hubo shocks diferenciales entre grupos durante el periodo de evaluación.</p>
-<hr />
-<p><strong>2. Causalidad inversa</strong></p>
-<p>El supuesto de tendencias paralelas puede fallar si <strong>la selección al tratamiento depende de la trayectoria pasada del resultado</strong>. Si los participantes fueron elegidos (o se autoseleccionaron) precisamente porque su resultado estaba cayendo, habrían subido de todas formas sin el programa — lo que se conoce como el <strong>dip de Ashenfelter</strong>.</p>
-<p><em>Ejemplo:</em> Un programa de capacitación laboral selecciona trabajadores que recientemente perdieron el empleo. Su tasa de empleo era baja antes del programa, pero habría subido naturalmente con el tiempo. DiD sobreestima el efecto.</p>
-<p><strong>¿Cómo detectarlo?</strong> Con múltiples periodos pre-tratamiento: si el grupo tratado ya tenía una tendencia ascendente antes del programa, el dip es visible.</p>
-<hr />
-<p><strong>3. Spillovers (efectos de derrame)</strong></p>
-<p>Si el tratamiento de algunos individuos <strong>afecta el resultado de quienes están en el grupo de control</strong>, el contrafactual queda contaminado. El grupo de control ya no representa lo que le habría pasado al grupo tratado sin el programa.</p>
-<p><em>Ejemplo:</em> Un subsidio a la contratación en empresas tratadas puede desplazar trabajadores desde empresas de control hacia las tratadas. El empleo en control baja no porque el programa fracase, sino porque los trabajadores se mueven. DiD subestima el efecto real.</p>
-<p><strong>¿Cómo detectarlo?</strong> Verificando que tratados y controles estén suficientemente separados geográfica o institucionalmente para que no haya interacciones.</p>
-<hr />
-<p><strong>4. Anticipación</strong></p>
-<p>Si los agentes saben que el programa llegará, pueden cambiar su comportamiento <strong>antes</strong> de que empiece. Esto hace que el periodo “antes” del tratamiento ya esté contaminado, y el estimador DiD subestima el efecto verdadero.</p>
-<p><em>Ejemplo:</em> Se anuncia en enero un subsidio a la inversión que entrará en vigor en julio. Las empresas tratadas empiezan a invertir desde enero. En julio, la diferencia pre-post parece pequeña, aunque el programa tuvo un efecto real desde el anuncio.</p>
-<p><strong>¿Cómo detectarlo y corregirlo?</strong> Redefinir la fecha de tratamiento como la fecha del <strong>anuncio</strong>, no la de implementación. Con event studies, los coeficientes pre-tratamiento serán distintos de cero si hay anticipación — pero esto es observacionalmente equivalente a tendencias no paralelas (ver sección anterior).</p>
-<hr />
-<p><strong>5. Cambios en la composición de los grupos</strong></p>
-<p>Si el tratamiento cambia quién permanece en la muestra (atrición diferencial), las medias post-tratamiento ya no son comparables. Por ejemplo, si el programa provoca que los participantes más débiles abandonen el programa, el promedio post-tratamiento mejora mecánicamente.</p>
-<p><strong>¿Cómo detectarlo?</strong> Comparando tasas de atrición entre tratados y controles, y analizando si las características de los que se van difieren entre grupos.</p>
-<hr />
-</div>
-<div id="implementación-en-stata" class="section level2 unnumbered hasAnchor">
-<h2>Implementación en Stata<a href="#implementaci%C3%B3n-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="preparación-de-los-datos" class="section level3 unnumbered hasAnchor">
-<h3>Preparación de los datos<a href="#preparaci%C3%B3n-de-los-datos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Descarga la base de datos y el do-file de esta clase:</p>
-<div class="boxejercicio">
-<p>📁 <strong>Archivos de la clase</strong></p>
-<ul>
-<li><a href="dofile/08_DID/base3.dta">base3.dta</a> — base de datos (8 000 observaciones, niños con dos periodos de seguimiento)</li>
-<li><a href="dofile/08_DID/08_DID.do">08_DID.do</a> — do-file completo</li>
-</ul>
-</div>
-<div class="sourceCode" id="cb90"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb90-1"><a href="did-teoria.html#cb90-1" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb90-2"><a href="did-teoria.html#cb90-2" tabindex="-1"></a><span class="kw">set</span> mem 150m</span>
-<span id="cb90-3"><a href="did-teoria.html#cb90-3" tabindex="-1"></a><span class="kw">capture</span> <span class="fu">log</span> <span class="kw">close</span></span>
-<span id="cb90-4"><a href="did-teoria.html#cb90-4" tabindex="-1"></a>cd <span class="st">&quot;RUTA_DE_TU_CARPETA/dofile/08_DID&quot;</span></span>
-<span id="cb90-5"><a href="did-teoria.html#cb90-5" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;base3.dta&quot;</span></span></code></pre></div>
-<p>Las variables clave:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Variable</th>
-<th>Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>y</code></td>
-<td>Talla para la edad (z-score)</td>
-</tr>
-<tr class="even">
-<td><code>D</code></td>
-<td>Indicador de tratamiento (1 = tratado, 0 = control)</td>
-</tr>
-<tr class="odd">
-<td><code>t</code></td>
-<td>Periodo (0 = antes, 1 = después)</td>
-</tr>
-<tr class="even">
-<td><code>orden_n</code></td>
-<td>Orden de nacimiento del niño en el hogar</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb91"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb91-1"><a href="did-teoria.html#cb91-1" tabindex="-1"></a>* Verificar la estructura del panel</span>
-<span id="cb91-2"><a href="did-teoria.html#cb91-2" tabindex="-1"></a><span class="kw">tab</span> t</span>
-<span id="cb91-3"><a href="did-teoria.html#cb91-3" tabindex="-1"></a><span class="kw">tab</span> D</span>
-<span id="cb91-4"><a href="did-teoria.html#cb91-4" tabindex="-1"></a><span class="kw">tab</span> t D</span></code></pre></div>
-<hr />
-</div>
-<div id="estadísticas-descriptivas-y-gráfico-de-tendencias" class="section level3 unnumbered hasAnchor">
-<h3>Estadísticas descriptivas y gráfico de tendencias<a href="#estad%C3%ADsticas-descriptivas-y-gr%C3%A1fico-de-tendencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb92"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb92-1"><a href="did-teoria.html#cb92-1" tabindex="-1"></a>* Promedios por grupo <span class="fu">y</span> periodo (la tabla 2x2)</span>
-<span id="cb92-2"><a href="did-teoria.html#cb92-2" tabindex="-1"></a><span class="kw">table</span> D t, c(<span class="kw">mean</span> <span class="fu">y</span>)</span>
-<span id="cb92-3"><a href="did-teoria.html#cb92-3" tabindex="-1"></a></span>
-<span id="cb92-4"><a href="did-teoria.html#cb92-4" tabindex="-1"></a>* Etiquetas para los gráficos</span>
-<span id="cb92-5"><a href="did-teoria.html#cb92-5" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> t 0 <span class="st">&quot;Antes&quot;</span> 1 <span class="st">&quot;Después&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb92-6"><a href="did-teoria.html#cb92-6" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> t t</span>
-<span id="cb92-7"><a href="did-teoria.html#cb92-7" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> D 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratado&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb92-8"><a href="did-teoria.html#cb92-8" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> D D</span>
-<span id="cb92-9"><a href="did-teoria.html#cb92-9" tabindex="-1"></a></span>
-<span id="cb92-10"><a href="did-teoria.html#cb92-10" tabindex="-1"></a>* Gráfico <span class="kw">de</span> evolución temporal (prueba visual <span class="kw">de</span> tendencias paralelas)</span>
-<span id="cb92-11"><a href="did-teoria.html#cb92-11" tabindex="-1"></a><span class="kw">preserve</span></span>
-<span id="cb92-12"><a href="did-teoria.html#cb92-12" tabindex="-1"></a><span class="kw">collapse</span> (<span class="kw">mean</span>) <span class="fu">y</span>, <span class="kw">by</span>(t D)</span>
-<span id="cb92-13"><a href="did-teoria.html#cb92-13" tabindex="-1"></a><span class="kw">twoway</span> (connected <span class="fu">y</span> t <span class="kw">if</span> D==1, <span class="bn">msymbol</span>(<span class="bn">circle</span>) lcolor(<span class="bn">navy</span>)) <span class="co">///</span></span>
-<span id="cb92-14"><a href="did-teoria.html#cb92-14" tabindex="-1"></a>       (connected <span class="fu">y</span> t <span class="kw">if</span> D==0, <span class="bn">msymbol</span>(triangle) lcolor(<span class="bn">maroon</span>)), <span class="co">///</span></span>
-<span id="cb92-15"><a href="did-teoria.html#cb92-15" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
-<span id="cb92-16"><a href="did-teoria.html#cb92-16" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Tendencias medias por grupo&quot;</span>) <span class="co">///</span></span>
-<span id="cb92-17"><a href="did-teoria.html#cb92-17" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Periodo&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Talla-para-edad (z-score)&quot;</span>)</span>
-<span id="cb92-18"><a href="did-teoria.html#cb92-18" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div>
-<p><strong>¿Qué muestra este gráfico?</strong></p>
-<p>Con solo dos periodos, este gráfico <strong>no es una prueba de tendencias paralelas</strong> — es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y después, y permite ver intuitivamente de dónde viene el estimador. Para probar tendencias paralelas necesitaríamos al menos un periodo previo adicional y un identificador individual.</p>
-<p>Lo que sí podemos verificar con este gráfico: que los grupos se movieron de forma diferente (si las pendientes difieren, el DiD captura esa diferencia). Pero no podemos saber si esa diferencia se debe al programa o a una tendencia pre-existente que no alcanzamos a ver.</p>
-<hr />
-</div>
-<div id="comparación-de-medias-por-periodo" class="section level3 unnumbered hasAnchor">
-<h3>Comparación de medias por periodo<a href="#comparaci%C3%B3n-de-medias-por-periodo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb93"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb93-1"><a href="did-teoria.html#cb93-1" tabindex="-1"></a>* Diferencia tratados-controles antes del programa</span>
-<span id="cb93-2"><a href="did-teoria.html#cb93-2" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 0, <span class="kw">by</span>(D)</span>
-<span id="cb93-3"><a href="did-teoria.html#cb93-3" tabindex="-1"></a></span>
-<span id="cb93-4"><a href="did-teoria.html#cb93-4" tabindex="-1"></a>* Diferencia tratados-controles después del programa</span>
-<span id="cb93-5"><a href="did-teoria.html#cb93-5" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 1, <span class="kw">by</span>(D)</span></code></pre></div>
-<p>La diferencia cruda cambia entre periodos. <strong>DiD</strong> aísla si ese cambio se debe al programa o a una tendencia pre-existente.</p>
-<hr />
-</div>
-<div id="estimador-did-paso-a-paso" class="section level3 unnumbered hasAnchor">
-<h3>Estimador DiD paso a paso<a href="did-teoria.html#estimador-did-paso-a-paso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="did-teoria.html#cb94-1" tabindex="-1"></a>* Cuatro medias <span class="kw">de</span> la tabla 2x2</span>
-<span id="cb94-2"><a href="did-teoria.html#cb94-2" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 0</span>
-<span id="cb94-3"><a href="did-teoria.html#cb94-3" tabindex="-1"></a><span class="fu">scalar</span> y_c0 = <span class="fu">r</span>(<span class="kw">mean</span>)       <span class="co">// Controles, antes</span></span>
-<span id="cb94-4"><a href="did-teoria.html#cb94-4" tabindex="-1"></a></span>
-<span id="cb94-5"><a href="did-teoria.html#cb94-5" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 1</span>
-<span id="cb94-6"><a href="did-teoria.html#cb94-6" tabindex="-1"></a><span class="fu">scalar</span> y_c1 = <span class="fu">r</span>(<span class="kw">mean</span>)       <span class="co">// Controles, después</span></span>
-<span id="cb94-7"><a href="did-teoria.html#cb94-7" tabindex="-1"></a></span>
-<span id="cb94-8"><a href="did-teoria.html#cb94-8" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 0</span>
-<span id="cb94-9"><a href="did-teoria.html#cb94-9" tabindex="-1"></a><span class="fu">scalar</span> y_t0 = <span class="fu">r</span>(<span class="kw">mean</span>)       <span class="co">// Tratados, antes</span></span>
-<span id="cb94-10"><a href="did-teoria.html#cb94-10" tabindex="-1"></a></span>
-<span id="cb94-11"><a href="did-teoria.html#cb94-11" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 1</span>
-<span id="cb94-12"><a href="did-teoria.html#cb94-12" tabindex="-1"></a><span class="fu">scalar</span> y_t1 = <span class="fu">r</span>(<span class="kw">mean</span>)       <span class="co">// Tratados, después</span></span>
-<span id="cb94-13"><a href="did-teoria.html#cb94-13" tabindex="-1"></a></span>
-<span id="cb94-14"><a href="did-teoria.html#cb94-14" tabindex="-1"></a>* Primera diferencia: cambio en cada grupo</span>
-<span id="cb94-15"><a href="did-teoria.html#cb94-15" tabindex="-1"></a><span class="fu">scalar</span> delta_tratados  = y_t1 - y_t0</span>
-<span id="cb94-16"><a href="did-teoria.html#cb94-16" tabindex="-1"></a><span class="fu">scalar</span> delta_controles = y_c1 - y_c0</span>
-<span id="cb94-17"><a href="did-teoria.html#cb94-17" tabindex="-1"></a></span>
-<span id="cb94-18"><a href="did-teoria.html#cb94-18" tabindex="-1"></a>* Segunda diferencia: DiD</span>
-<span id="cb94-19"><a href="did-teoria.html#cb94-19" tabindex="-1"></a><span class="fu">scalar</span> DD = delta_tratados - delta_controles</span>
-<span id="cb94-20"><a href="did-teoria.html#cb94-20" tabindex="-1"></a></span>
-<span id="cb94-21"><a href="did-teoria.html#cb94-21" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Cambio en tratados:  &quot;</span> delta_tratados</span>
-<span id="cb94-22"><a href="did-teoria.html#cb94-22" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Cambio en controles: &quot;</span> delta_controles</span>
-<span id="cb94-23"><a href="did-teoria.html#cb94-23" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Estimador DiD:       &quot;</span> DD</span></code></pre></div>
-<hr />
-</div>
-<div id="usando-el-comando-diff" class="section level3 unnumbered hasAnchor">
-<h3>Usando el comando <code>diff</code><a href="did-teoria.html#usando-el-comando-diff" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="did-teoria.html#cb95-1" tabindex="-1"></a><span class="kw">ssc</span> install <span class="fu">diff</span>, <span class="kw">replace</span></span>
-<span id="cb95-2"><a href="did-teoria.html#cb95-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t)</span></code></pre></div>
-<p>El comando <code>diff</code> reporta la tabla 2×2 completa (medias por grupo y periodo, primeras diferencias, y el estimador DiD) con su error estándar y el p-valor del test <span class="math inline">\(H_0: \delta = 0\)</span>.</p>
-<p><strong>La opción <code>test</code> de <code>diff</code>: prueba de balance, no de tendencias paralelas</strong></p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="did-teoria.html#cb96-1" tabindex="-1"></a>* <span class="kw">test</span> requiere especificar covariables con cov()</span>
-<span id="cb96-2"><a href="did-teoria.html#cb96-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t) <span class="kw">test</span> cov(orden_n)</span></code></pre></div>
-<p>La opción <code>test</code> corre <strong>t-tests de balance en el periodo base</strong> (<span class="math inline">\(t=0\)</span>), comparando tratados y controles en la variable de resultado y en las covariables especificadas. Lo que hace internamente es una regresión de cada variable sobre el indicador de tratamiento, restringida a <span class="math inline">\(t=0\)</span>.</p>
-<div class="boxcerebro">
-<p><strong>Importante:</strong> Esto es una prueba de <strong>balance pre-tratamiento</strong> (¿eran similares los grupos antes del programa?), <strong>no</strong> una prueba de tendencias paralelas (¿habrían tenido la misma trayectoria sin el programa?). Son dos cosas distintas. Un p-valor grande en el test de balance dice que los grupos eran similares en el periodo base, pero no dice nada sobre sus tendencias futuras.</p>
-</div>
-<hr />
-</div>
-<div id="implementación-con-regresión" class="section level3 unnumbered hasAnchor">
-<h3>Implementación con regresión<a href="#implementaci%C3%B3n-con-regresi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb97"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb97-1"><a href="did-teoria.html#cb97-1" tabindex="-1"></a>* Regresión DiD: <span class="fu">el</span> coeficiente <span class="kw">de</span> D#t es <span class="fu">el</span> estimador</span>
-<span id="cb97-2"><a href="did-teoria.html#cb97-2" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D##t, <span class="kw">robust</span></span>
-<span id="cb97-3"><a href="did-teoria.html#cb97-3" tabindex="-1"></a></span>
-<span id="cb97-4"><a href="did-teoria.html#cb97-4" tabindex="-1"></a>* Verificación: comparar con cálculo manual</span>
-<span id="cb97-5"><a href="did-teoria.html#cb97-5" tabindex="-1"></a>* <span class="kw">alpha</span>      = y_c0</span>
-<span id="cb97-6"><a href="did-teoria.html#cb97-6" tabindex="-1"></a>* beta (D)   = y_t0 - y_c0  (diferencia pre-tratamiento)</span>
-<span id="cb97-7"><a href="did-teoria.html#cb97-7" tabindex="-1"></a>* <span class="kw">gamma</span> (t)  = y_c1 - y_c0  (tendencia <span class="kw">de</span> los controles)</span>
-<span id="cb97-8"><a href="did-teoria.html#cb97-8" tabindex="-1"></a>* delta (D#t) = DD           (estimador DiD)</span></code></pre></div>
-<p><strong>Interpretación del resultado:</strong></p>
-<p>El coeficiente de <code>D#t</code> (la interacción) es el estimador DiD. En esta base estima un efecto de aproximadamente <strong>+0.18 desviaciones estándar</strong> en la talla-para-edad, significativo al 5%. Bajo el supuesto de tendencias paralelas, ese es el efecto causal del programa sobre los niños tratados.</p>
-<hr />
-</div>
-<div id="extensión-con-panel-y-primeras-diferencias" class="section level3 unnumbered hasAnchor">
-<h3>Extensión con panel y primeras diferencias<a href="#extensi%C3%B3n-con-panel-y-primeras-diferencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Con datos de panel, el estimador DiD es equivalente a una regresión en <strong>primeras diferencias</strong>:</p>
-<p><span class="math display">\[\Delta Y_i = \delta D_i + \Delta \varepsilon_i\]</span></p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb98-1"><a href="did-teoria.html#cb98-1" tabindex="-1"></a>* Crear identificador individual (panel balanceado: 4000 niños x 2 periodos)</span>
-<span id="cb98-2"><a href="did-teoria.html#cb98-2" tabindex="-1"></a><span class="kw">sort</span> t orden_n</span>
-<span id="cb98-3"><a href="did-teoria.html#cb98-3" tabindex="-1"></a><span class="kw">by</span> t: <span class="kw">gen</span> id = <span class="dt">_n</span></span>
-<span id="cb98-4"><a href="did-teoria.html#cb98-4" tabindex="-1"></a></span>
-<span id="cb98-5"><a href="did-teoria.html#cb98-5" tabindex="-1"></a>xtset id t</span>
-<span id="cb98-6"><a href="did-teoria.html#cb98-6" tabindex="-1"></a></span>
-<span id="cb98-7"><a href="did-teoria.html#cb98-7" tabindex="-1"></a>* Primeras diferencias = DiD en panel balanceado <span class="kw">de</span> 2 periodos</span>
-<span id="cb98-8"><a href="did-teoria.html#cb98-8" tabindex="-1"></a><span class="kw">reg</span> D.<span class="fu">y</span> D.D</span></code></pre></div>
-<p>Los dos métodos (regresión con interacción y primeras diferencias) entregan el mismo estimador cuando hay exactamente dos periodos y el panel es balanceado.</p>
-<hr />
-</div>
-</div>
-<div id="síntesis" class="section level2 unnumbered hasAnchor">
-<h2>Síntesis<a href="#s%C3%ADntesis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<table>
-<colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Componente</th>
-<th>¿Qué elimina?</th>
-<th>¿Qué supone?</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Primera diferencia (dentro de grupos)</td>
-<td>Diferencias fijas entre grupos</td>
-<td>Grupos observables</td>
-</tr>
-<tr class="even">
-<td>Segunda diferencia (entre grupos)</td>
-<td>Tendencia temporal común</td>
-<td>Tendencias paralelas</td>
-</tr>
-<tr class="odd">
-<td><strong>DiD</strong></td>
-<td>Ambas</td>
-<td><strong>Tendencias paralelas</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>El supuesto de tendencias paralelas no es verificable en el periodo de tratamiento.</strong> Con múltiples periodos pre-tratamiento puede buscarse evidencia indirecta vía event study, pero con solo dos periodos eso es imposible.</p>
-<p>Las principales amenazas a la validez del DiD son: (1) políticas simultáneas que afectan diferencialmente a los grupos, (2) causalidad inversa o dip de Ashenfelter, (3) spillovers que contaminan el grupo de control, (4) anticipación que contamina el periodo base, y (5) atrición diferencial entre grupos.</p>
-<hr />
-<div class="boxejercicio">
-<p><strong>✍️ Preguntas de reflexión</strong></p>
+<div id="la-receta-cómo-estimar-tau_rdn" class="section level2 unnumbered hasAnchor">
+<h2>La receta: cómo estimar <span class="math inline">\(\tau_{RDN}\)</span><a href="#la-receta-c%C3%B3mo-estimar-tau_rdn" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="boxinfo">
+<p><strong>Receta de estimación</strong></p>
 <ol style="list-style-type: decimal">
-<li>Calcula el estimador DiD a mano con las cuatro medias de la tabla y verifica que coincide con el coeficiente de la interacción en la regresión.</li>
-<li>¿Por qué no podemos interpretar causalmente la diferencia cruda entre tratados y controles en <span class="math inline">\(t=1\)</span>?</li>
-<li>¿Qué patrón esperarías ver en el gráfico de tendencias si el supuesto de tendencias paralelas <strong>se viola</strong>?</li>
-<li>¿Qué diferencia hay entre lo que prueba <code>estat ptrends</code> y lo que prueba <code>estat granger</code>? ¿Por qué importa distinguirlas?</li>
+<li><strong>Recorte la muestra</strong> a una ventana razonable alrededor del umbral: <span class="math inline">\(c - h \leq Z_i \leq c + h\)</span>. El parámetro <span class="math inline">\(h\)</span> es el <strong>ancho de banda</strong>.</li>
+<li><strong>Recodifique</strong> la variable de asignación en desviaciones del umbral: <span class="math inline">\(\tilde Z_i = Z_i - c\)</span>.
+<ul>
+<li><span class="math inline">\(\tilde Z_i = 0\)</span> si <span class="math inline">\(Z_i\)</span> está exactamente en el umbral</li>
+<li><span class="math inline">\(\tilde Z_i &gt; 0\)</span> si <span class="math inline">\(D_i = 1\)</span> (o <span class="math inline">\(\tilde Z_i &gt; 0\)</span> si <span class="math inline">\(D_i = 0\)</span>, según la dirección de la regla)</li>
+<li><span class="math inline">\(\tilde Z_i &lt; 0\)</span> si <span class="math inline">\(D_i = 0\)</span> (o al revés)</li>
+</ul></li>
+<li><strong>Decida un modelo</strong> para <span class="math inline">\(E[Y \mid Z, D]\)</span> — derivación abajo.</li>
+<li><strong>Estime</strong> por MCO con la muestra recortada. El coeficiente de <span class="math inline">\(D\)</span> es <span class="math inline">\(\hat\tau_{RDN}\)</span>.</li>
+</ol>
+</div>
+<div id="caso-más-simple-comparación-de-medias-en-la-ventana" class="section level3 unnumbered hasAnchor">
+<h3>Caso más simple — comparación de medias en la ventana<a href="#caso-m%C3%A1s-simple-comparaci%C3%B3n-de-medias-en-la-ventana" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Si solo nos quedamos con datos en una ventana muy estrecha <span class="math inline">\([c-h, c+h]\)</span>, <span class="math inline">\(\tau_{RDN}\)</span> se aproxima por la diferencia simple de medias:</p>
+<p><span class="math display">\[\hat\tau_{RDN} = \bar y_{\text{der}} - \bar y_{\text{izq}}\]</span></p>
+<p>donde <span class="math inline">\(\bar y_{\text{der}}\)</span> es el promedio del resultado para observaciones con <span class="math inline">\(Z_i \geq c\)</span> dentro de la ventana, y <span class="math inline">\(\bar y_{\text{izq}}\)</span> es el promedio para <span class="math inline">\(Z_i &lt; c\)</span>. Es el equivalente a regresar dos interceptos:</p>
+<ul>
+<li>A la izquierda: <span class="math inline">\(y = \alpha_{\text{izq}} + \beta_{\text{izq}} \tilde Z + \varepsilon \;\Rightarrow\; E[Y \mid \tilde Z = 0, D = 0] = \alpha_{\text{izq}}\)</span></li>
+<li>A la derecha: <span class="math inline">\(y = \alpha_{\text{der}} + \beta_{\text{der}} \tilde Z + \varepsilon \;\Rightarrow\; E[Y \mid \tilde Z = 0, D = 1] = \alpha_{\text{der}}\)</span></li>
+<li><span class="math inline">\(\hat\tau_{RDN} = \hat\alpha_{\text{der}} - \hat\alpha_{\text{izq}}\)</span></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="derivación-de-la-forma-de-regresión" class="section level2 unnumbered hasAnchor">
+<h2>Derivación de la forma de regresión<a href="#derivaci%C3%B3n-de-la-forma-de-regresi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="caso-1-lineal-con-la-misma-pendiente-a-ambos-lados" class="section level3 unnumbered hasAnchor">
+<h3>Caso 1 — lineal con la <strong>misma pendiente</strong> a ambos lados<a href="rdd.html#caso-1-lineal-con-la-misma-pendiente-a-ambos-lados" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Supongamos que <span class="math inline">\(E[Y(0) \mid Z]\)</span> es lineal en <span class="math inline">\(Z\)</span> y que el efecto del programa <span class="math inline">\(\tau\)</span> <strong>no depende de <span class="math inline">\(Z\)</span></strong>:</p>
+<p><span class="math display">\[E[Y(0) \mid Z] = \delta + \beta Z\]</span>
+<span class="math display">\[E[Y(1) - Y(0) \mid Z] = \tau\]</span></p>
+<p>Entonces:</p>
+<p><span class="math display">\[E[Y(1) \mid Z] = \tau + E[Y(0) \mid Z] = \tau + \delta + \beta Z\]</span></p>
+<p>Usando <span class="math inline">\(Y = D \cdot Y(1) + (1-D) Y(0)\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+E[Y \mid Z, D] &amp;= D \cdot E[Y(1) \mid Z] + (1-D) \cdot E[Y(0) \mid Z] \\
+&amp;= D \cdot (\tau + \delta + \beta Z) + (1-D)(\delta + \beta Z) \\
+&amp;= \delta + \beta Z + \tau D
+\end{align*}\]</span></p>
+<p>Centrando <span class="math inline">\(\tilde Z = Z - c\)</span>:</p>
+<p><span class="math display">\[\boxed{\; E[Y \mid \tilde Z, D] = \alpha + \beta \tilde Z + \tau D \;}\]</span></p>
+<p>donde <span class="math inline">\(\alpha = \delta + \beta c\)</span> es el intercepto al umbral. <strong>El coeficiente de <span class="math inline">\(D\)</span> es el salto <span class="math inline">\(\tau_{RDN}\)</span>.</strong></p>
+</div>
+<div id="caso-2-lineal-con-pendientes-distintas-a-cada-lado" class="section level3 unnumbered hasAnchor">
+<h3>Caso 2 — lineal con <strong>pendientes distintas</strong> a cada lado<a href="rdd.html#caso-2-lineal-con-pendientes-distintas-a-cada-lado" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Si <span class="math inline">\(E[Y(0) \mid Z]\)</span> y <span class="math inline">\(E[Y(1) \mid Z]\)</span> son lineales pero con pendientes diferentes:</p>
+<p><span class="math display">\[E[Y(0) \mid Z] = \delta_0 + \beta_0 Z, \qquad E[Y(1) \mid Z] = \delta_1 + \beta_1 Z\]</span></p>
+<p>El efecto causal depende de <span class="math inline">\(Z\)</span>:</p>
+<p><span class="math display">\[\tau(Z) = E[Y(1) - Y(0) \mid Z] = (\delta_1 - \delta_0) + (\beta_1 - \beta_0) Z\]</span></p>
+<p>Combinando como antes:</p>
+<p><span class="math display">\[E[Y \mid Z, D] = (\delta_1 - \delta_0) D + \tau \cdot D + \beta_0 Z + (\beta_1 - \beta_0) D \cdot Z\]</span></p>
+<p>Centrando en <span class="math inline">\(\tilde Z = Z - c\)</span>, el coeficiente del indicador <span class="math inline">\(D\)</span> se interpreta directamente como el <strong>salto en <span class="math inline">\(c\)</span></strong>:</p>
+<p><span class="math display">\[\boxed{\; E[Y \mid \tilde Z, D] = \alpha + \tau D + \beta_0 \tilde Z + \beta_1 (D \cdot \tilde Z) \;}\]</span></p>
+<p>donde la pendiente a la izquierda es <span class="math inline">\(\beta_0\)</span> y la pendiente a la derecha es <span class="math inline">\(\beta_0 + \beta_1\)</span>.</p>
+</div>
+<div id="caso-3-cuadrático-con-interacciones" class="section level3 unnumbered hasAnchor">
+<h3>Caso 3 — cuadrático con interacciones<a href="#caso-3-cuadr%C3%A1tico-con-interacciones" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Si la relación es curva, agregamos <span class="math inline">\(\tilde Z^2\)</span> y su interacción con <span class="math inline">\(D\)</span>:</p>
+<p><span class="math display">\[\boxed{\; E[Y \mid \tilde Z, D] = \alpha + \tau D + \beta_0 \tilde Z + \beta_1 (D \cdot \tilde Z) + \beta_2 \tilde Z^2 + \beta_3 (D \cdot \tilde Z^2) \;}\]</span></p>
+<p>Cada lado del umbral tiene su propia parábola, y <span class="math inline">\(\tau\)</span> sigue siendo el salto vertical en <span class="math inline">\(c\)</span> (porque al evaluar en <span class="math inline">\(\tilde Z = 0\)</span>, todos los términos polinómicos se anulan).</p>
+<div class="boxinfo">
+<p><strong>Por qué hay que centrar <span class="math inline">\(Z\)</span> en <span class="math inline">\(c\)</span>:</strong> sin centrar, <span class="math inline">\(\alpha\)</span> es el resultado esperado en <span class="math inline">\(Z = 0\)</span>, un punto arbitrario del soporte. Con <span class="math inline">\(\tilde Z = Z - c\)</span>, el coeficiente de <span class="math inline">\(D\)</span> se interpreta <strong>directamente</strong> como el salto en el umbral.</p>
+</div>
+<div class="boxwarning">
+<p><strong>Advertencia de Gelman &amp; Imbens (2019, JBES):</strong> polinomios globales de orden alto (<span class="math inline">\(p \geq 3\)</span>) son una <strong>mala idea</strong>. Dan demasiado peso a observaciones lejanas al umbral, son sensibles al orden y los CIs no tienen buena cobertura. La práctica moderna recomienda lineal o cuadrático global, o mejor aún, regresión <strong>local lineal con kernel</strong> (sección siguiente).</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="regresión-local-lineal-con-kernel" class="section level2 unnumbered hasAnchor">
+<h2>Regresión local lineal con kernel<a href="#regresi%C3%B3n-local-lineal-con-kernel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La estimación local difiere del polinomio global en dos cosas:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Solo usa observaciones en la ventana</strong> <span class="math inline">\([c-h, c+h]\)</span> alrededor del umbral.</li>
+<li>Dentro de esa ventana, corre una regresión lineal <strong>ponderada</strong> por un <strong>kernel</strong> <span class="math inline">\(K(\cdot)\)</span> que da más peso a observaciones cercanas a <span class="math inline">\(c\)</span>.</li>
+</ol>
+<p>El estimador resuelve, separadamente a cada lado:</p>
+<p><span class="math display">\[\min_{\alpha, \beta} \sum_{i:\, Z_i \in [c,\, c+h]} K\!\left(\frac{Z_i - c}{h}\right) \left(y_i - \alpha - \beta (Z_i - c)\right)^2\]</span></p>
+<p>y análogo a la izquierda. El salto estimado es <span class="math inline">\(\hat\tau_{RDN} = \hat\alpha_{\text{der}} - \hat\alpha_{\text{izq}}\)</span>.</p>
+<div class="boxinfo">
+<p><strong>¿Qué kernel?</strong> El <strong>kernel triangular</strong> <span class="math inline">\(K(u) = (1 - |u|) \cdot \mathbb{1}[|u| \leq 1]\)</span> es óptimo para estimación en el borde (Cheng, Fan &amp; Marron 1997) y es el default de <code>rdrobust</code>. También se usa el uniforme (regresión OLS simple sin pesos diferenciales) y el Epanechnikov.</p>
+</div>
+<hr />
+</div>
+<div id="selección-del-ancho-de-banda-h" class="section level2 unnumbered hasAnchor">
+<h2>Selección del ancho de banda <span class="math inline">\(h\)</span><a href="#selecci%C3%B3n-del-ancho-de-banda-h" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El bandwidth <span class="math inline">\(h\)</span> gobierna el trade-off sesgo–varianza:</p>
+<ul>
+<li><strong><span class="math inline">\(h\)</span> pequeño</strong> → poco sesgo (la aproximación lineal local es buena en una vecindad pequeña) pero <strong>mucha varianza</strong> (pocas observaciones).</li>
+<li><strong><span class="math inline">\(h\)</span> grande</strong> → poca varianza (más datos) pero <strong>mucho sesgo</strong> (la aproximación lineal puede ser pobre lejos de <span class="math inline">\(c\)</span>).</li>
+</ul>
+<p>Dos enfoques generales:</p>
+<div id="validación-cruzada-cross-validation" class="section level3 unnumbered hasAnchor">
+<h3>1. Validación cruzada (cross-validation)<a href="#validaci%C3%B3n-cruzada-cross-validation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Procedimiento intuitivo, atribuido a Ludwig &amp; Miller (2007):</p>
+<ol style="list-style-type: decimal">
+<li>Elija un ancho candidato <span class="math inline">\(h_1\)</span>.</li>
+<li>Para cada observación <span class="math inline">\(i\)</span> del lado izquierdo del umbral: corra una regresión lineal local con <span class="math inline">\(h_1\)</span> usando <strong>todas las observaciones a la izquierda de <span class="math inline">\(i\)</span></strong> en la ventana <span class="math inline">\([Z_i - h_1, Z_i)\)</span> (sin incluir a <span class="math inline">\(i\)</span>).</li>
+<li>Prediga <span class="math inline">\(\hat y_i\)</span> a partir de esa regresión.</li>
+<li>Repita por la derecha.</li>
+<li>Calcule <span class="math inline">\(\text{CV}(h_1) = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat y_i)^2\)</span>.</li>
+<li>Repita para otros valores candidatos de <span class="math inline">\(h\)</span>.</li>
+<li>Elija el <span class="math inline">\(h\)</span> que <strong>minimiza</strong> <span class="math inline">\(\text{CV}(h)\)</span>.</li>
+</ol>
+</div>
+<div id="reglas-automáticas" class="section level3 unnumbered hasAnchor">
+<h3>2. Reglas automáticas<a href="#reglas-autom%C3%A1ticas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bandwidth</th>
+<th>Referencia</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>IK</strong></td>
+<td>Imbens &amp; Kalyanaraman (2012, <em>RES</em>)</td>
+<td>Minimiza el MSE asintótico del estimador del salto</td>
+</tr>
+<tr class="even">
+<td><strong>CCT (MSE)</strong></td>
+<td>Calonico, Cattaneo &amp; Titiunik (2014, <em>Econometrica</em>)</td>
+<td>MSE-óptimo con corrección de sesgo robusta; default de <code>rdrobust</code></td>
+</tr>
+<tr class="odd">
+<td><strong>CER</strong></td>
+<td>Calonico, Cattaneo &amp; Farrell (2018)</td>
+<td>Coverage-error-rate óptimo (mejor cobertura del CI a costa de más sesgo)</td>
+</tr>
+</tbody>
+</table>
+<div class="boxinfo">
+<p><strong>Inferencia robusta con corrección de sesgo (CCT):</strong> Calonico et al. mostraron que los CIs convencionales con bandwidth MSE-óptimo subcubren. Solución: estimar puntualmente con <span class="math inline">\(h\)</span> MSE-óptimo, <strong>pero</strong> construir el CI con corrección de sesgo y SE robustos. <code>rdrobust</code> reporta tres estimadores: conventional, bias-corrected y <strong>robust</strong> — usen siempre el robust.</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="rdb-identificación" class="section level2 unnumbered hasAnchor">
+<h2>RDB: identificación<a href="#rdb-identificaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En la <strong>Regresión Discontinua Borrosa (RDB)</strong>, cruzar el umbral <strong>aumenta la probabilidad</strong> de recibir el tratamiento, pero no lo determina:</p>
+<p><span class="math display">\[P(D_i = 1 \mid Z_i = z) \text{ salta en } c, \text{ pero el salto es menor que } 1\]</span></p>
+<p>Casos típicos:</p>
+<ul>
+<li>Becas otorgadas por puntaje, pero no todos los elegibles aceptan</li>
+<li>Programa con focalización imperfecta o substitución</li>
+<li>Edad de jubilación efectiva difiere de la legal</li>
+</ul>
+<div id="notación-de-rdb" class="section level3 unnumbered hasAnchor">
+<h3>Notación de RDB<a href="#notaci%C3%B3n-de-rdb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Sea <span class="math inline">\(W_i = \mathbb{1}[Z_i \geq c]\)</span> la <strong>elegibilidad</strong> (siempre determinada por <span class="math inline">\(Z\)</span>) y <span class="math inline">\(D_i\)</span> la <strong>toma efectiva</strong> del tratamiento. La elegibilidad <span class="math inline">\(W\)</span> es el <strong>instrumento</strong>.</p>
+</div>
+<div id="supuestos-de-identificación" class="section level3 unnumbered hasAnchor">
+<h3>Supuestos de identificación<a href="#supuestos-de-identificaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="boxinfo">
+<p><strong>Supuestos</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Continuidad local:</strong> <span class="math inline">\(D(W=0), D(W=1), Y(W=0), Y(W=1)\)</span> son continuos alrededor del umbral.</li>
+<li><strong>Supuestos de variables instrumentales</strong> (sobre <span class="math inline">\(W\)</span>): monotonicidad, restricción de exclusión y relevancia.</li>
+</ol>
+</div>
+<p>Bajo estos supuestos, RDB identifica el <strong>LATE de los cooperadores en el umbral</strong> (Local² ATE):</p>
+<p><span class="math display">\[\tau_{RDB} = E\big[Y(W=1) - Y(W=0) \mid \text{unidad } i \text{ es cooperador},\; Z_i = c\big]\]</span></p>
+</div>
+<div id="estimador-de-wald-local" class="section level3 unnumbered hasAnchor">
+<h3>Estimador de Wald local<a href="rdd.html#estimador-de-wald-local" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\hat\tau_{RDB} = \frac{\lim_{z \downarrow c} E[Y \mid Z = z] - \lim_{z \uparrow c} E[Y \mid Z = z]}{\lim_{z \downarrow c} E[D \mid Z = z] - \lim_{z \uparrow c} E[D \mid Z = z]} = \frac{\text{Discontinuidad en } Y}{\text{Discontinuidad en } D}\]</span></p>
+<p>O equivalentemente, en una ventana suficientemente estrecha:</p>
+<p><span class="math display">\[\hat\tau_{RDB} = \frac{E[Y \mid W = 1] - E[Y \mid W = 0]}{E[D \mid W = 1] - E[D \mid W = 0]}\]</span></p>
+<div class="boxinfo">
+<p><strong>Conexión con IV:</strong> RDB es <strong>IV local</strong>. La elegibilidad <span class="math inline">\(W_i\)</span> es el instrumento; el tratamiento <span class="math inline">\(D_i\)</span> es la variable endógena. Bajo monotonicidad local (nadie deja de tratarse al cruzar el umbral), <span class="math inline">\(\tau_{RDB}\)</span> identifica el <strong>LATE de los cooperadores</strong> en una vecindad de <span class="math inline">\(c\)</span> — los que pasan a tratarse <em>porque</em> cruzan el umbral.</p>
+</div>
+</div>
+<div id="receta-para-rdb" class="section level3 unnumbered hasAnchor">
+<h3>Receta para RDB<a href="rdd.html#receta-para-rdb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="boxinfo">
+<p><strong>Pasos</strong></p>
+<ol start="0" style="list-style-type: decimal">
+<li><strong>Centrar</strong> la variable de asignación: <span class="math inline">\(\tilde Z = Z - c\)</span>.</li>
+<li><strong>Seleccionar la muestra</strong>: ancho de banda <span class="math inline">\(h\)</span>.</li>
+<li><strong>Crear el instrumento</strong>: <span class="math inline">\(W = \mathbb{1}[Z \geq c]\)</span>.</li>
+<li><strong>Estimar</strong> por MC2E (2SLS):
+<ul>
+<li><strong>Primera etapa:</strong> <span class="math inline">\(D = W\alpha + \mu\)</span>, <span class="math inline">\(\hat D = W\hat\alpha\)</span></li>
+<li><strong>Segunda etapa:</strong> <span class="math inline">\(y = \delta + \tau \hat D + f(\tilde Z) + \varepsilon\)</span></li>
+</ul>
+donde <span class="math inline">\(f(\tilde Z)\)</span> puede ser lineal, lineal con interacciones o cuadrática (los tres casos derivados arriba).</li>
+</ol>
+</div>
+<p><code>rdrobust</code> admite RDB directamente: <code>rdrobust y Z, c(c) fuzzy(D)</code>. También se puede estimar como 2SLS dentro de la ventana óptima:</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb190-1"><a href="rdd.html#cb190-1" tabindex="-1"></a>ivregress 2sls <span class="fu">y</span> Zt (D = W) WZt <span class="kw">if</span> <span class="fu">abs</span>(Zt) &lt; <span class="kw">h</span></span></code></pre></div>
+<p>donde <code>Zt</code> es <span class="math inline">\(\tilde Z\)</span> y <code>WZt</code> la interacción.</p>
+<hr />
+</div>
+</div>
+<div id="polinomio-global-vs-local-lineal-comparación" class="section level2 unnumbered hasAnchor">
+<h2>Polinomio global vs local lineal — comparación<a href="#polinomio-global-vs-local-lineal-comparaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Característica</th>
+<th>Polinomio global</th>
+<th>Local lineal con kernel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Datos usados</td>
+<td>Toda la muestra</td>
+<td>Solo <span class="math inline">\(Z \in [c-h, c+h]\)</span></td>
+</tr>
+<tr class="even">
+<td>Pesos</td>
+<td>Iguales</td>
+<td>Kernel (triangular)</td>
+</tr>
+<tr class="odd">
+<td>Hiperparámetro</td>
+<td>Orden del polinomio <span class="math inline">\(p\)</span></td>
+<td>Ancho de banda <span class="math inline">\(h\)</span></td>
+</tr>
+<tr class="even">
+<td>Tendencia</td>
+<td>Sensible a observaciones lejanas</td>
+<td>Robusta a colas</td>
+</tr>
+<tr class="odd">
+<td>Inferencia</td>
+<td>OLS estándar</td>
+<td>Bias-corrected robusta (CCT)</td>
+</tr>
+<tr class="even">
+<td>Comando Stata</td>
+<td><code>reg y D Zt DZt Zt2 DZt2</code></td>
+<td><code>rdrobust y Z, c(c)</code></td>
+</tr>
+<tr class="odd">
+<td>Recomendado para</td>
+<td>Visualización + intuición</td>
+<td>Estimación final del paper</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Práctica estándar:</strong> reportar ambos en el paper, con el local lineal como <strong>especificación principal</strong> y el polinomio global como <strong>robustez</strong>. La intuición se enseña con el polinomio; los resultados se publican con el local.</p>
+<hr />
+</div>
+<div id="pruebas-de-robustez" class="section level2 unnumbered hasAnchor">
+<h2>Pruebas de robustez<a href="rdd.html#pruebas-de-robustez" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Antes de creer un resultado RD, hay cuatro pruebas obligatorias:</p>
+<div id="sensibilidad" class="section level3 unnumbered hasAnchor">
+<h3>1. Sensibilidad<a href="rdd.html#sensibilidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>¿Qué tan sensibles son sus resultados a cambios en la especificación? Pruebe:</p>
+<ul>
+<li>Distintos órdenes de polinomio (lineal vs cuadrático)</li>
+<li>Distintos anchos de banda (<span class="math inline">\(h/2\)</span>, <span class="math inline">\(h\)</span>, <span class="math inline">\(2h\)</span>)</li>
+<li>Distintos kernels (triangular vs uniforme)</li>
+</ul>
+<p>El resultado no debe cambiar drásticamente. Reportar todas las variantes en una tabla de robustez.</p>
+</div>
+<div id="balance" class="section level3 unnumbered hasAnchor">
+<h3>2. Balance<a href="rdd.html#balance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>¿Alguna de las variables de control salta en el umbral? Las covariables <strong>fijadas antes</strong> del tratamiento (sexo, edad de los padres, año de nacimiento) <strong>no</strong> deben saltar en <span class="math inline">\(c\)</span>. Si lo hacen, las observaciones a cada lado no son comparables.</p>
+<p>Implementación: correr el estimador RD con cada covariable <span class="math inline">\(X\)</span> como “resultado”:</p>
+<p><span class="math display">\[E[X \mid Z, D] = \beta_0 + \beta_1 \tilde Z + \tau D + \beta_3 \tilde Z \cdot D\]</span></p>
+<p>El coeficiente <span class="math inline">\(\tau\)</span> debe ser <strong>cero</strong> y no significativo en todas las covariables. Apoyar con gráficos visuales.</p>
+</div>
+<div id="placebo-1" class="section level3 unnumbered hasAnchor">
+<h3>3. Placebo<a href="rdd.html#placebo-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Estimar el “salto” en valores <strong>placebo</strong> del umbral — puntos donde <strong>no</strong> hay tratamiento real. Por ejemplo, si el verdadero <span class="math inline">\(c = 50\)</span>, repita el análisis con <span class="math inline">\(c_{\text{placebo}} \in \{46, 48, 52, 54\}\)</span>.</p>
+<p>No debe aparecer ningún efecto significativo en los placebos. Si aparece, sospechar que la forma funcional está mal especificada o que hay otra discontinuidad oculta.</p>
+</div>
+<div id="sorting-test-de-mccrary-2008" class="section level3 unnumbered hasAnchor">
+<h3>4. Sorting (test de McCrary 2008)<a href="rdd.html#sorting-test-de-mccrary-2008" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>¿Los participantes <strong>cambian su comportamiento</strong> en el umbral para caer del lado deseado? Ejemplos: un estudiante repite el examen, un funcionario es sobornado para subir el puntaje, una empresa sub-reporta utilidades para evitar un impuesto.</p>
+<p>Síntoma observable: <strong>discontinuidad en la densidad de <span class="math inline">\(Z\)</span> en <span class="math inline">\(c\)</span></strong> — acumulación sospechosa de observaciones de un solo lado.</p>
+<ul>
+<li><strong>McCrary (2008):</strong> test formal de discontinuidad en la densidad. Stata: <code>rddensity</code> (Cattaneo, Jansson &amp; Ma 2018, <em>JASA</em>) — versión moderna sin tuning subjetivo.</li>
+<li><span class="math inline">\(H_0\)</span>: continuidad de la densidad en <span class="math inline">\(c\)</span> (no hay manipulación detectable).</li>
+</ul>
+<div class="boxinfo">
+<p><strong>El gráfico que siempre acompaña al test:</strong> la densidad estimada de <span class="math inline">\(Z\)</span> a cada lado del umbral. Una densidad continua (panel C de McCrary) sugiere no manipulación; una salto visible (panel D) es evidencia de sorting.</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="variable-de-asignación-discreta" class="section level2 unnumbered hasAnchor">
+<h2>Variable de asignación discreta<a href="#variable-de-asignaci%C3%B3n-discreta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Hasta acá asumimos <span class="math inline">\(Z\)</span> continua. En la práctica, <span class="math inline">\(Z\)</span> suele ser discreta: puntajes redondeados al entero, edad en años, número de hijos, montos en pesos. Lee &amp; Card (2008) y <strong>Kolesár &amp; Rothe (2018, AER)</strong> demostraron que con <span class="math inline">\(Z\)</span> discreta:</p>
+<ul>
+<li>Los CIs convencionales y los CIs robustos de CCT <strong>subcubren</strong>: la cobertura nominal del 95% puede ser &lt;70% en simulaciones.</li>
+<li>El problema viene de la <strong>especificación incorrecta</strong>: con valores discretos, ya no se puede tomar un límite <span class="math inline">\(z \downarrow c\)</span> — solo se observan los valores discretos. La diferencia entre el valor en <span class="math inline">\(Z=c\)</span> y la extrapolación lineal desde otros puntos es <strong>sesgo</strong>, y los CIs estándar lo ignoran.</li>
+</ul>
+<div class="boxwarning">
+<p><strong>Si <span class="math inline">\(Z\)</span> es discreta — qué NO hacer:</strong> correr <code>rdrobust</code> sin más y reportar el CI tal cual. Los SE pueden subestimar la incertidumbre por un factor de 2 o más.</p>
+</div>
+<div id="tres-alternativas" class="section level3 unnumbered hasAnchor">
+<h3>Tres alternativas<a href="rdd.html#tres-alternativas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Honest CIs (Kolesár &amp; Rothe 2018):</strong> asumir una cota explícita en la segunda derivada de <span class="math inline">\(E[Y \mid Z]\)</span> y construir CIs que cubran uniformemente sobre todas las funciones que respetan la cota. Implementado en el package R <code>RDHonest</code>.</li>
+<li><strong>Clustering en los valores de <span class="math inline">\(Z\)</span> (Lee &amp; Card 2008):</strong> agrupar SE por cada valor único de <span class="math inline">\(Z\)</span>. Conservador, fácil de implementar: <code>rdrobust y Z, c(c) cluster(Z)</code>.</li>
+<li><strong>Bandwidth grande deliberado y polinomio:</strong> si <span class="math inline">\(Z\)</span> tiene pocos valores discretos, tratarlo como variable categórica y reportar el coeficiente del indicador <span class="math inline">\(\mathbb{1}[Z \geq c]\)</span> con SE clusterizados.</li>
+</ol>
+</div>
+<div id="heaping" class="section level3 unnumbered hasAnchor">
+<h3>Heaping<a href="rdd.html#heaping" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Caso especial: <span class="math inline">\(Z\)</span> continua pero con <strong>acumulación en valores redondos</strong> (peso al nacer en gramos redondeados a 50, ingresos auto-reportados redondeados a múltiplos de 100K). Si el redondeo se correlaciona con el tratamiento o el resultado, el diseño se rompe. <strong>Donut RD</strong> (siguiente sección) es una solución parcial.</p>
+<hr />
+</div>
+</div>
+<div id="extensiones" class="section level2 unnumbered hasAnchor">
+<h2>Extensiones<a href="rdd.html#extensiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="regression-kink-design-rkd" class="section level3 unnumbered hasAnchor">
+<h3>Regression Kink Design (RKD)<a href="rdd.html#regression-kink-design-rkd" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En vez de un <strong>salto</strong> en el nivel del tratamiento, el umbral genera un <strong>cambio en la pendiente</strong> de cómo <span class="math inline">\(Z\)</span> afecta <span class="math inline">\(D\)</span>. Ejemplos: beneficios de desempleo que dependen del salario previo con tope, impuestos progresivos. Card, Lee, Pei &amp; Weber (2015, <em>Econometrica</em>) formalizaron el RKD; identificación requiere continuidad de la primera derivada.</p>
+<p>Estimación: igual que RD pero el estimando es el <strong>cambio en la pendiente</strong> en <span class="math inline">\(c\)</span>. <code>rdrobust</code> lo soporta con la opción <code>deriv(1)</code>.</p>
+</div>
+<div id="donut-rd" class="section level3 unnumbered hasAnchor">
+<h3>Donut RD<a href="rdd.html#donut-rd" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Si se sospecha manipulación o heaping <strong>exactamente en <span class="math inline">\(c\)</span></strong>, se omite una pequeña ventana <span class="math inline">\([c-\delta, c+\delta]\)</span> y se estima RD con las observaciones restantes. Trade-off: pierde poder y sesga la interpretación (ya no es “en el umbral” sino “extrapolado al umbral”). Útil como robustez.</p>
+</div>
+<div id="geographic-rd" class="section level3 unnumbered hasAnchor">
+<h3>Geographic RD<a href="rdd.html#geographic-rd" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La variable de asignación es la <strong>distancia a una frontera</strong> (administrativa, política, climática). Cada lado de la frontera tiene una política o tratamiento distinto. Dell (2010, <em>Econometrica</em>) usa la frontera del trabajo forzoso colonial peruano (mita) como ejemplo paradigmático.</p>
+<p>Complicaciones: la “distancia” puede medirse en múltiples direcciones; covariables geográficas (suelo, altitud, clima) deben balancear; spillovers entre lados son más probables.</p>
+</div>
+<div id="multi-cutoff-y-multi-score-rd" class="section level3 unnumbered hasAnchor">
+<h3>Multi-cutoff y multi-score RD<a href="rdd.html#multi-cutoff-y-multi-score-rd" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Variantes para umbrales múltiples (varias becas con umbrales distintos) o para reglas con varias dimensiones (puntaje <strong>y</strong> SISBEN). Ver Cattaneo, Idrobo &amp; Titiunik (2020) para una guía moderna.</p>
+<hr />
+</div>
+</div>
+<div id="checklist-final" class="section level2 unnumbered hasAnchor">
+<h2>Checklist final<a href="rdd.html#checklist-final" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="boxwarning">
+<p><strong>Antes de creer un resultado RD, exija:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Gráfico binned scatter</strong> del resultado vs <span class="math inline">\(Z\)</span> con el ajuste local lineal a cada lado.</li>
+<li><strong>Sorting / McCrary</strong> (<code>rddensity</code>) — debe <strong>no rechazar</strong>.</li>
+<li><strong>Balance de covariables predeterminadas</strong> — coeficientes RD cercanos a cero y no significativos.</li>
+<li><strong>Placebos en umbrales falsos</strong> — no encuentra efectos donde no debería.</li>
+<li><strong>Sensibilidad al ancho de banda</strong> — el resultado no debe cambiar drásticamente cuando <span class="math inline">\(h\)</span> varía <span class="math inline">\(\pm 50\%\)</span>.</li>
+<li><strong>Sensibilidad al orden del polinomio</strong> — lineal y cuadrático deben dar respuestas parecidas; cúbico no se reporta como principal.</li>
+<li><strong>Si <span class="math inline">\(Z\)</span> es discreta</strong> — SE clusterizados en valores de <span class="math inline">\(Z\)</span> o “honest CIs”.</li>
+<li><strong>Interpretación honesta:</strong> el efecto es <strong>local en <span class="math inline">\(c\)</span></strong>, no es ATE. Hay que decirlo en el abstract.</li>
 </ol>
 </div>
 <hr />
 </div>
-<div id="ejercicio-con-datos" class="section level2 unnumbered hasAnchor">
-<h2>Ejercicio con datos<a href="did-teoria.html#ejercicio-con-datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="boxejercicio">
-<p>📁 <strong>Do-file del ejercicio</strong></p>
-<p>Descarga el do-file, córrelo en Stata y reporta tus resultados en el formulario:</p>
+<div id="lecturas-recomendadas-8" class="section level2 unnumbered hasAnchor">
+<h2>Lecturas recomendadas<a href="rdd.html#lecturas-recomendadas-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li><a href="dofile/08_DID/08_DID_ejercicio.do">08_DID_ejercicio.do</a> — ejercicio con <code>base3.dta</code> y <code>hospdd</code></li>
+<li><strong>Hahn, Todd &amp; van der Klaauw (2001)</strong> — “Identification and estimation of treatment effects with a regression-discontinuity design”, <em>Econometrica</em> — el paper fundacional moderno.</li>
+<li><strong>Imbens &amp; Lemieux (2008)</strong> — “Regression discontinuity designs: a guide to practice”, <em>Journal of Econometrics</em> — la guía clásica.</li>
+<li><strong>Lee &amp; Lemieux (2010)</strong> — “Regression discontinuity designs in economics”, <em>Journal of Economic Literature</em> — survey exhaustivo con ejemplos.</li>
+<li><strong>Cattaneo, Idrobo &amp; Titiunik (2020)</strong> — <em>A Practical Introduction to Regression Discontinuity Designs</em> (Cambridge Elements, dos volúmenes). El manual moderno; cubre <code>rdrobust</code>, <code>rddensity</code>, <code>rdmulti</code>. <strong>Lectura obligada.</strong></li>
+<li><strong>Calonico, Cattaneo &amp; Titiunik (2014)</strong> — “Robust nonparametric confidence intervals for regression-discontinuity designs”, <em>Econometrica</em> — base teórica de <code>rdrobust</code>.</li>
+<li><strong>Kolesár &amp; Rothe (2018)</strong> — “Inference in regression discontinuity designs with a discrete running variable”, <em>AER</em> — lectura obligada cuando <span class="math inline">\(Z\)</span> es discreta.</li>
+<li><strong>Gelman &amp; Imbens (2019)</strong> — “Why high-order polynomials should not be used in regression discontinuity designs”, <em>JBES</em> — por qué no usar polinomios de orden alto.</li>
+<li><strong>McCrary (2008)</strong> — “Manipulation of the running variable in the regression discontinuity design”, <em>J. Econometrics</em> — el test de sorting.</li>
+<li><strong>Ludwig &amp; Miller (2007)</strong> — “Does Head Start improve children’s life chances?”, <em>QJE</em> — fuente del procedimiento de cross-validation para bandwidth.</li>
 </ul>
-<p><strong>Instrucciones:</strong></p>
-<ol style="list-style-type: decimal">
-<li>Descarga el do-file y cambia la ruta en la línea <code>cd "..."</code> a la carpeta donde tienes <code>base3.dta</code>.</li>
-<li>Corre el do-file completo.</li>
-<li>Anota los valores que aparecen en pantalla al final de cada sección.</li>
-<li>Ingresa tus respuestas en el formulario a continuación.</li>
-</ol>
-</div>
-<p><strong>Sección A — DiD básico (<code>base3.dta</code>)</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th>Pregunta</th>
-<th>Tu respuesta</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A1a. Media controles antes</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>A1b. Media controles después</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A1c. Media tratados antes</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>A1d. Media tratados después</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A2. Estimador DiD (manual)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>A3. Estimador DiD (regresión)</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A3b. ¿Coinciden A2 y A3? (sí/no)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>A4. P-valor del test de balance en t=0</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A4b. ¿Eran similares los grupos antes?</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Sección B — DiD múltiples periodos (<code>hospdd</code>)</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th>Pregunta</th>
-<th>Tu respuesta</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>B1. Estimador ATET (nuevo procedimiento)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>B2. F-stat de <code>estat ptrends</code></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>B2b. P-valor de <code>estat ptrends</code></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>B2c. ¿Se rechaza H0 de tendencias paralelas?</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>B3. F-stat de <code>estat granger</code></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>B3b. P-valor de <code>estat granger</code></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>B3c. ¿Hay evidencia de anticipación?</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Envía tus respuestas aquí:</strong></p>
-<!-- Reemplazar FORM_ID por el formulario activo antes de publicar el ejercicio.
-<iframe src="https://docs.google.com/forms/d/e/FORM_ID/viewform?embedded=true"
-        width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0"
-        style="border-radius: 8px; margin-top: 1em;">
-  Cargando formulario...
-</iframe>
--->
 
 </div>
 </div>
@@ -1079,8 +1019,8 @@ Los coeficientes <span class="math inline">\(\beta\)</span> y <span class="math 
           </div>
         </div>
       </div>
-<a href="poder-estadistico-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="bad-controls-teoria.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="parte-b-late-paso-a-paso.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rdd-stata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1111,7 +1051,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/08-DID.Rmd",
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/20-RDD.Rmd",
     "text": "Edit"
   },
   "history": {

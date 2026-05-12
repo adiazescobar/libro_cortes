@@ -71,3 +71,5 @@ ipw-1
 synthetic-control
 iv
 iv-stata
+rdd
+rdd-stata

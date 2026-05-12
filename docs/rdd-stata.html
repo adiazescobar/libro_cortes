@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 8 Diferencias en Diferencias | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 8 Diferencias en Diferencias | Cortes Transversales" />
+  <title>Capitulo 20 RDD en Stata: simulación | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 20 RDD en Stata: simulación | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 8 Diferencias en Diferencias | Cortes Transversales" />
+  <meta property="og:title" content="Capitulo 20 RDD en Stata: simulación | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 8 Diferencias en Diferencias | Cortes Transversales" />
+  <meta name="twitter:title" content="Capitulo 20 RDD en Stata: simulación | Cortes Transversales" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="poder-estadistico-stata.html"/>
-<link rel="next" href="bad-controls-teoria.html"/>
+<link rel="prev" href="rdd.html"/>
+<link rel="next" href="parte-a-rdd.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,7 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#establecer-causalidad"><i class="fa fa-check"></i>Establecer Causalidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-1-buscar-una-persona-similar"><i class="fa fa-check"></i>Solución 1: Buscar una persona similar</a></li>
 <li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#efecto-promedio-del-tratamiento-ate"><i class="fa fa-check"></i>Efecto Promedio del Tratamiento (ATE)</a></li>
-<li class="chapter" data-level="1.1" data-path="08-DID.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
+<li class="chapter" data-level="1.1" data-path="21-RDDStata.html"><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i><b>1.1</b> Solución 2: Diferencia de Medias= Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-2-diferencia-de-medias-efecto-causal-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Solución 2: Diferencia de Medias = Efecto Causal + Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Sesgo de Selección</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-3-comparaciones-antes-despu%C3%A9s-efecto-causal-efecto-de-maduraci%C3%B3n"><i class="fa fa-check"></i>Solución 3: Comparaciones Antes-Después = Efecto Causal + Efecto de Maduración</a></li>
@@ -498,580 +498,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="did-teoria" class="section level1 hasAnchor" number="8">
-<h1><span class="header-section-number">Capitulo 8</span> Diferencias en Diferencias<a href="did-teoria.html#did-teoria" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="rdd-stata" class="section level1 hasAnchor" number="20">
+<h1><span class="header-section-number">Capitulo 20</span> RDD en Stata: simulación<a href="rdd-stata.html#rdd-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="boxinfo">
-<p><strong>🎯 Metas de aprendizaje</strong></p>
+<p><strong>Metas de aprendizaje</strong></p>
 <ul>
-<li>Entender el problema de identificación que DiD resuelve.</li>
-<li>Comprender el supuesto de <strong>tendencias paralelas</strong> y por qué es el corazón de la estrategia.</li>
-<li>Derivar el estimador DiD desde los resultados potenciales.</li>
-<li>Interpretar cada coeficiente de la regresión DiD.</li>
-<li>Saber cómo probar (y cómo fallar) el supuesto de tendencias paralelas.</li>
-<li>Implementar DiD en Stata: manualmente, con <code>diff</code>, y con regresión.</li>
+<li>Aplicar la <strong>receta de estimación</strong> en Stata: centrar <span class="math inline">\(\tilde Z\)</span>, recortar muestra, modelar <span class="math inline">\(E[Y \mid \tilde Z, D]\)</span></li>
+<li>Verificar empíricamente que en RDN el polinomio global y la regresión local lineal recuperan el mismo salto cuando el modelo está bien especificado</li>
+<li>Ver cómo el polinomio global se equivoca cuando la relación es muy curva</li>
+<li>Visualizar la sensibilidad del estimador al ancho de banda y entender el bandwidth MSE-óptimo (CCT)</li>
+<li>Correr las 4 pruebas de robustez: sensibilidad, balance, placebo, sorting (<code>rddensity</code>)</li>
+<li>Estimar RDB y verificar que coincide con 2SLS local</li>
+<li>Reconocer cómo cambian los SE cuando la variable de asignación es discreta</li>
 </ul>
 </div>
 <hr />
-<div id="el-problema-que-did-resuelve" class="section level2 unnumbered hasAnchor">
-<h2>El problema que DiD resuelve<a href="did-teoria.html#el-problema-que-did-resuelve" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Suponga que quiere evaluar el efecto de un programa (subsidio, política, capacitación). El problema fundamental es que <strong>no podemos observar al mismo individuo tratado y no tratado al mismo tiempo</strong>.</p>
-<p>La comparación más ingenua sería:</p>
-<p><span class="math display">\[\text{Efecto aparente} = \underbrace{\bar{Y}_{\text{tratados}} - \bar{Y}_{\text{controles}}}_{\text{diferencia cruda}}\]</span></p>
-<p>Pero esa diferencia puede existir incluso sin programa, simplemente porque los grupos eran distintos desde antes. Eso es <strong>sesgo de selección</strong>.</p>
-<p>Una segunda idea: comparar el grupo tratado antes y después del programa:</p>
-<p><span class="math display">\[\text{Efecto aparente} = \bar{Y}_{\text{tratados},\, t=1} - \bar{Y}_{\text{tratados},\, t=0}\]</span></p>
-<p>Pero eso puede capturar cualquier cambio que hubiera ocurrido en ese periodo, con o sin programa (una recesión, una reforma, la maduración de los niños). Eso es el <strong>problema de la tendencia temporal</strong>.</p>
-<p><strong>DiD resuelve ambos problemas a la vez</strong> usando dos grupos (tratados y controles) y dos periodos (antes y después):</p>
-<p><span class="math display">\[\widehat{\delta}_{DD} = \underbrace{(\bar{Y}_{T,1} - \bar{Y}_{T,0})}_{\text{cambio en tratados}} - \underbrace{(\bar{Y}_{C,1} - \bar{Y}_{C,0})}_{\text{cambio en controles}}\]</span></p>
-<p>La lógica es: el cambio en el grupo de control nos dice cuánto habrían cambiado los tratados <strong>en ausencia del programa</strong>. La diferencia entre los dos cambios es el efecto del programa.</p>
+<div id="instalación-previa-1" class="section level2 unnumbered hasAnchor">
+<h2>Instalación previa<a href="#instalaci%C3%B3n-previa-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb191"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb191-1"><a href="rdd-stata.html#cb191-1" tabindex="-1"></a><span class="kw">ssc</span> install rdrobust</span>
+<span id="cb191-2"><a href="rdd-stata.html#cb191-2" tabindex="-1"></a><span class="kw">ssc</span> install rddensity</span>
+<span id="cb191-3"><a href="rdd-stata.html#cb191-3" tabindex="-1"></a><span class="kw">ssc</span> install lpdensity   <span class="co">// dependencia de rddensity</span></span></code></pre></div>
+<p><strong>Descargar archivos ejecutables:</strong></p>
+<p><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/19_RDD/RDD_simulacion.do">Descargar do-file Stata (RDD_simulacion.do)</a></p>
+<p><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/19_RDD/RDD_simulacion.py">Descargar versión Python (RDD_simulacion.py)</a></p>
+<p><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/19_RDD/RDD_simulacion.R">Descargar versión R (RDD_simulacion.R)</a></p>
+<p>Los tres archivos contienen las mismas seis partes (RDN lineal, RDN curvo, ancho de banda, pruebas de robustez, RDB, <span class="math inline">\(Z\)</span> discreta) y producen los mismos resultados.</p>
 <hr />
-</div>
-<div id="la-tabla-22" class="section level2 unnumbered hasAnchor">
-<h2>La tabla 2×2<a href="did-teoria.html#la-tabla-22" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>La estructura de datos de DiD siempre se puede organizar en una tabla:</p>
-<table>
-<colgroup>
-<col width="25%" />
-<col width="25%" />
-<col width="25%" />
-<col width="25%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th>Antes (<span class="math inline">\(t=0\)</span>)</th>
-<th>Después (<span class="math inline">\(t=1\)</span>)</th>
-<th><strong>Primera diferencia</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Controles</strong> (<span class="math inline">\(D=0\)</span>)</td>
-<td><span class="math inline">\(\bar{Y}_{C,0}\)</span></td>
-<td><span class="math inline">\(\bar{Y}_{C,1}\)</span></td>
-<td><span class="math inline">\(\bar{Y}_{C,1} - \bar{Y}_{C,0}\)</span></td>
-</tr>
-<tr class="even">
-<td><strong>Tratados</strong> (<span class="math inline">\(D=1\)</span>)</td>
-<td><span class="math inline">\(\bar{Y}_{T,0}\)</span></td>
-<td><span class="math inline">\(\bar{Y}_{T,1}\)</span></td>
-<td><span class="math inline">\(\bar{Y}_{T,1} - \bar{Y}_{T,0}\)</span></td>
-</tr>
-<tr class="odd">
-<td><strong>Segunda diferencia</strong></td>
-<td>—</td>
-<td>—</td>
-<td><span class="math inline">\(\widehat{\delta}_{DD}\)</span></td>
-</tr>
-</tbody>
-</table>
-<p>La <strong>primera diferencia por fila</strong> elimina diferencias fijas entre grupos.
-La <strong>segunda diferencia</strong> (entre filas) elimina la tendencia temporal común.</p>
-<hr />
-</div>
-<div id="resultados-potenciales-y-el-att" class="section level2 unnumbered hasAnchor">
-<h2>Resultados potenciales y el ATT<a href="did-teoria.html#resultados-potenciales-y-el-att" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Formalizamos con la notación de resultados potenciales:</p>
-<ul>
-<li><span class="math inline">\(Y_{it}(1)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> en el periodo <span class="math inline">\(t\)</span> <strong>si es tratado</strong>.</li>
-<li><span class="math inline">\(Y_{it}(0)\)</span>: resultado del individuo <span class="math inline">\(i\)</span> en el periodo <span class="math inline">\(t\)</span> <strong>si no es tratado</strong>.</li>
-</ul>
-<p>El efecto del tratamiento sobre los tratados (<strong>ATT</strong>) en <span class="math inline">\(t=1\)</span> es:</p>
-<p><span class="math display">\[\text{ATT} = E\!\left[Y_{i,1}(1) - Y_{i,1}(0) \mid D_i = 1\right]\]</span></p>
-<p>El problema: <span class="math inline">\(Y_{i,1}(0)\)</span> no se observa para los tratados después del tratamiento. Necesitamos un contrafactual.</p>
-<p>DiD propone usar el cambio observado en los controles como estimación del cambio contrafactual en los tratados:</p>
-<p><span class="math display">\[E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 1\right] \approx E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 0\right]\]</span></p>
-<p>Esa igualdad es exactamente el <strong>supuesto de tendencias paralelas</strong>.</p>
-<hr />
-</div>
-<div id="el-supuesto-de-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
-<h2>El supuesto de tendencias paralelas<a href="did-teoria.html#el-supuesto-de-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="boxcerebro">
-<p><strong>Supuesto de tendencias paralelas (formal):</strong></p>
-<p><span class="math display">\[E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 1\right] = E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 0\right]\]</span></p>
-<p>En ausencia del tratamiento, la evolución media del resultado en el grupo tratado habría sido <strong>idéntica</strong> a la del grupo de control.</p>
-</div>
-<p><strong>¿Qué dice en palabras?</strong></p>
-<p>No se exige que tratados y controles sean iguales en el periodo base — pueden tener niveles diferentes. Lo que se exige es que sus <strong>tendencias</strong> habrían sido las mismas si el programa no hubiera existido.</p>
-<p><strong>¿Por qué es creíble?</strong></p>
-<p>El supuesto es más plausible cuando:</p>
-<ul>
-<li>Los grupos son similares en características observables.</li>
-<li>El programa no fue asignado en función de la tendencia reciente de <span class="math inline">\(Y\)</span> (<em>Ashenfelter’s dip</em>: cuidado si los tratados fueron seleccionados porque estaban en declive).</li>
-<li>Los periodos pre-tratamiento muestran tendencias paralelas (evidencia empírica).</li>
-</ul>
-<p><strong>¿Qué lo viola?</strong></p>
-<ul>
-<li>Diferencias en la tendencia de crecimiento entre grupos (ej: los tratados tenían un crecimiento más rápido de antemano).</li>
-<li>Shocks simultáneos que afectan solo a un grupo.</li>
-<li>Selección de participantes basada en la trayectoria reciente de <span class="math inline">\(Y\)</span>.</li>
-</ul>
-<hr />
-</div>
-<div id="identificación-del-att-bajo-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
-<h2>Identificación del ATT bajo tendencias paralelas<a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Bajo el supuesto de tendencias paralelas, el estimador DiD recupera el ATT:</p>
-<p><span class="math display">\[
-\widehat{\delta}_{DD} = \underbrace{E[Y_{i,1} \mid D_i=1]}_{\bar{Y}_{T,1}} - \underbrace{E[Y_{i,0} \mid D_i=1]}_{\bar{Y}_{T,0}} - \underbrace{\Big(E[Y_{i,1} \mid D_i=0] - E[Y_{i,0} \mid D_i=0]\Big)}_{\text{tendencia de los controles}}
-\]</span></p>
-<p>Sustituyendo resultados potenciales y usando independencia e igualdad de tendencias:</p>
-<p><span class="math display">\[
-= E[Y(1) - Y(0) \mid D=1] = \text{ATT}
-\]</span></p>
-<p>El estimador es insesgado para el ATT <strong>si y solo si</strong> el supuesto de tendencias paralelas se cumple.</p>
-<hr />
-</div>
-<div id="la-regresión-did" class="section level2 unnumbered hasAnchor">
-<h2>La regresión DiD<a href="#la-regresi%C3%B3n-did" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El estimador de las cuatro medias se puede recuperar exactamente con:</p>
-<p><span class="math display">\[Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon_{it}\]</span></p>
-<p>Interpretación de cada coeficiente:</p>
-<table>
-<colgroup>
-<col width="50%" />
-<col width="50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Coeficiente</th>
-<th>Significado</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(\alpha\)</span></td>
-<td>Media de los controles en el periodo base (<span class="math inline">\(\bar{Y}_{C,0}\)</span>)</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\beta\)</span></td>
-<td>Diferencia pre-tratamiento entre grupos (<span class="math inline">\(\bar{Y}_{T,0} - \bar{Y}_{C,0}\)</span>)</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\gamma\)</span></td>
-<td>Cambio temporal en los controles (<span class="math inline">\(\bar{Y}_{C,1} - \bar{Y}_{C,0}\)</span>)</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\delta\)</span></td>
-<td><strong>Estimador DiD</strong> = efecto causal del programa (bajo tendencias paralelas)</td>
-</tr>
-</tbody>
-</table>
-<div class="boxcerebro">
-<p><strong>El coeficiente que importa es <span class="math inline">\(\delta\)</span></strong>, el de la interacción <span class="math inline">\(D \times t\)</span>.
-Los coeficientes <span class="math inline">\(\beta\)</span> y <span class="math inline">\(\gamma\)</span> por sí solos no tienen interpretación causal.</p>
-</div>
-<p><strong>Equivalencia algebraica:</strong> Los cuatro promedios se recuperan así:</p>
-<p><span class="math display">\[\bar{Y}_{C,0} = \hat{\alpha}, \quad \bar{Y}_{T,0} = \hat{\alpha}+\hat{\beta}, \quad \bar{Y}_{C,1} = \hat{\alpha}+\hat{\gamma}, \quad \bar{Y}_{T,1} = \hat{\alpha}+\hat{\beta}+\hat{\gamma}+\hat{\delta}\]</span></p>
-<hr />
-</div>
-<div id="prueba-de-tendencias-paralelas" class="section level2 unnumbered hasAnchor">
-<h2>Prueba de tendencias paralelas<a href="did-teoria.html#prueba-de-tendencias-paralelas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El supuesto de tendencias paralelas <strong>no es verificable</strong> en el periodo de tratamiento: el contrafactual <span class="math inline">\(Y_{it}(0)\)</span> para los tratados en <span class="math inline">\(t=1\)</span> no existe. Solo podemos buscar evidencia indirecta.</p>
-<p><strong>Con múltiples periodos pre-tratamiento</strong> (y un identificador individual), Stata ofrece dos pruebas formales distintas — y es importante no confundirlas:</p>
-<hr />
-<div id="prueba-de-tendencias-paralelas-estat-ptrends" class="section level3 unnumbered hasAnchor">
-<h3>Prueba de tendencias paralelas: <code>estat ptrends</code><a href="did-teoria.html#prueba-de-tendencias-paralelas-estat-ptrends" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb87"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb87-1"><a href="did-teoria.html#cb87-1" tabindex="-1"></a>xtdidregress (<span class="fu">y</span>) (treatment), <span class="fu">group</span>(id) time(<span class="fu">year</span>)</span>
-<span id="cb87-2"><a href="did-teoria.html#cb87-2" tabindex="-1"></a><span class="kw">estat</span> ptrends</span></code></pre></div>
-<p><strong>H₀:</strong> Las tendencias lineales son paralelas en el periodo pre-tratamiento.</p>
-<p>Lo que hace internamente: estima una regresión sobre los periodos pre-tratamiento con una interacción <code>tratado × tiempo</code> (como variable continua) y prueba si ese coeficiente es cero. Si se rechaza H₀, hay evidencia de que los grupos ya tenían pendientes distintas antes del programa.</p>
-<p>Esta es la prueba de tendencias paralelas propiamente dicha.</p>
-<hr />
-</div>
-<div id="prueba-de-anticipación-estat-granger" class="section level3 unnumbered hasAnchor">
-<h3>Prueba de anticipación: <code>estat granger</code><a href="#prueba-de-anticipaci%C3%B3n-estat-granger" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb88"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb88-1"><a href="did-teoria.html#cb88-1" tabindex="-1"></a><span class="kw">estat</span> granger</span></code></pre></div>
-<p><strong>H₀:</strong> No hubo efectos del tratamiento en anticipación (antes de que empezara).</p>
-<p>Lo que hace internamente: construye indicadores de “leads” — una variable por cada periodo pre-tratamiento que toma valor 1 si el grupo es tratado y el tiempo ya superó ese umbral. Incluye todos esos indicadores en una regresión y los prueba conjuntamente con un F-test acumulado.</p>
-<div class="boxcerebro">
-<p><strong>Diferencia clave entre las dos pruebas:</strong></p>
-<table>
-<colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Prueba</th>
-<th>H₀</th>
-<th>¿Qué detecta si se rechaza?</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>estat ptrends</code></td>
-<td>Tendencias lineales iguales antes del tratamiento</td>
-<td>Tendencias pre-existentes distintas entre grupos</td>
-</tr>
-<tr class="even">
-<td><code>estat granger</code></td>
-<td>Sin efectos anticipados del tratamiento</td>
-<td>Que los agentes cambiaron su comportamiento antes de que empezara el programa</td>
-</tr>
-</tbody>
-</table>
-<p>Son preguntas distintas. Un rechazo en <code>ptrends</code> no implica anticipación, y un rechazo en <code>granger</code> no implica que las tendencias no eran paralelas. Siempre se necesita un argumento teórico para interpretar cuál es el problema.</p>
-</div>
-<hr />
-</div>
-<div id="visualización-estat-trendplots-y-estat-grangerplot" class="section level3 unnumbered hasAnchor">
-<h3>Visualización: <code>estat trendplots</code> y <code>estat grangerplot</code><a href="#visualizaci%C3%B3n-estat-trendplots-y-estat-grangerplot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb89"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb89-1"><a href="did-teoria.html#cb89-1" tabindex="-1"></a><span class="kw">estat</span> trendplots   * medias observadas + tendencias lineales ajustadas por grupo</span>
-<span id="cb89-2"><a href="did-teoria.html#cb89-2" tabindex="-1"></a><span class="kw">estat</span> grangerplot  * event study: efectos específicos por periodo (pre <span class="fu">y</span> <span class="kw">post</span>)</span></code></pre></div>
-<p><code>trendplots</code> es el gráfico diagnóstico de tendencias. <code>grangerplot</code> es el event study completo con los efectos por periodo y sus intervalos de confianza.</p>
-<hr />
-<div class="boxcerebro">
-<p><strong>Restricción técnica:</strong> el código fuente de Stata exige <strong>al menos 2 periodos pre-tratamiento</strong> para correr <code>estat ptrends</code> o <code>estat granger</code>. Con solo un periodo antes del tratamiento, ambas pruebas fallan con error. En nuestra base (1 periodo antes, 1 después), estas pruebas no son ejecutables.</p>
-</div>
-<p><strong>Con solo dos periodos (como en nuestra base):</strong></p>
-<p>Con un único periodo antes y uno después, la prueba formal de pre-tendencias es <strong>imposible</strong>. El gráfico de tendencias medias que construimos en Stata es una <em>visualización del DiD</em>, no una prueba del supuesto. Para probar tendencias paralelas se necesitan <strong>al menos 3 periodos</strong> y un identificador de individuo.</p>
-<hr />
-</div>
-</div>
-<div id="amenazas-adicionales-a-la-validez" class="section level2 unnumbered hasAnchor">
-<h2>Amenazas adicionales a la validez<a href="did-teoria.html#amenazas-adicionales-a-la-validez" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Además de la violación de tendencias paralelas, DiD puede fallar por cuatro razones principales:</p>
-<hr />
-<p><strong>1. Políticas simultáneas</strong></p>
-<p>Si durante el mismo periodo ocurre otro evento o política que afecta <strong>solo a uno de los dos grupos</strong>, el cambio que atribuimos al programa puede ser en realidad causado por ese otro factor.</p>
-<p><em>Ejemplo:</em> Evaluamos un programa de empleo para madres en una ciudad. Al mismo tiempo, esa ciudad anuncia una inversión en guarderías públicas. El grupo tratado mejora, pero no podemos saber cuánto fue el programa y cuánto fueron las guarderías.</p>
-<p><strong>¿Cómo detectarlo?</strong> Revisando el contexto histórico y verificando que no hubo shocks diferenciales entre grupos durante el periodo de evaluación.</p>
-<hr />
-<p><strong>2. Causalidad inversa</strong></p>
-<p>El supuesto de tendencias paralelas puede fallar si <strong>la selección al tratamiento depende de la trayectoria pasada del resultado</strong>. Si los participantes fueron elegidos (o se autoseleccionaron) precisamente porque su resultado estaba cayendo, habrían subido de todas formas sin el programa — lo que se conoce como el <strong>dip de Ashenfelter</strong>.</p>
-<p><em>Ejemplo:</em> Un programa de capacitación laboral selecciona trabajadores que recientemente perdieron el empleo. Su tasa de empleo era baja antes del programa, pero habría subido naturalmente con el tiempo. DiD sobreestima el efecto.</p>
-<p><strong>¿Cómo detectarlo?</strong> Con múltiples periodos pre-tratamiento: si el grupo tratado ya tenía una tendencia ascendente antes del programa, el dip es visible.</p>
-<hr />
-<p><strong>3. Spillovers (efectos de derrame)</strong></p>
-<p>Si el tratamiento de algunos individuos <strong>afecta el resultado de quienes están en el grupo de control</strong>, el contrafactual queda contaminado. El grupo de control ya no representa lo que le habría pasado al grupo tratado sin el programa.</p>
-<p><em>Ejemplo:</em> Un subsidio a la contratación en empresas tratadas puede desplazar trabajadores desde empresas de control hacia las tratadas. El empleo en control baja no porque el programa fracase, sino porque los trabajadores se mueven. DiD subestima el efecto real.</p>
-<p><strong>¿Cómo detectarlo?</strong> Verificando que tratados y controles estén suficientemente separados geográfica o institucionalmente para que no haya interacciones.</p>
-<hr />
-<p><strong>4. Anticipación</strong></p>
-<p>Si los agentes saben que el programa llegará, pueden cambiar su comportamiento <strong>antes</strong> de que empiece. Esto hace que el periodo “antes” del tratamiento ya esté contaminado, y el estimador DiD subestima el efecto verdadero.</p>
-<p><em>Ejemplo:</em> Se anuncia en enero un subsidio a la inversión que entrará en vigor en julio. Las empresas tratadas empiezan a invertir desde enero. En julio, la diferencia pre-post parece pequeña, aunque el programa tuvo un efecto real desde el anuncio.</p>
-<p><strong>¿Cómo detectarlo y corregirlo?</strong> Redefinir la fecha de tratamiento como la fecha del <strong>anuncio</strong>, no la de implementación. Con event studies, los coeficientes pre-tratamiento serán distintos de cero si hay anticipación — pero esto es observacionalmente equivalente a tendencias no paralelas (ver sección anterior).</p>
-<hr />
-<p><strong>5. Cambios en la composición de los grupos</strong></p>
-<p>Si el tratamiento cambia quién permanece en la muestra (atrición diferencial), las medias post-tratamiento ya no son comparables. Por ejemplo, si el programa provoca que los participantes más débiles abandonen el programa, el promedio post-tratamiento mejora mecánicamente.</p>
-<p><strong>¿Cómo detectarlo?</strong> Comparando tasas de atrición entre tratados y controles, y analizando si las características de los que se van difieren entre grupos.</p>
-<hr />
-</div>
-<div id="implementación-en-stata" class="section level2 unnumbered hasAnchor">
-<h2>Implementación en Stata<a href="#implementaci%C3%B3n-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="preparación-de-los-datos" class="section level3 unnumbered hasAnchor">
-<h3>Preparación de los datos<a href="#preparaci%C3%B3n-de-los-datos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Descarga la base de datos y el do-file de esta clase:</p>
-<div class="boxejercicio">
-<p>📁 <strong>Archivos de la clase</strong></p>
-<ul>
-<li><a href="dofile/08_DID/base3.dta">base3.dta</a> — base de datos (8 000 observaciones, niños con dos periodos de seguimiento)</li>
-<li><a href="dofile/08_DID/08_DID.do">08_DID.do</a> — do-file completo</li>
-</ul>
-</div>
-<div class="sourceCode" id="cb90"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb90-1"><a href="did-teoria.html#cb90-1" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb90-2"><a href="did-teoria.html#cb90-2" tabindex="-1"></a><span class="kw">set</span> mem 150m</span>
-<span id="cb90-3"><a href="did-teoria.html#cb90-3" tabindex="-1"></a><span class="kw">capture</span> <span class="fu">log</span> <span class="kw">close</span></span>
-<span id="cb90-4"><a href="did-teoria.html#cb90-4" tabindex="-1"></a>cd <span class="st">&quot;RUTA_DE_TU_CARPETA/dofile/08_DID&quot;</span></span>
-<span id="cb90-5"><a href="did-teoria.html#cb90-5" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;base3.dta&quot;</span></span></code></pre></div>
-<p>Las variables clave:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Variable</th>
-<th>Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>y</code></td>
-<td>Talla para la edad (z-score)</td>
-</tr>
-<tr class="even">
-<td><code>D</code></td>
-<td>Indicador de tratamiento (1 = tratado, 0 = control)</td>
-</tr>
-<tr class="odd">
-<td><code>t</code></td>
-<td>Periodo (0 = antes, 1 = después)</td>
-</tr>
-<tr class="even">
-<td><code>orden_n</code></td>
-<td>Orden de nacimiento del niño en el hogar</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb91"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb91-1"><a href="did-teoria.html#cb91-1" tabindex="-1"></a>* Verificar la estructura del panel</span>
-<span id="cb91-2"><a href="did-teoria.html#cb91-2" tabindex="-1"></a><span class="kw">tab</span> t</span>
-<span id="cb91-3"><a href="did-teoria.html#cb91-3" tabindex="-1"></a><span class="kw">tab</span> D</span>
-<span id="cb91-4"><a href="did-teoria.html#cb91-4" tabindex="-1"></a><span class="kw">tab</span> t D</span></code></pre></div>
-<hr />
-</div>
-<div id="estadísticas-descriptivas-y-gráfico-de-tendencias" class="section level3 unnumbered hasAnchor">
-<h3>Estadísticas descriptivas y gráfico de tendencias<a href="#estad%C3%ADsticas-descriptivas-y-gr%C3%A1fico-de-tendencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb92"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb92-1"><a href="did-teoria.html#cb92-1" tabindex="-1"></a>* Promedios por grupo <span class="fu">y</span> periodo (la tabla 2x2)</span>
-<span id="cb92-2"><a href="did-teoria.html#cb92-2" tabindex="-1"></a><span class="kw">table</span> D t, c(<span class="kw">mean</span> <span class="fu">y</span>)</span>
-<span id="cb92-3"><a href="did-teoria.html#cb92-3" tabindex="-1"></a></span>
-<span id="cb92-4"><a href="did-teoria.html#cb92-4" tabindex="-1"></a>* Etiquetas para los gráficos</span>
-<span id="cb92-5"><a href="did-teoria.html#cb92-5" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> t 0 <span class="st">&quot;Antes&quot;</span> 1 <span class="st">&quot;Después&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb92-6"><a href="did-teoria.html#cb92-6" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> t t</span>
-<span id="cb92-7"><a href="did-teoria.html#cb92-7" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> D 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratado&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb92-8"><a href="did-teoria.html#cb92-8" tabindex="-1"></a><span class="kw">label</span> <span class="ot">value</span> D D</span>
-<span id="cb92-9"><a href="did-teoria.html#cb92-9" tabindex="-1"></a></span>
-<span id="cb92-10"><a href="did-teoria.html#cb92-10" tabindex="-1"></a>* Gráfico <span class="kw">de</span> evolución temporal (prueba visual <span class="kw">de</span> tendencias paralelas)</span>
-<span id="cb92-11"><a href="did-teoria.html#cb92-11" tabindex="-1"></a><span class="kw">preserve</span></span>
-<span id="cb92-12"><a href="did-teoria.html#cb92-12" tabindex="-1"></a><span class="kw">collapse</span> (<span class="kw">mean</span>) <span class="fu">y</span>, <span class="kw">by</span>(t D)</span>
-<span id="cb92-13"><a href="did-teoria.html#cb92-13" tabindex="-1"></a><span class="kw">twoway</span> (connected <span class="fu">y</span> t <span class="kw">if</span> D==1, <span class="bn">msymbol</span>(<span class="bn">circle</span>) lcolor(<span class="bn">navy</span>)) <span class="co">///</span></span>
-<span id="cb92-14"><a href="did-teoria.html#cb92-14" tabindex="-1"></a>       (connected <span class="fu">y</span> t <span class="kw">if</span> D==0, <span class="bn">msymbol</span>(triangle) lcolor(<span class="bn">maroon</span>)), <span class="co">///</span></span>
-<span id="cb92-15"><a href="did-teoria.html#cb92-15" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
-<span id="cb92-16"><a href="did-teoria.html#cb92-16" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Tendencias medias por grupo&quot;</span>) <span class="co">///</span></span>
-<span id="cb92-17"><a href="did-teoria.html#cb92-17" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Periodo&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Talla-para-edad (z-score)&quot;</span>)</span>
-<span id="cb92-18"><a href="did-teoria.html#cb92-18" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div>
-<p><strong>¿Qué muestra este gráfico?</strong></p>
-<p>Con solo dos periodos, este gráfico <strong>no es una prueba de tendencias paralelas</strong> — es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y después, y permite ver intuitivamente de dónde viene el estimador. Para probar tendencias paralelas necesitaríamos al menos un periodo previo adicional y un identificador individual.</p>
-<p>Lo que sí podemos verificar con este gráfico: que los grupos se movieron de forma diferente (si las pendientes difieren, el DiD captura esa diferencia). Pero no podemos saber si esa diferencia se debe al programa o a una tendencia pre-existente que no alcanzamos a ver.</p>
-<hr />
-</div>
-<div id="comparación-de-medias-por-periodo" class="section level3 unnumbered hasAnchor">
-<h3>Comparación de medias por periodo<a href="#comparaci%C3%B3n-de-medias-por-periodo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb93"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb93-1"><a href="did-teoria.html#cb93-1" tabindex="-1"></a>* Diferencia tratados-controles antes del programa</span>
-<span id="cb93-2"><a href="did-teoria.html#cb93-2" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 0, <span class="kw">by</span>(D)</span>
-<span id="cb93-3"><a href="did-teoria.html#cb93-3" tabindex="-1"></a></span>
-<span id="cb93-4"><a href="did-teoria.html#cb93-4" tabindex="-1"></a>* Diferencia tratados-controles después del programa</span>
-<span id="cb93-5"><a href="did-teoria.html#cb93-5" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span> <span class="kw">if</span> t == 1, <span class="kw">by</span>(D)</span></code></pre></div>
-<p>La diferencia cruda cambia entre periodos. <strong>DiD</strong> aísla si ese cambio se debe al programa o a una tendencia pre-existente.</p>
-<hr />
-</div>
-<div id="estimador-did-paso-a-paso" class="section level3 unnumbered hasAnchor">
-<h3>Estimador DiD paso a paso<a href="did-teoria.html#estimador-did-paso-a-paso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb94"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb94-1"><a href="did-teoria.html#cb94-1" tabindex="-1"></a>* Cuatro medias <span class="kw">de</span> la tabla 2x2</span>
-<span id="cb94-2"><a href="did-teoria.html#cb94-2" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 0</span>
-<span id="cb94-3"><a href="did-teoria.html#cb94-3" tabindex="-1"></a><span class="fu">scalar</span> y_c0 = <span class="fu">r</span>(<span class="kw">mean</span>)       <span class="co">// Controles, antes</span></span>
-<span id="cb94-4"><a href="did-teoria.html#cb94-4" tabindex="-1"></a></span>
-<span id="cb94-5"><a href="did-teoria.html#cb94-5" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 0 &amp; t == 1</span>
-<span id="cb94-6"><a href="did-teoria.html#cb94-6" tabindex="-1"></a><span class="fu">scalar</span> y_c1 = <span class="fu">r</span>(<span class="kw">mean</span>)       <span class="co">// Controles, después</span></span>
-<span id="cb94-7"><a href="did-teoria.html#cb94-7" tabindex="-1"></a></span>
-<span id="cb94-8"><a href="did-teoria.html#cb94-8" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 0</span>
-<span id="cb94-9"><a href="did-teoria.html#cb94-9" tabindex="-1"></a><span class="fu">scalar</span> y_t0 = <span class="fu">r</span>(<span class="kw">mean</span>)       <span class="co">// Tratados, antes</span></span>
-<span id="cb94-10"><a href="did-teoria.html#cb94-10" tabindex="-1"></a></span>
-<span id="cb94-11"><a href="did-teoria.html#cb94-11" tabindex="-1"></a><span class="kw">sum</span> <span class="fu">y</span> <span class="kw">if</span> D == 1 &amp; t == 1</span>
-<span id="cb94-12"><a href="did-teoria.html#cb94-12" tabindex="-1"></a><span class="fu">scalar</span> y_t1 = <span class="fu">r</span>(<span class="kw">mean</span>)       <span class="co">// Tratados, después</span></span>
-<span id="cb94-13"><a href="did-teoria.html#cb94-13" tabindex="-1"></a></span>
-<span id="cb94-14"><a href="did-teoria.html#cb94-14" tabindex="-1"></a>* Primera diferencia: cambio en cada grupo</span>
-<span id="cb94-15"><a href="did-teoria.html#cb94-15" tabindex="-1"></a><span class="fu">scalar</span> delta_tratados  = y_t1 - y_t0</span>
-<span id="cb94-16"><a href="did-teoria.html#cb94-16" tabindex="-1"></a><span class="fu">scalar</span> delta_controles = y_c1 - y_c0</span>
-<span id="cb94-17"><a href="did-teoria.html#cb94-17" tabindex="-1"></a></span>
-<span id="cb94-18"><a href="did-teoria.html#cb94-18" tabindex="-1"></a>* Segunda diferencia: DiD</span>
-<span id="cb94-19"><a href="did-teoria.html#cb94-19" tabindex="-1"></a><span class="fu">scalar</span> DD = delta_tratados - delta_controles</span>
-<span id="cb94-20"><a href="did-teoria.html#cb94-20" tabindex="-1"></a></span>
-<span id="cb94-21"><a href="did-teoria.html#cb94-21" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Cambio en tratados:  &quot;</span> delta_tratados</span>
-<span id="cb94-22"><a href="did-teoria.html#cb94-22" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Cambio en controles: &quot;</span> delta_controles</span>
-<span id="cb94-23"><a href="did-teoria.html#cb94-23" tabindex="-1"></a><span class="kw">di</span> <span class="st">&quot;Estimador DiD:       &quot;</span> DD</span></code></pre></div>
-<hr />
-</div>
-<div id="usando-el-comando-diff" class="section level3 unnumbered hasAnchor">
-<h3>Usando el comando <code>diff</code><a href="did-teoria.html#usando-el-comando-diff" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb95"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb95-1"><a href="did-teoria.html#cb95-1" tabindex="-1"></a><span class="kw">ssc</span> install <span class="fu">diff</span>, <span class="kw">replace</span></span>
-<span id="cb95-2"><a href="did-teoria.html#cb95-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t)</span></code></pre></div>
-<p>El comando <code>diff</code> reporta la tabla 2×2 completa (medias por grupo y periodo, primeras diferencias, y el estimador DiD) con su error estándar y el p-valor del test <span class="math inline">\(H_0: \delta = 0\)</span>.</p>
-<p><strong>La opción <code>test</code> de <code>diff</code>: prueba de balance, no de tendencias paralelas</strong></p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb96-1"><a href="did-teoria.html#cb96-1" tabindex="-1"></a>* <span class="kw">test</span> requiere especificar covariables con cov()</span>
-<span id="cb96-2"><a href="did-teoria.html#cb96-2" tabindex="-1"></a><span class="fu">diff</span> <span class="fu">y</span>, t(D) <span class="kw">p</span>(t) <span class="kw">test</span> cov(orden_n)</span></code></pre></div>
-<p>La opción <code>test</code> corre <strong>t-tests de balance en el periodo base</strong> (<span class="math inline">\(t=0\)</span>), comparando tratados y controles en la variable de resultado y en las covariables especificadas. Lo que hace internamente es una regresión de cada variable sobre el indicador de tratamiento, restringida a <span class="math inline">\(t=0\)</span>.</p>
-<div class="boxcerebro">
-<p><strong>Importante:</strong> Esto es una prueba de <strong>balance pre-tratamiento</strong> (¿eran similares los grupos antes del programa?), <strong>no</strong> una prueba de tendencias paralelas (¿habrían tenido la misma trayectoria sin el programa?). Son dos cosas distintas. Un p-valor grande en el test de balance dice que los grupos eran similares en el periodo base, pero no dice nada sobre sus tendencias futuras.</p>
-</div>
-<hr />
-</div>
-<div id="implementación-con-regresión" class="section level3 unnumbered hasAnchor">
-<h3>Implementación con regresión<a href="#implementaci%C3%B3n-con-regresi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb97"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb97-1"><a href="did-teoria.html#cb97-1" tabindex="-1"></a>* Regresión DiD: <span class="fu">el</span> coeficiente <span class="kw">de</span> D#t es <span class="fu">el</span> estimador</span>
-<span id="cb97-2"><a href="did-teoria.html#cb97-2" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> D##t, <span class="kw">robust</span></span>
-<span id="cb97-3"><a href="did-teoria.html#cb97-3" tabindex="-1"></a></span>
-<span id="cb97-4"><a href="did-teoria.html#cb97-4" tabindex="-1"></a>* Verificación: comparar con cálculo manual</span>
-<span id="cb97-5"><a href="did-teoria.html#cb97-5" tabindex="-1"></a>* <span class="kw">alpha</span>      = y_c0</span>
-<span id="cb97-6"><a href="did-teoria.html#cb97-6" tabindex="-1"></a>* beta (D)   = y_t0 - y_c0  (diferencia pre-tratamiento)</span>
-<span id="cb97-7"><a href="did-teoria.html#cb97-7" tabindex="-1"></a>* <span class="kw">gamma</span> (t)  = y_c1 - y_c0  (tendencia <span class="kw">de</span> los controles)</span>
-<span id="cb97-8"><a href="did-teoria.html#cb97-8" tabindex="-1"></a>* delta (D#t) = DD           (estimador DiD)</span></code></pre></div>
-<p><strong>Interpretación del resultado:</strong></p>
-<p>El coeficiente de <code>D#t</code> (la interacción) es el estimador DiD. En esta base estima un efecto de aproximadamente <strong>+0.18 desviaciones estándar</strong> en la talla-para-edad, significativo al 5%. Bajo el supuesto de tendencias paralelas, ese es el efecto causal del programa sobre los niños tratados.</p>
-<hr />
-</div>
-<div id="extensión-con-panel-y-primeras-diferencias" class="section level3 unnumbered hasAnchor">
-<h3>Extensión con panel y primeras diferencias<a href="#extensi%C3%B3n-con-panel-y-primeras-diferencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Con datos de panel, el estimador DiD es equivalente a una regresión en <strong>primeras diferencias</strong>:</p>
-<p><span class="math display">\[\Delta Y_i = \delta D_i + \Delta \varepsilon_i\]</span></p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb98-1"><a href="did-teoria.html#cb98-1" tabindex="-1"></a>* Crear identificador individual (panel balanceado: 4000 niños x 2 periodos)</span>
-<span id="cb98-2"><a href="did-teoria.html#cb98-2" tabindex="-1"></a><span class="kw">sort</span> t orden_n</span>
-<span id="cb98-3"><a href="did-teoria.html#cb98-3" tabindex="-1"></a><span class="kw">by</span> t: <span class="kw">gen</span> id = <span class="dt">_n</span></span>
-<span id="cb98-4"><a href="did-teoria.html#cb98-4" tabindex="-1"></a></span>
-<span id="cb98-5"><a href="did-teoria.html#cb98-5" tabindex="-1"></a>xtset id t</span>
-<span id="cb98-6"><a href="did-teoria.html#cb98-6" tabindex="-1"></a></span>
-<span id="cb98-7"><a href="did-teoria.html#cb98-7" tabindex="-1"></a>* Primeras diferencias = DiD en panel balanceado <span class="kw">de</span> 2 periodos</span>
-<span id="cb98-8"><a href="did-teoria.html#cb98-8" tabindex="-1"></a><span class="kw">reg</span> D.<span class="fu">y</span> D.D</span></code></pre></div>
-<p>Los dos métodos (regresión con interacción y primeras diferencias) entregan el mismo estimador cuando hay exactamente dos periodos y el panel es balanceado.</p>
-<hr />
-</div>
-</div>
-<div id="síntesis" class="section level2 unnumbered hasAnchor">
-<h2>Síntesis<a href="#s%C3%ADntesis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<table>
-<colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Componente</th>
-<th>¿Qué elimina?</th>
-<th>¿Qué supone?</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Primera diferencia (dentro de grupos)</td>
-<td>Diferencias fijas entre grupos</td>
-<td>Grupos observables</td>
-</tr>
-<tr class="even">
-<td>Segunda diferencia (entre grupos)</td>
-<td>Tendencia temporal común</td>
-<td>Tendencias paralelas</td>
-</tr>
-<tr class="odd">
-<td><strong>DiD</strong></td>
-<td>Ambas</td>
-<td><strong>Tendencias paralelas</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>El supuesto de tendencias paralelas no es verificable en el periodo de tratamiento.</strong> Con múltiples periodos pre-tratamiento puede buscarse evidencia indirecta vía event study, pero con solo dos periodos eso es imposible.</p>
-<p>Las principales amenazas a la validez del DiD son: (1) políticas simultáneas que afectan diferencialmente a los grupos, (2) causalidad inversa o dip de Ashenfelter, (3) spillovers que contaminan el grupo de control, (4) anticipación que contamina el periodo base, y (5) atrición diferencial entre grupos.</p>
-<hr />
-<div class="boxejercicio">
-<p><strong>✍️ Preguntas de reflexión</strong></p>
-<ol style="list-style-type: decimal">
-<li>Calcula el estimador DiD a mano con las cuatro medias de la tabla y verifica que coincide con el coeficiente de la interacción en la regresión.</li>
-<li>¿Por qué no podemos interpretar causalmente la diferencia cruda entre tratados y controles en <span class="math inline">\(t=1\)</span>?</li>
-<li>¿Qué patrón esperarías ver en el gráfico de tendencias si el supuesto de tendencias paralelas <strong>se viola</strong>?</li>
-<li>¿Qué diferencia hay entre lo que prueba <code>estat ptrends</code> y lo que prueba <code>estat granger</code>? ¿Por qué importa distinguirlas?</li>
-</ol>
-</div>
-<hr />
-</div>
-<div id="ejercicio-con-datos" class="section level2 unnumbered hasAnchor">
-<h2>Ejercicio con datos<a href="did-teoria.html#ejercicio-con-datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="boxejercicio">
-<p>📁 <strong>Do-file del ejercicio</strong></p>
-<p>Descarga el do-file, córrelo en Stata y reporta tus resultados en el formulario:</p>
-<ul>
-<li><a href="dofile/08_DID/08_DID_ejercicio.do">08_DID_ejercicio.do</a> — ejercicio con <code>base3.dta</code> y <code>hospdd</code></li>
-</ul>
-<p><strong>Instrucciones:</strong></p>
-<ol style="list-style-type: decimal">
-<li>Descarga el do-file y cambia la ruta en la línea <code>cd "..."</code> a la carpeta donde tienes <code>base3.dta</code>.</li>
-<li>Corre el do-file completo.</li>
-<li>Anota los valores que aparecen en pantalla al final de cada sección.</li>
-<li>Ingresa tus respuestas en el formulario a continuación.</li>
-</ol>
-</div>
-<p><strong>Sección A — DiD básico (<code>base3.dta</code>)</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th>Pregunta</th>
-<th>Tu respuesta</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A1a. Media controles antes</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>A1b. Media controles después</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A1c. Media tratados antes</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>A1d. Media tratados después</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A2. Estimador DiD (manual)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>A3. Estimador DiD (regresión)</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A3b. ¿Coinciden A2 y A3? (sí/no)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>A4. P-valor del test de balance en t=0</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>A4b. ¿Eran similares los grupos antes?</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Sección B — DiD múltiples periodos (<code>hospdd</code>)</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th>Pregunta</th>
-<th>Tu respuesta</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>B1. Estimador ATET (nuevo procedimiento)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>B2. F-stat de <code>estat ptrends</code></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>B2b. P-valor de <code>estat ptrends</code></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>B2c. ¿Se rechaza H0 de tendencias paralelas?</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>B3. F-stat de <code>estat granger</code></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>B3b. P-valor de <code>estat granger</code></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>B3c. ¿Hay evidencia de anticipación?</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Envía tus respuestas aquí:</strong></p>
-<!-- Reemplazar FORM_ID por el formulario activo antes de publicar el ejercicio.
-<iframe src="https://docs.google.com/forms/d/e/FORM_ID/viewform?embedded=true"
-        width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0"
-        style="border-radius: 8px; margin-top: 1em;">
-  Cargando formulario...
-</iframe>
--->
-
 </div>
 </div>
             </section>
@@ -1079,8 +531,8 @@ Los coeficientes <span class="math inline">\(\beta\)</span> y <span class="math 
           </div>
         </div>
       </div>
-<a href="poder-estadistico-stata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="bad-controls-teoria.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="rdd.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="parte-a-rdd.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1111,7 +563,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/08-DID.Rmd",
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/21-RDDStata.Rmd",
     "text": "Edit"
   },
   "history": {
