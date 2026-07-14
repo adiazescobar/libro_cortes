@@ -17,6 +17,23 @@ En el capítulo anterior formalizamos la teoría de resultados potenciales, la d
 - **Herramienta:** [J-PAL — Power calculations](https://www.povertyactionlab.org/resource/power-calculations)
 :::
 
+## Materiales para la clase {-}
+
+::: {.class-materials}
+**Descarga antes de comenzar**
+
+- [Do-file de Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_stata.do)
+- [Base `data.dta`](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/data.dta)
+- [Script de R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_R.R)
+- [Notebook de Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_python.ipynb)
+- [Resultados completos de Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/results/resultados_stata.csv)
+- [Verificación Stata–Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/results/verificacion_stata_python.csv)
+
+<a class="colab-link" href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/06_RCT_Stata/clase6_python.ipynb" target="_blank" rel="noopener">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir notebook en Google Colab">
+</a>
+:::
+
 ```{r setup-cap6, echo=FALSE, message=FALSE, warning=FALSE}
 library(haven)
 library(dplyr)
@@ -797,21 +814,3 @@ No me des respuestas. Solo nuevas preguntas que me ayuden a entender mejor la co
 :::
 
 ---
-
-## DESCARGA LOS DOCUMENTOS {-}
-
-**Descargar Stata do file**:
-[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_stata.do)
-
-**Descargar R script**:
-[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_R.R)
-
-**Descargar Python Notebook**:
-[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_python.ipynb)
-
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/06_RCT_Stata/clase6_python.ipynb)
-
-**Descarga los Datos**
-[Descargar data.dta](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/data.dta)
-
-*(Base real de un experimento  replicado en 4 semestres. Columnas: `id, resultado, grupo, edad, genero, programa, libros, semestre, n_preguntas`. N=70. El grupo B recibió definiciones de palabras difíciles (tratamiento) y el grupo A recibió un texto crítico de economía (control). La variable `semestre` sirve como estrato.)*
