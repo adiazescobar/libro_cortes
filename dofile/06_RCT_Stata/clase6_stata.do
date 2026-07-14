@@ -35,6 +35,15 @@ if _rc {
 }
 use "data.dta", clear
 
+* Validación explícita del contrato de datos compartido con Python
+foreach v in resultado grupo genero programa semestre edad libros {
+    capture confirm variable `v'
+    if _rc {
+        di as error "Falta la variable requerida `v' en data.dta."
+        exit 111
+    }
+}
+
 * Tratamiento: B = definiciones (1), A = texto crítico (0)
 gen D = (grupo == "B")
 label define Dlbl 0 "Control" 1 "Tratado"
@@ -187,6 +196,31 @@ eststo m3: reg y D i.semestre, vce(robust)
 
 * Escenario 4: Estratificado + controles (especificación completa)
 eststo m4: reg y D i.semestre $X, vce(robust)
+
+* Exportar contrato canónico para la verificación Stata vs. Python
+capture mkdir "results"
+tempname resultsh
+tempfile canonical_results
+postfile `resultsh' str24 modelo str12 termino double coeficiente ///
+    error_estandar N R2 str24 prueba double estadistico p_value ///
+    using "`canonical_results'", replace
+
+foreach spec in m1_simple m2_controles m3_estratos m4_completo {
+    if "`spec'" == "m1_simple"     local stored m1
+    if "`spec'" == "m2_controles" local stored m2
+    if "`spec'" == "m3_estratos"  local stored m3
+    if "`spec'" == "m4_completo"  local stored m4
+    estimates restore `stored'
+    local p_D = 2*ttail(e(df_r), abs(_b[D]/_se[D]))
+    post `resultsh' ("`spec'") ("D") (_b[D]) (_se[D]) (e(N)) (e(r2)) ///
+        ("") (.) (`p_D')
+}
+postclose `resultsh'
+
+preserve
+use "`canonical_results'", clear
+export delimited using "results/resultados_stata.csv", replace
+restore
 
 * Comparar los cuatro modelos
 esttab m1 m2 m3 m4, se star(* 0.10 ** 0.05 *** 0.01) ///
