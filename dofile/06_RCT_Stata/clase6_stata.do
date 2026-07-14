@@ -34,6 +34,7 @@ if _rc {
     exit 601
 }
 use "data.dta", clear
+capture mkdir "results"
 
 * Validación explícita del contrato de datos compartido con Python
 foreach v in resultado grupo genero programa semestre edad libros {
@@ -153,8 +154,31 @@ else {
     use "`balance_raw'", clear
     order variable mean_T mean_C diff tstat pval se sd_T sd_C N_T N_C
     export excel using "Table_Balance_raw.xlsx", firstrow(variables) replace
+    rename mean_T media_tratado
+    rename mean_C media_control
+    rename diff diferencia
+    rename pval p_value
+    keep variable media_tratado media_control diferencia p_value N_T N_C
+    export delimited using "results/balance_stata.csv", replace
     restore
 }
+
+* Exportación canónica independiente para las tablas del libro.
+* No depende de la rutina docente difmedias, que se conserva arriba.
+tempname balanceh
+tempfile canonical_balance
+postfile `balanceh' str32 variable double media_tratado media_control ///
+    diferencia p_value N_T N_C using "`canonical_balance'", replace
+foreach v of global X {
+    quietly ttest `v', by(D)
+    post `balanceh' ("`v'") (r(mu_2)) (r(mu_1)) ///
+        (r(mu_2) - r(mu_1)) (r(p)) (r(N_2)) (r(N_1))
+}
+postclose `balanceh'
+preserve
+use "`canonical_balance'", clear
+export delimited using "results/balance_stata.csv", replace
+restore
 
 * 3.3 Balance con iebaltab
 capture noisily iebaltab $X, grpvar(D) control(0) rowvarlabels ftest ///
@@ -198,7 +222,6 @@ eststo m3: reg y D i.semestre, vce(robust)
 eststo m4: reg y D i.semestre $X, vce(robust)
 
 * Exportar contrato canónico para la verificación Stata vs. Python
-capture mkdir "results"
 tempname resultsh
 tempfile canonical_results
 postfile `resultsh' str24 modelo str12 termino double coeficiente ///
@@ -244,6 +267,22 @@ eststo clear
 eststo het_mujer: reg y D##i.mujer, vce(robust)
 margins, dydx(D)
 margins D, at(mujer=(0 1))
+
+* Resultado canónico principal de heterogeneidad para el libro
+estimates restore het_mujer
+local het_b = _b[1.D#1.mujer]
+local het_se = _se[1.D#1.mujer]
+local het_N = e(N)
+preserve
+clear
+set obs 1
+gen str20 moderador = "genero"
+gen str40 termino = "D#Mujer"
+gen double coeficiente = `het_b'
+gen double error_estandar = `het_se'
+gen double N = `het_N'
+export delimited using "results/heterogeneidad_stata.csv", replace
+restore
 
 * 5.2 Por libros (continua)
 eststo het_libros: reg y D##c.libros, vce(robust)

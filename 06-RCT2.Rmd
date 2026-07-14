@@ -43,6 +43,26 @@ library(ggplot2)
 library(kableExtra)
 library(patchwork)
 
+read_required_csv <- function(path, required) {
+  if (!file.exists(path)) stop("Falta el resultado canónico de Stata: ", path)
+  out <- read.csv(path, check.names = FALSE)
+  missing <- setdiff(required, names(out))
+  if (length(missing)) {
+    stop("Faltan columnas en ", path, ": ", paste(missing, collapse = ", "))
+  }
+  if (!nrow(out)) stop("El resultado canónico de Stata está vacío: ", path)
+  out
+}
+
+stata_main <- read.csv("dofile/06_RCT_Stata/results/resultados_stata.csv",
+                       check.names = FALSE)
+required_main <- c("modelo", "termino", "coeficiente", "error_estandar", "N", "R2")
+missing_main <- setdiff(required_main, names(stata_main))
+if (length(missing_main)) {
+  stop("Faltan columnas en resultados_stata.csv: ", paste(missing_main, collapse = ", "))
+}
+if (!nrow(stata_main)) stop("resultados_stata.csv está vacío.")
+
 # Cargar datos
 dat <- read_dta("dofile/06_RCT_Stata/data.dta") %>%
   mutate(
@@ -416,24 +436,26 @@ esttab, se star(* 0.10 ** 0.05 *** 0.01) ///
 **Resultados del balance (con nuestros datos):**
 
 ```{r balance-table, echo=FALSE, message=FALSE, warning=FALSE}
-# Tabla de balance: t-tests univariados
-Xvars <- c("edad", "mujer", "libros", "pregrado", "maestria")
-bal <- lapply(Xvars, function(v) {
-  tt <- t.test(dat[[v]][dat$D == 1], dat[[v]][dat$D == 0])
-  data.frame(
-    Variable  = v,
-    Media_T   = round(mean(dat[[v]][dat$D == 1]), 3),
-    Media_C   = round(mean(dat[[v]][dat$D == 0]), 3),
-    Diff      = round(mean(dat[[v]][dat$D == 1]) - mean(dat[[v]][dat$D == 0]), 3),
-    t         = round(tt$statistic, 3),
-    `p-valor` = round(tt$p.value, 3),
-    check.names = FALSE
+# Tabla canónica exportada por el do-file de Stata
+bal <- read_required_csv(
+  "dofile/06_RCT_Stata/results/balance_stata.csv",
+  c("variable", "media_tratado", "media_control", "diferencia", "p_value", "N_T", "N_C")
+) %>%
+  transmute(
+    Variable = variable,
+    `Media tratados` = round(media_tratado, 3),
+    `Media control` = round(media_control, 3),
+    Diferencia = round(diferencia, 3),
+    `p-valor` = round(p_value, 3),
+    `N tratados` = N_T,
+    `N control` = N_C
   )
-}) %>% bind_rows()
 
-kable(bal, align = "lrrrcc", caption = "Balance de covariables (t-tests)") %>%
+kable(bal, align = "lrrrrrr", caption = "Balance de covariables — resultados de Stata") %>%
   kable_styling(bootstrap_options = c("striped","condensed"), full_width = FALSE)
 ```
+
+Las diferencias son las medias de tratados menos las de control. La tabla permite evaluar tanto su magnitud como su precisión; el balance no debe juzgarse únicamente variable por variable, por lo que complementamos esta lectura con la prueba conjunta.
 
 ```{r balance-ftest, echo=FALSE, message=FALSE, warning=FALSE}
 # Prueba conjunta: D ~ X (LPM con F-test)
@@ -484,21 +506,25 @@ esttab m1 m2 m3 m4, se star(* 0.10 ** 0.05 *** 0.01) ///
 **Resultados (con nuestros datos):**
 
 ```{r cuatro-escenarios, echo=FALSE, message=FALSE, warning=FALSE}
-m1 <- lm_robust(y ~ D, data = dat, se_type = "HC1")
-m2 <- lm_robust(y ~ D + edad + mujer + libros + pregrado + maestria,
-                 data = dat, se_type = "HC1")
-m3 <- lm_robust(y ~ D + semestre_f, data = dat, se_type = "HC1")
-m4 <- lm_robust(y ~ D + semestre_f + edad + mujer + libros + pregrado + maestria,
-                 data = dat, se_type = "HC1")
-
-modelsummary(
-  list("Simple" = m1, "+Controles" = m2, "+Estratos" = m3, "Completo" = m4),
-  stars = c("*" = 0.10, "**" = 0.05, "***" = 0.01),
-  coef_omit = "semestre|Intercept|pregrado",
-  gof_map = c("nobs", "r.squared"),
-  title = "Cuatro escenarios de estimación del ATE",
-  notes = "SE robustas (HC1) entre paréntesis. Dummies de semestre incluidas en modelos 3 y 4."
+model_labels <- c(
+  m1_simple = "Simple",
+  m2_controles = "+ Controles",
+  m3_estratos = "+ Estratos",
+  m4_completo = "Completo"
 )
+
+main_view <- stata_main %>%
+  filter(termino == "D") %>%
+  transmute(
+    Modelo = unname(model_labels[modelo]),
+    `ATE estimado` = round(coeficiente, 3),
+    `Error estándar robusto` = round(error_estandar, 3),
+    N = N,
+    `R²` = round(R2, 3)
+  )
+
+kable(main_view, align = "lrrrr", caption = "Cuatro escenarios de estimación del ATE — resultados de Stata") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
 ::: {.boxnote}
@@ -579,6 +605,25 @@ graph export "margins_qedad.pdf", replace
 ```
 
 **Resultados (con nuestros datos):**
+
+```{r het-stata-table, echo=FALSE, message=FALSE, warning=FALSE}
+het_stata <- read_required_csv(
+  "dofile/06_RCT_Stata/results/heterogeneidad_stata.csv",
+  c("moderador", "termino", "coeficiente", "error_estandar", "N")
+) %>%
+  transmute(
+    Moderador = "Género",
+    Término = "Tratamiento × Mujer",
+    Coeficiente = round(coeficiente, 3),
+    `Error estándar robusto` = round(error_estandar, 3),
+    N = N
+  )
+
+kable(het_stata, align = "llrrr", caption = "Heterogeneidad por género — resultado principal de Stata") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
+```
+
+La interacción es positiva, pero su error estándar es grande en relación con la magnitud estimada. En esta muestra no hay evidencia precisa de que el efecto difiera por género; el gráfico siguiente ayuda a leer los niveles predichos sin convertir una estimación imprecisa en una conclusión de heterogeneidad.
 
 ```{r het-mujer, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3.5, fig.width=8}
 # Heterogeneidad por mujer
