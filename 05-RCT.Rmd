@@ -15,7 +15,15 @@
 
 :::
 
-## Notación mínima para todo el módulo {-}
+## Pregunta causal {-}
+
+¿Cuándo la diferencia observada entre tratados y controles identifica el efecto causal promedio, y cómo debe cambiar la estimación cuando el diseño incorpora estratos o controles pretratamiento?
+
+## Intuición y motivación {-}
+
+Comparar resultados entre dos grupos no basta para aprender un efecto causal: quienes reciben un programa pueden ser distintos de quienes no lo reciben. La aleatorización resuelve este problema al construir un grupo de control que representa lo que habría ocurrido con los tratados en ausencia del tratamiento. El punto central del capítulo es entender formalmente por qué funciona esa comparación y cómo llevar el diseño a la regresión.
+
+## Notación, parámetros y estimandos {-}
 
 Antes de avanzar, fijemos la notación que usaremos en todo el módulo de experimentos:
 
@@ -64,6 +72,19 @@ ATE = ATT = ATU
 \]
 
 porque los grupos de tratamiento y control son, en promedio, idénticos en todo (observable y no observable).
+
+## Supuestos de identificación {-}
+
+La igualdad entre la diferencia observada y el efecto causal requiere declarar con precisión las condiciones del diseño:
+
+1. **Asignación aleatoria:** (D_i \perp (Y_i(1),Y_i(0))). La probabilidad de tratamiento es conocida y no depende de los resultados potenciales.
+2. **SUTVA:** el tratamiento de una unidad no modifica los resultados potenciales de otra y no existen versiones ocultas del tratamiento.
+3. **Medición y seguimiento comparables:** el resultado se mide de la misma forma en ambos brazos y la observación de (Y_i) no depende diferencialmente del tratamiento de una manera que vuelva selectiva la muestra analítica.
+4. **Respeto del diseño:** si la asignación se realiza dentro de estratos o bloques, el análisis debe conservar esa estructura para representar correctamente las probabilidades de asignación y aprovechar la precisión del diseño.
+
+Los dos primeros supuestos sostienen directamente la interpretación causal. Los dos últimos protegen la correspondencia entre el experimento diseñado, la muestra observada y el estimador que finalmente reportamos.
+
+## Desarrollo teórico y demostraciones {-}
 
 ---
 
@@ -573,7 +594,20 @@ ggplot(datos_het, aes(x = D, y = Y, fill = D)) +
 
 ---
 
-## Errores comunes {-}
+## Interpretación del estimador {-}
+
+En una regresión sin interacciones, el coeficiente de (D_i) representa la diferencia promedio entre los resultados de tratamiento y control. En un RCT correctamente implementado, esa comparación identifica el ATE. Los controles pretratamiento y los efectos fijos de estrato pueden cambiar la precisión y, en muestras finitas, mover ligeramente el punto estimado, pero no son la fuente de identificación.
+
+Cuando aparece una interacción, el coeficiente de (D_i) deja de ser automáticamente el efecto promedio: corresponde al efecto en el valor de referencia del moderador. Centrar una covariable continua permite recuperar en ese coeficiente el efecto evaluado en su media.
+
+## Supuestos, propiedades y condiciones de validez {-}
+
+- **Identificación:** proviene de la asignación aleatoria y de SUTVA.
+- **Insesgamiento o consistencia:** depende de que la comparación estimada corresponda al mecanismo de asignación y no esté seleccionada por atrición o medición diferencial.
+- **Precisión:** puede mejorar al incluir estratos y covariables pretratamiento que predicen el resultado.
+- **Inferencia:** los errores estándar deben reflejar el nivel real de asignación; agrupar por una dimensión con muy pocos clusters exige métodos y cautelas adicionales.
+
+## Amenazas, limitaciones y errores comunes {-}
 
 ::: {.box-cuidado}
 - Interpretar un desequilibrio aislado de covariables como prueba de que la aleatorización falló.
@@ -638,3 +672,12 @@ No me des respuestas. Solo nuevas preguntas que me ayuden a entender mejor este 
 
 
 ---
+
+## Puente a la clase práctica {-}
+
+En la clase práctica aplicaremos estas cuatro especificaciones a un experimento de aula con 70 observaciones y asignación dentro de semestre. Verificaremos balance, compararemos la precisión de los modelos y evaluaremos heterogeneidad sin cambiar el estimando causal.
+
+## Referencias {-}
+
+- Bernal, R. y Peña, X. *Guía práctica para la evaluación de impacto*, capítulo 4.
+- Abadie, A., Athey, S., Imbens, G. W. y Wooldridge, J. M. “When Should You Adjust Standard Errors for Clustering?” NBER Working Paper 24003.
