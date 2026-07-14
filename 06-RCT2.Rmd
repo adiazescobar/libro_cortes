@@ -512,8 +512,8 @@ esttab m1 m2 m3 m4, se star(* 0.10 ** 0.05 *** 0.01) ///
 ```{r cuatro-escenarios, echo=FALSE, message=FALSE, warning=FALSE}
 model_labels <- c(
   m1_simple = "Simple",
-  m2_controles = "+ Controles",
-  m3_estratos = "+ Estratos",
+  m2_controles = "Con controles",
+  m3_estratos = "Con estratos",
   m4_completo = "Completo"
 )
 
