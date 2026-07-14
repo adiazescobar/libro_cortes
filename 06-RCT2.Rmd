@@ -1,7 +1,7 @@
-# Experimentos Aleatorizados en Stata
+# Experimentos aleatorizados — Clase empírica
 
-::: {.boxinfo}
-**Objetivo del capítulo**
+::: {.box-stata}
+**Objetivos de la práctica**
 
 En el capítulo anterior formalizamos la teoría de resultados potenciales, la descomposición del sesgo de selección, su conexión con el sesgo por variable omitida, y los **cuatro escenarios de diseño** experimental. Ahora implementamos todo esto paso a paso en Stata, usando datos reales de un experimento de aula replicado en cuatro semestres.
 
@@ -37,6 +37,18 @@ dat <- read_dta("dofile/06_RCT_Stata/data.dta") %>%
     semestre_f = factor(semestre)
   )
 ```
+
+## Pregunta empírica {-}
+
+¿Cuál es el efecto causal de recibir definiciones de palabras difíciles, en lugar de un texto crítico de economía, sobre el resultado de un quiz de vocabulario? Además de estimar el efecto promedio, evaluaremos si respetar los estratos del diseño y agregar controles pretratamiento cambia la precisión.
+
+## Datos {-}
+
+La práctica usa una única base congelada, `data.dta`, con 70 observaciones provenientes de un experimento de aula replicado en cuatro semestres. El grupo B recibió las definiciones y constituye el tratamiento; el grupo A recibió el texto crítico y constituye el control. La variable `semestre` identifica los estratos de asignación.
+
+::: {.box-cuidado}
+Stata y Python deben leer exactamente esta misma base. Si el archivo no está disponible o le falta alguna variable requerida, ambos flujos se detienen: no se generan datos sustitutos.
+:::
 
 
 ## Recordatorio teórico (del capítulo anterior) {-}
@@ -652,6 +664,68 @@ modelsummary(
 
 ::: {.boxnote}
 **Regla práctica:** siempre que interactúes el tratamiento con una variable continua, **centra la variable** para que el coeficiente de \(D\) siga siendo interpretable como el efecto promedio.
+:::
+
+## Replicación en Python / Google Colab {-}
+
+::: {.box-colab}
+**Google Colab:** el notebook lee la misma `data.dta`, reconstruye las mismas variables y replica los cuatro modelos con errores estándar HC1.
+
+<a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/06_RCT_Stata/clase6_python.ipynb" target="_blank" rel="noopener">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab">
+</a>
+
+[Descargar directamente el notebook](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_python.ipynb)
+:::
+
+El núcleo de la réplica usa las mismas definiciones y especificaciones:
+
+```python
+df["D"] = (df["grupo"] == "B").astype(int)
+df["y"] = pd.to_numeric(df["resultado"], errors="coerce")
+
+m1 = smf.ols("y ~ D", data=df).fit(cov_type="HC1")
+m2 = smf.ols("y ~ D + edad + mujer + libros + pregrado + maestria", data=df).fit(cov_type="HC1")
+m3 = smf.ols("y ~ D + C(semestre_f)", data=df).fit(cov_type="HC1")
+m4 = smf.ols("y ~ D + C(semestre_f) + edad + mujer + libros + pregrado + maestria", data=df).fit(cov_type="HC1")
+```
+
+## Verificación Stata vs. Python {-}
+
+Stata y Python exportan un CSV canónico con coeficiente, error estándar, N y \(R^2\). El comparador exige diferencias absolutas menores que \(10^{-3}\) para coeficientes y errores estándar, igualdad exacta de N y diferencias menores que \(10^{-2}\) para \(R^2\).
+
+**Verificación automática de los cuatro modelos RCT**
+
+```{r verificacion-stata-python, echo=FALSE, message=FALSE, warning=FALSE}
+verification_path <- "dofile/06_RCT_Stata/results/verificacion_stata_python.csv"
+if (!file.exists(verification_path)) {
+  stop("Falta la verificación Stata–Python. Ejecuta ambos flujos y el comparador antes de renderizar.")
+}
+
+verification <- read.csv(verification_path, check.names = FALSE)
+if (any(verification$estado != "PASS")) {
+  stop("La verificación Stata–Python contiene resultados FAIL.")
+}
+
+verification_view <- verification %>%
+  transmute(
+    Modelo = modelo,
+    `Coef. Stata` = coeficiente_stata,
+    `Coef. Python` = coeficiente_python,
+    `Dif. coef.` = coef_abs_diff,
+    `SE Stata` = error_estandar_stata,
+    `SE Python` = error_estandar_python,
+    `Dif. SE` = se_abs_diff,
+    `N igual` = N_igual,
+    Estado = estado
+  )
+
+kable(verification_view, digits = 6, align = "lrrrrrrcc") %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
+```
+
+::: {.box-verificacion}
+**Criterio de publicación:** los cuatro modelos deben aparecer como `PASS`. Los p-valores se conservan en los archivos fuente, pero no forman parte del criterio porque Stata usa una referencia t finita y `statsmodels` reporta la aproximación normal para HC1.
 :::
 
 

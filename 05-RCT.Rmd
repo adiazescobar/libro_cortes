@@ -1,4 +1,4 @@
-# Experimentos Aleatorizados
+# Experimentos aleatorizados — Clase teórica
 
 ::: {.boxinfo}
 **Objetivo del capítulo**
@@ -573,6 +573,31 @@ ggplot(datos_het, aes(x = D, y = Y, fill = D)) +
 
 ---
 
+## Errores comunes {-}
+
+::: {.box-cuidado}
+- Interpretar un desequilibrio aislado de covariables como prueba de que la aleatorización falló.
+- Incluir controles postratamiento y convertirlos en “malos controles”.
+- Olvidar los efectos fijos de estrato cuando la asignación se hizo dentro de bloques.
+- Leer el coeficiente de (D) como ATE cuando aparece interactuado con una covariable sin centrar.
+- Usar errores estándar agrupados con muy pocos clusters sin discutir la fragilidad de la inferencia.
+:::
+
+## Resumen {-}
+
+::: {.box-resumen}
+La aleatorización elimina el sesgo de selección porque hace independiente la asignación de los resultados potenciales. La diferencia de medias —o, equivalentemente, el coeficiente de (D) en una regresión simple— identifica el ATE. Los controles pretratamiento y los efectos fijos de estrato no crean la identificación: pueden mejorar la precisión y alinear el análisis con el diseño. Las interacciones permiten estudiar heterogeneidad, pero su interpretación exige definir cuidadosamente el grupo o valor de referencia.
+:::
+
+## Preguntas para clase {-}
+
+::: {.box-ejercicios}
+1. ¿Por qué una diferencia de medias identifica el ATE en un RCT, pero no necesariamente en datos observacionales?
+2. ¿Qué cambia —y qué no cambia— al agregar controles pretratamiento a la regresión?
+3. ¿Por qué conviene incluir efectos fijos de estrato si la aleatorización se hizo dentro de bloques?
+4. ¿Cómo cambia la interpretación del coeficiente de tratamiento cuando interactuamos (D) con una covariable?
+5. ¿Qué riesgos aparecen al agrupar errores estándar con pocos clusters?
+:::
 
 ::: {.boxvideo .green title="Videos recomendados:"}
 
