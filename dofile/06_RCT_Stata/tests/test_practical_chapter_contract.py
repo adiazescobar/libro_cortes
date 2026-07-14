@@ -15,6 +15,9 @@ def test_materials_precede_empirical_question():
     text = CHAPTER.read_text(encoding="utf-8")
     assert "## Materiales para la clase {-}" in text
     assert text.index("## Materiales para la clase {-}") < text.index(
+        "::: {.box-stata}"
+    )
+    assert text.index("## Materiales para la clase {-}") < text.index(
         "## Pregunta empírica {-}"
     )
     assert "## DESCARGA LOS DOCUMENTOS {-}" not in text

@@ -1,22 +1,5 @@
 # Experimentos aleatorizados — Clase empírica
 
-::: {.box-stata}
-**Objetivos de la práctica**
-
-En el capítulo anterior formalizamos la teoría de resultados potenciales, la descomposición del sesgo de selección, su conexión con el sesgo por variable omitida, y los **cuatro escenarios de diseño** experimental. Ahora implementamos todo esto paso a paso en Stata, usando datos reales de un experimento de aula replicado en cuatro semestres.
-
-- Implementar los **cuatro escenarios de regresión** (simple, con controles, estratificado, estratificado + controles).
-- Ejecutar **diagnósticos de balance**, **efectos heterogéneos** y el **truco de centrar** de Wooldridge.
-- Manejar **inferencia estadística** (SE robustas, clusters, bootstrap).
-- Producir **reporte reproducible** exportable a Excel/PDF.
-
-### Lecturas {-}
-
-- **Paper Alert:** [When Should You Adjust Standard Errors for Clustering? (NBER w24003)](https://www.nber.org/papers/w24003)
-- **Teoría:** [Jakiela & Ozier — Handout](http://economics.ozier.com/econ626/lec/econ626-L07-handout-2019.pdf)
-- **Herramienta:** [J-PAL — Power calculations](https://www.povertyactionlab.org/resource/power-calculations)
-:::
-
 ## Materiales para la clase {-}
 
 ::: {.class-materials}
@@ -32,6 +15,23 @@ En el capítulo anterior formalizamos la teoría de resultados potenciales, la d
 <a class="colab-link" href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/06_RCT_Stata/clase6_python.ipynb" target="_blank" rel="noopener">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir notebook en Google Colab">
 </a>
+:::
+
+::: {.box-stata}
+**Objetivos de la práctica**
+
+En el capítulo anterior formalizamos la teoría de resultados potenciales, la descomposición del sesgo de selección, su conexión con el sesgo por variable omitida, y los **cuatro escenarios de diseño** experimental. Ahora implementamos todo esto paso a paso en Stata, usando datos reales de un experimento de aula replicado en cuatro semestres.
+
+- Implementar los **cuatro escenarios de regresión** (simple, con controles, estratificado, estratificado + controles).
+- Ejecutar **diagnósticos de balance**, **efectos heterogéneos** y el **truco de centrar** de Wooldridge.
+- Manejar **inferencia estadística** (SE robustas, clusters, bootstrap).
+- Producir **reporte reproducible** exportable a Excel/PDF.
+
+### Lecturas {-}
+
+- **Paper Alert:** [When Should You Adjust Standard Errors for Clustering? (NBER w24003)](https://www.nber.org/papers/w24003)
+- **Teoría:** [Jakiela & Ozier — Handout](http://economics.ozier.com/econ626/lec/econ626-L07-handout-2019.pdf)
+- **Herramienta:** [J-PAL — Power calculations](https://www.povertyactionlab.org/resource/power-calculations)
 :::
 
 ```{r setup-cap6, echo=FALSE, message=FALSE, warning=FALSE}
