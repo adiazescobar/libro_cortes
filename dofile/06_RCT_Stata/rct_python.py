@@ -82,3 +82,11 @@ def fit_main_models(df: pd.DataFrame) -> pd.DataFrame:
         )
     return pd.DataFrame(rows, columns=EXPECTED_COLUMNS)
 
+
+def export_python_results(data_path: str | Path, output_path: str | Path) -> Path:
+    """Estima los modelos y escribe el CSV canónico sin redondear resultados."""
+    destination = Path(output_path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    results = fit_main_models(prepare_rct_data(data_path))
+    results.to_csv(destination, index=False, encoding="utf-8", float_format="%.17g")
+    return destination
