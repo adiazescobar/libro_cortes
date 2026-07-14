@@ -435,6 +435,8 @@ esttab, se star(* 0.10 ** 0.05 *** 0.01) ///
 
 **Resultados del balance (con nuestros datos):**
 
+**Balance de covariables — resultados de Stata**
+
 ```{r balance-table, echo=FALSE, message=FALSE, warning=FALSE}
 # Tabla canónica exportada por el do-file de Stata
 bal <- read_required_csv(
@@ -451,7 +453,7 @@ bal <- read_required_csv(
     `N control` = N_C
   )
 
-kable(bal, align = "lrrrrrr", caption = "Balance de covariables — resultados de Stata") %>%
+kable(bal, align = "lrrrrrr") %>%
   kable_styling(bootstrap_options = c("striped","condensed"), full_width = FALSE)
 ```
 
@@ -505,6 +507,8 @@ esttab m1 m2 m3 m4, se star(* 0.10 ** 0.05 *** 0.01) ///
 
 **Resultados (con nuestros datos):**
 
+**Cuatro escenarios de estimación del ATE — resultados de Stata**
+
 ```{r cuatro-escenarios, echo=FALSE, message=FALSE, warning=FALSE}
 model_labels <- c(
   m1_simple = "Simple",
@@ -523,7 +527,7 @@ main_view <- stata_main %>%
     `R²` = round(R2, 3)
   )
 
-kable(main_view, align = "lrrrr", caption = "Cuatro escenarios de estimación del ATE — resultados de Stata") %>%
+kable(main_view, align = "lrrrr") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
@@ -606,6 +610,8 @@ graph export "margins_qedad.pdf", replace
 
 **Resultados (con nuestros datos):**
 
+**Heterogeneidad por género — resultado principal de Stata**
+
 ```{r het-stata-table, echo=FALSE, message=FALSE, warning=FALSE}
 het_stata <- read_required_csv(
   "dofile/06_RCT_Stata/results/heterogeneidad_stata.csv",
@@ -619,7 +625,7 @@ het_stata <- read_required_csv(
     N = N
   )
 
-kable(het_stata, align = "llrrr", caption = "Heterogeneidad por género — resultado principal de Stata") %>%
+kable(het_stata, align = "llrrr") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
