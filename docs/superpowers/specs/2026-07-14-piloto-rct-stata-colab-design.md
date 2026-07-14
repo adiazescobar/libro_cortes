@@ -26,7 +26,9 @@ El piloto debe demostrar que la estructura pedagógica, el diseño visual, los e
 
 ### Clase teórica
 
-`05-RCT.Rmd` será el capítulo “Experimentos aleatorizados — Clase teórica”. Su estructura canónica será:
+`05-RCT.Rmd` será el capítulo “Experimentos aleatorizados — Clase teórica”. El capítulo actual se considera sustantivamente completo y será la fuente principal del piloto: se preservarán su contenido, secuencia argumental, ejemplos, simulaciones y explicaciones. No se reescribirá para forzarlo a una plantilla. La intervención será editorial y mínima: renombrar el capítulo, resolver duplicaciones o desajustes puntuales, incorporar únicamente las secciones canónicas que realmente falten y aplicar el nuevo sistema visual.
+
+Su contenido se mapeará, sin reorganizaciones innecesarias, a esta estructura canónica:
 
 1. Objetivos de aprendizaje.
 2. Motivación aplicada.
@@ -40,7 +42,7 @@ El piloto debe demostrar que la estructura pedagógica, el diseño visual, los e
 10. Preguntas para clase.
 11. Lecturas recomendadas.
 
-Las simulaciones R existentes se conservarán cuando aporten intuición visual. No constituirán la réplica empírica Stata–Python.
+Las simulaciones R existentes se conservarán. No constituirán la réplica empírica Stata–Python. La mayor parte de la intervención técnica y reproducible del piloto se concentrará en `06-RCT2.Rmd` y en sus archivos Stata/Python.
 
 ### Clase empírica
 
@@ -207,4 +209,3 @@ Una vez aprobado el RCT renderizado, se propagará el patrón en este orden:
 7. IV/LATE.
 8. RDD.
 9. Correos modulares por tema.
-
