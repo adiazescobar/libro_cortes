@@ -1,6 +1,23 @@
 
 # Stata para Principiantes
 
+## Materiales para la clase {-}
+
+::: {.class-materials}
+**Descarga antes de comenzar**
+
+- [Do-file de Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/Clase00_Stata.do)
+- [Base `hh_98.dta`](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
+- [Script de R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
+- [Notebook de Python (nombre histórico)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
+
+El notebook funciona en Google Colab. Si lo ejecutas localmente, ajusta la ruta de `hh_98.dta` en la primera celda.
+
+<a class="colab-link" href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb" target="_blank" rel="noopener">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir notebook en Google Colab">
+</a>
+:::
+
 ::: {.boxinfo}
 ### Objetivos de aprendizaje {-}
 
@@ -32,7 +49,13 @@ local uno 1
 display `uno'
 ```
 
-Esto imprimirá `1` en la consola. La macro `uno` se expande y sustituye por su contenido (`1`) antes de ejecutar el comando.
+**Salida**
+
+```text
+1
+```
+
+Stata almacenó el texto `1` en la macro local y recuperó su contenido al expandir `` `uno' `` dentro de `display`.
 
 
 
@@ -45,7 +68,13 @@ local suma = 2 + 2
 display `suma'
 ```
 
-Stata calcula `2 + 2` y guarda el resultado `4` como texto dentro de `suma`. Al hacer `display`, se imprime el número 4.
+**Salida**
+
+```text
+4
+```
+
+Stata evaluó `2 + 2`, almacenó el resultado en `suma` y lo recuperó con `` `suma' ``.
 
 
 
@@ -161,6 +190,16 @@ foreach color in rojo azul verde {
 }
 ```
 
+**Salida**
+
+```text
+El color es rojo
+El color es azul
+El color es verde
+```
+
+En cada iteración, Stata reemplazó la macro local `color` por el elemento actual de la lista.
+
 #### c) Iterar sobre variables en la base usando `of varlist`  {-}
 
 ```stata 
@@ -249,7 +288,13 @@ end
 saludo
 ```
 
-Este programa se llama `saludo` y simplemente imprime un mensaje. Para ejecutarlo, basta con escribir su nombre.
+**Salida**
+
+```text
+Hola, FELIZ día
+```
+
+El programa almacenó la secuencia de comandos bajo el nombre `saludo`; al invocar ese nombre, Stata ejecutó `display`.
 
 
 
@@ -336,19 +381,19 @@ Permite crear una tabla temporal (como una mini base de datos) en la que puedes 
 
 ### Paso a paso: guardar medias con `summarize` {-}
 
-Supongamos que queremos guardar la media y la desviación estándar de varias variables numéricas de forma automatizada.
+Usamos tres variables que existen en `hh_98.dta`: edad, años de educación y tamaño del hogar. `summarize` deja la media en `r(mean)` y el número de observaciones en `r(N)`; debemos recuperarlos inmediatamente, antes de ejecutar otro comando que reemplace esos resultados.
 
 ```stata
-sysuse auto, clear
+use hh_98.dta, clear
 
 tempname resultados
 tempfile archivo
 
-postfile `resultados' str15 variable media sd using `archivo'
+postfile `resultados' str20 ejemplo str15 variable double valor long N using `archivo'
 
-foreach var in price weight length {
+foreach var in agehead educhead famsize {
     quietly summarize `var'
-    post `resultados' ("`var'") (r(mean)) (r(sd))
+    post `resultados' ("media") ("`var'") (r(mean)) (r(N))
 }
 
 postclose `resultados'
@@ -356,6 +401,30 @@ postclose `resultados'
 use `archivo', clear
 list
 ```
+
+**Salida verificada de Stata**
+
+```{r stata-basics-results, echo=FALSE, message=FALSE, warning=FALSE}
+results_path <- "dofile/Clase0_StataBasics/results/stata_basics_results.csv"
+if (!file.exists(results_path)) {
+  stop("Falta el resultado canónico de Stata: ", results_path)
+}
+stata_basics_results <- read.csv(results_path, check.names = FALSE)
+required_results <- c("ejemplo", "variable", "valor", "N")
+missing_results <- setdiff(required_results, names(stata_basics_results))
+if (length(missing_results)) {
+  stop("Faltan columnas en stata_basics_results.csv: ",
+       paste(missing_results, collapse = ", "))
+}
+if (!nrow(stata_basics_results)) stop("stata_basics_results.csv está vacío.")
+
+visible_results <- stata_basics_results[, c("variable", "valor", "N")]
+names(visible_results) <- c("Variable", "Media", "N")
+visible_results$Media <- round(visible_results$Media, 3)
+knitr::kable(visible_results, align = c("l", "r", "r"))
+```
+
+Cada `summarize` almacenó sus resultados en `r()`. El loop recuperó `r(mean)` y `r(N)` con `post`, una fila a la vez; `postclose` cerró la tabla antes de abrirla y exportarla.
 
 
 ### ¿Qué hicimos aquí? {-}
@@ -542,24 +611,4 @@ for v in ["x1", "x2", "x3"]:
     resultados.append({"var": v, "media": media})
 resultados_df = pd.DataFrame(resultados)
 ```
-
-## DESCARGA LOS DOCUMENTOS {-}
-
-**Descargar Stata do file**:
-[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/Clase00_Stata.do)
-
-**Descargar R script**:
-[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
-
-**Descargar Python Notebook**:
-[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
-
-El notebook de Python esta pensado para **Google Colab**. Si lo corres localmente, ajusta la ruta del archivo `hh_98.dta` en la primera celda.
-
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
-
-**Descarga los Datos**
-[Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
-
-
 

@@ -681,5 +681,27 @@ use `archivo', clear
 list
 
 *****************************************************************************
+* RESULTADOS CANONICOS CON VARIABLES REALES DE hh_98.dta
+*****************************************************************************
+use hh_98.dta, clear
+describe agehead educhead famsize
+
+capture mkdir results
+tempname canonical
+tempfile canonical_data
+postfile `canonical' str20 ejemplo str15 variable double valor long N using `canonical_data', replace
+
+foreach var of varlist agehead educhead famsize {
+    quietly summarize `var'
+    post `canonical' ("media") ("`var'") (r(mean)) (r(N))
+}
+
+postclose `canonical'
+use `canonical_data', clear
+format valor %9.3f
+list ejemplo variable valor N, noobs clean
+export delimited ejemplo variable valor N using "results/stata_basics_results.csv", replace
+
+*****************************************************************************
 *                         FIN DEL ARCHIVO
 *****************************************************************************
