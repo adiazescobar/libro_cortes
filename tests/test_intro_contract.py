@@ -39,3 +39,8 @@ def test_rdd_diagnostic_states_both_identification_conditions():
 def test_intro_bridge_follows_book_chronology():
     assert "el próximo capítulo introduce Stata" in TEXT
     assert "A continuación, el capítulo **Parámetros causales**" in TEXT
+
+
+def test_intro_does_not_expose_slide_layout_markup():
+    assert ".pull-left[" not in TEXT
+    assert ".pull-right[" not in TEXT

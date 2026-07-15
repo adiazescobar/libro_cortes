@@ -216,19 +216,9 @@ $$
 
 La diferencia observada equivale al efecto causal sobre los tratados más el sesgo de selección. Este último aparece cuando, aun sin tratamiento, tratados y controles habrían tenido resultados promedio distintos. Una muestra grande reduce la incertidumbre estadística, pero no elimina este sesgo. El capítulo **Parámetros causales** desarrolla la demostración y los estimandos con mayor detalle.
 
-.pull-left[
-**Tratados**
-```{r, out.width = "20%", echo = FALSE}
-knitr::include_graphics("img/pegado3.png")
-```
-]
-
-.pull-right[
-**Controles**
-```{r, out.width = "20%", echo = FALSE}
-knitr::include_graphics("img/pegado4.png")
-```
-]
+| **Tratados** | **Controles** |
+|:---:|:---:|
+| <img src="img/pegado3.png" alt="Grupo de tratamiento" style="max-width: 180px; width: 70%;"> | <img src="img/pegado4.png" alt="Grupo de control" style="max-width: 180px; width: 70%;"> |
 
 ## Comparaciones que no identifican causalidad {-}
 
