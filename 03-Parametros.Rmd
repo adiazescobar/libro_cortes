@@ -31,6 +31,12 @@ El efecto causal individual es
 \tau_i=Y_i(D=1)-Y_i(D=0).
 \]
 
+::: {.boxinfo title="💡 Intuición: una unidad, dos resultados potenciales"}
+
+Cada persona tiene dos resultados potenciales definidos por la intervención, aunque los datos revelan solo uno. El efecto causal compara esos dos estados para la misma unidad; comparar personas distintas requiere, además, un argumento de identificación.
+
+:::
+
 ## El problema fundamental {-}
 
 El problema fundamental de la inferencia causal es que \(\tau_i\) no puede calcularse directamente: solo uno de sus dos componentes es observable. La inferencia causal reemplaza ese contrafactual individual faltante por una comparación válida a nivel de grupos, apoyada en un diseño y en supuestos explícitos.
@@ -49,6 +55,12 @@ El siguiente ejemplo conserva los ocho perfiles y hace visible el problema. `yd0
 | 8 | 5  | 7  | 0 | 1 | 5  | 2 |
 
 Con la tabla, calcule ATE, ATT, ATU, \(CATE(0)\), \(CATE(1)\), la diferencia naïve entre salarios observados y su sesgo respecto del ATT. Luego explique qué contrafactual no estaría disponible en datos reales.
+
+::: {.boxnote title="🔎 Ejemplo guiado: ocho personas, cuatro parámetros"}
+
+La tabla permite separar cuatro poblaciones objetivo: las ocho personas para el ATE, las tratadas para el ATT, las no tratadas para el ATU y cada estrato de \(X\) para el CATE. Antes de calcular, identifique el subconjunto sobre el cual promedia cada estimando.
+
+:::
 
 ## ATE, ATT, ATU y CATE {-}
 
@@ -84,11 +96,23 @@ Por la ley de expectativas iteradas, el ATE agrega los efectos según el estado 
 ATE=P(D_i=1)ATT+P(D_i=0)ATU.
 \]
 
+::: {.boxnote title="✅ Resultado clave: del ATT y ATU al ATE"}
+
+El ATE es un promedio ponderado del ATT y el ATU, con pesos dados por la proporción de personas tratadas y no tratadas en la población de interés.
+
+:::
+
 También agrega los efectos condicionales sobre la distribución de las características:
 
 \[
 ATE=\mathbb{E}[CATE(X_i)].
 \]
+
+::: {.boxnote title="✅ Resultado clave: del CATE al ATE"}
+
+Los CATE describen heterogeneidad por características pretratamiento. Promediarlos usando la distribución de \(X_i\) en la población de interés recupera el ATE.
+
+:::
 
 Estas relaciones muestran por qué ATT, ATU y ATE coinciden cuando no existe heterogeneidad relevante, pero pueden diferir cuando la ganancia del programa varía entre personas o subgrupos.
 
@@ -120,6 +144,12 @@ Por tanto,
 
 El último par de términos es el **sesgo de selección**. Si es positivo, la diferencia observada excede el ATT; si es negativo, queda por debajo del ATT; si es cero, la diferencia observada coincide con el ATT. Por ello, la selección no siempre produce una sobreestimación: su dirección depende de cómo habrían diferido ambos grupos sin tratamiento.
 
+::: {.boxwarning title="⚠️ Advertencia: más datos no corrigen selección"}
+
+Aumentar el tamaño de la muestra reduce la incertidumbre de la diferencia observada, pero no elimina la diferencia contrafactual entre quienes eligen participar y quienes no. Una comparación sesgada puede estimarse con mucha precisión.
+
+:::
+
 ## Supuestos de identificación {-}
 
 La **independencia incondicional** exige
@@ -138,6 +168,12 @@ En estudios observacionales suele plantearse **independencia condicional**, acom
 \]
 
 La primera condición afirma que, dentro de grupos con el mismo \(X_i\) pretratamiento, la participación no aporta información adicional sobre los resultados potenciales. La segunda exige que para cada valor relevante de \(x\) haya probabilidad positiva tanto de participar como de no participar; sin soporte común no existe una comparación empírica para ese subgrupo. Ninguna de las dos condiciones puede garantizarse solo incluyendo muchos controles: deben justificarse con conocimiento institucional y del mecanismo de asignación.
+
+::: {.boxwarning title="⚠️ Advertencia: ignorabilidad sin positividad no basta"}
+
+Aunque la independencia condicional fuera plausible, no puede identificarse el efecto para un perfil \(X_i=x\) si todas las personas con ese perfil reciben el mismo estado de tratamiento. Sin observaciones comparables en ambos estados, falta soporte para construir el contrafactual.
+
+:::
 
 No todos los diseños identifican efectos imponiendo independencia. Las variables instrumentales se apoyan, entre otros requisitos, en **relevancia** y **exclusión**; la regresión discontinua, en **continuidad** alrededor del umbral; y diferencias en diferencias, en **tendencias paralelas**. En general, IV, RDD y DiD no “cumplen independencia”: identifican parámetros causales bajo estructuras distintas y, a veces, para poblaciones locales específicas.
 
@@ -198,6 +234,30 @@ Un efecto causal compara dos resultados potenciales para la misma unidad, aunque
 1. Use la tabla de ocho personas para calcular ATE, ATT, ATU, \(CATE(0)\) y \(CATE(1)\). Verifique las dos relaciones de agregación del ATE.
 2. Calcule la diferencia naïve de la tabla y descompóngala en ATT y sesgo de selección. Interprete el signo del sesgo.
 3. Proponga un ejemplo en el cual una comparación antes-después falle y otro en el cual SUTVA falle. En cada caso, identifique el resultado potencial o la condición que genera el problema.
+
+::: {.boxejercicio title="Elección del parámetro causal"}
+
+**T-P1.** Un programa de capacitación se dirige exclusivamente a personas desempleadas de larga duración, pero solo una parte de las elegibles participa. El gobierno quiere decidir si mantiene el programa para quienes efectivamente se inscriben. Escoja entre ATE, ATT, ATU y CATE; justifique cuál es la población relevante y escriba el estimando usando \(Y_i(D=1)\) y \(Y_i(D=0)\).
+
+**Puntaje sugerido:** 4 puntos.
+
+:::
+
+::: {.boxejercicio title="Diferencia observada y selección"}
+
+**T-P2.** Considere los datos del enunciado \(\mathbb{E}[Y_i\mid D_i=1]=12\), \(\mathbb{E}[Y_i\mid D_i=0]=7\) y \(ATT=2\). Derive el sesgo de selección a partir de la descomposición completa de la diferencia observada y explique qué significa su signo en términos de los resultados que las personas tratadas y no tratadas habrían obtenido sin tratamiento.
+
+**Puntaje sugerido:** 5 puntos.
+
+:::
+
+::: {.boxejercicio title="Diagnóstico de los supuestos"}
+
+**T-P3.** Una intervención escolar es adoptada voluntariamente por las escuelas. Para cierto perfil institucional existe una escuela tratada, pero ninguna escuela no tratada comparable. Además, el programa puede generar derrames entre compañeros. Diagnostique por separado la independencia, la positividad y SUTVA, y proponga una modificación del diseño que atienda estas amenazas.
+
+**Puntaje sugerido:** 6 puntos.
+
+:::
 
 ## Puente a la práctica {-}
 
