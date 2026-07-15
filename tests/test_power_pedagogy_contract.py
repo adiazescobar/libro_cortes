@@ -2,6 +2,8 @@ import os
 import re
 import subprocess
 from collections import Counter
+import hashlib
+import json
 from pathlib import Path
 
 import pytest
@@ -11,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 THEORY_PATH = ROOT / "07-POWER-Teoria.Rmd"
 PRACTICE_PATH = ROOT / "07-POWER.Rmd"
 BOOKDOWN = ROOT / "_bookdown.yml"
+PRACTICE_SNAPSHOT = ROOT / "tests/fixtures/power_practice_baseline.json"
 
 PRACTICE_REQUIRED = [
     "power twomeans",
@@ -153,8 +156,11 @@ def _has_disclosed_answer(block):
         r"(?:\*\*|__)?(?:respuesta|solución|pista|opción correcta|clave|"
         r"resultado esperado|valor esperado|resultado)(?:\*\*|__)?\s*"
         r"(?::|\.|=|correcta\b|es\b)|\bla\s+respuesta\s+es\b|"
-        r"\bsolución\s+correcta\b|\b(?:el|la)\s+(?:MDE|poder|tamaño de muestra)\s+"
-        r"(?:correct[oa]\s+)?es\s+[-+]?\d+(?:[.,]\d+)?"
+        r"\bsolución\s+correcta\b|\bla\s+opción\s+\w+\s+es\s+correcta\b|"
+        r"\b(?:el|la)\s+(?:MDE|poder|tamaño de muestra)\s+"
+        r"(?:correct[oa]\s+)?es\s+[-+]?\d+(?:[.,]\d+)?|"
+        r"\b(?:se\s+requieren?|obtenemos?|resulta(?:n)?|asciende(?:n)?\s+a)\s+"
+        r"[-+]?\d+(?:[.,]\d+)?(?:\s*(?:%|observaciones|clústeres|individuos))?"
     )
     lowered = block.casefold()
     return bool(label.search(block)) or any(
@@ -166,9 +172,22 @@ def _has_disclosed_answer(block):
 def _metadata_once(block, label):
     pattern = re.compile(
         rf"(?im)^\s*(?:[-*+]\s+)?(?:\*\*|__)?{re.escape(label)}"
-        rf"(?:\*\*|__)?\s*:"
+        rf"(?::(?:\*\*|__)|(?:\*\*|__)\s*:|\s*:)",
     )
     assert len(pattern.findall(block)) == 1, f"Cada pregunta exige una línea {label}:"
+
+
+def _assert_closed_question_structure(block, required_labels):
+    field_pattern = re.compile(
+        r"(?im)^\s*(?:[-*+]\s+)?(?:\*\*|__)([^:*_\n]+?)"
+        r"(?::(?:\*\*|__)|(?:\*\*|__)\s*:)"
+    )
+    fields = [field.strip() for field in field_pattern.findall(block)]
+    allowed = set(required_labels) | {"Código", "Tipo", "Fuente", "Enunciado"}
+    assert set(required_labels) <= set(fields)
+    assert len(fields) == len(set(fields)), "Los campos estructurales no pueden repetirse"
+    assert set(fields) <= allowed, f"Campo no permitido en caja estudiantil: {set(fields) - allowed}"
+    assert not _has_disclosed_answer(block)
 
 
 def _headings(text, level):
@@ -220,6 +239,60 @@ def _assert_inventory_preserved(text, inventory):
     assert all(found_urls[url] >= count for url, count in required_urls.items())
 
 
+def _normalize_unit(text):
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _snapshot_units(text):
+    prose = []
+    code = []
+    current = []
+    code_lines = []
+    in_code = False
+    for line in text.splitlines():
+        if re.match(r"^`{3,}", line):
+            if in_code:
+                normalized = _normalize_unit("\n".join(code_lines))
+                if normalized:
+                    code.append(normalized)
+                code_lines = []
+                in_code = False
+            else:
+                normalized = _normalize_unit("\n".join(current))
+                if normalized:
+                    prose.append(normalized)
+                current = []
+                in_code = True
+            continue
+        if in_code:
+            code_lines.append(line)
+            continue
+        if not line.strip():
+            normalized = _normalize_unit("\n".join(current))
+            if normalized:
+                prose.append(normalized)
+            current = []
+        elif not re.match(r"^#{1,6}\s+|^:{3,}\s*(?:\{|$)", line):
+            current.append(line)
+    normalized = _normalize_unit("\n".join(code_lines if in_code else current))
+    if normalized:
+        (code if in_code else prose).append(normalized)
+
+    digest = lambda unit: hashlib.sha256(unit.encode("utf-8")).hexdigest()
+    return {
+        "prose_sha256": Counter(digest(unit) for unit in prose),
+        "code_sha256": Counter(digest(unit) for unit in code),
+        "url_destinations": Counter(re.findall(r"https?://[^\s)>\"']+", text)),
+    }
+
+
+def _assert_complete_snapshot_preserved(text, snapshot):
+    observed = _snapshot_units(text)
+    for family in ["prose_sha256", "code_sha256", "url_destinations"]:
+        required = Counter(snapshot[family])
+        assert not (required - observed[family]), f"Se eliminaron unidades base de {family}"
+
+
 def _assert_ppt_sequence(text):
     positions = []
     for label, markers in POWER_PPT_SEQUENCE:
@@ -259,6 +332,26 @@ def test_current_power_practice_content_is_preserved():
 
 def test_complete_current_practice_inventory_is_preserved_while_allowing_reordering():
     _assert_inventory_preserved(_read(PRACTICE_PATH), PRACTICE_INVENTORY)
+
+
+def test_every_normalized_prose_code_and_repeated_url_unit_is_preserved():
+    snapshot = json.loads(_read(PRACTICE_SNAPSHOT))
+    _assert_complete_snapshot_preserved(_read(PRACTICE_PATH), snapshot)
+
+
+def test_complete_snapshot_rejects_unlisted_prose_code_and_one_repeated_url_deletion():
+    practice = _read(PRACTICE_PATH)
+    snapshot = json.loads(_read(PRACTICE_SNAPSHOT))
+    prose = "Una disminución en `nratio` implica asignar una proporción mayor al grupo de control, lo que en general reduce el poder y aumenta el MDE."
+    code = "local mde = round(`r(delta)',0.0001)"
+    repeated_url = "https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1"
+    for mutated in [
+        practice.replace(prose, "", 1),
+        practice.replace(code, "", 1),
+        practice.replace(repeated_url, "", 1),
+    ]:
+        with pytest.raises(AssertionError):
+            _assert_complete_snapshot_preserved(mutated, snapshot)
 
 
 def test_inventory_contract_rejects_each_deleted_section_formula_case_and_link():
@@ -343,7 +436,7 @@ def test_power_theory_has_blocks_and_exactly_three_questions():
     for block in blocks:
         _metadata_once(block, "Puntaje sugerido")
         _metadata_once(block, "Producto esperado")
-        assert not _has_disclosed_answer(block)
+        _assert_closed_question_structure(block, ["Puntaje sugerido", "Producto esperado"])
 
 
 def test_power_practice_has_between_fourteen_and_eighteen_semantic_stages():
@@ -386,7 +479,9 @@ def test_power_practice_has_exactly_four_self_contained_questions():
     for block in blocks:
         for label in ["Puntaje sugerido", "Comandos permitidos", "Producto esperado"]:
             _metadata_once(block, label)
-        assert not _has_disclosed_answer(block)
+        _assert_closed_question_structure(
+            block, ["Puntaje sugerido", "Comandos permitidos", "Producto esperado"]
+        )
     classification = {
         "POWER-S1": {"fuente": "canonico"},
         "POWER-S2": {"fuente": "hipotetico"},
@@ -415,9 +510,32 @@ def test_answer_detector_rejects_disclosures_but_allows_question_wording():
         "hide(panel)",
         "collapse = TRUE",
         "El tamaño de muestra correcto es 800.",
+        "La opción B es correcta.",
+        "Se requieren 800 observaciones.",
+        "Con estos datos obtenemos 800.",
+        "El cálculo resulta 800.",
+        "El valor calculado asciende a 0.8.",
     ]:
         assert _has_disclosed_answer(disclosure)
     assert not _has_disclosed_answer("Producto esperado: cálculo y justificación.")
+
+
+def test_closed_question_structure_allows_only_student_fields_and_no_solution_field():
+    valid = """**Código:** POWER-S1
+**Puntaje sugerido:** 5
+**Comandos permitidos:** power
+**Producto esperado:** cálculo y justificación
+
+Calcule el tamaño de muestra y explique su estrategia."""
+    _assert_closed_question_structure(
+        valid, ["Puntaje sugerido", "Comandos permitidos", "Producto esperado"]
+    )
+    for field in ["Solución", "Respuesta", "Clave", "Resultado esperado"]:
+        with pytest.raises(AssertionError):
+            _assert_closed_question_structure(
+                valid + f"\n**{field}:** 800",
+                ["Puntaje sugerido", "Comandos permitidos", "Producto esperado"],
+            )
 
 
 def test_hypothetical_classification_is_non_vacuous_and_requires_literal_label():
