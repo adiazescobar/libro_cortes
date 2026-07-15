@@ -132,11 +132,16 @@ El término \( \mathbb{E}[Y_i(D=0) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=0]
 - Esto genera un sesgo **positivo**: atribuimos a la capacitación algo que en realidad es motivación.
 
 ::: {.boxnote}
-**Demostración — sesgo cero en expectativa:** bajo asignación aleatoria,
+**Demostración — sesgo cero en expectativa:** considere una población finita de \(N\) unidades y una aleatorización completa con \(n_1\) tratados y \(n_0=N-n_1\) controles. La diferencia de medias es
 \[
-\mathbb{E}_{D}\!\left[\mathbb{E}[Y_i(D=0)\mid D_i=1]-\mathbb{E}[Y_i(D=0)\mid D_i=0]\right]=0.
+\widehat{\tau}=\frac{1}{n_1}\sum_{i=1}^{N}D_iY_i(D=1)-\frac{1}{n_0}\sum_{i=1}^{N}(1-D_i)Y_i(D=0).
 \]
-Por tanto, al promediar sobre posibles asignaciones, la diferencia observada coincide con el efecto causal promedio. Esta es una demostración sobre el sesgo del estimador; no exige que cada covariable quede idénticamente distribuida en una muestra concreta.
+Como \(\mathbb{E}_{D}[D_i]=n_1/N\) y \(\mathbb{E}_{D}[1-D_i]=n_0/N\), la esperanza sobre posibles asignaciones de cada media de brazo satisface
+\[
+\mathbb{E}_{D}\!\left[\frac{1}{n_1}\sum_iD_iY_i(D=1)\right]=\frac{1}{N}\sum_iY_i(D=1),\qquad
+\mathbb{E}_{D}\!\left[\frac{1}{n_0}\sum_i(1-D_i)Y_i(D=0)\right]=\frac{1}{N}\sum_iY_i(D=0).
+\]
+Por linealidad, \(\mathbb{E}_{D}[\widehat{\tau}]=N^{-1}\sum_i[Y_i(D=1)-Y_i(D=0)]=SATE\). Así, el sesgo de aleatorización de \(\widehat{\tau}\) es cero, aunque una asignación particular no produzca balance exacto.
 :::
 
 **¿Qué hace la aleatorización?**
@@ -668,7 +673,7 @@ La aleatorización elimina el sesgo de selección porque hace independiente la a
 ::: {.box-ejercicios}
 **RCT-T1 — Resultados potenciales, insesgadez y balance**
 
-En un RCT individual, 200 personas tienen resultados potenciales \(Y_i(D=1)\) y \(Y_i(D=0)\). La mitad es asignada al azar a \(D_i=1\). Antes del tratamiento, el promedio de ingreso es 0,2 desviaciones estándar mayor entre tratados que entre controles por una diferencia fortuita de esta asignación.
+En un RCT individual, las 200 personas constituyen la población finita de interés y tienen resultados potenciales \(Y_i(D=1)\) y \(Y_i(D=0)\). La mitad es asignada al azar a \(D_i=1\). El estimando es el efecto promedio del tratamiento en estas 200 personas (SATE). Antes del tratamiento, el promedio de ingreso es 0,2 desviaciones estándar mayor entre tratados que entre controles por una diferencia fortuita de esta asignación.
 
 1. Identifique el estimando de la diferencia de medias del resultado final. 2. Demuestre su insesgadez tomando expectativa sobre posibles asignaciones. 3. Explique por qué el balance basal exacto no es requisito para la identificación y cómo interpretaría la diferencia observada.
 
@@ -680,20 +685,20 @@ En un RCT individual, 200 personas tienen resultados potenciales \(Y_i(D=1)\) y 
 ::: {.box-ejercicios}
 **RCT-T2 — Lectura comparada de cuatro regresiones**
 
-Un experimento reporta cuatro columnas estimadas sobre la misma muestra:
+Un experimento con 200 observaciones reporta cuatro columnas estimadas sobre la misma muestra. La asignación se realizó dentro de cuatro bloques, por lo que hay tres dummies de bloque no redundantes; además, el plan de análisis definió dos controles baseline. Todas las columnas incluyen intercepto y tratamiento.
 
-| Columna | Coeficiente de tratamiento | Error estándar |
-|:--:|:--:|:--:|
-| A | 2,06 | 0,52 |
-| B | 2,01 | 0,39 |
-| C | 2,08 | 0,45 |
-| D | 2,03 | 0,31 |
+| Columna | Coeficiente de tratamiento | Error estándar | Grados de libertad residuales |
+|:--:|:--:|:--:|:--:|
+| A | 2,06 | 0,52 | 198 |
+| B | 2,01 | 0,39 | 196 |
+| C | 2,08 | 0,45 | 195 |
+| D | 2,03 | 0,31 | 193 |
 
-Las especificaciones disponibles son: RCT simple; RCT simple con controles baseline; RCT estratificado con efectos fijos de bloque; y RCT estratificado con efectos fijos de bloque y controles baseline. Relacione cada columna con una especificación, justificando su criterio sin suponer que el menor error estándar determina por sí solo la correspondencia. Identifique el parámetro estimado y explique por qué los coeficientes son próximos mientras cambia la precisión.
+Las especificaciones disponibles son: RCT simple; RCT simple con controles baseline; RCT estratificado con efectos fijos de bloque; y RCT estratificado con efectos fijos de bloque y controles baseline. Relacione cada columna con una especificación usando la estructura de cada modelo y los grados de libertad, no el orden de los errores estándar. Identifique el parámetro estimado y explique por qué los coeficientes son próximos mientras cambia la precisión.
 
 **Puntaje sugerido:** 10 puntos.
 
-**Producto esperado:** correspondencia razonada de las cuatro columnas, identificación del parámetro y comparación concisa de identificación y precisión.
+**Producto esperado:** correspondencia única y justificada de las cuatro columnas mediante conteo de parámetros, identificación del parámetro causal y comparación concisa de identificación y precisión.
 :::
 
 ::: {.box-ejercicios}
