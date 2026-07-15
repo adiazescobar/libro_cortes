@@ -40,6 +40,21 @@ def test_scoring_contract_is_present():
     assert 'root.classList.add("show-feedback")' in TEXT
 
 
+def test_feedback_css_never_hides_answer_widgets():
+    css = TEXT.split("```{css, echo=FALSE}", 1)[1].split("```", 1)[0]
+    dangerous = [
+        "#prueba-entrada-quiz:not(.show-feedback) .webex-correct,",
+        "#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect,",
+        "input.webex-solveme.webex-correct",
+        "input.webex-solveme.webex-incorrect",
+        ".webex-radiogroup label.webex-correct",
+        ".webex-radiogroup label.webex-incorrect",
+    ]
+    assert not any(selector in css for selector in dangerous)
+    assert "#prueba-entrada-quiz:not(.show-feedback) .webex-check" in css
+    assert "#prueba-entrada-quiz:not(.show-feedback) .webex-feedback" in css
+
+
 def test_scoring_javascript_runs_only_on_finalize_and_reports_sections():
     script = TEXT.split("<script>", 1)[1].split("</script>", 1)[0]
     harness = r"""

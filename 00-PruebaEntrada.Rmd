@@ -65,13 +65,15 @@ library(webexercises)
 
 /* ======= CLAVE 1: Desactivar feedback inmediato de webexercises hasta finalizar ======= */
 #prueba-entrada-quiz:not(.show-feedback) .webex-check,
-#prueba-entrada-quiz:not(.show-feedback) .webex-correct,
-#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect,
-#prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-correct,
-#prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-incorrect,
-#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-correct,
-#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-incorrect {
+#prueba-entrada-quiz:not(.show-feedback) .webex-feedback {
   display: none !important;
+}
+
+/* Los controles siguen visibles; solo se neutralizan sus marcas prematuras. */
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect),
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect) {
+  color: inherit !important;
+  font-weight: inherit !important;
 }
 
 /* ======= CLAVE 2: Ocultar explicaciones/soluciones hasta finalizar =======
