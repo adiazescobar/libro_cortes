@@ -54,6 +54,18 @@ en la historia local. La clave y sus soluciones nunca fueron committed.
 - QA HTML focal: tabla robusta con cinco columnas, cuatro códigos únicos, cuatro
   pares de metadatos y cero marcadores privados.
 
+### Corrección de empaquetado
+
+Sin volver a renderizar, se copió el HTML dividido fresco de la práctica desde
+la raíz del proyecto a
+`/private/tmp/libro_cortes_parametros_ampliado/parametros-causales-stata.html`.
+Origen y destino tienen SHA-256
+`26c4274f9d896226f0fa31d506cd4f1a38ddb3e8c44b3bdfe2889f1e7f5c7ad0`, y el
+timestamp del destino es posterior al del origen. El archivo empacado contiene
+una tabla robusta y exactamente cuatro campos `Comandos permitidos` y cuatro
+campos `Producto esperado`. El HTML de teoría ya era idéntico entre origen y
+destino, por lo que no fue necesario copiarlo de nuevo.
+
 ## Preocupaciones residuales
 
 El workaround de salida de bookdown sigue siendo necesario. El árbol de trabajo
