@@ -3,10 +3,24 @@ import re
 import subprocess
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[1]
 THEORY = (ROOT / "05-RCT.Rmd").read_text(encoding="utf-8")
 PRACTICE = (ROOT / "06-RCT2.Rmd").read_text(encoding="utf-8")
+
+DECOMPOSITION_AND_SIMULATION_FRAGMENTS = [
+    r"\underbrace{\mathbb{E}[Y_i(D=1) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=1]}_{ATT}",
+    r"\underbrace{\mathbb{E}[Y_i(D=0) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=0]}_{\text{sesgo de selección}}",
+    "# --- Escenario 1: Auto-selección (los motivados eligen tratarse) ---",
+    "D_sesgo <- as.numeric(motivacion + rnorm(N, sd = 0.5) > 0)",
+    "Y_sesgo <- D_sesgo * Y1 + (1 - D_sesgo) * Y0",
+    "# --- Escenario 2: Aleatorización ---",
+    "D_azar <- rbinom(N, 1, 0.5)",
+    "Y_azar <- D_azar * Y1 + (1 - D_azar) * Y0",
+    'Componente = rep(c("Diferencia observada", "ATT (efecto causal)", "Sesgo de selección"), 2)',
+]
 
 
 def _boxes(text):
@@ -104,13 +118,23 @@ def _assert_stage_headings(h3, stages, permitted_non_stages):
     assert stage_headings == stages
 
 
+def _assert_decomposition_and_both_simulations(text):
+    compact = re.sub(r"[ \t]+", " ", text)
+    missing = [
+        fragment
+        for fragment in DECOMPOSITION_AND_SIMULATION_FRAGMENTS
+        if fragment not in compact
+    ]
+    assert not missing, (
+        "Debe preservarse la ecuación de descomposición y el código de "
+        f"ambas simulaciones; faltan {len(missing)} fragmentos distintivos"
+    )
+
+
 def test_theory_preserves_foundational_content_and_resources():
     required = [
         "Resultados potenciales:",
-        "sesgo de selección",
         "Resumen de los cuatro escenarios:",
-        "Auto-selección",
-        "Aleatorización",
         "CATE(x)",
         "El truco de centrar (Wooldridge)",
         "## Supuestos, propiedades y condiciones de validez {-}",
@@ -130,6 +154,17 @@ def test_theory_preserves_foundational_content_and_resources():
     assert [THEORY.index(fragment) for fragment in scenarios] == sorted(
         THEORY.index(fragment) for fragment in scenarios
     )
+
+
+def test_theory_preserves_decomposition_and_both_simulations():
+    _assert_decomposition_and_both_simulations(THEORY)
+
+
+def test_decomposition_and_simulation_contract_rejects_each_deleted_object():
+    for fragment in DECOMPOSITION_AND_SIMULATION_FRAGMENTS:
+        mutated = re.sub(r"[ \t]+", " ", THEORY).replace(fragment, "", 1)
+        with pytest.raises(AssertionError):
+            _assert_decomposition_and_both_simulations(mutated)
 
 
 def test_both_chapters_use_only_global_potential_outcomes_notation():
