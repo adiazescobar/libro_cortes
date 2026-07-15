@@ -34,6 +34,28 @@ def _executable_stata_text():
     return "\n".join(blocks)
 
 
+def _has_selection_assignment(code):
+    """Accept a D rule whose condition or probability actually depends on X/yd0."""
+    assignment_lines = re.findall(
+        r"(?im)^\s*(?:gen(?:erate)?|replace)\s+D\s*=\s*([^\n]+)", code
+    )
+    for expression in assignment_lines:
+        depends_on_covariate = re.search(r"(?i)\b(?:X|yd0)\b", expression)
+        uses_condition = re.search(r"(?:<=|>=|==|!=|<|>)", expression)
+        uses_probability = re.search(r"(?i)\bruniform\s*\(\s*\)", expression)
+        if depends_on_covariate and (uses_condition or uses_probability):
+            return True
+    return False
+
+
+def _has_random_half_assignment(code):
+    return bool(re.search(
+        r"(?im)^\s*(?:gen(?:erate)?|replace)\s+D\s*=\s*"
+        r"\(?\s*runiform\s*\(\s*\)\s*<\s*(?:0?\.5|1/2)\s*\)?\s*(?://.*|$)",
+        code,
+    ))
+
+
 def test_downloads_are_first_and_complete():
     h2_headings = re.findall(r"^##\s+[^\n]+", TEXT, re.MULTILINE)
     assert h2_headings[0] == "## Materiales para la clase {-}"
@@ -84,13 +106,23 @@ def test_page_contains_complete_executable_stata_workflow():
 
 def test_page_contains_both_executable_assignment_rules():
     code = _executable_stata_text()
-    selection_rule = re.search(r"(?im)^\s*generate\s+D\s*=\s*X\b", code)
-    random_rule = re.search(
-        r"(?im)^\s*generate\s+D\s*=\s*runiform\s*\(\s*\)\s*<\s*(?:0?\.5|1/2)\b",
-        code,
+    assert _has_selection_assignment(code), (
+        "Falta una regla ejecutable donde la selección dependa de X o yd0 "
+        "mediante una condición o probabilidad"
     )
-    assert selection_rule, "Falta la regla ejecutable de asignación con selección D = X"
-    assert random_rule, "Falta la regla ejecutable de asignación aleatoria con runiform()"
+    assert _has_random_half_assignment(code), (
+        "Falta la regla ejecutable de asignación aleatoria runiform() < .5"
+    )
+
+
+def test_assignment_rule_matchers_reject_superficial_mentions():
+    assert not _has_selection_assignment("generate D = X")
+    assert not _has_selection_assignment("* selección depende de X")
+    assert _has_selection_assignment("generate D = X > 0")
+    assert _has_selection_assignment("gen D = runiform() < invlogit(yd0)")
+    assert not _has_random_half_assignment("La regla es runiform() < .5")
+    assert not _has_random_half_assignment("generate D = runiform() < .4")
+    assert _has_random_half_assignment("generate D = runiform() < .5")
 
 
 def test_results_schema():

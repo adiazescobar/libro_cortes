@@ -43,4 +43,28 @@ Resultado: exit code 0.
 ## Preocupaciones
 
 - El brief exige explícitamente `generate y` y `generate tau`; por ello las abreviaturas Stata `gen y` y `gen tau` no satisfacen el contrato. Esta rigidez es intencional para la presentación pedagógica aprobada.
-- La regla con selección se fija como una instrucción ejecutable `generate D = X`; si la implementación futura usa una expresión algebraicamente equivalente, deberá conservar esta regla explícita o acordarse un cambio del contrato.
+- La regla con selección ya no exige literalmente `generate D = X`: acepta `generate`, `gen` o `replace` cuando la expresión para `D` depende de `X` o `yd0` mediante una condición o una probabilidad. La regla aleatoria exige una instrucción ejecutable con `runiform() < .5` (también acepta `0.5` o `1/2`).
+
+## Correcciones posteriores a revisión
+
+- Los códigos se detectan globalmente con los patrones abiertos `T-P\d+` y `S-P\d+`. El contrato rechaza códigos fuera del rango, duplicados, códigos fuera de un bloque pedagógico y más de un código por bloque.
+- Tanto las preguntas teóricas como las prácticas rechazan, sin distinguir mayúsculas, marcadores de respuesta, solución, pista, `details`, `hide(` y `Ver respuesta`.
+- Las comprobaciones globales de privacidad y contenido desplegable tampoco distinguen mayúsculas.
+- Se añadieron casos de control del matcher de asignación para confirmar que menciones narrativas y `generate D = X` no bastan, mientras que condiciones y probabilidades dependientes de `X` o `yd0` sí cuentan.
+
+Verificación focal posterior a revisión:
+
+```text
+/private/tmp/libro_cortes_rct_venv/bin/python -m pytest -q tests/test_parametros_pedagogy_contract.py tests/test_parametros_stata_contract.py
+```
+
+Resultado: **6 failed, 12 passed**. Los seis fallos siguen siendo el RED intencional por contenido pedagógico aún no implementado; las doce pruebas restantes, incluida la autoprueba de reglas de asignación, pasan.
+
+Validación adicional:
+
+```text
+git diff --check
+/private/tmp/libro_cortes_rct_venv/bin/python -m py_compile tests/test_parametros_pedagogy_contract.py tests/test_parametros_stata_contract.py
+```
+
+Resultado: ambos comandos terminaron con exit code 0 y sin salida de error.

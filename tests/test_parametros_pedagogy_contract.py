@@ -27,9 +27,31 @@ def _pedagogy_boxes(text):
     return boxes
 
 
-def _exam_question_boxes(text, code_pattern):
-    pattern = re.compile(rf"(?<![A-Z0-9-]){code_pattern}(?![A-Z0-9-])")
-    return [(box, pattern.findall(box)) for box in _pedagogy_boxes(text) if pattern.search(box)]
+def _assert_exact_question_codes(text, prefix, expected_codes):
+    """Require every question code globally, exactly once, inside its own box."""
+    pattern = re.compile(rf"(?<![A-Z0-9-]){re.escape(prefix)}P\d+(?![A-Z0-9-])")
+    global_codes = pattern.findall(text)
+    assert global_codes == expected_codes, (
+        f"Los códigos {prefix} deben ser únicos, estar en orden y limitarse a "
+        f"{expected_codes}; encontrados: {global_codes}"
+    )
+
+    questions = [
+        (box, pattern.findall(box))
+        for box in _pedagogy_boxes(text)
+        if pattern.search(box)
+    ]
+    boxed_codes = [code for _box, matches in questions for code in matches]
+    assert boxed_codes == global_codes, "Cada código debe estar dentro de un bloque de pregunta"
+    assert len(questions) == len(expected_codes), "Cada pregunta debe tener su propio bloque"
+    assert all(len(matches) == 1 for _box, matches in questions)
+    return questions
+
+
+def _assert_no_answer_markers(block):
+    lowered = block.casefold()
+    forbidden = ["respuesta", "solución", "pista", "details", "hide(", "ver respuesta"]
+    assert not any(marker in lowered for marker in forbidden)
 
 
 def test_theory_has_colored_learning_blocks():
@@ -40,18 +62,12 @@ def test_theory_has_colored_learning_blocks():
 
 
 def test_theory_has_exactly_three_exam_questions_without_answers():
-    questions = _exam_question_boxes(THEORY, r"T-P[1-3]")
-    codes = [code for _box, matches in questions for code in matches]
-    assert codes == ["T-P1", "T-P2", "T-P3"]
-    assert len(questions) == 3
+    questions = _assert_exact_question_codes(THEORY, "T-", ["T-P1", "T-P2", "T-P3"])
     for block, matches in questions:
         assert len(matches) == 1
-        lowered = block.lower()
+        lowered = block.casefold()
         assert "puntaje sugerido" in lowered
-        assert not any(
-            marker in lowered
-            for marker in ["respuesta:", "solución:", "pista:", "<details", "hide("]
-        )
+        _assert_no_answer_markers(block)
 
 
 def test_practice_restores_twelve_guided_stages():
@@ -86,16 +102,18 @@ def test_practice_has_required_blocks_and_exam_questions():
         assert label in PRACTICE
     assert len(_pedagogy_boxes(PRACTICE)) >= 10
 
-    questions = _exam_question_boxes(PRACTICE, r"S-P[1-4]")
-    codes = [code for _box, matches in questions for code in matches]
-    assert codes == ["S-P1", "S-P2", "S-P3", "S-P4"]
-    assert len(questions) == 4
-    assert all(len(matches) == 1 for _box, matches in questions)
+    questions = _assert_exact_question_codes(
+        PRACTICE, "S-", ["S-P1", "S-P2", "S-P3", "S-P4"]
+    )
+    for block, _matches in questions:
+        _assert_no_answer_markers(block)
 
 
 def test_student_material_never_exposes_private_key():
-    combined = THEORY + PRACTICE + (ROOT / "_bookdown.yml").read_text(encoding="utf-8")
+    combined = (
+        THEORY + PRACTICE + (ROOT / "_bookdown.yml").read_text(encoding="utf-8")
+    ).casefold()
     assert "clave_parametros_causales" not in combined
     assert "claves_docentes" not in combined
-    assert "<details" not in THEORY + PRACTICE
-    assert "Ver respuesta" not in THEORY + PRACTICE
+    assert "<details" not in combined
+    assert "ver respuesta" not in combined
