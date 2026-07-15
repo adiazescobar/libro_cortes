@@ -143,6 +143,37 @@ def test_point_results_export_visible_group_counts_and_means():
     } <= original
 
 
+def test_regression_output_exports_robust_uncertainty_for_d():
+    with (BASE / "results/parameters_results.csv").open(
+        newline="", encoding="utf-8-sig"
+    ) as handle:
+        rows = list(csv.DictReader(handle))
+    original = {
+        row["estimando"]: float(row["valor"])
+        for row in rows if row["escenario"] == "datos_originales"
+    }
+    required = {
+        "COEF_REG_D", "SE_ROBUST_REG_D", "IC95_INF_REG_D", "IC95_SUP_REG_D",
+        "COEF_REG_CONSTANTE", "SE_ROBUST_REG_CONSTANTE",
+        "IC95_INF_REG_CONSTANTE", "IC95_SUP_REG_CONSTANTE",
+    }
+    assert required <= set(original)
+    assert original["SE_ROBUST_REG_D"] > 0
+    assert original["IC95_INF_REG_D"] < original["COEF_REG_D"] < original["IC95_SUP_REG_D"]
+    assert re.search(r"regress\s+y\s+D\s*,\s*(?:vce\(robust\)|robust)", DO_TEXT, re.I)
+    assert "_se[D]" in DO_TEXT
+
+
+def test_s_p1_displays_interpolated_canonical_regression_table():
+    assert "tabla_regresion" in TEXT
+    for estimand in [
+        "COEF_REG_D", "SE_ROBUST_REG_D", "IC95_INF_REG_D", "IC95_SUP_REG_D"
+    ]:
+        assert estimand in TEXT
+    s_p1 = TEXT.split("S-P1", 1)[1].split(":::", 1)[0]
+    assert "knitr::kable(tabla_regresion" in s_p1
+
+
 def test_practice_has_objectives_prerequisites_sequence_and_bridge():
     headings = [
         "## Materiales para la clase {-}",

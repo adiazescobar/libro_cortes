@@ -34,6 +34,29 @@ tabla_puntual$estimando <- unname(etiquetas_estimando[tabla_puntual$estimando])
 tabla_puntual$valor <- round(tabla_puntual$valor, 3)
 names(tabla_puntual) <- c("Estimando", "Valor", "N")
 
+estimandos_regresion <- data.frame(
+  Término = c("Constante", "D"),
+  coeficiente = c("COEF_REG_CONSTANTE", "COEF_REG_D"),
+  error = c("SE_ROBUST_REG_CONSTANTE", "SE_ROBUST_REG_D"),
+  inferior = c("IC95_INF_REG_CONSTANTE", "IC95_INF_REG_D"),
+  superior = c("IC95_SUP_REG_CONSTANTE", "IC95_SUP_REG_D")
+)
+extraer_regresion <- function(clave) {
+  filas <- point$escenario == "datos_originales" & point$estimando %in% clave
+  lookup <- setNames(point$valor[filas], point$estimando[filas])
+  stopifnot(length(lookup) == length(clave), all(clave %in% names(lookup)))
+  unname(lookup[clave])
+}
+tabla_regresion <- data.frame(
+  Término = estimandos_regresion$Término,
+  Coeficiente = extraer_regresion(estimandos_regresion$coeficiente),
+  `Error estándar robusto` = extraer_regresion(estimandos_regresion$error),
+  `IC 95%: límite inferior` = extraer_regresion(estimandos_regresion$inferior),
+  `IC 95%: límite superior` = extraer_regresion(estimandos_regresion$superior),
+  check.names = FALSE
+)
+tabla_regresion[, -1] <- round(tabla_regresion[, -1], 3)
+
 tabla_escenarios <- point[
   point$escenario %in% c("datos_duplicados", "aleatorizacion_unica") &
     point$estimando %in% c("ATE", "ATT", "ATU", "NAIVE", "SESGO_ATT"),
@@ -522,6 +545,16 @@ desviaciones estándar canónicas y por cuánto?
 el intervalo de confianza de `lincom D`. Explique la relación exacta entre
 `_b[D]` y las dos medias de grupo, e indique por qué el coeficiente no tiene
 automáticamente interpretación causal.
+
+```{r tabla-output-s-p1, echo=FALSE}
+knitr::kable(tabla_regresion, caption = "Output canónico de la regresión con errores estándar robustos")
+```
+
+**Comandos permitidos:** `regress y D, robust`, `lincom D` y operaciones
+aritméticas con las medias de los dos grupos.
+
+**Producto esperado:** interpretación escrita de los cuatro componentes
+solicitados y una igualdad que conecte el coeficiente de `D` con las medias.
 :::
 
 ::: {.boxquestion}
@@ -537,6 +570,12 @@ NAIVE−ATT. Muestre las fórmulas y las unidades que entran en cada promedio.
 | 4 | 1 | 0 | 7 | 8 |
 | 5 | 1 | 0 | 8 | 10 |
 | 6 | 1 | 1 | 10 | 13 |
+
+**Comandos permitidos:** `generate`, `summarize` con condiciones `if` y
+operaciones aritméticas; también puede resolver los promedios a mano.
+
+**Producto esperado:** tabla con los siete estimandos solicitados, sus fórmulas
+y las unidades incluidas en cada promedio.
 :::
 
 ::: {.boxquestion}
@@ -556,6 +595,12 @@ program define estimadores
     scalar ATU = r(mean)
 end
 ```
+
+**Comandos permitidos:** `program define`, `syntax`, `tokenize`, locales,
+`summarize`, escalares y `display`.
+
+**Producto esperado:** listado numerado de los cuatro errores, explicación de
+su consecuencia y un programa Stata completo que ejecute sin errores.
 :::
 
 ::: {.boxquestion}
@@ -565,6 +610,12 @@ probabilidad de tratamiento sea el complemento exacto de la regla canónica,
 y el centro aproximado de NAIVE−ATT, y razone cómo cambiaría su dispersión frente
 a la regla canónica. Escriba código Stata ejecutable que modifique `one_rep`, fije
 una semilla, ejecute `simulate` y resuma la distribución.
+
+**Comandos permitidos:** comandos del programa `one_rep`, `invlogit()`,
+`runiform()`, `set seed`, `simulate` y `summarize, detail`.
+
+**Producto esperado:** código Stata ejecutable y un párrafo que anticipe signo,
+centro y dispersión de la distribución frente a la regla canónica.
 :::
 
 ## 8. Síntesis

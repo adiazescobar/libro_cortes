@@ -49,6 +49,14 @@ program define post_estimands
 
     quietly regress y D, vce(robust)
     post `postname' ("`scenario'") ("COEF_REG_D") (_b[D]) (`n')
+    post `postname' ("`scenario'") ("SE_ROBUST_REG_D") (_se[D]) (`n')
+    local tcrit = invttail(e(df_r), 0.025)
+    post `postname' ("`scenario'") ("IC95_INF_REG_D") (_b[D] - `tcrit'*_se[D]) (`n')
+    post `postname' ("`scenario'") ("IC95_SUP_REG_D") (_b[D] + `tcrit'*_se[D]) (`n')
+    post `postname' ("`scenario'") ("COEF_REG_CONSTANTE") (_b[_cons]) (`n')
+    post `postname' ("`scenario'") ("SE_ROBUST_REG_CONSTANTE") (_se[_cons]) (`n')
+    post `postname' ("`scenario'") ("IC95_INF_REG_CONSTANTE") (_b[_cons] - `tcrit'*_se[_cons]) (`n')
+    post `postname' ("`scenario'") ("IC95_SUP_REG_CONSTANTE") (_b[_cons] + `tcrit'*_se[_cons]) (`n')
 end
 
 use "04_data.dta", clear
@@ -62,7 +70,7 @@ tempfile original population
 save `original', replace
 
 tempname pointpost
-postfile `pointpost' str24 escenario str20 estimando double valor long N using "results/parameters_results.dta", replace
+postfile `pointpost' str24 escenario str32 estimando double valor long N using "results/parameters_results.dta", replace
 post_estimands, postname(`pointpost') scenario("datos_originales")
 
 * Se replican perfiles idénticos. El N nominal aumenta, pero no la información

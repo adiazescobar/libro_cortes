@@ -134,6 +134,16 @@ def test_practice_has_required_blocks_and_exam_questions():
         _assert_no_answer_markers(block)
 
 
+def test_each_practice_question_states_allowed_commands_and_expected_product():
+    questions = _assert_exact_question_codes(
+        PRACTICE, "S-", ["S-P1", "S-P2", "S-P3", "S-P4"]
+    )
+    for block, matches in questions:
+        for label in ["Comandos permitidos:", "Producto esperado:"]:
+            assert block.count(label) == 1, f"{matches[0]} debe incluir una vez {label}"
+        assert block.index("Comandos permitidos:") < block.index("Producto esperado:")
+
+
 def test_s_p4_specifies_the_rule_that_the_private_rubric_grades():
     questions = _assert_exact_question_codes(
         PRACTICE, "S-", ["S-P1", "S-P2", "S-P3", "S-P4"]
