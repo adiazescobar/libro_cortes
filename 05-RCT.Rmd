@@ -43,6 +43,10 @@ El **problema fundamental** de la inferencia causal es que para cada individuo s
 Y_i = D_i \cdot Y_i(D=1) + (1-D_i) \cdot Y_i(D=0)
 \]
 
+::: {.boxnote}
+**Intuición — el contrafactual promedio:** aunque nunca observamos simultáneamente los dos resultados potenciales de una misma persona, no necesitamos reconstruir cada contrafactual individual para estimar un efecto promedio. El grupo de control aporta el promedio que habría observado el grupo tratado sin tratamiento, siempre que la asignación haga comparables ambos grupos en expectativa.
+:::
+
 **Efectos:**
 
 - **ATE (Average Treatment Effect):** efecto promedio en **toda** la población.
@@ -72,6 +76,14 @@ ATE = ATT = ATU
 \]
 
 porque los grupos de tratamiento y control son, en promedio, idénticos en todo (observable y no observable).
+
+::: {.boxnote}
+**Resultado clave — independencia en expectativa:** si \(D_i \perp (Y_i(D=1),Y_i(D=0))\), entonces para \(d\in\{0,1\}\),
+\[
+\mathbb{E}[Y_i(D=d)\mid D_i=1]=\mathbb{E}[Y_i(D=d)\mid D_i=0]=\mathbb{E}[Y_i(D=d)].
+\]
+La igualdad es una propiedad del mecanismo de asignación repetido, no una promesa de igualdad exacta en una realización particular del experimento.
+:::
 
 ## Supuestos de identificación {-}
 
@@ -118,6 +130,14 @@ El término \( \mathbb{E}[Y_i(D=0) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=0]
 - Pero la motivación **también** aumenta el salario, incluso sin capacitación.
 - Por lo tanto \( \mathbb{E}[Y_i(D=0) \mid D_i=1] > \mathbb{E}[Y_i(D=0) \mid D_i=0] \): los tratados habrían ganado más **de todas formas**.
 - Esto genera un sesgo **positivo**: atribuimos a la capacitación algo que en realidad es motivación.
+
+::: {.boxnote}
+**Demostración — sesgo cero en expectativa:** bajo asignación aleatoria,
+\[
+\mathbb{E}_{D}\!\left[\mathbb{E}[Y_i(D=0)\mid D_i=1]-\mathbb{E}[Y_i(D=0)\mid D_i=0]\right]=0.
+\]
+Por tanto, al promediar sobre posibles asignaciones, la diferencia observada coincide con el efecto causal promedio. Esta es una demostración sobre el sesgo del estimador; no exige que cada covariable quede idénticamente distribuida en una muestra concreta.
+:::
 
 **¿Qué hace la aleatorización?**
 
@@ -364,11 +384,15 @@ dens1 + dens2
 
 Por lo tanto ya no es necesario observar la motivación, ya que la aleatorización garantiza que los grupos sean comparables. Esto es exactamente lo mismo que vimos con resultados potenciales: el sesgo de selección \( \mathbb{E}[Y_i(D=0) \mid D_i=1] - \mathbb{E}[Y_i(D=0) \mid D_i=0] \) se hace cero, y en regresión \( \text{Cov}(D,M) = 0 \). Son dos caras de la misma moneda.
 
+::: {.box-cuidado}
+**Advertencia — balance muestral:** la aleatorización garantiza balance en expectativa, no igualdad exacta de medias en cada muestra. Una pequeña diferencia basal fortuita es compatible con un experimento correctamente aleatorizado; debe interpretarse junto con el mecanismo de asignación y no como una prueba automática de sesgo.
+:::
+
 Ahora veamos cómo esto se traduce a regresión en cuatro escenarios de diseño experimental, de lo más simple a lo más completo.
 
 ---
 
-## 1) RCT simple, sin estratos, sin controles {-}
+## RCT simple, sin estratos, sin controles {-}
 
 **Objetivo:** identificación "pura" por aleatorización.
 
@@ -412,7 +436,7 @@ ggplot(datos, aes(x = D, y = Y, fill = D)) +
 
 ---
 
-## 2) RCT simple, sin estratos, con controles {-}
+## RCT simple, sin estratos, con controles {-}
 
 **Objetivo:** misma identificación causal, mayor **precisión**.
 
@@ -463,7 +487,7 @@ ggplot(comparacion, aes(x = Modelo, y = tau_hat)) +
 
 ---
 
-## 3) RCT estratificado (bloques), sin controles adicionales {-}
+## RCT estratificado (bloques), sin controles adicionales {-}
 
 **Objetivo:** respetar el diseño experimental y ganar precisión.
 
@@ -481,6 +505,10 @@ Y_i = \alpha + \tau D_i + \delta' S_i + u_i
 
 ::: {.boxnote}
 **Mensaje clave:** si estratificaste la asignación, **controla por estratos** en el análisis. Es coherencia entre diseño y estimación.
+:::
+
+::: {.boxnote}
+**Resultado clave — estratos y controles pretratamiento:** condicionar en los estratos usados para asignar preserva la comparación dentro de los bloques del diseño. Agregar covariables medidas antes del tratamiento que predicen el resultado puede reducir la varianza residual; ninguna de las dos decisiones reemplaza la aleatorización como fuente de identificación.
 :::
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -503,7 +531,7 @@ ggplot(datos_est, aes(x = estrato, y = Y, fill = factor(D, labels = c("Control",
 
 ---
 
-## 4) RCT estratificado + controles adicionales {-}
+## RCT estratificado + controles adicionales {-}
 
 **Objetivo:** máxima precisión manteniendo interpretación causal.
 
@@ -520,6 +548,10 @@ Aquí combinamos:
 **Mensaje clave:** efectos fijos de estrato "por diseño" + controles baseline "por eficiencia". Es la especificación más completa y la que típicamente se reporta en papers experimentales.
 :::
 
+::: {.box-cuidado}
+**Advertencia — selección de controles y especificación:** no deben incluirse variables postratamiento, pues pueden ser mecanismos del efecto o abrir selección. La especificación principal debe justificarse antes de observar resultados, respetar los estratos del diseño y usar solo controles pretratamiento; comparar muchas variantes hasta encontrar significancia invalida la interpretación confirmatoria.
+:::
+
 **Resumen de los cuatro escenarios:**
 
 ::: {.table .table-bordered .table-striped}
@@ -532,6 +564,10 @@ Aquí combinamos:
 :::
 
 En los cuatro casos, \( \hat{\tau} \) estima el **ATE** de forma consistente. Lo que cambia es la **precisión**.
+
+::: {.boxnote}
+**Comparación — cuatro especificaciones:** el modelo simple muestra la identificación directa; añadir controles baseline busca precisión; añadir efectos fijos de estrato alinea la estimación con una asignación bloqueada; combinar ambos reúne diseño y eficiencia. El coeficiente puede variar fortuitamente entre columnas, pero el estimando causal permanece siendo el ATE cuando no hay interacciones y se respeta el diseño.
+:::
 
 ---
 
@@ -554,6 +590,10 @@ Y_i = \alpha + \tau D_i + \theta Z_i + \gamma (D_i \cdot Z_i) + u_i
 - \( \gamma \) mide la **diferencia** en el efecto del tratamiento entre los dos grupos.
 
 **ATE (promedio):** \( \tau + \gamma \cdot \mathbb{E}[Z] \)
+
+::: {.boxnote}
+**Intuición — interacción, efecto base y CATE:** la interacción permite que el efecto cambie con \(Z\). Sin centrar, \(\tau\) es el efecto base evaluado en \(Z=0\), mientras que \(\tau+\gamma z\) es el CATE en \(Z=z\); promediar esos efectos sobre la distribución de \(Z\) produce el ATE.
+:::
 
 ### El truco de centrar (Wooldridge) {-}
 
@@ -621,6 +661,51 @@ Cuando aparece una interacción, el coeficiente de (D_i) deja de ser automática
 
 ::: {.box-resumen}
 La aleatorización elimina el sesgo de selección porque hace independiente la asignación de los resultados potenciales. La diferencia de medias —o, equivalentemente, el coeficiente de (D) en una regresión simple— identifica el ATE. Los controles pretratamiento y los efectos fijos de estrato no crean la identificación: pueden mejorar la precisión y alinear el análisis con el diseño. Las interacciones permiten estudiar heterogeneidad, pero su interpretación exige definir cuidadosamente el grupo o valor de referencia.
+:::
+
+## Práctica tipo parcial {-}
+
+::: {.box-ejercicios}
+**RCT-T1 — Resultados potenciales, insesgadez y balance**
+
+En un RCT individual, 200 personas tienen resultados potenciales \(Y_i(D=1)\) y \(Y_i(D=0)\). La mitad es asignada al azar a \(D_i=1\). Antes del tratamiento, el promedio de ingreso es 0,2 desviaciones estándar mayor entre tratados que entre controles por una diferencia fortuita de esta asignación.
+
+1. Identifique el estimando de la diferencia de medias del resultado final. 2. Demuestre su insesgadez tomando expectativa sobre posibles asignaciones. 3. Explique por qué el balance basal exacto no es requisito para la identificación y cómo interpretaría la diferencia observada.
+
+**Puntaje sugerido:** 10 puntos.
+
+**Producto esperado:** estimando escrito con resultados potenciales, derivación algebraica breve y explicación conceptual de cuatro a seis líneas.
+:::
+
+::: {.box-ejercicios}
+**RCT-T2 — Lectura comparada de cuatro regresiones**
+
+Un experimento reporta cuatro columnas estimadas sobre la misma muestra:
+
+| Columna | Coeficiente de tratamiento | Error estándar |
+|:--:|:--:|:--:|
+| A | 2,06 | 0,52 |
+| B | 2,01 | 0,39 |
+| C | 2,08 | 0,45 |
+| D | 2,03 | 0,31 |
+
+Las especificaciones disponibles son: RCT simple; RCT simple con controles baseline; RCT estratificado con efectos fijos de bloque; y RCT estratificado con efectos fijos de bloque y controles baseline. Relacione cada columna con una especificación, justificando su criterio sin suponer que el menor error estándar determina por sí solo la correspondencia. Identifique el parámetro estimado y explique por qué los coeficientes son próximos mientras cambia la precisión.
+
+**Puntaje sugerido:** 10 puntos.
+
+**Producto esperado:** correspondencia razonada de las cuatro columnas, identificación del parámetro y comparación concisa de identificación y precisión.
+:::
+
+::: {.box-ejercicios}
+**RCT-T3 — Interacción, CATE y centrado**
+
+Considere \(Y_i=\alpha+\tau D_i+\theta Z_i+\gamma(D_i\cdot Z_i)+u_i\), donde \(Z_i\) no está centrada, \(\mathbb{E}[Z_i]=4\), \(\tau=1,5\) y \(\gamma=0,4\).
+
+1. Interprete el efecto base. 2. Calcule el CATE para \(Z=2\) y \(Z=6\). 3. Obtenga el ATE y muestre cómo se interpreta el coeficiente de tratamiento al usar \(Z_{c,i}=Z_i-4\). 4. Formule una advertencia sobre interpretar \(\tau\) como ATE cuando la covariable no está centrada.
+
+**Puntaje sugerido:** 10 puntos.
+
+**Producto esperado:** cuatro expresiones o cálculos claramente rotulados y una advertencia interpretativa de dos o tres líneas.
 :::
 
 ## Preguntas para clase {-}
