@@ -1,7 +1,10 @@
 import os
 import re
 import subprocess
+from collections import Counter
 from pathlib import Path
+
+import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,6 +23,80 @@ PRACTICE_REQUIRED = [
     "07_stata.do",
     "07_R.R",
     "07_phyton.ipynb",
+]
+
+PRACTICE_INVENTORY = {
+    "sections": [
+        "Introducción", "Sin controles", "Tamaño de muestra para un efecto dado",
+        "Efecto mínimo detectable (MDE) para un N dado",
+        "MDE para un N dado con variable binaria", "Incorporando controles",
+        "Tamaño de muestra para un efecto dado con covariables",
+        "MDE para un N dado con covariables",
+        "Tamaño de muestra con cumplimiento parcial (take-up)",
+        "Diseños por conglomerados o grupos",
+        "Número de clústeres para un efecto y tamaño de clúster dados",
+        "Tamaño de clúster para un número dado de clústeres",
+        "MDE para un tamaño de clúster y número de clústeres dados",
+        "Qué puede salir mal en un RCT",
+        "Externalidades y efectos de derrame (*spillovers*)",
+        "Efectos de equilibrio general", "Efectos de comportamiento",
+        "Problemas éticos: los tres pilares del Belmont Report",
+        "Otros problemas comunes",
+        "Ejercicio aplicado: Bertrand y Mullainathan (2004)",
+        "El experimento", "Preguntas del ejercicio", "Código de referencia",
+        "DESCARGA LOS DOCUMENTOS",
+    ],
+    "formulas_and_cases": [
+        r"z_{1-\alpha/2} + z_{1-\beta}",
+        r"\delta_{\min}", r"p_1(1 - p_1) + p_2(1 - p_2)",
+        r"\sigma_{\text{res}}^2", r"\delta_{\text{efectivo}}",
+        r"DE = 1 + \rho(M-1)", r"K_1 = \frac",
+        "Hawthorne", "John Henry", "Tuskegee", "Guatemala (1940s)",
+        "4.870 hojas de vida ficticias", "Emily, Greg", "Lakisha, Jamal",
+        "reg call i.black##i.female", "reg call c.black##c.yearsexp",
+    ],
+    "link_destinations": [
+        "https://www.stata.com/manuals/pss.pdf",
+        "https://www.povertyactionlab.org/resource/power-calculations",
+        "https://www.hhs.gov/ohrp/regulations-and-policy/belmont-report/index.html",
+        "https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/BM_parcial.do",
+        "https://www.dropbox.com/scl/fi/ephx1kl4opc0q3oxe5ckp/bm.dta?rlkey=zwp0hwtec5z25a4ll9qn8biz7&dl=1",
+        "https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_stata.do",
+        "https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_R.R",
+        "https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/07_phyton.ipynb",
+        "https://colab.research.google.com/assets/colab-badge.svg",
+        "https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/07_Power/07_phyton.ipynb",
+        "https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta",
+    ],
+}
+
+POWER_PPT_SEQUENCE = [
+    ("Errores tipo I y II", ["error tipo I", "error tipo II", "poder estadístico"]),
+    ("Continuo sin controles 7.1", ["7.1", "resultado continuo", "sin controles", "Bogotá"]),
+    ("Continuo con controles 7.2", ["7.2", "resultado continuo", "con controles", "Bogotá"]),
+    ("Binario sin controles 7.3", ["7.3", "resultado binario", "sin controles", "Bogotá"]),
+    ("Binario con controles 7.4", ["7.4", "resultado binario", "con controles", "Zambia"]),
+    ("Tasas", ["tasas", "Senegal"]),
+    ("Clústeres", ["clústeres", "Sudáfrica"]),
+]
+
+PRACTICE_STAGE_SEQUENCE = [
+    "Error tipo I, error tipo II y poder",
+    "Tamaño de muestra para un resultado continuo sin controles",
+    "MDE para un resultado continuo sin controles",
+    "Tamaño de muestra para un resultado continuo con controles",
+    "MDE para un resultado continuo con controles",
+    "Resultado binario sin controles",
+    "Resultado binario con controles",
+    "Comparación de tasas",
+    "Cumplimiento parcial (take-up)",
+    "Atrición",
+    "Diseño por clústeres",
+    "Caso Bogotá",
+    "Caso Zambia",
+    "Caso Senegal",
+    "Caso Sudáfrica",
+    "Bertrand y Mullainathan",
 ]
 
 
@@ -73,13 +150,16 @@ def _question_boxes(text, family, expected):
 def _has_disclosed_answer(block):
     label = re.compile(
         r"(?im)^\s*(?:>\s*)?(?:[-*+]\s+)?(?:#{1,6}\s+)?"
-        r"(?:\*\*|__)?(?:respuesta|solución|pista)(?:\*\*|__)?\s*"
+        r"(?:\*\*|__)?(?:respuesta|solución|pista|opción correcta|clave|"
+        r"resultado esperado|valor esperado|resultado)(?:\*\*|__)?\s*"
         r"(?::|\.|=|correcta\b|es\b)|\bla\s+respuesta\s+es\b|"
-        r"\bsolución\s+correcta\b"
+        r"\bsolución\s+correcta\b|\b(?:el|la)\s+(?:MDE|poder|tamaño de muestra)\s+"
+        r"(?:correct[oa]\s+)?es\s+[-+]?\d+(?:[.,]\d+)?"
     )
     lowered = block.casefold()
     return bool(label.search(block)) or any(
-        marker in lowered for marker in ["<details", "hide(", "ver respuesta"]
+        marker in lowered
+        for marker in ["<details", "hide(", "collapse", "ver respuesta"]
     )
 
 
@@ -118,10 +198,86 @@ def _private_exposure_counts(paths, contents, tokens):
     return path_hits, content_hits
 
 
+def _assert_no_private_exposure(paths, contents, tokens):
+    path_hits, content_hits = _private_exposure_counts(paths, contents, tokens)
+    assert (path_hits, content_hits) == (0, 0), (
+        "Hay identificadores privados; "
+        f"coincidencias en rutas={path_hits}, contenidos={content_hits}"
+    )
+
+
+def _assert_inventory_preserved(text, inventory):
+    headings = [_headings(text, level) for level in (2, 3, 4)]
+    normalized_headings = {
+        re.sub(r"^\d+\.\s+", "", heading)
+        for group in headings
+        for heading in group
+    }
+    assert set(inventory["sections"]) <= normalized_headings
+    assert all(fragment in text for fragment in inventory["formulas_and_cases"])
+    found_urls = Counter(re.findall(r"https?://[^\s)>\"']+", text))
+    required_urls = Counter(inventory["link_destinations"])
+    assert all(found_urls[url] >= count for url, count in required_urls.items())
+
+
+def _assert_ppt_sequence(text):
+    positions = []
+    for label, markers in POWER_PPT_SEQUENCE:
+        match = re.search(re.escape(markers[0]), text, re.IGNORECASE)
+        assert match, f"Falta marcador principal de POWER.pptx en {label}"
+        positions.append(match.start())
+    assert positions == sorted(positions), "Los casos de POWER.pptx deben conservar orden conceptual"
+    for index, (label, markers) in enumerate(POWER_PPT_SEQUENCE):
+        end = positions[index + 1] if index + 1 < len(positions) else len(text)
+        case_block = text[positions[index]:end]
+        for marker in markers[1:]:
+            assert re.search(re.escape(marker), case_block, re.IGNORECASE), (
+                f"Falta marcador de POWER.pptx en {label}"
+            )
+
+
+def _assert_hypothetical_labels(blocks, classification):
+    assert classification, "Debe existir una clasificación explícita de hipotéticos"
+    by_code = {code: block for code, block in blocks}
+    classified = [code for code, metadata in classification.items() if metadata["fuente"] == "hipotetico"]
+    assert classified, "La clasificación debe incluir al menos un caso hipotético"
+    for code in classified:
+        assert code in by_code
+        assert "escenario hipotético" in by_code[code].casefold()
+
+
+def _assert_stage_sequence(headings):
+    selected = [heading for heading in headings if heading in PRACTICE_STAGE_SEQUENCE]
+    assert selected == PRACTICE_STAGE_SEQUENCE
+
+
 def test_current_power_practice_content_is_preserved():
     practice = _read(PRACTICE_PATH)
     missing = [fragment for fragment in PRACTICE_REQUIRED if fragment not in practice]
     assert not missing, f"Se perdieron {len(missing)} fragmentos distintivos del capítulo"
+
+
+def test_complete_current_practice_inventory_is_preserved_while_allowing_reordering():
+    _assert_inventory_preserved(_read(PRACTICE_PATH), PRACTICE_INVENTORY)
+
+
+def test_inventory_contract_rejects_each_deleted_section_formula_case_and_link():
+    practice = _read(PRACTICE_PATH)
+    for section in PRACTICE_INVENTORY["sections"]:
+        mutated = re.sub(
+            rf"^#{{2,4}}\s+(?:\d+\.\s+)?{re.escape(section)}\s*\{{[^}}]*\}}\s*$",
+            "",
+            practice,
+            flags=re.MULTILINE,
+        )
+        with pytest.raises(AssertionError):
+            _assert_inventory_preserved(mutated, PRACTICE_INVENTORY)
+    for fragment in PRACTICE_INVENTORY["formulas_and_cases"]:
+        with pytest.raises(AssertionError):
+            _assert_inventory_preserved(practice.replace(fragment, ""), PRACTICE_INVENTORY)
+    for url in PRACTICE_INVENTORY["link_destinations"]:
+        with pytest.raises(AssertionError):
+            _assert_inventory_preserved(practice.replace(url, ""), PRACTICE_INVENTORY)
 
 
 def test_power_theory_precedes_practice_in_bookdown():
@@ -161,6 +317,25 @@ def test_power_theory_follows_the_approved_conceptual_sequence():
     assert [heading for heading in h2 if heading in sequence] == sequence
 
 
+def test_power_theory_follows_power_ppt_cases_in_conceptual_order():
+    _assert_ppt_sequence(_read(THEORY_PATH))
+
+
+def test_power_ppt_contract_rejects_missing_case_marker_and_reordered_cases():
+    canonical = "\n".join(
+        " | ".join(markers) for _label, markers in POWER_PPT_SEQUENCE
+    )
+    _assert_ppt_sequence(canonical)
+    with pytest.raises(AssertionError):
+        _assert_ppt_sequence(canonical.replace("Bogotá", "", 1))
+    reordered = "\n".join(
+        " | ".join(markers)
+        for _label, markers in [POWER_PPT_SEQUENCE[1], POWER_PPT_SEQUENCE[0], *POWER_PPT_SEQUENCE[2:]]
+    )
+    with pytest.raises(AssertionError):
+        _assert_ppt_sequence(reordered)
+
+
 def test_power_theory_has_blocks_and_exactly_three_questions():
     theory = _read(THEORY_PATH)
     assert len(_boxes(theory)) >= 8
@@ -175,6 +350,22 @@ def test_power_practice_has_between_fourteen_and_eighteen_semantic_stages():
     practice = _read(PRACTICE_PATH)
     h3 = _headings(practice, 3)
     assert 14 <= len(h3) <= 18
+
+
+def test_power_practice_has_the_concrete_semantic_stage_sequence():
+    headings = _headings(_read(PRACTICE_PATH), 3)
+    _assert_stage_sequence(headings)
+
+
+def test_semantic_stage_contract_rejects_generic_missing_and_reordered_stages():
+    _assert_stage_sequence(PRACTICE_STAGE_SEQUENCE)
+    for mutated in [
+        ["Parte"] * len(PRACTICE_STAGE_SEQUENCE),
+        PRACTICE_STAGE_SEQUENCE[:-1],
+        [PRACTICE_STAGE_SEQUENCE[1], PRACTICE_STAGE_SEQUENCE[0], *PRACTICE_STAGE_SEQUENCE[2:]],
+    ]:
+        with pytest.raises(AssertionError):
+            _assert_stage_sequence(mutated)
 
 
 def test_power_practice_headings_delegate_numbering_to_bookdown():
@@ -196,8 +387,16 @@ def test_power_practice_has_exactly_four_self_contained_questions():
         for label in ["Puntaje sugerido", "Comandos permitidos", "Producto esperado"]:
             _metadata_once(block, label)
         assert not _has_disclosed_answer(block)
-    hypothetical = [block for block in blocks if "hipotét" in block.casefold()]
-    assert all("escenario hipotético" in block.casefold() for block in hypothetical)
+    classification = {
+        "POWER-S1": {"fuente": "canonico"},
+        "POWER-S2": {"fuente": "hipotetico"},
+        "POWER-S3": {"fuente": "canonico"},
+        "POWER-S4": {"fuente": "hipotetico"},
+    }
+    _assert_hypothetical_labels(
+        list(zip(["POWER-S1", "POWER-S2", "POWER-S3", "POWER-S4"], blocks)),
+        classification,
+    )
 
 
 def test_answer_detector_rejects_disclosures_but_allows_question_wording():
@@ -207,10 +406,30 @@ def test_answer_detector_rejects_disclosures_but_allows_question_wording():
         "Solución correcta = aumentar clústeres.",
         "La respuesta es el MDE.",
         "Pista: use power.",
+        "Opción correcta: B",
+        "Clave: B",
+        "Resultado esperado: 800",
+        "Valor esperado = 0.8",
+        "Resultado: 800",
         "<details>",
         "hide(panel)",
+        "collapse = TRUE",
+        "El tamaño de muestra correcto es 800.",
     ]:
         assert _has_disclosed_answer(disclosure)
+    assert not _has_disclosed_answer("Producto esperado: cálculo y justificación.")
+
+
+def test_hypothetical_classification_is_non_vacuous_and_requires_literal_label():
+    classification = {"POWER-S2": {"fuente": "hipotetico"}}
+    _assert_hypothetical_labels(
+        [("POWER-S2", "Este es un escenario hipotético para calcular el MDE.")],
+        classification,
+    )
+    with pytest.raises(AssertionError):
+        _assert_hypothetical_labels([("POWER-S2", "Calcule el MDE.")], classification)
+    with pytest.raises(AssertionError):
+        _assert_hypothetical_labels([], {})
 
 
 def test_power_theory_headings_delegate_numbering_to_bookdown():
@@ -249,13 +468,7 @@ def test_student_material_omits_private_identifiers_without_echoing_them():
         for path in candidates
         if path.is_file()
     }
-    path_hits, content_hits = _private_exposure_counts(
-        [path for path in tracked if path], contents, tokens
-    )
-    assert (path_hits, content_hits) == (0, 0), (
-        "Hay identificadores privados; "
-        f"coincidencias en rutas={path_hits}, contenidos={content_hits}"
-    )
+    _assert_no_private_exposure([path for path in tracked if path], contents, tokens)
 
 
 def test_private_audit_detects_path_and_content_without_returning_token():
@@ -263,3 +476,8 @@ def test_private_audit_detects_path_and_content_without_returning_token():
     assert _private_exposure_counts(
         [f"docs/{token}/index.html"], {"temporal.html": token}, [token]
     ) == (1, 1)
+    with pytest.raises(AssertionError) as failure:
+        _assert_no_private_exposure(
+            [f"docs/{token}/index.html"], {"temporal.html": token}, [token]
+        )
+    assert token not in str(failure.value)
