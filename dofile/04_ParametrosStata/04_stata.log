@@ -1,0 +1,268 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/dof
+> ile/04_ParametrosStata/04_stata.log
+  log type:  text
+ opened on:  15 Jul 2026, 11:15:26
+
+. 
+. capture mkdir "results"
+
+. 
+. capture program drop post_estimands
+
+. program define post_estimands
+  1.     syntax, POSTname(name) SCENario(string)
+  2.     local n = _N
+  3. 
+.     quietly summarize tau
+  4.     local ate = r(mean)
+  5.     post `postname' ("`scenario'") ("ATE") (`ate') (`n')
+  6. 
+.     quietly summarize tau if D == 1
+  7.     local att = r(mean)
+  8.     post `postname' ("`scenario'") ("ATT") (`att') (`n')
+  9. 
+.     quietly summarize tau if D == 0
+ 10.     local atu = r(mean)
+ 11.     post `postname' ("`scenario'") ("ATU") (`atu') (`n')
+ 12. 
+.     quietly summarize tau if X == 0
+ 13.     post `postname' ("`scenario'") ("CATE_X0") (r(mean)) (`n')
+ 14. 
+.     quietly summarize tau if X == 1
+ 15.     post `postname' ("`scenario'") ("CATE_X1") (r(mean)) (`n')
+ 16. 
+.     quietly summarize y if D == 1
+ 17.     local y1 = r(mean)
+ 18.     quietly summarize y if D == 0
+ 19.     local naive = `y1' - r(mean)
+ 20.     post `postname' ("`scenario'") ("NAIVE") (`naive') (`n')
+ 21.     post `postname' ("`scenario'") ("SESGO_ATT") (`naive' - `att') (`n')
+ 22.     post `postname' ("`scenario'") ("DESV_NAIVE_ATE") (`naive' - `ate') (`
+> n')
+ 23. 
+.     quietly regress y D, vce(robust)
+ 24.     post `postname' ("`scenario'") ("COEF_REG_D") (_b[D]) (`n')
+ 25. end
+
+. 
+. use "04_data.dta", clear
+
+. generate byte X = (_n > 4)
+
+. label define grupo_pre 0 "Grupo A" 1 "Grupo B"
+
+. label values X grupo_pre
+
+. generate double y = D*yd1 + (1-D)*yd0
+
+. generate double tau = yd1 - yd0
+
+. 
+. tempfile original population
+
+. save `original', replace
+(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000001 not
+    found)
+file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000001 saved
+    as .dta format
+
+. 
+. tempname pointpost
+
+. postfile `pointpost' str24 escenario str20 estimando double valor long N usin
+> g "results/parameters_results.dta", replace
+
+. post_estimands, postname(`pointpost') scenario("datos_originales")
+
+. 
+. * Se replican perfiles idénticos. El N nominal aumenta, pero no la informació
+> n
+. * independiente; por construcción, los estimandos y el sesgo no cambian.
+. expand 10000
+(79,992 observations created)
+
+. post_estimands, postname(`pointpost') scenario("datos_duplicados")
+
+. drop y tau
+
+. save `population', replace
+(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000002 not
+    found)
+file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000002 saved
+    as .dta format
+
+. 
+. drop D
+
+. set seed 87634
+
+. generate byte D = (runiform() < 0.5)
+
+. generate double y = D*yd1 + (1-D)*yd0
+
+. generate double tau = yd1 - yd0
+
+. post_estimands, postname(`pointpost') scenario("aleatorizacion_unica")
+
+. 
+. postclose `pointpost'
+
+. use "results/parameters_results.dta", clear
+
+. sort escenario estimando
+
+. export delimited using "results/parameters_results.csv", replace
+file results/parameters_results.csv saved
+
+. 
+. capture program drop one_rep
+
+. program define one_rep, rclass
+  1.     syntax, POPulation(string) SCENario(string)
+  2.     use "`population'", clear
+  3.     drop D
+  4.     if "`scenario'" == "seleccion" {
+  5.         quietly summarize yd0
+  6.         generate double p = invlogit((yd0-r(mean))/2)
+  7.         generate byte D = (runiform() < p)
+  8.     }
+  9.     else {
+ 10.         generate byte D = (runiform() < 0.5)
+ 11.     }
+ 12.     generate double y = D*yd1 + (1-D)*yd0
+ 13.     generate double tau = yd1-yd0
+ 14.     quietly summarize tau if D == 1
+ 15.     local att = r(mean)
+ 16.     quietly summarize y if D == 1
+ 17.     local y1 = r(mean)
+ 18.     quietly summarize y if D == 0
+ 19.     return scalar sesgo = `y1' - r(mean) - `att'
+ 20. end
+
+. 
+. simulate sesgo=r(sesgo), reps(1000) seed(12345) nodots: one_rep, population("
+> `population'") scenario("seleccion")
+
+      Command: one_rep,
+                   population("/var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn
+                   > /T//St98224.000002") scenario("seleccion")
+        sesgo: r(sesgo)
+
+
+. generate str16 escenario = "seleccion"
+
+. generate long rep = _n
+
+. tempfile seleccion
+
+. save `seleccion', replace
+(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000003 not
+    found)
+file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000003 saved
+    as .dta format
+
+. 
+. simulate sesgo=r(sesgo), reps(1000) seed(87634) nodots: one_rep, population("
+> `population'") scenario("aleatorizacion")
+
+      Command: one_rep,
+                   population("/var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn
+                   > /T//St98224.000002") scenario("aleatorizacion")
+        sesgo: r(sesgo)
+
+
+. generate str16 escenario = "aleatorizacion"
+
+. generate long rep = _n
+
+. append using `seleccion'
+
+. order escenario rep sesgo
+
+. sort escenario rep
+
+. save "results/monte_carlo_draws.dta", replace
+file results/monte_carlo_draws.dta saved
+
+. 
+. tempname summarypost
+
+. postfile `summarypost' str16 escenario long N double media desv_est p5 median
+> a p95 using "results/monte_carlo_summary.dta", replace
+
+. foreach s in seleccion aleatorizacion {
+  2.     quietly summarize sesgo if escenario == "`s'", detail
+  3.     post `summarypost' ("`s'") (r(N)) (r(mean)) (r(sd)) (r(p5)) (r(p50)) (
+> r(p95))
+  4. }
+
+. postclose `summarypost'
+
+. 
+. preserve
+
+. use "results/monte_carlo_summary.dta", clear
+
+. sort escenario
+
+. export delimited using "results/monte_carlo_summary.csv", replace
+file results/monte_carlo_summary.csv saved
+
+. restore
+
+. 
+. quietly summarize sesgo
+
+. local xmin = floor(r(min)*10)/10
+
+. local xmax = ceil(r(max)*10)/10
+
+. 
+. histogram sesgo if escenario == "seleccion", width(.01) start(`xmin') fractio
+> n color(navy%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin
+> ' `xmax')) xlabel(0(1)4) title("Sesgo con selección") subtitle("1.000 repetic
+> iones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name(g_seleccion
+> , replace)
+(bin=410, start=-.1, width=.01)
+
+. graph export "sesgo_con_seleccion.png", replace width(1800)
+file sesgo_con_seleccion.png written in PNG format
+
+. 
+. histogram sesgo if escenario == "aleatorizacion", width(.01) start(`xmin') fr
+> action color(forest_green%70) xline(0, lcolor(maroon) lwidth(medthick)) xscal
+> e(range(`xmin' `xmax')) xlabel(0(1)4) title("Sesgo con aleatorización") subti
+> tle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción"
+> ) name(g_aleatorizacion, replace)
+(bin=17, start=-.1, width=.01)
+
+. graph export "sesgo_con_aleatorizacion.png", replace width(1800)
+file sesgo_con_aleatorizacion.png written in PNG format
+
+. 
+. twoway (kdensity sesgo if escenario == "seleccion", lcolor(navy) lwidth(medth
+> ick)) (kdensity sesgo if escenario == "aleatorizacion", lcolor(forest_green) 
+> lwidth(medthick)), xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xm
+> in' `xmax')) xlabel(0(1)4) title("Comparación de escenarios") subtitle("Distr
+> ibución del sesgo en 1.000 repeticiones") xtitle("NAIVE - ATT") ytitle("Densi
+> dad") legend(order(1 "Selección" 2 "Aleatorización")) name(g_comparacion, rep
+> lace)
+
+. graph export "comparacion_escenarios.png", replace width(1800)
+file comparacion_escenarios.png written in PNG format
+
+. 
+. use `original', clear
+
+. display "Pipeline canónico completado"
+Pipeline canónico completado
+
+. log close
+      name:  <unnamed>
+       log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/dof
+> ile/04_ParametrosStata/04_stata.log
+  log type:  text
+ closed on:  15 Jul 2026, 11:18:09
+-------------------------------------------------------------------------------

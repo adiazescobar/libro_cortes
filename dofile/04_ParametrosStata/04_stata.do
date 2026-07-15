@@ -1,274 +1,143 @@
-* Clase 4 - Estimadores Causales en Secciones Transversales
-* Profesora: Ana Díaz
+version 19.0
+clear all
+set more off
+capture log close
+log using "04_stata.log", replace text
 
-* --------------------------
-* Cargar datos y generar y
-* --------------------------
+capture mkdir "results"
 
-use "04_data.dta", clear
+capture program drop post_estimands
+program define post_estimands
+    syntax, POSTname(name) SCENario(string)
+    local n = _N
 
-gen y = D*yd1 + (1-D)*yd0
-label var y "Salarios en millones de pesos"
-label define D 0 "Control" 1 "Tratados"
-label value D D
-numlabel, add
+    quietly summarize tau
+    local ate = r(mean)
+    post `postname' ("`scenario'") ("ATE") (`ate') (`n')
 
-* --------------------------
-* Estadísticas descriptivas
-* --------------------------
+    quietly summarize tau if D == 1
+    local att = r(mean)
+    post `postname' ("`scenario'") ("ATT") (`att') (`n')
 
-tab D
-sum y
-bysort D: sum y
-sum y if D == 0
-sum y if D == 1
+    quietly summarize tau if D == 0
+    local atu = r(mean)
+    post `postname' ("`scenario'") ("ATU") (`atu') (`n')
 
-* --------------------------
-* Diferencia de medias y regresión
-* --------------------------
+    quietly summarize tau if X == 0
+    post `postname' ("`scenario'") ("CATE_X0") (r(mean)) (`n')
 
-ttest y, by(D)
-reg y D, robust
+    quietly summarize tau if X == 1
+    post `postname' ("`scenario'") ("CATE_X1") (r(mean)) (`n')
 
-* --------------------------
-* Generar efecto individual (tau)
-* --------------------------
+    quietly summarize y if D == 1
+    local y1 = r(mean)
+    quietly summarize y if D == 0
+    local naive = `y1' - r(mean)
+    post `postname' ("`scenario'") ("NAIVE") (`naive') (`n')
+    post `postname' ("`scenario'") ("SESGO_ATT") (`naive' - `att') (`n')
+    post `postname' ("`scenario'") ("DESV_NAIVE_ATE") (`naive' - `ate') (`n')
 
-gen tau = yd1 - yd0
-
-* --------------------------
-* Definir programa estimadores
-* --------------------------
-
-cap prog drop estimadores
-program define estimadores
-    args tau y D
-    di "--- Calculando estimadores ---"
-    quietly {
-        sum `tau'
-        scalar ATE = r(mean)
-        sum `tau' if `D' == 1
-        scalar ATT = r(mean)
-        sum `tau' if `D' == 0
-        scalar ATU = r(mean)
-        sum `y' if `D' == 1
-        scalar ybar_1 = r(mean)
-        sum `y' if `D' == 0
-        scalar ybar_0 = r(mean)
-        scalar NAIVE = ybar_1 - ybar_0
-    }
-    di "ATE = " ATE
-    di "ATT = " ATT
-    di "ATU = " ATU
-    di "Naive = " NAIVE
-    di "Sesgo de Selección = " NAIVE - ATT
+    quietly regress y D, vce(robust)
+    post `postname' ("`scenario'") ("COEF_REG_D") (_b[D]) (`n')
 end
 
-* --------------------------
-* Ejecutar programa estimadores
-* --------------------------
+use "04_data.dta", clear
+generate byte X = (_n > 4)
+label define grupo_pre 0 "Grupo A" 1 "Grupo B"
+label values X grupo_pre
+generate double y = D*yd1 + (1-D)*yd0
+generate double tau = yd1 - yd0
 
-estimadores tau y D
+tempfile original population
+save `original', replace
 
-* --------------------------
-* Experimento 1: Aumentar tamaño muestral
-* --------------------------
+tempname pointpost
+postfile `pointpost' str24 escenario str20 estimando double valor long N using "results/parameters_results.dta", replace
+post_estimands, postname(`pointpost') scenario("datos_originales")
 
+* Se replican perfiles idénticos. El N nominal aumenta, pero no la información
+* independiente; por construcción, los estimandos y el sesgo no cambian.
+expand 10000
+post_estimands, postname(`pointpost') scenario("datos_duplicados")
 drop y tau
-expand 10000
+save `population', replace
 
-gen y = D*yd1 + (1-D)*yd0
-gen tau = yd1 - yd0
-
-estimadores tau y D
-
-* --------------------------
-* Experimento 2: Asignación aleatoria
-* --------------------------
-
-drop y D tau
+drop D
 set seed 87634
-gen D = (uniform() > 0.5)
-gen y = D*yd1 + (1-D)*yd0
-gen tau = yd1 - yd0
+generate byte D = (runiform() < 0.5)
+generate double y = D*yd1 + (1-D)*yd0
+generate double tau = yd1 - yd0
+post_estimands, postname(`pointpost') scenario("aleatorizacion_unica")
 
-estimadores tau y D
+postclose `pointpost'
+use "results/parameters_results.dta", clear
+sort escenario estimando
+export delimited using "results/parameters_results.csv", replace
 
-* ==================================================
-* Experimento 3: Simulación Monte Carlo
-* ==================================================
-
-* ¿Por qué eliminamos el D original en cada simulación?
-* Si NO eliminamos el D original, todas las 1000 simulaciones usarían
-* exactamente la misma asignación de tratamiento y darían el mismo resultado.
-* El Monte Carlo no tendría sentido.
-*
-* Lo que queremos es simular "¿qué pasaría si repetimos el estudio 1000 veces?":
-* - En cada simulación mantenemos los mismos resultados potenciales (yd0, yd1)
-* - Pero re-asignamos el tratamiento de forma diferente
-
-* --------------------------
-* Escenario 1: Con SELECCIÓN (viola independencia)
-* --------------------------
-
-* Primero, preparamos los datos de clase expandidos
-use "04_data.dta", clear
-
-* Expandimos a 80,000 observaciones
-expand 10000
-
-* Guardamos los datos expandidos
-tempfile datos_expandidos
-save `datos_expandidos', replace
-
-* Ahora creamos base para almacenar resultados de 1000 simulaciones
-clear all
-set seed 12345
-set obs 1000
-gen sim_id = _n
-gen SESGO = .
-
-* Loop de Monte Carlo
-forvalues i = 1/1000 {
-
-    quietly {
-        preserve
-
-        * Cargar datos expandidos de clase
-        use `datos_expandidos', clear
-
-        * IMPORTANTE: Eliminamos el D original y creamos uno nuevo en cada simulación
-        * Si no hacemos esto, todas las simulaciones darían el mismo resultado
-        drop D
-
-        * SELECCIÓN: Los que tienen mejor yd0 se tratan más
-        * Calcular media de yd0 para centrar
-        sum yd0
-        scalar mean_yd0 = r(mean)
-
-        gen prob_D = invlogit((yd0 - mean_yd0)/2)  // Mayor yd0 → mayor prob de D=1
-        gen D = (uniform() < prob_D)
-
-        * Generar resultado observado y efecto individual
-        gen y = D*yd1 + (1-D)*yd0
-        gen tau = yd1 - yd0
-
-        * Calcular estimadores (misma nomenclatura que en clase)
-        sum tau
-        scalar ATE = r(mean)
-
-        sum tau if D==1
-        scalar ATT = r(mean)
-
-        sum y if D==1
-        scalar ybar_1 = r(mean)
-        sum y if D==0
-        scalar ybar_0 = r(mean)
-        scalar NAIVE = ybar_1 - ybar_0
-
-        restore
-
-        * Guardar el sesgo de esta simulación
-        * Recordar: NAIVE = ATT + SESGO, por lo tanto SESGO = NAIVE - ATT
-        replace SESGO = NAIVE - ATT in `i'
+capture program drop one_rep
+program define one_rep, rclass
+    syntax, POPulation(string) SCENario(string)
+    use "`population'", clear
+    drop D
+    if "`scenario'" == "seleccion" {
+        quietly summarize yd0
+        generate double p = invlogit((yd0-r(mean))/2)
+        generate byte D = (runiform() < p)
     }
-
-    * Mostrar progreso cada 100 simulaciones
-    if mod(`i', 100) == 0 {
-        di "Simulación `i' de 1000 completada"
+    else {
+        generate byte D = (runiform() < 0.5)
     }
+    generate double y = D*yd1 + (1-D)*yd0
+    generate double tau = yd1-yd0
+    quietly summarize tau if D == 1
+    local att = r(mean)
+    quietly summarize y if D == 1
+    local y1 = r(mean)
+    quietly summarize y if D == 0
+    return scalar sesgo = `y1' - r(mean) - `att'
+end
+
+simulate sesgo=r(sesgo), reps(1000) seed(12345) nodots: one_rep, population("`population'") scenario("seleccion")
+generate str16 escenario = "seleccion"
+generate long rep = _n
+tempfile seleccion
+save `seleccion', replace
+
+simulate sesgo=r(sesgo), reps(1000) seed(87634) nodots: one_rep, population("`population'") scenario("aleatorizacion")
+generate str16 escenario = "aleatorizacion"
+generate long rep = _n
+append using `seleccion'
+order escenario rep sesgo
+sort escenario rep
+save "results/monte_carlo_draws.dta", replace
+
+tempname summarypost
+postfile `summarypost' str16 escenario long N double media desv_est p5 mediana p95 using "results/monte_carlo_summary.dta", replace
+foreach s in seleccion aleatorizacion {
+    quietly summarize sesgo if escenario == "`s'", detail
+    post `summarypost' ("`s'") (r(N)) (r(mean)) (r(sd)) (r(p5)) (r(p50)) (r(p95))
 }
+postclose `summarypost'
 
-* Resultados de la simulación CON SELECCIÓN
-di _n "=== RESULTADOS CON SELECCIÓN (viola independencia) ==="
-sum SESGO
-di "Sesgo promedio del estimador Naive: " r(mean)
-di "El sesgo persiste incluso con muchas observaciones!"
+preserve
+use "results/monte_carlo_summary.dta", clear
+sort escenario
+export delimited using "results/monte_carlo_summary.csv", replace
+restore
 
-* Gráfico
-histogram SESGO, ///
-    xline(0, lcolor(red) lwidth(thick)) ///
-    title("Distribución del Sesgo del Estimador Naive") ///
-    subtitle("1000 simulaciones con SELECCIÓN - Datos de clase") ///
-    xtitle("SESGO = NAIVE - ATT") ///
-    note("Línea roja = sesgo cero (lo ideal)")
-graph export "sesgo_con_seleccion.png", replace
+quietly summarize sesgo
+local xmin = floor(r(min)*10)/10
+local xmax = ceil(r(max)*10)/10
 
-* --------------------------
-* Escenario 2: Con ALEATORIZACIÓN (cumple independencia)
-* --------------------------
+histogram sesgo if escenario == "seleccion", width(.01) start(`xmin') fraction color(navy%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(0(1)4) title("Sesgo con selección") subtitle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name(g_seleccion, replace)
+graph export "sesgo_con_seleccion.png", replace width(1800)
 
-* Cargar datos de clase y expandir (si no está ya cargado del escenario anterior)
-use "04_data.dta", clear
-expand 10000
-tempfile datos_expandidos
-save `datos_expandidos', replace
+histogram sesgo if escenario == "aleatorizacion", width(.01) start(`xmin') fraction color(forest_green%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(0(1)4) title("Sesgo con aleatorización") subtitle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name(g_aleatorizacion, replace)
+graph export "sesgo_con_aleatorizacion.png", replace width(1800)
 
-* Crear base para almacenar resultados
-clear all
-set seed 12345
-set obs 1000
-gen sim_id = _n
-gen SESGO = .
+twoway (kdensity sesgo if escenario == "seleccion", lcolor(navy) lwidth(medthick)) (kdensity sesgo if escenario == "aleatorizacion", lcolor(forest_green) lwidth(medthick)), xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(0(1)4) title("Comparación de escenarios") subtitle("Distribución del sesgo en 1.000 repeticiones") xtitle("NAIVE - ATT") ytitle("Densidad") legend(order(1 "Selección" 2 "Aleatorización")) name(g_comparacion, replace)
+graph export "comparacion_escenarios.png", replace width(1800)
 
-* Loop de Monte Carlo
-forvalues i = 1/1000 {
-
-    quietly {
-        preserve
-
-        * Cargar datos expandidos de clase
-        use `datos_expandidos', clear
-
-        * IMPORTANTE: Eliminamos el D original y creamos uno nuevo en cada simulación
-        * Si no hacemos esto, todas las simulaciones darían el mismo resultado
-        drop D
-
-        * ALEATORIZACIÓN: D es independiente de yd0 y yd1
-        gen D = (uniform() < 0.5)   // 50% tratamiento, 50% control
-
-        * Generar resultado observado y efecto individual
-        gen y = D*yd1 + (1-D)*yd0
-        gen tau = yd1 - yd0
-
-        * Calcular estimadores (misma nomenclatura que en clase)
-        sum tau
-        scalar ATE = r(mean)
-
-        sum tau if D==1
-        scalar ATT = r(mean)
-
-        sum y if D==1
-        scalar ybar_1 = r(mean)
-        sum y if D==0
-        scalar ybar_0 = r(mean)
-        scalar NAIVE = ybar_1 - ybar_0
-
-        restore
-
-        * Guardar el sesgo de esta simulación
-        * Recordar: NAIVE = ATT + SESGO, por lo tanto SESGO = NAIVE - ATT
-        replace SESGO = NAIVE - ATT in `i'
-    }
-
-    if mod(`i', 100) == 0 {
-        di "Simulación `i' de 1000 completada"
-    }
-}
-
-* Resultados de la simulación CON ALEATORIZACIÓN
-di _n "=== RESULTADOS CON ALEATORIZACIÓN (cumple independencia) ==="
-sum SESGO
-di "Sesgo promedio del estimador Naive: " r(mean)
-di "El sesgo es aproximadamente CERO!"
-
-* Gráfico
-histogram SESGO, ///
-    xline(0, lcolor(green) lwidth(thick)) ///
-    title("Distribución del Sesgo del Estimador Naive") ///
-    subtitle("1000 simulaciones con ALEATORIZACIÓN - Datos de clase") ///
-    xtitle("SESGO = NAIVE - ATT") ///
-    note("Línea verde = sesgo cero. ¡La distribución está centrada en cero!")
-graph export "sesgo_con_aleatorizacion.png", replace
-
-di _n "=== FIN DE LA SIMULACIÓN MONTE CARLO ==="
+use `original', clear
+display "Pipeline canónico completado"
+log close

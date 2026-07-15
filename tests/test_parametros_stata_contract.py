@@ -33,8 +33,9 @@ def test_canonical_do_file_exports_exactly_the_page_artifacts():
         "results/monte_carlo_summary.csv",
     }
     assert graph_exports == {
-        "results/sesgo_con_seleccion.png",
-        "results/sesgo_con_aleatorizacion.png",
+        "sesgo_con_seleccion.png",
+        "sesgo_con_aleatorizacion.png",
+        "comparacion_escenarios.png",
     }
 
 
@@ -49,3 +50,24 @@ def test_results_schema():
     with (BASE / "results/parameters_results.csv").open(newline="", encoding="utf-8-sig") as handle:
         columns = set(next(csv.reader(handle)))
     assert {"escenario", "estimando", "valor", "N"} <= columns
+
+
+def test_monte_carlo_outputs_have_complete_scenarios():
+    with (BASE / "results/monte_carlo_summary.csv").open(newline="", encoding="utf-8-sig") as handle:
+        summary = list(csv.DictReader(handle))
+    assert {"escenario", "N", "media", "desv_est", "p5", "mediana", "p95"} <= set(summary[0])
+    assert {row["escenario"] for row in summary} == {"seleccion", "aleatorizacion"}
+    assert {int(row["N"]) for row in summary} == {1000}
+
+    draws = BASE / "results/monte_carlo_draws.dta"
+    assert draws.is_file() and draws.stat().st_size > 0
+
+
+def test_all_three_stata_graphs_exist():
+    for name in [
+        "sesgo_con_seleccion.png",
+        "sesgo_con_aleatorizacion.png",
+        "comparacion_escenarios.png",
+    ]:
+        graph = BASE / name
+        assert graph.is_file() and graph.stat().st_size > 0
