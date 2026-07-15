@@ -1,535 +1,268 @@
 # Parámetros Causales en Stata {#parametros-causales-stata}
 
+## Materiales para la clase {-}
+
+- [Do-file de Stata](dofile/04_ParametrosStata/04_stata.do)
+- [Base de datos](dofile/04_ParametrosStata/04_data.dta)
+- [Script de R](dofile/04_ParametrosStata/04_R.R)
+- [Notebook histórico `04_phyton.ipynb`](dofile/04_ParametrosStata/04_phyton.ipynb)
+- [Abrir el notebook en Colab](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/04_ParametrosStata/04_phyton.ipynb)
+- [Log de Stata](dofile/04_ParametrosStata/04_stata.log)
+- [Resultados puntuales (CSV)](dofile/04_ParametrosStata/results/parameters_results.csv)
+- [Resumen Monte Carlo (CSV)](dofile/04_ParametrosStata/results/monte_carlo_summary.csv)
+- [Histograma con selección](dofile/04_ParametrosStata/sesgo_con_seleccion.png)
+- [Histograma con aleatorización](dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png)
+- [Comparación de escenarios](dofile/04_ParametrosStata/comparacion_escenarios.png)
+
+```{r resultados-canonicos, include=FALSE}
+point <- read.csv("dofile/04_ParametrosStata/results/parameters_results.csv", check.names = FALSE)
+mc <- read.csv("dofile/04_ParametrosStata/results/monte_carlo_summary.csv", check.names = FALSE)
+stopifnot(all(c("escenario", "estimando", "valor", "N") %in% names(point)))
+stopifnot(all(c("escenario", "N", "media", "desv_est", "p5", "mediana", "p95") %in% names(mc)))
+
+etiquetas_estimando <- c(
+  ATE = "ATE", ATT = "ATT", ATU = "ATU",
+  CATE_X0 = "CATE(0)", CATE_X1 = "CATE(1)",
+  NAIVE = "Naïve", SESGO_ATT = "Sesgo (Naïve − ATT)"
+)
+
+tabla_puntual <- point[
+  point$escenario == "datos_originales" & point$estimando %in% names(etiquetas_estimando),
+  c("estimando", "valor", "N")
+]
+tabla_puntual$estimando <- unname(etiquetas_estimando[tabla_puntual$estimando])
+tabla_puntual$valor <- round(tabla_puntual$valor, 3)
+names(tabla_puntual) <- c("Estimando", "Valor", "N")
+
+tabla_escenarios <- point[
+  point$escenario %in% c("datos_duplicados", "aleatorizacion_unica") &
+    point$estimando %in% c("ATE", "ATT", "ATU", "NAIVE", "SESGO_ATT"),
+  c("escenario", "estimando", "valor", "N")
+]
+tabla_escenarios$escenario <- c(
+  datos_duplicados = "Duplicación",
+  aleatorizacion_unica = "Aleatorización"
+)[tabla_escenarios$escenario]
+tabla_escenarios$estimando <- c(
+  ATE = "ATE", ATT = "ATT", ATU = "ATU", NAIVE = "Naïve",
+  SESGO_ATT = "Sesgo (Naïve − ATT)"
+)[tabla_escenarios$estimando]
+tabla_escenarios$valor <- round(tabla_escenarios$valor, 3)
+names(tabla_escenarios) <- c("Escenario", "Estimando", "Valor", "N")
+
+tabla_mc <- mc[, c("escenario", "N", "media", "desv_est", "p5", "mediana", "p95")]
+tabla_mc$escenario <- c(
+  seleccion = "Selección", aleatorizacion = "Aleatorización"
+)[tabla_mc$escenario]
+tabla_mc[, c("media", "desv_est", "p5", "mediana", "p95")] <- round(
+  tabla_mc[, c("media", "desv_est", "p5", "mediana", "p95")], 3
+)
+names(tabla_mc) <- c("Escenario", "Repeticiones", "Media", "Desv. est.", "p5", "p50", "p95")
+```
+
 ::: {.boxinfo}
-## 📚 Lecturas obligatorias{-}
-
-- Lectura 4 – Capítulo 4 del libro de Scott Cunningham:  
-  👉 [Mixtape: Potential Outcomes](https://mixtape.scunning.com/04-potential_outcomes)
-
-- Documento de referencia sobre RCT:  
-  📄 `RCT.pdf`
+El objetivo es distinguir **parámetros causales** —ATE, ATT, ATU y CATE— de la
+diferencia observada entre tratados y controles. Los resultados que aparecen en
+esta página se leen directamente de los archivos producidos por el do-file.
 :::
 
-*🎯 Objetivo de la clase* 
+## 1. Describir los datos y construir el resultado observado
 
-Aprenderemos a estimar y comparar distintos **estimadores del efecto causal**:
+**Pregunta.** ¿Quiénes reciben el tratamiento y qué resultado observamos para
+cada unidad?
 
-- ATE (Efecto Promedio en la Población)
-- ATT (Efecto Promedio en los Tratados)
-- ATU (Efecto Promedio en los No Tratados)
-- Estimador Naïve (diferencia observada entre grupos)
-
-Repasamos conceptos de la clase anterior: resultados potenciales, estimadores de media y regresión simple.
-
-
----
-
-*📥 Cargar la base y generar la variable de resultado observado* 
+**Comando.**
 
 ```stata
 use "04_data.dta", clear
-
-* Generamos el resultado observado según el tratamiento recibido
 gen y = D*yd1 + (1-D)*yd0
-
-label var y "Salarios en millones de pesos"
-label define D 0 "Control" 1 "Tratados"
-label value D D
-numlabel, add
-```
-
----
-
-*📊 Estadísticas descriptivas por grupo*
-
-```stata
+label define tratamiento 0 "Control" 1 "Tratados"
+label values D tratamiento
 tab D
-
-          D |      Freq.     Percent        Cum.
-------------+-----------------------------------
- 0. Control |          4       50.00       50.00
-1. Tratados |          4       50.00      100.00
-------------+-----------------------------------
-      Total |          8      100.00
-      
-      
-sum y
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-           y |          8       7.625    3.700869          3         12
-
-
-bysort D: sum y
-------------------------------------------------------------------------------------------
--> D = 0. Control
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-           y |          4        4.25    .9574271          3          5
-
-------------------------------------------------------------------------------------------
--> D = 1. Tratados
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-           y |          4          11    .8164966         10         12
-
-sum y if D == 0
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-           y |          4        4.25    .9574271          3          5
-
-sum y if D == 1
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-           y |          4          11    .8164966         10         12
-
+bysort D: summarize y yd0 yd1
 ```
 
-Nos permite observar las diferencias **promedio** entre grupos tratados y de control.
+**Resultado.** La base original tiene ocho observaciones: cuatro tratadas y
+cuatro controles. Para cada unidad solo observamos `yd1` si `D==1` y `yd0` si
+`D==0`.
 
----
+**Interpretación.** El problema fundamental de la inferencia causal no es
+calcular una media, sino que nunca observamos simultáneamente ambos resultados
+potenciales de la misma unidad.
 
- *📎 Diferencia de medias*
+**Práctica breve.** Identifique en la base una unidad tratada y escriba cuál es
+su resultado observado y cuál es su contrafactual.
+
+## 2. Relacionar diferencia de medias y regresión
+
+**Pregunta.** ¿Qué mide el coeficiente de `D` en una regresión sin covariables?
+
+**Comando.**
 
 ```stata
 ttest y, by(D)
+reg y D, robust
+lincom D
+```
 
-Two-sample t test with equal variances
-------------------------------------------------------------------------------
-   Group |     Obs        Mean    Std. err.   Std. dev.   [95% conf. interval]
----------+--------------------------------------------------------------------
-0. Contr |       4        4.25    .4787136    .9574271     2.72652     5.77348
-1. Trata |       4          11    .4082483    .8164966    9.700772    12.29923
----------+--------------------------------------------------------------------
-Combined |       8       7.625    1.308455    3.700869    4.530996      10.719
----------+--------------------------------------------------------------------
-    diff |               -6.75    .6291529               -8.289482   -5.210518
-------------------------------------------------------------------------------
-    diff = mean(0. Contr) - mean(1. Trata)                        t = -10.7287
-H0: diff = 0                                     Degrees of freedom =        6
+**Resultado.** Tanto la diferencia de medias como el coeficiente de `D`
+producen 6.75 en los datos originales.
 
-    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
- Pr(T < t) = 0.0000         Pr(|T| > |t|) = 0.0000          Pr(T > t) = 1.0000
+**Interpretación.** Esta equivalencia es algebraica. El coeficiente es el
+estimador naïve, pero no adquiere interpretación causal si la asignación está
+relacionada con los resultados potenciales.
 
+**Práctica breve.** Compruebe que `_b[_cons]` coincide con la media de `y` en el
+grupo de control.
+
+## 3. Calcular parámetros causales y heterogeneidad
+
+**Pregunta.** ¿Son iguales el efecto promedio de la población, los efectos por
+estatus de tratamiento y los efectos por el valor pretratamiento de `X`?
+
+**Comando.**
+
+```stata
+gen tau = yd1 - yd0
+summarize tau
+summarize tau if D == 1
+summarize tau if D == 0
+summarize tau if X == 0
+summarize tau if X == 1
+
+summarize y if D == 1
+scalar y1 = r(mean)
+summarize y if D == 0
+scalar y0 = r(mean)
+scalar naive = y1 - y0
+```
+
+**Resultado.**
+
+```{r tabla-resultados-puntuales, echo=FALSE}
+knitr::kable(tabla_puntual, align = c("l", "r", "r"),
+             caption = "Parámetros y contrastes en los datos originales")
+```
+
+**Interpretación.** ATE, ATT y ATU son 0.75, pero CATE(0)=1.25 y
+CATE(1)=0.25: hay heterogeneidad aunque los promedios por estatus coincidan. El
+estimador naïve es 6.75 y excede el ATT en 6 unidades por selección.
+
+**Práctica breve.** Verifique la identidad
+
+\[
+ATE=P(D=1)ATT+P(D=0)ATU.
+\]
+
+## 4. Duplicar observaciones no resuelve la selección
+
+**Pregunta.** ¿Una muestra artificialmente más grande elimina el sesgo?
+
+**Comando.**
+
+```stata
+use "04_data.dta", clear
+expand 10000
+gen y = D*yd1 + (1-D)*yd0
+gen tau = yd1 - yd0
 reg y D, robust
 ```
 
-*📎 Regresioón Simple*
-Modelo:
-\[ Y = \alpha + \tau D + \varepsilon \]
+**Resultado.**
 
-- \( \tau \) representa el estimador naïve (diferencia de medias observada).
-- No es causal si hay **sesgo de selección**.
-
-
-```stata
-Linear regression                               Number of obs     =          8
-                                                F(1, 6)           =     115.11
-                                                Prob > F          =     0.0000
-                                                R-squared         =     0.9505
-                                                Root MSE          =     .88976
-
-------------------------------------------------------------------------------
-             |               Robust
-           y | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-           D |       6.75   .6291529    10.73   0.000     5.210518    8.289482
-       _cons |       4.25   .4787136     8.88   0.000      3.07863     5.42137
-------------------------------------------------------------------------------
-```
----
-
-*🧮 Estimación de ATE, ATT y ATU*
-
-```stata
-gen tau = yd1 - yd0   // efecto individual
-display "ATE: "
-sum tau
-scalar ATE = r(mean)
-di "ATE = " ATE
-
-sum tau if D == 1
-scalar ATT = r(mean)
-di "ATT = " ATT
-
-sum tau if D == 0
-scalar ATU = r(mean)
-di "ATU = " ATU
+```{r tabla-duplicacion-aleatorizacion, echo=FALSE}
+knitr::kable(tabla_escenarios, align = c("l", "l", "r", "r"),
+             caption = "Duplicación y una asignación aleatoria")
 ```
 
----
+**Interpretación.** La duplicación lleva (N) de 8 a 80,000, pero conserva
+exactamente la relación entre tratamiento y resultados potenciales: el sesgo
+sigue siendo 6. Más observaciones pueden mejorar precisión; no reparan una
+estrategia de identificación.
 
-*🧯 Comparación con el estimador naïve*
+**Práctica breve.** Cambie `expand 10000` por `expand 100` y anticipe qué
+estimandos cambian antes de ejecutar el bloque.
 
-```stata
-sum y if D==1
-scalar ybar_1 = r(mean)
+## 5. Reasignar el tratamiento al azar
 
-sum y if D==0
-scalar ybar_0 = r(mean)
+**Pregunta.** ¿Qué cambia cuando `D` se genera independientemente de los
+resultados potenciales?
 
-scalar NAIVE = ybar_1 - ybar_0
-di "Naive = " NAIVE
-
-di "Sesgo de selección = " NAIVE - ATT
-```
-
-
-*⚙️ Programa para estimadores*
+**Comando.**
 
 ```stata
-cap prog drop estimadores
-program define estimadores
-    args tau y D
-
-    di "--- Calculando estimadores ---"
-    quietly {
-        sum `tau'
-        scalar ATE = r(mean)
-        sum `tau' if `D' == 1
-        scalar ATT = r(mean)
-        sum `tau' if `D' == 0
-        scalar ATU = r(mean)
-        sum `y' if `D' == 1
-        scalar ybar_1 = r(mean)
-        sum `y' if `D' == 0
-        scalar ybar_0 = r(mean)
-        scalar NAIVE = ybar_1 - ybar_0
-    }
-    di "ATE = " ATE
-    di "ATT = " ATT
-    di "ATU = " ATU
-    di "Naive = " NAIVE
-    di "Sesgo de Selección = " NAIVE - ATT
-end
-
-* Llamamos el programa:
-estimadores tau y D
-```
-
-
-
-*🧪 Experimento 1: ¿Qué pasa si aumento el tamaño muestral? *
-
-```stata
-drop y tau
+use "04_data.dta", clear
 expand 10000
-
-* Generar nuevamente el resultado
-gen y = D*yd1 + (1-D)*yd0
-gen tau = yd1 - yd0
-
-estimadores tau y D
-```
-
-🔍 **Moraleja:** Aumentar el tamaño no elimina el sesgo si hay selección.
-
----
-
-*🧪 Experimento 2: Asignación aleatoria *
-
-```stata
-drop y D tau
+drop D
 set seed 87634
-gen D = (uniform() > 0.5)
+gen D = runiform() < 0.5
 gen y = D*yd1 + (1-D)*yd0
-
-* Repetimos estimadores
 gen tau = yd1 - yd0
-
-estimadores tau y D
-...
+reg y D, robust
 ```
 
-🎯 Con asignación aleatoria:
-\[ ATE \approx ATT \approx ATU \approx Naïve \]
+**Resultado.** En la tabla anterior, una realización aleatoria produce un
+naïve de 0.751 y un sesgo respecto al ATT cercano a cero.
 
+**Interpretación.** La aleatorización rompe, en expectativa, la asociación
+entre `D` y los resultados potenciales. En una realización finita puede quedar
+una diferencia pequeña por azar.
 
----
+**Práctica breve.** Cambie la semilla, repita el bloque y compare el nuevo
+coeficiente con el ATE de 0.75.
 
-*🧪 Experimento 3: Simulación Monte Carlo - ¿El sesgo persiste siempre?*
+## 6. Repetir el experimento: Monte Carlo
 
-**¿Qué es una simulación Monte Carlo?**
+**Pregunta.** ¿Qué revela repetir 1,000 veces la asignación con selección y la
+asignación aleatoria?
 
-Es repetir un proceso aleatorio **muchas veces** (ej: 1000 repeticiones) para observar:
-- La distribución de nuestros estimadores
-- Si en promedio acertamos (sesgo)
-- Qué tan dispersas son nuestras estimaciones (varianza)
-
-**¿Por qué es útil?**
-
-Nos permite **ver** qué pasaría si pudiéramos repetir nuestro estudio 1000 veces para analizar las propiedades estadísticas de nuestros estimadores. En la vida real solo tenemos una muestra, pero en simulación podemos explorar "¿qué pasaría si...?"
-
----
-
-**📊 Escenario 1: Simulación con SELECCIÓN (viola independencia)**
-
-Simulamos 1000 estudios donde las unidades **se auto-seleccionan** al tratamiento usando **nuestros datos de clase**:
-
-**⚠️ ¿Por qué eliminamos el D original en cada simulación?**
-
-Si NO eliminamos el D original, todas las 1000 simulaciones usarían exactamente la misma asignación de tratamiento y darían el mismo resultado. El Monte Carlo no tendría sentido.
-
-Lo que queremos es simular "¿qué pasaría si repetimos el estudio 1000 veces?":
-- En cada simulación mantenemos los mismos **resultados potenciales** (yd0, yd1)
-- Pero **re-asignamos el tratamiento** de forma diferente (con sesgo de selección)
+**Comando.** El do-file define un programa `simula_sesgo`, ejecuta ambos
+escenarios con `simulate` y resume las repeticiones. Para reproducir todo:
 
 ```stata
-* Primero, preparamos los datos de clase expandidos
-use "04_data.dta", clear
-
-* Expandimos a 80,000 observaciones
-expand 10000
-
-* Guardamos los datos expandidos
-tempfile datos_expandidos
-save `datos_expandidos', replace
-
-* Ahora creamos base para almacenar resultados de 1000 simulaciones
-clear all
-set seed 12345
-set obs 1000
-gen sim_id = _n
-gen SESGO = .
-
-* Loop de Monte Carlo
-forvalues i = 1/1000 {
-
-    quietly {
-        preserve
-
-        * Cargar datos expandidos de clase
-        use `datos_expandidos', clear
-
-        * IMPORTANTE: Eliminamos el D original y creamos uno nuevo en cada simulación
-        * Si no hacemos esto, todas las simulaciones darían el mismo resultado
-        drop D
-
-        * SELECCIÓN: Los que tienen mejor yd0 se tratan más
-        * Calcular media de yd0 para centrar
-        sum yd0
-        scalar mean_yd0 = r(mean)
-
-        gen prob_D = invlogit((yd0 - mean_yd0)/2)  // Mayor yd0 → mayor prob de D=1
-        gen D = (uniform() < prob_D)
-
-        * Generar resultado observado y efecto individual
-        gen y = D*yd1 + (1-D)*yd0
-        gen tau = yd1 - yd0
-
-        * Calcular estimadores (misma nomenclatura que en clase)
-        sum tau
-        scalar ATE = r(mean)
-
-        sum tau if D==1
-        scalar ATT = r(mean)
-
-        sum y if D==1
-        scalar ybar_1 = r(mean)
-        sum y if D==0
-        scalar ybar_0 = r(mean)
-        scalar NAIVE = ybar_1 - ybar_0
-
-        restore
-
-        * Guardar el sesgo de esta simulación
-        * Recordar: NAIVE = ATT + SESGO, por lo tanto SESGO = NAIVE - ATT
-        replace SESGO = NAIVE - ATT in `i'
-    }
-
-    * Mostrar progreso cada 100 simulaciones
-    if mod(`i', 100) == 0 {
-        di "Simulación `i' de 1000 completada"
-    }
-}
-
-* Resultados de la simulación CON SELECCIÓN
-di _n "=== RESULTADOS CON SELECCIÓN (viola independencia) ==="
-sum SESGO
-di "Sesgo promedio del estimador Naive: " r(mean)
-di "El sesgo persiste incluso con muchas observaciones!"
-
-* Gráfico
-histogram SESGO, ///
-    xline(0, lcolor(red) lwidth(thick)) ///
-    title("Distribución del Sesgo del Estimador Naive") ///
-    subtitle("1000 simulaciones con SELECCIÓN - Datos de clase") ///
-    xtitle("SESGO = NAIVE - ATT") ///
-    note("Línea roja = sesgo cero (lo ideal)")
-graph export "sesgo_con_seleccion.png", replace
+cd "dofile/04_ParametrosStata"
+do "04_stata.do"
 ```
 
-📌 **Interpretación:**
-- El histograma muestra que el estimador naive está **sistemáticamente sesgado**
-- En promedio, el sesgo NO es cero (la distribución no está centrada en 0)
-- **Aumentar el tamaño muestral NO elimina este sesgo** (problema de identificación)
+**Resultado.**
 
----
-
-**📊 Escenario 2: Simulación con ALEATORIZACIÓN (cumple independencia)**
-
-Ahora simulamos 1000 estudios donde el tratamiento se asigna **aleatoriamente** usando **nuestros datos de clase**:
-
-```stata
-* Cargar datos de clase y expandir (si no está ya cargado del escenario anterior)
-use "04_data.dta", clear
-expand 10000
-tempfile datos_expandidos
-save `datos_expandidos', replace
-
-* Crear base para almacenar resultados
-clear all
-set seed 12345
-set obs 1000
-gen sim_id = _n
-gen SESGO = .
-
-* Loop de Monte Carlo
-forvalues i = 1/1000 {
-
-    quietly {
-        preserve
-
-        * Cargar datos expandidos de clase
-        use `datos_expandidos', clear
-
-        * IMPORTANTE: Eliminamos el D original y creamos uno nuevo en cada simulación
-        * Si no hacemos esto, todas las simulaciones darían el mismo resultado
-        drop D
-
-        * ALEATORIZACIÓN: D es independiente de yd0 y yd1
-        gen D = (uniform() < 0.5)   // 50% tratamiento, 50% control
-
-        * Generar resultado observado y efecto individual
-        gen y = D*yd1 + (1-D)*yd0
-        gen tau = yd1 - yd0
-
-        * Calcular estimadores (misma nomenclatura que en clase)
-        sum tau
-        scalar ATE = r(mean)
-
-        sum tau if D==1
-        scalar ATT = r(mean)
-
-        sum y if D==1
-        scalar ybar_1 = r(mean)
-        sum y if D==0
-        scalar ybar_0 = r(mean)
-        scalar NAIVE = ybar_1 - ybar_0
-
-        restore
-
-        * Guardar el sesgo de esta simulación
-        * Recordar: NAIVE = ATT + SESGO, por lo tanto SESGO = NAIVE - ATT
-        replace SESGO = NAIVE - ATT in `i'
-    }
-
-    if mod(`i', 100) == 0 {
-        di "Simulación `i' de 1000 completada"
-    }
-}
-
-* Resultados de la simulación CON ALEATORIZACIÓN
-di _n "=== RESULTADOS CON ALEATORIZACIÓN (cumple independencia) ==="
-sum SESGO
-di "Sesgo promedio del estimador Naive: " r(mean)
-di "El sesgo es aproximadamente CERO!"
-
-* Gráfico
-histogram SESGO, ///
-    xline(0, lcolor(green) lwidth(thick)) ///
-    title("Distribución del Sesgo del Estimador Naive") ///
-    subtitle("1000 simulaciones con ALEATORIZACIÓN - Datos de clase") ///
-    xtitle("SESGO = NAIVE - ATT") ///
-    note("Línea verde = sesgo cero. ¡La distribución está centrada en cero!")
-graph export "sesgo_con_aleatorizacion.png", replace
+```{r tabla-monte-carlo, echo=FALSE}
+knitr::kable(tabla_mc, align = c("l", rep("r", 6)),
+             caption = "Distribución del sesgo Naïve − ATT en 1,000 repeticiones")
 ```
 
-📌 **Interpretación:**
-- El histograma muestra que el estimador naive **NO tiene sesgo sistemático**
-- La distribución está centrada en cero (sesgo promedio ≈ 0)
-- **La aleatorización garantiza que en promedio acertamos** (insesgadez)
-- Hay variabilidad muestral (no todas las simulaciones dan exactamente ATE), ¡pero en promedio es correcto!
+![Sesgo bajo selección: la distribución está lejos de cero.](dofile/04_ParametrosStata/sesgo_con_seleccion.png)
 
----
+![Sesgo bajo aleatorización: la distribución está centrada cerca de cero.](dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png)
 
-**🔬 Comparación lado a lado**
+![Comparación de las distribuciones bajo selección y aleatorización.](dofile/04_ParametrosStata/comparacion_escenarios.png)
 
-Para comparar ambos escenarios, puedes correr ambos códigos y guardar los resultados con nombres diferentes, luego combinarlos:
+**Interpretación.** La selección desplaza toda la distribución del sesgo: su
+media es 3.941. La aleatorización la centra aproximadamente en cero, pero no
+elimina la variabilidad entre repeticiones. Aleatorizar garantiza insesgadez en
+expectativa, no igualdad exacta en cada muestra.
 
-```stata
-* Nota: Este código requiere haber corrido ambos escenarios y guardado los datos
-* En el Escenario 1, antes del último 'graph export', agregar:
-* save "resultados_seleccion.dta", replace
+**Práctica breve.** Compare `p5` y `p95` en ambos escenarios. Explique por qué
+una media cercana a cero puede coexistir con estimaciones individuales no
+nulas.
 
-* En el Escenario 2, antes del último 'graph export', agregar:
-* save "resultados_aleatorizacion.dta", replace
+## 7. Ejercicios
 
-* Luego puedes combinar y comparar:
-use "resultados_seleccion.dta", clear
-gen escenario = 1
-append using "resultados_aleatorizacion.dta"
-replace escenario = 2 if missing(escenario)
+1. **Cambiar la selección.** En el programa de simulación, modifique la regla de
+   asignación para que la probabilidad de tratamiento disminuya con `yd0`.
+   Anticipe el signo del sesgo y verifíquelo con 1,000 repeticiones.
+2. **Explorar otro CATE.** Elija otra variable pretratamiento disponible o cree
+   grupos a partir de una transformación de `X`. Compare los efectos promedio
+   entre grupos y argumente por qué la variable no debe ser postratamiento.
+3. **Reducir el tamaño muestral.** Use una expansión menor y repita el Monte
+   Carlo. Compare la desviación estándar y el intervalo entre `p5` y `p95` con
+   los resultados canónicos.
 
-label define esc 1 "Con selección" 2 "Con aleatorización"
-label values escenario esc
+## 8. Síntesis
 
-* Gráfico comparativo
-twoway ///
-    (histogram naive_sesgo if escenario==1, color(red%30)) ///
-    (histogram naive_sesgo if escenario==2, color(green%30)), ///
-    legend(order(1 "Con selección" 2 "Con aleatorización")) ///
-    xline(0, lcolor(black) lwidth(thick)) ///
-    title("Comparación: Sesgo con vs sin aleatorización") ///
-    subtitle("Usando datos de clase - 1000 simulaciones Monte Carlo") ///
-    note("Con los datos de clase vemos la misma lección: solo la aleatorización elimina el sesgo")
-graph export "comparacion_escenarios.png", replace
-```
-
----
-
-**💡 Lecciones clave del Monte Carlo**
-
-1. **El sesgo de selección NO desaparece con más datos**
-   - En el Escenario 1, incluso con 1000 observaciones por simulación, el sesgo persiste
-
-2. **La aleatorización elimina el sesgo en expectativa**
-   - En el Escenario 2, el sesgo promedio es ~0 (aunque hay variabilidad muestral)
-
-3. **Podemos CUANTIFICAR el sesgo**
-   - Las simulaciones nos muestran qué tan grande es el problema
-
-4. **La inferencia causal requiere identificación, no solo más datos**
-   - Big Data con sesgo sigue teniendo sesgo
-   - Small Data bien identificado es más confiable
-
----
-
-*🧠 Reflexiones finales*
-
-- El estimador naïve es solo válido si hay **asignación aleatoria**.
-- La diferencia entre ATT y Naïve nos permite cuantificar el **sesgo de selección**.
-- El ATE no es igual al ATT si hay **heterogeneidad en el tratamiento**.
-- El tamaño muestral no soluciona problemas de sesgo.
-
----
-
-## DESCARGA LOS DOCUMENTOS {-}
-
-**Descargar Stata do file**:
-[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_stata.do)
-
-**Descargar R script**:
-[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_R.R)
-
-**Descargar Python Notebook**:
-[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_phyton.ipynb)
-
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/04_ParametrosStata/04_phyton.ipynb)
-
-**Descarga los Datos**:
-[Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_data.dta)
+1. **Identificación:** más datos no eliminan el sesgo de selección.
+2. **Heterogeneidad:** un ATE puede ocultar CATE distintos entre grupos.
+3. **Precisión frente a sesgo:** aumentar (N) puede reducir variabilidad sin
+   acercar el estimador al parámetro causal.
+4. **Aleatorización en expectativa:** el sesgo promedio se centra cerca de cero,
+   aunque cada realización conserve variabilidad muestral.
