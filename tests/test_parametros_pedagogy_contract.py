@@ -153,3 +153,22 @@ def test_student_material_never_exposes_private_key():
     assert "claves_docentes" not in combined
     assert "<details" not in combined
     assert "ver respuesta" not in combined
+
+
+def test_docs_recursively_omit_external_key_identifiers_and_path():
+    docs = ROOT / "docs"
+    forbidden = [
+        "clave" + "_parametros_causales",
+        "claves" + "_docentes",
+        "/Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/"
+        + "claves_docentes/clave_parametros_causales.md",
+    ]
+    hits = []
+    for path in docs.rglob("*"):
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore").casefold()
+        for token in forbidden:
+            if token.casefold() in text:
+                hits.append((str(path.relative_to(ROOT)), token))
+    assert not hits, f"Identificadores privados rastreables en docs/: {hits}"

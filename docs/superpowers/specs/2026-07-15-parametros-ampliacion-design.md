@@ -96,7 +96,7 @@ Cada ejercicio especificará puntaje, comandos permitidos y productos esperados.
 
 ## Clave privada para profesora y monitor
 
-Se creará fuera del repositorio público en `/Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/claves_docentes/clave_parametros_causales.md`. No se usará `docs/instructor/`: `docs` es el directorio de publicación de GitHub Pages y cualquier archivo ubicado allí podría quedar accesible aunque no tenga enlaces.
+Se creará en una ubicación privada externa comunicada fuera del repositorio. No se usará `docs/instructor/`: `docs` es el directorio de publicación de GitHub Pages y cualquier archivo ubicado allí podría quedar accesible aunque no tenga enlaces.
 
 La clave:
 
@@ -126,7 +126,7 @@ La ampliación estará completa cuando:
 3. ninguna pregunta estudiantil incluya respuesta, pista o elemento desplegable;
 4. la clave privada externa contenga los siete códigos y sus cinco componentes de calificación;
 5. ninguna página estudiantil enlace o mencione la ruta de la clave;
-6. el render temporal no contenga `clave_parametros_causales` ni las soluciones;
+6. el render temporal no contenga identificadores de la clave privada ni las soluciones;
 7. todas las cifras visibles continúen proviniendo de artefactos canónicos;
 8. la suite automatizada completa pase;
 9. ambos capítulos se revisen en escritorio y móvil, con especial atención a longitud, ritmo visual, código y tablas;

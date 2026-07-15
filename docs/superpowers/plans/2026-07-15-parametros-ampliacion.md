@@ -15,7 +15,7 @@
 - Mantener descargas al inicio de la práctica y ninguna descarga en teoría.
 - Añadir exactamente tres preguntas teóricas `T-P1`–`T-P3` y cuatro prácticas `S-P1`–`S-P4`.
 - No incluir respuestas, pistas, retroalimentación automática ni elementos desplegables en las páginas estudiantiles.
-- Guardar la clave únicamente en `/Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/claves_docentes/clave_parametros_causales.md`.
+- Guardar la clave únicamente en una ubicación privada externa comunicada fuera del repositorio.
 - No añadir la clave al repositorio, `_bookdown.yml`, `docs` ni enlaces estudiantiles.
 - Toda cifra empírica visible seguirá proviniendo de CSV exportados por Stata.
 - Las futuras diapositivas incluirán todos los resultados, pero quedan fuera de este plan.
@@ -88,8 +88,7 @@ def test_practice_has_required_blocks_and_exam_questions():
 ```python
 def test_student_material_never_exposes_private_key():
     combined = THEORY + PRACTICE + (ROOT / "_bookdown.yml").read_text(encoding="utf-8")
-    assert "clave_parametros_causales" not in combined
-    assert "claves_docentes" not in combined
+    assert all(token not in combined for token in PRIVATE_KEY_IDENTIFIERS)
     assert "<details" not in THEORY + PRACTICE
     assert "Ver respuesta" not in THEORY + PRACTICE
 ```
@@ -172,7 +171,7 @@ git commit -m "docs: add exam practice to parameters theory"
 **Files:**
 - Modify: `04-ParametrosStata.Rmd`
 - Modify: `style.css` only if existing boxes cannot express the approved pattern.
-- Create externally: `/Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/claves_docentes/clave_parametros_causales.md`
+- Create externally: ubicación privada externa comunicada fuera del repositorio
 - Test: `tests/test_parametros_pedagogy_contract.py`
 - Test: `tests/test_parametros_stata_contract.py`
 
@@ -237,7 +236,7 @@ Ningún bloque contendrá solución, pista o desplegable.
 
 - [ ] **Step 8: Crear la clave privada externa**
 
-Crear el directorio `claves_docentes` si no existe y escribir `clave_parametros_causales.md` con encabezado de confidencialidad. Para cada código `T-P1`–`T-P3` y `S-P1`–`S-P4`, incluir cinco subtítulos: `Respuesta correcta`, `Procedimiento`, `Criterios de calificación`, `Errores frecuentes`, `Puntaje sugerido`. No incluir el archivo en Git.
+Crear la clave en la ubicación privada externa comunicada fuera del repositorio, con encabezado de confidencialidad. Para cada código `T-P1`–`T-P3` y `S-P1`–`S-P4`, incluir cinco subtítulos: `Respuesta correcta`, `Procedimiento`, `Criterios de calificación`, `Errores frecuentes`, `Puntaje sugerido`. No incluir el archivo en Git.
 
 - [ ] **Step 9: Ejecutar pruebas focales y verificar privacidad**
 
@@ -245,7 +244,7 @@ Run: `/private/tmp/libro_cortes_rct_venv/bin/python -m pytest -q tests/test_para
 
 Expected: todos pasan.
 
-Run: `git status --short --untracked-files=all | rg "clave_parametros|claves_docentes"`
+Run: verificar que el índice y el estado de Git no incluyan identificadores de la clave privada externa.
 
 Expected: sin salida porque la clave está fuera del repositorio.
 
@@ -263,7 +262,7 @@ git commit -m "docs: restore guided parameters practice"
 **Files:**
 - Verify: `03-Parametros.Rmd`
 - Verify: `04-ParametrosStata.Rmd`
-- Verify externally: `/Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/claves_docentes/clave_parametros_causales.md`
+- Verify externally: ubicación privada externa comunicada fuera del repositorio
 - Verify: `/private/tmp/libro_cortes_parametros_ampliado/parametros-causales-teoria.html`
 - Verify: `/private/tmp/libro_cortes_parametros_ampliado/parametros-causales-stata.html`
 

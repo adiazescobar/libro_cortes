@@ -36,8 +36,12 @@ Stata. La suite completa final se ejecutó después del render y del QA.
   índice de Git.
 - Los dos HTML estudiantiles no contienen marcadores privados, respuestas ni
   frases sustantivas distintivas copiadas de las soluciones.
-- La documentación interna de diseño no forma parte de `_bookdown.yml`; no se
-  trató como contenido estudiantil ni se publicó.
+- Una revisión posterior detectó que dos archivos rastreados bajo `docs/`
+  divulgaban identificadores exactos y la ubicación externa. Se redactaron como
+  “ubicación privada externa comunicada fuera del repositorio”, sin mover,
+  borrar ni modificar la clave externa.
+- Un nuevo test recorre `docs/` de forma recursiva y rechaza esos identificadores
+  o la ruta exacta, permitiendo referencias genéricas a una clave privada.
 
 Este informe omite deliberadamente respuestas, cálculos de la clave y nombres
 de archivos privados.
@@ -87,6 +91,27 @@ publicó contenido en `docs`.
 
 Se conservaron capturas de evidencia en el directorio temporal con prefijo
 `qa-`; no forman parte del repositorio.
+
+### Re-QA posterior al HTML final
+
+Antes del re-QA se confirmaron timestamps y hashes SHA-256 de los dos HTML
+finales. El capítulo práctico contenía el enunciado corregido de S-P4, por lo que
+no fue necesario renderizar de nuevo. Los hashes verificados fueron:
+
+- teoría: `f154e17a687f8fdfdea4dd2dcc27b9251a1369f6eedd7c098ced9b933994a7a4`;
+- práctica: `66a35b45e457285312cfb573fb6341838a7d827d84030b29786bb70a0e662059`.
+
+Se generaron cuatro capturas nuevas, posteriores a esos HTML:
+
+- `qa-theory-desktop-final2.png`;
+- `qa-theory-mobile-final2.png`;
+- `qa-stata-desktop-final2.png`;
+- `qa-stata-mobile-final2.png`.
+
+El re-QA confirmó nuevamente cero desbordamiento global, cero marcadores
+privados, tres preguntas y dos videos en teoría, y doce etapas, cuatro preguntas
+y tres gráficos en práctica. En móvil se conservaron scroll interno en dos
+tablas y once bloques de código, sin imágenes fuera del viewport.
 
 ## Auditoría académica
 
