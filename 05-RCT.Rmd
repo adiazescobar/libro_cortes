@@ -77,7 +77,7 @@ porque los grupos de tratamiento y control son, en promedio, idénticos en todo 
 
 La igualdad entre la diferencia observada y el efecto causal requiere declarar con precisión las condiciones del diseño:
 
-1. **Asignación aleatoria:** (D_i \perp (Y_i(1),Y_i(0))). La probabilidad de tratamiento es conocida y no depende de los resultados potenciales.
+1. **Asignación aleatoria:** (D_i \perp (Y_i(D=1),Y_i(D=0))). La probabilidad de tratamiento es conocida y no depende de los resultados potenciales.
 2. **SUTVA:** el tratamiento de una unidad no modifica los resultados potenciales de otra y no existen versiones ocultas del tratamiento.
 3. **Medición y seguimiento comparables:** el resultado se mide de la misma forma en ambos brazos y la observación de (Y_i) no depende diferencialmente del tratamiento de una manera que vuelva selectiva la muestra analítica.
 4. **Respeto del diseño:** si la asignación se realiza dentro de estratos o bloques, el análisis debe conservar esa estructura para representar correctamente las probabilidades de asignación y aprovechar la precisión del diseño.

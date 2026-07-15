@@ -107,16 +107,16 @@ Stata y Python deben leer exactamente esta misma base. Si el archivo no está di
 
 1. **Asignación aleatoria:** cada unidad \(i\) es asignada de manera independiente al tratamiento con probabilidad \(p\).
    \[
-   D_i \;\perp\; \{Y_i(1), Y_i(0)\}.
+   D_i \;\perp\; \{Y_i(D=1), Y_i(D=0)\}.
    \]
 2. **SUTVA** (Stable Unit Treatment Value Assumption): no hay interferencia entre unidades ni versiones del tratamiento.
    En español: no hay externalidades ni efectos de equilibrio general que cambien los resultados potenciales de otros individuos.
 
 *3) Parámetros y equivalencias clave*
 
-- **ATE:** \(\tau = \mathbb{E}[Y(1)-Y(0)]\).
-- **ATT:** \(\mathbb{E}[Y(1)-Y(0) \mid D=1]\).
-- **ATU:** \(\mathbb{E}[Y(1)-Y(0) \mid D=0]\).
+- **ATE:** \(\tau = \mathbb{E}[Y(D=1)-Y(D=0)]\).
+- **ATT:** \(\mathbb{E}[Y(D=1)-Y(D=0) \mid D=1]\).
+- **ATU:** \(\mathbb{E}[Y(D=1)-Y(D=0) \mid D=0]\).
 
 Bajo aleatorización: \(ATE = ATT = ATU\), porque los grupos son comparables en todo (observable y no observable).
 
@@ -134,7 +134,7 @@ Bajo aleatorización: \(ATE = ATT = ATU\), porque los grupos son comparables en 
   \;=\;
   \underbrace{\tau}_{\text{efecto causal}}
   \;+\;
-  \underbrace{\mathbb{E}[Y(0)\mid D=1] - \mathbb{E}[Y(0)\mid D=0]}_{\text{sesgo de selección}}.
+  \underbrace{\mathbb{E}[Y(D=0)\mid D=1] - \mathbb{E}[Y(D=0)\mid D=0]}_{\text{sesgo de selección}}.
   \]
 
 ::: {.boxnote}

@@ -214,7 +214,7 @@ tab late
 ```stata
 * Resultado potencial sin tratamiento: pequeño ruido base
 gen y0 = 0.25 * invnormal(uniform())
-gen y1 = y0 + late                          // Y(1) = Y(0) + efecto individual
+gen y1 = y0 + late                          // Y(D=1) = Y(D=0) + efecto individual
 
 * Tratamiento observado (regla de monotonicidad):
 *   never-takers:  D = 0 siempre

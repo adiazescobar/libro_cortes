@@ -115,20 +115,20 @@ kbl(checklist, align = "l", booktabs = TRUE,
 
 El contrafactual responde: **¿qué habría ocurrido con la misma unidad bajo la condición alternativa?** Para formalizarlo, definimos $D_i=1$ si la unidad $i$ recibe el tratamiento y $D_i=0$ si no lo recibe. Cada unidad tiene dos resultados potenciales:
 
-- $Y_i(1)$: resultado si recibe el tratamiento;
-- $Y_i(0)$: resultado si no lo recibe.
+- $Y_i(D=1)$: resultado si recibe el tratamiento;
+- $Y_i(D=0)$: resultado si no lo recibe.
 
-El efecto causal individual es $\tau_i=Y_i(1)-Y_i(0)$.
+El efecto causal individual es $\tau_i=Y_i(D=1)-Y_i(D=0)$.
 
 ### Visualizando el contrafactual {-}
 
-Unidad tratada: observamos $Y_i(1)$.
+Unidad tratada: observamos $Y_i(D=1)$.
 
 ```{r, ninas1, out.width = "20%", echo = FALSE, fig.align='left'}
 knitr::include_graphics("img/ninas1.png")
 ```
 
-Para esa misma unidad, $Y_i(0)$ es el resultado potencial no observado: su contrafactual. Una persona del grupo de control no es literalmente ese contrafactual individual. Bajo supuestos de comparabilidad —por ejemplo, asignación aleatoria— el promedio del grupo de control puede aproximar el contrafactual **promedio** del grupo tratado.
+Para esa misma unidad, $Y_i(D=0)$ es el resultado potencial no observado: su contrafactual. Una persona del grupo de control no es literalmente ese contrafactual individual. Bajo supuestos de comparabilidad —por ejemplo, asignación aleatoria— el promedio del grupo de control puede aproximar el contrafactual **promedio** del grupo tratado.
 
 ```{r, ninas1c, out.width = "20%", echo = FALSE, fig.align='right'}
 knitr::include_graphics("img/ninas1.png")
@@ -136,11 +136,11 @@ knitr::include_graphics("img/ninas1.png")
 
 ### Ejemplo de heterogeneidad {-}
 
-Supongamos que el tratamiento es **ir al hospital** ($D=1$) y que $Y_i(d)=1$ significa que la persona se recupera bajo la condición $d$. Los siguientes perfiles son resultados potenciales hipotéticos que ilustran heterogeneidad de efectos; no constituyen recomendaciones clínicas:
+Supongamos que el tratamiento es **ir al hospital** ($D=1$) y que $Y_i(D=d)=1$ significa que la persona se recupera bajo la condición $d$. Los siguientes perfiles son resultados potenciales hipotéticos que ilustran heterogeneidad de efectos; no constituyen recomendaciones clínicas:
 
-- Carolina: $Y_i(0)=0$ y $Y_i(1)=0$; no se recuperaría bajo ninguna condición.
-- Camila: $Y_i(0)=0$ y $Y_i(1)=1$; se recuperaría únicamente si va al hospital.
-- Mónica: $Y_i(0)=1$ y $Y_i(1)=0$; se recuperaría únicamente si no va al hospital.
+- Carolina: $Y_i(D=0)=0$ y $Y_i(D=1)=0$; no se recuperaría bajo ninguna condición.
+- Camila: $Y_i(D=0)=0$ y $Y_i(D=1)=1$; se recuperaría únicamente si va al hospital.
+- Mónica: $Y_i(D=0)=1$ y $Y_i(D=1)=0$; se recuperaría únicamente si no va al hospital.
 
 El ejemplo muestra que los efectos individuales pueden diferir. En datos reales nunca observamos ambos resultados potenciales de una misma persona y, por tanto, no podemos clasificarla en uno de estos perfiles.
 
@@ -150,20 +150,20 @@ El ejemplo muestra que los efectos individuales pueden diferir. En datos reales 
 
 ## El problema fundamental {-}
 
-Nunca observamos simultáneamente $Y_i(1)$ y $Y_i(0)$ para una misma unidad. Solo observamos:
+Nunca observamos simultáneamente $Y_i(D=1)$ y $Y_i(D=0)$ para una misma unidad. Solo observamos:
 
 $$
-Y_i = D_iY_i(1)+(1-D_i)Y_i(0)
+Y_i = D_iY_i(D=1)+(1-D_i)Y_i(D=0)
 = \begin{cases}
-Y_i(0) & \text{si } D_i=0,\\
-Y_i(1) & \text{si } D_i=1.
+Y_i(D=0) & \text{si } D_i=0,\\
+Y_i(D=1) & \text{si } D_i=1.
 \end{cases}
 $$
 
 Este problema de datos faltantes impide calcular directamente el efecto individual y también el efecto promedio del tratamiento:
 
 $$
-ATE=\mathbb{E}[Y_i(1)-Y_i(0)].
+ATE=\mathbb{E}[Y_i(D=1)-Y_i(D=0)].
 $$
 
 En un mundo ideal podríamos clonar cada unidad y observarla bajo ambas condiciones. Como no es posible, la inferencia causal construye comparaciones que recuperan efectos promedio bajo supuestos explícitos.
@@ -204,14 +204,14 @@ $$
 \mathbb{E}[Y_i\mid D_i=1]-\mathbb{E}[Y_i\mid D_i=0].
 $$
 
-Al sumar y restar $\mathbb{E}[Y_i(0)\mid D_i=1]$, obtenemos:
+Al sumar y restar $\mathbb{E}[Y_i(D=0)\mid D_i=1]$, obtenemos:
 
 $$
 \underbrace{\mathbb{E}[Y_i\mid D_i=1]-\mathbb{E}[Y_i\mid D_i=0]}_{\text{diferencia observada}}
 =
-\underbrace{\mathbb{E}[Y_i(1)-Y_i(0)\mid D_i=1]}_{\text{efecto causal sobre tratados}}
+\underbrace{\mathbb{E}[Y_i(D=1)-Y_i(D=0)\mid D_i=1]}_{\text{efecto causal sobre tratados}}
 +
-\underbrace{\mathbb{E}[Y_i(0)\mid D_i=1]-\mathbb{E}[Y_i(0)\mid D_i=0]}_{\text{sesgo de selección}}.
+\underbrace{\mathbb{E}[Y_i(D=0)\mid D_i=1]-\mathbb{E}[Y_i(D=0)\mid D_i=0]}_{\text{sesgo de selección}}.
 $$
 
 La diferencia observada equivale al efecto causal sobre los tratados más el sesgo de selección. Este último aparece cuando, aun sin tratamiento, tratados y controles habrían tenido resultados promedio distintos. Una muestra grande reduce la incertidumbre estadística, pero no elimina este sesgo. El capítulo **Parámetros causales** desarrolla la demostración y los estimandos con mayor detalle.

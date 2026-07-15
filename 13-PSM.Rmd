@@ -15,7 +15,7 @@
 
 El capítulo anterior mostró que el emparejamiento exacto se vuelve impracticable cuando el vector de controles $X$ tiene muchas dimensiones. Rosenbaum y Rubin (1983) demostraron un resultado fundamental que resuelve este problema:
 
-> Si $(Y(1), Y(0)) \perp D \mid X$ (CIA), entonces también se cumple $(Y(1), Y(0)) \perp D \mid P(X)$, donde $P(X) = P(D=1 \mid X)$.
+> Si $(Y(D=1), Y(D=0)) \perp D \mid X$ (CIA), entonces también se cumple $(Y(D=1), Y(D=0)) \perp D \mid P(X)$, donde $P(X) = P(D=1 \mid X)$.
 
 Es decir: **condicionar en el propensity score es suficiente para eliminar el sesgo de selección**, aunque hayamos colapsado todo el vector $X$ en un único escalar. En lugar de buscar un clon exacto en todas las dimensiones de $X$, buscamos individuos con la misma probabilidad estimada de haber recibido el tratamiento.
 
@@ -49,7 +49,7 @@ La elección entre logit y probit generalmente no cambia los resultados. Lo que 
 
 ### Supuesto 1: CIA (Conditional Independence Assumption) {-}
 
-$$\{Y_i(1), Y_i(0)\} \perp D_i \mid X_i$$
+$$\{Y_i(D=1), Y_i(D=0)\} \perp D_i \mid X_i$$
 
 Una vez controlamos por $X$, el tratamiento es como si fuera aleatorio. Este es el supuesto más fuerte: requiere que no haya variables no observadas que afecten simultáneamente la selección y el resultado.
 
@@ -150,8 +150,8 @@ El método de matching y la especificación del PS cambian según qué parámetr
 
 | Parámetro | Definición | Cuándo es relevante |
 |-----------|-----------|---------------------|
-| **ATT** | $E[Y(1) - Y(0) \mid D=1]$ | Efecto sobre quienes *sí* participan — evaluación de programa |
-| **ATE** | $E[Y(1) - Y(0)]$ | Efecto si se asignara el tratamiento *a todos* — decisión de política |
+| **ATT** | $E[Y(D=1) - Y(D=0) \mid D=1]$ | Efecto sobre quienes *sí* participan — evaluación de programa |
+| **ATE** | $E[Y(D=1) - Y(D=0)]$ | Efecto si se asignara el tratamiento *a todos* — decisión de política |
 
 Para el **ATT**, el soporte común se define desde la perspectiva de los tratados: $[\min(\hat{p}_{D=1}), \max(\hat{p}_{D=0})]$.
 

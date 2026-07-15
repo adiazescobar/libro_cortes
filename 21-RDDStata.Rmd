@@ -92,7 +92,7 @@ reg y D Zt
 
 | Coeficiente | Lectura | Valor esperado |
 |---|---|---|
-| `_b[_cons]` | $E[Y(0) \mid Z = 62]$ | $\approx 1.0$ |
+| `_b[_cons]` | $E[Y(D=0) \mid Z = 62]$ | $\approx 1.0$ |
 | `_b[D]` | **salto $\tau_{RDN}$** | $\approx 2.0$ |
 | `_b[Zt]` | Pendiente común | $\approx 0.10$ |
 

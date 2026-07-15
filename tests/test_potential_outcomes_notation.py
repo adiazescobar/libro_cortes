@@ -4,14 +4,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN = re.compile(
-    r"Y\s*(?:_\s*(?:\{[^}\n]+\}|[A-Za-z0-9]+))?\s*\(\s*(?:0|1|d)\s*\)",
-    re.IGNORECASE,
+    r"Y\s*(?:_\s*(?:\{[^}\n]+\}|[A-Za-z0-9]+))?\s*\(\s*(?:0|1|[dD])\s*\)",
 )
 
 
 def test_notation_pattern_covers_variants_without_rejecting_valid_time_notation():
     abbreviated = ["Y(1)", "Y_i( 0 )", "Y_j(d)", "Y_{k} ( 1 )", "Y_{it}(d)"]
-    valid = ["Y_i(D=1)", "Y(D=0)", "Y_{it}(D=1)", "Y_{it} ( D = 0 )"]
+    valid = [
+        "Y_i(D=1)",
+        "Y(D=0)",
+        "Y_{it}(D=1)",
+        "Y_{it} ( D = 0 )",
+        "ttest y, by(D)",
+        "rdrobust y Z, fuzzy(D)",
+    ]
     assert all(FORBIDDEN.fullmatch(value) for value in abbreviated)
     assert all(FORBIDDEN.search(value) is None for value in valid)
 

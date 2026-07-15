@@ -27,7 +27,7 @@ donde:
 El supuesto clave es:
 
 \[
-E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=1] = E[Y_{i,t=1}(0) - Y_{i,t=0}(0) \mid D=0]
+E[Y_{i,t=1}(D=0) - Y_{i,t=0}(D=0) \mid D=1] = E[Y_{i,t=1}(D=0) - Y_{i,t=0}(D=0) \mid D=0]
 \]
 
 Si esto se cumple, la estimación DID es **insesgada**.
@@ -127,7 +127,7 @@ En palabras simples:
 El estimador DID será insesgado si:
 
 \[
-E[Y_{i}(0) \mid D=1, t=1] - E[Y_{i}(0) \mid D=1, t=0] = E[Y_{i}(0) \mid D=0, t=1] - E[Y_{i}(0) \mid D=0, t=0]
+E[Y_{i}(D=0) \mid D=1, t=1] - E[Y_{i}(D=0) \mid D=1, t=0] = E[Y_{i}(D=0) \mid D=0, t=1] - E[Y_{i}(D=0) \mid D=0, t=0]
 \]
 
 - Si los grupos no siguen tendencias paralelas → **sesgo**.  
@@ -159,7 +159,7 @@ $$Y = \alpha + \tau D + \varepsilon$$
 
 el estimador de diferencias de medias es:
 
-$$\hat{\tau}_{\text{naive}} = E[Y \mid D=1] - E[Y \mid D=0] = E[Y(1)] - E[Y(0)] = \text{ATE}$$
+$$\hat{\tau}_{\text{naive}} = E[Y \mid D=1] - E[Y \mid D=0] = E[Y(D=1)] - E[Y(D=0)] = \text{ATE}$$
 
 Es insesgado y consistente. Todo bien hasta aquí.
 
@@ -174,52 +174,52 @@ $$E[Y \mid D=1,\, F=1] \;-\; E[Y \mid D=0,\, F=1] \;=\; ?$$
 
 Para calcular esto usamos la ecuación de switching:
 
-$$Y_i = D_i \cdot Y_i(1) + (1-D_i)\cdot Y_i(0), \qquad F_i = D_i \cdot F_i(1) + (1-D_i)\cdot F_i(0)$$
+$$Y_i = D_i \cdot Y_i(D=1) + (1-D_i)\cdot Y_i(D=0), \qquad F_i = D_i \cdot F_i(1) + (1-D_i)\cdot F_i(0)$$
 
 **Término izquierdo** — entre los tratados con $F=1$:
 
-$$E[Y \mid D=1,\, F=1] = E\!\left[Y(1) \mid D=1,\; F(1)=1\right] = E\!\left[Y(1) \mid F(1)=1\right]$$
+$$E[Y \mid D=1,\, F=1] = E\!\left[Y(D=1) \mid D=1,\; F(1)=1\right] = E\!\left[Y(D=1) \mid F(1)=1\right]$$
 
-El último paso usa la independencia $Y(1) \perp D$.
+El último paso usa la independencia $Y(D=1) \perp D$.
 
 **Término derecho** — entre los controles con $F=1$. Aquí está el truco: para los controles ($D=0$), $F=1$ significa que $F(D=0)=1$, **no** $F(D=1)=1$. Son grupos distintos.
 
-$$E[Y \mid D=0,\, F=1] = E\!\left[Y(0) \mid D=0,\; F(0)=1\right] = E\!\left[Y(0) \mid F(0)=1\right]$$
+$$E[Y \mid D=0,\, F=1] = E\!\left[Y(D=0) \mid D=0,\; F(0)=1\right] = E\!\left[Y(D=0) \mid F(0)=1\right]$$
 
 ### La descomposición en cuatro términos {-}
 
-Juntando los dos lados y sumando y restando $E[Y(0) \mid F(1)=1]$:
+Juntando los dos lados y sumando y restando $E[Y(D=0) \mid F(1)=1]$:
 
 $$
 E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1]
 $$
 
 $$
-= \underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}
+= \underbrace{E[Y(D=1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(D=0) \mid F(0)=1]}_{\textcircled{2}}
 $$
 
-Sumamos y restamos $E[Y(0)\mid F(1)=1]$:
+Sumamos y restamos $E[Y(D=0)\mid F(1)=1]$:
 
 $$
-= \Big(\underbrace{E[Y(1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{4}}\Big) + \Big(\underbrace{E[Y(0) \mid F(1)=1]}_{\textcircled{3}} - \underbrace{E[Y(0) \mid F(0)=1]}_{\textcircled{2}}\Big)
+= \Big(\underbrace{E[Y(D=1) \mid F(1)=1]}_{\textcircled{1}} - \underbrace{E[Y(D=0) \mid F(1)=1]}_{\textcircled{4}}\Big) + \Big(\underbrace{E[Y(D=0) \mid F(1)=1]}_{\textcircled{3}} - \underbrace{E[Y(D=0) \mid F(0)=1]}_{\textcircled{2}}\Big)
 $$
 
 Lo que resulta en:
 
 $$
-\boxed{E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1] = \underbrace{E[Y(1)-Y(0) \mid F(1)=1]}_{\text{ATE}_{F=1}} + \underbrace{E[Y(0) \mid F(1)=1] - E[Y(0) \mid F(0)=1]}_{\text{Sesgo de agrupación}}}
+\boxed{E[Y \mid D=1,\, F=1] - E[Y \mid D=0,\, F=1] = \underbrace{E[Y(D=1)-Y(D=0) \mid F(1)=1]}_{\text{ATE}_{F=1}} + \underbrace{E[Y(D=0) \mid F(1)=1] - E[Y(D=0) \mid F(0)=1]}_{\text{Sesgo de agrupación}}}
 $$
 
 ### ¿Qué significa cada término? {-}
 
 **Término 1 — $\text{ATE}_{F=1}$:** el efecto promedio del tratamiento **para las personas que habrían llegado a $F=1$ si fueran tratadas**. No es el ATE de toda la población; es un ATE condicional en un subgrupo particular.
 
-**Término 2 — Sesgo de agrupación:** compara el resultado contrafactual $Y(0)$ de dos grupos diferentes:
+**Término 2 — Sesgo de agrupación:** compara el resultado contrafactual $Y(D=0)$ de dos grupos diferentes:
 
-- $E[Y(0) \mid F(1)=1]$: resultado sin tratamiento de quienes *habrían* llegado a $F=1$ **si fueran tratados**.
-- $E[Y(0) \mid F(0)=1]$: resultado sin tratamiento de quienes *habrían* llegado a $F=1$ **si no fueran tratados**.
+- $E[Y(D=0) \mid F(1)=1]$: resultado sin tratamiento de quienes *habrían* llegado a $F=1$ **si fueran tratados**.
+- $E[Y(D=0) \mid F(0)=1]$: resultado sin tratamiento de quienes *habrían* llegado a $F=1$ **si no fueran tratados**.
 
-Estos son grupos distintos. El tratamiento $D$ "reorganiza" quién termina en $F=1$: con educación universitaria, más personas entran a empleos STEM (incluyendo algunas con menor habilidad innata). Sin educación, solo los más hábiles llegan a STEM. Por eso $E[Y(0)\mid F(1)=1] < E[Y(0)\mid F(0)=1]$: el sesgo de agrupación es negativo y **atenúa** el efecto estimado.
+Estos son grupos distintos. El tratamiento $D$ "reorganiza" quién termina en $F=1$: con educación universitaria, más personas entran a empleos STEM (incluyendo algunas con menor habilidad innata). Sin educación, solo los más hábiles llegan a STEM. Por eso $E[Y(D=0)\mid F(1)=1] < E[Y(D=0)\mid F(0)=1]$: el sesgo de agrupación es negativo y **atenúa** el efecto estimado.
 
 ::: {.boxcerebro}
 **Intuición de una línea:**
