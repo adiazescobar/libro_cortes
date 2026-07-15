@@ -302,6 +302,12 @@ pre code {
 }
 
 @media (max-width: 700px) {
+  .book .book-body .page-wrapper .page-inner section.normal table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .class-materials ul { grid-template-columns: 1fr; }
   .scoring-guide .btn-score { width: 100%; }
   .question-box .webex-radiogroup,

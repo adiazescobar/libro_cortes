@@ -129,13 +129,13 @@ quietly summarize sesgo
 local xmin = floor(r(min)*10)/10
 local xmax = ceil(r(max)*10)/10
 
-histogram sesgo if escenario == "seleccion", width(.01) start(`xmin') fraction color(navy%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(0(1)4) title("Sesgo con selección") subtitle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name(g_seleccion, replace)
+histogram sesgo if escenario == "seleccion", width(.01) start(`xmin') fraction color(navy%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Sesgo con selección") subtitle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name(g_seleccion, replace)
 graph export "sesgo_con_seleccion.png", replace width(1800)
 
-histogram sesgo if escenario == "aleatorizacion", width(.01) start(`xmin') fraction color(forest_green%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(0(1)4) title("Sesgo con aleatorización") subtitle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name(g_aleatorizacion, replace)
+histogram sesgo if escenario == "aleatorizacion", width(.01) start(`xmin') fraction color(forest_green%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Sesgo con aleatorización") subtitle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name(g_aleatorizacion, replace)
 graph export "sesgo_con_aleatorizacion.png", replace width(1800)
 
-twoway (kdensity sesgo if escenario == "seleccion", lcolor(navy) lwidth(medthick)) (kdensity sesgo if escenario == "aleatorizacion", lcolor(forest_green) lwidth(medthick)), xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(0(1)4) title("Comparación de escenarios") subtitle("Distribución del sesgo en 1.000 repeticiones") xtitle("NAIVE - ATT") ytitle("Densidad") legend(order(1 "Selección" 2 "Aleatorización")) name(g_comparacion, replace)
+twoway (kdensity sesgo if escenario == "seleccion", lcolor(navy) lwidth(medthick)) (kdensity sesgo if escenario == "aleatorizacion", lcolor(forest_green) lwidth(medthick)), xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Comparación de escenarios") subtitle("Distribución del sesgo en 1.000 repeticiones") xtitle("NAIVE - ATT") ytitle("Densidad") legend(order(1 "Selección" 2 "Aleatorización")) name(g_comparacion, replace)
 graph export "comparacion_escenarios.png", replace width(1800)
 
 use `original', clear

@@ -195,7 +195,7 @@ Un efecto causal compara dos resultados potenciales para la misma unidad, aunque
 
 ## Ejercicios {-}
 
-1. Use la tabla de ocho personas para calcular ATE, ATT, ATU, (CATE(0)) y (CATE(1)). Verifique las dos relaciones de agregación del ATE.
+1. Use la tabla de ocho personas para calcular ATE, ATT, ATU, \(CATE(0)\) y \(CATE(1)\). Verifique las dos relaciones de agregación del ATE.
 2. Calcule la diferencia naïve de la tabla y descompóngala en ATT y sesgo de selección. Interprete el signo del sesgo.
 3. Proponga un ejemplo en el cual una comparación antes-después falle y otro en el cual SUTVA falle. En cada caso, identifique el resultado potencial o la condición que genera el problema.
 

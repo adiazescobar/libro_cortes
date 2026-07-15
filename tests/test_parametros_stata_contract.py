@@ -2,6 +2,8 @@ import csv
 import re
 from pathlib import Path
 
+import pandas as pd
+
 
 ROOT = Path(__file__).resolve().parents[1]
 TEXT = (ROOT / "04-ParametrosStata.Rmd").read_text(encoding="utf-8")
@@ -61,6 +63,15 @@ def test_monte_carlo_outputs_have_complete_scenarios():
 
     draws = BASE / "results/monte_carlo_draws.dta"
     assert draws.is_file() and draws.stat().st_size > 0
+    draws_df = pd.read_stata(draws, convert_categoricals=False)
+    assert list(draws_df.columns) == ["escenario", "rep", "sesgo"]
+    assert len(draws_df) == 2000
+    assert not draws_df.isna().any().any()
+    for scenario in ["seleccion", "aleatorizacion"]:
+        scenario_draws = draws_df.loc[draws_df["escenario"] == scenario]
+        assert len(scenario_draws) == 1000
+        assert scenario_draws["rep"].is_unique
+        assert set(scenario_draws["rep"]) == set(range(1, 1001))
 
 
 def test_all_three_stata_graphs_exist():

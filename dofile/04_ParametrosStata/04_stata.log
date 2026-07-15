@@ -3,7 +3,7 @@
        log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/dof
 > ile/04_ParametrosStata/04_stata.log
   log type:  text
- opened on:  15 Jul 2026, 11:15:26
+ opened on:  15 Jul 2026, 11:30:06
 
 . 
 . capture mkdir "results"
@@ -63,9 +63,9 @@
 . tempfile original population
 
 . save `original', replace
-(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000001 not
+(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St06491.000001 not
     found)
-file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000001 saved
+file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St06491.000001 saved
     as .dta format
 
 . 
@@ -88,9 +88,9 @@ file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000001 saved
 . drop y tau
 
 . save `population', replace
-(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000002 not
+(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St06491.000002 not
     found)
-file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000002 saved
+file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St06491.000002 saved
     as .dta format
 
 . 
@@ -147,7 +147,7 @@ file results/parameters_results.csv saved
 
       Command: one_rep,
                    population("/var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn
-                   > /T//St98224.000002") scenario("seleccion")
+                   > /T//St06491.000002") scenario("seleccion")
         sesgo: r(sesgo)
 
 
@@ -158,9 +158,9 @@ file results/parameters_results.csv saved
 . tempfile seleccion
 
 . save `seleccion', replace
-(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000003 not
+(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St06491.000003 not
     found)
-file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000003 saved
+file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St06491.000003 saved
     as .dta format
 
 . 
@@ -169,7 +169,7 @@ file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St98224.000003 saved
 
       Command: one_rep,
                    population("/var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn
-                   > /T//St98224.000002") scenario("aleatorizacion")
+                   > /T//St06491.000002") scenario("aleatorizacion")
         sesgo: r(sesgo)
 
 
@@ -222,9 +222,9 @@ file results/monte_carlo_summary.csv saved
 . 
 . histogram sesgo if escenario == "seleccion", width(.01) start(`xmin') fractio
 > n color(navy%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin
-> ' `xmax')) xlabel(0(1)4) title("Sesgo con selección") subtitle("1.000 repetic
-> iones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name(g_seleccion
-> , replace)
+> ' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Sesgo con selección") subtitle("1
+> .000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name
+> (g_seleccion, replace)
 (bin=410, start=-.1, width=.01)
 
 . graph export "sesgo_con_seleccion.png", replace width(1800)
@@ -233,9 +233,9 @@ file sesgo_con_seleccion.png written in PNG format
 . 
 . histogram sesgo if escenario == "aleatorizacion", width(.01) start(`xmin') fr
 > action color(forest_green%70) xline(0, lcolor(maroon) lwidth(medthick)) xscal
-> e(range(`xmin' `xmax')) xlabel(0(1)4) title("Sesgo con aleatorización") subti
-> tle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción"
-> ) name(g_aleatorizacion, replace)
+> e(range(`xmin' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Sesgo con aleatoriza
+> ción") subtitle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitl
+> e("Fracción") name(g_aleatorizacion, replace)
 (bin=17, start=-.1, width=.01)
 
 . graph export "sesgo_con_aleatorizacion.png", replace width(1800)
@@ -245,10 +245,10 @@ file sesgo_con_aleatorizacion.png written in PNG format
 . twoway (kdensity sesgo if escenario == "seleccion", lcolor(navy) lwidth(medth
 > ick)) (kdensity sesgo if escenario == "aleatorizacion", lcolor(forest_green) 
 > lwidth(medthick)), xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xm
-> in' `xmax')) xlabel(0(1)4) title("Comparación de escenarios") subtitle("Distr
-> ibución del sesgo en 1.000 repeticiones") xtitle("NAIVE - ATT") ytitle("Densi
-> dad") legend(order(1 "Selección" 2 "Aleatorización")) name(g_comparacion, rep
-> lace)
+> in' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Comparación de escenarios") sub
+> title("Distribución del sesgo en 1.000 repeticiones") xtitle("NAIVE - ATT") y
+> title("Densidad") legend(order(1 "Selección" 2 "Aleatorización")) name(g_comp
+> aracion, replace)
 
 . graph export "comparacion_escenarios.png", replace width(1800)
 file comparacion_escenarios.png written in PNG format
@@ -264,5 +264,5 @@ Pipeline canónico completado
        log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/dof
 > ile/04_ParametrosStata/04_stata.log
   log type:  text
- closed on:  15 Jul 2026, 11:18:09
+ closed on:  15 Jul 2026, 11:32:41
 -------------------------------------------------------------------------------

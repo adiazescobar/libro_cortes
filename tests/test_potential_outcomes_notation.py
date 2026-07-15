@@ -9,7 +9,7 @@ FORBIDDEN = re.compile(
 
 
 def test_notation_pattern_covers_variants_without_rejecting_valid_time_notation():
-    abbreviated = ["Y(1)", "Y_i( 0 )", "Y_j(d)", "Y_{k} ( 1 )", "Y_{it}(d)"]
+    abbreviated = ["Y(1)", "Y_i( 0 )", "Y_j(d)", "Y_{k} ( 1 )", "Y_{it}(d)", "Y(D)", "Y_i(D)"]
     valid = [
         "Y_i(D=1)",
         "Y(D=0)",
