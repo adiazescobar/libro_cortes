@@ -400,6 +400,8 @@ postclose `resultados'
 
 use `archivo', clear
 list
+capture mkdir results
+export delimited using "results/stata_basics_results.csv", replace
 ```
 
 **Salida verificada de Stata**
@@ -424,14 +426,14 @@ visible_results$Media <- round(visible_results$Media, 3)
 knitr::kable(visible_results, align = c("l", "r", "r"))
 ```
 
-Cada `summarize` almacenó sus resultados en `r()`. El loop recuperó `r(mean)` y `r(N)` con `post`, una fila a la vez; `postclose` cerró la tabla antes de abrirla y exportarla.
+Cada `summarize` almacenó sus resultados en `r()`. El loop recuperó `r(mean)` y `r(N)` con `post`, una fila a la vez; `postclose` cerró la tabla antes de abrirla con `use` y exportarla con `export delimited`. `capture mkdir results` crea la carpeta de salida cuando aún no existe.
 
 
 ### ¿Qué hicimos aquí? {-}
 
 1. `tempname` crea un alias para el objeto de `postfile`.
 2. `tempfile` genera una ruta temporal para almacenar los resultados.
-3. `postfile` define las variables a guardar (aquí: nombre, media y desviación estándar).
+3. `postfile` define las variables a guardar (aquí: ejemplo, nombre de la variable, media y número de observaciones).
 4. Dentro del loop, usamos `post` para guardar cada fila.
 5. Cerramos con `postclose`.
 6. Cargamos el archivo resultante con `use` y lo exploramos.
@@ -447,7 +449,7 @@ Cada `summarize` almacenó sus resultados en `r()`. El loop recuperó `r(mean)` 
 ::: {.boxejercicio}
 ### 📦 Ejercicios con `postfile`  {-}
 
-1. Modifica el ejemplo para guardar también el número de observaciones (`r(N)`).
+1. Modifica el ejemplo para guardar también la desviación estándar (`r(sd)`). Para hacerlo, tendrás que ampliar la definición de `postfile` con una columna adicional y añadir `r(sd)` al comando `post`.
 2. Aplica un `regress` en un loop sobre varias variables dependientes y guarda los coeficientes de `weight` en cada una.
 3. Crea una base de resultados que incluya, por cada variable, un indicador lógico que diga si su media es mayor a 500.
 4. Exporta la base final a Excel usando `export excel`.
@@ -611,4 +613,3 @@ for v in ["x1", "x2", "x3"]:
     resultados.append({"var": v, "media": media})
 resultados_df = pd.DataFrame(resultados)
 ```
-

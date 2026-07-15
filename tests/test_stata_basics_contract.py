@@ -24,3 +24,14 @@ def test_canonical_results_schema():
     with path.open(newline="", encoding="utf-8-sig") as handle:
         columns = set(next(csv.reader(handle)))
     assert {"ejemplo", "variable", "valor", "N"} <= columns
+
+
+def test_postfile_lesson_matches_canonical_flow():
+    assert 'export delimited using "results/stata_basics_results.csv", replace' in RMD
+    assert (
+        "`postfile` define las variables a guardar (aquí: ejemplo, nombre de la "
+        "variable, media y número de observaciones)."
+    ) in RMD
+    assert "guardar también la desviación estándar (`r(sd)`)" in RMD
+    assert "ampliar la definición de `postfile`" in RMD
+    assert "guardar también el número de observaciones (`r(N)`)" not in RMD
