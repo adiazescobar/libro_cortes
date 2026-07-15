@@ -628,6 +628,37 @@ main_view <- stata_main %>%
     `R²` = round(R2, 3)
   )
 
+s2_rows <- sprintf(
+  "%s: coeficiente %.3f, SE %.3f, gl %d",
+  main_view$Modelo,
+  main_view$`ATE estimado`,
+  main_view$`Error estándar robusto`,
+  main_view$`gl residuales`
+)
+s2_case_text <- paste0(
+  "Sobre la muestra canónica de ", unique(main_view$N),
+  " estudiantes se obtienen: ", paste(s2_rows, collapse = "; "), "."
+)
+
+s4_reference <- stata_main %>%
+  filter(modelo == "m4_completo", termino == "D")
+s4_python_hyp <- s4_reference %>%
+  transmute(
+    coeficiente = coeficiente - 0.08,
+    error_estandar = error_estandar * 0.90,
+    N = N - 2
+  )
+s4_case_text <- sprintf(
+  paste0(
+    "Después, use este **escenario hipotético de diagnóstico**: ",
+    "la referencia canónica de Stata para el modelo completo reporta ",
+    "coeficiente %.4f, SE %.4f y N=%d; unos valores Python deliberadamente ",
+    "divergentes, generados para el ejercicio, reportan %.4f, %.4f y N=%d."
+  ),
+  s4_reference$coeficiente, s4_reference$error_estandar, s4_reference$N,
+  s4_python_hyp$coeficiente, s4_python_hyp$error_estandar, s4_python_hyp$N
+)
+
 kable(main_view, align = "lrrrrrrr") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
@@ -639,7 +670,7 @@ kable(main_view, align = "lrrrrrrr") %>%
 ::: {.box-ejercicio}
 **RCT-S2 — Lectura de modelos y precisión**
 
-Sobre la misma muestra de 70 estudiantes se obtienen: simple, 4.312 (SE 0.476); con controles, 4.252 (SE 0.464); con estratos, 4.390 (SE 0.429); completo, 4.296 (SE 0.440). Los grados de libertad residuales son 68, 63, 65 y 60, respectivamente. Compare coeficientes, precisión e IC 95% con referencia t. ¿Cuál especificación es más precisa en esta muestra? Justifique por qué una SE menor no significa que los controles hayan creado la identificación y explique qué condición de ponderación permite interpretar las cuatro columnas como el mismo ATE objetivo.
+`r s2_case_text` Compare coeficientes, precisión e IC 95% con referencia t y los grados de libertad residuales indicados. ¿Cuál especificación es más precisa en esta muestra? Justifique por qué una SE menor no significa que los controles hayan creado la identificación y explique qué condición de ponderación permite interpretar las cuatro columnas como el mismo ATE objetivo.
 
 **Puntaje sugerido:** 5 puntos.
 
@@ -886,7 +917,7 @@ modelsummary(
 ::: {.box-ejercicio}
 **RCT-S4 — Interacción, CATE y concordancia**
 
-En `reg y i.D##i.mujer i.D##c.libros, vce(robust)`, el coeficiente de `1.D` es 3.20, el de `1.D#1.mujer` es 0.80 y el de `1.D#c.libros` es 0.15. Calcule el efecto ajustado para el perfil `mujer=1`, `libros=4` y escriba el `lincom` correspondiente. Después, para el modelo completo, Stata reporta coeficiente 4.2956, SE 0.4404 y N=70, mientras Python reporta 4.2100, SE 0.3980 y N=68. Diagnostique en orden las comprobaciones de muestra, fórmula, codificación de estratos y covarianza que haría antes de atribuir la discrepancia al software. Distinga en su reporte niveles predichos de `dydx(D)`/CATE.
+En un caso hipotético, tras `reg y i.D##i.mujer i.D##c.libros, vce(robust)`, el coeficiente de `1.D` es 3.20, el de `1.D#1.mujer` es 0.80 y el de `1.D#c.libros` es 0.15. Calcule el efecto ajustado para el perfil `mujer=1`, `libros=4` y escriba el `lincom` correspondiente. `r s4_case_text` Diagnostique en orden las comprobaciones de muestra, fórmula, codificación de estratos y covarianza que haría antes de atribuir la discrepancia al software. Distinga en su reporte niveles predichos de `dydx(D)`/CATE.
 
 **Puntaje sugerido:** 5 puntos.
 

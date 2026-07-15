@@ -277,9 +277,9 @@ def test_practice_exam_questions_are_self_contained_cases():
     blocks = _questions(PRACTICE, "RCT-S", ["RCT-S1", "RCT-S2", "RCT-S3", "RCT-S4"])
     required_by_question = [
         ["student_id", "20250813", "p=0.50", "semestre", "Formule"],
-        ["4.312", "0.476", "4.390", "0.429", "Compare", "Justifique"],
+        ["`r s2_case_text`", "Compare", "Justifique"],
         ["240 estudiantes", "24 escuelas", "asistencia posterior", "Decida", "Explique"],
-        ["mujer=1", "libros=4", "4.2956", "4.2100", "Diagnostique", "Calcule"],
+        ["mujer=1", "libros=4", "`r s4_case_text`", "Diagnostique", "Calcule"],
     ]
     for block, required in zip(blocks, required_by_question):
         assert all(fragment in block for fragment in required), required
@@ -337,6 +337,21 @@ def test_confidence_interval_df_are_mapped_by_model_name():
         assert mapping in PRACTICE
     assert "df_residual = unname(df_by_model[modelo])" in PRACTICE
     assert "df_residual = c(68, 63, 65, 60)" not in PRACTICE
+
+
+def test_empirical_exam_inputs_come_from_canonical_objects_and_hypothetical_case_is_labeled():
+    blocks = _questions(PRACTICE, "RCT-S", ["RCT-S1", "RCT-S2", "RCT-S3", "RCT-S4"])
+    for required in [
+        "s2_case_text <-",
+        "main_view",
+        "s4_reference <- stata_main",
+        "s4_python_hyp <-",
+        "s4_case_text <-",
+    ]:
+        assert required in PRACTICE
+    assert "`r s2_case_text`" in blocks[1]
+    assert "`r s4_case_text`" in blocks[3]
+    assert "escenario hipotético de diagnóstico" in PRACTICE
 
 
 def test_theory_headings_delegate_numbering_to_bookdown():
