@@ -1,5 +1,6 @@
 import os
 import re
+import subprocess
 from pathlib import Path
 
 
@@ -31,8 +32,9 @@ def _boxes(text):
 def _has_answer_marker(block):
     answer_label = re.compile(
         r"(?im)^\s*(?:>\s*)?(?:[-*+]\s+)?(?:#{1,6}\s+)?"
-        r"(?:(?:\*\*|__)?(?:respuesta|solución|pista)"
-        r"(?:\s*:\s*(?:\*\*|__)?|(?:\*\*|__)\s*:))"
+        r"(?:\*\*|__)?(?:respuesta|solución|pista)(?:\*\*|__)?\s*"
+        r"(?::|\.|=|correcta\b|es\b)|\bla\s+respuesta\s+es\b|"
+        r"\bsolución\s+correcta\b",
     )
     lowered = block.casefold()
     return bool(answer_label.search(block)) or any(
@@ -54,12 +56,52 @@ def _questions(text, family, expected):
     return question_boxes
 
 
+def _assert_metadata_line(block, label):
+    pattern = re.compile(
+        rf"(?im)^\s*(?:[-*+]\s+)?(?:\*\*|__)?{re.escape(label)}"
+        rf"(?:\*\*|__)?\s*:"
+    )
+    assert len(pattern.findall(block)) == 1, f"Se exige una línea estructural {label}:"
+
+
 def _assert_no_manual_numbering(text):
     forbidden = re.compile(
         r"^#{2,4}\s+(?:(?:PASO|Paso|Etapa)\b\s*\d*|\d+\s*[.):_-])",
         re.MULTILINE,
     )
     assert not forbidden.search(text), "Bookdown, no el Rmd, debe numerar encabezados"
+
+
+def _assert_global_potential_outcomes_notation(text):
+    compact = re.sub(r"(?:\\,|\s)+", "", text)
+    assert "Y_i(D=1)" in compact and "Y_i(D=0)" in compact
+    incompatible = [
+        r"(?<![A-Za-z_])Y\(D=[01]\)",
+        r"Y_i\([01]\)",
+        r"Y_i\^[{]?[01][}]?",
+    ]
+    assert not any(re.search(pattern, compact) for pattern in incompatible)
+
+
+def _private_exposure_counts(tracked_paths, content_by_path, forbidden):
+    names = 0
+    contents = 0
+    lowered_tokens = [token.casefold() for token in forbidden if token]
+    for path in tracked_paths:
+        lowered_path = path.casefold()
+        names += any(token in lowered_path for token in lowered_tokens)
+    for text in content_by_path.values():
+        lowered_text = text.casefold()
+        contents += any(token in lowered_text for token in lowered_tokens)
+    return names, contents
+
+
+def _assert_stage_headings(h3, stages, permitted_non_stages):
+    classified = set(stages) | set(permitted_non_stages)
+    unexpected = [heading for heading in h3 if heading not in classified]
+    assert not unexpected, f"H3 no clasificados como etapa o excepción: {unexpected}"
+    stage_headings = [heading for heading in h3 if heading not in permitted_non_stages]
+    assert stage_headings == stages
 
 
 def test_theory_preserves_foundational_content_and_resources():
@@ -90,17 +132,50 @@ def test_theory_preserves_foundational_content_and_resources():
     )
 
 
+def test_both_chapters_use_only_global_potential_outcomes_notation():
+    _assert_global_potential_outcomes_notation(THEORY)
+    _assert_global_potential_outcomes_notation(PRACTICE)
+
+
+def test_potential_outcomes_notation_rejects_real_incompatible_variants():
+    compatible = r"$Y_i(D=1)$ y $Y_i(D=0)$"
+    _assert_global_potential_outcomes_notation(compatible)
+    for rival in [
+        r"$Y_i(D=1)$, $Y_i(D=0)$ y $Y(D=1)$",
+        r"$Y_i(D=1)$, $Y_i(D=0)$ y $Y_i(1)$",
+        r"$Y_i(D=1)$, $Y_i(D=0)$ y $Y_i^{0}$",
+    ]:
+        try:
+            _assert_global_potential_outcomes_notation(rival)
+        except AssertionError:
+            continue
+        raise AssertionError("Una variante incompatible no fue rechazada")
+
+
 def test_theory_has_required_learning_blocks():
-    assert len(_boxes(THEORY)) >= 8
+    boxes = _boxes(THEORY)
+    assert len(boxes) >= 8
     for label in ["Intuición", "Resultado clave", "Demostración", "Advertencia", "Comparación"]:
-        assert label in THEORY
+        assert any(label in box for box in boxes), f"Falta un bloque etiquetado {label}"
 
 
 def test_theory_has_exact_exam_questions_without_answers():
     for block in _questions(THEORY, "RCT-T", ["RCT-T1", "RCT-T2", "RCT-T3"]):
-        assert block.casefold().count("puntaje sugerido") == 1
-        assert block.casefold().count("producto esperado") == 1
+        _assert_metadata_line(block, "Puntaje sugerido")
+        _assert_metadata_line(block, "Producto esperado")
         assert not _has_answer_marker(block)
+
+
+def test_answer_detector_rejects_predictable_disclosures():
+    assert not _has_answer_marker("Justifique su respuesta y proponga una solución.")
+    for disclosure in [
+        "Respuesta. El estimador es 4.",
+        "Solución correcta = usar controles.",
+        "La respuesta es el ATE.",
+        "Pista = centre la covariable.",
+        "Ver respuesta",
+    ]:
+        assert _has_answer_marker(disclosure)
 
 
 def test_practice_has_eighteen_unique_ordered_stages():
@@ -124,23 +199,42 @@ def test_practice_has_eighteen_unique_ordered_stages():
         "Replicación en Python y Colab",
         "Concordancia Stata–Python",
     ]
-    h3 = [re.sub(r"\s*\{-\}\s*$", "", item).strip() for item in re.findall(r"^###\s+(.+)$", PRACTICE, re.MULTILINE)]
-    selected = [heading for heading in h3 if heading in stages]
-    assert selected == stages
-    assert all(h3.count(stage) == 1 for stage in stages)
+    permitted_non_stages = {
+        "Lecturas",
+        "Asignación a nivel individual (dos muestras independientes)",
+        "Pruebas",
+        "El truco de centrar (Wooldridge)",
+    }
+    h3 = [
+        re.sub(r"\s*\{-\}\s*$", "", item).strip()
+        for item in re.findall(r"^###\s+(.+)$", PRACTICE, re.MULTILINE)
+    ]
+    _assert_stage_headings(h3, stages, permitted_non_stages)
+
+
+def test_stage_structure_rejects_an_interleaved_extra_h3():
+    stages = ["Etapa alfa", "Etapa beta"]
+    _assert_stage_headings(["Lecturas", *stages], stages, {"Lecturas"})
+    try:
+        _assert_stage_headings(
+            ["Etapa alfa", "Encabezado inesperado", "Etapa beta"], stages, {"Lecturas"}
+        )
+    except AssertionError:
+        return
+    raise AssertionError("Un H3 extra intercalado no fue rechazado")
 
 
 def test_practice_has_required_learning_blocks():
-    assert len(_boxes(PRACTICE)) >= 12
+    boxes = _boxes(PRACTICE)
+    assert len(boxes) >= 12
     for label in ["Comando clave", "Salida central", "Interpretación", "Error frecuente", "Resultado clave"]:
-        assert label in PRACTICE
+        assert any(label in box for box in boxes), f"Falta un bloque etiquetado {label}"
 
 
 def test_practice_has_exact_exam_questions_without_answers():
     for block in _questions(PRACTICE, "RCT-S", ["RCT-S1", "RCT-S2", "RCT-S3", "RCT-S4"]):
-        lowered = block.casefold()
-        for label in ["puntaje sugerido", "comandos permitidos", "producto esperado"]:
-            assert lowered.count(label) == 1
+        for label in ["Puntaje sugerido", "Comandos permitidos", "Producto esperado"]:
+            _assert_metadata_line(block, label)
         assert not _has_answer_marker(block)
 
 
@@ -160,14 +254,36 @@ def test_tracked_student_material_omits_private_identifiers():
     ]
     supplied = os.environ.get("RCT_PRIVATE_IDENTIFIERS", "")
     forbidden = fragments + [item for item in supplied.split(os.pathsep) if item]
+    tracked_paths = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout.decode("utf-8").split("\0")
+    tracked_paths = [path for path in tracked_paths if path]
     candidates = [ROOT / "_bookdown.yml", *ROOT.glob("*.Rmd")]
     docs = ROOT / "docs"
     if docs.exists():
         candidates.extend(path for path in docs.rglob("*") if path.is_file())
-    hits = []
+    content_by_path = {}
     for path in candidates:
-        text = path.read_text(encoding="utf-8", errors="ignore").casefold()
-        for token in forbidden:
-            if token.casefold() in text:
-                hits.append((str(path.relative_to(ROOT)), token))
-    assert not hits, f"Identificadores privados rastreables: {hits}"
+        content_by_path[str(path.relative_to(ROOT))] = path.read_text(
+            encoding="utf-8", errors="ignore"
+        )
+    name_hits, content_hits = _private_exposure_counts(
+        tracked_paths, content_by_path, forbidden
+    )
+    assert name_hits == 0 and content_hits == 0, (
+        "Hay identificadores privados rastreables; "
+        f"coincidencias en rutas={name_hits}, contenidos={content_hits}"
+    )
+
+
+def test_private_audit_detects_name_path_and_content_without_echoing_token():
+    token = "docente" + "-solo-interno"
+    names, contents = _private_exposure_counts(
+        [f"docs/{token}/index.html", "05-RCT.Rmd"],
+        {"05-RCT.Rmd": f"ruta: ../{token}.md"},
+        [token],
+    )
+    assert (names, contents) == (1, 1)

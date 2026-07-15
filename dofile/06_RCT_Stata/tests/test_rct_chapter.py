@@ -2,6 +2,8 @@ import csv
 import re
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[3]
 CHAPTER = ROOT / "06-RCT2.Rmd"
@@ -12,6 +14,27 @@ RESULTS = BASE / "results"
 def _columns(path):
     with path.open(newline="", encoding="utf-8-sig") as handle:
         return set(next(csv.reader(handle)))
+
+
+def _assert_canonical_verification(rows):
+    expected_models = ["m1_simple", "m2_controles", "m3_estratos", "m4_completo"]
+    assert len(rows) == 4
+    assert [row["modelo"] for row in rows] == expected_models
+    assert len({(row["modelo"], row["termino"]) for row in rows}) == 4
+    for row in rows:
+        assert row["termino"] == "D"
+        assert row["estado"] == "PASS"
+        assert row["N_igual"].casefold() == "true"
+        assert int(float(row["N_stata"])) == int(float(row["N_python"])) == 70
+        coef_diff = abs(float(row["coeficiente_stata"]) - float(row["coeficiente_python"]))
+        se_diff = abs(float(row["error_estandar_stata"]) - float(row["error_estandar_python"]))
+        r2_diff = abs(float(row["R2_stata"]) - float(row["R2_python"]))
+        assert float(row["coef_abs_diff"]) == pytest.approx(coef_diff, abs=1e-15)
+        assert float(row["se_abs_diff"]) == pytest.approx(se_diff, abs=1e-15)
+        assert float(row["R2_abs_diff"]) == pytest.approx(r2_diff, abs=1e-15)
+        assert coef_diff < 1e-3
+        assert se_diff < 1e-3
+        assert r2_diff < 1e-2
 
 
 def test_all_download_links_resolve_to_current_materials():
@@ -71,8 +94,37 @@ def test_balance_heterogeneity_and_verification_contracts_are_preserved():
     assert {"moderador", "termino", "coeficiente", "error_estandar", "N"} <= _columns(
         RESULTS / "heterogeneidad_stata.csv"
     )
-    verification = _columns(RESULTS / "verificacion_stata_python.csv")
-    assert {"modelo", "termino", "estado"} <= verification
+    verification_path = RESULTS / "verificacion_stata_python.csv"
+    assert {
+        "modelo", "termino", "estado", "N_stata", "N_python", "N_igual",
+        "coeficiente_stata", "coeficiente_python", "error_estandar_stata",
+        "error_estandar_python", "R2_stata", "R2_python", "coef_abs_diff",
+        "se_abs_diff", "R2_abs_diff",
+    } <= _columns(verification_path)
+    with verification_path.open(newline="", encoding="utf-8-sig") as handle:
+        _assert_canonical_verification(list(csv.DictReader(handle)))
+
+
+def test_verification_contract_rejects_directed_mutations():
+    path = RESULTS / "verificacion_stata_python.csv"
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        canonical = list(csv.DictReader(handle))
+    mutations = [
+        (0, "estado", "FAIL"),
+        (0, "termino", "constante"),
+        (0, "N_igual", "False"),
+        (0, "N_python", "69"),
+        (0, "coef_abs_diff", "0.001"),
+        (0, "se_abs_diff", "0.001"),
+        (0, "R2_abs_diff", "0.01"),
+        (0, "coeficiente_python", "99"),
+        (3, "modelo", "modelo_extra"),
+    ]
+    for index, field, value in mutations:
+        altered = [row.copy() for row in canonical]
+        altered[index][field] = value
+        with pytest.raises(AssertionError):
+            _assert_canonical_verification(altered)
 
 
 def test_chapter_preserves_balance_heterogeneity_and_verification_sections():
