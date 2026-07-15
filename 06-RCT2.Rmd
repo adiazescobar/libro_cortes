@@ -114,9 +114,9 @@ Stata y Python deben leer exactamente esta misma base. Si el archivo no está di
 
 *3) Parámetros y equivalencias clave*
 
-- **ATE:** \(\tau = \mathbb{E}[Y(D=1)-Y(D=0)]\).
-- **ATT:** \(\mathbb{E}[Y(D=1)-Y(D=0) \mid D=1]\).
-- **ATU:** \(\mathbb{E}[Y(D=1)-Y(D=0) \mid D=0]\).
+- **ATE:** \(\tau = \mathbb{E}[Y_i(D=1)-Y_i(D=0)]\).
+- **ATT:** \(\mathbb{E}[Y_i(D=1)-Y_i(D=0) \mid D_i=1]\).
+- **ATU:** \(\mathbb{E}[Y_i(D=1)-Y_i(D=0) \mid D_i=0]\).
 
 Bajo aleatorización: \(ATE = ATT = ATU\), porque los grupos son comparables en todo (observable y no observable).
 
@@ -134,7 +134,7 @@ Bajo aleatorización: \(ATE = ATT = ATU\), porque los grupos son comparables en 
   \;=\;
   \underbrace{\tau}_{\text{efecto causal}}
   \;+\;
-  \underbrace{\mathbb{E}[Y(D=0)\mid D=1] - \mathbb{E}[Y(D=0)\mid D=0]}_{\text{sesgo de selección}}.
+  \underbrace{\mathbb{E}[Y_i(D=0)\mid D_i=1] - \mathbb{E}[Y_i(D=0)\mid D_i=0]}_{\text{sesgo de selección}}.
   \]
 
 ::: {.boxnote}
@@ -142,14 +142,40 @@ Bajo aleatorización: \(ATE = ATT = ATU\), porque los grupos son comparables en 
 :::
 
 
-## Paso a Paso para un RCT {-}
+## Desarrollo guiado del RCT {-}
 
-### PASO 1) Diseñar el experimento {-}
-- Definir la **población objetivo** y el **tratamiento**.
-- Determinar el **tamaño de muestra** necesario para detectar un efecto significativo (usando `power` en Stata/R).
+### Pregunta, tratamiento, resultado y unidad de asignación {-}
+
+La unidad de asignación es el estudiante. El tratamiento es recibir definiciones de palabras difíciles (grupo B), el control es recibir el texto crítico de economía (grupo A) y el resultado es el puntaje del quiz. El estimando principal es el ATE sobre los 70 estudiantes de los cuatro semestres. Antes de recolectar datos, el protocolo fija población objetivo, resultado primario, tamaño de muestra y mínima diferencia detectable.
+
+::: {.box-intuicion}
+**Interpretación:** la unidad de asignación determina qué observaciones pueden considerarse independientes y el nivel correcto de la inferencia. No debe confundirse con la unidad en la que se mide el resultado.
+:::
+
+### Inspección y preparación de los datos {-}
+
+```stata
+use "data.dta", clear
+describe
+gen long student_id = _n
+isid student_id
+assert inlist(grupo, "A", "B")
+assert !missing(resultado, semestre, edad, genero, programa, libros)
+gen byte D = (grupo == "B")
+gen y = resultado
+gen mujer = (genero == "Mujer")
+gen pregrado = (programa == "Pregrado")
+gen maestria = (programa == "Maestría")
+global X edad mujer libros pregrado maestria
+tab semestre D
+```
+
+::: {.box-stata}
+**Comando clave:** `isid student_id` comprueba que cada fila representa una unidad única; los `assert` detienen el flujo si cambia el contrato de datos.
+:::
 
 
-### Paso 2) Aleatorizar la asignación (Stata) {-}
+### Semilla y asignación aleatoria {-}
 
 Abajo tienes varias formas de asignar tratamiento en Stata. Incluyo opciones con `runiform()` (base) y con el comando de SSC `randtreat` (estratificado, proporciones desiguales, clusters y manejo de *misfits*).
 
@@ -160,6 +186,14 @@ set seed 20250813
 local RNGSTATE = c(rngstate)   // guardar estado; opcionalmente escríbelo en tu log
 display as text "Seed guardada: `RNGSTATE'"
 ```
+
+La semilla reproduce la secuencia pseudoaleatoria solo si también se conserva el orden de las observaciones y el algoritmo. Por eso se ordena por un identificador estable antes de generar números. En una asignación Bernoulli, cada unidad tiene probabilidad conocida \(p\), pero el número final de tratados es aleatorio.
+
+::: {.box-cuidado}
+**Error frecuente:** fijar la semilla después de `runiform()` o reordenar la base entre ejecuciones cambia la asignación. Registrar semilla no reemplaza archivar la lista final de asignación.
+:::
+
+### Aleatorización simple y estratificada {-}
 
 *Bernoulli simple (50/50) con `runiform()`*
 
@@ -328,7 +362,15 @@ gen byte D = Dcl
 tab D
 ```
 
-### PASO 3) Verificar el balance de covariables {-}
+La asignación simple da a cada estudiante la misma probabilidad marginal. La estratificada preserva la proporción dentro de grupos definidos antes del tratamiento y debe analizarse incorporando esos estratos. Diferencias basales pueden aparecer por azar aun con una asignación correcta: son balance fortuito, no prueba automática de manipulación.
+
+::: {.box-resultado}
+**Resultado clave:** el protocolo elige simple o estratificada antes de observar resultados. Realeatorizar porque una covariable “salió significativa” altera la distribución de asignación y exige documentar esa regla.
+:::
+
+### Tabla de balance {-}
+
+Aquí vamos a **Verificar el balance de covariables** con resultados exportados por Stata, no con cifras transcritas.
 
 Nuestra base `data.dta` contiene datos de un experimento de aula replicado en **cuatro semestres**. En cada semestre, a un grupo se le entregaron **definiciones de palabras difíciles** (tratamiento) y al otro un **texto crítico de economía** (control), y luego todos presentaron el mismo quiz de vocabulario.
 
@@ -459,6 +501,14 @@ kable(bal, align = "lrrrrrr") %>%
 
 Las diferencias son las medias de tratados menos las de control. La tabla permite evaluar tanto su magnitud como su precisión; el balance no debe juzgarse únicamente variable por variable, por lo que complementamos esta lectura con la prueba conjunta.
 
+Además del p-valor, conviene reportar la diferencia estandarizada: diferencia de medias dividida por una desviación estándar combinada. Esta medida separa magnitud de tamaño muestral. Un p-valor grande no demuestra igualdad y, con muchas pruebas, algún p-valor pequeño puede aparecer por azar. Ante desbalance fortuito se conserva la asignación, se documenta y se ajusta por covariables pretratamiento o por la regla prespecificada.
+
+::: {.box-salida}
+**Salida central:** la tabla canónica presenta medias por brazo, diferencia, p-valor y tamaños de grupo para cada covariable; se lee junto con magnitudes sustantivas y el protocolo.
+:::
+
+### Prueba conjunta de balance {-}
+
 ```{r balance-ftest, echo=FALSE, message=FALSE, warning=FALSE}
 # Prueba conjunta: D ~ X (LPM con F-test)
 lpm <- lm(D ~ edad + mujer + libros + pregrado + maestria, data = dat)
@@ -468,9 +518,23 @@ pval_f <- pf(ft[1], ft[2], ft[3], lower.tail = FALSE)
 
 **Prueba conjunta (LPM):** F = `r round(ft[1], 3)`, p-valor = `r round(pval_f, 3)`. `r if(pval_f > 0.10) "No rechazamos balance conjunto." else "Se rechaza balance conjunto."`
 
-### PASO 4) Estimar el efecto del tratamiento: los cuatro escenarios {-}
+::: {.box-interpretacion}
+**Interpretación:** en `reg D $X, vce(robust)` y `test $X`, la hipótesis conjunta es que las covariables no predicen la asignación. No rechazar no prueba aleatoriedad; la evidencia principal sigue siendo el mecanismo documentado.
+:::
 
-En el capítulo anterior derivamos **cuatro especificaciones** según el diseño experimental. Ahora las implementamos en Stata, usando `semestre` como variable de estrato \(S_i\):
+::: {.box-ejercicio}
+**RCT-S1 — Aleatorización y balance**
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `set seed`, `runiform()`, `bysort`, `ttest`, `reg`, `test`.
+
+**Producto esperado:** lista reproducible de asignación simple y estratificada, tabla de balance individual y prueba conjunta, con una breve evaluación del balance fortuito.
+:::
+
+### RCT simple sin controles {-}
+
+En el capítulo anterior derivamos **los cuatro escenarios** según el diseño experimental. Ahora los implementamos en Stata, usando `semestre` como variable de estrato \(S_i\):
 
 ::: {.table .table-bordered .table-striped}
 | Escenario | Regresión | Objetivo |
@@ -487,16 +551,40 @@ En los cuatro casos, \(\hat{\tau}\) estima el **ATE** de forma consistente. Lo q
 * ── Escenario 1: RCT simple (diferencia de medias) ──────────────────────
 eststo clear
 eststo m1: reg y D, vce(robust)
+```
 
+El coeficiente de `D` coincide con la diferencia de medias. `vce(robust)` permite varianzas distintas entre brazos.
+
+### RCT simple con controles {-}
+
+```stata
 * ── Escenario 2: RCT simple + controles baseline ────────────────────────
 eststo m2: reg y D $X, vce(robust)
+```
 
+Los controles pretratamiento no crean identificación; pueden reducir la varianza residual si predicen el resultado.
+
+### RCT estratificado sin controles adicionales {-}
+
+```stata
 * ── Escenario 3: Estratificado por semestre, sin controles ───────────────
 eststo m3: reg y D i.semestre, vce(robust)
+```
 
+Las dummies de `semestre` incorporan los bloques usados por el diseño y comparan estudiantes dentro de cohortes.
+
+### RCT estratificado con controles adicionales {-}
+
+```stata
 * ── Escenario 4: Estratificado + controles (especificación completa) ────
 eststo m4: reg y D i.semestre $X, vce(robust)
+```
 
+Esta especificación combina la estructura de asignación con covariables basales predictivas.
+
+### Comparación de las cuatro especificaciones {-}
+
+```stata
 * Comparar los cuatro modelos lado a lado
 esttab m1 m2 m3 m4, se star(* 0.10 ** 0.05 *** 0.01) ///
     stats(N r2, fmt(%9.0g %9.3f) labels("N" "R2")) ///
@@ -519,15 +607,21 @@ model_labels <- c(
 
 main_view <- stata_main %>%
   filter(termino == "D") %>%
+  mutate(
+    ci_inferior = coeficiente - 1.96 * error_estandar,
+    ci_superior = coeficiente + 1.96 * error_estandar
+  ) %>%
   transmute(
     Modelo = unname(model_labels[modelo]),
     `ATE estimado` = round(coeficiente, 3),
     `Error estándar robusto` = round(error_estandar, 3),
+    `IC 95% inferior` = round(ci_inferior, 3),
+    `IC 95% superior` = round(ci_superior, 3),
     N = N,
     `R²` = round(R2, 3)
   )
 
-kable(main_view, align = "lrrrr") %>%
+kable(main_view, align = "lrrrrrr") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
@@ -535,6 +629,15 @@ kable(main_view, align = "lrrrr") %>%
 **Observe cómo cambian los SE de \(\hat{\tau}\)** entre los cuatro modelos. El punto estimado debe ser similar (la aleatorización garantiza consistencia), pero los errores estándar se reducen al agregar variables que predicen \(Y\). Los estratos (semestre) absorben diferencias de nivel entre cohortes.
 :::
 
+::: {.box-ejercicio}
+**RCT-S2 — Lectura de modelos y precisión**
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `reg`, `eststo`, `esttab`, `lincom`.
+
+**Producto esperado:** una tabla con coeficiente, error estándar, IC 95%, N y R² para los cuatro modelos, seguida de una comparación argumentada de precisión.
+:::
 ::: {.boxnote}
 Interpretación según escala de \(Y\)
 
@@ -549,7 +652,7 @@ Interpretación según escala de \(Y\)
 
 
 
-## Inferencia estadística {-}
+### Inferencia y unidad de asignación {-}
 
 ###  Asignación a nivel individual (dos muestras independientes) {-}
 - **Varianza del estimador (clásica):**
@@ -562,11 +665,13 @@ Interpretación según escala de \(Y\)
 - **Heterocedasticidad:** usar **SE robustas** (HC).  
 - **Asignación por clusters:** usar **SE cluster** al nivel de asignación. Con pocos clusters, considerar **wild cluster bootstrap**.
 
+Con asignación individual, HC1 es coherente con independencia entre estudiantes. Si se asignaran escuelas o salones, `vce(cluster escuela)` debe reflejar esa unidad, porque los resultados dentro del cluster pueden estar correlacionados. Con pocos clusters, la aproximación asintótica y sus grados de libertad son frágiles; se reporta el número de clusters y se considera inferencia aleatorizada o wild cluster bootstrap.
+
 ### Pruebas {-}
 - **Significancia individual:** \(H_0:\,\tau=0\) (t‐test).  
 - **Significancia conjunta de \(X\):** en \(D \sim X\), \(H_0:\,\beta_X=0\) (F/\(\chi^2\)). Queremos **no rechazar**.
 
-## ¿Cuándo incluir controles? {-}
+### Cuándo incluir controles {-}
 
 - **Identificación:** con aleatorización correcta, **no necesitas** \(X\) para identificar \(\tau\).
 - **Precisión:** incluir \(X\) **pretratamiento** que **expliquen \(Y\)** puede **reducir** \(\operatorname{Var}(\hat{\tau})\) (menor varianza residual).  
@@ -577,7 +682,25 @@ Interpretación según escala de \(Y\)
   \]
   Si \(X \perp D\) (por diseño) y \(X\) explica \(Y\), esperar **SE(D)** más pequeñas.
 
-## Efectos heterogéneos (HET) {-}
+Los controles deben medirse antes del tratamiento. Un control postratamiento puede ser mediador o colisionador: condicionarlo cambia el estimando y puede introducir sesgo. La regla de selección y la especificación principal se fijan antes de mirar impactos.
+
+::: {.box-cuidado}
+**Error frecuente:** añadir asistencia posterior al tratamiento “para mejorar el ajuste” puede bloquear parte del efecto causal. Un R² mayor no garantiza una estimación causal más válida.
+:::
+
+::: {.box-ejercicio}
+**RCT-S3 — Inferencia y controles**
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `reg`, `vce(robust)`, `vce(cluster ...)`, `test`.
+
+**Producto esperado:** elección justificada del nivel de inferencia y clasificación de controles pretratamiento y postratamiento para dos diseños propuestos.
+:::
+
+### Heterogeneidad mediante interacciones {-}
+
+Los **Efectos heterogéneos (HET)** permiten preguntar si el impacto cambia con características basales.
 
 - **Especificación general:**
   \[
@@ -606,6 +729,19 @@ eststo: reg y D##i.q_edad, vce(robust)
 margins D#q_edad
 marginsplot, title("Heterogeneidad por cuartiles de edad")
 graph export "margins_qedad.pdf", replace
+```
+
+### Efecto base y CATE {-}
+
+Para una moderadora binaria, el coeficiente de `D` es el efecto base cuando \(W=0\); el CATE cuando \(W=1\) es la suma del coeficiente de `D` y el de la interacción. Para libros o edad, el CATE cambia con el valor del moderador. `lincom` y `margins, dydx(D)` calculan esa combinación con su error estándar.
+
+```stata
+reg y D##i.mujer, vce(robust)
+lincom 1.D + 1.D#1.mujer
+margins mujer, dydx(D)
+
+reg y D##c.libros, vce(robust)
+margins, dydx(D) at(libros=(0(1)8))
 ```
 
 **Resultados (con nuestros datos):**
@@ -684,7 +820,9 @@ ggplot(grid_q, aes(x = q_edad, y = yhat, fill = Grupo)) +
   theme(legend.position = "bottom")
 ```
 
-### El truco de centrar (Wooldridge) {-}
+### Centrado de covariables {-}
+
+**El truco de centrar (Wooldridge)**
 
 En el capítulo anterior vimos que si interactuamos \(D\) con una covariable \(W\), el coeficiente \(\tau\) solo es el efecto para \(W=0\), **no** el ATE promedio. Para que \(\tau\) sea directamente el ATE, centramos la covariable:
 
@@ -734,7 +872,19 @@ modelsummary(
 **Regla práctica:** siempre que interactúes el tratamiento con una variable continua, **centra la variable** para que el coeficiente de \(D\) siga siendo interpretable como el efecto promedio.
 :::
 
-## Replicación en Python / Google Colab {-}
+::: {.box-ejercicio}
+**RCT-S4 — Interacción, CATE y concordancia**
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `reg`, `lincom`, `margins`, `summarize`, `gen`, Python `statsmodels`.
+
+**Producto esperado:** CATE para un perfil indicado, comparación centrada/no centrada y diagnóstico documentado de una discrepancia hipotética entre Stata y Python.
+:::
+
+### Replicación en Python y Colab {-}
+
+La sección conserva la **Replicación en Python / Google Colab** del pipeline original.
 
 ::: {.box-colab}
 **Google Colab:** el notebook lee la misma `data.dta`, reconstruye las mismas variables y replica los cuatro modelos con errores estándar HC1.
@@ -758,7 +908,11 @@ m3 = smf.ols("y ~ D + C(semestre_f)", data=df).fit(cov_type="HC1")
 m4 = smf.ols("y ~ D + C(semestre_f) + edad + mujer + libros + pregrado + maestria", data=df).fit(cov_type="HC1")
 ```
 
-## Verificación Stata vs. Python {-}
+El mapeo exige la misma fórmula, codificación de categorías, muestra completa y covarianza HC1. `i.semestre` corresponde a `C(semestre_f)`. Si el diseño tuviera probabilidades desiguales, ambos lenguajes tendrían que usar los mismos pesos; los estratos se incluyen explícitamente en ambos. Antes de comparar se verifican N, categorías base y valores faltantes.
+
+### Concordancia Stata–Python {-}
+
+Esta es la **Verificación Stata vs. Python** de los cuatro modelos.
 
 Stata y Python exportan un CSV canónico con coeficiente, error estándar, N y \(R^2\). El comparador exige diferencias absolutas menores que \(10^{-3}\) para coeficientes y errores estándar, igualdad exacta de N y diferencias menores que \(10^{-2}\) para \(R^2\).
 
@@ -795,7 +949,6 @@ kable(verification_view, digits = 6, align = "lrrrrrrcc") %>%
 ::: {.box-verificacion}
 **Criterio de publicación:** los cuatro modelos deben aparecer como `PASS`. Los p-valores se conservan en los archivos fuente, pero no forman parte del criterio porque Stata usa una referencia t finita y `statsmodels` reporta la aproximación normal para HC1.
 :::
-
 
 ::: {.boxejercicio}
 **Ejercicios**
