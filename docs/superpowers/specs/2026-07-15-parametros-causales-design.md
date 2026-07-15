@@ -18,6 +18,7 @@ Estandarizar los capítulos teórico y práctico de Parámetros causales con las
 6. Las diapositivas prácticas que se construirán posteriormente incluirán todos los pasos y todos los resultados necesarios para dictar la clase.
 7. Las clases teóricas no incluyen un bloque de descargas.
 8. Las descargas de las clases prácticas aparecen inmediatamente después del título.
+9. La notación de resultados potenciales será `Y_i(D=1)` y `Y_i(D=0)` en todos los capítulos. Cuando el índice individual no sea necesario, se usará `Y(D=1)` y `Y(D=0)`. No se alternará con `Y_i(1)`, `Y_i(0)`, `Y(1)` o `Y(0)`.
 
 ## Capítulo 3: Parámetros causales (teoría)
 
@@ -40,7 +41,7 @@ El capítulo seguirá este orden:
 
 ### Criterios académicos
 
-- Usar la notación estándar `Y_i(1)` y `Y_i(0)` de manera consistente.
+- Usar exclusivamente la notación de clase `Y_i(D=1)` y `Y_i(D=0)`, o sus versiones sin índice cuando corresponda.
 - Distinguir parámetros causales de estimadores muestrales.
 - Explicar que el ATT, ATU y ATE son parámetros distintos cuando existe heterogeneidad de efectos y selección.
 - Mostrar la identidad:
@@ -52,7 +53,7 @@ El capítulo seguirá este orden:
 - Derivar paso a paso que la diferencia observada entre tratados y controles es el ATT más el sesgo de selección.
 - No afirmar que la independencia de resultados potenciales se cumple en general para IV, RDD o DiD. Cada uno identifica un parámetro bajo supuestos propios; se presentarán como estrategias alternativas de identificación.
 - Presentar independencia condicional junto con positividad y dejar claro que exige observar los factores de confusión relevantes.
-- Formular el antes-después con índices de tratamiento y tiempo para no confundir `Y(0)` con “resultado antes”.
+- Formular el antes-después con índices de tratamiento y tiempo para no confundir `Y(D=0)` con “resultado antes”.
 - Presentar SUTVA mediante sus dos componentes: ausencia de interferencia y tratamiento bien definido. No describir el segundo componente simplemente como “el mismo tratamiento para todos”.
 - Mantener los dos videos existentes.
 - Sustituir el prompt largo de ChatGPT por una actividad corta que pida identificar el estimando, el contrafactual faltante, el supuesto requerido y dos amenazas a la identificación.
@@ -132,7 +133,7 @@ Los logs y resultados completos permanecerán descargables. No se pegarán bloqu
 
 La entrega se considerará completa cuando:
 
-1. existan pruebas contractuales para estructura, notación, descargas y ausencia de resultados transcritos manualmente;
+1. existan pruebas contractuales para estructura, uso exclusivo de `Y_i(D=1)` y `Y_i(D=0)`, descargas y ausencia de resultados transcritos manualmente;
 2. el do-file ejecute completo en Stata 19 y produzca los archivos esperados;
 3. las cifras visibles coincidan con las salidas exportadas;
 4. el libro renderice sin errores;
