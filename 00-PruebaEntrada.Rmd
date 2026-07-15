@@ -70,10 +70,33 @@ library(webexercises)
 }
 
 /* Los controles siguen visibles; solo se neutralizan sus marcas prematuras. */
-#prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect),
-#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect) {
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect) {
+  background: var(--paper) !important;
+  border-color: var(--line) !important;
+  box-shadow: none !important;
   color: inherit !important;
   font-weight: inherit !important;
+}
+
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect)::before,
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect)::after,
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect)::before,
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect)::after {
+  content: none !important;
+  display: none !important;
+}
+
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select, label):is(.webex-correct, .webex-incorrect)
+  :is(.webex-icon, .fa, [class*="icon"]) {
+  display: none !important;
 }
 
 /* ======= CLAVE 2: Ocultar explicaciones/soluciones hasta finalizar =======
