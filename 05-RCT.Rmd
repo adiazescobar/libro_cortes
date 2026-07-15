@@ -78,9 +78,12 @@ ATE = ATT = ATU
 porque los grupos de tratamiento y control son, en promedio, idénticos en todo (observable y no observable).
 
 ::: {.boxnote}
-**Resultado clave — independencia en expectativa:** si \(D_i \perp (Y_i(D=1),Y_i(D=0))\), entonces para \(d\in\{0,1\}\),
+**Resultado clave — independencia en expectativa:** si \(D_i \perp (Y_i(D=1),Y_i(D=0))\), entonces
 \[
-\mathbb{E}[Y_i(D=d)\mid D_i=1]=\mathbb{E}[Y_i(D=d)\mid D_i=0]=\mathbb{E}[Y_i(D=d)].
+\begin{aligned}
+\mathbb{E}[Y_i(D=1)\mid D_i=1]&=\mathbb{E}[Y_i(D=1)\mid D_i=0]=\mathbb{E}[Y_i(D=1)],\\
+\mathbb{E}[Y_i(D=0)\mid D_i=1]&=\mathbb{E}[Y_i(D=0)\mid D_i=0]=\mathbb{E}[Y_i(D=0)].
+\end{aligned}
 \]
 La igualdad es una propiedad del mecanismo de asignación repetido, no una promesa de igualdad exacta en una realización particular del experimento.
 :::
