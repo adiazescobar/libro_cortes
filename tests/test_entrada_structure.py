@@ -53,7 +53,7 @@ def test_feedback_css_never_hides_answer_widgets():
     assert not any(selector in css for selector in dangerous)
     assert "#prueba-entrada-quiz:not(.show-feedback) .webex-check" in css
     assert "#prueba-entrada-quiz:not(.show-feedback) .webex-feedback" in css
-    assert "border-color: var(--line) !important" in css
+    assert "border: 1px solid var(--line) !important" in css
     assert "background: var(--paper) !important" in css
     assert "background: transparent !important" in css
     assert "box-shadow: none !important" in css
@@ -61,6 +61,13 @@ def test_feedback_css_never_hides_answer_widgets():
     assert ":is(.webex-correct, .webex-incorrect)::after" in css
     assert "content: none !important" in css
     assert ':is(.webex-icon, .fa, [class*="icon"])' in css
+    for state in ["webex-correct", "webex-incorrect"]:
+        for pseudo in ["before", "after"]:
+            selector = (
+                "#prueba-entrada-quiz:not(.show-feedback) "
+                f".{state} + .webex-icon::{pseudo}"
+            )
+            assert selector in css
 
 
 def test_scoring_javascript_runs_only_on_finalize_and_reports_sections():

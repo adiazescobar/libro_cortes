@@ -72,7 +72,7 @@ library(webexercises)
 /* Los controles siguen visibles; solo se neutralizan sus marcas prematuras. */
 #prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect) {
   background: var(--paper) !important;
-  border-color: var(--line) !important;
+  border: 1px solid var(--line) !important;
   box-shadow: none !important;
   color: inherit !important;
   font-weight: inherit !important;
@@ -80,7 +80,7 @@ library(webexercises)
 
 #prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect) {
   background: transparent !important;
-  border-color: transparent !important;
+  border: 1px solid transparent !important;
   box-shadow: none !important;
   color: inherit !important;
   font-weight: inherit !important;
@@ -90,6 +90,14 @@ library(webexercises)
 #prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect)::after,
 #prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect)::before,
 #prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect)::after {
+  content: none !important;
+  display: none !important;
+}
+
+#prueba-entrada-quiz:not(.show-feedback) .webex-correct + .webex-icon::before,
+#prueba-entrada-quiz:not(.show-feedback) .webex-correct + .webex-icon::after,
+#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect + .webex-icon::before,
+#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect + .webex-icon::after {
   content: none !important;
   display: none !important;
 }
