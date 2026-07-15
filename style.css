@@ -69,6 +69,21 @@ pre code {
   border-radius: 4px;
 }
 
+.boxcode,
+.boxoutput,
+.boxkey,
+.boxquestion {
+  border-left: 5px solid var(--accent);
+  border-radius: 5px;
+  margin: 1em 0;
+  padding: 1em;
+}
+
+.boxcode { background-color: #f4ecf7; border-left-color: #9b59b6; }
+.boxoutput { background-color: #e8f8f5; border-left-color: #2ecc71; }
+.boxkey { background-color: #eef6fb; border-left-color: #007ACC; }
+.boxquestion { background-color: #fff6e6; border-left-color: #e67e22; }
+
 .boxsuccess {
   border-left: 5px solid #2ecc71;
   background-color: #e8f8f5;

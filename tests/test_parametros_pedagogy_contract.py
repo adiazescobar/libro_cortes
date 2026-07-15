@@ -112,10 +112,8 @@ def test_practice_restores_twelve_guided_stages():
         "Monte Carlo con aleatorización",
         "Comparación gráfica",
     ]
-    missing = [stage for stage in stages if stage not in PRACTICE]
-    assert not missing, f"Faltan etapas guiadas: {', '.join(missing)}"
-    positions = [PRACTICE.index(stage) for stage in stages]
-    assert positions == sorted(positions)
+    headings = re.findall(r"^### Etapa (\d+)\. (.+)$", PRACTICE, re.MULTILINE)
+    assert headings == [(str(index), stage) for index, stage in enumerate(stages, 1)]
 
 
 def test_practice_has_required_blocks_and_exam_questions():
