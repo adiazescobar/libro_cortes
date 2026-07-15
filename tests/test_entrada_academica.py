@@ -42,3 +42,12 @@ def test_question_18_has_one_answer_aligned_with_audit():
     with AUDIT.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     assert rows[17]["clave"] == "regress Y X1 X2"
+
+
+def test_question_14_defines_counterfactual_as_unobserved_alternative_condition():
+    question = re.search(r"Pregunta 14\..*?</div>", RMD, flags=re.DOTALL).group()
+    expected = "Lo que habría ocurrido con la misma unidad bajo la condición alternativa"
+    assert f'answer = "{expected}"' in question
+    with AUDIT.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert rows[13]["clave"] == expected

@@ -35,3 +35,49 @@ def test_postfile_lesson_matches_canonical_flow():
     assert "guardar también la desviación estándar (`r(sd)`)" in RMD
     assert "ampliar la definición de `postfile`" in RMD
     assert "guardar también el número de observaciones (`r(N)`)" not in RMD
+
+
+def test_objectives_and_resources_use_standard_accents():
+    assert "Al finalizar este capítulo podrás:" in RMD
+    assert "lógica básica" in RMD
+    assert "aquí:" in RMD
+    assert "capitulo" not in RMD
+    assert "podras" not in RMD
+
+
+def test_language_equivalences_are_executable_and_accurate():
+    assert "`display abs(-2)`" in RMD
+    assert "`sqrt()` pertenece a R base y no requiere `library()`" in RMD
+    assert "En R necesitas `library()` si usas `sqrt`" not in RMD
+
+
+def test_scalars_cover_numeric_and_string_types():
+    assert "Un **scalar** de Stata puede almacenar un valor numérico o una cadena" in RMD
+    assert "en este capítulo usamos scalars numéricos" in RMD
+
+
+def test_elementary_data_workflow_and_final_checklist_are_present():
+    for snippet in [
+        "clear all",
+        "set more off",
+        "generate precio_miles",
+        "replace precio_miles",
+        "keep if",
+        "drop precio_miles",
+        "Checklist de preparación",
+    ]:
+        assert snippet in RMD
+
+
+def test_core_programming_patterns_have_visible_outputs_and_interpretation():
+    for heading in [
+        "### Patrón completo con macros {-}",
+        "### Loop con `foreach` {-}",
+        "### Loop con `forvalues` {-}",
+        "### Loop con `while` {-}",
+        "#### a) Con `args` {-}",
+        "#### b) Con `syntax` {-}",
+    ]:
+        assert heading in RMD
+    assert RMD.count("**Salida**") >= 9
+    assert RMD.count("**Interpretación**") >= 6

@@ -307,10 +307,10 @@ Aleatorización: balancea (en expectativa) observables y no observables.
 <div class="question-box">
 <span class="question-number">Pregunta 14.</span> El contrafactual se refiere a:
 
-`r mcq(c("Los datos que se perdieron en el estudio", "El grupo de control", answer = "Lo que habría ocurrido en ausencia del tratamiento", "Los efectos secundarios del tratamiento"))`
+`r mcq(c("Los datos que se perdieron en el estudio", "El grupo de control", answer = "Lo que habría ocurrido con la misma unidad bajo la condición alternativa", "Los efectos secundarios del tratamiento"))`
 
 `r hide("Ver explicación")`
-Contrafactual: el resultado potencial en el estado no observado.
+El contrafactual es el resultado potencial de la misma unidad bajo la condición alternativa no observada: sin tratamiento si fue tratada, o con tratamiento si no lo fue.
 `r unhide()`
 </div>
 

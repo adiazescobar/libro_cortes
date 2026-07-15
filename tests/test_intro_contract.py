@@ -30,7 +30,12 @@ def test_intro_factual_and_copy_fixes():
 
 def test_rdd_diagnostic_states_both_identification_conditions():
     assert (
-        "¿Hay ordenamiento preciso alrededor del umbral y son continuos los "
+        "¿Es plausible la ausencia de ordenamiento preciso alrededor del umbral y son continuos los "
         "resultados potenciales?"
     ) in TEXT
-    assert "¿Las unidades pueden manipular la variable de asignación?" not in TEXT
+    assert "¿Hay ordenamiento preciso alrededor del umbral" not in TEXT
+
+
+def test_intro_bridge_follows_book_chronology():
+    assert "el próximo capítulo introduce Stata" in TEXT
+    assert "A continuación, el capítulo **Parámetros causales**" in TEXT

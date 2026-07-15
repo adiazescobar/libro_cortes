@@ -21,16 +21,51 @@ El notebook funciona en Google Colab. Si lo ejecutas localmente, ajusta la ruta 
 ::: {.boxinfo}
 ### Objetivos de aprendizaje {-}
 
-Al finalizar este capitulo podras:
+Al finalizar este capítulo podrás:
 
-- reconocer la logica basica de trabajo en Stata
-- usar macros, loops y comandos descriptivos sencillos
-- modificar bases de datos con operaciones elementales
-- descargar y ejecutar los archivos de apoyo del capitulo
+- reconocer la lógica básica de trabajo en Stata;
+- usar macros, loops y comandos descriptivos sencillos;
+- modificar bases de datos con operaciones elementales; y
+- descargar y ejecutar los archivos de apoyo del capítulo.
 :::
 
 ::: {.boxnote}
-Puedes consultar el **Stata Cheat Sheet** aqui: [https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf](https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf)
+Puedes consultar el **Stata Cheat Sheet** aquí: [https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf](https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf)
+:::
+
+## Preparar el entorno y modificar datos {-}
+
+**Objetivo.** Abrir una base en un entorno limpio, crear y corregir una variable, y filtrar observaciones sin alterar el archivo original.
+
+```stata
+clear all
+set more off
+sysuse auto, clear
+
+generate precio_miles = price / 1000
+replace precio_miles = . if price < 0
+
+preserve
+keep if foreign == 1
+count
+restore
+
+drop precio_miles
+```
+
+**Salida**
+
+```text
+(0 real changes made)
+  22
+```
+
+**Interpretación**. `generate` crea una variable y `replace` modifica únicamente las observaciones que cumplen la condición. `keep` y `drop` eliminan observaciones o variables de la copia en memoria: por eso el filtro está protegido con `preserve`/`restore`, y nunca se usa `save, replace` sobre el archivo fuente.
+
+::: {.boxejercicio}
+### Ejercicio breve {-}
+
+Vuelve a cargar `auto`; crea `peso_miles = weight/1000`, conserva temporalmente los autos con `weight >= 3000`, cuenta las observaciones y restaura la base.
 :::
 
 ## Macros en Stata {-}
@@ -42,7 +77,9 @@ Stata tiene dos tipos principales de macros:
 - `local`: válidas solo dentro del entorno donde se definieron (por ejemplo, dentro de un programa o loop).
 - `global`: válidas en todo el entorno de trabajo mientras dure la sesión (desaconsejadas para la mayoría de tareas por riesgo de sobreescritura accidental).
 
-### Macro local: definición y expansión {-}
+### Patrón completo con macros {-}
+
+**Objetivo.** Guardar un valor reutilizable y expandirlo dentro de un comando.
 
 ```stata
 local uno 1
@@ -55,7 +92,7 @@ display `uno'
 1
 ```
 
-Stata almacenó el texto `1` en la macro local y recuperó su contenido al expandir `` `uno' `` dentro de `display`.
+**Interpretación**. Stata almacenó el texto `1` en la macro local y recuperó su contenido al expandir `` `uno' `` dentro de `display`.
 
 
 
@@ -110,7 +147,7 @@ Al usar `global`, la invocación se hace con **signo dólar** (`$`). El contenid
 
 ### Scalar vs. Macro {-}
 
-Un **scalar** almacena valores numéricos (reales), no texto. Se usa para cálculos matemáticos, estadísticas o comparaciones numéricas.
+Un **scalar** de Stata puede almacenar un valor numérico o una cadena; en este capítulo usamos scalars numéricos para cálculos, estadísticas y comparaciones. Un scalar de texto se define, por ejemplo, con `scalar saludo = "hola"`.
 
 ```stata
 scalar x = 2 + 3
@@ -133,7 +170,7 @@ Resultado:
 Diferencia clave:
 
 - `macro`: almacena texto (puede ser número, pero como cadena).
-- `scalar`: almacena un número real que puede usarse en operaciones matemáticas.
+- `scalar`: almacena un único valor numérico o string; aquí usamos valores numéricos en operaciones matemáticas.
 
 
 ### Buenas prácticas {-}
@@ -200,6 +237,8 @@ El color es verde
 
 En cada iteración, Stata reemplazó la macro local `color` por el elemento actual de la lista.
 
+**Interpretación**. Un solo comando produjo tres mensajes porque `foreach` sustituyó `color` sucesivamente. Este patrón evita copiar y pegar el mismo comando.
+
 #### c) Iterar sobre variables en la base usando `of varlist`  {-}
 
 ```stata 
@@ -232,6 +271,18 @@ forvalues i = 1/5 {
 }
 ```
 
+**Salida**
+
+```text
+Iteración 1
+Iteración 2
+Iteración 3
+Iteración 4
+Iteración 5
+```
+
+**Interpretación**. `forvalues` recorre enteros; aquí ejecutó exactamente cinco iteraciones en orden ascendente.
+
 #### b) Incrementos diferentes  {-}
 
 ```stata
@@ -261,6 +312,18 @@ while `i' <= 5 {
     local ++i
 }
 ```
+
+**Salida**
+
+```text
+1
+2
+3
+4
+5
+```
+
+**Interpretación**. `while` comprueba la condición antes de cada vuelta. `local ++i` es indispensable para que el loop termine.
 
 
 ::: {.boxejercicio}
@@ -302,7 +365,7 @@ El programa almacenó la secuencia de comandos bajo el nombre `saludo`; al invoc
 
 Puedes pasar información a un programa con `args` o con `syntax`.
 
-#### a) Con `args`  {-}
+#### a) Con `args` {-}
 
 ```stata
 capture program drop cuadrado
@@ -315,10 +378,16 @@ end
 cuadrado 4
 ```
 
-> Esto imprimirá: `El cuadrado de 4 es: 16`
+**Salida**
+
+```text
+El cuadrado de 4 es: 16
+```
+
+**Interpretación**. `args` asignó el primer elemento escrito después de `cuadrado` a la macro local `x`; es apropiado para interfaces breves y posicionales.
 
 
-#### b) Con `syntax` (más power)  {-}
+#### b) Con `syntax` {-}
 
 ```stata
 capture program drop promedio
@@ -331,7 +400,14 @@ end
 promedio mpg
 ```
 
-> `syntax` verifica que se cumpla una estructura: aquí, exactamente una variable.
+**Salida**
+
+```text
+Variable | Obs   Mean   Std. dev.   Min   Max
+     mpg |  74  21.30        5.79    12    41
+```
+
+**Interpretación**. `syntax` valida la interfaz antes de ejecutar el programa: aquí exige exactamente una variable y la deja disponible en la macro `varlist`.
 
 
 
@@ -466,6 +542,17 @@ A lo largo de este capítulo exploramos los componentes fundamentales para comen
 - Implementar un programa divertido con frases de reguetón, mostrando que también se puede aprender con humor.
 - Utilizar **`postfile`** para almacenar resultados generados dentro de loops y analizarlos de manera estructurada.
 
+### Checklist de preparación {-}
+
+Antes de continuar al siguiente capítulo, verifica que puedes:
+
+- iniciar un do-file con `clear all` y `set more off`;
+- cargar una base con `use` o `sysuse` sin sobrescribir el archivo fuente;
+- distinguir `generate` de `replace`, y variables de observaciones en `drop`/`keep`;
+- expandir una macro local y elegir entre `foreach`, `forvalues` y `while`;
+- leer una salida antes de automatizarla; y
+- definir un programa pequeño con `args` o validar entradas con `syntax`.
+
 ---
 
 ### Buenas prácticas al programar en Stata {-}
@@ -520,9 +607,9 @@ Aquí les dejo cómo realizar tareas comunes de análisis de datos en **Stata**,
 |---------------------|------------------|---------------|----------------|
 | Suma                | `display 2+2`    | `2 + 2`       | `2 + 2`        |
 | Raíz cuadrada       | `display sqrt(4)`| `sqrt(4)`     | `math.sqrt(4)` |
-| Valor absoluto      | `abs(-2)`        | `abs(-2)`     | `abs(-2)`      |
+| Valor absoluto      | `display abs(-2)`| `abs(-2)`     | `abs(-2)`      |
 
-> En R necesitas `library()` si usas `sqrt`. En Python, debes importar `import math`.
+> `sqrt()` pertenece a R base y no requiere `library()`. En Python, `math.sqrt()` sí requiere `import math`.
 
 
 
