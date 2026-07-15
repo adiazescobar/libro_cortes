@@ -132,7 +132,6 @@ esta página se leen directamente de los archivos producidos por el do-file.
 ```stata
 use "04_data.dta", clear
 describe
-list, clean noobs
 generate X = (_n > 4)
 generate y = D*yd1 + (1-D)*yd0
 generate tau = yd1 - yd0
@@ -143,6 +142,7 @@ label define tratamiento 0 "Control" 1 "Tratados"
 label values D tratamiento
 label define grupo_pre 0 "Grupo A" 1 "Grupo B"
 label values X grupo_pre
+list, clean noobs
 ```
 :::
 
