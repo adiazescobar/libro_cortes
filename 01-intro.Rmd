@@ -265,6 +265,6 @@ Cada estrategia identifica un parámetro causal bajo supuestos específicos. Nin
 | Selección en observables | Unidades comparables según covariables | ¿Se observaron todos los factores de selección relevantes? |
 | Panel / DiD | Cambios entre grupos y periodos | ¿La tendencia contrafactual habría sido paralela? |
 | Variables instrumentales | Variación inducida por un instrumento | ¿El instrumento es relevante y satisface la restricción de exclusión? |
-| Regresión discontinua | Unidades cercanas a un umbral | ¿Las unidades pueden manipular la variable de asignación? |
+| Regresión discontinua | Unidades cercanas a un umbral | ¿Hay ordenamiento preciso alrededor del umbral y son continuos los resultados potenciales? |
 
 Los capítulos siguientes desarrollan primero los parámetros causales y luego estas familias de diseños. Antes de estimarlas, el próximo capítulo presenta las herramientas de **Stata** necesarias para importar y organizar datos, ejecutar comandos y reproducir los ejercicios del libro.
