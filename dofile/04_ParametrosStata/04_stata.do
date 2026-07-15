@@ -11,6 +11,16 @@ program define post_estimands
     syntax, POSTname(name) SCENario(string)
     local n = _N
 
+    quietly count if D == 0
+    post `postname' ("`scenario'") ("N_D0") (r(N)) (`n')
+    quietly count if D == 1
+    post `postname' ("`scenario'") ("N_D1") (r(N)) (`n')
+
+    quietly summarize y if D == 0
+    post `postname' ("`scenario'") ("MEDIA_Y_D0") (r(mean)) (`n')
+    quietly summarize y if D == 1
+    post `postname' ("`scenario'") ("MEDIA_Y_D1") (r(mean)) (`n')
+
     quietly summarize tau
     local ate = r(mean)
     post `postname' ("`scenario'") ("ATE") (`ate') (`n')

@@ -174,9 +174,9 @@ La vacunación puede violar ausencia de interferencia porque vacunar a otras per
 
 ::: {.boxvideo .green title="🎥 Videos recomendados:"}
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/ln5LBKiF8hE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/ln5LBKiF8hE" title="Introducción a resultados potenciales" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/iPBV3BlV7jk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/iPBV3BlV7jk" title="Mastering Metrics e inferencia causal" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 :::
 

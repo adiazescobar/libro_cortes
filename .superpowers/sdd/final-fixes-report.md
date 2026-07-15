@@ -1,119 +1,67 @@
-# Informe de correcciones finales
+# Correcciones finales — Parámetros causales
 
 Fecha: 2026-07-15
 
-## Alcance
+## Cambios
 
-- `01-intro.Rmd`: el diagnóstico de RDD ahora exige ausencia plausible de ordenamiento preciso y continuidad de resultados potenciales; el puente respeta la secuencia Introducción → Stata → Parámetros.
-- `02-StataBasics.Rmd`: equivalencias ejecutables, precisión sobre scalars numéricos/string, tildes, preparación del entorno, modificación segura con `generate`/`replace`/`keep`/`drop`, checklist final y patrón objetivo → comando → salida → interpretación → ejercicio para macros, loops y programas.
-- `00-PruebaEntrada.Rmd` y `docs/audits/prueba_entrada_academica.csv`: contrafactual definido para la misma unidad bajo la condición alternativa.
-- Pruebas de contrato ampliadas para cristalizar estas decisiones.
+- `04-ParametrosStata.Rmd` incorpora objetivos, conocimientos previos y puente al capítulo de RCT.
+- Las frecuencias y medias observadas por tratamiento se exportan desde Stata como `N_D0`, `N_D1`, `MEDIA_Y_D0` y `MEDIA_Y_D1` en el artefacto canónico.
+- Todas las cifras empíricas visibles del capítulo práctico se interpolan desde los CSV canónicos mediante objetos R.
+- La etiqueta visible del notebook dice Python, manteniendo `04_phyton.ipynb`; los dos videos teóricos tienen títulos descriptivos y `$N$` usa delimitadores matemáticos.
+- `01-intro.Rmd`, `18-IV.Rmd` y `20-RDD.Rmd` sustituyen la notación genérica `D=d` por pares explícitos `D=1`/`D=0`.
+- Los contratos cubren estructura y secuencia, enlaces, etiqueta Python, títulos de iframes, ausencia de cifras transcritas, exportaciones de Stata y variantes prohibidas de notación.
 
-## TDD: rojo
+## TDD
 
-Comando exacto:
+Pruebas RED focalizadas:
 
-```sh
-python3 -m pytest tests/test_intro_contract.py tests/test_stata_basics_contract.py tests/test_entrada_academica.py -q
+```bash
+/private/tmp/libro_cortes_rct_venv/bin/python -m pytest -q \
+  tests/test_parametros_theory_contract.py \
+  tests/test_parametros_stata_contract.py \
+  tests/test_potential_outcomes_notation.py
 ```
 
-Salida antes de modificar los Rmd:
+Resultado inicial: 5 fallos por artefactos/estructura/etiqueta/cifras/notación y 1 fallo separado por títulos faltantes en los iframes. Tras la implementación y regeneración: `18 passed`.
 
-```text
-..FF....FFFFF...F                                                        [100%]
-8 failed, 9 passed in 0.30s
+## Stata 19
+
+Ejecutado desde `dofile/04_ParametrosStata`:
+
+```bash
+/Applications/StataNow/StataSE.app/Contents/MacOS/stata-se -b do 04_stata.do
 ```
 
-Los ocho fallos correspondieron a RDD, cronología, tildes, equivalencias, scalars, flujo elemental de datos, patrones pedagógicos y contrafactual del quiz.
+Resultado: exit 0; el log cerró el 15-jul-2026 a las 11:54:30 con `Pipeline canónico completado`. Se regeneraron CSV, DTA, log y gráficos. El log se normalizó después de la ejecución para retirar espacios finales generados por Stata sin cambiar su contenido.
 
-## TDD: verde focalizado
+## Suite y limpieza
 
-Mismo comando, después de implementar:
+```bash
+/private/tmp/libro_cortes_rct_venv/bin/python -m pytest -q
+# 59 passed in 4.13s
 
-```text
-.................                                                        [100%]
-17 passed in 0.06s
+git diff --check
+# sin salida
 ```
 
-## Suite completa
+Las búsquedas de notación genérica prohibida y de las frases numéricas transcritas tampoco devolvieron coincidencias.
 
-Comando exacto:
+## Render y HTML
 
-```sh
-python3 -m pytest -q
+```bash
+Rscript -e "bookdown::render_book('index.Rmd', output_dir='/private/tmp/libro_cortes_parametros_render')"
 ```
 
-Salida:
+Resultado: exit 0 y `Output created: /private/tmp/libro_cortes_parametros_render/index.html`. Como en la ejecución anterior, `bookdown` dejó los HTML divididos en la raíz; solo los dos capítulos de parámetros se copiaron al directorio temporal para comprobarlos. No se publicó ni copió contenido a `docs/`.
 
-```text
-.......................................                                  [100%]
-39 passed in 4.22s
-```
+Checks HTML básicos confirmaron:
 
-## Render aislado
+- objetivos, conocimientos previos y puente en la práctica;
+- etiqueta visible `Notebook de Python`;
+- títulos descriptivos de ambos iframes;
+- cifras R evaluadas, sin código inline residual;
+- existencia no vacía de los siete materiales descargables principales.
 
-Comando exacto:
+## Preocupación residual
 
-```sh
-mkdir -p /private/tmp/libro_cortes_final_renders
-Rscript -e 'for (f in c("00-PruebaEntrada.Rmd", "01-intro.Rmd", "02-StataBasics.Rmd")) { message("RENDER ", f); rmarkdown::render(f, output_format = "html_document", output_file = sub("[.]Rmd$", ".html", f), output_dir = "/private/tmp/libro_cortes_final_renders", knit_root_dir = getwd(), quiet = FALSE, clean = TRUE, envir = new.env(parent = globalenv())) }'
-```
-
-Salidas finales:
-
-```text
-Output created: /private/tmp/libro_cortes_final_renders/00-PruebaEntrada.html
-Output created: /private/tmp/libro_cortes_final_renders/01-intro.html
-Output created: /private/tmp/libro_cortes_final_renders/02-StataBasics.html
-```
-
-Tamaños verificados:
-
-```text
-637K  /private/tmp/libro_cortes_final_renders/00-PruebaEntrada.html
-4.4M  /private/tmp/libro_cortes_final_renders/01-intro.html
-638K  /private/tmp/libro_cortes_final_renders/02-StataBasics.html
-```
-
-Pandoc emitió advertencias no bloqueantes al intentar incrustar recursos externos de Spotify, YouTube y el badge de Colab porque el entorno no resolvió esos dominios. Los tres HTML se generaron con éxito y los recursos locales sí fueron procesados.
-
-## Control de alcance
-
-Se preservaron los cambios ajenos y los artefactos no rastreados. El commit incluye solamente los tres Rmd corregidos, la matriz académica, las tres pruebas de contrato y este informe.
-
-## Addendum ortográfico
-
-Se corrigieron las catorce etiquetas visibles `Ver explicacion` a `Ver explicación` y los recursos visibles `Estadistica Basica`, `Estadistica y Probabilidad`, `Regresion Lineal` y `Khan Academy - Regresion`. Los atributos `data-section` ya normalizados y la lógica JavaScript no se modificaron.
-
-Prueba nueva en rojo:
-
-```sh
-python3 -m pytest tests/test_entrada_structure.py -q
-```
-
-```text
-..F...                                                                   [100%]
-1 failed, 5 passed in 0.37s
-```
-
-Suite focal después de la corrección:
-
-```sh
-python3 -m pytest tests/test_entrada_structure.py tests/test_entrada_academica.py -q
-```
-
-```text
-..........                                                               [100%]
-10 passed in 0.26s
-```
-
-Suite completa del addendum:
-
-```sh
-python3 -m pytest -q
-```
-
-```text
-........................................                                 [100%]
-40 passed in 4.56s
-```
+Persiste la peculiaridad preexistente de `bookdown`: el `output_dir` recibe el índice, pero los HTML divididos se generan en la raíz. La vista previa temporal quedó completa para estos dos capítulos y `docs/` permanece sin publicar.

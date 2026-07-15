@@ -74,3 +74,11 @@ def test_theory_keeps_original_videos_and_has_a_brief_activity():
     assert len(activity.strip()) <= 1_200
     for phrase in ["estimando", "contrafactual faltante", "supuesto", "dos amenazas"]:
         assert phrase in activity.lower()
+
+
+def test_both_theory_iframes_have_descriptive_titles():
+    iframes = re.findall(r"<iframe\b[^>]*>", TEXT, re.IGNORECASE)
+    assert len(iframes) == 2
+    for iframe in iframes:
+        title = re.search(r'\btitle="([^"]+)"', iframe, re.IGNORECASE)
+        assert title and len(title.group(1).split()) >= 2

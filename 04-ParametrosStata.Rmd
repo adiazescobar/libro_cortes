@@ -5,7 +5,7 @@
 - [Do-file de Stata](dofile/04_ParametrosStata/04_stata.do)
 - [Base de datos](dofile/04_ParametrosStata/04_data.dta)
 - [Script de R](dofile/04_ParametrosStata/04_R.R)
-- [Notebook histórico `04_phyton.ipynb`](dofile/04_ParametrosStata/04_phyton.ipynb)
+- [Notebook de Python (`04_phyton.ipynb`)](dofile/04_ParametrosStata/04_phyton.ipynb)
 - [Abrir el notebook en Colab](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/04_ParametrosStata/04_phyton.ipynb)
 - [Log de Stata](dofile/04_ParametrosStata/04_stata.log)
 - [Resultados puntuales (CSV)](dofile/04_ParametrosStata/results/parameters_results.csv)
@@ -58,7 +58,51 @@ tabla_mc[, c("media", "desv_est", "p5", "mediana", "p95")] <- round(
   tabla_mc[, c("media", "desv_est", "p5", "mediana", "p95")], 3
 )
 names(tabla_mc) <- c("Escenario", "Repeticiones", "Media", "Desv. est.", "p5", "p50", "p95")
+
+valor_puntual <- function(escenario, estimando) {
+  fila <- point$escenario == escenario & point$estimando == estimando
+  stopifnot(sum(fila) == 1L)
+  point$valor[fila]
+}
+n_escenario <- function(escenario) {
+  valores <- unique(point$N[point$escenario == escenario])
+  stopifnot(length(valores) == 1L)
+  valores
+}
+fmt <- function(x, digits = 3) format(round(x, digits), trim = TRUE, scientific = FALSE)
+
+n_original <- n_escenario("datos_originales")
+n_duplicado <- n_escenario("datos_duplicados")
+n_d0 <- valor_puntual("datos_originales", "N_D0")
+n_d1 <- valor_puntual("datos_originales", "N_D1")
+media_y_d0 <- valor_puntual("datos_originales", "MEDIA_Y_D0")
+media_y_d1 <- valor_puntual("datos_originales", "MEDIA_Y_D1")
+ate_original <- valor_puntual("datos_originales", "ATE")
+att_original <- valor_puntual("datos_originales", "ATT")
+atu_original <- valor_puntual("datos_originales", "ATU")
+cate_x0 <- valor_puntual("datos_originales", "CATE_X0")
+cate_x1 <- valor_puntual("datos_originales", "CATE_X1")
+naive_original <- valor_puntual("datos_originales", "NAIVE")
+sesgo_original <- valor_puntual("datos_originales", "SESGO_ATT")
+naive_aleatorio <- valor_puntual("aleatorizacion_unica", "NAIVE")
+sesgo_aleatorio <- valor_puntual("aleatorizacion_unica", "SESGO_ATT")
+mc_reps <- unique(mc$N)
+stopifnot(length(mc_reps) == 1L)
+mc_media_seleccion <- mc$media[mc$escenario == "seleccion"]
 ```
+
+## Objetivos {-}
+
+Al terminar este capítulo podrá:
+
+1. construir el resultado observado y el efecto individual a partir de resultados potenciales;
+2. estimar e interpretar ATE, ATT, ATU, CATE y la comparación naïve;
+3. separar precisión, sesgo de selección e identificación mediante simulaciones; y
+4. contrastar selección y aleatorización en una realización y en repetición.
+
+**Conocimientos previos.** Se requiere manejar `use`, `generate`, `summarize`,
+`ttest` y regresión lineal básica en Stata, además de las definiciones del
+capítulo anterior sobre resultados potenciales y parámetros causales.
 
 ::: {.boxinfo}
 El objetivo es distinguir **parámetros causales** —ATE, ATT, ATU y CATE— de la
@@ -82,8 +126,10 @@ tab D
 bysort D: summarize y yd0 yd1
 ```
 
-**Resultado.** La base original tiene ocho observaciones: cuatro tratadas y
-cuatro controles. Para cada unidad solo observamos `yd1` si `D==1` y `yd0` si
+**Resultado.** La base original tiene `r fmt(n_original, 0)` observaciones:
+`r fmt(n_d1, 0)` tratadas y `r fmt(n_d0, 0)` controles. Las medias observadas
+son `r fmt(media_y_d1)` entre tratados y `r fmt(media_y_d0)` entre controles.
+Para cada unidad solo observamos `yd1` si `D==1` y `yd0` si
 `D==0`.
 
 **Interpretación.** El problema fundamental de la inferencia causal no es
@@ -106,7 +152,7 @@ lincom D
 ```
 
 **Resultado.** Tanto la diferencia de medias como el coeficiente de `D`
-producen 6.75 en los datos originales.
+producen `r fmt(naive_original)` en los datos originales.
 
 **Interpretación.** Esta equivalencia es algebraica. El coeficiente es el
 estimador naïve, pero no adquiere interpretación causal si la asignación está
@@ -144,9 +190,12 @@ knitr::kable(tabla_puntual, align = c("l", "r", "r"),
              caption = "Parámetros y contrastes en los datos originales")
 ```
 
-**Interpretación.** ATE, ATT y ATU son 0.75, pero CATE(0)=1.25 y
-CATE(1)=0.25: hay heterogeneidad aunque los promedios por estatus coincidan. El
-estimador naïve es 6.75 y excede el ATT en 6 unidades por selección.
+**Interpretación.** ATE, ATT y ATU son `r fmt(ate_original)`,
+`r fmt(att_original)` y `r fmt(atu_original)`, respectivamente; en cambio,
+CATE(0) es `r fmt(cate_x0)` y CATE(1) es `r fmt(cate_x1)`: hay heterogeneidad
+aunque los promedios por estatus coincidan. El estimador naïve es
+`r fmt(naive_original)` y excede el ATT en `r fmt(sesgo_original)` unidades por
+selección.
 
 **Práctica breve.** Verifique la identidad
 
@@ -175,9 +224,10 @@ knitr::kable(tabla_escenarios, align = c("l", "l", "r", "r"),
              caption = "Duplicación y una asignación aleatoria")
 ```
 
-**Interpretación.** La duplicación lleva (N) de 8 a 80,000, pero conserva
+**Interpretación.** La duplicación lleva $N$ de `r format(n_original, big.mark = ",", scientific = FALSE)`
+a `r format(n_duplicado, big.mark = ",", scientific = FALSE)`, pero conserva
 exactamente la relación entre tratamiento y resultados potenciales: el sesgo
-sigue siendo 6. Más observaciones pueden mejorar precisión; no reparan una
+sigue siendo `r fmt(valor_puntual("datos_duplicados", "SESGO_ATT"))`. Más observaciones pueden mejorar precisión; no reparan una
 estrategia de identificación.
 
 **Práctica breve.** Cambie `expand 10000` por `expand 100` y anticipe qué
@@ -202,18 +252,19 @@ reg y D, robust
 ```
 
 **Resultado.** En la tabla anterior, una realización aleatoria produce un
-naïve de 0.751 y un sesgo respecto al ATT cercano a cero.
+naïve de `r fmt(naive_aleatorio)` y un sesgo respecto al ATT de
+`r fmt(sesgo_aleatorio)`.
 
 **Interpretación.** La aleatorización rompe, en expectativa, la asociación
 entre `D` y los resultados potenciales. En una realización finita puede quedar
 una diferencia pequeña por azar.
 
 **Práctica breve.** Cambie la semilla, repita el bloque y compare el nuevo
-coeficiente con el ATE de 0.75.
+coeficiente con el ATE de `r fmt(ate_original)`.
 
 ## 6. Repetir el experimento: Monte Carlo
 
-**Pregunta.** ¿Qué revela repetir 1,000 veces la asignación con selección y la
+**Pregunta.** ¿Qué revela repetir `r format(mc_reps, big.mark = ",", scientific = FALSE)` veces la asignación con selección y la
 asignación aleatoria?
 
 **Comando.** El do-file define un programa `simula_sesgo`, ejecuta ambos
@@ -228,7 +279,7 @@ do "04_stata.do"
 
 ```{r tabla-monte-carlo, echo=FALSE}
 knitr::kable(tabla_mc, align = c("l", rep("r", 6)),
-             caption = "Distribución del sesgo Naïve − ATT en 1,000 repeticiones")
+             caption = paste("Distribución del sesgo Naïve − ATT en", mc_reps, "repeticiones"))
 ```
 
 ![Sesgo bajo selección: la distribución está lejos de cero.](dofile/04_ParametrosStata/sesgo_con_seleccion.png)
@@ -238,7 +289,7 @@ knitr::kable(tabla_mc, align = c("l", rep("r", 6)),
 ![Comparación de las distribuciones bajo selección y aleatorización.](dofile/04_ParametrosStata/comparacion_escenarios.png)
 
 **Interpretación.** La selección desplaza toda la distribución del sesgo: su
-media es 3.941. La aleatorización la centra aproximadamente en cero, pero no
+media es `r fmt(mc_media_seleccion)`. La aleatorización la centra aproximadamente en cero, pero no
 elimina la variabilidad entre repeticiones. Aleatorizar garantiza insesgadez en
 expectativa, no igualdad exacta en cada muestra.
 
@@ -250,7 +301,8 @@ nulas.
 
 1. **Cambiar la selección.** En el programa de simulación, modifique la regla de
    asignación para que la probabilidad de tratamiento disminuya con `yd0`.
-   Anticipe el signo del sesgo y verifíquelo con 1,000 repeticiones.
+   Anticipe el signo del sesgo y verifíquelo con
+   `r format(mc_reps, big.mark = ",", scientific = FALSE)` repeticiones.
 2. **Explorar otro CATE.** Elija otra variable pretratamiento disponible o cree
    grupos a partir de una transformación de `X`. Compare los efectos promedio
    entre grupos y argumente por qué la variable no debe ser postratamiento.
@@ -262,7 +314,13 @@ nulas.
 
 1. **Identificación:** más datos no eliminan el sesgo de selección.
 2. **Heterogeneidad:** un ATE puede ocultar CATE distintos entre grupos.
-3. **Precisión frente a sesgo:** aumentar (N) puede reducir variabilidad sin
+3. **Precisión frente a sesgo:** aumentar $N$ puede reducir variabilidad sin
    acercar el estimador al parámetro causal.
 4. **Aleatorización en expectativa:** el sesgo promedio se centra cerca de cero,
    aunque cada realización conserve variabilidad muestral.
+
+## Puente al capítulo siguiente {-}
+
+El capítulo [Experimentos aleatorios controlados](05-RCT.Rmd) usa esta misma
+lógica para mostrar cómo un diseño experimental identifica efectos causales y
+cómo se diagnostica el balance antes de estimarlos.

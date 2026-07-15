@@ -136,7 +136,7 @@ knitr::include_graphics("img/ninas1.png")
 
 ### Ejemplo de heterogeneidad {-}
 
-Supongamos que el tratamiento es **ir al hospital** ($D=1$) y que $Y_i(D=d)=1$ significa que la persona se recupera bajo la condición $d$. Los siguientes perfiles son resultados potenciales hipotéticos que ilustran heterogeneidad de efectos; no constituyen recomendaciones clínicas:
+Supongamos que el tratamiento es **ir al hospital** ($D=1$). $Y_i(D=1)=1$ significa que la persona se recuperaría si fuera al hospital, mientras que $Y_i(D=0)=1$ significa que se recuperaría sin ir. Los siguientes perfiles son resultados potenciales hipotéticos que ilustran heterogeneidad de efectos; no constituyen recomendaciones clínicas:
 
 - Carolina: $Y_i(D=0)=0$ y $Y_i(D=1)=0$; no se recuperaría bajo ninguna condición.
 - Camila: $Y_i(D=0)=0$ y $Y_i(D=1)=1$; se recuperaría únicamente si va al hospital.

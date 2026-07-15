@@ -54,6 +54,63 @@ def test_results_schema():
     assert {"escenario", "estimando", "valor", "N"} <= columns
 
 
+def test_point_results_export_visible_group_counts_and_means():
+    with (BASE / "results/parameters_results.csv").open(newline="", encoding="utf-8-sig") as handle:
+        rows = list(csv.DictReader(handle))
+    original = {
+        row["estimando"] for row in rows if row["escenario"] == "datos_originales"
+    }
+    assert {
+        "N_D0", "N_D1", "MEDIA_Y_D0", "MEDIA_Y_D1",
+        "ATE", "ATT", "ATU", "CATE_X0", "CATE_X1", "NAIVE", "SESGO_ATT",
+    } <= original
+
+
+def test_practice_has_objectives_prerequisites_sequence_and_bridge():
+    headings = [
+        "## Materiales para la clase {-}",
+        "## Objetivos {-}",
+        "## 1. Describir los datos y construir el resultado observado",
+        "## 2. Relacionar diferencia de medias y regresión",
+        "## 3. Calcular parámetros causales y heterogeneidad",
+        "## 4. Duplicar observaciones no resuelve la selección",
+        "## 5. Reasignar el tratamiento al azar",
+        "## 6. Repetir el experimento: Monte Carlo",
+        "## 7. Ejercicios",
+        "## 8. Síntesis",
+        "## Puente al capítulo siguiente {-}",
+    ]
+    positions = [TEXT.index(heading) for heading in headings]
+    assert positions == sorted(positions)
+    assert "Conocimientos previos" in TEXT
+    assert "05-RCT.Rmd" in TEXT
+
+
+def test_download_label_says_python_and_iframes_have_titles():
+    assert "[Notebook de Python (`04_phyton.ipynb`)]" in TEXT
+    assert "Notebook histórico" not in TEXT
+    for iframe in re.findall(r"<iframe\b[^>]*>", TEXT, re.IGNORECASE):
+        assert re.search(r'\btitle="[^"]+"', iframe, re.IGNORECASE)
+
+
+def test_visible_results_are_interpolated_not_transcribed():
+    forbidden = [
+        "cuatro tratadas y cuatro controles",
+        "producen 6.75",
+        "son 0.75",
+        "CATE(0)=1.25",
+        "CATE(1)=0.25",
+        "es 6.75",
+        "sesgo sigue siendo 6",
+        "naïve de 0.751",
+        "ATE de 0.75",
+        "media es 3.941",
+    ]
+    assert all(phrase not in TEXT for phrase in forbidden)
+    assert "`r " in TEXT
+    assert "(N)" not in TEXT
+
+
 def test_monte_carlo_outputs_have_complete_scenarios():
     with (BASE / "results/monte_carlo_summary.csv").open(newline="", encoding="utf-8-sig") as handle:
         summary = list(csv.DictReader(handle))

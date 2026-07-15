@@ -4,12 +4,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN = re.compile(
-    r"Y\s*(?:_\s*(?:\{[^}\n]+\}|[A-Za-z0-9]+))?\s*\(\s*(?:0|1|[dD])\s*\)",
+    r"Y\s*(?:_\s*(?:\{[^}\n]+\}|[A-Za-z0-9]+))?\s*\(\s*(?:0|1|[dD]|D\s*=\s*[dD])\s*\)",
 )
 
 
 def test_notation_pattern_covers_variants_without_rejecting_valid_time_notation():
-    abbreviated = ["Y(1)", "Y_i( 0 )", "Y_j(d)", "Y_{k} ( 1 )", "Y_{it}(d)", "Y(D)", "Y_i(D)"]
+    abbreviated = [
+        "Y(1)", "Y_i( 0 )", "Y_j(d)", "Y_{k} ( 1 )", "Y_{it}(d)",
+        "Y(D)", "Y_i(D)", "Y(D=d)", "Y_i(D = D)",
+    ]
     valid = [
         "Y_i(D=1)",
         "Y(D=0)",

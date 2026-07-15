@@ -83,7 +83,7 @@ Todos los que cruzan el umbral reciben el tratamiento, ninguno por debajo lo rec
 ::: {.boxinfo}
 **Supuesto clave — continuidad local (Hahn, Todd & van der Klaauw 2001):**
 
-$$E[Y(D=d) \mid Z = z] \text{ es continuo en } z = c \text{ para } d = 0, 1$$
+$$E[Y(D=1) \mid Z=z] \text{ y } E[Y(D=0) \mid Z=z] \text{ son continuos en } z=c$$
 
 Es decir, en ausencia del tratamiento, el resultado esperado **no salta** en el umbral. Cualquier discontinuidad observada en $E[Y \mid Z]$ en $c$ es atribuible al tratamiento.
 :::
