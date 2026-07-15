@@ -5,7 +5,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 # Paquete webexercises
 if (!requireNamespace("webexercises", quietly = TRUE)) {
-  install.packages("webexercises")
+  stop("Falta el paquete webexercises. Instálalo antes de renderizar el libro.")
 }
 library(webexercises)
 ```
@@ -13,52 +13,15 @@ library(webexercises)
 ```{css, echo=FALSE}
 /* Estilos personalizados para la prueba de entrada */
 
-.quiz-section {
-  background-color: #f8f9fa;
-  border-left: 4px solid #1F77B4;
-  padding: 20px;
-  margin: 20px 0;
-  border-radius: 5px;
-}
-
 .quiz-section h2 {
   color: #1F77B4;
   margin-top: 0;
-}
-
-.question-box {
-  background-color: white;
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .question-number {
   font-weight: bold;
   color: #1F77B4;
   font-size: 1.1em;
-}
-
-.intro-box {
-  background: linear-gradient(135deg, #1F77B4 0%, #2E86AB 100%);
-  color: white;
-  padding: 25px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-}
-
-.intro-box h3 {
-  margin-top: 0;
-  color: white;
-}
-
-.scoring-guide {
-  background-color: #e8f4f8;
-  border: 2px solid #1F77B4;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 30px;
 }
 
 .resources-box {
@@ -119,38 +82,12 @@ library(webexercises)
   display: none !important;
 }
 
-/* Botón de puntaje */
-.btn-score {
-  display: inline-block;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #1F77B4;
-  background: #1F77B4;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.btn-score:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-#score-result table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-#score-result th, #score-result td {
-  border: 1px solid #dee2e6;
-  padding: 8px;
-  text-align: left;
-}
 ```
 
-<div class="intro-box">
-<h3>Bienvenido a la Prueba de Entrada</h3>
+## Antes de comenzar {-}
+
+<div class="diagnostic-intro">
+<h3>Bienvenida a la Prueba de Entrada</h3>
 
 Esta prueba diagnóstica tiene como objetivo evaluar tus conocimientos previos en estadística, regresión lineal, causalidad y manejo básico de Stata.
 
@@ -159,10 +96,10 @@ Esta prueba diagnóstica tiene como objetivo evaluar tus conocimientos previos e
 - La prueba contiene <strong>20 preguntas</strong> divididas en 4 secciones
 - Responde cada pregunta seleccionando la opción correcta o escribiendo tu respuesta
 - La retroalimentación, las explicaciones y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong>
-- No hay límite de tiempo, pero intenta responder sin consultar materiales
+- Hazla en una sola sesión, sin consultar materiales
 - Al final encontrarás recursos para repasar
 
-<strong>Tiempo estimado:</strong> 15-20 minutos
+<strong>Tiempo estimado:</strong> 15–20 minutos
 
 </div>
 
@@ -419,7 +356,7 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
 
 ---
 
-## Puntaje (automatico) {-}
+## Puntaje (automático) {-}
 
 <div class="scoring-guide">
   <button type="button" id="btn-finalizar" class="btn-score">
@@ -558,21 +495,20 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
     });
 
     const bySection = sections.map(sec => {
-      const name = sec.getAttribute("data-section") || "Seccion";
+      const name = sec.getAttribute("data-section") || "Sección";
       const boxes = Array.from(sec.querySelectorAll(".question-box"));
-      let t = boxes.length, c = 0;
+      let c = 0;
       boxes.forEach(b => { if (scoreQuestionBox(b).correct) c += 1; });
-      return { name, total: t, correct: c };
+      return { name, total: 5, correct: c };
     });
 
-    return { total, correct, answered, bySection };
+    return { total: 20, correct, answered, bySection };
   }
 
-  function levelMessage(nCorrect) {
-    if (nCorrect >= 16) return "Excelente: base muy solida para el curso.";
-    if (nCorrect >= 13) return "Buen nivel: repasa los temas con errores.";
-    if (nCorrect >= 10) return "Nivel aceptable: conviene repasar prerequisitos.";
-    return "Reforzar prerequisitos: revisa los recursos sugeridos.";
+  function recommendation(nCorrect) {
+    if (nCorrect <= 2) return "Repaso prioritario";
+    if (nCorrect === 3) return "Repaso recomendado";
+    return "Preparación suficiente";
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -585,26 +521,34 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
     btn.addEventListener("click", () => {
       const s = computeScores(root);
       const pct = s.total > 0 ? Math.round(100 * s.correct / s.total) : 0;
+      const pending = Array.from(root.querySelectorAll(".question-box"))
+        .map((box, index) => ({ box, number: index + 1 }))
+        .filter(item => !scoreQuestionBox(item.box).answered)
+        .map(item => item.number);
 
       const rows = s.bySection.map(x =>
-        `<tr><td>${x.name}</td><td>${x.correct} / ${x.total}</td></tr>`
+        `<tr><td>${x.name}</td><td>${x.correct} / 5</td><td class="score-recommendation">${recommendation(x.correct)}</td></tr>`
       ).join("");
+
+      const pendingMessage = pending.length > 0
+        ? `<p><strong>Preguntas pendientes (contadas como incorrectas):</strong> ${pending.join(", ")}</p>`
+        : "<p><strong>Preguntas pendientes:</strong> ninguna.</p>";
 
       out.innerHTML = `
         <h3>Resultados</h3>
-        <p><strong>Puntaje total:</strong> ${s.correct} / ${s.total} (${pct}%)</p>
-        <p><strong>Preguntas respondidas:</strong> ${s.answered} / ${s.total}</p>
-        <p><strong>Diagnostico:</strong> ${levelMessage(s.correct)}</p>
+        <p><strong>Puntaje total:</strong> ${s.correct} / 20 (${pct}%)</p>
+        <p><strong>Preguntas respondidas:</strong> ${s.answered} / 20</p>
+        ${pendingMessage}
 
-        <h4>Desglose por seccion</h4>
+        <h4>Desglose por sección</h4>
         <table>
-          <thead><tr><th>Seccion</th><th>Puntaje</th></tr></thead>
+          <thead><tr><th>Sección</th><th>Puntaje</th><th>Recomendación</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
       `;
 
       out.style.display = "block";
-      root.classList.add("show-feedback"); // ahora sí se muestran correct/incorrect y explicaciones
+      root.classList.add("show-feedback");
       out.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });

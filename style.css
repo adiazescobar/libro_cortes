@@ -244,6 +244,68 @@ pre code {
 
 .class-materials .colab-link img { height: 20px; }
 
+/* Prueba de entrada */
+.diagnostic-intro,
+.quiz-section,
+.question-box,
+.scoring-guide {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  margin: 1.25em 0;
+  padding: 1em 1.15em;
+}
+
+.diagnostic-intro,
+.quiz-section,
+.scoring-guide {
+  border-left: 5px solid var(--accent);
+}
+
+.question-box {
+  overflow-wrap: anywhere;
+}
+
+.scoring-guide .btn-score {
+  background: var(--accent);
+  border-color: var(--accent);
+  border-radius: 8px;
+  color: var(--paper);
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  padding: 10px 14px;
+}
+
+.scoring-guide .btn-score:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#score-result table {
+  border-collapse: collapse;
+  margin-top: 10px;
+  width: 100%;
+}
+
+#score-result th,
+#score-result td {
+  border: 1px solid var(--line);
+  padding: 8px;
+  text-align: left;
+}
+
+.score-recommendation {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 @media (max-width: 700px) {
   .class-materials ul { grid-template-columns: 1fr; }
+  .scoring-guide .btn-score { width: 100%; }
+  .question-box .webex-radiogroup,
+  .question-box .webex-radiogroup label,
+  .question-box input,
+  .question-box select { max-width: 100%; }
 }
