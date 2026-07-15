@@ -1,4 +1,5 @@
 from pathlib import Path
+import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,3 +38,71 @@ def test_scoring_contract_is_present():
     assert 'return "Preparación suficiente"' in TEXT
     assert "Preguntas pendientes (contadas como incorrectas)" in TEXT
     assert 'root.classList.add("show-feedback")' in TEXT
+
+
+def test_scoring_javascript_runs_only_on_finalize_and_reports_sections():
+    script = TEXT.split("<script>", 1)[1].split("</script>", 1)[0]
+    harness = r"""
+const events = [];
+const sectionScores = [2, 3, 4, 5];
+const boxes = [];
+
+sectionScores.forEach((score, sectionIndex) => {
+  for (let index = 0; index < 5; index += 1) {
+    const pending = sectionIndex === 0 && index === 4;
+    const correct = index < score;
+    const group = {
+      querySelector: () => pending ? null : { value: correct ? "answer" : "wrong" }
+    };
+    boxes.push({
+      querySelectorAll: selector => selector === ".webex-radiogroup" ? [group] : []
+    });
+  }
+});
+
+const names = ["Estadística básica", "Regresión lineal", "Causalidad", "Stata"];
+const sections = names.map((name, index) => ({
+  getAttribute: () => name,
+  querySelectorAll: () => boxes.slice(index * 5, index * 5 + 5)
+}));
+const root = {
+  querySelectorAll: selector => selector === ".question-box" ? boxes : sections,
+  classList: { add: value => events.push(`reveal:${value}`) }
+};
+const button = { addEventListener: (_event, listener) => { button.listener = listener; } };
+const output = {
+  style: {},
+  scrollIntoView: () => {},
+  set innerHTML(value) { this.html = value; events.push("render"); },
+  get innerHTML() { return this.html; }
+};
+global.document = {
+  addEventListener: (_event, listener) => listener(),
+  getElementById: id => ({
+    "prueba-entrada-quiz": root,
+    "btn-finalizar": button,
+    "score-result": output
+  })[id]
+};
+"""
+    assertions = r"""
+if (events.length !== 0) throw new Error("feedback before finalize");
+button.listener();
+const expected = [
+  "14 / 20", "2 / 5", "3 / 5", "4 / 5", "5 / 5",
+  "Repaso prioritario", "Repaso recomendado", "Preparación suficiente",
+  "Preguntas pendientes (contadas como incorrectas):</strong> 5"
+];
+expected.forEach(value => {
+  if (!output.html.includes(value)) throw new Error(`missing: ${value}`);
+});
+if (events.join("|") !== "render|reveal:show-feedback") {
+  throw new Error(`wrong event order: ${events.join("|")}`);
+}
+"""
+    subprocess.run(
+        ["node", "-e", harness + script + assertions],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
