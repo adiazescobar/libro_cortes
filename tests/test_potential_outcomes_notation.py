@@ -3,13 +3,23 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+FORBIDDEN = re.compile(
+    r"Y\s*(?:_\s*(?:\{[^}\n]+\}|[A-Za-z0-9]+))?\s*\(\s*(?:0|1|d)\s*\)",
+    re.IGNORECASE,
+)
+
+
+def test_notation_pattern_covers_variants_without_rejecting_valid_time_notation():
+    abbreviated = ["Y(1)", "Y_i( 0 )", "Y_j(d)", "Y_{k} ( 1 )", "Y_{it}(d)"]
+    valid = ["Y_i(D=1)", "Y(D=0)", "Y_{it}(D=1)", "Y_{it} ( D = 0 )"]
+    assert all(FORBIDDEN.fullmatch(value) for value in abbreviated)
+    assert all(FORBIDDEN.search(value) is None for value in valid)
 
 
 def test_all_chapters_use_class_potential_outcomes_notation():
-    forbidden = re.compile(r"Y(?:_i)?\((?:1|0)\)")
     offenders = {}
     for path in ROOT.glob("*.Rmd"):
-        matches = forbidden.findall(path.read_text(encoding="utf-8"))
+        matches = FORBIDDEN.findall(path.read_text(encoding="utf-8"))
         if matches:
             offenders[path.name] = matches
     assert offenders == {}
