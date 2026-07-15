@@ -5,7 +5,8 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 # Paquete webexercises
 if (!requireNamespace("webexercises", quietly = TRUE)) {
-  stop("Falta el paquete webexercises. Instálalo antes de renderizar el libro.")
+  stop("Falta el paquete webexercises. Instálalo con ",
+       "install.", "packages('webexercises') antes de renderizar el libro.")
 }
 library(webexercises)
 ```
