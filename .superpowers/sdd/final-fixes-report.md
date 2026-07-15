@@ -80,3 +80,40 @@ Pandoc emitió advertencias no bloqueantes al intentar incrustar recursos extern
 ## Control de alcance
 
 Se preservaron los cambios ajenos y los artefactos no rastreados. El commit incluye solamente los tres Rmd corregidos, la matriz académica, las tres pruebas de contrato y este informe.
+
+## Addendum ortográfico
+
+Se corrigieron las catorce etiquetas visibles `Ver explicacion` a `Ver explicación` y los recursos visibles `Estadistica Basica`, `Estadistica y Probabilidad`, `Regresion Lineal` y `Khan Academy - Regresion`. Los atributos `data-section` ya normalizados y la lógica JavaScript no se modificaron.
+
+Prueba nueva en rojo:
+
+```sh
+python3 -m pytest tests/test_entrada_structure.py -q
+```
+
+```text
+..F...                                                                   [100%]
+1 failed, 5 passed in 0.37s
+```
+
+Suite focal después de la corrección:
+
+```sh
+python3 -m pytest tests/test_entrada_structure.py tests/test_entrada_academica.py -q
+```
+
+```text
+..........                                                               [100%]
+10 passed in 0.26s
+```
+
+Suite completa del addendum:
+
+```sh
+python3 -m pytest -q
+```
+
+```text
+........................................                                 [100%]
+40 passed in 4.56s
+```

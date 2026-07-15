@@ -168,7 +168,7 @@ Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones está
 
 `r mcq(c("La probabilidad de que la hipótesis nula sea verdadera", answer = "La probabilidad de observar datos tan extremos o más, dado que \\(H_0\\) es verdadera", "La probabilidad de que la hipótesis alternativa sea falsa", "El nivel de significancia del test"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 El valor p es la probabilidad de obtener un resultado tan extremo o más extremo que el observado, asumiendo que la hipótesis nula es verdadera.
 `r unhide()`
 </div>
@@ -178,7 +178,7 @@ El valor p es la probabilidad de obtener un resultado tan extremo o más extremo
 
 `r mcq(c(answer = "Error Tipo I", "Error Tipo II", "Sesgo de selección", "Error estándar"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 - Error Tipo I: Rechazar \(H_0\) cuando es verdadera (probabilidad \(\alpha\)).
 - Error Tipo II: No rechazar \(H_0\) cuando es falsa (probabilidad \(\beta\)).
 `r unhide()`
@@ -189,7 +189,7 @@ El valor p es la probabilidad de obtener un resultado tan extremo o más extremo
 
 `r mcq(c("Hay 95% de probabilidad de que el parámetro verdadero esté en este intervalo específico", answer = "En muestreos repetidos, aproximadamente 95% de los intervalos construidos con este procedimiento contendrían el parámetro", "El 95% de los datos está dentro del intervalo", "Estamos 95% seguros de nuestra estimación"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 Interpretación frecuentista: si repitiéramos el muestreo muchas veces y construyéramos IC del 95% cada vez, cerca del 95% de esos intervalos contendrían el valor verdadero del parámetro.
 `r unhide()`
 </div>
@@ -199,7 +199,7 @@ Interpretación frecuentista: si repitiéramos el muestreo muchas veces y constr
 
 `r mcq(c("La tendencia central de los datos", answer = "La dispersión de los datos alrededor de la media", "La relación entre dos variables", "El valor más frecuente"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 La varianza mide la dispersión alrededor de la media: \(\operatorname{Var}(X) = E[(X - \mu)^2]\). La desviación estándar es la raíz cuadrada de la varianza.
 `r unhide()`
 </div>
@@ -219,7 +219,7 @@ Esta sección evalúa tu comprensión del modelo de regresión lineal, sus supue
 
 `r mcq(c("El valor de Y cuando X = 0", answer = "El cambio esperado en Y por cada unidad adicional de X", "La correlación entre X e Y", "La varianza de Y explicada por X"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 \(\beta_1\) es el cambio esperado en \(Y\) asociado con una unidad adicional de \(X\), ceteris paribus.
 `r unhide()`
 </div>
@@ -229,7 +229,7 @@ Esta sección evalúa tu comprensión del modelo de regresión lineal, sus supue
 
 `r mcq(c("El coeficiente de correlación es 0.75", "El modelo tiene 75% de probabilidad de ser correcto", answer = "El 75% de la variación en Y es explicada por las variables independientes", "El 75% de las observaciones están correctamente predichas"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 \(R^2\) es la proporción de la varianza de \(Y\) explicada por el modelo.
 `r unhide()`
 </div>
@@ -239,7 +239,7 @@ Esta sección evalúa tu comprensión del modelo de regresión lineal, sus supue
 
 `r mcq(c("Los errores tienen media cero", "Los errores son homocedásticos", "No hay multicolinealidad perfecta", answer = "Los errores deben seguir una distribución uniforme"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suele asumir normalidad.
 `r unhide()`
 </div>
@@ -249,7 +249,7 @@ OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suel
 
 `r mcq(c("El coeficiente es significativo al 1%", answer = "El coeficiente es significativo al 5%", "El coeficiente no es significativo", "Hay 3% de probabilidad de que el coeficiente sea correcto"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 0.03 < 0.05 implica significancia al 5% (y al 10%), pero no al 1%.
 `r unhide()`
 </div>
@@ -259,7 +259,7 @@ OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suel
 
 `r mcq(c("El cambio absoluto en Y por unidad de X", "El cambio en log(Y) en términos absolutos", answer = "Aproximadamente \\(100\\beta_1\\)% por una unidad adicional de \\(X\\)", "La elasticidad de Y respecto a X"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 En un modelo semilogarítmico, \(100\beta_1\) es el cambio porcentual aproximado en \(Y\) por una unidad adicional de \(X\), para cambios pequeños.
 `r unhide()`
 </div>
@@ -279,7 +279,7 @@ Esta sección evalúa la diferencia entre correlación y causalidad, y conceptos
 
 `r mcq(c("Causalidad directa", "Causalidad inversa", answer = "Correlación espuria (correlación sin causalidad)", "Efecto placebo"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 Ejemplo de correlación espuria: puede haber una tercera variable (p. ej. desarrollo) que explique ambos.
 `r unhide()`
 </div>
@@ -289,7 +289,7 @@ Ejemplo de correlación espuria: puede haber una tercera variable (p. ej. desarr
 
 `r mcq(c("La muestra es muy pequeña", "Los datos tienen errores de medición", answer = "Los individuos tratados son sistemáticamente diferentes de los no tratados", "El modelo tiene muchas variables"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 Sesgo de selección: \(E[Y_0|D=1] \neq E[Y_0|D=0]\).
 `r unhide()`
 </div>
@@ -319,7 +319,7 @@ El contrafactual es el resultado potencial de la misma unidad bajo la condición
 
 `r mcq(c("La diferencia en tamaño de los grupos", "Los errores de medición en los datos", answer = "La autoselección (los que participan pueden ser diferentes de los que no)", "La falta de datos"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 Autoselección: diferencias previas (motivación, habilidad, redes) contaminan la comparación.
 `r unhide()`
 </div>
@@ -339,7 +339,7 @@ Esta sección evalúa tu familiaridad básica con Stata.
 
 `r mcq(c("view", answer = "browse o list", "show", "display"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 `browse` abre el visor de datos. `list` imprime observaciones en Results (por ejemplo: `list in 1/10`).
 `r unhide()`
 </div>
@@ -349,7 +349,7 @@ Esta sección evalúa tu familiaridad básica con Stata.
 
 `r mcq(c("La variable x tiene un p-value de 2.35", answer = "Por cada unidad adicional de x, Y aumenta en 2.35 unidades (en promedio)", "El R-cuadrado del modelo es 2.35", "Hay 2.35 observaciones con esa variable"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 El coeficiente es el cambio promedio en Y asociado con una unidad adicional en X, ceteris paribus.
 `r unhide()`
 </div>
@@ -597,9 +597,9 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
 
 <div class="resources-box">
 
-### Si necesitas repasar Estadistica Basica {-}
+### Si necesitas repasar Estadística Básica {-}
 
-- Khan Academy - Estadistica y Probabilidad
+- Khan Academy - Estadística y Probabilidad
 ```text
 https://es.khanacademy.org/math/statistics-probability
 ```
@@ -609,11 +609,11 @@ https://es.khanacademy.org/math/statistics-probability
 https://www.openintro.org/book/os/
 ```
 
-### Si necesitas repasar Regresion Lineal {-}
+### Si necesitas repasar Regresión Lineal {-}
 
 - Wooldridge, "Introductory Econometrics" (Caps 1-4)
 
-- Khan Academy - Regresion
+- Khan Academy - Regresión
 ```text
 https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data
 ```

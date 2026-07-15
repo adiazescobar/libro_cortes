@@ -26,6 +26,25 @@ def test_instructions_precede_quiz():
         assert phrase in TEXT
 
 
+def test_visible_quiz_labels_use_standard_accents():
+    for unaccented in [
+        "Ver explicacion",
+        "Estadistica Basica",
+        "Estadistica y Probabilidad",
+        "Regresion Lineal",
+        "Khan Academy - Regresion",
+    ]:
+        assert unaccented not in TEXT
+    for accented in [
+        "Ver explicación",
+        "Estadística Básica",
+        "Estadística y Probabilidad",
+        "Regresión Lineal",
+        "Khan Academy - Regresión",
+    ]:
+        assert accented in TEXT
+
+
 def test_scoring_contract_is_present():
     assert 'id="btn-finalizar"' in TEXT
     assert 'id="score-result"' in TEXT
