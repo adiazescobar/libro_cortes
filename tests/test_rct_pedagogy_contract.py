@@ -273,6 +273,52 @@ def test_practice_has_exact_exam_questions_without_answers():
         assert not _has_answer_marker(block)
 
 
+def test_practice_exam_questions_are_self_contained_cases():
+    blocks = _questions(PRACTICE, "RCT-S", ["RCT-S1", "RCT-S2", "RCT-S3", "RCT-S4"])
+    required_by_question = [
+        ["student_id", "20250813", "p=0.50", "semestre", "Formule"],
+        ["4.312", "0.476", "4.390", "0.429", "Compare", "Justifique"],
+        ["240 estudiantes", "24 escuelas", "asistencia posterior", "Decida", "Explique"],
+        ["mujer=1", "libros=4", "4.2956", "4.2100", "Diagnostique", "Calcule"],
+    ]
+    for block, required in zip(blocks, required_by_question):
+        assert all(fragment in block for fragment in required), required
+        assert "Producto esperado" in block
+
+
+def test_practice_stata_examples_are_sequential_and_interactions_are_coherent():
+    assert "sort id" not in PRACTICE
+    for variable in ["D_simple50", "D_simple30", "D_exact40", "D_estrato50"]:
+        assert variable in PRACTICE
+    assert "reg y D##" not in PRACTICE
+    assert "reg y c.D##" not in PRACTICE
+    assert "i.D##i.mujer" in PRACTICE
+    assert "i.D##c.libros" in PRACTICE
+    assert "margins D, at(" not in PRACTICE
+    assert "niveles predichos" in PRACTICE and "dydx(D)" in PRACTICE
+
+
+def test_practice_qualifies_ate_weighting_centering_and_confidence_intervals():
+    forbidden = [
+        "En los cuatro casos, \\(\\hat{\\tau}\\) estima el **ATE** de forma consistente. Lo que cambia es la **precisión**.",
+        "ahora \\(\\tau = ATE\\) directamente",
+        "Ahora el coeficiente de D es directamente el ATE",
+        '"Con centrado: coef(D) = ATE promedio."',
+        "modelos del PASO 4",
+    ]
+    assert not any(fragment in PRACTICE for fragment in forbidden)
+    for required in [
+        "probabilidades de tratamiento iguales entre estratos",
+        "ponderación por la población objetivo",
+        "efecto ajustado en la media",
+        "promedio de los CATE predichos",
+        "qt(0.975",
+        "grados de libertad residuales",
+        "Ejercicios adicionales",
+    ]:
+        assert required in PRACTICE
+
+
 def test_theory_headings_delegate_numbering_to_bookdown():
     _assert_no_manual_numbering(THEORY)
 

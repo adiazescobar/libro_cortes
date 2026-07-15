@@ -200,21 +200,18 @@ La semilla reproduce la secuencia pseudoaleatoria solo si también se conserva e
 Asigna tratamiento con probabilidad 0.5 a cada unidad.
 
 ```stata
-* Supón que tienes un id por fila
-sort id
-gen double u = runiform()
-gen byte D = (u < 0.5)           // 1=tratado, 0=control
-tab D
-drop u
+sort student_id
+gen double u_simple50 = runiform()
+gen byte D_simple50 = (u_simple50 < 0.5)
+tab D_simple50
 ```
 
 **Cambio de proporción (p=0.30):**
 
 ```stata
-gen double u = runiform()
-gen byte D = (u < 0.30)
-tab D
-drop u
+gen double u_simple30 = runiform()
+gen byte D_simple30 = (u_simple30 < 0.30)
+tab D_simple30
 ```
 
 **Asignación con conteo exacto de tratados (p.ej., 40% exacto)**
@@ -225,11 +222,11 @@ Asegura exactamente `round(N*0.40)` tratados.
 count
 local N      = r(N)
 local Ntr    = round(`N'*0.40)   // número exacto de tratados
-gen double u = runiform()
-sort u
-gen byte D   = (_n <= `Ntr')
-tab D
-drop u
+gen double u_exact40 = runiform()
+sort u_exact40
+gen byte D_exact40 = (_n <= `Ntr')
+tab D_exact40
+sort student_id
 ```
 
 **Estratificada** (bloques) con `runiform()`
@@ -240,20 +237,20 @@ Mantén la proporción deseada **dentro de cada estrato** (ej., por `mujer` × `
 
 ```stata
 egen long strata = group(mujer programa), label
-bys strata: gen double u = runiform()
-bys strata (u): gen byte D = (_n <= round(_N*0.50))   // 50/50 exacto en cada estrato
-tab D
-by strata: tab D
-drop u
+bys strata: gen double u_estrato50 = runiform()
+bys strata (u_estrato50): gen byte D_estrato50 = (_n <= round(_N*0.50))
+tab D_estrato50
+by strata: tab D_estrato50
+sort student_id
 ```
 
 **Proporción distinta por estrato (p.ej., 40%):**
 
 ```stata
-bys strata: gen double u = runiform()
-bys strata (u): gen byte D = (_n <= round(_N*0.40))
-by strata: tab D
-drop u
+bys strata: gen double u_estrato40 = runiform()
+bys strata (u_estrato40): gen byte D_estrato40 = (_n <= round(_N*0.40))
+by strata: tab D_estrato40
+sort student_id
 ```
 
 **Cluster** (aleatoriza a nivel del cluster y la pasa a individuos)
@@ -279,8 +276,7 @@ restore
 
 * Trae la asignación al nivel individual
 merge m:1 escuela using `cl', keep(match master) nogen
-gen byte D = D_cluster
-tab D
+tab D_cluster
 ```
 
 Usando **`randtreat`** (SSC): multi-brazos, proporciones desiguales, estratos y *misfits*
@@ -294,22 +290,22 @@ ssc install randtreat, replace
 **Binario 50/50 (sin estratos)**
 
 ```stata
-randtreat, generate(D) multiple(2) setseed(20250813)
-tab D
+randtreat, generate(D_rand50) multiple(2) setseed(20250813)
+tab D_rand50
 ```
 
 **Binario 50/50 dentro de estratos (`mujer` × `programa`)**
 
 ```stata
-randtreat, generate(D) multiple(2) strata(mujer programa) setseed(20250813)
-by mujer programa: tab D
+randtreat, generate(D_randestrato) multiple(2) strata(mujer programa) setseed(20250813)
+by mujer programa: tab D_randestrato
 ```
 
 ** Proporciones desiguales (30% tratado, 70% control)**
 
 ```stata
-randtreat, generate(D) multiple(2) unequal(0.30 0.70) setseed(20250813)
-tab D
+randtreat, generate(D_rand30) multiple(2) unequal(0.30 0.70) setseed(20250813)
+tab D_rand30
 ```
 
 ** Multi-brazo (T1/T2/C = 0.4/0.4/0.2) con estratos**
@@ -329,7 +325,7 @@ Cuando el tamaño de estrato no es divisible por los brazos/proporciones, usa `m
 * `misfits(missing)`: deja *misfits* sin asignar para que los decidas manualmente.
 
 ```stata
-randtreat, generate(arm) multiple(3) unequal(0.40 0.40 0.20) ///
+randtreat, generate(arm_misfits) multiple(3) unequal(0.40 0.40 0.20) ///
     strata(mujer programa) misfits(wstrata) setseed(20250813)
 ```
 
@@ -339,8 +335,8 @@ randtreat, generate(arm) multiple(3) unequal(0.40 0.40 0.20) ///
 
 ```stata
 * Por ejemplo, exactamente 50 tratados en total:
-randtreat, generate(D) multiple(2) ntreated(50) setseed(20250813)
-tab D
+randtreat, generate(D_randexacta) multiple(2) ntreated(50) setseed(20250813)
+tab D_randexacta
 ```
 
 **Cluster + `randtreat`**
@@ -358,8 +354,7 @@ save `cl', replace
 restore
 
 merge m:1 escuela using `cl', nogen
-gen byte D = Dcl
-tab D
+tab Dcl
 ```
 
 La asignación simple da a cada estudiante la misma probabilidad marginal. La estratificada preserva la proporción dentro de grupos definidos antes del tratamiento y debe analizarse incorporando esos estratos. Diferencias basales pueden aparecer por azar aun con una asignación correcta: son balance fortuito, no prueba automática de manipulación.
@@ -525,11 +520,13 @@ pval_f <- pf(ft[1], ft[2], ft[3], lower.tail = FALSE)
 ::: {.box-ejercicio}
 **RCT-S1 — Aleatorización y balance**
 
+Una base contiene 70 estudiantes, identificados por `student_id`, distribuidos en cuatro valores de `semestre`. Use la semilla `20250813`. Formule y ejecute dos asignaciones: Bernoulli simple con `p=0.50` y conteo 50/50 dentro de cada `semestre`. Para la asignación estratificada, evalúe balance de `edad`, `mujer` y `libros` con pruebas individuales y con una prueba conjunta `D ~ X`. ¿Qué elementos conservaría para que otra persona reproduzca la asignación? ¿Cómo distinguiría desbalance fortuito de un error de implementación?
+
 **Puntaje sugerido:** 5 puntos.
 
 **Comandos permitidos:** `set seed`, `runiform()`, `bysort`, `ttest`, `reg`, `test`.
 
-**Producto esperado:** lista reproducible de asignación simple y estratificada, tabla de balance individual y prueba conjunta, con una breve evaluación del balance fortuito.
+**Producto esperado:** dos listas de asignación reproducibles, tabla de balance individual, prueba conjunta y evaluación escrita del balance fortuito.
 :::
 
 ### RCT simple sin controles {-}
@@ -545,7 +542,7 @@ En el capítulo anterior derivamos **los cuatro escenarios** según el diseño e
 | 4 | \( Y_i = \alpha + \tau D_i + \delta' S_i + \beta' X_i + u_i \) | Diseño + eficiencia (especificación completa) |
 :::
 
-En los cuatro casos, \(\hat{\tau}\) estima el **ATE** de forma consistente. Lo que cambia es la **precisión**.
+Con probabilidades de tratamiento iguales entre estratos y una especificación compatible con el diseño, los cuatro coeficientes apuntan al mismo ATE de la población objetivo; los controles pretratamiento y estratos pueden cambiar la precisión. Si las probabilidades difieren entre estratos o los efectos son heterogéneos, la regresión no ponderada puede inducir una ponderación distinta de la población objetivo. En ese caso se debe prespecificar el estimando y usar ponderación por la población objetivo o un promedio explícito de efectos por estrato.
 
 ```stata
 * ── Escenario 1: RCT simple (diferencia de medias) ──────────────────────
@@ -608,8 +605,10 @@ model_labels <- c(
 main_view <- stata_main %>%
   filter(termino == "D") %>%
   mutate(
-    ci_inferior = coeficiente - 1.96 * error_estandar,
-    ci_superior = coeficiente + 1.96 * error_estandar
+    df_residual = c(68, 63, 65, 60),
+    critico_t = qt(0.975, df = df_residual),
+    ci_inferior = coeficiente - critico_t * error_estandar,
+    ci_superior = coeficiente + critico_t * error_estandar
   ) %>%
   transmute(
     Modelo = unname(model_labels[modelo]),
@@ -617,11 +616,12 @@ main_view <- stata_main %>%
     `Error estándar robusto` = round(error_estandar, 3),
     `IC 95% inferior` = round(ci_inferior, 3),
     `IC 95% superior` = round(ci_superior, 3),
+    `gl residuales` = df_residual,
     N = N,
     `R²` = round(R2, 3)
   )
 
-kable(main_view, align = "lrrrrrr") %>%
+kable(main_view, align = "lrrrrrrr") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
@@ -632,11 +632,13 @@ kable(main_view, align = "lrrrrrr") %>%
 ::: {.box-ejercicio}
 **RCT-S2 — Lectura de modelos y precisión**
 
+Sobre la misma muestra de 70 estudiantes se obtienen: simple, 4.312 (SE 0.476); con controles, 4.252 (SE 0.464); con estratos, 4.390 (SE 0.429); completo, 4.296 (SE 0.440). Los grados de libertad residuales son 68, 63, 65 y 60, respectivamente. Compare coeficientes, precisión e IC 95% con referencia t. ¿Cuál especificación es más precisa en esta muestra? Justifique por qué una SE menor no significa que los controles hayan creado la identificación y explique qué condición de ponderación permite interpretar las cuatro columnas como el mismo ATE objetivo.
+
 **Puntaje sugerido:** 5 puntos.
 
 **Comandos permitidos:** `reg`, `eststo`, `esttab`, `lincom`.
 
-**Producto esperado:** una tabla con coeficiente, error estándar, IC 95%, N y R² para los cuatro modelos, seguida de una comparación argumentada de precisión.
+**Producto esperado:** cálculos de cuatro IC 95% y una comparación argumentada de estimando, precisión y ponderación.
 :::
 ::: {.boxnote}
 Interpretación según escala de \(Y\)
@@ -691,11 +693,13 @@ Los controles deben medirse antes del tratamiento. Un control postratamiento pue
 ::: {.box-ejercicio}
 **RCT-S3 — Inferencia y controles**
 
+Diseño A asigna individualmente a 240 estudiantes dentro de salones. Diseño B asigna tratamiento a 24 escuelas y mide a 20 estudiantes por escuela. Para ambos se observan puntaje basal, género, asistencia posterior al tratamiento y puntaje final. Decida el nivel de los errores estándar en cada diseño y si usaría cada covariable como control principal. Explique qué cambia con solo 24 clusters y por qué la asistencia posterior requiere un tratamiento distinto de las covariables basales.
+
 **Puntaje sugerido:** 5 puntos.
 
 **Comandos permitidos:** `reg`, `vce(robust)`, `vce(cluster ...)`, `test`.
 
-**Producto esperado:** elección justificada del nivel de inferencia y clasificación de controles pretratamiento y postratamiento para dos diseños propuestos.
+**Producto esperado:** dos especificaciones de inferencia y una clasificación razonada de las cuatro covariables.
 :::
 
 ### Heterogeneidad mediante interacciones {-}
@@ -708,24 +712,24 @@ Los **Efectos heterogéneos (HET)** permiten preguntar si el impacto cambia con 
   \]
   donde \(W\) es el moderador (p. ej., **mujer**, **libros**, **cuartiles de edad**).
 - **Interpretación:** \(\delta\) es el **cambio en el efecto de \(D\)** al pasar de un nivel de \(W\) a otro.
-  Usar `margins`/`marginsplot` para reportar efectos marginales y perfiles por subgrupo.
+  Usar `margins`/`marginsplot` para reportar efectos marginales y perfiles por subgrupo. `margins, dydx(D)` entrega cambios tratados-control (CATE); otros comandos de `margins` pueden entregar niveles predichos y no deben rotularse como efectos.
 
 ```stata
 * Por mujer (binaria)
 eststo clear
-eststo: reg y D##i.mujer, vce(robust)
+eststo: reg y i.D##i.mujer, vce(robust)
 margins, dydx(D)
-margins D, at(mujer=(0 1))
+margins D#mujer
 
 * Por libros (continua)
-eststo: reg y D##c.libros, vce(robust)
+eststo: reg y i.D##c.libros, vce(robust)
 margins, dydx(D) at(libros=(0(1)8))
 marginsplot, title("Efecto marginal de D según libros")
 graph export "margins_libros.pdf", replace
 
 * Por cuartiles de edad
 xtile q_edad = edad, nq(4)
-eststo: reg y D##i.q_edad, vce(robust)
+eststo: reg y i.D##i.q_edad, vce(robust)
 margins D#q_edad
 marginsplot, title("Heterogeneidad por cuartiles de edad")
 graph export "margins_qedad.pdf", replace
@@ -736,11 +740,11 @@ graph export "margins_qedad.pdf", replace
 Para una moderadora binaria, el coeficiente de `D` es el efecto base cuando \(W=0\); el CATE cuando \(W=1\) es la suma del coeficiente de `D` y el de la interacción. Para libros o edad, el CATE cambia con el valor del moderador. `lincom` y `margins, dydx(D)` calculan esa combinación con su error estándar.
 
 ```stata
-reg y D##i.mujer, vce(robust)
+reg y i.D##i.mujer, vce(robust)
 lincom 1.D + 1.D#1.mujer
 margins mujer, dydx(D)
 
-reg y D##c.libros, vce(robust)
+reg y i.D##c.libros, vce(robust)
 margins, dydx(D) at(libros=(0(1)8))
 ```
 
@@ -824,23 +828,23 @@ ggplot(grid_q, aes(x = q_edad, y = yhat, fill = Grupo)) +
 
 **El truco de centrar (Wooldridge)**
 
-En el capítulo anterior vimos que si interactuamos \(D\) con una covariable \(W\), el coeficiente \(\tau\) solo es el efecto para \(W=0\), **no** el ATE promedio. Para que \(\tau\) sea directamente el ATE, centramos la covariable:
+En el capítulo anterior vimos que si interactuamos \(D\) con una covariable \(W\), el coeficiente \(\tau\) es el efecto ajustado para \(W=0\). Al centrar la covariable, ese coeficiente pasa a ser el efecto ajustado en la media de \(W\):
 
 \[
 W_c = W - \bar{W}, \qquad Y_i = \alpha + \tau D_i + \gamma W_{c,i} + \delta (D_i \cdot W_{c,i}) + u_i
 \]
 
-Como \(\mathbb{E}[W_c]=0\), ahora \(\tau = ATE\) directamente.
+Como \(\mathbb{E}[W_c]=0\), el coeficiente de tratamiento se evalúa en \(W=\bar W\). Solo coincide con el ATE bajo una forma funcional adecuada y una agregación compatible con la población objetivo. En general, el ATE ajustado se obtiene como el promedio de los CATE predichos para las unidades, con los pesos del diseño correspondientes.
 
 ```stata
 * ── Sin centrar: τ = efecto solo para libros=0 ──────────────────────────
-reg y c.D##c.libros, vce(robust)
+reg y i.D##c.libros, vce(robust)
 
-* ── Con centrado: τ = ATE promedio ───────────────────────────────────────
+* ── Con centrado: efecto ajustado en libros = media ─────────────────────
 sum libros
 gen libros_c = libros - r(mean)
-reg y c.D##c.libros_c, vce(robust)
-* Ahora el coeficiente de D es directamente el ATE
+reg y i.D##c.libros_c, vce(robust)
+* Para un promedio ajustado, promediar CATE predichos con pesos de diseño
 ```
 
 **Resultados (con nuestros datos):**
@@ -864,22 +868,24 @@ modelsummary(
   gof_map = c("nobs", "r.squared"),
   title = "Truco de centrar: comparación",
   notes = c("Sin centrar: coef(D) = efecto cuando libros = 0.",
-            "Con centrado: coef(D) = ATE promedio.")
+            "Con centrado: coef(D) = efecto ajustado en la media de libros.")
 )
 ```
 
 ::: {.boxnote}
-**Regla práctica:** siempre que interactúes el tratamiento con una variable continua, **centra la variable** para que el coeficiente de \(D\) siga siendo interpretable como el efecto promedio.
+**Regla práctica:** centrar una variable continua hace interpretable el coeficiente de \(D\) en el valor medio; no reemplaza promediar CATE ni aplicar los pesos del diseño para estimar el ATE objetivo.
 :::
 
 ::: {.box-ejercicio}
 **RCT-S4 — Interacción, CATE y concordancia**
 
+En `reg y i.D##i.mujer i.D##c.libros, vce(robust)`, el coeficiente de `1.D` es 3.20, el de `1.D#1.mujer` es 0.80 y el de `1.D#c.libros` es 0.15. Calcule el efecto ajustado para el perfil `mujer=1`, `libros=4` y escriba el `lincom` correspondiente. Después, para el modelo completo, Stata reporta coeficiente 4.2956, SE 0.4404 y N=70, mientras Python reporta 4.2100, SE 0.3980 y N=68. Diagnostique en orden las comprobaciones de muestra, fórmula, codificación de estratos y covarianza que haría antes de atribuir la discrepancia al software. Distinga en su reporte niveles predichos de `dydx(D)`/CATE.
+
 **Puntaje sugerido:** 5 puntos.
 
 **Comandos permitidos:** `reg`, `lincom`, `margins`, `summarize`, `gen`, Python `statsmodels`.
 
-**Producto esperado:** CATE para un perfil indicado, comparación centrada/no centrada y diagnóstico documentado de una discrepancia hipotética entre Stata y Python.
+**Producto esperado:** cálculo y comando del CATE para el perfil, más un diagnóstico secuencial de la discrepancia entre lenguajes.
 :::
 
 ### Replicación en Python y Colab {-}
@@ -951,12 +957,14 @@ kable(verification_view, digits = 6, align = "lrrrrrrcc") %>%
 :::
 
 ::: {.boxejercicio}
-**Ejercicios**
+**Ejercicios adicionales**
+
+Estas actividades amplían la práctica y no sustituyen las cuatro preguntas tipo parcial anteriores.
 
 1. **Aleatorización (Bernoulli y estratos)**
-   (a) Con tu `data.dta`, genera `D` con p=0.5 usando `runiform()`.
-   (b) Repite con p=0.3.
-   (c) Crea estratos por `mujer × programa` y asigna 50/50 exacto por estrato.
+   (a) Con tu `data.dta`, genera `D_practica50` con p=0.5 usando `runiform()`.
+   (b) Genera por separado `D_practica30` con p=0.3.
+   (c) Crea estratos por `mujer × programa` y guarda la asignación 50/50 exacta en `D_practica_estrato`.
 
 2. **`randtreat` avanzado**
    (a) Asigna 3 brazos (T1/T2/C) con proporciones 0.4/0.4/0.2 y estratos `mujer × programa`.
@@ -968,7 +976,7 @@ kable(verification_view, digits = 6, align = "lrrrrrrcc") %>%
    (c) Interpreta: ¿hay evidencia de desbalance?
 
 4. **Los cuatro escenarios**
-   (a) Estima los cuatro modelos del PASO 4 (simple, +controles, +estratos, completo).
+   (a) Estima los cuatro modelos de la sección **Comparación de las cuatro especificaciones** (simple, +controles, +estratos, completo).
    (b) Compara \(\hat{\tau}\) y sus SE entre los cuatro. ¿Cuál tiene menor SE? ¿Por qué?
    (c) ¿Cambia mucho el punto estimado al incluir estratos? Discute.
 
