@@ -319,6 +319,26 @@ def test_practice_qualifies_ate_weighting_centering_and_confidence_intervals():
         assert required in PRACTICE
 
 
+def test_practice_exam_command_allowlists_support_required_products():
+    blocks = _questions(PRACTICE, "RCT-S", ["RCT-S1", "RCT-S2", "RCT-S3", "RCT-S4"])
+    for command in ["sort", "generate", "isid", "tabulate"]:
+        assert f"`{command}" in blocks[0]
+    assert "`display invttail(" in blocks[1]
+
+
+def test_confidence_interval_df_are_mapped_by_model_name():
+    assert "df_by_model <- c(" in PRACTICE
+    for mapping in [
+        "m1_simple = 68",
+        "m2_controles = 63",
+        "m3_estratos = 65",
+        "m4_completo = 60",
+    ]:
+        assert mapping in PRACTICE
+    assert "df_residual = unname(df_by_model[modelo])" in PRACTICE
+    assert "df_residual = c(68, 63, 65, 60)" not in PRACTICE
+
+
 def test_theory_headings_delegate_numbering_to_bookdown():
     _assert_no_manual_numbering(THEORY)
 

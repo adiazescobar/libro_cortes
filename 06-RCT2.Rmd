@@ -524,7 +524,7 @@ Una base contiene 70 estudiantes, identificados por `student_id`, distribuidos e
 
 **Puntaje sugerido:** 5 puntos.
 
-**Comandos permitidos:** `set seed`, `runiform()`, `bysort`, `ttest`, `reg`, `test`.
+**Comandos permitidos:** `sort`, `generate`, `isid`, `set seed`, `runiform()`, `bysort`, `tabulate`, `list`, `ttest`, `reg`, `test`.
 
 **Producto esperado:** dos listas de asignación reproducibles, tabla de balance individual, prueba conjunta y evaluación escrita del balance fortuito.
 :::
@@ -602,10 +602,17 @@ model_labels <- c(
   m4_completo = "Completo"
 )
 
+df_by_model <- c(
+  m1_simple = 68,
+  m2_controles = 63,
+  m3_estratos = 65,
+  m4_completo = 60
+)
+
 main_view <- stata_main %>%
   filter(termino == "D") %>%
   mutate(
-    df_residual = c(68, 63, 65, 60),
+    df_residual = unname(df_by_model[modelo]),
     critico_t = qt(0.975, df = df_residual),
     ci_inferior = coeficiente - critico_t * error_estandar,
     ci_superior = coeficiente + critico_t * error_estandar
@@ -636,7 +643,7 @@ Sobre la misma muestra de 70 estudiantes se obtienen: simple, 4.312 (SE 0.476); 
 
 **Puntaje sugerido:** 5 puntos.
 
-**Comandos permitidos:** `reg`, `eststo`, `esttab`, `lincom`.
+**Comandos permitidos:** `display invttail(gl, 0.025)` para obtener cada valor crítico t; calculadora básica para multiplicar y sumar.
 
 **Producto esperado:** cálculos de cuatro IC 95% y una comparación argumentada de estimando, precisión y ponderación.
 :::
