@@ -30,8 +30,8 @@ El capítulo seguirá este orden:
 2. pregunta causal y población de interés;
 3. resultados potenciales, tratamiento observado y resultado observado;
 4. problema fundamental de la inferencia causal;
-5. efectos individuales y parámetros promedio ATE, ATT y ATU;
-6. relación entre ATE, ATT y ATU;
+5. efectos individuales y parámetros promedio ATE, ATT, ATU y CATE;
+6. relación entre ATE, ATT, ATU y CATE;
 7. comparación naïve y demostración completa del sesgo de selección;
 8. independencia incondicional e independencia condicional;
 9. soporte común o positividad cuando se condicione en covariables;
@@ -44,6 +44,18 @@ El capítulo seguirá este orden:
 - Usar exclusivamente la notación de clase `Y_i(D=1)` y `Y_i(D=0)`, o sus versiones sin índice cuando corresponda.
 - Distinguir parámetros causales de estimadores muestrales.
 - Explicar que el ATT, ATU y ATE son parámetros distintos cuando existe heterogeneidad de efectos y selección.
+- Definir el efecto promedio condicional como
+
+  \[
+  CATE(x)=\mathbb{E}[Y_i(D=1)-Y_i(D=0)\mid X_i=x],
+  \]
+
+  y explicar que describe heterogeneidad causal entre subgrupos definidos por covariables pretratamiento.
+- Mostrar que el ATE agrega los CATE sobre la distribución de $X$:
+
+  \[
+  ATE=\mathbb{E}[CATE(X_i)].
+  \]
 - Mostrar la identidad:
 
   \[
@@ -60,7 +72,7 @@ El capítulo seguirá este orden:
 
 ### Ejemplo numérico
 
-Se conservará la muestra de ocho individuos porque conecta directamente con la práctica. El capítulo mostrará los resultados potenciales, el tratamiento y el resultado observado, y pedirá calcular ATE, ATT, ATU, diferencia naïve y sesgo de selección. Las soluciones o pistas deben ser suficientes para verificar los cálculos sin anticipar toda la actividad.
+Se conservará la muestra de ocho individuos porque conecta directamente con la práctica. El capítulo mostrará los resultados potenciales, el tratamiento y el resultado observado, y pedirá calcular ATE, ATT, ATU, un CATE por una covariable pretratamiento, diferencia naïve y sesgo de selección. Las soluciones o pistas deben ser suficientes para verificar los cálculos sin anticipar toda la actividad.
 
 ## Capítulo 4: Parámetros causales en Stata
 
@@ -84,7 +96,7 @@ Se conservará el nombre histórico `04_phyton.ipynb` para no romper enlaces exi
 3. carga de datos y construcción de `y` y `tau`;
 4. descripción de tratados y controles;
 5. diferencia de medias y regresión simple;
-6. cálculo de ATE, ATT y ATU;
+6. cálculo de ATE, ATT, ATU y CATE por subgrupo pretratamiento;
 7. comparación naïve y descomposición del sesgo;
 8. experimento de aumento artificial del tamaño muestral;
 9. experimento de asignación aleatoria;
@@ -101,7 +113,7 @@ La página mostrará únicamente:
 
 - frecuencias y medias esenciales por grupo;
 - coeficiente de la diferencia de medias/regresión y su interpretación;
-- ATE, ATT, ATU, estimador naïve y sesgo para los ocho individuos;
+- ATE, ATT, ATU, CATE por subgrupo, estimador naïve y sesgo para los ocho individuos;
 - resumen del experimento de tamaño muestral;
 - resumen del experimento aleatorio;
 - media, desviación estándar y cuantiles relevantes del sesgo en cada Monte Carlo;
