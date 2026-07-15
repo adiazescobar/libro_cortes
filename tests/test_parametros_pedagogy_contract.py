@@ -112,8 +112,13 @@ def test_practice_restores_twelve_guided_stages():
         "Monte Carlo con aleatorización",
         "Comparación gráfica",
     ]
-    headings = re.findall(r"^### Etapa (\d+)\. (.+)$", PRACTICE, re.MULTILINE)
-    assert headings == [(str(index), stage) for index, stage in enumerate(stages, 1)]
+    headings = re.findall(r"^### (.+)$", PRACTICE, re.MULTILINE)
+    assert [heading for heading in headings if heading in stages] == stages
+
+
+def test_practice_headings_rely_only_on_bookdown_numbering():
+    assert not re.search(r"^#{2,4}\s+\d+[.)]\s+", PRACTICE, re.MULTILINE)
+    assert not re.search(r"^#{2,4}\s+Etapa\s+\d+[.)]\s+", PRACTICE, re.MULTILINE)
 
 
 def test_practice_has_required_blocks_and_exam_questions():

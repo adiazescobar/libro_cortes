@@ -145,9 +145,9 @@ diferencia observada entre tratados y controles. Los resultados que aparecen en
 esta página se leen directamente de los archivos producidos por el do-file.
 :::
 
-## 1. Describir los datos y construir el resultado observado
+## Describir los datos y construir el resultado observado
 
-### Etapa 1. Preparación de los datos
+### Preparación de los datos
 
 ::: {.boxnote}
 **Comando clave**
@@ -181,7 +181,7 @@ auditar la construcción fila por fila. En datos reales nunca observamos a la
 vez `yd0` y `yd1` para una misma persona.
 :::
 
-### Etapa 2. Descripción por grupos
+### Descripción por grupos
 
 ::: {.boxcode}
 **Comando clave**
@@ -205,9 +205,9 @@ respectivamente.
 no establece qué habría ocurrido al mismo conjunto de personas sin tratamiento.
 :::
 
-## 2. Relacionar diferencia de medias y regresión
+## Relacionar diferencia de medias y regresión
 
-### Etapa 3. Diferencia de medias
+### Diferencia de medias
 
 ::: {.boxcode}
 **Comando clave**
@@ -233,7 +233,7 @@ controles. Con `by(D)`, Stata muestra `mean(0)-mean(1)`, cuyo signo es el opuest
 del coeficiente de `D` en la regresión con constante.
 :::
 
-### Etapa 4. Regresión simple
+### Regresión simple
 
 ::: {.boxcode}
 **Comando clave**
@@ -259,9 +259,9 @@ Ni `robust` ni un intervalo estrecho convierten el coeficiente en causal cuando
 existe selección.
 :::
 
-## 3. Calcular parámetros causales y heterogeneidad
+## Calcular parámetros causales y heterogeneidad
 
-### Etapa 5. Programa `estimadores`
+### Programa `estimadores`
 
 ::: {.boxcode}
 **Comando clave**
@@ -297,7 +297,7 @@ cuando se ejecuta el siguiente comando. El argumento `y` mantiene una interfaz
 pedagógica común, aunque estos tres estimandos se calculan con `tau` y `D`.
 :::
 
-### Etapa 6. ATE, ATT, ATU y CATE
+### ATE, ATT, ATU y CATE
 
 ::: {.boxcode}
 **Comando clave**
@@ -333,7 +333,7 @@ knitr::kable(tabla_puntual, align = c("l", "r", "r"),
 Además, $ATE=P(D=1)ATT+P(D=0)ATU$.
 :::
 
-### Etapa 7. Descomposición del sesgo
+### Descomposición del sesgo
 
 ::: {.boxcode}
 **Comando clave**
@@ -363,9 +363,9 @@ resultados potenciales, no porque falten observaciones ni porque la resta esté
 mal calculada.
 :::
 
-## 4. Duplicar observaciones no resuelve la selección
+## Duplicar observaciones no resuelve la selección
 
-### Etapa 8. Duplicación de observaciones
+### Duplicación de observaciones
 
 ::: {.boxcode}
 **Comando clave**
@@ -398,9 +398,9 @@ independiente. Las copias no aportan variación nueva: el sesgo permanece en
 `r fmt(valor_puntual("datos_duplicados", "SESGO_ATT"))`.
 :::
 
-## 5. Reasignar el tratamiento al azar
+## Reasignar el tratamiento al azar
 
-### Etapa 9. Asignación aleatoria
+### Asignación aleatoria
 
 ::: {.boxcode}
 **Comando clave**
@@ -430,13 +430,13 @@ aleatorización implica insesgadez al repetir el procedimiento; no exige que una
 muestra finita reproduzca exactamente el ATE `r fmt(ate_original)`.
 :::
 
-## 6. Repetir el experimento: Monte Carlo
+## Repetir el experimento: Monte Carlo
 
 La población simulada contiene `r format(n_duplicado, big.mark = ",", scientific = FALSE)`
 perfiles. Cada llamada vuelve a asignar tratamiento, construye `y` y devuelve
 NAIVE−ATT.
 
-### Etapa 10. Monte Carlo con selección
+### Monte Carlo con selección
 
 ::: {.boxcode}
 **Comando clave**
@@ -485,7 +485,7 @@ sin tratamiento en una probabilidad entre cero y uno. Por eso `D` depende de
 fija la secuencia pseudoaleatoria.
 :::
 
-### Etapa 11. Monte Carlo con aleatorización
+### Monte Carlo con aleatorización
 
 ::: {.boxcode}
 **Comando clave**
@@ -503,7 +503,7 @@ summarize sesgo, detail
 de los resultados potenciales, en expectativa.
 :::
 
-### Etapa 12. Comparación gráfica
+### Comparación gráfica
 
 ```{r tabla-monte-carlo, echo=FALSE}
 knitr::kable(tabla_mc, align = c("l", rep("r", 6)),
@@ -537,7 +537,7 @@ eliminar la variación muestral. ¿Cuál escenario es más disperso según las
 desviaciones estándar canónicas y por cuánto?
 :::
 
-## 7. Ejercicios
+## Ejercicios
 
 ::: {.boxquestion}
 **S-P1 (5 puntos). Regresión y diferencia de medias.** Considere el output de
@@ -618,7 +618,7 @@ una semilla, ejecute `simulate` y resuma la distribución.
 centro y dispersión de la distribución frente a la regla canónica.
 :::
 
-## 8. Síntesis
+## Síntesis
 
 1. **Identificación:** más datos no eliminan el sesgo de selección.
 2. **Heterogeneidad:** un ATE puede ocultar CATE distintos entre grupos.

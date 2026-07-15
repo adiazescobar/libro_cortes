@@ -178,14 +178,14 @@ def test_practice_has_objectives_prerequisites_sequence_and_bridge():
     headings = [
         "## Materiales para la clase {-}",
         "## Objetivos {-}",
-        "## 1. Describir los datos y construir el resultado observado",
-        "## 2. Relacionar diferencia de medias y regresión",
-        "## 3. Calcular parámetros causales y heterogeneidad",
-        "## 4. Duplicar observaciones no resuelve la selección",
-        "## 5. Reasignar el tratamiento al azar",
-        "## 6. Repetir el experimento: Monte Carlo",
-        "## 7. Ejercicios",
-        "## 8. Síntesis",
+            "## Describir los datos y construir el resultado observado",
+            "## Relacionar diferencia de medias y regresión",
+            "## Calcular parámetros causales y heterogeneidad",
+            "## Duplicar observaciones no resuelve la selección",
+            "## Reasignar el tratamiento al azar",
+            "## Repetir el experimento: Monte Carlo",
+            "## Ejercicios",
+            "## Síntesis",
         "## Puente al capítulo siguiente {-}",
     ]
     positions = [TEXT.index(heading) for heading in headings]
