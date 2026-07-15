@@ -48,10 +48,37 @@ def _assert_exact_question_codes(text, prefix, expected_codes):
     return questions
 
 
-def _assert_no_answer_markers(block):
+def _contains_answer_marker(block):
+    answer_label = re.compile(
+        r"(?im)^\s*(?:>\s*)?(?:[-*+]\s+)?(?:#{1,6}\s+)?"
+        r"(?:(?:\*\*|__)?(?:respuesta|solución|pista)"
+        r"(?:\s*:\s*(?:\*\*|__)?|(?:\*\*|__)\s*:))"
+    )
     lowered = block.casefold()
-    forbidden = ["respuesta", "solución", "pista", "details", "hide(", "ver respuesta"]
-    assert not any(marker in lowered for marker in forbidden)
+    return bool(answer_label.search(block)) or any(
+        marker in lowered for marker in ["<details", "hide(", "ver respuesta"]
+    )
+
+
+def _assert_no_answer_markers(block):
+    assert not _contains_answer_marker(block)
+
+
+def test_answer_marker_detection_allows_legitimate_question_wording():
+    assert not _contains_answer_marker("Justifique su respuesta con el supuesto central.")
+    assert not _contains_answer_marker("Proponga una solución y discuta sus límites.")
+    assert not _contains_answer_marker("Use la pista del enunciado para argumentar.")
+    for marker in [
+        "Respuesta: texto",
+        "  **Solución:** texto",
+        "### __Pista__: texto",
+        "> **RESPUESTA**: texto",
+        "- Pista: texto",
+        "<DETAILS>",
+        "hide(panel)",
+        "VER RESPUESTA",
+    ]:
+        assert _contains_answer_marker(marker)
 
 
 def test_theory_has_colored_learning_blocks():

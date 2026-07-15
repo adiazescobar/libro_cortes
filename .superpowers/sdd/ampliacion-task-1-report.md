@@ -68,3 +68,20 @@ git diff --check
 ```
 
 Resultado: ambos comandos terminaron con exit code 0 y sin salida de error.
+
+## Corrección de falsos positivos en marcadores de respuesta
+
+- La prohibición por pregunta ya no rechaza las palabras desnudas `respuesta`, `solución` o `pista` dentro de un enunciado legítimo.
+- Se detectan como clave únicamente etiquetas al comienzo de línea como `Respuesta:`, `Solución:` y `Pista:`, ignorando espacios y formas Markdown habituales (encabezados, listas, citas y negrilla). La detección no distingue mayúsculas.
+- Se mantienen las prohibiciones de `<details`, `hide(` y `Ver respuesta` en cualquier posición.
+- La autoprueba permite explícitamente frases como `Justifique su respuesta` y `Proponga una solución`, y cubre variantes positivas de todos los marcadores prohibidos.
+
+Verificación focal:
+
+```text
+/private/tmp/libro_cortes_rct_venv/bin/python -m pytest -q tests/test_parametros_pedagogy_contract.py tests/test_parametros_stata_contract.py
+```
+
+Resultado: **6 failed, 13 passed**. La nueva autoprueba de marcadores pasa; los seis fallos corresponden al RED intencional por contenido pedagógico aún ausente de los Rmd.
+
+También pasaron `git diff --check` y la compilación sintáctica con `python -m py_compile` de ambos archivos de pruebas.
