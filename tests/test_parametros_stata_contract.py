@@ -18,6 +18,22 @@ REQUIRED_DOWNLOADS = [
 ]
 
 
+def _stata_blocks():
+    return re.findall(
+        r"^```stata\s*$\n(?P<code>.*?)^```\s*$",
+        TEXT,
+        re.MULTILINE | re.DOTALL | re.IGNORECASE,
+    )
+
+
+def _executable_stata_text():
+    blocks = _stata_blocks()
+    assert blocks, "La página debe incluir bloques de código Stata"
+    for block in blocks:
+        assert "..." not in block, "Los bloques Stata no pueden contener pseudocódigo con ..."
+    return "\n".join(blocks)
+
+
 def test_downloads_are_first_and_complete():
     h2_headings = re.findall(r"^##\s+[^\n]+", TEXT, re.MULTILINE)
     assert h2_headings[0] == "## Materiales para la clase {-}"
@@ -46,6 +62,35 @@ def test_page_consumes_canonical_results():
     assert 'read.csv("dofile/04_ParametrosStata/results/monte_carlo_summary.csv"' in TEXT
     assert "Linear regression                               Number of obs" not in TEXT
     assert "..." not in TEXT
+
+
+def test_page_contains_complete_executable_stata_workflow():
+    code = _executable_stata_text()
+    required_commands = {
+        "resultado observado": r"(?im)^\s*generate\s+y\s*=",
+        "efecto individual": r"(?im)^\s*generate\s+tau\s*=",
+        "creación de X": r"(?im)^\s*generate\s+X\s*=",
+        "diferencia de medias": r"(?im)^\s*ttest\s+\w+\s*,\s*by\s*\(",
+        "regresión": r"(?im)^\s*regress\s+",
+        "programa estimadores": r"(?im)^\s*program\s+define\s+estimadores\b",
+        "medias por condición": r"(?im)^\s*summarize\s+\w+\s+if\s+",
+        "duplicación": r"(?im)^\s*expand\s+10000\b",
+        "semilla": r"(?im)^\s*set\s+seed\s+\d+\b",
+        "simulación": r"(?im)^\s*simulate\s+",
+    }
+    missing = [label for label, pattern in required_commands.items() if not re.search(pattern, code)]
+    assert not missing, f"Faltan comandos ejecutables para: {', '.join(missing)}"
+
+
+def test_page_contains_both_executable_assignment_rules():
+    code = _executable_stata_text()
+    selection_rule = re.search(r"(?im)^\s*generate\s+D\s*=\s*X\b", code)
+    random_rule = re.search(
+        r"(?im)^\s*generate\s+D\s*=\s*runiform\s*\(\s*\)\s*<\s*(?:0?\.5|1/2)\b",
+        code,
+    )
+    assert selection_rule, "Falta la regla ejecutable de asignación con selección D = X"
+    assert random_rule, "Falta la regla ejecutable de asignación aleatoria con runiform()"
 
 
 def test_results_schema():
