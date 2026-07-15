@@ -3,8 +3,9 @@
 ## Estado
 
 Completado. Se verificaron los capítulos teórico y práctico, la clave docente
-externa, el render ampliado y las vistas de escritorio y móvil. No se publicó ni
-se modificó deliberadamente el contenido de `docs`.
+externa, el render ampliado y las vistas de escritorio y móvil. No se publicó el
+render ampliado en `docs`; únicamente se redactaron identificadores privados en
+dos documentos internos rastreados.
 
 ## Pruebas y TDD
 
