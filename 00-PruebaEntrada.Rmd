@@ -328,17 +328,17 @@ Sesgo de selección: \(E[Y_0|D=1] \neq E[Y_0|D=0]\).
 
 `r mcq(c("Aumenta el tamaño de la muestra", "Reduce los costos del estudio", answer = "Hace que los grupos de tratamiento y control sean comparables en expectativa", "Elimina los errores de medición"))`
 
-`r hide("Ver explicacion")`
-Aleatorizacion: balancea (en expectativa) observables y no observables.
+`r hide("Ver explicación")`
+Aleatorización: balancea (en expectativa) observables y no observables.
 `r unhide()`
 </div>
 
 <div class="question-box">
 <span class="question-number">Pregunta 14.</span> El contrafactual se refiere a:
 
-`r mcq(c("Los datos que se perdieron en el estudio", "El grupo de control", answer = "Lo que habria ocurrido en ausencia del tratamiento", "Los efectos secundarios del tratamiento"))`
+`r mcq(c("Los datos que se perdieron en el estudio", "El grupo de control", answer = "Lo que habría ocurrido en ausencia del tratamiento", "Los efectos secundarios del tratamiento"))`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 Contrafactual: el resultado potencial en el estado no observado.
 `r unhide()`
 </div>
@@ -386,9 +386,9 @@ El coeficiente es el cambio promedio en Y asociado con una unidad adicional en X
 <div class="question-box">
 <span class="question-number">Pregunta 18.</span> ¿Cuál es el comando correcto en Stata para realizar una regresión de Y sobre X1 y X2?
 
-`r fitb(c("reg Y X1 X2", "regress Y X1 X2"), width = 25, ignore_case = TRUE)`
+`r fitb("regress Y X1 X2", width = 25, ignore_case = TRUE)`
 
-`r hide("Ver explicacion")`
+`r hide("Ver explicación")`
 Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
 `r unhide()`
 </div>

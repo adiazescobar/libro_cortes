@@ -28,3 +28,17 @@ def test_academic_audit_is_complete():
     }
     assert all(row["estado"] == "aprobada" for row in rows)
     assert all(row["clave"] and row["justificacion"] for row in rows)
+
+
+def test_question_18_has_one_answer_aligned_with_audit():
+    question = re.search(
+        r"Pregunta 18\..*?</div>",
+        RMD,
+        flags=re.DOTALL,
+    ).group()
+    assert '`r fitb("regress Y X1 X2", width = 25, ignore_case = TRUE)`' in question
+    assert "fitb(c(" not in question
+
+    with AUDIT.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert rows[17]["clave"] == "regress Y X1 X2"
