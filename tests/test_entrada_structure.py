@@ -51,11 +51,19 @@ sectionScores.forEach((score, sectionIndex) => {
   for (let index = 0; index < 5; index += 1) {
     const pending = sectionIndex === 0 && index === 4;
     const correct = index < score;
-    const group = {
-      querySelector: () => pending ? null : { value: correct ? "answer" : "wrong" }
+    const questionIndex = sectionIndex * 5 + index;
+    const select = { value: pending ? "blank" : (correct ? "answer" : "wrong") };
+    const input = {
+      value: "regress Y X1 X2",
+      classList: { contains: value => value === "ignore_case" },
+      dataset: { answer: JSON.stringify(["regress Y X1 X2"]) }
     };
     boxes.push({
-      querySelectorAll: selector => selector === ".webex-radiogroup" ? [group] : []
+      querySelectorAll: selector => {
+        if (questionIndex === 17 && selector === "input.webex-solveme") return [input];
+        if (questionIndex !== 17 && selector === "select.webex-select") return [select];
+        return [];
+      }
     });
   }
 });
