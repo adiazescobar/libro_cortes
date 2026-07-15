@@ -156,11 +156,11 @@ Esta prueba diagnóstica tiene como objetivo evaluar tus conocimientos previos e
 
 <strong>Instrucciones:</strong>
 
-- La prueba contiene <strong>18 preguntas</strong> divididas en 4 secciones
-- Responde cada pregunta seleccionando la opcion correcta o escribiendo tu respuesta
+- La prueba contiene <strong>20 preguntas</strong> divididas en 4 secciones
+- Responde cada pregunta seleccionando la opción correcta o escribiendo tu respuesta
 - La retroalimentación, las explicaciones y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong>
-- No hay limite de tiempo, pero intenta responder sin consultar materiales
-- Al final encontraras recursos para repasar
+- No hay límite de tiempo, pero intenta responder sin consultar materiales
+- Al final encontrarás recursos para repasar
 
 <strong>Tiempo estimado:</strong> 15-20 minutos
 
@@ -170,53 +170,53 @@ Esta prueba diagnóstica tiene como objetivo evaluar tus conocimientos previos e
 
 <div id="prueba-entrada-quiz">
 
-## Seccion 1: Estadistica Basica {-}
+## Sección 1: Estadística básica {-}
 
-<div class="quiz-section" data-section="Estadistica Basica">
+<div class="quiz-section" data-section="Estadística básica">
 
-Esta seccion evalua conceptos fundamentales de estadistica descriptiva e inferencial que son esenciales para el analisis econometrico.
+Esta sección evalúa conceptos fundamentales de estadística descriptiva e inferencial que son esenciales para el análisis econométrico.
 
 <div class="question-box">
 <span class="question-number">Pregunta 1.</span> Si una variable X tiene media 50 y desviación estándar 10, y sigue una distribución normal, ¿qué porcentaje de las observaciones se encuentra entre 30 y 70?
 
 `r mcq(c("68%", answer = "95%", "99%", "50%"))`
 
-`r hide("Ver explicacion")`
-En una distribucion normal:
+`r hide("Ver explicación")`
+En una distribución normal:
 
-- El 68% de los datos esta dentro de 1 desviacion estandar de la media
-- El 95% de los datos esta dentro de 2 desviaciones estandar de la media
-- El 99.7% esta dentro de 3 desviaciones estandar
+- El 68% de los datos está dentro de 1 desviación estándar de la media
+- El 95% de los datos está dentro de 2 desviaciones estándar de la media
+- El 99.7% está dentro de 3 desviaciones estándar
 
-Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones estandar, por lo tanto es el 95%.
+Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones estándar, por lo tanto es el 95%.
 `r unhide()`
 </div>
 
 <div class="question-box">
 <span class="question-number">Pregunta 2.</span> El p-value (valor p) representa:
 
-`r mcq(c("La probabilidad de que la hipotesis nula sea verdadera", answer = "La probabilidad de observar datos tan extremos o mas, dado que H0 es verdadera", "La probabilidad de que la hipotesis alternativa sea falsa", "El nivel de significancia del test"))`
+`r mcq(c("La probabilidad de que la hipótesis nula sea verdadera", answer = "La probabilidad de observar datos tan extremos o más, dado que \\(H_0\\) es verdadera", "La probabilidad de que la hipótesis alternativa sea falsa", "El nivel de significancia del test"))`
 
 `r hide("Ver explicacion")`
-El p-value es la probabilidad de obtener un resultado tan extremo o mas extremo que el observado, asumiendo que la hipotesis nula es verdadera.
+El valor p es la probabilidad de obtener un resultado tan extremo o más extremo que el observado, asumiendo que la hipótesis nula es verdadera.
 `r unhide()`
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 3.</span> Rechazar la hipotesis nula cuando en realidad es verdadera se conoce como:
+<span class="question-number">Pregunta 3.</span> Rechazar la hipótesis nula cuando en realidad es verdadera se conoce como:
 
-`r mcq(c(answer = "Error Tipo I", "Error Tipo II", "Sesgo de seleccion", "Error estandar"))`
+`r mcq(c(answer = "Error Tipo I", "Error Tipo II", "Sesgo de selección", "Error estándar"))`
 
 `r hide("Ver explicacion")`
-- Error Tipo I: Rechazar H0 cuando es verdadera (probabilidad alpha).
-- Error Tipo II: No rechazar H0 cuando es falsa (probabilidad beta).
+- Error Tipo I: Rechazar \(H_0\) cuando es verdadera (probabilidad \(\alpha\)).
+- Error Tipo II: No rechazar \(H_0\) cuando es falsa (probabilidad \(\beta\)).
 `r unhide()`
 </div>
 
 <div class="question-box">
 <span class="question-number">Pregunta 4.</span> Un intervalo de confianza del 95% significa que:
 
-`r mcq(c("Hay 95% de probabilidad de que el parámetro verdadero esté en este intervalo específico", answer = "Si construyéramos 100 intervalos de esta manera, 95 de ellos contendrían el parámetro verdadero", "El 95% de los datos está dentro del intervalo", "Estamos 95% seguros de nuestra estimación"))`
+`r mcq(c("Hay 95% de probabilidad de que el parámetro verdadero esté en este intervalo específico", answer = "En muestreos repetidos, aproximadamente 95% de los intervalos construidos con este procedimiento contendrían el parámetro", "El 95% de los datos está dentro del intervalo", "Estamos 95% seguros de nuestra estimación"))`
 
 `r hide("Ver explicacion")`
 Interpretación frecuentista: si repitiéramos el muestreo muchas veces y construyéramos IC del 95% cada vez, cerca del 95% de esos intervalos contendrían el valor verdadero del parámetro.
@@ -226,10 +226,10 @@ Interpretación frecuentista: si repitiéramos el muestreo muchas veces y constr
 <div class="question-box">
 <span class="question-number">Pregunta 5.</span> La varianza mide:
 
-`r mcq(c("La tendencia central de los datos", answer = "La dispersion de los datos alrededor de la media", "La relacion entre dos variables", "El valor mas frecuente"))`
+`r mcq(c("La tendencia central de los datos", answer = "La dispersión de los datos alrededor de la media", "La relación entre dos variables", "El valor más frecuente"))`
 
 `r hide("Ver explicacion")`
-La varianza mide la dispersion alrededor de la media: Var(X) = E[(X - mu)^2]. La desviacion estandar es la raiz cuadrada de la varianza.
+La varianza mide la dispersión alrededor de la media: \(\operatorname{Var}(X) = E[(X - \mu)^2]\). La desviación estándar es la raíz cuadrada de la varianza.
 `r unhide()`
 </div>
 
@@ -237,34 +237,34 @@ La varianza mide la dispersion alrededor de la media: Var(X) = E[(X - mu)^2]. La
 
 ---
 
-## Seccion 2: Regresion Lineal {-}
+## Sección 2: Regresión lineal {-}
 
-<div class="quiz-section" data-section="Regresion Lineal">
+<div class="quiz-section" data-section="Regresión lineal">
 
-Esta seccion evalua tu comprension del modelo de regresion lineal, sus supuestos e interpretacion.
+Esta sección evalúa tu comprensión del modelo de regresión lineal, sus supuestos e interpretación.
 
 <div class="question-box">
-<span class="question-number">Pregunta 6.</span> En el modelo Y = beta0 + beta1 X + e, el coeficiente beta1 representa:
+<span class="question-number">Pregunta 6.</span> En el modelo \(Y = \beta_0 + \beta_1 X + e\), el coeficiente \(\beta_1\) representa:
 
-`r mcq(c("El valor de Y cuando X = 0", answer = "El cambio esperado en Y por cada unidad adicional de X", "La correlacion entre X e Y", "La varianza de Y explicada por X"))`
+`r mcq(c("El valor de Y cuando X = 0", answer = "El cambio esperado en Y por cada unidad adicional de X", "La correlación entre X e Y", "La varianza de Y explicada por X"))`
 
 `r hide("Ver explicacion")`
-beta1 es el cambio esperado en Y asociado con una unidad adicional de X (ceteris paribus).
+\(\beta_1\) es el cambio esperado en \(Y\) asociado con una unidad adicional de \(X\), ceteris paribus.
 `r unhide()`
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 7.</span> Si R2 = 0.75, esto significa que:
+<span class="question-number">Pregunta 7.</span> Si \(R^2 = 0.75\), esto significa que:
 
-`r mcq(c("El coeficiente de correlacion es 0.75", "El modelo tiene 75% de probabilidad de ser correcto", answer = "El 75% de la variacion en Y es explicada por las variables independientes", "El 75% de las observaciones estan correctamente predichas"))`
+`r mcq(c("El coeficiente de correlación es 0.75", "El modelo tiene 75% de probabilidad de ser correcto", answer = "El 75% de la variación en Y es explicada por las variables independientes", "El 75% de las observaciones están correctamente predichas"))`
 
 `r hide("Ver explicacion")`
-R2 es la proporcion de la varianza de Y explicada por el modelo.
+\(R^2\) es la proporción de la varianza de \(Y\) explicada por el modelo.
 `r unhide()`
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 8.</span> Cual de las siguientes NO es un supuesto del modelo clasico de regresion lineal (OLS)?
+<span class="question-number">Pregunta 8.</span> ¿Cuál de las siguientes NO es un supuesto del modelo clásico de regresión lineal (MCO)?
 
 `r mcq(c("Los errores tienen media cero", "Los errores son homocedásticos", "No hay multicolinealidad perfecta", answer = "Los errores deben seguir una distribución uniforme"))`
 
@@ -284,12 +284,12 @@ OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suel
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 10.</span> En un modelo log(Y) = beta0 + beta1 X + e, el coeficiente beta1 se interpreta aproximadamente como:
+<span class="question-number">Pregunta 10.</span> En un modelo \(\log(Y) = \beta_0 + \beta_1 X + e\), el coeficiente \(\beta_1\) se interpreta aproximadamente como:
 
-`r mcq(c("El cambio absoluto en Y por unidad de X", "El cambio en log(Y) en terminos absolutos", answer = "El cambio porcentual en Y por cada unidad adicional de X", "La elasticidad de Y respecto a X"))`
+`r mcq(c("El cambio absoluto en Y por unidad de X", "El cambio en log(Y) en términos absolutos", answer = "Aproximadamente \\(100\\beta_1\\)% por una unidad adicional de \\(X\\)", "La elasticidad de Y respecto a X"))`
 
 `r hide("Ver explicacion")`
-En un modelo semi-log, beta1 * 100 es el cambio porcentual aproximado en Y por una unidad adicional de X (para cambios pequeños).
+En un modelo semilogarítmico, \(100\beta_1\) es el cambio porcentual aproximado en \(Y\) por una unidad adicional de \(X\), para cambios pequeños.
 `r unhide()`
 </div>
 
@@ -297,36 +297,36 @@ En un modelo semi-log, beta1 * 100 es el cambio porcentual aproximado en Y por u
 
 ---
 
-## Seccion 3: Causalidad {-}
+## Sección 3: Causalidad {-}
 
 <div class="quiz-section" data-section="Causalidad">
 
-Esta seccion evalua la diferencia entre correlacion y causalidad, y conceptos basicos de inferencia causal.
+Esta sección evalúa la diferencia entre correlación y causalidad, y conceptos básicos de inferencia causal.
 
 <div class="question-box">
-<span class="question-number">Pregunta 11.</span> La observacion de que "los paises con mayor consumo de chocolate tienen mas premios Nobel per capita" es un ejemplo de:
+<span class="question-number">Pregunta 11.</span> La observación de que "los países con mayor consumo de chocolate tienen más premios Nobel per capita" es un ejemplo de:
 
-`r mcq(c("Causalidad directa", "Causalidad inversa", answer = "Correlacion espuria (correlacion sin causalidad)", "Efecto placebo"))`
+`r mcq(c("Causalidad directa", "Causalidad inversa", answer = "Correlación espuria (correlación sin causalidad)", "Efecto placebo"))`
 
 `r hide("Ver explicacion")`
-Ejemplo de correlacion espuria: puede haber una tercera variable (p. ej. desarrollo) que explique ambos.
+Ejemplo de correlación espuria: puede haber una tercera variable (p. ej. desarrollo) que explique ambos.
 `r unhide()`
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 12.</span> El sesgo de seleccion ocurre cuando:
+<span class="question-number">Pregunta 12.</span> El sesgo de selección ocurre cuando:
 
-`r mcq(c("La muestra es muy pequena", "Los datos tienen errores de medicion", answer = "Los individuos tratados son sistematicamente diferentes de los no tratados", "El modelo tiene muchas variables"))`
+`r mcq(c("La muestra es muy pequeña", "Los datos tienen errores de medición", answer = "Los individuos tratados son sistemáticamente diferentes de los no tratados", "El modelo tiene muchas variables"))`
 
 `r hide("Ver explicacion")`
-Sesgo de seleccion: E[Y0|D=1] != E[Y0|D=0].
+Sesgo de selección: \(E[Y_0|D=1] \neq E[Y_0|D=0]\).
 `r unhide()`
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 13.</span> La asignacion aleatoria del tratamiento es importante porque:
+<span class="question-number">Pregunta 13.</span> La asignación aleatoria del tratamiento es importante porque:
 
-`r mcq(c("Aumenta el tamano de la muestra", "Reduce los costos del estudio", answer = "Hace que los grupos de tratamiento y control sean comparables en expectativa", "Elimina los errores de medicion"))`
+`r mcq(c("Aumenta el tamaño de la muestra", "Reduce los costos del estudio", answer = "Hace que los grupos de tratamiento y control sean comparables en expectativa", "Elimina los errores de medición"))`
 
 `r hide("Ver explicacion")`
 Aleatorizacion: balancea (en expectativa) observables y no observables.
@@ -346,10 +346,10 @@ Contrafactual: el resultado potencial en el estado no observado.
 <div class="question-box">
 <span class="question-number">Pregunta 15.</span> El principal problema al comparar simplemente participantes vs. no participantes es:
 
-`r mcq(c("La diferencia en tamano de los grupos", "Los errores de medicion en los datos", answer = "La autoseleccion (los que participan pueden ser diferentes de los que no)", "La falta de datos"))`
+`r mcq(c("La diferencia en tamaño de los grupos", "Los errores de medición en los datos", answer = "La autoselección (los que participan pueden ser diferentes de los que no)", "La falta de datos"))`
 
 `r hide("Ver explicacion")`
-Autoseleccion: diferencias previas (motivacion, habilidad, redes) contaminan la comparacion.
+Autoselección: diferencias previas (motivación, habilidad, redes) contaminan la comparación.
 `r unhide()`
 </div>
 
@@ -357,14 +357,14 @@ Autoseleccion: diferencias previas (motivacion, habilidad, redes) contaminan la 
 
 ---
 
-## Seccion 4: Stata {-}
+## Sección 4: Stata {-}
 
 <div class="quiz-section" data-section="Stata">
 
-Esta seccion evalua tu familiaridad basica con Stata.
+Esta sección evalúa tu familiaridad básica con Stata.
 
 <div class="question-box">
-<span class="question-number">Pregunta 16.</span> En Stata, cual comando usarias para ver las primeras observaciones de tu base de datos?
+<span class="question-number">Pregunta 16.</span> En Stata, ¿cuál comando usarías para ver las primeras observaciones de tu base de datos?
 
 `r mcq(c("view", answer = "browse o list", "show", "display"))`
 
@@ -374,7 +374,7 @@ Esta seccion evalua tu familiaridad basica con Stata.
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 17.</span> En una regresion en Stata, si el coeficiente de x es 2.35, esto significa que:
+<span class="question-number">Pregunta 17.</span> En una regresión en Stata, si el coeficiente de x es 2.35, esto significa que:
 
 `r mcq(c("La variable x tiene un p-value de 2.35", answer = "Por cada unidad adicional de x, Y aumenta en 2.35 unidades (en promedio)", "El R-cuadrado del modelo es 2.35", "Hay 2.35 observaciones con esa variable"))`
 
@@ -384,12 +384,32 @@ El coeficiente es el cambio promedio en Y asociado con una unidad adicional en X
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 18.</span> Cual es el comando correcto en Stata para realizar una regresion de Y sobre X1 y X2?
+<span class="question-number">Pregunta 18.</span> ¿Cuál es el comando correcto en Stata para realizar una regresión de Y sobre X1 y X2?
 
 `r fitb(c("reg Y X1 X2", "regress Y X1 X2"), width = 25, ignore_case = TRUE)`
 
 `r hide("Ver explicacion")`
 Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
+`r unhide()`
+</div>
+
+<div class="question-box">
+<span class="question-number">Pregunta 19.</span> ¿Qué comando crea `ingreso_alto` igual a 1 únicamente para observaciones con `ingreso` mayor que 1000?
+
+`r mcq(c("replace ingreso_alto = 1 if ingreso > 1000", answer = "generate ingreso_alto = 1 if ingreso > 1000", "if ingreso > 1000 generate ingreso_alto = 1", "create ingreso_alto where ingreso > 1000"))`
+
+`r hide("Ver explicación")`
+`generate` crea una variable nueva y `if` restringe las observaciones a las que se asigna el valor. Las demás quedarán como valores perdidos hasta que se definan explícitamente.
+`r unhide()`
+</div>
+
+<div class="question-box">
+<span class="question-number">Pregunta 20.</span> Después de ejecutar `summarize salario`, ¿cómo muestra Stata la media almacenada por el comando?
+
+`r mcq(c("display e(mean)", answer = "display r(mean)", "display _b[mean]", "show mean(salario)"))`
+
+`r hide("Ver explicación")`
+`summarize` es un comando de clase `r`; guarda la media en `r(mean)` hasta que otro comando sobrescriba esos resultados.
 `r unhide()`
 </div>
 

@@ -1,0 +1,30 @@
+import csv
+import re
+from collections import Counter
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+RMD = (ROOT / "00-PruebaEntrada.Rmd").read_text(encoding="utf-8")
+AUDIT = ROOT / "docs/audits/prueba_entrada_academica.csv"
+
+
+def test_quiz_has_twenty_balanced_questions():
+    numbers = re.findall(r'question-number">Pregunta (\d+)\.', RMD)
+    assert numbers == [str(i) for i in range(1, 21)]
+    sections = re.findall(r'<div class="quiz-section" data-section="([^"]+)">', RMD)
+    assert sections == ["Estadística básica", "Regresión lineal", "Causalidad", "Stata"]
+
+
+def test_academic_audit_is_complete():
+    with AUDIT.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 20
+    assert Counter(row["seccion"] for row in rows) == {
+        "Estadística básica": 5,
+        "Regresión lineal": 5,
+        "Causalidad": 5,
+        "Stata": 5,
+    }
+    assert all(row["estado"] == "aprobada" for row in rows)
+    assert all(row["clave"] and row["justificacion"] for row in rows)
