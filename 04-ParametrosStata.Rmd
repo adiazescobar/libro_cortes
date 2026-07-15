@@ -560,10 +560,11 @@ end
 
 ::: {.boxquestion}
 **S-P4 (7 puntos). Nueva regla de selección.** Diseñe una regla donde la
-probabilidad de tratamiento disminuya con `yd0`. Anticipe el signo y el centro
-aproximado de NAIVE−ATT, y razone cómo cambiaría su dispersión frente a la regla
-canónica. Escriba pseudocódigo Stata ejecutable que modifique `one_rep`, fije una
-semilla, ejecute `simulate` y resuma la distribución.
+probabilidad de tratamiento sea el complemento exacto de la regla canónica,
+`invlogit(-(yd0-r(mean))/2)`, y por tanto disminuya con `yd0`. Anticipe el signo
+y el centro aproximado de NAIVE−ATT, y razone cómo cambiaría su dispersión frente
+a la regla canónica. Escriba código Stata ejecutable que modifique `one_rep`, fije
+una semilla, ejecute `simulate` y resuma la distribución.
 :::
 
 ## 8. Síntesis

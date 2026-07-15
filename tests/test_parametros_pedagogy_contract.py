@@ -134,6 +134,17 @@ def test_practice_has_required_blocks_and_exam_questions():
         _assert_no_answer_markers(block)
 
 
+def test_s_p4_specifies_the_rule_that_the_private_rubric_grades():
+    questions = _assert_exact_question_codes(
+        PRACTICE, "S-", ["S-P1", "S-P2", "S-P3", "S-P4"]
+    )
+    s_p4 = questions[-1][0]
+    assert "complemento exacto de la regla canónica" in s_p4
+    assert "invlogit(-(yd0-r(mean))/2)" in s_p4
+    assert "código Stata ejecutable" in s_p4
+    assert "pseudocódigo" not in s_p4.casefold()
+
+
 def test_student_material_never_exposes_private_key():
     combined = (
         THEORY + PRACTICE + (ROOT / "_bookdown.yml").read_text(encoding="utf-8")
