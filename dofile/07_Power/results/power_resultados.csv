@@ -1,0 +1,8 @@
+escenario,familia,estimando,valor,alpha,power,asignacion_tratada,fuente
+continuo sin controles,continua,N_total,175,.05,.8,.5,07_stata.do
+continuo con controles,continua,N_total,86,.05,.8,.5,07_stata.do
+binario,binaria,N_total,1057,.05,.8,.5,07_stata.do
+take-up,continua,N_total,273,.05,.8,.5,07_stata.do
+atrición,continua,N_total,219,.05,.8,.5,07_stata.do
+tasa,tasa,N_total,6684,.05,.8,.5,07_stata.do
+clúster,clúster,N_total,604,.05,.8,.5,07_stata.do

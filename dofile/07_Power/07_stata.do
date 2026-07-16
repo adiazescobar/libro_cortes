@@ -10,6 +10,63 @@
 ********************************************************************************
 
 
+* Pipeline canónico reproducible (no requiere datos de clase)
+clear all
+set more off
+local alpha 0.05
+local target_power 0.80
+local allocation 0.50
+local z_alpha = invnormal(1 - `alpha'/2)
+local z_power = invnormal(`target_power')
+capture mkdir "dofile/07_Power/results"
+tempname results
+postfile `results' str40 escenario str12 familia str12 estimando double valor double alpha double power double asignacion_tratada str24 fuente using "dofile/07_Power/results/power_resultados.dta", replace
+
+power twomeans 0 0.30, sd(1) power(`target_power') alpha(`alpha')
+local returned_N = r(N)
+local canonical_N = ceil(2*((`z_alpha'+`z_power')*1/0.30)^2)
+post `results' ("continuo sin controles") ("continua") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+
+power twomeans 0 0.30, sd(0.70) power(`target_power') alpha(`alpha')
+local returned_N = r(N)
+local canonical_N = ceil(2*((`z_alpha'+`z_power')*0.70/0.30)^2)
+post `results' ("continuo con controles") ("continua") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+
+power twoproportions 0.08 0.05, power(`target_power') alpha(`alpha')
+local returned_N = r(N)
+local canonical_N = ceil(((`z_alpha'+`z_power')^2*(0.08*(1-0.08)+0.05*(1-0.05)))/(0.08-0.05)^2)
+post `results' ("binario") ("binaria") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+
+local takeup_delta = 0.30*(0.90-0.10)
+power twomeans 0 `takeup_delta', sd(1) power(`target_power') alpha(`alpha')
+local returned_N = r(N)
+local canonical_N = ceil(2*((`z_alpha'+`z_power')/`takeup_delta')^2)
+post `results' ("take-up") ("continua") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+
+power twomeans 0 0.30, sd(1) power(`target_power') alpha(`alpha')
+local returned_N = r(N)
+local base_N = ceil(2*((`z_alpha'+`z_power')/0.30)^2)
+local canonical_N = ceil(`base_N'/0.80)
+post `results' ("atrición") ("continua") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+
+power twoproportions 0.07203 0.06, power(`target_power') alpha(`alpha')
+local returned_N = r(N)
+local canonical_N = ceil(((`z_alpha'+`z_power')^2*(0.07203*(1-0.07203)+0.06*(1-0.06)))/(0.07203-0.06)^2)
+post `results' ("tasa") ("tasa") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+
+power twomeans 0 0.30, sd(1) power(`target_power') alpha(`alpha')
+local returned_N = r(N)
+local base_N = ceil(2*((`z_alpha'+`z_power')/0.30)^2)
+local canonical_N = ceil(`base_N'*(1+0.05*(50-1)))
+post `results' ("clúster") ("clúster") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+
+postclose `results'
+use "dofile/07_Power/results/power_resultados.dta", clear
+export delimited using "dofile/07_Power/results/power_resultados.csv", replace
+erase "dofile/07_Power/results/power_resultados.dta"
+exit, clear
+
+* Material histórico de clase (requiere que el usuario cargue su base y globals).
 global outcome ha_nchs                                           //SPECIFY the outcome and treatment 
 
 

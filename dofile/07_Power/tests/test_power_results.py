@@ -10,6 +10,8 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 RESULTS = ROOT / "dofile/07_Power/results"
+CANONICAL = RESULTS / "power_resultados.csv"
+VERIFICATION = RESULTS / "power_verificacion.csv"
 EXPECTED_COLUMNS = {
     "escenario",
     "familia",
@@ -79,16 +81,11 @@ def _validated_rows(fieldnames, rows):
 
 def _canonical_rows():
     assert RESULTS.is_dir(), "Falta dofile/07_Power/results/"
-    csv_paths = sorted(RESULTS.glob("*.csv"))
-    assert csv_paths, "Faltan resultados canónicos CSV de POWER"
-    rows = []
-    for path in csv_paths:
-        with path.open(newline="", encoding="utf-8-sig") as handle:
-            reader = csv.DictReader(handle)
-            assert set(reader.fieldnames or ()) == EXPECTED_COLUMNS, (
-                f"{path.name} no satisface el esquema canónico de POWER"
-            )
-            rows.extend(reader)
+    assert CANONICAL.is_file(), "Falta power_resultados.csv"
+    with CANONICAL.open(newline="", encoding="utf-8-sig") as handle:
+        reader = csv.DictReader(handle)
+        assert set(reader.fieldnames or ()) == EXPECTED_COLUMNS
+        rows = list(reader)
     return _validated_rows(EXPECTED_COLUMNS, rows)
 
 
@@ -208,3 +205,16 @@ def test_printing_reproducible_cannot_replace_independent_numeric_comparison(tmp
     fabricated[0] = {**fabricated[0], "valor": str(float(fabricated[0]["valor"]) + 1)}
     with pytest.raises(AssertionError):
         _assert_rows_match_regeneration(fabricated, _regenerated_rows())
+
+
+def test_cross_language_verification_has_four_families_and_all_pass():
+    assert VERIFICATION.is_file(), "Falta power_verificacion.csv"
+    with VERIFICATION.open(newline="", encoding="utf-8-sig") as handle:
+        rows = list(csv.DictReader(handle))
+    assert set(rows[0]) == {
+        "escenario", "valor_stata", "valor_alternativo", "diferencia_abs",
+        "tolerancia", "estado",
+    }
+    assert {case["escenario"] for case in DECLARED_CASES} <= {row["escenario"] for row in rows}
+    assert all(row["estado"] == "PASS" for row in rows)
+    assert all(float(row["diferencia_abs"]) <= float(row["tolerancia"]) for row in rows)

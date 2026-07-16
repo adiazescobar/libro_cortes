@@ -1,0 +1,8 @@
+escenario,valor_stata,valor_alternativo,diferencia_abs,tolerancia,estado
+continuo sin controles,175.0,175,0.0,0.0,PASS
+continuo con controles,86.0,86,0.0,0.0,PASS
+binario,1057.0,1057,0.0,0.0,PASS
+take-up,273.0,273,0.0,0.0,PASS
+atrición,219.0,219,0.0,0.0,PASS
+tasa,6684.0,6684,0.0,0.0,PASS
+clúster,604.0,604,0.0,0.0,PASS
