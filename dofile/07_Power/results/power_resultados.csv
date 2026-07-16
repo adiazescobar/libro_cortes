@@ -1,8 +1,8 @@
-escenario,familia,estimando,valor,alpha,power,asignacion_tratada,fuente
-continuo sin controles,continua,N_total,175,.05,.8,.5,07_stata.do
-continuo con controles,continua,N_total,86,.05,.8,.5,07_stata.do
-binario,binaria,N_total,1057,.05,.8,.5,07_stata.do
-take-up,continua,N_total,273,.05,.8,.5,07_stata.do
-atrición,continua,N_total,219,.05,.8,.5,07_stata.do
-tasa,tasa,N_total,6684,.05,.8,.5,07_stata.do
-clúster,clúster,N_total,604,.05,.8,.5,07_stata.do
+escenario,familia,comando,cantidad_solicitada,valor_stata,N_total,N_por_brazo,N1,N2,unidad_resultado,alpha,power,colas,asignacion_tratada,delta,sd,p0,p1,takeup_tratamiento,takeup_control,retencion,icc,tamano_cluster,K1,K2,K_total,N_realizable,fuente
+continuo sin controles,continua,power twomeans,N_total,352,352,176,176,176,individuos,.05,.8,bilateral,.5,.3,1,,,,,,,,,,,,07_stata.do
+continuo con controles,continua,power twomeans,N_total,174,174,87,87,87,individuos,.05,.8,bilateral,.5,.3,.7,,,,,,,,,,,,07_stata.do
+binario,binaria,power twoproportions,N_total,2118,2118,1059,1059,1059,individuos,.05,.8,bilateral,.5,,,.08,.05,,,,,,,,,,07_stata.do
+take-up,continua,power twomeans,N_total,548,548,274,274,274,individuos,.05,.8,bilateral,.5,.24,1,,,.9,.1,,,,,,,,07_stata.do
+atrición,continua,power twomeans,N_total,352,352,176,176,176,individuos,.05,.8,bilateral,.5,.3,1,,,,,.8,,,,,,440,07_stata.do
+tasa,tasa,power twoproportions,N_total,13374,13374,6687,6687,6687,individuos,.05,.8,bilateral,.5,,,.07203,.06,,,,,,,,,,07_stata.do
+clúster,clúster,"power twomeans, cluster",K_por_brazo,13,1300,650,650,650,clusters_por_brazo,.05,.8,bilateral,.5,.3,1,,,,,,.05,50,13,13,26,1300,07_stata.do

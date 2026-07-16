@@ -1,8 +1,8 @@
-escenario,valor_stata,valor_alternativo,diferencia_abs,tolerancia,estado
-continuo sin controles,175.0,175,0.0,0.0,PASS
-continuo con controles,86.0,86,0.0,0.0,PASS
-binario,1057.0,1057,0.0,0.0,PASS
-take-up,273.0,273,0.0,0.0,PASS
-atrición,219.0,219,0.0,0.0,PASS
-tasa,6684.0,6684,0.0,0.0,PASS
-clúster,604.0,604,0.0,0.0,PASS
+escenario,valor_stata,valor_alternativo,diferencia_abs,tolerancia,metodo_alternativo,estado
+continuo sin controles,352.0,350,2.0,4,normal bilateral; total=2*N_por_brazo,PASS
+continuo con controles,174.0,172,2.0,4,normal bilateral; total=2*N_por_brazo,PASS
+binario,2118.0,2114,4.0,10,normal bilateral para dos proporciones,PASS
+take-up,548.0,546,2.0,4,normal bilateral con delta ajustado por take-up,PASS
+atrición,352.0,350,2.0,4,normal bilateral antes de inflar por atrición,PASS
+tasa,13374.0,13368,6.0,10,normal bilateral para dos proporciones,PASS
+clúster,13.0,13,0.0,1,efecto de diseño y redondeo a clúster completo por brazo,PASS

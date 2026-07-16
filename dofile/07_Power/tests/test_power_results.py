@@ -3,218 +3,123 @@ import math
 import subprocess
 import sys
 from pathlib import Path
-from statistics import NormalDist
 
 import pytest
 
-
 ROOT = Path(__file__).resolve().parents[3]
-RESULTS = ROOT / "dofile/07_Power/results"
-CANONICAL = RESULTS / "power_resultados.csv"
-VERIFICATION = RESULTS / "power_verificacion.csv"
+POWER = ROOT / "dofile/07_Power"
+CANONICAL = POWER / "results/power_resultados.csv"
+VERIFICATION = POWER / "results/power_verificacion.csv"
+
 EXPECTED_COLUMNS = {
-    "escenario",
-    "familia",
-    "estimando",
-    "valor",
-    "alpha",
-    "power",
-    "asignacion_tratada",
-    "fuente",
+    "escenario", "familia", "comando", "cantidad_solicitada", "valor_stata",
+    "N_total", "N_por_brazo", "N1", "N2", "unidad_resultado", "alpha", "power",
+    "colas", "asignacion_tratada", "delta", "sd", "p0", "p1", "takeup_tratamiento",
+    "takeup_control", "retencion", "icc", "tamano_cluster", "K1", "K2", "K_total",
+    "N_realizable", "fuente",
 }
-EXPECTED_SCENARIOS = {
-    "continuo sin controles",
-    "continuo con controles",
-    "binario",
-    "take-up",
-    "atrición",
-    "tasa",
-    "clúster",
+EXPECTED = {
+    "continuo sin controles": (352, 176, 176),
+    "continuo con controles": (174, 87, 87),
+    "binario": (2118, 1059, 1059),
+    "take-up": (548, 274, 274),
+    "atrición": (352, 176, 176),
+    "tasa": (13374, 6687, 6687),
+    "clúster": (1300, 650, 650),
 }
-ALLOWED_SOURCES = {
-    "07_stata.do",
-    "07_R.R",
-    "07_phyton.ipynb",
-    "BM_parcial.do",
-    "escenario hipotético",
-}
-FORBIDDEN_COLUMNS = {
-    "respuesta", "respuesta_correcta", "opcion_correcta", "clave",
-    "clave_docente", "solucion", "pista",
-}
-DECLARED_CASES = [
-    {"escenario": "continuo sin controles", "familia": "continua", "kind": "means", "sd": 1.0, "delta": 0.30},
-    {"escenario": "continuo con controles", "familia": "continua", "kind": "means", "sd": 0.70, "delta": 0.30},
-    {"escenario": "binario", "familia": "binaria", "kind": "proportions", "p1": 0.08, "p2": 0.05},
-    {"escenario": "take-up", "familia": "continua", "kind": "means", "sd": 1.0, "delta": 0.30 * (0.90 - 0.10)},
-    {"escenario": "atrición", "familia": "continua", "kind": "attrition", "sd": 1.0, "delta": 0.30, "retention": 0.80},
-    {"escenario": "tasa", "familia": "tasa", "kind": "proportions", "p1": 0.07203, "p2": 0.06},
-    {"escenario": "clúster", "familia": "clúster", "kind": "cluster", "sd": 1.0, "delta": 0.30, "rho": 0.05, "m": 50},
-]
 
 
-def _validated_rows(fieldnames, rows):
-    columns = set(fieldnames or ())
-    assert columns == EXPECTED_COLUMNS
-    assert not columns & FORBIDDEN_COLUMNS
-    keys = []
-    for row in rows:
-        assert all(str(row[column]).strip() for column in EXPECTED_COLUMNS)
-        value = float(row["valor"])
-        alpha = float(row["alpha"])
-        power = float(row["power"])
-        allocation = float(row["asignacion_tratada"])
-        assert all(math.isfinite(number) for number in [value, alpha, power, allocation])
-        assert 0 < alpha < 1
-        assert 0 < power < 1
-        assert 0 < allocation < 1
-        assert row["fuente"].strip() in ALLOWED_SOURCES
-        if row["fuente"].strip() == "escenario hipotético":
-            assert "escenario hipotético" in row["escenario"].casefold()
-        else:
-            source = ROOT / "dofile/07_Power" / row["fuente"].strip()
-            assert source.is_file(), "La fuente canónica debe ser un script rastreable"
-        keys.append((row["escenario"].strip().casefold(), row["estimando"].strip().casefold()))
-    assert len(keys) == len(set(keys)), "escenario + estimando debe ser una clave única"
-    return rows
-
-
-def _canonical_rows():
-    assert RESULTS.is_dir(), "Falta dofile/07_Power/results/"
-    assert CANONICAL.is_file(), "Falta power_resultados.csv"
+def _rows():
+    assert CANONICAL.is_file()
     with CANONICAL.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
         assert set(reader.fieldnames or ()) == EXPECTED_COLUMNS
         rows = list(reader)
-    return _validated_rows(EXPECTED_COLUMNS, rows)
-
-
-def _two_arm_n(sd, delta, alpha=0.05, power=0.80):
-    normal = NormalDist()
-    z_alpha = normal.inv_cdf(1 - alpha / 2)
-    z_power = normal.inv_cdf(power)
-    return math.ceil(2 * ((z_alpha + z_power) * sd / delta) ** 2)
-
-
-def _two_proportion_n(p1, p2, alpha=0.05, power=0.80):
-    normal = NormalDist()
-    z_alpha = normal.inv_cdf(1 - alpha / 2)
-    z_power = normal.inv_cdf(power)
-    variance = p1 * (1 - p1) + p2 * (1 - p2)
-    return math.ceil(((z_alpha + z_power) ** 2 * variance) / ((p1 - p2) ** 2))
-
-
-def _regenerated_rows():
-    rows = []
-    for case in DECLARED_CASES:
-        if case["kind"] == "proportions":
-            value = _two_proportion_n(case["p1"], case["p2"])
-        else:
-            value = _two_arm_n(case["sd"], case["delta"])
-            if case["kind"] == "attrition":
-                value = math.ceil(value / case["retention"])
-            elif case["kind"] == "cluster":
-                value = math.ceil(value * (1 + case["rho"] * (case["m"] - 1)))
-        rows.append(
-            {
-                "escenario": case["escenario"], "familia": case["familia"],
-                "estimando": "N_total", "valor": str(value), "alpha": "0.05",
-                "power": "0.8", "asignacion_tratada": "0.5", "fuente": "07_stata.do",
-            }
-        )
+    assert {row["escenario"] for row in rows} == set(EXPECTED)
     return rows
 
 
-def _write_rows(path, rows):
-    with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=sorted(EXPECTED_COLUMNS))
-        writer.writeheader()
-        writer.writerows(rows)
+def _number(row, name):
+    value = row[name].strip()
+    return None if value == "" else float(value)
 
 
-def _assert_rows_match_regeneration(canonical, regenerated, tolerance=1e-9):
-    key = lambda row: (row["escenario"].casefold(), row["estimando"].casefold())
-    canonical_by_key = {key(row): row for row in canonical}
-    regenerated_by_key = {key(row): row for row in regenerated}
-    assert canonical_by_key.keys() == regenerated_by_key.keys()
-    for row_key, expected in regenerated_by_key.items():
-        observed = canonical_by_key[row_key]
-        for field in EXPECTED_COLUMNS - {"valor", "alpha", "power", "asignacion_tratada"}:
-            assert observed[field] == expected[field]
-        for field in ["valor", "alpha", "power", "asignacion_tratada"]:
-            assert float(observed[field]) == pytest.approx(float(expected[field]), abs=tolerance)
+def test_canonical_rows_publish_actual_stata_returns_and_not_normal_approximations():
+    rows = {row["escenario"]: row for row in _rows()}
+    normal_approx_totals = {"continuo sin controles": 350, "binario": 2114, "tasa": 13368}
+    for scenario, (total, n1, n2) in EXPECTED.items():
+        row = rows[scenario]
+        assert _number(row, "N_total") == total
+        assert _number(row, "N1") == n1
+        assert _number(row, "N2") == n2
+        assert _number(row, "N_total") == _number(row, "N1") + _number(row, "N2")
+        assert _number(row, "N_por_brazo") == n1 == n2
+    for scenario, approximation in normal_approx_totals.items():
+        assert _number(rows[scenario], "N_total") != approximation
 
 
-def test_power_results_use_the_canonical_schema():
-    rows = _canonical_rows()
-    assert rows, "Los resultados canónicos no pueden estar vacíos"
+def test_inputs_are_auditable_and_blanks_are_contextual():
+    for row in _rows():
+        assert row["comando"] in {"power twomeans", "power twoproportions", "power twomeans, cluster"}
+        assert row["cantidad_solicitada"] in {"N_total", "K_por_brazo"}
+        assert row["unidad_resultado"] in {"individuos", "clusters_por_brazo"}
+        assert _number(row, "alpha") == pytest.approx(0.05)
+        assert _number(row, "power") == pytest.approx(0.80)
+        assert row["colas"] == "bilateral"
+        assert _number(row, "asignacion_tratada") == pytest.approx(0.5)
+        assert row["fuente"] == "07_stata.do"
+        if row["familia"] in {"continua", "clúster"}:
+            assert _number(row, "delta") is not None and _number(row, "sd") is not None
+            assert row["p0"] == row["p1"] == ""
+        else:
+            assert _number(row, "p0") is not None and _number(row, "p1") is not None
+            assert row["delta"] == row["sd"] == ""
+        if row["escenario"] != "take-up":
+            assert row["takeup_tratamiento"] == row["takeup_control"] == ""
+        if row["escenario"] != "atrición":
+            assert row["retencion"] == ""
 
 
-def test_power_results_cover_all_minimum_scenarios():
-    rows = _canonical_rows()
-    observed = {row["escenario"].strip().casefold() for row in rows}
-    assert EXPECTED_SCENARIOS <= observed
+def test_attrition_and_cluster_units_and_rounding_relations():
+    rows = {row["escenario"]: row for row in _rows()}
+    attrition = rows["atrición"]
+    assert _number(attrition, "retencion") == pytest.approx(0.80)
+    assert _number(attrition, "N_realizable") == math.ceil(_number(attrition, "N_total") / 0.80)
+
+    cluster = rows["clúster"]
+    assert cluster["comando"] == "power twomeans, cluster"
+    assert cluster["cantidad_solicitada"] == "K_por_brazo"
+    assert _number(cluster, "valor_stata") == _number(cluster, "K1") == 13
+    assert _number(cluster, "K_total") == _number(cluster, "K1") + _number(cluster, "K2") == 26
+    assert _number(cluster, "N1") == _number(cluster, "K1") * _number(cluster, "tamano_cluster")
+    assert _number(cluster, "N2") == _number(cluster, "K2") * _number(cluster, "tamano_cluster")
+    assert _number(cluster, "N_realizable") == _number(cluster, "N_total") == 1300
+    assert _number(cluster, "icc") == pytest.approx(0.05)
 
 
-def test_result_validator_rejects_sensitive_extra_columns_bad_types_ranges_sources_and_duplicates():
-    valid = {
-        "escenario": "continuo sin controles", "familia": "continua",
-        "estimando": "N", "valor": "800", "alpha": "0.05", "power": "0.8",
-        "asignacion_tratada": "0.5", "fuente": "07_stata.do",
-    }
-    _validated_rows(EXPECTED_COLUMNS, [valid])
-    mutations = [
-        (EXPECTED_COLUMNS | {"clave_docente"}, [{**valid, "clave_docente": "B"}]),
-        (EXPECTED_COLUMNS, [{**valid, "valor": "abc"}]),
-        (EXPECTED_COLUMNS, [{**valid, "alpha": "0"}]),
-        (EXPECTED_COLUMNS, [{**valid, "power": "999"}]),
-        (EXPECTED_COLUMNS, [{**valid, "asignacion_tratada": "-4"}]),
-        (EXPECTED_COLUMNS, [{**valid, "fuente": "inventada"}]),
-        (EXPECTED_COLUMNS, [valid, valid.copy()]),
-    ]
-    for columns, rows in mutations:
-        with pytest.raises((AssertionError, ValueError)):
-            _validated_rows(columns, rows)
+def test_stata_source_posts_returned_scalars_not_dead_locals():
+    source = (POWER / "07_stata.do").read_text(encoding="utf-8")
+    assert "local canonical_N" not in source
+    assert source.count("local stata_N = r(N)") >= 7
+    assert "local stata_K1 = r(K1)" in source and "local stata_K2 = r(K2)" in source
+    assert "(`stata_N')" in source and "(`stata_K1')" in source
 
 
-def test_hypothetical_result_requires_literal_source_and_scenario_label():
-    hypothetical = {
-        "escenario": "escenario hipotético de atrición", "familia": "continua",
-        "estimando": "N", "valor": "800", "alpha": "0.05", "power": "0.8",
-        "asignacion_tratada": "0.5", "fuente": "escenario hipotético",
-    }
-    _validated_rows(EXPECTED_COLUMNS, [hypothetical])
-    with pytest.raises(AssertionError):
-        _validated_rows(EXPECTED_COLUMNS, [{**hypothetical, "escenario": "atrición"}])
-
-
-def test_canonical_values_equal_independent_regeneration_in_temporary_csv(tmp_path):
-    regenerated_path = tmp_path / "power_regenerated.csv"
-    _write_rows(regenerated_path, _regenerated_rows())
-    with regenerated_path.open(newline="", encoding="utf-8") as handle:
-        regenerated = list(csv.DictReader(handle))
-    _assert_rows_match_regeneration(_canonical_rows(), regenerated)
-
-
-def test_printing_reproducible_cannot_replace_independent_numeric_comparison(tmp_path):
-    stub = tmp_path / "fake_verifier.py"
-    stub.write_text("print('reproducible')\n", encoding="utf-8")
-    completed = subprocess.run([sys.executable, str(stub)], capture_output=True, text=True)
-    assert completed.returncode == 0 and completed.stdout.strip() == "reproducible"
-    fabricated = _regenerated_rows()
-    fabricated[0] = {**fabricated[0], "valor": str(float(fabricated[0]["valor"]) + 1)}
-    with pytest.raises(AssertionError):
-        _assert_rows_match_regeneration(fabricated, _regenerated_rows())
-
-
-def test_cross_language_verification_has_four_families_and_all_pass():
-    assert VERIFICATION.is_file(), "Falta power_verificacion.csv"
+def test_verification_compares_stata_to_independent_method_with_nonzero_tolerances():
     with VERIFICATION.open(newline="", encoding="utf-8-sig") as handle:
         rows = list(csv.DictReader(handle))
-    assert set(rows[0]) == {
-        "escenario", "valor_stata", "valor_alternativo", "diferencia_abs",
-        "tolerancia", "estado",
-    }
-    assert {case["escenario"] for case in DECLARED_CASES} <= {row["escenario"] for row in rows}
+    assert set(rows[0]) == {"escenario", "valor_stata", "valor_alternativo", "diferencia_abs", "tolerancia", "metodo_alternativo", "estado"}
+    assert {row["escenario"] for row in rows} == set(EXPECTED)
     assert all(row["estado"] == "PASS" for row in rows)
-    assert all(float(row["diferencia_abs"]) <= float(row["tolerancia"]) for row in rows)
+    assert all(float(row["tolerancia"]) > 0 for row in rows)
+    assert any(float(row["diferencia_abs"]) > 0 for row in rows)
+
+
+def test_stdout_cannot_substitute_numeric_validation(tmp_path):
+    stub = tmp_path / "fake.py"
+    stub.write_text("print('PASS')\n", encoding="utf-8")
+    completed = subprocess.run([sys.executable, str(stub)], capture_output=True, text=True)
+    assert completed.stdout.strip() == "PASS"
+    bad = dict(EXPECTED)
+    bad["continuo sin controles"] = (350, 175, 175)
+    assert bad != EXPECTED

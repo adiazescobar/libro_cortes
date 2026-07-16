@@ -16,49 +16,57 @@ set more off
 local alpha 0.05
 local target_power 0.80
 local allocation 0.50
-local z_alpha = invnormal(1 - `alpha'/2)
-local z_power = invnormal(`target_power')
 capture mkdir "dofile/07_Power/results"
 tempname results
-postfile `results' str40 escenario str12 familia str12 estimando double valor double alpha double power double asignacion_tratada str24 fuente using "dofile/07_Power/results/power_resultados.dta", replace
+postfile `results' str40 escenario str12 familia str28 comando str20 cantidad_solicitada double valor_stata double N_total double N_por_brazo double N1 double N2 str24 unidad_resultado double alpha double power str12 colas double asignacion_tratada double delta double sd double p0 double p1 double takeup_tratamiento double takeup_control double retencion double icc double tamano_cluster double K1 double K2 double K_total double N_realizable str24 fuente using "dofile/07_Power/results/power_resultados.dta", replace
 
 power twomeans 0 0.30, sd(1) power(`target_power') alpha(`alpha')
-local returned_N = r(N)
-local canonical_N = ceil(2*((`z_alpha'+`z_power')*1/0.30)^2)
-post `results' ("continuo sin controles") ("continua") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+local stata_N = r(N)
+local stata_N1 = r(N1)
+local stata_N2 = r(N2)
+post `results' ("continuo sin controles") ("continua") ("power twomeans") ("N_total") (`stata_N') (`stata_N') (`stata_N1') (`stata_N1') (`stata_N2') ("individuos") (`alpha') (`target_power') ("bilateral") (`allocation') (0.30) (1) (.) (.) (.) (.) (.) (.) (.) (.) (.) (.) (.) ("07_stata.do")
 
 power twomeans 0 0.30, sd(0.70) power(`target_power') alpha(`alpha')
-local returned_N = r(N)
-local canonical_N = ceil(2*((`z_alpha'+`z_power')*0.70/0.30)^2)
-post `results' ("continuo con controles") ("continua") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+local stata_N = r(N)
+local stata_N1 = r(N1)
+local stata_N2 = r(N2)
+post `results' ("continuo con controles") ("continua") ("power twomeans") ("N_total") (`stata_N') (`stata_N') (`stata_N1') (`stata_N1') (`stata_N2') ("individuos") (`alpha') (`target_power') ("bilateral") (`allocation') (0.30) (0.70) (.) (.) (.) (.) (.) (.) (.) (.) (.) (.) (.) ("07_stata.do")
 
 power twoproportions 0.08 0.05, power(`target_power') alpha(`alpha')
-local returned_N = r(N)
-local canonical_N = ceil(((`z_alpha'+`z_power')^2*(0.08*(1-0.08)+0.05*(1-0.05)))/(0.08-0.05)^2)
-post `results' ("binario") ("binaria") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+local stata_N = r(N)
+local stata_N1 = r(N1)
+local stata_N2 = r(N2)
+post `results' ("binario") ("binaria") ("power twoproportions") ("N_total") (`stata_N') (`stata_N') (`stata_N1') (`stata_N1') (`stata_N2') ("individuos") (`alpha') (`target_power') ("bilateral") (`allocation') (.) (.) (0.08) (0.05) (.) (.) (.) (.) (.) (.) (.) (.) (.) ("07_stata.do")
 
 local takeup_delta = 0.30*(0.90-0.10)
 power twomeans 0 `takeup_delta', sd(1) power(`target_power') alpha(`alpha')
-local returned_N = r(N)
-local canonical_N = ceil(2*((`z_alpha'+`z_power')/`takeup_delta')^2)
-post `results' ("take-up") ("continua") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+local stata_N = r(N)
+local stata_N1 = r(N1)
+local stata_N2 = r(N2)
+post `results' ("take-up") ("continua") ("power twomeans") ("N_total") (`stata_N') (`stata_N') (`stata_N1') (`stata_N1') (`stata_N2') ("individuos") (`alpha') (`target_power') ("bilateral") (`allocation') (`takeup_delta') (1) (.) (.) (0.90) (0.10) (.) (.) (.) (.) (.) (.) (.) ("07_stata.do")
 
 power twomeans 0 0.30, sd(1) power(`target_power') alpha(`alpha')
-local returned_N = r(N)
-local base_N = ceil(2*((`z_alpha'+`z_power')/0.30)^2)
-local canonical_N = ceil(`base_N'/0.80)
-post `results' ("atrición") ("continua") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+local stata_N = r(N)
+local stata_N1 = r(N1)
+local stata_N2 = r(N2)
+local attrition_N = ceil(`stata_N'/0.80)
+post `results' ("atrición") ("continua") ("power twomeans") ("N_total") (`stata_N') (`stata_N') (`stata_N1') (`stata_N1') (`stata_N2') ("individuos") (`alpha') (`target_power') ("bilateral") (`allocation') (0.30) (1) (.) (.) (.) (.) (0.80) (.) (.) (.) (.) (.) (`attrition_N') ("07_stata.do")
 
 power twoproportions 0.07203 0.06, power(`target_power') alpha(`alpha')
-local returned_N = r(N)
-local canonical_N = ceil(((`z_alpha'+`z_power')^2*(0.07203*(1-0.07203)+0.06*(1-0.06)))/(0.07203-0.06)^2)
-post `results' ("tasa") ("tasa") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+local stata_N = r(N)
+local stata_N1 = r(N1)
+local stata_N2 = r(N2)
+post `results' ("tasa") ("tasa") ("power twoproportions") ("N_total") (`stata_N') (`stata_N') (`stata_N1') (`stata_N1') (`stata_N2') ("individuos") (`alpha') (`target_power') ("bilateral") (`allocation') (.) (.) (0.07203) (0.06) (.) (.) (.) (.) (.) (.) (.) (.) (.) ("07_stata.do")
 
-power twomeans 0 0.30, sd(1) power(`target_power') alpha(`alpha')
-local returned_N = r(N)
-local base_N = ceil(2*((`z_alpha'+`z_power')/0.30)^2)
-local canonical_N = ceil(`base_N'*(1+0.05*(50-1)))
-post `results' ("clúster") ("clúster") ("N_total") (`canonical_N') (`alpha') (`target_power') (`allocation') ("07_stata.do")
+power twomeans 0 0.30, cluster m1(50) mratio(1) kratio(1) power(`target_power') sd(1) rho(0.05) alpha(`alpha')
+local stata_N = r(N)
+local stata_N1 = r(N1)
+local stata_N2 = r(N2)
+local stata_K1 = r(K1)
+local stata_K2 = r(K2)
+local stata_M1 = r(M1)
+local stata_Ktotal = `stata_K1' + `stata_K2'
+post `results' ("clúster") ("clúster") ("power twomeans, cluster") ("K_por_brazo") (`stata_K1') (`stata_N') (`stata_N1') (`stata_N1') (`stata_N2') ("clusters_por_brazo") (`alpha') (`target_power') ("bilateral") (`allocation') (0.30) (1) (.) (.) (.) (.) (.) (0.05) (`stata_M1') (`stata_K1') (`stata_K2') (`stata_Ktotal') (`stata_N') ("07_stata.do")
 
 postclose `results'
 use "dofile/07_Power/results/power_resultados.dta", clear
