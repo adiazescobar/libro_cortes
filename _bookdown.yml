@@ -15,7 +15,8 @@ rmd_files:
   - 04-ParametrosStata.Rmd    # Este será Cap 4
   - 05-RCT.Rmd                # Este será Cap 5
   - 06-RCT2.Rmd               # Este será Cap 6
-  - 07-POWER.Rmd              # Este será Cap 7
+  - 07-POWER-Teoria.Rmd      # Poder estadístico — teoría
+  - 07-POWER.Rmd             # Poder estadístico — Stata
   - 08-DID.Rmd                # Este será Cap 8
   - 09-BadControls.Rmd        # Este será Cap 9
   - 10-BadControlsStata.Rmd   # Este será Cap 10
