@@ -59,7 +59,7 @@ limpiar_na <- function(df) {
 
 ### Estimando y estructura de los datos {-}
 
-Todo el capítulo estima un mismo **estimando**: el efecto promedio del tratamiento sobre los tratados (ATT) de un programa de nutrición sobre la talla-para-edad de los niños, identificado con la lógica de diferencias en diferencias del Capítulo \@ref(did-teoria). La estructura de datos es la mínima posible para un DiD: **dos grupos** (tratados y controles) observados en **dos periodos** (antes y después), sin identificador individual.
+Todo el capítulo estima un mismo **estimando**: el efecto promedio del tratamiento sobre los tratados (ATT) de un programa de nutrición sobre la talla-para-edad de los niños, identificado con la lógica de diferencias en diferencias del Capítulo \@ref(did-teoria). `base3.dta` contiene **cortes transversales repetidos**: dos grupos (tratados y controles) observados en dos periodos (antes y después), pero sin identificador que permita seguir al mismo niño en el tiempo.
 
 ::: {.boxinfo}
 **Decisión de diseño:** antes de escribir cualquier comando, deja explícito el estimando (ATT), la unidad de observación (niño-periodo), el grupo de comparación y el supuesto que sostiene la interpretación causal (tendencias paralelas). Los comandos solo automatizan esa decisión.
@@ -193,7 +193,7 @@ di "Estimador DiD:       " DD
 ```
 
 ::: {.boxkey}
-**Interpretación:** el valor de `DD` reproduce exactamente la segunda diferencia de la tabla 2×2 canónica — compara la fila `did_manual` de `did_resultados.csv`. Ese mismo número reaparecerá con `diff`, con la regresión y con las primeras diferencias: cuatro caminos, un solo estimando.
+**Interpretación:** el valor de `DD` reproduce exactamente la segunda diferencia de la tabla 2×2 canónica — compara la fila `did_manual` de `did_resultados.csv`. Ese mismo número reaparecerá con `diff` y con la regresión: tres caminos, un solo estimando.
 :::
 
 ---
@@ -251,45 +251,36 @@ El coeficiente de `D#t` (la interacción) es el estimador DiD. En esta base esti
 
 ### Primeras diferencias en panel {-}
 
-Con datos de panel, el estimador DiD es equivalente a una regresión en **primeras diferencias**:
+La equivalencia en primeras diferencias es un resultado para un **panel genuino**
+en el que cada unidad $i$ se observa antes y después. En ese caso:
 
 $$\Delta Y_i = \delta D_i + \Delta \varepsilon_i$$
 
-```stata
-* Crear identificador individual (panel balanceado: 4000 niños x 2 periodos)
-* El emparejamiento debe preservar el grupo: dentro de cada periodo se ordena
-* primero por D, de modo que cada id ficticio conserva su condición de
-* tratamiento en ambos periodos.
-sort t D orden_n
-by t: gen id = _n
+Con dos periodos, una regresión del cambio individual $\Delta Y_i$ sobre el
+estado de tratamiento $D_i$ recupera el mismo estimador que la interacción.
+Pero `base3.dta` son cortes transversales repetidos: no sabemos qué observación
+post corresponde a cada observación pre y, por tanto, no podemos formar
+$\Delta Y_i$. Emparejar filas por su posición inventaría un panel y produciría
+una inferencia sin sustento en el diseño de los datos. Por eso conservamos la
+ecuación como equivalencia teórica y no la estimamos con esta base.
 
-xtset id t
-
-* Primeras diferencias = DiD en panel balanceado de 2 periodos
-* Con D invariante en el tiempo, se regresa la primera diferencia del resultado
-* sobre el NIVEL de D; regresar sobre D.D sería un error (aquí D.D = 0).
-reg D.y D
-```
-
-Los dos métodos (regresión con interacción y primeras diferencias) entregan el mismo estimador cuando hay exactamente dos periodos y el panel es balanceado.
-
-La tabla siguiente reúne los cuatro caminos al mismo estimando, con los valores canónicos exportados por Stata:
+La tabla siguiente reúne los tres caminos válidos al mismo estimando, con los valores canónicos exportados por Stata:
 
 ```{r did-tabla-metodos, echo=FALSE, message=FALSE, warning=FALSE}
 metodos <- did_res[did_res$escenario %in%
-                     c("did_manual", "did_diff", "did_regresion", "did_primeras_diferencias"),
+                     c("did_manual", "did_diff", "did_regresion"),
                    c("escenario", "comando", "valor_stata", "ee", "p_valor", "N")]
 metodos$escenario <- c("Segunda diferencia manual", "Comando diff",
-                       "Regresión con interacción", "Primeras diferencias")[
+                       "Regresión con interacción")[
   match(metodos$escenario,
-        c("did_manual", "did_diff", "did_regresion", "did_primeras_diferencias"))]
+        c("did_manual", "did_diff", "did_regresion"))]
 names(metodos) <- c("Método", "Comando", "DiD", "EE", "p-valor", "N")
 kable(limpiar_na(format(metodos, digits = 4)), align = "llrrrr") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
 ::: {.boxsuccess}
-**Resultado clave:** los cuatro métodos entregan el mismo DiD hasta el error de redondeo — la fila de verificación cruzada de `did_verificacion.csv` lo confirma contra una implementación independiente en Python. Las diferencias están en la inferencia: cada método usa un error estándar distinto, y esa elección debe justificarse.
+**Resultado clave:** los tres métodos entregan el mismo DiD hasta el error de redondeo — las filas de verificación cruzada de `did_verificacion.csv` lo confirman contra implementaciones independientes en Python. El cálculo manual no reporta inferencia; `diff` y la regresión sí, y la elección del error estándar debe justificarse.
 :::
 
 ---

@@ -214,7 +214,12 @@ $$
 = E[Y(D=1) - Y(D=0) \mid D=1] = \text{ATT}
 $$
 
-El estimador es insesgado para el ATT **si y solo si** el supuesto de tendencias paralelas se cumple.
+Esta igualdad identifica el ATT bajo tendencias paralelas junto con los demás
+supuestos que conectan los resultados potenciales con los datos observados:
+consistencia, ausencia de anticipación, composición estable de los grupos y
+ausencia de interferencia relevante entre unidades. En particular, la notación
+$Y_i(D=1)$/$Y_i(D=0)$ supone que el resultado potencial de cada unidad está bien
+definido por su propio estado de tratamiento.
 
 ---
 
@@ -422,4 +427,4 @@ Resuelve las tres preguntas siguientes. Cada una es autocontenida e incluye el p
 
 ## Puente a la clase práctica {-}
 
-En la siguiente clase implementamos todo lo anterior en Stata con `base3.dta`: la tabla 2×2, el estimador manual, el comando `diff`, la regresión con interacción, las primeras diferencias en panel y, con la base `hospdd`, el estimador con múltiples periodos y las pruebas formales `estat ptrends` y `estat granger`. Continúa en el Capítulo \@ref(did-stata).
+En la siguiente clase implementamos todo lo anterior en Stata con `base3.dta`: la tabla 2×2, el estimador manual, el comando `diff` y la regresión con interacción. También presentamos la equivalencia teórica en primeras diferencias para un panel genuino y, con la base `hospdd`, el estimador con múltiples periodos y las pruebas formales `estat ptrends` y `estat granger`. Continúa en el Capítulo \@ref(did-stata).

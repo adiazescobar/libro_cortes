@@ -94,18 +94,6 @@ diff y, t(D) p(t)
 reg y D##t, robust
 * El coeficiente de 1.D#1.t es el estimador DiD (debe coincidir con DD manual)
 
-* ---- Primeras diferencias (equivalente si panel balanceado, 2 periodos) -----
-* El emparejamiento debe preservar el grupo: dentro de cada periodo se ordena
-* primero por D, de modo que cada id ficticio conserva su condición de
-* tratamiento en ambos periodos. Con D invariante en el tiempo, la regresión de
-* la primera diferencia del resultado sobre el NIVEL de D reproduce el DiD.
-* Regresar sobre D.D sería un error: con el emparejamiento correcto D.D = 0.
-sort t D orden_n
-bys t: gen id = _n
-xtset id t
-reg D.y D
-
-
 ********************************************************************************
 * PARTE 2: DiD CON MÚLTIPLES PERIODOS — base hospdd (Stata built-in)
 *
@@ -255,18 +243,6 @@ local se_dd = _se[1.D#1.t]
 local p_dd  = 2*ttail(e(df_r), abs(`b_dd'/`se_dd'))
 local N_reg = e(N)
 post `res' ("did_regresion") ("reg y D##t, robust") ("DiD") (`b_dd') (`se_dd') (.) (`p_dd') (`N_reg') ("08_DID.do")
-
-* ---- Primeras diferencias en panel construido -------------------------------
-* Emparejamiento que preserva el grupo (ver nota en la sección homóloga arriba).
-sort t D orden_n
-bys t: gen id_pd = _n
-xtset id_pd t
-quietly reg D.y D
-local b_pd  = _b[D]
-local se_pd = _se[D]
-local p_pd  = 2*ttail(e(df_r), abs(`b_pd'/`se_pd'))
-local N_pd  = e(N)
-post `res' ("did_primeras_diferencias") ("reg D.y D") ("DiD") (`b_pd') (`se_pd') (.) (`p_pd') (`N_pd') ("08_DID.do")
 
 * ---- hospdd: ATET y pruebas formales ----------------------------------------
 webuse hospdd, clear
