@@ -272,10 +272,16 @@ def _did_panel_violations(combined):
     if found:
         violations.append(f"la práctica o el do-file todavía construyen panel ficticio: {found}")
 
-    genuine_panel_result = re.search(
-        r"resultado.{0,240}panel genuino|panel genuino.{0,240}resultado",
-        lowered,
-        re.DOTALL,
+    semantic_units = [
+        unit.casefold()
+        for unit in re.split(r"\n\s*\n", combined)
+        if unit.strip()
+    ]
+    genuine_panel_result = any(
+        "primeras diferencias" in unit
+        and re.search(r"\b(?:equivalencia|resultado)\b", unit)
+        and "panel genuino" in unit
+        for unit in semantic_units
     )
     if not genuine_panel_result:
         violations.append(
@@ -335,6 +341,16 @@ con base3.dta. La equivalencia en primeras diferencias se presenta como resultad
 un panel genuino.
 """
     assert _did_panel_violations(allowed) == []
+
+
+def test_did_panel_contract_rejects_result_for_genuine_panel_without_first_differences():
+    mutated = """
+base3.dta contiene cortes transversales repetidos.
+
+Esta equivalencia es un resultado para un panel genuino.
+"""
+    violations = _did_panel_violations(mutated)
+    assert any("primeras diferencias" in violation for violation in violations)
 
 
 # ------------------------------------------------------------------ privacidad
