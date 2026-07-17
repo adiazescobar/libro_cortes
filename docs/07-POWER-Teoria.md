@@ -175,9 +175,9 @@ N_{reclutar}=\left\lceil\frac{N_{analitico}}{r}\right\rceil.
 
 Esta inflación preserva cantidad, no repara sesgo por atrición diferencial.
 
-### Resultado continuo sin controles 7.1
+### Resultado continuo sin controles
 
-Este es el caso de resultado continuo sin controles en Bogotá: un programa de aprendizaje busca aumentar ingresos anuales; presupuesto para $N=1{,}000$, 50% por brazo, prueba bilateral, $\alpha=0.02$ y poder de 80%. Con una DE histórica $\sigma$, el MDE es
+**Caso 7.1.** Este es el caso de resultado continuo sin controles en Bogotá: un programa de aprendizaje busca aumentar ingresos anuales; presupuesto para $N=1{,}000$, 50% por brazo, prueba bilateral, $\alpha=0.02$ y poder de 80%. Con una DE histórica $\sigma$, el MDE es
 
 \[
 MDE=(z_{0.99}+z_{0.80})\frac{\sigma}{\sqrt{1000(0.5)(0.5)}}.
@@ -185,13 +185,13 @@ MDE=(z_{0.99}+z_{0.80})\frac{\sigma}{\sqrt{1000(0.5)(0.5)}}.
 
 Es $N$ **total** y la prueba es de **dos colas**. El caso exige una estimación piloto de $\sigma$ para expresarlo en unidades monetarias; sin ella solo puede reportarse en unidades de DE.
 
-### Resultado continuo con controles 7.2
+### Resultado continuo con controles
 
-El segundo caso Bogotá estudia un resultado continuo con controles: conserva $N=1{,}000$, asignación 50/50, prueba bilateral y poder de 80%, y añade predictores con $R^2=0.5$. Manteniendo los demás parámetros, el MDE es $\sqrt{0.5}$ veces el del diseño sin controles. La ganancia depende de que el $R^2$ sea externo y reproducible, no calculado buscando el mejor resultado final.
+**Caso 7.2.** El segundo caso Bogotá estudia un resultado continuo con controles: conserva $N=1{,}000$, asignación 50/50, prueba bilateral y poder de 80%, y añade predictores con $R^2=0.5$. Manteniendo los demás parámetros, el MDE es $\sqrt{0.5}$ veces el del diseño sin controles. La ganancia depende de que el $R^2$ sea externo y reproducible, no calculado buscando el mejor resultado final.
 
-### Resultado binario sin controles 7.3
+### Resultado binario sin controles
 
-Este caso Bogotá usa un resultado binario sin controles: subsidio de transporte para mamografía, $N=1{,}000$ total, 50% control, tasa base $p_0=0.03$, prueba unilateral con $\alpha=0.05$ y poder de 80%. `POWER.pptx` usa $z_{0.95}=1.65$, $z_{0.80}=0.84$ y reporta un MDE histórico de 0,027. Para planear una diferencia $p_1-p_0=\delta$, la varianza exacta aproximada es
+**Caso 7.3.** Este caso Bogotá usa un resultado binario sin controles: subsidio de transporte para mamografía, $N=1{,}000$ total, 50% control, tasa base $p_0=0.03$, prueba unilateral con $\alpha=0.05$ y poder de 80%. `POWER.pptx` usa $z_{0.95}=1.65$, $z_{0.80}=0.84$ y reporta un MDE histórico de 0,027. Para planear una diferencia $p_1-p_0=\delta$, la varianza exacta aproximada es
 
 \[
 SE=\sqrt{\frac{p_1(1-p_1)}{n_1}+\frac{p_0(1-p_0)}{n_0}},
@@ -199,9 +199,9 @@ SE=\sqrt{\frac{p_1(1-p_1)}{n_1}+\frac{p_0(1-p_0)}{n_0}},
 
 por lo que el MDE binario se resuelve numéricamente cuando $p_1=p_0+\delta$ aparece también dentro del error estándar.
 
-### Resultado binario con controles 7.4
+### Resultado binario con controles
 
-El caso Zambia usa un resultado binario con controles: incentivos para circuncisión masculina, $N=1{,}000$ total (la lámina usa $n=991$ efectivos), 50/50, tasa base 3%, prueba unilateral, $\alpha=0.05$, poder 80% y $R^2=0.6$ de un estudio similar en Kenya. La lámina reporta MDE histórico de 0,017. Conceptualmente se multiplica la varianza relevante por $1-R^2$; antes de usar ese ajuste debe justificarse la transportabilidad del predictor étnico al distrito de Makululu.
+**Caso 7.4.** El caso Zambia usa un resultado binario con controles: incentivos para circuncisión masculina, $N=1{,}000$ total (la lámina usa $n=991$ efectivos), 50/50, tasa base 3%, prueba unilateral, $\alpha=0.05$, poder 80% y $R^2=0.6$ de un estudio similar en Kenya. La lámina reporta MDE histórico de 0,017. Conceptualmente se multiplica la varianza relevante por $1-R^2$; antes de usar ese ajuste debe justificarse la transportabilidad del predictor étnico al distrito de Makululu.
 
 ### Comparación de tasas
 

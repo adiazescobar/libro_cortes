@@ -1,0 +1,637 @@
+
+# Diferencias en diferencias — Clase empírica {#did-stata}
+
+## Materiales para la clase {-}
+
+Descarga todos los archivos antes de la clase. El *do-file* reproduce todos los
+cálculos de esta página; los dos archivos `.csv` contienen los resultados
+canónicos verificados que se muestran en las tablas.
+
+#### DESCARGA LOS DOCUMENTOS {-}
+
+::: {.class-materials}
+**Descargar base de datos (DiD 2×2)**:
+[Descargar base3.dta](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/08_DID/base3.dta)
+
+**Descargar Stata do file**:
+[Descargar 08_DID.do](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/08_DID/08_DID.do)
+
+**Descargar do-file del ejercicio**:
+[Descargar 08_DID_ejercicio.do](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/08_DID/08_DID_ejercicio.do)
+
+**Descargar R script**:
+[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/08_DID/08_R.R)
+
+**Descargar Python Notebook**:
+[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/08_DID/08_phyton.ipynb)
+
+- [Resultados canónicos de Stata (`did_resultados.csv`)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/08_DID/results/did_resultados.csv)
+- [Verificación cruzada (`did_verificacion.csv`)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/08_DID/results/did_verificacion.csv)
+:::
+
+
+
+## El DiD básico en la base de nutrición {-}
+
+### Estimando y estructura de los datos {-}
+
+Todo el capítulo estima un mismo **estimando**: el efecto promedio del
+tratamiento sobre los tratados (ATT) de un programa de nutrición sobre la
+talla-para-edad de los niños. Su interpretación causal exige el conjunto de
+supuestos de identificación del Capítulo \@ref(did-teoria). `base3.dta` contiene
+**cortes transversales repetidos**: dos grupos (tratados y controles) observados
+en dos periodos (antes y después), pero sin identificador que permita seguir al
+mismo niño en el tiempo.
+
+::: {.boxinfo}
+**Decisión de diseño:** antes de escribir cualquier comando, deja explícito el
+estimando (ATT), la unidad de observación (niño-periodo), el grupo de comparación
+y el conjunto de supuestos de identificación del Capítulo \@ref(did-teoria):
+tendencias paralelas, consistencia, ausencia de anticipación, composición estable
+y ausencia de interferencia relevante. Los comandos solo automatizan esa
+decisión.
+:::
+
+### Preparación de la base {-}
+
+```stata
+clear all
+set mem 150m
+capture log close
+cd "RUTA_DE_TU_CARPETA/dofile/08_DID"
+use "base3.dta"
+```
+
+Las variables clave:
+
+| Variable | Descripción |
+|---|---|
+| `y` | Talla para la edad (z-score) |
+| `D` | Indicador de tratamiento (1 = tratado, 0 = control) |
+| `t` | Periodo (0 = antes, 1 = después) |
+| `orden_n` | Orden de nacimiento del niño en el hogar |
+
+```stata
+* Verificar la estructura de los datos
+tab t
+tab D
+tab t D
+```
+
+---
+
+### La tabla 2×2 con medias observadas {-}
+
+```stata
+* Promedios por grupo y periodo (la tabla 2x2)
+table D t, c(mean y)
+```
+
+La tabla siguiente reproduce esas cuatro medias desde los resultados canónicos exportados por `08_DID.do`; es la materia prima de todo lo que sigue.
+
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:right;"> Antes (t = 0) </th>
+   <th style="text-align:right;"> Después (t = 1) </th>
+   <th style="text-align:right;"> Primera diferencia </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Controles (D = 0) </td>
+   <td style="text-align:right;"> -0.763 </td>
+   <td style="text-align:right;"> -0.690 </td>
+   <td style="text-align:right;"> 0.073 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Tratados (D = 1) </td>
+   <td style="text-align:right;"> -0.663 </td>
+   <td style="text-align:right;"> -0.408 </td>
+   <td style="text-align:right;"> 0.255 </td>
+  </tr>
+</tbody>
+</table>
+
+::: {.boxoutput}
+**Salida central:** las cuatro medias de la tabla 2×2 provienen de `did_resultados.csv`, generado por Stata; ninguna cifra se transcribe a mano. La segunda diferencia de esas medias — el DiD — aparecerá idéntica en cada método de estimación de este capítulo.
+:::
+
+### Gráfico de evolución temporal {-}
+
+```stata
+* Etiquetas para los gráficos
+label define t 0 "Antes" 1 "Después", replace
+label value t t
+label define D 0 "Control" 1 "Tratado", replace
+label value D D
+
+* Gráfico de evolución temporal (visualización del DiD)
+preserve
+collapse (mean) y, by(t D)
+twoway (connected y t if D==1, msymbol(circle) lcolor(navy)) ///
+       (connected y t if D==0, msymbol(triangle) lcolor(maroon)), ///
+       legend(label(1 "Tratados") label(2 "Controles")) ///
+       title("Tendencias medias por grupo") ///
+       xtitle("Periodo") ytitle("Talla-para-edad (z-score)")
+restore
+```
+
+**¿Qué muestra este gráfico?**
+
+Con solo dos periodos, este gráfico **no es una prueba de tendencias paralelas**
+— es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y
+después, y permite ver intuitivamente de dónde viene el estimador. Para examinar
+pre-tendencias necesitaríamos al menos un periodo pre-tratamiento adicional.
+Cortes transversales repetidos con varios preperiodos y composición estable
+permiten comparar las tendencias medias sin un identificador individual.
+
+Lo que sí podemos verificar con este gráfico: que los grupos se movieron de forma diferente (si las pendientes difieren, el DiD captura esa diferencia). Pero no podemos saber si esa diferencia se debe al programa o a una tendencia pre-existente que no alcanzamos a ver.
+
+::: {.box-cuidado}
+**Error frecuente:** presentar este gráfico de dos periodos como "prueba de tendencias paralelas". Con un solo periodo pre-tratamiento la prueba es imposible; la evidencia formal requiere varios periodos previos y llega más adelante con `estat ptrends`.
+:::
+
+---
+
+### Comparación de medias por periodo {-}
+
+```stata
+* Diferencia tratados-controles antes del programa
+ttest y if t == 0, by(D)
+
+* Diferencia tratados-controles después del programa
+ttest y if t == 1, by(D)
+```
+
+La diferencia cruda cambia entre periodos. **DiD** mide cuánto difiere ese cambio
+entre tratados y controles; atribuir la diferencia al programa exige el conjunto
+de supuestos de identificación del Capítulo \@ref(did-teoria).
+
+---
+
+### Estimador DiD paso a paso {-}
+
+```stata
+* Cuatro medias de la tabla 2x2
+sum y if D == 0 & t == 0
+scalar y_c0 = r(mean)       // Controles, antes
+
+sum y if D == 0 & t == 1
+scalar y_c1 = r(mean)       // Controles, después
+
+sum y if D == 1 & t == 0
+scalar y_t0 = r(mean)       // Tratados, antes
+
+sum y if D == 1 & t == 1
+scalar y_t1 = r(mean)       // Tratados, después
+
+* Primera diferencia: cambio en cada grupo
+scalar delta_tratados  = y_t1 - y_t0
+scalar delta_controles = y_c1 - y_c0
+
+* Segunda diferencia: DiD
+scalar DD = delta_tratados - delta_controles
+
+di "Cambio en tratados:  " delta_tratados
+di "Cambio en controles: " delta_controles
+di "Estimador DiD:       " DD
+```
+
+::: {.boxkey}
+**Interpretación:** el valor de `DD` reproduce exactamente la segunda diferencia de la tabla 2×2 canónica — compara la fila `did_manual` de `did_resultados.csv`. Ese mismo número reaparecerá con `diff` y con la regresión: tres caminos, un solo estimando.
+:::
+
+---
+
+## Estimación e inferencia {-}
+
+### Estimación con el comando diff {-}
+
+```stata
+ssc install diff, replace
+diff y, t(D) p(t)
+```
+
+El comando `diff` reporta la tabla 2×2 completa (medias por grupo y periodo, primeras diferencias, y el estimador DiD) con su error estándar y el p-valor del test $H_0: \delta = 0$.
+
+::: {.box-stata}
+**Comando clave:** `diff y, t(D) p(t)` exige solo dos insumos — el indicador de grupo en `t()` y el de periodo en `p()` — y devuelve la tabla 2×2, el DiD y su inferencia en una sola pasada. Es la forma más rápida de auditar el cálculo manual.
+:::
+
+### Balance en el periodo base {-}
+
+**La opción `test` de `diff`: prueba de balance, no de tendencias paralelas**
+
+```stata
+* test requiere especificar covariables con cov()
+diff y, t(D) p(t) test cov(orden_n)
+```
+
+La opción `test` corre **t-tests de balance en el periodo base** ($t=0$), comparando tratados y controles en la variable de resultado y en las covariables especificadas. Lo que hace internamente es una regresión de cada variable sobre el indicador de tratamiento, restringida a $t=0$.
+
+::: {.boxcerebro}
+**Importante:** Esto es una prueba de **balance pre-tratamiento** (¿eran similares los grupos antes del programa?), **no** una prueba de tendencias paralelas (¿habrían tenido la misma trayectoria sin el programa?). Son dos cosas distintas. Un p-valor grande en el test de balance dice que los grupos eran similares en el periodo base, pero no dice nada sobre sus tendencias futuras.
+:::
+
+---
+
+### Estimación por regresión {-}
+
+```stata
+* Regresión DiD: el coeficiente de D#t es el estimador
+reg y D##t, robust
+
+* Verificación: comparar con cálculo manual
+* alpha      = y_c0
+* beta (D)   = y_t0 - y_c0  (diferencia pre-tratamiento)
+* gamma (t)  = y_c1 - y_c0  (tendencia de los controles)
+* delta (D#t) = DD           (estimador DiD)
+```
+
+**Interpretación del resultado:**
+
+El coeficiente de `D#t` (la interacción) es el estimador DiD. En esta base estima
+un ATT de aproximadamente **+0.18 desviaciones estándar** en la talla-para-edad,
+significativo al 5%. Interpretarlo como el efecto causal del programa sobre los
+niños tratados exige el conjunto de supuestos de identificación del Capítulo
+\@ref(did-teoria): tendencias paralelas, consistencia, ausencia de anticipación,
+composición estable y ausencia de interferencia relevante.
+
+---
+
+### Primeras diferencias en panel {-}
+
+La equivalencia en primeras diferencias es un resultado para un **panel genuino**
+en el que cada unidad $i$ se observa antes y después. En ese caso:
+
+$$\Delta Y_i = \delta D_i + \Delta \varepsilon_i$$
+
+Con dos periodos, una regresión del cambio individual $\Delta Y_i$ sobre el
+estado de tratamiento $D_i$ recupera el mismo estimador que la interacción.
+Pero `base3.dta` son cortes transversales repetidos: no sabemos qué observación
+post corresponde a cada observación pre y, por tanto, no podemos formar
+$\Delta Y_i$. Emparejar filas por su posición inventaría un panel y produciría
+una inferencia sin sustento en el diseño de los datos. Por eso conservamos la
+ecuación como equivalencia teórica y no la estimamos con esta base.
+
+La tabla siguiente reúne los tres caminos válidos al mismo estimando, con los valores canónicos exportados por Stata:
+
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:left;"> Método </th>
+   <th style="text-align:left;"> Comando </th>
+   <th style="text-align:right;"> DiD </th>
+   <th style="text-align:right;"> EE </th>
+   <th style="text-align:right;"> p-valor </th>
+   <th style="text-align:right;"> N </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 5 </td>
+   <td style="text-align:left;"> Segunda diferencia manual </td>
+   <td style="text-align:left;"> segunda diferencia </td>
+   <td style="text-align:right;"> 0.1816 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 8000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 6 </td>
+   <td style="text-align:left;"> Comando diff </td>
+   <td style="text-align:left;"> diff y, t(D) p(t) </td>
+   <td style="text-align:right;"> 0.1816 </td>
+   <td style="text-align:right;"> 0.05144 </td>
+   <td style="text-align:right;"> 0.0004165 </td>
+   <td style="text-align:right;"> 8000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 7 </td>
+   <td style="text-align:left;"> Regresión con interacción </td>
+   <td style="text-align:left;"> reg y D##t, robust </td>
+   <td style="text-align:right;"> 0.1816 </td>
+   <td style="text-align:right;"> 0.05144 </td>
+   <td style="text-align:right;"> 0.0004165 </td>
+   <td style="text-align:right;"> 8000 </td>
+  </tr>
+</tbody>
+</table>
+
+::: {.boxsuccess}
+**Resultado clave:** los tres métodos entregan el mismo DiD hasta el error de redondeo — las filas de verificación cruzada de `did_verificacion.csv` lo confirman contra implementaciones independientes en Python. El cálculo manual no reporta inferencia; `diff` y la regresión sí, y la elección del error estándar debe justificarse.
+:::
+
+---
+
+## Múltiples periodos y pruebas formales {-}
+
+### DiD con múltiples periodos {-}
+
+Con más de dos periodos y adopción escalonada del tratamiento, Stata ofrece `xtdidregress`. La sintaxis general es:
+
+```stata
+xtdidregress (y) (treatment), group(id) time(year)
+estat ptrends
+```
+
+La base `hospdd` (incluida en Stata) ilustra el caso: hospitales que adoptan en distintos meses un nuevo procedimiento de admisión; el resultado es la satisfacción de los pacientes.
+
+```stata
+webuse hospdd, clear
+xtset hospital
+xtdidregress (satis) (procedure), group(hospital) time(month)
+```
+
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Comando </th>
+   <th style="text-align:right;"> ATET </th>
+   <th style="text-align:right;"> EE (clúster) </th>
+   <th style="text-align:right;"> p-valor </th>
+   <th style="text-align:right;"> N </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> xtdidregress </td>
+   <td style="text-align:right;"> 0.848 </td>
+   <td style="text-align:right;"> 0.03201 </td>
+   <td style="text-align:right;"> 4.348e-29 </td>
+   <td style="text-align:right;"> 7368 </td>
+  </tr>
+</tbody>
+</table>
+
+::: {.boxoutput}
+**Salida central:** el ATET canónico de `hospdd` proviene de `did_resultados.csv` y coincide, en la verificación cruzada, con una regresión de efectos fijos por hospital y mes estimada en Python. El error estándar se agrupa por hospital — la unidad de asignación.
+:::
+
+### Prueba de tendencias paralelas {-}
+
+Con varios periodos pre-tratamiento, la prueba formal del Capítulo \@ref(did-teoria) es ejecutable:
+
+```stata
+estat ptrends
+```
+
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Comando </th>
+   <th style="text-align:left;"> H0 </th>
+   <th style="text-align:right;"> F </th>
+   <th style="text-align:right;"> p-valor </th>
+   <th style="text-align:right;"> N </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> estat ptrends </td>
+   <td style="text-align:left;"> Tendencias lineales paralelas pre-tratamiento </td>
+   <td style="text-align:right;"> 0.555 </td>
+   <td style="text-align:right;"> 0.460 </td>
+   <td style="text-align:right;"> 7368 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> estat granger </td>
+   <td style="text-align:left;"> Sin efectos de anticipación </td>
+   <td style="text-align:right;"> 0.327 </td>
+   <td style="text-align:right;"> 0.723 </td>
+   <td style="text-align:right;"> 7368 </td>
+  </tr>
+</tbody>
+</table>
+
+::: {.boxkey}
+**Interpretación:** en `hospdd` no se rechaza la hipótesis nula de tendencias paralelas (p ≈ 0,46): la evidencia pre-tratamiento es compatible con el supuesto. Recuerda que no rechazar no lo *demuestra* — solo indica que los datos previos no lo contradicen.
+:::
+
+### Prueba de anticipación {-}
+
+```stata
+estat granger
+```
+
+En la misma tabla canónica, `estat granger` tampoco rechaza su hipótesis nula (p ≈ 0,72): no hay evidencia de que los hospitales cambiaran la satisfacción **antes** de adoptar el procedimiento. Los diagnósticos visuales completan el análisis:
+
+```stata
+estat trendplots   * medias observadas + tendencias lineales ajustadas por grupo
+estat grangerplot  * event study: efectos específicos por periodo (pre y post)
+```
+
+`trendplots` es el gráfico diagnóstico de tendencias. `grangerplot` es el event study completo con los efectos por periodo y sus intervalos de confianza.
+
+::: {.box-cuidado}
+**Error frecuente:** leer un rechazo en `estat granger` como prueba automática de anticipación. Como se discutió en la teoría, un rechazo es observacionalmente equivalente a tendencias no paralelas; separar las dos historias exige un argumento sobre el comportamiento de los agentes.
+:::
+
+---
+
+## Del diagnóstico al diseño {-}
+
+### Checklist de amenazas para el diseño {-}
+
+Cada amenaza discutida en la teoría tiene un diagnóstico concreto en esta práctica. Antes de defender un DiD, recorre la lista:
+
+| Amenaza | Diagnóstico en esta práctica |
+|---|---|
+| Tendencias no paralelas | `estat ptrends` (requiere ≥ 2 periodos pre); con 2 periodos, solo argumento institucional |
+| Anticipación | `estat granger` y el event study de `estat grangerplot` |
+| Selección por trayectoria (dip de Ashenfelter) | Varios periodos pre-tratamiento en el gráfico de tendencias |
+| Diferencias fijas entre grupos | Se eliminan por construcción; verifica balance con `diff, test cov()` |
+| Políticas simultáneas y spillovers | No hay comando: exige revisión del contexto y de la separación entre grupos |
+| Atrición diferencial | Comparar N por celda de la tabla 2×2 entre periodos |
+
+::: {.boxinfo}
+**Decisión de diseño:** el checklist no es un ritual de robustez — cada fila responde a una historia alternativa que explicaría el mismo número. Un DiD defendible nombra la historia, muestra el diagnóstico y explica por qué la historia alternativa no sobrevive.
+:::
+
+## Evaluación {-}
+
+### Ejercicio aplicado {-}
+
+::: {.boxejercicio}
+📁 **Do-file del ejercicio**
+
+Descarga el do-file, córrelo en Stata y reporta tus resultados en el formulario:
+
+* [08_DID_ejercicio.do](dofile/08_DID/08_DID_ejercicio.do) — ejercicio con `base3.dta` y `hospdd`
+
+**Instrucciones:**
+
+1. Descarga el do-file y cambia la ruta en la línea `cd "..."` a la carpeta donde tienes `base3.dta`.
+2. Corre el do-file completo.
+3. Anota los valores que aparecen en pantalla al final de cada sección.
+4. Ingresa tus respuestas en el formulario a continuación.
+:::
+
+**Sección A — DiD básico (`base3.dta`)**
+
+| Pregunta | Tu respuesta |
+|---|---|
+| A1a. Media controles antes | |
+| A1b. Media controles después | |
+| A1c. Media tratados antes | |
+| A1d. Media tratados después | |
+| A2. Estimador DiD (manual) | |
+| A3. Estimador DiD (regresión) | |
+| A3b. ¿Coinciden A2 y A3? (sí/no) | |
+| A4. P-valor del test de balance en t=0 | |
+| A4b. ¿Eran similares los grupos antes? | |
+
+**Sección B — DiD múltiples periodos (`hospdd`)**
+
+| Pregunta | Tu respuesta |
+|---|---|
+| B1. Estimador ATET (nuevo procedimiento) | |
+| B2. F-stat de `estat ptrends` | |
+| B2b. P-valor de `estat ptrends` | |
+| B2c. ¿Se rechaza H0 de tendencias paralelas? | |
+| B3. F-stat de `estat granger` | |
+| B3b. P-valor de `estat granger` | |
+| B3c. ¿Hay evidencia de anticipación? | |
+
+**Envía tus respuestas aquí:**
+
+```{=html}
+<!-- Reemplazar FORM_ID por el formulario activo antes de publicar el ejercicio.
+<iframe src="https://docs.google.com/forms/d/e/FORM_ID/viewform?embedded=true"
+        width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0"
+        style="border-radius: 8px; margin-top: 1em;">
+  Cargando formulario...
+</iframe>
+-->
+```
+
+### Replicación en R y Python {-}
+
+Los archivos de la clase incluyen el script de R y el notebook de Python que reproducen el DiD básico. Además, `verificar_did.py` reestima con `pandas`/`statsmodels` los tres resultados centrales — el DiD manual, el coeficiente de la regresión con errores HC1 y el ATET de `hospdd` con efectos fijos de hospital y mes — y los compara contra los valores de Stata:
+
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Escenario </th>
+   <th style="text-align:right;"> Stata </th>
+   <th style="text-align:right;"> Método alterno </th>
+   <th style="text-align:right;"> Dif. abs. </th>
+   <th style="text-align:right;"> Tolerancia </th>
+   <th style="text-align:left;"> Estado </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> did_manual </td>
+   <td style="text-align:right;"> 0.1816249158 </td>
+   <td style="text-align:right;"> 0.1816249192 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 1e-06 </td>
+   <td style="text-align:left;"> PASS </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> did_regresion </td>
+   <td style="text-align:right;"> 0.1816249158 </td>
+   <td style="text-align:right;"> 0.1816249158 </td>
+   <td style="text-align:right;"> 2.86e-14 </td>
+   <td style="text-align:right;"> 1e-06 </td>
+   <td style="text-align:left;"> PASS </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> hospdd_atet </td>
+   <td style="text-align:right;"> 0.8479878643 </td>
+   <td style="text-align:right;"> 0.847987867 </td>
+   <td style="text-align:right;"> 2.7e-09 </td>
+   <td style="text-align:right;"> 1e-06 </td>
+   <td style="text-align:left;"> PASS </td>
+  </tr>
+</tbody>
+</table>
+
+::: {.boxoutput}
+**Salida central:** que las tres filas estén en estado `PASS` confirma que los números publicados en esta página no dependen del software: Stata y Python llegan al mismo estimando con implementaciones independientes.
+:::
+
+---
+
+## Práctica evaluada {-}
+
+Resuelve las cuatro preguntas siguientes. Cada una es autocontenida: incluye todos los datos necesarios, el puntaje sugerido, los comandos permitidos y el producto esperado. No se entregan respuestas ni pistas; el trabajo se evalúa sobre el procedimiento y la justificación.
+
+::: {.box-ejercicio}
+**Código:** DID-S1
+
+**Tipo:** Tabla 2×2 y DiD manual
+
+**Fuente:** base3.dta (resultados canónicos)
+
+**Enunciado:** Con `base3.dta`, calcule las cuatro medias de la tabla 2×2 (grupo × periodo) de la talla-para-edad, guárdelas como escalares y construya el estimador DiD como segunda diferencia. Verifique que su resultado coincide con la fila `did_manual` de `did_resultados.csv` y explique, en una frase por resta, qué elimina la primera diferencia y qué elimina la segunda.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `sum`, `scalar`, `display`.
+
+**Producto esperado:** las cuatro medias, el DiD manual, la comparación con el valor canónico y la explicación de las dos restas.
+:::
+
+::: {.box-ejercicio}
+**Código:** DID-S2
+
+**Tipo:** Regresión DiD e interpretación
+
+**Fuente:** base3.dta (resultados canónicos)
+
+**Enunciado:** Estime la regresión DiD con interacción y errores robustos sobre `base3.dta`. Reporte los cuatro coeficientes y muestre numéricamente cómo cada uno se corresponde con las medias de la tabla 2×2 de la pregunta anterior. Interprete el coeficiente de la interacción y su error estándar, y explique por qué los coeficientes del indicador de grupo y del indicador de periodo no admiten lectura causal.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `reg` (con `##` y opción `robust`), `display`.
+
+**Producto esperado:** la regresión estimada, la correspondencia
+coeficiente-a-media verificada con números y la interpretación de la interacción
+condicionada al conjunto de supuestos de identificación del Capítulo
+\@ref(did-teoria).
+:::
+
+::: {.box-ejercicio}
+**Código:** DID-S3
+
+**Tipo:** Balance, tendencias y anticipación
+
+**Fuente:** base3.dta y diseño del capítulo
+
+**Enunciado:** Ejecute la prueba de balance de `diff` usando `orden_n` como
+covariable sobre `base3.dta` e interprete su resultado. Explique con precisión por
+qué esa prueba no es una prueba de tendencias paralelas, por qué un solo periodo
+pre-tratamiento no permite examinar pre-tendencias y cómo varios cortes
+transversales repetidos con composición estable sí permitirían comparar
+tendencias medias sin identificar individuos. Distinga esta posibilidad
+conceptual de la estructura agrupada longitudinal que exige `xtdidregress` para
+habilitar sus comandos posteriores `estat ptrends` y `estat granger`, y cierre
+diferenciando las hipótesis nulas de ambas pruebas.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `diff` (con `test cov()`), `display`.
+
+**Producto esperado:** la prueba de balance interpretada, la distinción conceptual balance/tendencias, el requisito de datos para las pruebas formales y el contraste entre las dos hipótesis nulas.
+:::
+
+::: {.box-ejercicio}
+**Código:** DID-S4
+
+**Tipo:** Múltiples periodos y comparación reproducible
+
+**Fuente:** hospdd (resultados canónicos)
+
+**Enunciado:** Con la base `hospdd`, estime el ATET del nuevo procedimiento de admisión con `xtdidregress`, ejecute las pruebas de tendencias paralelas y de anticipación, e interprete las tres salidas. Después replique el ATET en R o en Python mediante una regresión con efectos fijos de hospital y de mes, y compare su resultado con la fila `hospdd_atet` de `did_verificacion.csv`, comentando la tolerancia empleada y el origen de cualquier diferencia.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `webuse`, `xtset`, `xtdidregress`, `estat ptrends`, `estat granger`; en R o Python, la librería de regresión que prefiera.
+
+**Producto esperado:** el ATET con su inferencia, las dos pruebas interpretadas, la replicación independiente y la comparación contra el valor canónico.
+:::

@@ -1,4 +1,4 @@
-# Parámetros Causales en Stata {#parametros-causales-stata}
+# Parámetros causales — Clase empírica {#parametros-causales-stata}
 
 ## Materiales para la clase {-}
 

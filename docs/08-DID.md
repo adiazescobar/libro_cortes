@@ -1,5 +1,5 @@
 
-# Diferencias en Diferencias {#did-teoria}
+# Diferencias en diferencias — Clase teórica {#did-teoria}
 
 ::: {.boxinfo}
 **🎯 Metas de aprendizaje**
@@ -9,10 +9,34 @@
 - Derivar el estimador DiD desde los resultados potenciales.
 - Interpretar cada coeficiente de la regresión DiD.
 - Saber cómo probar (y cómo fallar) el supuesto de tendencias paralelas.
-- Implementar DiD en Stata: manualmente, con `diff`, y con regresión.
+- Reconocer los experimentos naturales clásicos que inauguraron el método.
 :::
 
 ---
+
+## Experimentos naturales {-}
+
+Diferencias en diferencias nace de una idea más general: aprovechar **experimentos naturales**, situaciones en las que un evento fortuito divide a la población en tratados y no tratados sin que nadie lo haya diseñado como experimento. Las fuentes típicas de ese evento fortuito son cuatro:
+
+1. Un cambio en la naturaleza (un desastre, una sequía, una epidemia).
+2. Vaguedad en la ley, que hace que una regla se aplique a unos y no a otros.
+3. Cambios no esperados en la implementación de un programa.
+4. Aleatoriedad en las circunstancias individuales.
+
+::: {.boxinfo}
+**Intuición:** en un RCT el investigador lanza la moneda; en un experimento natural la lanza el mundo. La tarea del econometrista es reconocer cuándo el mundo lanzó una moneda creíble — y qué comparación la aprovecha.
+:::
+
+## Contrafactuales falsos {-}
+
+Antes de definir el estimador conviene entender las dos comparaciones ingenuas que DiD corrige:
+
+- **Comparaciones antes y después:** comparan a las mismas personas o comunidades antes y después del programa. Inconveniente: no controlan las tendencias temporales — cualquier cosa que hubiera pasado de todas formas se atribuye al programa.
+- **Comparaciones entre participantes y no participantes (con–sin):** comparan a quienes están en el programa con quienes no están. Inconveniente: **selección** — ¿por qué no participaron los no participantes?
+
+::: {.boxcerebro}
+**Suma de dos errores == correcto.** La estimación de diferencias en diferencias combina los dos enfoques defectuosos — pre vs. post y con vs. sin — y, al hacerlo, puede superar simultáneamente el sesgo de selección (en atributos fijos) y las tendencias temporales del resultado de interés. La idea básica es observar al grupo de tratamiento y a un grupo de comparación **antes y después** del programa.
+:::
 
 ## El problema que DiD resuelve {-}
 
@@ -35,6 +59,65 @@ Pero eso puede capturar cualquier cambio que hubiera ocurrido en ese periodo, co
 $$\widehat{\delta}_{DD} = \underbrace{(\bar{Y}_{T,1} - \bar{Y}_{T,0})}_{\text{cambio en tratados}} - \underbrace{(\bar{Y}_{C,1} - \bar{Y}_{C,0})}_{\text{cambio en controles}}$$
 
 La lógica es: el cambio en el grupo de control nos dice cuánto habrían cambiado los tratados **en ausencia del programa**. La diferencia entre los dos cambios es el efecto del programa.
+
+---
+
+## El caso de John Snow (1854) {-}
+
+El primer diferencias en diferencias célebre es anterior a la econometría. John Snow creía que el cólera se contagiaba por agua contaminada — no por el "aire viciado" de la teoría dominante — y usó un evento fortuito para probarlo.
+
+**La línea de tiempo:**
+
+- **1849:** la peor epidemia de cólera en Londres se cobra 14.137 vidas. Dos empresas suministraban agua a gran parte de la ciudad — Lambeth Waterworks Co. y Southwark & Vauxhall Water Co. — y ambas la tomaban del Támesis.
+- **1852:** Lambeth Company movió su tubo de suministro río arriba, fuera del alcance de las aguas residuales. Todos sabían que el Támesis estaba sucio en el sur.
+- **1853:** Londres sufre otro brote de cólera. ¿Los clientes de Lambeth Waterworks son menos propensos a enfermarse?
+
+Snow contrató a John Whiting para que visitara las casas de los fallecidos y determinara qué empresa les suministraba agua potable. Con esos datos calculó tasas de mortalidad por empresa:
+
+| Empresa | Casas | Muertes por cólera | Tasa por 100 mil |
+|---|---:|---:|---:|
+| Lambeth (tubo movido río arriba) | 26.107 | 98 | 37 |
+| Southwark & Vauxhall | 40.046 | 1.263 | 315 |
+| Resto de Londres | 256.423 | 1.422 | 56 |
+
+Los clientes de Southwark & Vauxhall — cuyo suministro siguió contaminado — murieron a una tasa casi diez veces mayor que los de Lambeth, y fueron responsables de la gran mayoría de las muertes del brote de 1854 en Broad Street.
+
+::: {.boxkey}
+**Interpretación:** el cambio del tubo de Lambeth es el evento fortuito; los clientes de Southwark & Vauxhall son el grupo de comparación. Para que la comparación sea creíble se necesita mostrar evidencia de que, **antes** del cambio del tubo, las condiciones entre los dos grupos de clientes eran similares — exactamente la lógica que hoy llamamos tendencias paralelas.
+:::
+
+## El caso Mariel: migrantes y mercado laboral {-}
+
+Card (1990) estudió los impactos en el mercado laboral de los flujos de migrantes con el mismo diseño. El **éxodo de Mariel** llevó a Miami una ola de inmigrantes cubanos entre mayo y septiembre de 1980 — un evento fortuito desde la perspectiva del mercado laboral local. Card comparó a Miami con ciudades de altas tasas de migración (Atlanta, Houston, Los Ángeles y Tampa) y miró las condiciones laborales **antes y después** de la llegada.
+
+La tabla clásica del caso (Angrist y Krueger) muestra las tasas de desempleo en Miami frente a las ciudades de comparación, antes y después del flujo — y repite el ejercicio con "el flujo de Mariel que no ocurrió" (1993–1995), un experimento placebo donde no debería encontrarse efecto alguno. El resultado célebre: a pesar del aumento de 7% en la fuerza laboral de Miami, las diferencias en diferencias no muestran deterioro para los trabajadores locales.
+
+**Otros ejemplos con la misma lógica:** cambios en las leyes de salario mínimo (Angrist y Kugler), prohibiciones de fumar en Helena, Montana; cierres de hospitales (Levitt); desastres naturales; ataques terroristas; y variaciones exógenas en el tamaño de la familia (Angrist y Evans). En todos, el evento fortuito puede venir de **asignación aleatoria directa** (loterías: el servicio militar en Vietnam o Argentina, los vales educativos en Colombia) o de asignación **as if random** (la reasignación de policías tras un ataque terrorista, desastres naturales y elecciones, cambios en la ley de maternidad).
+
+::: {.boxinfo}
+**Intuición:** la pregunta operativa nunca es "¿tengo dos grupos y dos periodos?" — casi siempre los hay. Es "¿qué evento fortuito hace creíble que el grupo de comparación revele la tendencia contrafactual del tratado?". Sin ese evento, DiD es solo aritmética.
+:::
+
+## El ejemplo de aula: dos grupos, dos periodos {-}
+
+El siguiente ejemplo numérico — un caso histórico de clase, con valores fijados en las diapositivas — muestra por qué las dos comparaciones ingenuas fallan y cómo la doble diferencia las corrige. Hay un grupo de tratamiento y uno de control, observados en línea base ($t=1$) y seguimiento ($t=2$):
+
+|  | Tratamiento | Control | DID |
+|---|---:|---:|---:|
+| $t=1$ (línea base) | $\bar{Y}_{T,1} = 40$ | $\bar{Y}_{C,1} = 20$ | |
+| $t=2$ (seguimiento) | $\bar{Y}_{T,2} = 80$ | $\bar{Y}_{C,2} = 30$ | |
+| Cambio | 40 | 10 | **30** |
+
+Las tres lecturas posibles:
+
+- **Con–sin** en $t=2$: $80 - 30 = 50$. Sobreestima: mezcla el efecto con la diferencia pre-existente entre grupos.
+- **Antes–después** en tratados: $80 - 40 = 40$. Sobreestima: atribuye al programa la tendencia temporal común.
+- **Diferencias en diferencias:** $(80-40) - (30-20) = 30$. El cambio de los controles estima la tendencia contrafactual de los tratados.
+
+<div class="figure" style="text-align: center">
+<img src="08-DID_files/figure-html/did-ejemplo-aula-1.png" alt="Caso histórico de clase: el contrafactual punteado convierte 50 (con–sin) y 40 (antes–después) en el DiD de 30." width="672" />
+<p class="caption">(\#fig:did-ejemplo-aula)Caso histórico de clase: el contrafactual punteado convierte 50 (con–sin) y 40 (antes–después) en el DiD de 30.</p>
+</div>
 
 ---
 
@@ -106,19 +189,28 @@ El supuesto es más plausible cuando:
 
 ## Identificación del ATT bajo tendencias paralelas {-}
 
-Bajo el supuesto de tendencias paralelas, el estimador DiD recupera el ATT:
+Bajo el conjunto de supuestos de identificación —tendencias paralelas,
+consistencia, ausencia de anticipación, composición estable y ausencia de
+interferencia relevante—, el estimador DiD recupera el ATT:
 
 $$
 \widehat{\delta}_{DD} = \underbrace{E[Y_{i,1} \mid D_i=1]}_{\bar{Y}_{T,1}} - \underbrace{E[Y_{i,0} \mid D_i=1]}_{\bar{Y}_{T,0}} - \underbrace{\Big(E[Y_{i,1} \mid D_i=0] - E[Y_{i,0} \mid D_i=0]\Big)}_{\text{tendencia de los controles}}
 $$
 
-Sustituyendo resultados potenciales y usando independencia e igualdad de tendencias:
+Sustituyendo resultados potenciales y usando consistencia, ausencia de
+anticipación y tendencias paralelas, bajo composición estable de los grupos y
+ausencia de interferencia relevante:
 
 $$
 = E[Y(D=1) - Y(D=0) \mid D=1] = \text{ATT}
 $$
 
-El estimador es insesgado para el ATT **si y solo si** el supuesto de tendencias paralelas se cumple.
+Esta igualdad identifica el ATT bajo tendencias paralelas junto con los demás
+supuestos que conectan los resultados potenciales con los datos observados:
+consistencia, ausencia de anticipación, composición estable de los grupos y
+ausencia de interferencia relevante entre unidades. En particular, la notación
+$Y_i(D=1)$/$Y_i(D=0)$ supone que el resultado potencial de cada unidad está bien
+definido por su propio estado de tratamiento.
 
 ---
 
@@ -135,7 +227,7 @@ Interpretación de cada coeficiente:
 | $\alpha$ | Media de los controles en el periodo base ($\bar{Y}_{C,0}$) |
 | $\beta$ | Diferencia pre-tratamiento entre grupos ($\bar{Y}_{T,0} - \bar{Y}_{C,0}$) |
 | $\gamma$ | Cambio temporal en los controles ($\bar{Y}_{C,1} - \bar{Y}_{C,0}$) |
-| $\delta$ | **Estimador DiD** = efecto causal del programa (bajo tendencias paralelas) |
+| $\delta$ | **Estimador DiD**; es el efecto causal del programa solo bajo el conjunto de supuestos de identificación indicado arriba |
 
 ::: {.boxcerebro}
 **El coeficiente que importa es $\delta$**, el de la interacción $D \times t$.
@@ -152,16 +244,17 @@ $$\bar{Y}_{C,0} = \hat{\alpha}, \quad \bar{Y}_{T,0} = \hat{\alpha}+\hat{\beta}, 
 
 El supuesto de tendencias paralelas **no es verificable** en el periodo de tratamiento: el contrafactual $Y_{it}(D=0)$ para los tratados en $t=1$ no existe. Solo podemos buscar evidencia indirecta.
 
-**Con múltiples periodos pre-tratamiento** (y un identificador individual), Stata ofrece dos pruebas formales distintas — y es importante no confundirlas:
+**Con múltiples periodos pre-tratamiento**, podemos comparar las tendencias
+medias previas de tratados y controles. Esta evidencia no requiere seguir a la
+misma unidad: cortes transversales repetidos con composición estable también
+permiten examinar pre-tendencias. El ejemplo de Stata que sigue usa
+`xtdidregress` y, por ser un comando para datos agrupados longitudinalmente,
+requiere identificar el grupo de panel. Sus dos pruebas posteriores son
+distintas — y es importante no confundirlas:
 
 ---
 
 ### Prueba de tendencias paralelas: `estat ptrends` {-}
-
-```stata
-xtdidregress (y) (treatment), group(id) time(year)
-estat ptrends
-```
 
 **H₀:** Las tendencias lineales son paralelas en el periodo pre-tratamiento.
 
@@ -172,10 +265,6 @@ Esta es la prueba de tendencias paralelas propiamente dicha.
 ---
 
 ### Prueba de anticipación: `estat granger` {-}
-
-```stata
-estat granger
-```
 
 **H₀:** No hubo efectos del tratamiento en anticipación (antes de que empezara).
 
@@ -196,12 +285,7 @@ Son preguntas distintas. Un rechazo en `ptrends` no implica anticipación, y un 
 
 ### Visualización: `estat trendplots` y `estat grangerplot` {-}
 
-```stata
-estat trendplots   * medias observadas + tendencias lineales ajustadas por grupo
-estat grangerplot  * event study: efectos específicos por periodo (pre y post)
-```
-
-`trendplots` es el gráfico diagnóstico de tendencias. `grangerplot` es el event study completo con los efectos por periodo y sus intervalos de confianza.
+`trendplots` es el gráfico diagnóstico de tendencias. `grangerplot` es el event study completo con los efectos por periodo y sus intervalos de confianza. Ambos se ejecutan en la clase práctica sobre la base `hospdd`, junto con las dos pruebas formales.
 
 ---
 
@@ -211,7 +295,13 @@ estat grangerplot  * event study: efectos específicos por periodo (pre y post)
 
 **Con solo dos periodos (como en nuestra base):**
 
-Con un único periodo antes y uno después, la prueba formal de pre-tendencias es **imposible**. El gráfico de tendencias medias que construimos en Stata es una *visualización del DiD*, no una prueba del supuesto. Para probar tendencias paralelas se necesitan **al menos 3 periodos** y un identificador de individuo.
+Con un único periodo antes y uno después, la prueba formal de pre-tendencias es
+**imposible**. El gráfico de tendencias medias que construimos en Stata es una
+*visualización del DiD*, no una prueba del supuesto. Para examinar
+pre-tendencias se necesitan **al menos dos periodos pre-tratamiento**. Esto
+puede hacerse con un panel o con cortes transversales repetidos cuya composición
+sea comparable a través del tiempo; no se necesita un identificador individual
+para comparar tendencias medias.
 
 ---
 
@@ -269,184 +359,6 @@ Si el tratamiento cambia quién permanece en la muestra (atrición diferencial),
 
 ---
 
-## Implementación en Stata {-}
-
-### Preparación de los datos {-}
-
-Descarga la base de datos y el do-file de esta clase:
-
-::: {.boxejercicio}
-📁 **Archivos de la clase**
-
-* [base3.dta](dofile/08_DID/base3.dta) — base de datos (8 000 observaciones, niños con dos periodos de seguimiento)
-* [08_DID.do](dofile/08_DID/08_DID.do) — do-file completo
-:::
-
-```stata
-clear all
-set mem 150m
-capture log close
-cd "RUTA_DE_TU_CARPETA/dofile/08_DID"
-use "base3.dta"
-```
-
-Las variables clave:
-
-| Variable | Descripción |
-|---|---|
-| `y` | Talla para la edad (z-score) |
-| `D` | Indicador de tratamiento (1 = tratado, 0 = control) |
-| `t` | Periodo (0 = antes, 1 = después) |
-| `orden_n` | Orden de nacimiento del niño en el hogar |
-
-```stata
-* Verificar la estructura del panel
-tab t
-tab D
-tab t D
-```
-
----
-
-### Estadísticas descriptivas y gráfico de tendencias {-}
-
-```stata
-* Promedios por grupo y periodo (la tabla 2x2)
-table D t, c(mean y)
-
-* Etiquetas para los gráficos
-label define t 0 "Antes" 1 "Después", replace
-label value t t
-label define D 0 "Control" 1 "Tratado", replace
-label value D D
-
-* Gráfico de evolución temporal (prueba visual de tendencias paralelas)
-preserve
-collapse (mean) y, by(t D)
-twoway (connected y t if D==1, msymbol(circle) lcolor(navy)) ///
-       (connected y t if D==0, msymbol(triangle) lcolor(maroon)), ///
-       legend(label(1 "Tratados") label(2 "Controles")) ///
-       title("Tendencias medias por grupo") ///
-       xtitle("Periodo") ytitle("Talla-para-edad (z-score)")
-restore
-```
-
-**¿Qué muestra este gráfico?**
-
-Con solo dos periodos, este gráfico **no es una prueba de tendencias paralelas** — es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y después, y permite ver intuitivamente de dónde viene el estimador. Para probar tendencias paralelas necesitaríamos al menos un periodo previo adicional y un identificador individual.
-
-Lo que sí podemos verificar con este gráfico: que los grupos se movieron de forma diferente (si las pendientes difieren, el DiD captura esa diferencia). Pero no podemos saber si esa diferencia se debe al programa o a una tendencia pre-existente que no alcanzamos a ver.
-
----
-
-### Comparación de medias por periodo {-}
-
-```stata
-* Diferencia tratados-controles antes del programa
-ttest y if t == 0, by(D)
-
-* Diferencia tratados-controles después del programa
-ttest y if t == 1, by(D)
-```
-
-La diferencia cruda cambia entre periodos. **DiD** aísla si ese cambio se debe al programa o a una tendencia pre-existente.
-
----
-
-### Estimador DiD paso a paso {-}
-
-```stata
-* Cuatro medias de la tabla 2x2
-sum y if D == 0 & t == 0
-scalar y_c0 = r(mean)       // Controles, antes
-
-sum y if D == 0 & t == 1
-scalar y_c1 = r(mean)       // Controles, después
-
-sum y if D == 1 & t == 0
-scalar y_t0 = r(mean)       // Tratados, antes
-
-sum y if D == 1 & t == 1
-scalar y_t1 = r(mean)       // Tratados, después
-
-* Primera diferencia: cambio en cada grupo
-scalar delta_tratados  = y_t1 - y_t0
-scalar delta_controles = y_c1 - y_c0
-
-* Segunda diferencia: DiD
-scalar DD = delta_tratados - delta_controles
-
-di "Cambio en tratados:  " delta_tratados
-di "Cambio en controles: " delta_controles
-di "Estimador DiD:       " DD
-```
-
----
-
-### Usando el comando `diff` {-}
-
-```stata
-ssc install diff, replace
-diff y, t(D) p(t)
-```
-
-El comando `diff` reporta la tabla 2×2 completa (medias por grupo y periodo, primeras diferencias, y el estimador DiD) con su error estándar y el p-valor del test $H_0: \delta = 0$.
-
-**La opción `test` de `diff`: prueba de balance, no de tendencias paralelas**
-
-```stata
-* test requiere especificar covariables con cov()
-diff y, t(D) p(t) test cov(orden_n)
-```
-
-La opción `test` corre **t-tests de balance en el periodo base** ($t=0$), comparando tratados y controles en la variable de resultado y en las covariables especificadas. Lo que hace internamente es una regresión de cada variable sobre el indicador de tratamiento, restringida a $t=0$.
-
-::: {.boxcerebro}
-**Importante:** Esto es una prueba de **balance pre-tratamiento** (¿eran similares los grupos antes del programa?), **no** una prueba de tendencias paralelas (¿habrían tenido la misma trayectoria sin el programa?). Son dos cosas distintas. Un p-valor grande en el test de balance dice que los grupos eran similares en el periodo base, pero no dice nada sobre sus tendencias futuras.
-:::
-
----
-
-### Implementación con regresión {-}
-
-```stata
-* Regresión DiD: el coeficiente de D#t es el estimador
-reg y D##t, robust
-
-* Verificación: comparar con cálculo manual
-* alpha      = y_c0
-* beta (D)   = y_t0 - y_c0  (diferencia pre-tratamiento)
-* gamma (t)  = y_c1 - y_c0  (tendencia de los controles)
-* delta (D#t) = DD           (estimador DiD)
-```
-
-**Interpretación del resultado:**
-
-El coeficiente de `D#t` (la interacción) es el estimador DiD. En esta base estima un efecto de aproximadamente **+0.18 desviaciones estándar** en la talla-para-edad, significativo al 5%. Bajo el supuesto de tendencias paralelas, ese es el efecto causal del programa sobre los niños tratados.
-
----
-
-### Extensión con panel y primeras diferencias {-}
-
-Con datos de panel, el estimador DiD es equivalente a una regresión en **primeras diferencias**:
-
-$$\Delta Y_i = \delta D_i + \Delta \varepsilon_i$$
-
-```stata
-* Crear identificador individual (panel balanceado: 4000 niños x 2 periodos)
-sort t orden_n
-by t: gen id = _n
-
-xtset id t
-
-* Primeras diferencias = DiD en panel balanceado de 2 periodos
-reg D.y D.D
-```
-
-Los dos métodos (regresión con interacción y primeras diferencias) entregan el mismo estimador cuando hay exactamente dos periodos y el panel es balanceado.
-
----
-
 ## Síntesis {-}
 
 | Componente | ¿Qué elimina? | ¿Qué supone? |
@@ -472,57 +384,50 @@ Las principales amenazas a la validez del DiD son: (1) políticas simultáneas q
 
 ---
 
-## Ejercicio con datos {-}
+---
 
-::: {.boxejercicio}
-📁 **Do-file del ejercicio**
+## Preguntas tipo examen {-}
 
-Descarga el do-file, córrelo en Stata y reporta tus resultados en el formulario:
+Resuelve las tres preguntas siguientes. Cada una es autocontenida e incluye el puntaje sugerido y el producto esperado; no se entregan respuestas ni pistas.
 
-* [08_DID_ejercicio.do](dofile/08_DID/08_DID_ejercicio.do) — ejercicio con `base3.dta` y `hospdd`
+::: {.box-ejercicio}
+**Código:** DID-T1
 
-**Instrucciones:**
+**Tipo:** Contrafactuales falsos y tabla 2×2
 
-1. Descarga el do-file y cambia la ruta en la línea `cd "..."` a la carpeta donde tienes `base3.dta`.
-2. Corre el do-file completo.
-3. Anota los valores que aparecen en pantalla al final de cada sección.
-4. Ingresa tus respuestas en el formulario a continuación.
+**Enunciado:** Un programa municipal de empleo juvenil se implementa en la comuna A y no en la comuna B. La tasa de ocupación juvenil observada es: comuna A, 55% antes y 70% después; comuna B, 35% antes y 44% después. Calcule la comparación con–sin en el periodo final, la comparación antes–después en la comuna tratada y el estimador de diferencias en diferencias. Explique qué problema tiene cada una de las dos comparaciones ingenuas y qué componente elimina cada resta del DiD. Indique el conjunto de supuestos bajo el cual el DiD es el efecto causal del programa.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Producto esperado:** los tres cálculos numéricos, la identificación del sesgo de cada comparación ingenua y el enunciado preciso del supuesto de identificación.
 :::
 
-**Sección A — DiD básico (`base3.dta`)**
+::: {.box-ejercicio}
+**Código:** DID-T2
 
-| Pregunta | Tu respuesta |
-|---|---|
-| A1a. Media controles antes | |
-| A1b. Media controles después | |
-| A1c. Media tratados antes | |
-| A1d. Media tratados después | |
-| A2. Estimador DiD (manual) | |
-| A3. Estimador DiD (regresión) | |
-| A3b. ¿Coinciden A2 y A3? (sí/no) | |
-| A4. P-valor del test de balance en t=0 | |
-| A4b. ¿Eran similares los grupos antes? | |
+**Tipo:** La regresión DiD y sus coeficientes
 
-**Sección B — DiD múltiples periodos (`hospdd`)**
+**Enunciado:** Considere la regresión $Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon_{it}$ estimada con dos grupos y dos periodos. Derive la expresión de cada coeficiente en términos de las cuatro medias de la tabla 2×2 y demuestre que el coeficiente de la interacción reproduce exactamente la doble diferencia. Explique por qué $\beta$ y $\gamma$ no tienen interpretación causal, y qué cambiaría en la lectura de $\delta$ si las tendencias de los dos grupos no fueran paralelas.
 
-| Pregunta | Tu respuesta |
-|---|---|
-| B1. Estimador ATET (nuevo procedimiento) | |
-| B2. F-stat de `estat ptrends` | |
-| B2b. P-valor de `estat ptrends` | |
-| B2c. ¿Se rechaza H0 de tendencias paralelas? | |
-| B3. F-stat de `estat granger` | |
-| B3b. P-valor de `estat granger` | |
-| B3c. ¿Hay evidencia de anticipación? | |
+**Puntaje sugerido:** 5 puntos.
 
-**Envía tus respuestas aquí:**
+**Producto esperado:** la correspondencia algebraica completa entre coeficientes y medias, la demostración de la equivalencia y la discusión de la interpretación causal.
+:::
 
-```{=html}
-<!-- Reemplazar FORM_ID por el formulario activo antes de publicar el ejercicio.
-<iframe src="https://docs.google.com/forms/d/e/FORM_ID/viewform?embedded=true"
-        width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0"
-        style="border-radius: 8px; margin-top: 1em;">
-  Cargando formulario...
-</iframe>
--->
-```
+::: {.box-ejercicio}
+**Código:** DID-T3
+
+**Tipo:** Tendencias paralelas, pruebas y amenazas
+
+**Enunciado:** Un programa de capacitación selecciona municipios cuyo empleo venía cayendo en los tres años previos. Un colega propone validar el diseño DiD mostrando que el empleo pre-programa tenía niveles similares entre municipios tratados y de control. Evalúe la propuesta: distinga entre balance en niveles y tendencias paralelas; explique qué patrón esperaría encontrar en una prueba tipo `estat ptrends` y en una tipo `estat granger` dada la regla de selección descrita; y explique por qué un rechazo en la prueba de anticipación es observacionalmente equivalente a tendencias no paralelas. Concluya con la amenaza específica que este diseño enfrenta y una estrategia para mitigarla.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Producto esperado:** la distinción balance/tendencias, la predicción razonada para cada prueba, el argumento de equivalencia observacional y la amenaza identificada con su mitigación.
+:::
+
+---
+
+## Puente a la clase práctica {-}
+
+En la siguiente clase implementamos todo lo anterior en Stata con `base3.dta`: la tabla 2×2, el estimador manual, el comando `diff` y la regresión con interacción. También presentamos la equivalencia teórica en primeras diferencias para un panel genuino y, con la base `hospdd`, el estimador con múltiples periodos y las pruebas formales `estat ptrends` y `estat granger`. Continúa en el Capítulo \@ref(did-stata).

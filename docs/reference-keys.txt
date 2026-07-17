@@ -4,6 +4,7 @@ tab:tabla-duplicacion-aleatorizacion
 tab:tabla-monte-carlo
 tab:tabla-output-s-p1
 fig:power-two-distributions
+fig:did-ejemplo-aula
 introducción-a-la-inferencia-causal
 stata-para-principiantes
 parametros-causales-teoria
@@ -42,10 +43,10 @@ dos-distribuciones-y-poder
 valores-críticos-mde-y-tamaño-de-muestra
 taller-de-desempleo-juvenil
 parámetros-que-cambian-el-diseño
-resultado-continuo-sin-controles-7.1
-resultado-continuo-con-controles-7.2
-resultado-binario-sin-controles-7.3
-resultado-binario-con-controles-7.4
+resultado-continuo-sin-controles
+resultado-continuo-con-controles
+resultado-binario-sin-controles
+resultado-binario-con-controles
 comparación-de-tasas
 diseño-por-clústeres
 amenazas-limitaciones-y-errores-comunes-1
@@ -55,6 +56,7 @@ puente-a-la-clase-práctica-1
 referencias-2
 poder-estadistico-stata
 did-teoria
+did-stata
 bad-controls-teoria
 bad-controls-stata
 datos-de-panel-did-y-twfe-en-stata

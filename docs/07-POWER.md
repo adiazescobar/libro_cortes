@@ -1,5 +1,5 @@
 
-# Poder Estadístico en Stata {#poder-estadistico-stata}
+# Poder estadístico — Clase empírica {#poder-estadistico-stata}
 
 ## Materiales para la clase {-}
 

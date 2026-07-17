@@ -1,4 +1,4 @@
-# Malos Controles: Código y Simulaciones {#bad-controls-stata}
+# Malos controles — Clase empírica {#bad-controls-stata}
 
 ::: {.boxinfo}
 **Metas de aprendizaje**
