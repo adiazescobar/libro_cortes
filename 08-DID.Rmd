@@ -14,6 +14,30 @@
 
 ---
 
+## Experimentos naturales {-}
+
+Diferencias en diferencias nace de una idea más general: aprovechar **experimentos naturales**, situaciones en las que un evento fortuito divide a la población en tratados y no tratados sin que nadie lo haya diseñado como experimento. Las fuentes típicas de ese evento fortuito son cuatro:
+
+1. Un cambio en la naturaleza (un desastre, una sequía, una epidemia).
+2. Vaguedad en la ley, que hace que una regla se aplique a unos y no a otros.
+3. Cambios no esperados en la implementación de un programa.
+4. Aleatoriedad en las circunstancias individuales.
+
+::: {.boxinfo}
+**Intuición:** en un RCT el investigador lanza la moneda; en un experimento natural la lanza el mundo. La tarea del econometrista es reconocer cuándo el mundo lanzó una moneda creíble — y qué comparación la aprovecha.
+:::
+
+## Contrafactuales falsos {-}
+
+Antes de definir el estimador conviene entender las dos comparaciones ingenuas que DiD corrige:
+
+- **Comparaciones antes y después:** comparan a las mismas personas o comunidades antes y después del programa. Inconveniente: no controlan las tendencias temporales — cualquier cosa que hubiera pasado de todas formas se atribuye al programa.
+- **Comparaciones entre participantes y no participantes (con–sin):** comparan a quienes están en el programa con quienes no están. Inconveniente: **selección** — ¿por qué no participaron los no participantes?
+
+::: {.boxcerebro}
+**Suma de dos errores == correcto.** La estimación de diferencias en diferencias combina los dos enfoques defectuosos — pre vs. post y con vs. sin — y, al hacerlo, puede superar simultáneamente el sesgo de selección (en atributos fijos) y las tendencias temporales del resultado de interés. La idea básica es observar al grupo de tratamiento y a un grupo de comparación **antes y después** del programa.
+:::
+
 ## El problema que DiD resuelve {-}
 
 Suponga que quiere evaluar el efecto de un programa (subsidio, política, capacitación). El problema fundamental es que **no podemos observar al mismo individuo tratado y no tratado al mismo tiempo**.
@@ -35,6 +59,66 @@ Pero eso puede capturar cualquier cambio que hubiera ocurrido en ese periodo, co
 $$\widehat{\delta}_{DD} = \underbrace{(\bar{Y}_{T,1} - \bar{Y}_{T,0})}_{\text{cambio en tratados}} - \underbrace{(\bar{Y}_{C,1} - \bar{Y}_{C,0})}_{\text{cambio en controles}}$$
 
 La lógica es: el cambio en el grupo de control nos dice cuánto habrían cambiado los tratados **en ausencia del programa**. La diferencia entre los dos cambios es el efecto del programa.
+
+---
+
+## El caso de John Snow (1854) {-}
+
+El primer diferencias en diferencias célebre es anterior a la econometría. John Snow creía que el cólera se contagiaba por agua contaminada — no por el "aire viciado" de la teoría dominante — y usó un evento fortuito para probarlo.
+
+**La línea de tiempo:**
+
+- **1849:** la peor epidemia de cólera en Londres se cobra 14.137 vidas. Dos empresas suministraban agua a gran parte de la ciudad — Lambeth Waterworks Co. y Southwark & Vauxhall Water Co. — y ambas la tomaban del Támesis.
+- **1852:** Lambeth Company movió su tubo de suministro río arriba, fuera del alcance de las aguas residuales. Todos sabían que el Támesis estaba sucio en el sur.
+- **1853:** Londres sufre otro brote de cólera. ¿Los clientes de Lambeth Waterworks son menos propensos a enfermarse?
+
+Snow contrató a John Whiting para que visitara las casas de los fallecidos y determinara qué empresa les suministraba agua potable. Con esos datos calculó tasas de mortalidad por empresa:
+
+| Empresa | Casas | Muertes por cólera | Tasa por 100 mil |
+|---|---:|---:|---:|
+| Lambeth (tubo movido río arriba) | 26.107 | 98 | 37 |
+| Southwark & Vauxhall | 40.046 | 1.263 | 315 |
+| Resto de Londres | 256.423 | 1.422 | 56 |
+
+Los clientes de Southwark & Vauxhall — cuyo suministro siguió contaminado — murieron a una tasa casi diez veces mayor que los de Lambeth, y fueron responsables de la gran mayoría de las muertes del brote de 1854 en Broad Street.
+
+::: {.boxkey}
+**Interpretación:** el cambio del tubo de Lambeth es el evento fortuito; los clientes de Southwark & Vauxhall son el grupo de comparación. Para que la comparación sea creíble se necesita mostrar evidencia de que, **antes** del cambio del tubo, las condiciones entre los dos grupos de clientes eran similares — exactamente la lógica que hoy llamamos tendencias paralelas.
+:::
+
+## El ejemplo de aula: dos grupos, dos periodos {-}
+
+El siguiente ejemplo numérico — un caso histórico de clase, con valores fijados en las diapositivas — muestra por qué las dos comparaciones ingenuas fallan y cómo la doble diferencia las corrige. Hay un grupo de tratamiento y uno de control, observados en línea base ($t=1$) y seguimiento ($t=2$):
+
+|  | Tratamiento | Control | DID |
+|---|---:|---:|---:|
+| $t=1$ (línea base) | $\bar{Y}_{T,1} = 40$ | $\bar{Y}_{C,1} = 20$ | |
+| $t=2$ (seguimiento) | $\bar{Y}_{T,2} = 80$ | $\bar{Y}_{C,2} = 30$ | |
+| Cambio | 40 | 10 | **30** |
+
+Las tres lecturas posibles:
+
+- **Con–sin** en $t=2$: $80 - 30 = 50$. Sobreestima: mezcla el efecto con la diferencia pre-existente entre grupos.
+- **Antes–después** en tratados: $80 - 40 = 40$. Sobreestima: atribuye al programa la tendencia temporal común.
+- **Diferencias en diferencias:** $(80-40) - (30-20) = 30$. El cambio de los controles estima la tendencia contrafactual de los tratados.
+
+```{r did-ejemplo-aula, echo=FALSE, fig.align="center", fig.width=7, fig.height=4.5, fig.cap="Caso histórico de clase: el contrafactual punteado convierte 50 (con–sin) y 40 (antes–después) en el DiD de 30."}
+t_vals <- c(1, 2)
+trat   <- c(40, 80)
+ctrl   <- c(20, 30)
+contra <- c(40, 40 + (30 - 20))
+plot(t_vals, trat, type = "o", pch = 16, col = "navy", lwd = 2,
+     ylim = c(0, 85), xlim = c(0.9, 2.1), xaxt = "n",
+     xlab = "Tiempo", ylab = "Y")
+axis(1, at = c(1, 2), labels = c("t = 1", "t = 2"))
+lines(t_vals, ctrl, type = "o", pch = 17, col = "maroon", lwd = 2)
+lines(t_vals, contra, type = "o", pch = 1, col = "darkcyan", lty = 3, lwd = 2)
+arrows(2.05, contra[2], 2.05, trat[2], code = 3, length = 0.06)
+text(2.09, mean(c(contra[2], trat[2])), "30", adj = 0)
+legend("topleft", bty = "n",
+       legend = c("Tratados (observado)", "Controles (observado)", "Contrafactual de tratados"),
+       col = c("navy", "maroon", "darkcyan"), lty = c(1, 1, 3), pch = c(16, 17, 1), lwd = 2)
+```
 
 ---
 

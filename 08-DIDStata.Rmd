@@ -55,9 +55,17 @@ limpiar_na <- function(df) {
 }
 ```
 
-## Implementación en Stata {-}
+## El DiD básico en la base de nutrición {-}
 
-### Preparación de los datos {-}
+### Estimando y estructura de los datos {-}
+
+Todo el capítulo estima un mismo **estimando**: el efecto promedio del tratamiento sobre los tratados (ATT) de un programa de nutrición sobre la talla-para-edad de los niños, identificado con la lógica de diferencias en diferencias del Capítulo \@ref(did-teoria). La estructura de datos es la mínima posible para un DiD: **dos grupos** (tratados y controles) observados en **dos periodos** (antes y después), sin identificador individual.
+
+::: {.boxinfo}
+**Decisión de diseño:** antes de escribir cualquier comando, deja explícito el estimando (ATT), la unidad de observación (niño-periodo), el grupo de comparación y el supuesto que sostiene la interpretación causal (tendencias paralelas). Los comandos solo automatizan esa decisión.
+:::
+
+### Preparación de la base {-}
 
 ```stata
 clear all
@@ -85,12 +93,34 @@ tab t D
 
 ---
 
-### Estadísticas descriptivas y gráfico de tendencias {-}
+### La tabla 2×2 con medias observadas {-}
 
 ```stata
 * Promedios por grupo y periodo (la tabla 2x2)
 table D t, c(mean y)
+```
 
+La tabla siguiente reproduce esas cuatro medias desde los resultados canónicos exportados por `08_DID.do`; es la materia prima de todo lo que sigue.
+
+```{r did-tabla-2x2, echo=FALSE, message=FALSE, warning=FALSE}
+medias <- data.frame(
+  Grupo = c("Controles (D = 0)", "Tratados (D = 1)"),
+  Antes = c(did_val("media_C0"), did_val("media_T0")),
+  Despues = c(did_val("media_C1"), did_val("media_T1"))
+)
+medias$`Primera diferencia` <- medias$Despues - medias$Antes
+names(medias) <- c("", "Antes (t = 0)", "Después (t = 1)", "Primera diferencia")
+kable(medias, digits = 3, align = "lrrr") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
+```
+
+::: {.boxoutput}
+**Salida central:** las cuatro medias de la tabla 2×2 provienen de `did_resultados.csv`, generado por Stata; ninguna cifra se transcribe a mano. La segunda diferencia de esas medias — el DiD — aparecerá idéntica en cada método de estimación de este capítulo.
+:::
+
+### Gráfico de evolución temporal {-}
+
+```stata
 * Etiquetas para los gráficos
 label define t 0 "Antes" 1 "Después", replace
 label value t t
@@ -113,6 +143,10 @@ restore
 Con solo dos periodos, este gráfico **no es una prueba de tendencias paralelas** — es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y después, y permite ver intuitivamente de dónde viene el estimador. Para probar tendencias paralelas necesitaríamos al menos un periodo previo adicional y un identificador individual.
 
 Lo que sí podemos verificar con este gráfico: que los grupos se movieron de forma diferente (si las pendientes difieren, el DiD captura esa diferencia). Pero no podemos saber si esa diferencia se debe al programa o a una tendencia pre-existente que no alcanzamos a ver.
+
+::: {.box-cuidado}
+**Error frecuente:** presentar este gráfico de dos periodos como "prueba de tendencias paralelas". Con un solo periodo pre-tratamiento la prueba es imposible; la evidencia formal requiere varios periodos previos y llega más adelante con `estat ptrends`.
+:::
 
 ---
 
@@ -157,6 +191,10 @@ di "Cambio en tratados:  " delta_tratados
 di "Cambio en controles: " delta_controles
 di "Estimador DiD:       " DD
 ```
+
+::: {.boxkey}
+**Interpretación:** el valor de `DD` reproduce exactamente la segunda diferencia de la tabla 2×2 canónica — compara la fila `did_manual` de `did_resultados.csv`. Ese mismo número reaparecerá con `diff`, con la regresión y con las primeras diferencias: cuatro caminos, un solo estimando.
+:::
 
 ---
 
