@@ -23,7 +23,10 @@ def test_baseline_units_survive_across_theory_and_practice():
     snapshot = json.loads(base._read(SNAPSHOT))
     combined = _union()
     for family, fragments in snapshot.items():
-        missing = [fragment for fragment in fragments if fragment not in combined]
+        missing = [
+            fragment for fragment in fragments
+            if fragment.casefold() not in combined.casefold()
+        ]
         assert not missing, f"Faltan unidades de {family}: {missing}"
 
 

@@ -1,0 +1,317 @@
+# Datos de panel y TWFE — Clase empírica {#panel-twfe-stata}
+
+## Materiales para la clase {-}
+
+::: {.class-materials}
+**Descargue antes de comenzar**
+
+- [Do-file de Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_stata.do)
+- [Script de R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.R)
+- [Script de Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.py)
+- [Resultados de estimadores de panel](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/results/panel_estimators.csv)
+- [Resultados de la equivalencia 2×2](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/results/twfe_2x2.csv)
+- [Resultados de adopción escalonada](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/results/twfe_staggered.csv)
+- [Event study TWFE](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/results/twfe_eventstudy.csv)
+- [Mapa método–parámetro](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/results/method_parameter_map.csv)
+:::
+
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Declarar, describir y visualizar un panel.
+- Comparar pooled OLS, FE, FD y RE.
+- Verificar la equivalencia 2×2.
+- Diagnosticar comparaciones y pesos de TWFE escalonado.
+- Elegir métodos modernos según el parámetro.
+:::
+
+```{r twfe-results-setup, echo=FALSE}
+panel_results <- read.csv("dofile/11_TWFE/results/panel_estimators.csv",
+                          check.names = FALSE)
+eq_results <- read.csv("dofile/11_TWFE/results/twfe_2x2.csv",
+                       check.names = FALSE)
+staggered_results <- read.csv("dofile/11_TWFE/results/twfe_staggered.csv",
+                              check.names = FALSE)
+event_results <- read.csv("dofile/11_TWFE/results/twfe_eventstudy.csv",
+                          check.names = FALSE)
+method_map <- read.csv("dofile/11_TWFE/results/method_parameter_map.csv",
+                       check.names = FALSE)
+```
+
+## Declarar y describir el panel {-}
+
+```stata
+xtset id t
+xtdes
+xtsum Y X
+xtline Y if id<=10, overlay
+```
+
+- `xtset` verifica que cada par unidad–periodo sea único.
+- `xtdes` muestra balance, huecos y longitud del panel.
+- `xtsum` separa variación *overall*, *between* y *within*.
+- `xtline` permite detectar trayectorias, quiebres y valores anómalos.
+
+::: {.boxadvertencia}
+No declare un panel con un identificador ficticio. La misma unidad debe observarse repetidamente; los cortes transversales repetidos requieren otra estructura.
+:::
+
+## Comparar pooled OLS, FE, FD y RE {-}
+
+El DGP canónico genera \(X_{it}\) correlacionado con \(\alpha_i\), con \(\beta=3\).
+
+```stata
+regress Y X i.t, vce(cluster id)
+xtreg Y X i.t, fe vce(cluster id)
+regress D.Y D.X ibn.t, noconstant vce(cluster id)
+xtreg Y X i.t, re vce(cluster id)
+```
+
+```{r twfe-panel-table, echo=FALSE}
+knitr::kable(
+  panel_results,
+  digits = 3,
+  col.names = c("DGP", "Método", "Parámetro", "Coeficiente", "EE", "Verdad"),
+  caption = "Estimadores de panel en el DGP canónico"
+)
+```
+
+Pooled y RE mezclan variación *within* con la heterogeneidad correlacionada. FE y FD eliminan \(\alpha_i\) y se concentran cerca del valor verdadero.
+
+### Transformación within a mano {-}
+
+```stata
+bysort id: egen mean_Y = mean(Y)
+bysort id: egen mean_X = mean(X)
+gen Y_within = Y-mean_Y
+gen X_within = X-mean_X
+regress Y_within X_within i.t, noconstant vce(cluster id)
+```
+
+El ejercicio permite comprobar la **transformación within** sin tratar `xtreg, fe` como una caja negra.
+
+### Hausman como diagnóstico, no selector automático {-}
+
+```stata
+xtreg Y X i.t, fe
+estimates store fe
+xtreg Y X i.t, re
+hausman fe ., sigmamore
+```
+
+El contraste depende de supuestos sobre ambos modelos y no reemplaza el razonamiento sustantivo sobre correlación entre \(X_{it}\) y \(\alpha_i\).
+
+## Verificar la equivalencia en el caso 2×2 {-}
+
+```stata
+regress Y treated t D, vce(cluster id)
+regress D.Y D.D, vce(cluster id)
+reghdfe Y D, absorb(id t) vce(cluster id)
+```
+
+```{r twfe-equivalence-table, echo=FALSE}
+knitr::kable(
+  eq_results,
+  digits = 3,
+  col.names = c("DGP", "Método", "Parámetro", "Coeficiente", "EE", "Verdad"),
+  caption = "DiD = FD = TWFE en el diseño 2×2"
+)
+```
+
+Los cuatro coeficientes son idénticos salvo redondeo. Sus errores estándar pueden variar por la forma de estimación; la interpretación causal exige los supuestos discutidos en la teoría.
+
+::: {.boxcerebro}
+La equivalencia numérica comprueba el álgebra del diseño, no tendencias paralelas.
+:::
+
+## Simulación grande con adopción escalonada {-}
+
+El DGP tiene 900 unidades, 12 periodos, una cohorte que adopta en \(t=5\), otra en \(t=8\) y una nunca tratada. Los efectos crecen con la exposición y difieren entre cohortes.
+
+```stata
+gen cohort = cond(id<=300,5,cond(id<=600,8,0))
+gen D = cohort>0 & t>=cohort
+gen event_time = t-cohort if cohort>0
+reghdfe Y D, absorb(id t) vce(cluster id)
+```
+
+```{r twfe-staggered-table, echo=FALSE}
+knitr::kable(
+  staggered_results,
+  digits = 3,
+  col.names = c("DGP", "Método", "Parámetro", "Muestra", "Coeficiente", "EE"),
+  caption = "ATT verdadero y coeficiente TWFE escalonado"
+)
+```
+
+TWFE no recupera el promedio simple de las celdas tratadas porque residualiza el tratamiento y mezcla comparaciones con distinta exposición.
+
+## Goodman-Bacon: comparaciones 2×2 {-}
+
+```stata
+bacondecomp Y D, ddetail
+```
+
+Lea la salida en tres familias:
+
+- tratada frente a nunca tratada;
+- temprana frente a tardía antes de su adopción;
+- tardía frente a temprana ya tratada.
+
+::: {.boxadvertencia}
+`bacondecomp` muestra comparaciones y pesos en la descomposición Bacon. No debe describirse como si reportara directamente todos los pesos sobre \(ATT(g,t)\).
+:::
+
+## Pesos causales con twowayfeweights {-}
+
+```stata
+twowayfeweights Y id t D, type(feTR) summary_measures
+```
+
+Esta herramienta responde una pregunta complementaria: cómo pondera TWFE efectos grupo-periodo y cuán robusto es su signo a heterogeneidad.
+
+::: {.boxcerebro}
+Use `bacondecomp` para entender de dónde vienen las comparaciones 2×2 y `twowayfeweights` para estudiar pesos implícitos sobre efectos causales.
+:::
+
+## Event study TWFE contaminado {-}
+
+```stata
+reghdfe Y lead4 lead3 lead2 lag0 lag1 lag2 lag3 lag4, ///
+    absorb(id t) vce(cluster id)
+```
+
+```{r twfe-event-table, echo=FALSE}
+knitr::kable(
+  event_results,
+  digits = 3,
+  col.names = c("DGP", "Método", "Parámetro", "Horizonte", "Coeficiente", "EE"),
+  caption = "Event study TWFE tradicional en un DGP sin anticipación"
+)
+```
+
+Los leads negativos aparecen aunque el DGP no tiene anticipación. Son contaminación de efectos heterogéneos de otros periodos, no evidencia de que las unidades hayan respondido antes.
+
+## Estimadores modernos: parámetro antes que comando {-}
+
+```{r twfe-method-map, echo=FALSE}
+knitr::kable(
+  method_map,
+  col.names = c("Método", "Parámetro", "Muestra de comparación", "Horizonte"),
+  caption = "Qué estima cada alternativa heterogeneity-robust"
+)
+```
+
+### Callaway y Sant’Anna {-}
+
+```stata
+csdid Y, ivar(id) time(t) gvar(cohort) notyet
+estat simple
+estat group
+estat event
+```
+
+`csdid` construye \(ATT(g,t)\) y luego permite agregaciones transparentes.
+
+### Sun y Abraham {-}
+
+```stata
+eventstudyinteract Y lead4 lead3 lead2 lag0-lag4, ///
+    absorb(id t) cohort(cohort) control_cohort(never_treat) ///
+    vce(cluster id)
+```
+
+`eventstudyinteract` produce promedios *interaction-weighted* por tiempo relativo.
+
+### Imputación de Borusyak, Jaravel y Spiess {-}
+
+```stata
+did_imputation Y id t cohort, horizons(0/4) pretrend(4)
+```
+
+El método aprende el resultado no tratado con observaciones no tratadas y construye efectos de evento por imputación.
+
+### Diseños generales y tratamientos no absorbentes {-}
+
+```stata
+did_multiplegt_dyn Y id t D, effects(4) placebo(4) cluster(id)
+```
+
+La instalación correcta es `ssc install did_multiplegt_dyn, replace`. Sus efectos dinámicos pueden representar cambios actuales frente al *status quo* y diseños más generales.
+
+### Estimación en dos etapas {-}
+
+```stata
+did2s Y, first_stage(i.id i.t) second_stage(lag0-lag4) ///
+    treatment(D) cluster(id)
+```
+
+En `did2s`, el parámetro depende de las variables de la segunda etapa. Para `event_plot`, guarde cada matriz con el mismo nombre que luego consume el gráfico:
+
+```stata
+matrix did2s_b = e(b)
+matrix did2s_v = e(V)
+event_plot did2s_b#did2s_v
+```
+
+No combine en una figura métodos con poblaciones, agregaciones u horizontes incompatibles.
+
+## Checklist aplicado {-}
+
+Antes de correr un comando, documente:
+
+| Decisión | Pregunta |
+|---|---|
+| Tratamiento | ¿Binario, continuo, multivaluado, absorbente o reversible? |
+| Controles | ¿Nunca tratados, no-aún tratados, *stayers* o *quasi-stayers*? |
+| Parámetro | ¿ATT global, \(ATT(g,t)\), evento, acumulado o *status quo*? |
+| Dinámica | ¿Anticipación o efectos rezagados? |
+| Inferencia | ¿Nivel de asignación, clustering y número de clústeres? |
+| Covariables | ¿Pretratamiento o afectadas por el programa? |
+| Comparación | ¿Misma población y horizonte entre métodos? |
+
+## Preguntas tipo examen {-}
+
+::: {.boxejercicio}
+**Código:** TWFE-S1
+**Tipo:** Panel y estimación
+**Fuente:** Elaboración propia
+**Enunciado:** Declare el panel, descomponga la variación de \(X\) y estime pooled OLS, FE, FD y RE. Explique las diferencias usando la correlación entre \(X_{it}\) y \(\alpha_i\).
+**Puntaje sugerido:** 5 puntos
+**Comandos permitidos:** `xtset`, `xtsum`, `regress`, `xtreg`
+**Producto esperado:** Código, tabla y explicación de máximo 180 palabras.
+:::
+
+::: {.boxejercicio}
+**Código:** TWFE-S2
+**Tipo:** Equivalencia 2×2
+**Fuente:** Elaboración propia
+**Enunciado:** Estime DiD manual, regresión DiD, primeras diferencias y TWFE en un panel de dos periodos. Verifique la igualdad y separe esa comprobación de la discusión de identificación.
+**Puntaje sugerido:** 5 puntos
+**Comandos permitidos:** `summarize`, `regress`, `reghdfe`
+**Producto esperado:** Cuatro coeficientes y checklist causal.
+:::
+
+::: {.boxejercicio}
+**Código:** TWFE-S3
+**Tipo:** Diagnóstico escalonado
+**Fuente:** Goodman-Bacon; de Chaisemartin y D’Haultfœuille
+**Enunciado:** En el DGP escalonado, ejecute los dos diagnósticos de pesos. Explique qué pregunta responde cada uno y señale las comparaciones potencialmente contaminadas.
+**Puntaje sugerido:** 5 puntos
+**Comandos permitidos:** `reghdfe`, `bacondecomp`, `twowayfeweights`
+**Producto esperado:** Dos salidas y diagnóstico comparativo.
+:::
+
+::: {.boxejercicio}
+**Código:** TWFE-S4
+**Tipo:** Selección de estimador
+**Fuente:** Elaboración propia
+**Enunciado:** Para un tratamiento reversible con efectos rezagados, defina el parámetro y seleccione un estimador. Justifique controles, horizonte, clustering y por qué no usaría automáticamente un event study TWFE.
+**Puntaje sugerido:** 5 puntos
+**Comandos permitidos:** `did_multiplegt_dyn`, `csdid`, `eventstudyinteract`, `did_imputation`, `did2s`
+**Producto esperado:** Especificación ejecutable y memo de máximo 250 palabras.
+:::
+
+## Replicación en R y Python {-}
+
+`11_twfe.R` y `11_twfe.py` reproducen los DGP y la lógica de FE/TWFE. Para una comparación entre lenguajes, mantenga idénticos el estimando, las cohortes, el horizonte y la población de control; no compare únicamente nombres de comandos.
