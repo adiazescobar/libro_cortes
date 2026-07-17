@@ -242,11 +242,6 @@ El supuesto de tendencias paralelas **no es verificable** en el periodo de trata
 
 ### Prueba de tendencias paralelas: `estat ptrends` {-}
 
-```stata
-xtdidregress (y) (treatment), group(id) time(year)
-estat ptrends
-```
-
 **H₀:** Las tendencias lineales son paralelas en el periodo pre-tratamiento.
 
 Lo que hace internamente: estima una regresión sobre los periodos pre-tratamiento con una interacción `tratado × tiempo` (como variable continua) y prueba si ese coeficiente es cero. Si se rechaza H₀, hay evidencia de que los grupos ya tenían pendientes distintas antes del programa.
@@ -256,10 +251,6 @@ Esta es la prueba de tendencias paralelas propiamente dicha.
 ---
 
 ### Prueba de anticipación: `estat granger` {-}
-
-```stata
-estat granger
-```
 
 **H₀:** No hubo efectos del tratamiento en anticipación (antes de que empezara).
 
@@ -280,12 +271,7 @@ Son preguntas distintas. Un rechazo en `ptrends` no implica anticipación, y un 
 
 ### Visualización: `estat trendplots` y `estat grangerplot` {-}
 
-```stata
-estat trendplots   * medias observadas + tendencias lineales ajustadas por grupo
-estat grangerplot  * event study: efectos específicos por periodo (pre y post)
-```
-
-`trendplots` es el gráfico diagnóstico de tendencias. `grangerplot` es el event study completo con los efectos por periodo y sus intervalos de confianza.
+`trendplots` es el gráfico diagnóstico de tendencias. `grangerplot` es el event study completo con los efectos por periodo y sus intervalos de confianza. Ambos se ejecutan en la clase práctica sobre la base `hospdd`, junto con las dos pruebas formales.
 
 ---
 

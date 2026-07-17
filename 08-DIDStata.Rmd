@@ -198,7 +198,9 @@ di "Estimador DiD:       " DD
 
 ---
 
-### Usando el comando `diff` {-}
+## Estimación e inferencia {-}
+
+### Estimación con el comando diff {-}
 
 ```stata
 ssc install diff, replace
@@ -206,6 +208,12 @@ diff y, t(D) p(t)
 ```
 
 El comando `diff` reporta la tabla 2×2 completa (medias por grupo y periodo, primeras diferencias, y el estimador DiD) con su error estándar y el p-valor del test $H_0: \delta = 0$.
+
+::: {.box-stata}
+**Comando clave:** `diff y, t(D) p(t)` exige solo dos insumos — el indicador de grupo en `t()` y el de periodo en `p()` — y devuelve la tabla 2×2, el DiD y su inferencia en una sola pasada. Es la forma más rápida de auditar el cálculo manual.
+:::
+
+### Balance en el periodo base {-}
 
 **La opción `test` de `diff`: prueba de balance, no de tendencias paralelas**
 
@@ -222,7 +230,7 @@ La opción `test` corre **t-tests de balance en el periodo base** ($t=0$), compa
 
 ---
 
-### Implementación con regresión {-}
+### Estimación por regresión {-}
 
 ```stata
 * Regresión DiD: el coeficiente de D#t es el estimador
@@ -241,7 +249,7 @@ El coeficiente de `D#t` (la interacción) es el estimador DiD. En esta base esti
 
 ---
 
-### Extensión con panel y primeras diferencias {-}
+### Primeras diferencias en panel {-}
 
 Con datos de panel, el estimador DiD es equivalente a una regresión en **primeras diferencias**:
 
@@ -264,6 +272,100 @@ reg D.y D
 ```
 
 Los dos métodos (regresión con interacción y primeras diferencias) entregan el mismo estimador cuando hay exactamente dos periodos y el panel es balanceado.
+
+La tabla siguiente reúne los cuatro caminos al mismo estimando, con los valores canónicos exportados por Stata:
+
+```{r did-tabla-metodos, echo=FALSE, message=FALSE, warning=FALSE}
+metodos <- did_res[did_res$escenario %in%
+                     c("did_manual", "did_diff", "did_regresion", "did_primeras_diferencias"),
+                   c("escenario", "comando", "valor_stata", "ee", "p_valor", "N")]
+metodos$escenario <- c("Segunda diferencia manual", "Comando diff",
+                       "Regresión con interacción", "Primeras diferencias")[
+  match(metodos$escenario,
+        c("did_manual", "did_diff", "did_regresion", "did_primeras_diferencias"))]
+names(metodos) <- c("Método", "Comando", "DiD", "EE", "p-valor", "N")
+kable(limpiar_na(format(metodos, digits = 4)), align = "llrrrr") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
+```
+
+::: {.boxsuccess}
+**Resultado clave:** los cuatro métodos entregan el mismo DiD hasta el error de redondeo — la fila de verificación cruzada de `did_verificacion.csv` lo confirma contra una implementación independiente en Python. Las diferencias están en la inferencia: cada método usa un error estándar distinto, y esa elección debe justificarse.
+:::
+
+---
+
+## Múltiples periodos y pruebas formales {-}
+
+### DiD con múltiples periodos {-}
+
+Con más de dos periodos y adopción escalonada del tratamiento, Stata ofrece `xtdidregress`. La sintaxis general es:
+
+```stata
+xtdidregress (y) (treatment), group(id) time(year)
+estat ptrends
+```
+
+La base `hospdd` (incluida en Stata) ilustra el caso: hospitales que adoptan en distintos meses un nuevo procedimiento de admisión; el resultado es la satisfacción de los pacientes.
+
+```stata
+webuse hospdd, clear
+xtset hospital
+xtdidregress (satis) (procedure), group(hospital) time(month)
+```
+
+```{r did-tabla-atet, echo=FALSE, message=FALSE, warning=FALSE}
+atet <- did_res[did_res$escenario == "hospdd_atet",
+                c("comando", "valor_stata", "ee", "p_valor", "N")]
+names(atet) <- c("Comando", "ATET", "EE (clúster)", "p-valor", "N")
+kable(limpiar_na(format(atet, digits = 4)), align = "lrrrr", row.names = FALSE) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
+```
+
+::: {.boxoutput}
+**Salida central:** el ATET canónico de `hospdd` proviene de `did_resultados.csv` y coincide, en la verificación cruzada, con una regresión de efectos fijos por hospital y mes estimada en Python. El error estándar se agrupa por hospital — la unidad de asignación.
+:::
+
+### Prueba de tendencias paralelas {-}
+
+Con varios periodos pre-tratamiento, la prueba formal del Capítulo \@ref(did-teoria) es ejecutable:
+
+```stata
+estat ptrends
+```
+
+```{r did-tabla-ptrends, echo=FALSE, message=FALSE, warning=FALSE}
+pruebas <- did_res[did_res$escenario %in% c("ptrends", "granger"),
+                   c("comando", "estadistico", "p_valor", "N")]
+pruebas$H0 <- c("Tendencias lineales paralelas pre-tratamiento",
+                "Sin efectos de anticipación")
+pruebas <- pruebas[, c("comando", "H0", "estadistico", "p_valor", "N")]
+names(pruebas) <- c("Comando", "H0", "F", "p-valor", "N")
+kable(limpiar_na(format(pruebas, digits = 3)), align = "llrrr", row.names = FALSE) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
+```
+
+::: {.boxkey}
+**Interpretación:** en `hospdd` no se rechaza la hipótesis nula de tendencias paralelas (p ≈ 0,46): la evidencia pre-tratamiento es compatible con el supuesto. Recuerda que no rechazar no lo *demuestra* — solo indica que los datos previos no lo contradicen.
+:::
+
+### Prueba de anticipación {-}
+
+```stata
+estat granger
+```
+
+En la misma tabla canónica, `estat granger` tampoco rechaza su hipótesis nula (p ≈ 0,72): no hay evidencia de que los hospitales cambiaran la satisfacción **antes** de adoptar el procedimiento. Los diagnósticos visuales completan el análisis:
+
+```stata
+estat trendplots   * medias observadas + tendencias lineales ajustadas por grupo
+estat grangerplot  * event study: efectos específicos por periodo (pre y post)
+```
+
+`trendplots` es el gráfico diagnóstico de tendencias. `grangerplot` es el event study completo con los efectos por periodo y sus intervalos de confianza.
+
+::: {.box-cuidado}
+**Error frecuente:** leer un rechazo en `estat granger` como prueba automática de anticipación. Como se discutió en la teoría, un rechazo es observacionalmente equivalente a tendencias no paralelas; separar las dos historias exige un argumento sobre el comportamiento de los agentes.
+:::
 
 ---
 
