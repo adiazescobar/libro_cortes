@@ -23,13 +23,25 @@ DONE_WITH_CONCERNS
 
 git diff --check
 sin salida (éxito)
+
+Verificación focal posterior:
+
+```text
+/private/tmp/libro_cortes_rct_venv/bin/python -m pytest -q tests/test_chapter_title_contract.py tests/test_power_pedagogy_contract.py tests/test_did_pedagogy_contract.py
+85 passed in 3.24s
+
+rg focal de H2–H4 con sufijos jerárquicos
+sin coincidencias
+```
 ```
 
 ## Self-review
 
 - Diff de archivos de capítulo: 7 inserciones y 7 eliminaciones en 7 archivos.
 - Cada cambio es una sustitución de H1 conforme al mapeo exacto.
-- Los sufijos pedagógicos `7.1`–`7.4` en POWER se conservaron: no son prefijos de numeración manual y el contrato pedagógico los exige.
+- Una corrección focal posterior retiró los sufijos `7.1`–`7.4` de cuatro H3 de POWER para evitar la doble numeración de Bookdown.
+- Los identificadores `Caso 7.1`–`Caso 7.4` se preservaron en texto no-heading para mantener la correspondencia pedagógica.
+- El contrato ahora rechaza numeración manual al inicio o al final de H2–H4, sin rechazar años o cantidades sustantivas.
 - No se incorporaron cambios preexistentes o artefactos ajenos.
 
 ## Preocupaciones

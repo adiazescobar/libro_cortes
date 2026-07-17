@@ -59,6 +59,19 @@ def _assert_title_and_anchor(text, expected):
     assert _first_h1(text) == expected
 
 
+def _assert_no_manual_heading_numbering(text):
+    headings = [
+        heading
+        for level in (2, 3, 4)
+        for heading in base._headings(text, level)
+    ]
+    prefix = re.compile(
+        r"^(?:(?:PASO|Paso|Etapa)\b(?:\s+\d+)?|\d+(?:\.\d+)*\s*[.):_-]?\s+)"
+    )
+    suffix = re.compile(r"\s+\d+\.\d+(?:\.\d+)*$")
+    assert not any(prefix.search(heading) or suffix.search(heading) for heading in headings)
+
+
 @pytest.mark.parametrize(("filename", "expected"), EXPECTED.items())
 def test_chapter_has_exact_title_and_stable_anchor(filename, expected):
     _assert_title_and_anchor(base._read(ROOT / filename), expected)
@@ -73,12 +86,34 @@ def test_chapter_h2_to_h4_delegate_numbering_to_bookdown(filename):
         for heading in base._headings(text, level)
     ]
     assert headings, f"{filename} debe contener encabezados H2–H4"
-    base._assert_no_manual_numbering(text)
+    _assert_no_manual_heading_numbering(text)
 
 
 def test_manual_numbering_contract_rejects_a_numbered_subtitle():
     with pytest.raises(AssertionError):
-        base._assert_no_manual_numbering("## 1. Subtítulo")
+        _assert_no_manual_heading_numbering("## 1. Subtítulo")
+
+
+def test_manual_numbering_contract_rejects_a_numbered_subtitle_without_dot():
+    with pytest.raises(AssertionError):
+        _assert_no_manual_heading_numbering("## 1 Subtítulo")
+
+
+def test_manual_numbering_contract_rejects_a_trailing_chapter_number():
+    with pytest.raises(AssertionError):
+        _assert_no_manual_heading_numbering("## Subtítulo 7.1")
+
+
+@pytest.mark.parametrize(
+    "heading",
+    [
+        "## El caso de John Snow (1854)",
+        "### Bertrand y Mullainathan (2004)",
+        "#### Muestra de 1.000 observaciones",
+    ],
+)
+def test_manual_numbering_contract_allows_substantive_numbers(heading):
+    _assert_no_manual_heading_numbering(heading)
 
 
 @pytest.mark.parametrize("fence", ["```", "~~~"])
