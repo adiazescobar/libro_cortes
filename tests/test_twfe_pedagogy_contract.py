@@ -70,6 +70,44 @@ def test_theory_distinguishes_bacon_comparisons_from_negative_causal_weights():
     assert not any(fragment in text for fragment in forbidden)
 
 
+def test_theory_develops_the_main_twfe_problem_step_by_step():
+    text = base._read(THEORY)
+    headings = base._headings(text, 2) + base._headings(text, 3)
+    for heading in [
+        "El problema principal de TWFE",
+        "Una cohorte ya tratada como control",
+        "Ejemplo mínimo: dos unidades y cuatro periodos",
+        "Residualizar el tratamiento paso a paso",
+        "Pesos implícitos sobre las celdas tratadas",
+        "TWFE frente al ATT overall",
+        "Cuándo importan los pesos negativos",
+        "Un caso con signo incorrecto",
+    ]:
+        assert heading in headings
+    for marker in [
+        r"\widetilde D_{it}=D_{it}-\bar D_i-\bar D_t+\bar D",
+        r"\sum_{i,t}\widetilde D_{it}^2",
+        r"\pi_{it}",
+        r"TWFE=3",
+        r"ATT_{\text{overall}}=2.5",
+        "todos los efectos son positivos",
+        "coeficiente TWFE es negativo",
+    ]:
+        assert marker in text
+
+
+def test_theory_explains_contaminated_comparison_algebraically():
+    text = base._read(THEORY)
+    for marker in [
+        r"\Delta Y_{\text{tardía}}",
+        r"\Delta Y_{\text{temprana}}",
+        "cambio del efecto de la cohorte temprana",
+        "control válido antes de su adopción",
+        "control contaminado después de su adopción",
+    ]:
+        assert marker in text
+
+
 def test_theory_separates_algebra_from_causal_identification():
     text = base._read(THEORY)
     for marker in [

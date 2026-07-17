@@ -108,38 +108,242 @@ Cuando los efectos varían entre cohortes o con el tiempo desde adopción, un ú
 El problema no es “muchos periodos” por sí mismo. Surge de combinar variación en el momento de adopción con heterogeneidad de efectos.
 :::
 
-## Las tres familias de comparaciones 2×2 {-}
+## El problema principal de TWFE {-}
 
-Goodman-Bacon (2021) muestra que TWFE puede escribirse como un promedio ponderado de **comparaciones 2×2**:
+Suponga que algunas unidades se tratan temprano, otras tarde y otras nunca. La regresión
 
-1. cohorte tratada frente a nunca tratada;
-2. cohorte temprana frente a cohorte tardía, antes de que la tardía se trate;
-3. cohorte tardía frente a cohorte temprana ya tratada.
+\[
+Y_{it}=\alpha_i+\lambda_t+\beta^{TWFE}D_{it}+\varepsilon_{it}
+\]
 
-La tercera familia usa como control una unidad cuyo resultado ya incorpora tratamiento. Si el efecto de la cohorte temprana evoluciona, la comparación resta parte de ese efecto y puede quedar contaminada.
+usa toda la variación residual de \(D_{it}\) después de retirar efectos de unidad y tiempo. Esa variación no compara únicamente tratadas contra nunca tratadas. También enfrenta cohortes tratadas entre sí.
 
-`bacondecomp` es útil para ver cuáles comparaciones aparecen y cuánto pesan en esa descomposición.
+El problema aparece cuando dos condiciones coinciden:
 
-## Pesos sobre efectos grupo-periodo {-}
+1. el momento de adopción varía;
+2. el efecto cambia entre cohortes o con la duración del tratamiento.
 
-Hay una segunda pregunta: ¿qué pesos asigna TWFE a los efectos causales de las celdas tratadas? Residualice el tratamiento:
+En ese caso, \(\beta^{TWFE}\) puede no representar ni el efecto de una cohorte particular ni el promedio de los efectos entre todas las observaciones tratadas.
+
+::: {.boxcerebro}
+**El mecanismo central:** TWFE puede usar una cohorte que ya recibió el tratamiento como contrafactual de otra cohorte que apenas empieza. Si el efecto de la primera continúa cambiando, su evolución no representa el resultado sin tratamiento de la segunda.
+:::
+
+### Una cohorte ya tratada como control {-}
+
+Considere una cohorte temprana \(E\), tratada desde \(g_E\), y una tardía \(L\), tratada desde \(g_L>g_E\).
+
+**Antes de \(g_L\)**, la cohorte tardía aún no está tratada. Puede servir como **control válido antes de su adopción** para estudiar el efecto inicial en la cohorte temprana:
+
+\[
+\Delta Y_{\text{temprana}}-\Delta Y_{\text{tardía}}.
+\]
+
+**Después de \(g_L\)**, ambas están tratadas. Para estudiar a la tardía, TWFE puede invertir la comparación:
+
+\[
+\Delta Y_{\text{tardía}}-\Delta Y_{\text{temprana}}.
+\]
+
+Pero ahora la temprana es un **control contaminado después de su adopción**. Escriba
+
+\[
+\Delta Y_{\text{temprana}}
+=\Delta Y_{\text{temprana}}(D=0)
++\underbrace{\Delta ATT_E}_{\text{cambio del efecto de la cohorte temprana}}.
+\]
+
+Entonces el DiD invertido contiene
+
+\[
+\underbrace{ATT_L}_{\text{efecto buscado}}
+-\underbrace{\Delta ATT_E}_{\text{efecto ya presente en el control}}.
+\]
+
+Si el efecto temprano crece, \(\Delta ATT_E>0\) y la comparación resta parte de un efecto ajeno. Si decrece, puede inflar el efecto tardío. Solo con efectos constantes en el tiempo la contaminación desaparece en esta comparación particular.
+
+### Las tres familias de comparaciones 2×2 {-}
+
+Goodman-Bacon (2021) muestra que TWFE puede escribirse como
+
+\[
+\widehat\beta^{TWFE}=\sum_k\omega_k\widehat\beta_k^{2\times2},
+\qquad \omega_k>0,\qquad \sum_k\omega_k=1.
+\]
+
+Las **comparaciones 2×2** son:
+
+| Comparación | Control utilizado | Lectura |
+|---|---|---|
+| Tratada vs. nunca tratada | Nunca tratada | Comparación limpia bajo tendencias paralelas |
+| Temprana vs. tardía | Tardía todavía no tratada | Limpia durante la ventana previa a \(g_L\) |
+| Tardía vs. temprana | Temprana ya tratada | Puede estar contaminada por la dinámica de \(ATT_E\) |
+
+Los pesos de Bacon son positivos. El problema de esta descomposición no son pesos negativos, sino que algunos DiD que reciben peso pueden utilizar controles ya tratados.
+
+`bacondecomp` permite observar cuánto aporta cada familia al coeficiente final.
+
+## Del estimando deseado al coeficiente TWFE {-}
+
+Un objetivo frecuente es el promedio de los efectos sobre todas las celdas tratadas:
+
+\[
+ATT_{\text{overall}}
+=
+\frac{\sum_{g,t:t\ge g}N_{g,t}ATT(g,t)}
+{\sum_{g,t:t\ge g}N_{g,t}}.
+\]
+
+Este promedio usa pesos proporcionales al número de observaciones tratadas \(N_{g,t}\), todos no negativos. TWFE usa otra ponderación, determinada por la residualización de \(D_{it}\).
+
+### Ejemplo mínimo: dos unidades y cuatro periodos {-}
+
+Considere el siguiente patrón:
+
+| Unidad | \(t=1\) | \(t=2\) | \(t=3\) | \(t=4\) |
+|---|---:|---:|---:|---:|
+| Temprana \(E\) | 0 | 1 | 1 | 1 |
+| Tardía \(L\) | 0 | 0 | 0 | 1 |
+
+La unidad \(E\) tiene efectos \(2,2,2\) en sus tres celdas tratadas. La unidad \(L\) tiene efecto \(4\) al tratarse. Todos los efectos son positivos.
+
+El ATT overall es
+
+\[
+ATT_{\text{overall}}=\frac{2+2+2+4}{4}=2.5.
+\]
+
+### Residualizar el tratamiento paso a paso {-}
+
+TWFE trabaja con
 
 \[
 \widetilde D_{it}=D_{it}-\bar D_i-\bar D_t+\bar D.
 \]
 
-El coeficiente puede representarse, bajo condiciones apropiadas, como
+Aquí,
 
 \[
-\widehat\beta_{TWFE}\approx
-\sum_{g,t:\,t\ge g}w_{g,t}ATT(g,t).
+\bar D_E=\frac34,\qquad
+\bar D_L=\frac14,\qquad
+(\bar D_1,\bar D_2,\bar D_3,\bar D_4)=
+\left(0,\frac12,\frac12,1\right),\qquad
+\bar D=\frac12.
 \]
 
-Los \(w_{g,t}\) dependen de \(\widetilde D_{it}\) y algunos pueden ser negativos. de Chaisemartin y D’Haultfœuille (2020) muestran que esos **pesos negativos** sobre **efectos grupo-periodo** pueden producir un coeficiente fuera del rango de los efectos, incluso con efectos individuales del mismo signo.
+Por tanto:
+
+| Unidad | \(t=1\) | \(t=2\) | \(t=3\) | \(t=4\) |
+|---|---:|---:|---:|---:|
+| \(E\) | \(-1/4\) | \(+1/4\) | \(+1/4\) | **\(-1/4\)** |
+| \(L\) | \(+1/4\) | \(-1/4\) | \(-1/4\) | \(+1/4\) |
+
+La celda \((E,4)\) está tratada, pero su tratamiento residualizado es negativo. En \(t=4\), todas las unidades están tratadas; el efecto fijo temporal absorbe la exposición común y la cohorte temprana aporta variación residual con signo contrario.
+
+### Pesos implícitos sobre las celdas tratadas {-}
+
+Después de aplicar Frisch–Waugh–Lovell,
+
+\[
+\widehat\beta^{TWFE}
+=
+\frac{\sum_{i,t}\widetilde D_{it}\widetilde Y_{it}}
+{\sum_{i,t}\widetilde D_{it}^2}.
+\]
+
+Como
+
+\[
+\sum_{i,t}\widetilde D_{it}^2
+=8\left(\frac14\right)^2=\frac12,
+\]
+
+el peso causal de una celda tratada es proporcional a
+
+\[
+\pi_{it}=
+\frac{\widetilde D_{it}}
+{\sum_{j,s}\widetilde D_{js}^2}.
+\]
+
+| Celda tratada | \(ATT(g,t)\) | \(\widetilde D_{it}\) | \(\pi_{it}\) | Aporte |
+|---|---:|---:|---:|---:|
+| \((E,2)\) | 2 | \(+1/4\) | \(+1/2\) | 1 |
+| \((E,3)\) | 2 | \(+1/4\) | \(+1/2\) | 1 |
+| \((E,4)\) | 2 | \(-1/4\) | \(-1/2\) | \(-1\) |
+| \((L,4)\) | 4 | \(+1/4\) | \(+1/2\) | 2 |
+
+Los pesos sobre celdas tratadas suman uno, pero no son los pesos \(1/4\) del ATT overall.
+
+### TWFE frente al ATT overall {-}
+
+\[
+TWFE
+=\frac12(2)+\frac12(2)-\frac12(2)+\frac12(4)=3.
+\]
+
+Por tanto,
+
+\[
+\boxed{TWFE=3\neq ATT_{\text{overall}}=2.5}.
+\]
+
+TWFE sobrepondera el efecto alto de la cohorte tardía y asigna peso negativo a una celda de la cohorte temprana. Esta diferencia no es ruido muestral: aparece incluso en el ejemplo determinista.
 
 ::: {.boxadvertencia}
-Goodman-Bacon describe la composición en comparaciones 2×2. de Chaisemartin y D’Haultfœuille estudian los pesos causales sobre celdas grupo-periodo. Son diagnósticos relacionados, pero no son la misma descomposición.
+Este ejemplo explica el problema con una tabla que puede calcularse a mano. No basta con afirmar que “TWFE mezcla comparaciones”: hay que observar qué celda tratada recibe signo negativo después de residualizar \(D\).
 :::
+
+### Cuándo importan los pesos negativos {-}
+
+Los pesos negativos no generan distorsión si todos los efectos son idénticos:
+
+\[
+ATT(g,t)=\tau
+\quad\Longrightarrow\quad
+\sum_{g,t}\pi_{g,t}ATT(g,t)
+=\tau\sum_{g,t}\pi_{g,t}=\tau.
+\]
+
+La dificultad es la combinación de pesos no convexos y heterogeneidad. Cuando \(ATT(g,t)\) cambia entre cohortes o periodos, TWFE puede:
+
+- quedar fuera del rango de los efectos;
+- alejarse considerablemente del ATT overall;
+- asignar más influencia a cohortes pequeñas o ventanas particulares;
+- invertir el signo.
+
+### Un caso con signo incorrecto {-}
+
+Mantenga los mismos pesos y suponga que el efecto tardío de la cohorte temprana crece a \(ATT(E,4)=100\), mientras los demás efectos permanecen positivos:
+
+\[
+ATT(E,2)=2,\quad ATT(E,3)=2,\quad ATT(E,4)=100,\quad ATT(L,4)=4.
+\]
+
+Entonces,
+
+\[
+\beta^{TWFE}
+=\frac12(2)+\frac12(2)-\frac12(100)+\frac12(4)
+=-46.
+\]
+
+El **coeficiente TWFE es negativo** aunque **todos los efectos son positivos**. En cambio,
+
+\[
+ATT_{\text{overall}}=\frac{2+2+100+4}{4}=27.
+\]
+
+Este caso extremo muestra por qué el signo del coeficiente no basta para inferir el signo de los efectos causales subyacentes.
+
+## Dos objetos de pesos que no deben confundirse {-}
+
+| Objeto | Representación | ¿Puede ser negativo? | Referencia |
+|---|---|---:|---|
+| Comparaciones Bacon | \(\sum_k\omega_k\widehat\beta_k^{2\times2}\) | No | Goodman-Bacon |
+| Efectos grupo-periodo | \(\sum_{g,t}\pi_{g,t}ATT(g,t)\) | Sí | de Chaisemartin–D’Haultfœuille |
+
+Goodman-Bacon describe la composición en comparaciones 2×2. de Chaisemartin y D’Haultfœuille (2020) estudian los pesos causales sobre **efectos grupo-periodo**. Son diagnósticos relacionados, pero no la misma descomposición.
 
 `twowayfeweights` complementa a `bacondecomp`: permite inspeccionar pesos implícitos y medidas de robustez vinculadas directamente con la heterogeneidad causal.
 
