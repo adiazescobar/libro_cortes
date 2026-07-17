@@ -252,6 +252,55 @@ def test_did_classroom_example_is_labeled_historical_not_canonical():
     assert example, "El ejemplo de aula debe rotularse como caso histórico de clase"
 
 
+def test_did_repeated_cross_sections_do_not_invent_a_panel():
+    practice = base._read(PRACTICE_PATH)
+    dofile = base._read(ROOT / "dofile/08_DID/08_DID.do")
+    combined = practice + "\n" + dofile
+    lowered = combined.casefold()
+
+    violations = []
+    if "cortes transversales repetidos" not in lowered:
+        violations.append("falta identificar base3.dta como cortes transversales repetidos")
+
+    forbidden = {
+        "id ficticio": r"\bid\s+ficticio\b",
+        "gen id": r"\bgen\s+id\b",
+        "gen id_pd": r"\bgen\s+id_pd\b",
+        "xtset id": r"\bxtset\s+id\b",
+        "reg D.y D": r"\breg\s+D\.y\s+D\b",
+    }
+    found = [
+        label for label, pattern in forbidden.items()
+        if re.search(pattern, combined, re.IGNORECASE)
+    ]
+    if found:
+        violations.append(f"la práctica o el do-file todavía construyen panel ficticio: {found}")
+
+    genuine_panel_result = re.search(
+        r"resultado.{0,240}panel genuino|panel genuino.{0,240}resultado",
+        lowered,
+        re.DOTALL,
+    )
+    if not genuine_panel_result:
+        violations.append(
+            "la equivalencia en primeras diferencias debe rotularse como resultado "
+            "para un panel genuino"
+        )
+
+    base3_first_differences = re.search(
+        r"base3\.dta.{0,1200}(?:primeras diferencias|reg\s+D\.y\s+D)"
+        r"|(?:primeras diferencias|reg\s+D\.y\s+D).{0,1200}base3\.dta",
+        combined,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if base3_first_differences:
+        violations.append(
+            "base3.dta no puede presentarse como base para estimar primeras diferencias"
+        )
+
+    assert not violations, "\n".join(violations)
+
+
 # ------------------------------------------------------------------ privacidad
 
 

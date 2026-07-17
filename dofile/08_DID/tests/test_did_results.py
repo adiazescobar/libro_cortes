@@ -15,9 +15,11 @@ EXPECTED_COLUMNS = {
 
 REQUIRED_SCENARIOS = {
     "media_C0", "media_C1", "media_T0", "media_T1",
-    "did_manual", "did_diff", "did_regresion", "did_primeras_diferencias",
+    "did_manual", "did_diff", "did_regresion",
     "hospdd_atet", "ptrends", "granger",
 }
+
+BASIC_DID_SCENARIOS = {"did_manual", "did_diff", "did_regresion"}
 
 VERIFICATION_COLUMNS = {
     "escenario", "valor_stata", "valor_alternativo", "diferencia_abs",
@@ -63,12 +65,11 @@ def test_manual_did_matches_the_two_by_two_means():
 
 def test_estimators_agree_across_methods():
     rows = _rows()
+    basic_did_rows = {scenario for scenario in rows if scenario.startswith("did_")}
+    assert basic_did_rows == BASIC_DID_SCENARIOS
     manual = _number(rows["did_manual"], "valor_stata")
     assert _number(rows["did_regresion"], "valor_stata") == pytest.approx(manual, abs=1e-6)
     assert _number(rows["did_diff"], "valor_stata") == pytest.approx(manual, abs=1e-4)
-    assert _number(rows["did_primeras_diferencias"], "valor_stata") == pytest.approx(
-        manual, abs=1e-6
-    )
 
 
 def test_inference_columns_are_published_for_estimates_and_tests():
