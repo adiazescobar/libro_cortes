@@ -1,0 +1,8 @@
+case,specification,estimand,estimate,se,truth
+mediator,without_mediator,total effect,2.021918749128596,.028283563,2
+mediator,with_mediator,not the total effect,-.0227896284839552,.027959706,2
+collider,without_collider,total effect,.0194948276666697,.014545328,0
+collider,with_collider,noncausal coefficient,.8357584095545606,.02748315,0
+contaminated_proxy,without_proxy,total effect,2.000099023601859,.018600937,2
+contaminated_proxy,with_post_proxy,noncausal coefficient,1.390597431076722,.015931072,2
+contaminated_proxy,with_true_U,total effect conditional on U,1.984811879389974,.010044003,2

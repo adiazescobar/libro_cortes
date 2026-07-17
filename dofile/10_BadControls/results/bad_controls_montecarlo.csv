@@ -1,0 +1,7 @@
+case,specification,mean_estimate,truth,repetitions
+mediator,without_mediator,2.002367637554805,2,300
+mediator,with_mediator,-.0084414975457912,2,300
+collider,without_collider,.0020813450754213,0,300
+collider,with_collider,.8009757483005524,0,300
+contaminated_proxy,without_proxy,1.996510655085246,2,300
+contaminated_proxy,with_post_proxy,1.406447861591975,2,300
