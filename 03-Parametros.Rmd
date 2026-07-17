@@ -1,4 +1,4 @@
-# Parámetros Causales (Teoría) {#parametros-causales-teoria}
+# Parámetros causales — Clase teórica {#parametros-causales-teoria}
 
 ## Objetivos y lecturas {-}
 

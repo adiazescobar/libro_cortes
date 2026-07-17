@@ -1,5 +1,5 @@
 
-# Diferencias en Diferencias en Stata {#did-stata}
+# Diferencias en diferencias — Clase empírica {#did-stata}
 
 ## Materiales para la clase {-}
 
