@@ -1,5 +1,6 @@
 import json
 import re
+import subprocess
 
 import pytest
 
@@ -255,7 +256,17 @@ def test_did_classroom_example_is_labeled_historical_not_canonical():
 
 
 def test_did_student_material_omits_private_identifiers_without_echoing_them():
-    tokens = ["".join(("cla", "ve_did")), "".join(("cla", "ves_docentes"))]
-    tracked = [THEORY_PATH, PRACTICE_PATH]
-    contents = [path.read_text(encoding="utf-8") for path in tracked if path.is_file()]
-    base._assert_no_private_exposure(tracked, contents, tokens)
+    tokens = ["".join(("cla", "ve_did")), "".join(("cla", "ve_dif"))]
+    tracked = subprocess.run(
+        ["git", "ls-files", "-z"], cwd=ROOT, check=True, capture_output=True
+    ).stdout.decode("utf-8").split("\0")
+    candidates = [BOOKDOWN, *ROOT.glob("*.Rmd")]
+    docs = ROOT / "docs"
+    if docs.exists():
+        candidates.extend(path for path in docs.rglob("*") if path.is_file())
+    contents = {
+        str(path.relative_to(ROOT)): path.read_text(encoding="utf-8", errors="ignore")
+        for path in candidates
+        if path.is_file()
+    }
+    base._assert_no_private_exposure([path for path in tracked if path], contents, tokens)
