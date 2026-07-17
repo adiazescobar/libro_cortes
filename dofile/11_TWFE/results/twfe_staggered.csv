@@ -1,0 +1,3 @@
+dgp,method,parameter,comparison_sample,estimate,se
+staggered,True ATT,average treated-cell effect,all treated cells,2.546153846153846,0
+staggered,TWFE,implicit weighted average,all cohorts and periods,2.090743250339294,.042289767

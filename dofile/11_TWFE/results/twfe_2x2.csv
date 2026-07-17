@@ -1,0 +1,5 @@
+dgp,method,parameter,estimate,se,truth
+2x2,DiD manual,ATT,2.78795820424414,0,3
+2x2,Regression DiD,ATT,2.787958204244142,.14103594,3
+2x2,First differences,ATT,2.78795820424414,.14094765,3
+2x2,TWFE,ATT,2.787958204244133,.14094743,3

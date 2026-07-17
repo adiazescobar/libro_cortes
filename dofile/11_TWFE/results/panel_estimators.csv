@@ -1,0 +1,5 @@
+dgp,method,parameter,estimate,se,truth
+panel,Pooled OLS,beta within/between,3.521148013524209,.034522831,3
+panel,FE,beta within,3.023224619941723,.029834785,3
+panel,FD,beta first difference,3.009883030256467,.035134032,3
+panel,RE,beta quasi-within,3.311513515949988,.029497251,3

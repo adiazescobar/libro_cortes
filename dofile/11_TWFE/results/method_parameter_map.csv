@@ -1,0 +1,6 @@
+method,parameter,comparison_sample,horizon
+csdid,"ATT(g,t) and explicit aggregations",never or not-yet treated,calendar/group/event
+eventstudyinteract,interaction-weighted relative-time average,chosen control cohort,relative time
+did_imputation,event effects by imputation,untreated observations,requested horizons
+did_multiplegt_dyn,dynamic current-vs-status quo effects,switchers and valid controls,dynamic/cumulative
+did2s,parameter defined by second stage,untreated first-stage sample,second-stage variables

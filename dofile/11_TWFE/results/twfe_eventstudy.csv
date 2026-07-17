@@ -1,0 +1,9 @@
+dgp,method,parameter,horizon,estimate,se
+staggered,TWFE event study,relative-time coefficient,-4,-.6628855908815494,.062106542
+staggered,TWFE event study,relative-time coefficient,-3,-.9512277076143381,.064061977
+staggered,TWFE event study,relative-time coefficient,-2,-.9696821149967993,.062263992
+staggered,TWFE event study,relative-time coefficient,0,.0520655191076794,.069621056
+staggered,TWFE event study,relative-time coefficient,1,.3747220820333615,.071830615
+staggered,TWFE event study,relative-time coefficient,2,.7140347137168392,.054771736
+staggered,TWFE event study,relative-time coefficient,3,.4765924948146,.069152929
+staggered,TWFE event study,relative-time coefficient,4,.6783240116887052,.068791598
