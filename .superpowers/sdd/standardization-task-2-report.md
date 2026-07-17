@@ -87,5 +87,11 @@ El contrato se reforzó mediante RED→GREEN. La nueva prueba falló inicialment
 con cuatro mensajes correspondientes a identificación incompleta,
 “independencia” no definida, terminología de panel y requisito falso de
 identificador; después de las correcciones, las dos pruebas específicas pasaron.
-El fixture se actualizó de forma quirúrgica, reemplazando únicamente once hashes
+El fixture se actualizó de forma quirúrgica, reemplazando únicamente trece hashes
 de prosa y dos de código asociados a estas correcciones.
+
+Una revisión final amplió el contrato causal a teoría y práctica. Dos mutaciones
+adicionales rechazan explícitamente (i) que tendencias paralelas por sí solas
+recuperen el ATT y (ii) que $\delta$ sea un efecto causal condicionado solo a
+tendencias paralelas. El RED reprodujo la formulación incompleta; el GREEN se
+obtuvo al condicionar ambas unidades teóricas al conjunto completo de supuestos.

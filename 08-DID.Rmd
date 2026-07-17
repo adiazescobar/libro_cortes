@@ -202,7 +202,9 @@ El supuesto es más plausible cuando:
 
 ## Identificación del ATT bajo tendencias paralelas {-}
 
-Bajo el supuesto de tendencias paralelas, el estimador DiD recupera el ATT:
+Bajo el conjunto de supuestos de identificación —tendencias paralelas,
+consistencia, ausencia de anticipación, composición estable y ausencia de
+interferencia relevante—, el estimador DiD recupera el ATT:
 
 $$
 \widehat{\delta}_{DD} = \underbrace{E[Y_{i,1} \mid D_i=1]}_{\bar{Y}_{T,1}} - \underbrace{E[Y_{i,0} \mid D_i=1]}_{\bar{Y}_{T,0}} - \underbrace{\Big(E[Y_{i,1} \mid D_i=0] - E[Y_{i,0} \mid D_i=0]\Big)}_{\text{tendencia de los controles}}
@@ -238,7 +240,7 @@ Interpretación de cada coeficiente:
 | $\alpha$ | Media de los controles en el periodo base ($\bar{Y}_{C,0}$) |
 | $\beta$ | Diferencia pre-tratamiento entre grupos ($\bar{Y}_{T,0} - \bar{Y}_{C,0}$) |
 | $\gamma$ | Cambio temporal en los controles ($\bar{Y}_{C,1} - \bar{Y}_{C,0}$) |
-| $\delta$ | **Estimador DiD** = efecto causal del programa (bajo tendencias paralelas) |
+| $\delta$ | **Estimador DiD**; es el efecto causal del programa solo bajo el conjunto de supuestos de identificación indicado arriba |
 
 ::: {.boxcerebro}
 **El coeficiente que importa es $\delta$**, el de la interacción $D \times t$.

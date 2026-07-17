@@ -364,14 +364,21 @@ def _did_identification_precision_violations(theory, practice):
     identification_reference = "conjunto de supuestos de identificación"
     causal_att_units = [
         re.sub(r"\s+", " ", unit).casefold()
-        for unit in re.split(r"\n\s*\n", practice)
+        for unit in re.split(r"\n\s*\n", theory + "\n" + practice)
         if (
             (
                 "att" in unit.casefold()
-                and re.search(r"\b(?:causal|identificad[oa])\b", unit.casefold())
+                and re.search(
+                    r"\b(?:causal|identificad[oa]|identifica|recupera)\b",
+                    unit.casefold(),
+                )
             )
             or "efecto causal del programa sobre los niños tratados" in unit.casefold()
             or "si ese cambio se debe al programa" in unit.casefold()
+            or (
+                re.search(r"\bdelta\b|\\delta", unit.casefold())
+                and "efecto causal" in unit.casefold()
+            )
         )
     ]
     for unit in causal_att_units:
@@ -427,6 +434,12 @@ def test_did_precision_contract_rejects_each_reviewed_regression():
     assert _did_identification_precision_violations("", complete) == []
     mutations = [
         "El ATT es causal bajo tendencias paralelas.",
+        "Bajo el supuesto de tendencias paralelas, el estimador DiD recupera el ATT.",
+        (
+            "| Coeficiente | Significado |\n"
+            "| $\\delta$ | Estimador DiD = efecto causal del programa "
+            "(bajo tendencias paralelas) |"
+        ),
         "Sustituyendo resultados potenciales y usando independencia.",
         "* Verificar la estructura del panel",
         (
