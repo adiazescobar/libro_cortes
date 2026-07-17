@@ -252,12 +252,8 @@ def test_did_classroom_example_is_labeled_historical_not_canonical():
     assert example, "El ejemplo de aula debe rotularse como caso histórico de clase"
 
 
-def test_did_repeated_cross_sections_do_not_invent_a_panel():
-    practice = base._read(PRACTICE_PATH)
-    dofile = base._read(ROOT / "dofile/08_DID/08_DID.do")
-    combined = practice + "\n" + dofile
+def _did_panel_violations(combined):
     lowered = combined.casefold()
-
     violations = []
     if "cortes transversales repetidos" not in lowered:
         violations.append("falta identificar base3.dta como cortes transversales repetidos")
@@ -287,18 +283,58 @@ def test_did_repeated_cross_sections_do_not_invent_a_panel():
             "para un panel genuino"
         )
 
-    base3_first_differences = re.search(
-        r"base3\.dta.{0,1200}(?:primeras diferencias|reg\s+D\.y\s+D)"
-        r"|(?:primeras diferencias|reg\s+D\.y\s+D).{0,1200}base3\.dta",
+    positive_base3_first_differences = re.search(
+        r"\b(?:estim(?:amos|ar|aremos)|aplic(?:amos|ar)|calcul(?:amos|ar)|"
+        r"ejecut(?:amos|ar))\s+(?:las\s+)?primeras diferencias\s+"
+        r"(?:con|sobre|usando|en)\s+`?base3\.dta`?",
         combined,
-        re.IGNORECASE | re.DOTALL,
+        re.IGNORECASE,
     )
-    if base3_first_differences:
+    if positive_base3_first_differences:
         violations.append(
             "base3.dta no puede presentarse como base para estimar primeras diferencias"
         )
 
+    return violations
+
+
+def test_did_repeated_cross_sections_do_not_invent_a_panel():
+    practice = base._read(PRACTICE_PATH)
+    dofile = base._read(ROOT / "dofile/08_DID/08_DID.do")
+    violations = _did_panel_violations(practice + "\n" + dofile)
     assert not violations, "\n".join(violations)
+
+
+@pytest.mark.parametrize(
+    "forbidden",
+    ["id ficticio", "gen id", "gen id_pd", "xtset id", "reg D.y D"],
+)
+def test_did_panel_contract_rejects_each_fictitious_panel_form(forbidden):
+    canonical = (
+        "base3.dta contiene cortes transversales repetidos.\n"
+        "La equivalencia en primeras diferencias es un resultado para un panel genuino.\n"
+    )
+    assert _did_panel_violations(canonical) == []
+    assert _did_panel_violations(canonical + forbidden)
+
+
+def test_did_panel_contract_rejects_positive_base3_first_difference_claim():
+    mutated = (
+        "base3.dta contiene cortes transversales repetidos.\n"
+        "La equivalencia es un resultado para un panel genuino.\n"
+        "Estimamos primeras diferencias usando base3.dta.\n"
+    )
+    assert _did_panel_violations(mutated)
+
+
+def test_did_panel_contract_allows_negation_and_genuine_panel_explanation_together():
+    allowed = """
+## Estructura de los datos
+base3.dta contiene cortes transversales repetidos. No se estiman primeras diferencias
+con base3.dta. La equivalencia en primeras diferencias se presenta como resultado para
+un panel genuino.
+"""
+    assert _did_panel_violations(allowed) == []
 
 
 # ------------------------------------------------------------------ privacidad

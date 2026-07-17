@@ -29,18 +29,39 @@ EXPECTED = {
     ),
 }
 
-H1 = re.compile(r"^#\s+(.+?)(?:\s+\{#([^}\s]+)[^}]*\})?\s*$", re.MULTILINE)
+H1 = re.compile(r"^#\s+(.+?)(?:\s+\{#([^}\s]+)[^}]*\})?\s*$")
+FENCE = re.compile(r"^[ \t]{0,3}(`{3,}|~{3,})")
 
 
 def _first_h1(text):
-    match = H1.search(text)
-    assert match, "El capítulo debe tener un H1"
-    return match.group(1).strip(), match.group(2)
+    fence_character = None
+    fence_length = 0
+    for line in text.splitlines():
+        fence = FENCE.match(line)
+        if fence:
+            marker = fence.group(1)
+            if fence_character is None:
+                fence_character = marker[0]
+                fence_length = len(marker)
+                continue
+            if marker[0] == fence_character and len(marker) >= fence_length:
+                fence_character = None
+                fence_length = 0
+                continue
+        if fence_character is None:
+            match = H1.match(line)
+            if match:
+                return match.group(1).strip(), match.group(2)
+    raise AssertionError("El capítulo debe tener un H1 real")
+
+
+def _assert_title_and_anchor(text, expected):
+    assert _first_h1(text) == expected
 
 
 @pytest.mark.parametrize(("filename", "expected"), EXPECTED.items())
 def test_chapter_has_exact_title_and_stable_anchor(filename, expected):
-    assert _first_h1(base._read(ROOT / filename)) == expected
+    _assert_title_and_anchor(base._read(ROOT / filename), expected)
 
 
 @pytest.mark.parametrize("filename", EXPECTED)
@@ -58,3 +79,26 @@ def test_chapter_h2_to_h4_delegate_numbering_to_bookdown(filename):
 def test_manual_numbering_contract_rejects_a_numbered_subtitle():
     with pytest.raises(AssertionError):
         base._assert_no_manual_numbering("## 1. Subtítulo")
+
+
+@pytest.mark.parametrize("fence", ["```", "~~~"])
+def test_first_real_h1_ignores_fenced_examples(fence):
+    text = (
+        f"{fence}markdown\n"
+        "# Título ilustrativo {#no-es-anchor}\n"
+        f"{fence}\n"
+        "# Título real {#anchor-real}\n"
+    )
+    assert _first_h1(text) == ("Título real", "anchor-real")
+
+
+def test_title_contract_rejects_a_title_only_mutation():
+    expected = ("Título correcto", "anchor-estable")
+    with pytest.raises(AssertionError):
+        _assert_title_and_anchor("# Título incorrecto {#anchor-estable}", expected)
+
+
+def test_title_contract_rejects_an_anchor_only_mutation():
+    expected = ("Título correcto", "anchor-estable")
+    with pytest.raises(AssertionError):
+        _assert_title_and_anchor("# Título correcto {#anchor-cambiado}", expected)
