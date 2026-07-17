@@ -49,7 +49,8 @@ No se regeneró el fixture completo ni se alteraron las demás unidades.
   produjo tres `PASS`.
 - GREEN focal:
   `/private/tmp/libro_cortes_rct_venv/bin/python -m pytest -q tests/test_did_pedagogy_contract.py dofile/08_DID/tests/test_did_results.py`
-  produjo `33 passed`.
+  produjo originalmente `33 passed`; tras reforzar los contratos del review,
+  la ejecución final produjo `35 passed`.
 
 ## Self-review
 
@@ -65,3 +66,26 @@ No se regeneró el fixture completo ni se alteraron las demás unidades.
 ## Preocupaciones
 
 Ninguna pendiente dentro del alcance.
+
+## Correcciones posteriores al review
+
+Se atendieron todos los hallazgos de
+`.superpowers/sdd/standardization-task-2-review.md`:
+
+- Las afirmaciones causales del ATT en la práctica ahora enumeran el conjunto
+  completo de supuestos o remiten inequívocamente a la sección de identificación
+  de la teoría.
+- La comparación de pre-tendencias ya no exige un identificador individual:
+  se explica que varios cortes transversales repetidos con composición estable
+  permiten comparar tendencias medias. También se distingue esta posibilidad
+  conceptual de la estructura agrupada longitudinal que requiere
+  `xtdidregress` para sus comandos posteriores.
+- Se corrigieron la pregunta aplicada afectada, el comentario “estructura del
+  panel” y la referencia imprecisa a “independencia” en la derivación.
+
+El contrato se reforzó mediante RED→GREEN. La nueva prueba falló inicialmente
+con cuatro mensajes correspondientes a identificación incompleta,
+“independencia” no definida, terminología de panel y requisito falso de
+identificador; después de las correcciones, las dos pruebas específicas pasaron.
+El fixture se actualizó de forma quirúrgica, reemplazando únicamente once hashes
+de prosa y dos de código asociados a estas correcciones.

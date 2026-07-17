@@ -352,6 +352,92 @@ Esta equivalencia es un resultado para un panel genuino.
     assert any("primeras diferencias" in violation for violation in violations)
 
 
+def _did_identification_precision_violations(theory, practice):
+    violations = []
+    complete_assumptions = [
+        "tendencias paralelas",
+        "consistencia",
+        "ausencia de anticipación",
+        "composición estable",
+        "ausencia de interferencia relevante",
+    ]
+    identification_reference = "conjunto de supuestos de identificación"
+    causal_att_units = [
+        re.sub(r"\s+", " ", unit).casefold()
+        for unit in re.split(r"\n\s*\n", practice)
+        if (
+            (
+                "att" in unit.casefold()
+                and re.search(r"\b(?:causal|identificad[oa])\b", unit.casefold())
+            )
+            or "efecto causal del programa sobre los niños tratados" in unit.casefold()
+            or "si ese cambio se debe al programa" in unit.casefold()
+        )
+    ]
+    for unit in causal_att_units:
+        if identification_reference not in unit and not all(
+            assumption in unit for assumption in complete_assumptions
+        ):
+            violations.append(
+                "una afirmación causal del ATT omite el conjunto completo de identificación"
+            )
+            break
+
+    combined = (theory + "\n" + practice).casefold()
+    if "usando independencia" in combined:
+        violations.append("la derivación todavía invoca una independencia no definida")
+    if "verificar la estructura del panel" in practice.casefold():
+        violations.append("base3.dta todavía se describe como panel")
+
+    for sentence in re.split(r"(?<=[.!?])\s+", combined):
+        discusses_pretrends = re.search(
+            r"pre[- ]?tendencias|tendencias paralelas|periodos pre[- ]?tratamiento",
+            sentence,
+        )
+        requires_individual_id = re.search(
+            r"(?:requiere|requieren|necesita|necesitan|se necesitan)"
+            r".{0,120}identificador (?:individual|de individuo)",
+            sentence,
+        )
+        explicitly_denies_requirement = re.search(
+            r"(?:no|sin)\s+(?:se\s+)?(?:requiere|requieren|necesita|necesitan)"
+            r".{0,120}identificador|sin un identificador individual",
+            sentence,
+        )
+        if discusses_pretrends and requires_individual_id and not explicitly_denies_requirement:
+            violations.append(
+                "examinar tendencias medias pretratamiento no requiere identificador individual"
+            )
+            break
+    return violations
+
+
+def test_did_identification_and_repeated_cross_section_claims_are_precise():
+    violations = _did_identification_precision_violations(
+        base._read(THEORY_PATH), base._read(PRACTICE_PATH)
+    )
+    assert not violations, "\n".join(violations)
+
+
+def test_did_precision_contract_rejects_each_reviewed_regression():
+    complete = (
+        "El ATT tiene interpretación causal bajo tendencias paralelas, consistencia, "
+        "ausencia de anticipación, composición estable y ausencia de interferencia relevante."
+    )
+    assert _did_identification_precision_violations("", complete) == []
+    mutations = [
+        "El ATT es causal bajo tendencias paralelas.",
+        "Sustituyendo resultados potenciales y usando independencia.",
+        "* Verificar la estructura del panel",
+        (
+            "Para examinar pre-tendencias se necesitan varios periodos "
+            "y un identificador individual."
+        ),
+    ]
+    for mutation in mutations:
+        assert _did_identification_precision_violations("", complete + "\n\n" + mutation)
+
+
 # ------------------------------------------------------------------ privacidad
 
 

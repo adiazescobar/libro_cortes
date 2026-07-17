@@ -59,10 +59,21 @@ limpiar_na <- function(df) {
 
 ### Estimando y estructura de los datos {-}
 
-Todo el capítulo estima un mismo **estimando**: el efecto promedio del tratamiento sobre los tratados (ATT) de un programa de nutrición sobre la talla-para-edad de los niños, identificado con la lógica de diferencias en diferencias del Capítulo \@ref(did-teoria). `base3.dta` contiene **cortes transversales repetidos**: dos grupos (tratados y controles) observados en dos periodos (antes y después), pero sin identificador que permita seguir al mismo niño en el tiempo.
+Todo el capítulo estima un mismo **estimando**: el efecto promedio del
+tratamiento sobre los tratados (ATT) de un programa de nutrición sobre la
+talla-para-edad de los niños. Su interpretación causal exige el conjunto de
+supuestos de identificación del Capítulo \@ref(did-teoria). `base3.dta` contiene
+**cortes transversales repetidos**: dos grupos (tratados y controles) observados
+en dos periodos (antes y después), pero sin identificador que permita seguir al
+mismo niño en el tiempo.
 
 ::: {.boxinfo}
-**Decisión de diseño:** antes de escribir cualquier comando, deja explícito el estimando (ATT), la unidad de observación (niño-periodo), el grupo de comparación y el supuesto que sostiene la interpretación causal (tendencias paralelas). Los comandos solo automatizan esa decisión.
+**Decisión de diseño:** antes de escribir cualquier comando, deja explícito el
+estimando (ATT), la unidad de observación (niño-periodo), el grupo de comparación
+y el conjunto de supuestos de identificación del Capítulo \@ref(did-teoria):
+tendencias paralelas, consistencia, ausencia de anticipación, composición estable
+y ausencia de interferencia relevante. Los comandos solo automatizan esa
+decisión.
 :::
 
 ### Preparación de la base {-}
@@ -85,7 +96,7 @@ Las variables clave:
 | `orden_n` | Orden de nacimiento del niño en el hogar |
 
 ```stata
-* Verificar la estructura del panel
+* Verificar la estructura de los datos
 tab t
 tab D
 tab t D
@@ -127,7 +138,7 @@ label value t t
 label define D 0 "Control" 1 "Tratado", replace
 label value D D
 
-* Gráfico de evolución temporal (prueba visual de tendencias paralelas)
+* Gráfico de evolución temporal (visualización del DiD)
 preserve
 collapse (mean) y, by(t D)
 twoway (connected y t if D==1, msymbol(circle) lcolor(navy)) ///
@@ -140,7 +151,12 @@ restore
 
 **¿Qué muestra este gráfico?**
 
-Con solo dos periodos, este gráfico **no es una prueba de tendencias paralelas** — es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y después, y permite ver intuitivamente de dónde viene el estimador. Para probar tendencias paralelas necesitaríamos al menos un periodo previo adicional y un identificador individual.
+Con solo dos periodos, este gráfico **no es una prueba de tendencias paralelas**
+— es una visualización del DiD. Muestra cuánto cambió cada grupo entre antes y
+después, y permite ver intuitivamente de dónde viene el estimador. Para examinar
+pre-tendencias necesitaríamos al menos un periodo pre-tratamiento adicional.
+Cortes transversales repetidos con varios preperiodos y composición estable
+permiten comparar las tendencias medias sin un identificador individual.
 
 Lo que sí podemos verificar con este gráfico: que los grupos se movieron de forma diferente (si las pendientes difieren, el DiD captura esa diferencia). Pero no podemos saber si esa diferencia se debe al programa o a una tendencia pre-existente que no alcanzamos a ver.
 
@@ -160,7 +176,9 @@ ttest y if t == 0, by(D)
 ttest y if t == 1, by(D)
 ```
 
-La diferencia cruda cambia entre periodos. **DiD** aísla si ese cambio se debe al programa o a una tendencia pre-existente.
+La diferencia cruda cambia entre periodos. **DiD** mide cuánto difiere ese cambio
+entre tratados y controles; atribuir la diferencia al programa exige el conjunto
+de supuestos de identificación del Capítulo \@ref(did-teoria).
 
 ---
 
@@ -245,7 +263,12 @@ reg y D##t, robust
 
 **Interpretación del resultado:**
 
-El coeficiente de `D#t` (la interacción) es el estimador DiD. En esta base estima un efecto de aproximadamente **+0.18 desviaciones estándar** en la talla-para-edad, significativo al 5%. Bajo el supuesto de tendencias paralelas, ese es el efecto causal del programa sobre los niños tratados.
+El coeficiente de `D#t` (la interacción) es el estimador DiD. En esta base estima
+un ATT de aproximadamente **+0.18 desviaciones estándar** en la talla-para-edad,
+significativo al 5%. Interpretarlo como el efecto causal del programa sobre los
+niños tratados exige el conjunto de supuestos de identificación del Capítulo
+\@ref(did-teoria): tendencias paralelas, consistencia, ausencia de anticipación,
+composición estable y ausencia de interferencia relevante.
 
 ---
 
@@ -487,7 +510,10 @@ Resuelve las cuatro preguntas siguientes. Cada una es autocontenida: incluye tod
 
 **Comandos permitidos:** `reg` (con `##` y opción `robust`), `display`.
 
-**Producto esperado:** la regresión estimada, la correspondencia coeficiente-a-media verificada con números y la interpretación causal correcta de la interacción.
+**Producto esperado:** la regresión estimada, la correspondencia
+coeficiente-a-media verificada con números y la interpretación de la interacción
+condicionada al conjunto de supuestos de identificación del Capítulo
+\@ref(did-teoria).
 :::
 
 ::: {.box-ejercicio}
@@ -497,7 +523,15 @@ Resuelve las cuatro preguntas siguientes. Cada una es autocontenida: incluye tod
 
 **Fuente:** base3.dta y diseño del capítulo
 
-**Enunciado:** Ejecute la prueba de balance de `diff` usando `orden_n` como covariable sobre `base3.dta` e interprete su resultado. Explique con precisión por qué esa prueba no es una prueba de tendencias paralelas, qué estructura de datos adicional se necesitaría para ejecutar `estat ptrends` en esta base y por qué la prueba falla con un solo periodo pre-tratamiento. Cierre distinguiendo la hipótesis nula de `estat ptrends` de la de `estat granger`.
+**Enunciado:** Ejecute la prueba de balance de `diff` usando `orden_n` como
+covariable sobre `base3.dta` e interprete su resultado. Explique con precisión por
+qué esa prueba no es una prueba de tendencias paralelas, por qué un solo periodo
+pre-tratamiento no permite examinar pre-tendencias y cómo varios cortes
+transversales repetidos con composición estable sí permitirían comparar
+tendencias medias sin identificar individuos. Distinga esta posibilidad
+conceptual de la estructura agrupada longitudinal que exige `xtdidregress` para
+habilitar sus comandos posteriores `estat ptrends` y `estat granger`, y cierre
+diferenciando las hipótesis nulas de ambas pruebas.
 
 **Puntaje sugerido:** 5 puntos.
 

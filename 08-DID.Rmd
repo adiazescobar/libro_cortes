@@ -208,7 +208,9 @@ $$
 \widehat{\delta}_{DD} = \underbrace{E[Y_{i,1} \mid D_i=1]}_{\bar{Y}_{T,1}} - \underbrace{E[Y_{i,0} \mid D_i=1]}_{\bar{Y}_{T,0}} - \underbrace{\Big(E[Y_{i,1} \mid D_i=0] - E[Y_{i,0} \mid D_i=0]\Big)}_{\text{tendencia de los controles}}
 $$
 
-Sustituyendo resultados potenciales y usando independencia e igualdad de tendencias:
+Sustituyendo resultados potenciales y usando consistencia, ausencia de
+anticipación y tendencias paralelas, bajo composición estable de los grupos y
+ausencia de interferencia relevante:
 
 $$
 = E[Y(D=1) - Y(D=0) \mid D=1] = \text{ATT}
@@ -253,7 +255,13 @@ $$\bar{Y}_{C,0} = \hat{\alpha}, \quad \bar{Y}_{T,0} = \hat{\alpha}+\hat{\beta}, 
 
 El supuesto de tendencias paralelas **no es verificable** en el periodo de tratamiento: el contrafactual $Y_{it}(D=0)$ para los tratados en $t=1$ no existe. Solo podemos buscar evidencia indirecta.
 
-**Con múltiples periodos pre-tratamiento** (y un identificador individual), Stata ofrece dos pruebas formales distintas — y es importante no confundirlas:
+**Con múltiples periodos pre-tratamiento**, podemos comparar las tendencias
+medias previas de tratados y controles. Esta evidencia no requiere seguir a la
+misma unidad: cortes transversales repetidos con composición estable también
+permiten examinar pre-tendencias. El ejemplo de Stata que sigue usa
+`xtdidregress` y, por ser un comando para datos agrupados longitudinalmente,
+requiere identificar el grupo de panel. Sus dos pruebas posteriores son
+distintas — y es importante no confundirlas:
 
 ---
 
@@ -298,7 +306,13 @@ Son preguntas distintas. Un rechazo en `ptrends` no implica anticipación, y un 
 
 **Con solo dos periodos (como en nuestra base):**
 
-Con un único periodo antes y uno después, la prueba formal de pre-tendencias es **imposible**. El gráfico de tendencias medias que construimos en Stata es una *visualización del DiD*, no una prueba del supuesto. Para probar tendencias paralelas se necesitan **al menos 3 periodos** y un identificador de individuo.
+Con un único periodo antes y uno después, la prueba formal de pre-tendencias es
+**imposible**. El gráfico de tendencias medias que construimos en Stata es una
+*visualización del DiD*, no una prueba del supuesto. Para examinar
+pre-tendencias se necesitan **al menos dos periodos pre-tratamiento**. Esto
+puede hacerse con un panel o con cortes transversales repetidos cuya composición
+sea comparable a través del tiempo; no se necesita un identificador individual
+para comparar tendencias medias.
 
 ---
 
@@ -392,7 +406,7 @@ Resuelve las tres preguntas siguientes. Cada una es autocontenida e incluye el p
 
 **Tipo:** Contrafactuales falsos y tabla 2×2
 
-**Enunciado:** Un programa municipal de empleo juvenil se implementa en la comuna A y no en la comuna B. La tasa de ocupación juvenil observada es: comuna A, 55% antes y 70% después; comuna B, 35% antes y 44% después. Calcule la comparación con–sin en el periodo final, la comparación antes–después en la comuna tratada y el estimador de diferencias en diferencias. Explique qué problema tiene cada una de las dos comparaciones ingenuas y qué componente elimina cada resta del DiD. Indique el supuesto bajo el cual el DiD es el efecto causal del programa.
+**Enunciado:** Un programa municipal de empleo juvenil se implementa en la comuna A y no en la comuna B. La tasa de ocupación juvenil observada es: comuna A, 55% antes y 70% después; comuna B, 35% antes y 44% después. Calcule la comparación con–sin en el periodo final, la comparación antes–después en la comuna tratada y el estimador de diferencias en diferencias. Explique qué problema tiene cada una de las dos comparaciones ingenuas y qué componente elimina cada resta del DiD. Indique el conjunto de supuestos bajo el cual el DiD es el efecto causal del programa.
 
 **Puntaje sugerido:** 5 puntos.
 
