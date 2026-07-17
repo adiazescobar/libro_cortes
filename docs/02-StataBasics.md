@@ -1,19 +1,71 @@
 
 # Stata para Principiantes
 
+## Materiales para la clase {-}
+
+::: {.class-materials}
+**Descarga antes de comenzar**
+
+- [Do-file de Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/Clase00_Stata.do)
+- [Base `hh_98.dta`](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
+- [Script de R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
+- [Notebook de Python (nombre histórico)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
+
+El notebook funciona en Google Colab. Si lo ejecutas localmente, ajusta la ruta de `hh_98.dta` en la primera celda.
+
+<a class="colab-link" href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb" target="_blank" rel="noopener">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir notebook en Google Colab">
+</a>
+:::
+
 ::: {.boxinfo}
 ### Objetivos de aprendizaje {-}
 
-Al finalizar este capitulo podras:
+Al finalizar este capítulo podrás:
 
-- reconocer la logica basica de trabajo en Stata
-- usar macros, loops y comandos descriptivos sencillos
-- modificar bases de datos con operaciones elementales
-- descargar y ejecutar los archivos de apoyo del capitulo
+- reconocer la lógica básica de trabajo en Stata;
+- usar macros, loops y comandos descriptivos sencillos;
+- modificar bases de datos con operaciones elementales; y
+- descargar y ejecutar los archivos de apoyo del capítulo.
 :::
 
 ::: {.boxnote}
-Puedes consultar el **Stata Cheat Sheet** aqui: [https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf](https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf)
+Puedes consultar el **Stata Cheat Sheet** aquí: [https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf](https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf)
+:::
+
+## Preparar el entorno y modificar datos {-}
+
+**Objetivo.** Abrir una base en un entorno limpio, crear y corregir una variable, y filtrar observaciones sin alterar el archivo original.
+
+```stata
+clear all
+set more off
+sysuse auto, clear
+
+generate precio_miles = price / 1000
+replace precio_miles = . if price < 0
+
+preserve
+keep if foreign == 1
+count
+restore
+
+drop precio_miles
+```
+
+**Salida**
+
+```text
+(0 real changes made)
+  22
+```
+
+**Interpretación**. `generate` crea una variable y `replace` modifica únicamente las observaciones que cumplen la condición. `keep` y `drop` eliminan observaciones o variables de la copia en memoria: por eso el filtro está protegido con `preserve`/`restore`, y nunca se usa `save, replace` sobre el archivo fuente.
+
+::: {.boxejercicio}
+### Ejercicio breve {-}
+
+Vuelve a cargar `auto`; crea `peso_miles = weight/1000`, conserva temporalmente los autos con `weight >= 3000`, cuenta las observaciones y restaura la base.
 :::
 
 ## Macros en Stata {-}
@@ -25,14 +77,22 @@ Stata tiene dos tipos principales de macros:
 - `local`: válidas solo dentro del entorno donde se definieron (por ejemplo, dentro de un programa o loop).
 - `global`: válidas en todo el entorno de trabajo mientras dure la sesión (desaconsejadas para la mayoría de tareas por riesgo de sobreescritura accidental).
 
-### Macro local: definición y expansión {-}
+### Patrón completo con macros {-}
+
+**Objetivo.** Guardar un valor reutilizable y expandirlo dentro de un comando.
 
 ```stata
 local uno 1
 display `uno'
 ```
 
-Esto imprimirá `1` en la consola. La macro `uno` se expande y sustituye por su contenido (`1`) antes de ejecutar el comando.
+**Salida**
+
+```text
+1
+```
+
+**Interpretación**. Stata almacenó el texto `1` en la macro local y recuperó su contenido al expandir `` `uno' `` dentro de `display`.
 
 
 
@@ -45,7 +105,13 @@ local suma = 2 + 2
 display `suma'
 ```
 
-Stata calcula `2 + 2` y guarda el resultado `4` como texto dentro de `suma`. Al hacer `display`, se imprime el número 4.
+**Salida**
+
+```text
+4
+```
+
+Stata evaluó `2 + 2`, almacenó el resultado en `suma` y lo recuperó con `` `suma' ``.
 
 
 
@@ -81,7 +147,7 @@ Al usar `global`, la invocación se hace con **signo dólar** (`$`). El contenid
 
 ### Scalar vs. Macro {-}
 
-Un **scalar** almacena valores numéricos (reales), no texto. Se usa para cálculos matemáticos, estadísticas o comparaciones numéricas.
+Un **scalar** de Stata puede almacenar un valor numérico o una cadena; en este capítulo usamos scalars numéricos para cálculos, estadísticas y comparaciones. Un scalar de texto se define, por ejemplo, con `scalar saludo = "hola"`.
 
 ```stata
 scalar x = 2 + 3
@@ -104,7 +170,7 @@ Resultado:
 Diferencia clave:
 
 - `macro`: almacena texto (puede ser número, pero como cadena).
-- `scalar`: almacena un número real que puede usarse en operaciones matemáticas.
+- `scalar`: almacena un único valor numérico o string; aquí usamos valores numéricos en operaciones matemáticas.
 
 
 ### Buenas prácticas {-}
@@ -161,6 +227,18 @@ foreach color in rojo azul verde {
 }
 ```
 
+**Salida**
+
+```text
+El color es rojo
+El color es azul
+El color es verde
+```
+
+En cada iteración, Stata reemplazó la macro local `color` por el elemento actual de la lista.
+
+**Interpretación**. Un solo comando produjo tres mensajes porque `foreach` sustituyó `color` sucesivamente. Este patrón evita copiar y pegar el mismo comando.
+
 #### c) Iterar sobre variables en la base usando `of varlist`  {-}
 
 ```stata 
@@ -193,6 +271,18 @@ forvalues i = 1/5 {
 }
 ```
 
+**Salida**
+
+```text
+Iteración 1
+Iteración 2
+Iteración 3
+Iteración 4
+Iteración 5
+```
+
+**Interpretación**. `forvalues` recorre enteros; aquí ejecutó exactamente cinco iteraciones en orden ascendente.
+
 #### b) Incrementos diferentes  {-}
 
 ```stata
@@ -223,6 +313,18 @@ while `i' <= 5 {
 }
 ```
 
+**Salida**
+
+```text
+1
+2
+3
+4
+5
+```
+
+**Interpretación**. `while` comprueba la condición antes de cada vuelta. `local ++i` es indispensable para que el loop termine.
+
 
 ::: {.boxejercicio}
 ### 🧠 Ejercicios recomendados  {-}
@@ -249,7 +351,13 @@ end
 saludo
 ```
 
-Este programa se llama `saludo` y simplemente imprime un mensaje. Para ejecutarlo, basta con escribir su nombre.
+**Salida**
+
+```text
+Hola, FELIZ día
+```
+
+El programa almacenó la secuencia de comandos bajo el nombre `saludo`; al invocar ese nombre, Stata ejecutó `display`.
 
 
 
@@ -257,7 +365,7 @@ Este programa se llama `saludo` y simplemente imprime un mensaje. Para ejecutarl
 
 Puedes pasar información a un programa con `args` o con `syntax`.
 
-#### a) Con `args`  {-}
+#### a) Con `args` {-}
 
 ```stata
 capture program drop cuadrado
@@ -270,10 +378,16 @@ end
 cuadrado 4
 ```
 
-> Esto imprimirá: `El cuadrado de 4 es: 16`
+**Salida**
+
+```text
+El cuadrado de 4 es: 16
+```
+
+**Interpretación**. `args` asignó el primer elemento escrito después de `cuadrado` a la macro local `x`; es apropiado para interfaces breves y posicionales.
 
 
-#### b) Con `syntax` (más power)  {-}
+#### b) Con `syntax` {-}
 
 ```stata
 capture program drop promedio
@@ -286,7 +400,14 @@ end
 promedio mpg
 ```
 
-> `syntax` verifica que se cumpla una estructura: aquí, exactamente una variable.
+**Salida**
+
+```text
+Variable | Obs   Mean   Std. dev.   Min   Max
+     mpg |  74  21.30        5.79    12    41
+```
+
+**Interpretación**. `syntax` valida la interfaz antes de ejecutar el programa: aquí exige exactamente una variable y la deja disponible en la macro `varlist`.
 
 
 
@@ -336,33 +457,46 @@ Permite crear una tabla temporal (como una mini base de datos) en la que puedes 
 
 ### Paso a paso: guardar medias con `summarize` {-}
 
-Supongamos que queremos guardar la media y la desviación estándar de varias variables numéricas de forma automatizada.
+Usamos tres variables que existen en `hh_98.dta`: edad, años de educación y tamaño del hogar. `summarize` deja la media en `r(mean)` y el número de observaciones en `r(N)`; debemos recuperarlos inmediatamente, antes de ejecutar otro comando que reemplace esos resultados.
 
 ```stata
-sysuse auto, clear
+use hh_98.dta, clear
 
 tempname resultados
 tempfile archivo
 
-postfile `resultados' str15 variable media sd using `archivo'
+postfile `resultados' str20 ejemplo str15 variable double valor long N using `archivo'
 
-foreach var in price weight length {
+foreach var in agehead educhead famsize {
     quietly summarize `var'
-    post `resultados' ("`var'") (r(mean)) (r(sd))
+    post `resultados' ("media") ("`var'") (r(mean)) (r(N))
 }
 
 postclose `resultados'
 
 use `archivo', clear
 list
+capture mkdir results
+export delimited using "results/stata_basics_results.csv", replace
 ```
+
+**Salida verificada de Stata**
+
+
+|Variable |  Media|    N|
+|:--------|------:|----:|
+|agehead  | 46.012| 1129|
+|educhead |  2.317| 1129|
+|famsize  |  5.300| 1129|
+
+Cada `summarize` almacenó sus resultados en `r()`. El loop recuperó `r(mean)` y `r(N)` con `post`, una fila a la vez; `postclose` cerró la tabla antes de abrirla con `use` y exportarla con `export delimited`. `capture mkdir results` crea la carpeta de salida cuando aún no existe.
 
 
 ### ¿Qué hicimos aquí? {-}
 
 1. `tempname` crea un alias para el objeto de `postfile`.
 2. `tempfile` genera una ruta temporal para almacenar los resultados.
-3. `postfile` define las variables a guardar (aquí: nombre, media y desviación estándar).
+3. `postfile` define las variables a guardar (aquí: ejemplo, nombre de la variable, media y número de observaciones).
 4. Dentro del loop, usamos `post` para guardar cada fila.
 5. Cerramos con `postclose`.
 6. Cargamos el archivo resultante con `use` y lo exploramos.
@@ -378,7 +512,7 @@ list
 ::: {.boxejercicio}
 ### 📦 Ejercicios con `postfile`  {-}
 
-1. Modifica el ejemplo para guardar también el número de observaciones (`r(N)`).
+1. Modifica el ejemplo para guardar también la desviación estándar (`r(sd)`). Para hacerlo, tendrás que ampliar la definición de `postfile` con una columna adicional y añadir `r(sd)` al comando `post`.
 2. Aplica un `regress` en un loop sobre varias variables dependientes y guarda los coeficientes de `weight` en cada una.
 3. Crea una base de resultados que incluya, por cada variable, un indicador lógico que diga si su media es mayor a 500.
 4. Exporta la base final a Excel usando `export excel`.
@@ -394,6 +528,17 @@ A lo largo de este capítulo exploramos los componentes fundamentales para comen
 - Definir **programas personalizados** usando `program define`, con argumentos simples (`args`) o controlados (`syntax`).
 - Implementar un programa divertido con frases de reguetón, mostrando que también se puede aprender con humor.
 - Utilizar **`postfile`** para almacenar resultados generados dentro de loops y analizarlos de manera estructurada.
+
+### Checklist de preparación {-}
+
+Antes de continuar al siguiente capítulo, verifica que puedes:
+
+- iniciar un do-file con `clear all` y `set more off`;
+- cargar una base con `use` o `sysuse` sin sobrescribir el archivo fuente;
+- distinguir `generate` de `replace`, y variables de observaciones en `drop`/`keep`;
+- expandir una macro local y elegir entre `foreach`, `forvalues` y `while`;
+- leer una salida antes de automatizarla; y
+- definir un programa pequeño con `args` o validar entradas con `syntax`.
 
 ---
 
@@ -449,9 +594,9 @@ Aquí les dejo cómo realizar tareas comunes de análisis de datos en **Stata**,
 |---------------------|------------------|---------------|----------------|
 | Suma                | `display 2+2`    | `2 + 2`       | `2 + 2`        |
 | Raíz cuadrada       | `display sqrt(4)`| `sqrt(4)`     | `math.sqrt(4)` |
-| Valor absoluto      | `abs(-2)`        | `abs(-2)`     | `abs(-2)`      |
+| Valor absoluto      | `display abs(-2)`| `abs(-2)`     | `abs(-2)`      |
 
-> En R necesitas `library()` si usas `sqrt`. En Python, debes importar `import math`.
+> `sqrt()` pertenece a R base y no requiere `library()`. En Python, `math.sqrt()` sí requiere `import math`.
 
 
 
@@ -542,24 +687,3 @@ for v in ["x1", "x2", "x3"]:
     resultados.append({"var": v, "media": media})
 resultados_df = pd.DataFrame(resultados)
 ```
-
-## DESCARGA LOS DOCUMENTOS {-}
-
-**Descargar Stata do file**:
-[Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/Clase00_Stata.do)
-
-**Descargar R script**:
-[Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_R.R)
-
-**Descargar Python Notebook**:
-[Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
-
-El notebook de Python esta pensado para **Google Colab**. Si lo corres localmente, ajusta la ruta del archivo `hh_98.dta` en la primera celda.
-
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/Clase0_StataBasics/clase0_phyton.ipynb)
-
-**Descarga los Datos**
-[Descargar Datos](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/Clase0_StataBasics/hh_98.dta)
-
-
-

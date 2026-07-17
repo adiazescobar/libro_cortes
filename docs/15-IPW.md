@@ -17,9 +17,9 @@ Hirano & Imbens proponen un estimador que usa una versión flexible del propensi
 
 El objetivo es estimar:
 
-$$\tau = E[Y_i(1) - Y_i(0)]$$
+$$\tau = E[Y_i(D=1) - Y_i(D=0)]$$
 
-Bajo la **CIA** ($\{Y_i(1), Y_i(0)\} \perp D_i \mid X_i$) y el **soporte común** ($0 < P(X) < 1$), podemos identificar este efecto usando los ponderadores del propensity score.
+Bajo la **CIA** ($\{Y_i(D=1), Y_i(D=0)\} \perp D_i \mid X_i$) y el **soporte común** ($0 < P(X) < 1$), podemos identificar este efecto usando los ponderadores del propensity score.
 
 ---
 
@@ -29,19 +29,19 @@ Bajo la **CIA** ($\{Y_i(1), Y_i(0)\} \perp D_i \mid X_i$) y el **soporte común*
 
 Bajo CIA y soporte común se puede demostrar que:
 
-$$E\left[\frac{Y \cdot D}{P(X)}\right] = E[Y(1)]$$
+$$E\left[\frac{Y \cdot D}{P(X)}\right] = E[Y(D=1)]$$
 
-$$E\left[\frac{Y \cdot (1-D)}{1-P(X)}\right] = E[Y(0)]$$
+$$E\left[\frac{Y \cdot (1-D)}{1-P(X)}\right] = E[Y(D=0)]$$
 
 **Demostración (para el primer resultado):**
 
-$$E\left[\frac{Y \cdot D}{P(X)} \,\bigg|\, X=x\right] = E\left[\frac{Y(1)}{P(X)} \cdot \mathbf{1}(D=1) \,\bigg|\, D=1,\, X=x\right] \cdot P(X)$$
+$$E\left[\frac{Y \cdot D}{P(X)} \,\bigg|\, X=x\right] = E\left[\frac{Y(D=1)}{P(X)} \cdot \mathbf{1}(D=1) \,\bigg|\, D=1,\, X=x\right] \cdot P(X)$$
 
-$$= \frac{E[Y(1) \mid X=x] \cdot P(X)}{P(X)} = E[Y(1) \mid X=x]$$
+$$= \frac{E[Y(D=1) \mid X=x] \cdot P(X)}{P(X)} = E[Y(D=1) \mid X=x]$$
 
-Integrando sobre $X$: $E\left[\frac{Y \cdot D}{P(X)}\right] = E[Y(1)]$.
+Integrando sobre $X$: $E\left[\frac{Y \cdot D}{P(X)}\right] = E[Y(D=1)]$.
 
-El mismo argumento da $E\left[\frac{Y(1-D)}{1-P(X)}\right] = E[Y(0)]$.
+El mismo argumento da $E\left[\frac{Y(1-D)}{1-P(X)}\right] = E[Y(D=0)]$.
 
 Por tanto:
 

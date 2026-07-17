@@ -5,52 +5,15 @@
 <style type="text/css">
 /* Estilos personalizados para la prueba de entrada */
 
-.quiz-section {
-  background-color: #f8f9fa;
-  border-left: 4px solid #1F77B4;
-  padding: 20px;
-  margin: 20px 0;
-  border-radius: 5px;
-}
-
 .quiz-section h2 {
   color: #1F77B4;
   margin-top: 0;
-}
-
-.question-box {
-  background-color: white;
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .question-number {
   font-weight: bold;
   color: #1F77B4;
   font-size: 1.1em;
-}
-
-.intro-box {
-  background: linear-gradient(135deg, #1F77B4 0%, #2E86AB 100%);
-  color: white;
-  padding: 25px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-}
-
-.intro-box h3 {
-  margin-top: 0;
-  color: white;
-}
-
-.scoring-guide {
-  background-color: #e8f4f8;
-  border: 2px solid #1F77B4;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 30px;
 }
 
 .resources-box {
@@ -93,12 +56,45 @@
 
 /* ======= CLAVE 1: Desactivar feedback inmediato de webexercises hasta finalizar ======= */
 #prueba-entrada-quiz:not(.show-feedback) .webex-check,
-#prueba-entrada-quiz:not(.show-feedback) .webex-correct,
-#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect,
-#prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-correct,
-#prueba-entrada-quiz:not(.show-feedback) input.webex-solveme.webex-incorrect,
-#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-correct,
-#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label.webex-incorrect {
+#prueba-entrada-quiz:not(.show-feedback) .webex-feedback {
+  display: none !important;
+}
+
+/* Los controles siguen visibles; solo se neutralizan sus marcas prematuras. */
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect) {
+  background: var(--paper) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect) {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect)::before,
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select):is(.webex-correct, .webex-incorrect)::after,
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect)::before,
+#prueba-entrada-quiz:not(.show-feedback) .webex-radiogroup label:is(.webex-correct, .webex-incorrect)::after {
+  content: none !important;
+  display: none !important;
+}
+
+#prueba-entrada-quiz:not(.show-feedback) .webex-correct + .webex-icon::before,
+#prueba-entrada-quiz:not(.show-feedback) .webex-correct + .webex-icon::after,
+#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect + .webex-icon::before,
+#prueba-entrada-quiz:not(.show-feedback) .webex-incorrect + .webex-icon::after {
+  content: none !important;
+  display: none !important;
+}
+
+#prueba-entrada-quiz:not(.show-feedback) :is(input, select, label):is(.webex-correct, .webex-incorrect)
+  :is(.webex-icon, .fa, [class*="icon"]) {
   display: none !important;
 }
 
@@ -111,50 +107,24 @@
   display: none !important;
 }
 
-/* Botón de puntaje */
-.btn-score {
-  display: inline-block;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #1F77B4;
-  background: #1F77B4;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.btn-score:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-#score-result table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-#score-result th, #score-result td {
-  border: 1px solid #dee2e6;
-  padding: 8px;
-  text-align: left;
-}
 </style>
 
-<div class="intro-box">
-<h3>Bienvenido a la Prueba de Entrada</h3>
+## Antes de comenzar {-}
+
+<div class="diagnostic-intro">
+<h3>Bienvenida a la Prueba de Entrada</h3>
 
 Esta prueba diagnóstica tiene como objetivo evaluar tus conocimientos previos en estadística, regresión lineal, causalidad y manejo básico de Stata.
 
 <strong>Instrucciones:</strong>
 
-- La prueba contiene <strong>18 preguntas</strong> divididas en 4 secciones
-- Responde cada pregunta seleccionando la opcion correcta o escribiendo tu respuesta
+- La prueba contiene <strong>20 preguntas</strong> divididas en 4 secciones
+- Responde cada pregunta seleccionando la opción correcta o escribiendo tu respuesta
 - La retroalimentación, las explicaciones y el puntaje se muestran solo al final, cuando presiones <strong>Finalizar y calcular puntaje</strong>
-- No hay limite de tiempo, pero intenta responder sin consultar materiales
-- Al final encontraras recursos para repasar
+- Hazla en una sola sesión, sin consultar materiales
+- Al final encontrarás recursos para repasar
 
-<strong>Tiempo estimado:</strong> 15-20 minutos
+<strong>Tiempo estimado:</strong> 15–20 minutos
 
 </div>
 
@@ -162,11 +132,11 @@ Esta prueba diagnóstica tiene como objetivo evaluar tus conocimientos previos e
 
 <div id="prueba-entrada-quiz">
 
-## Seccion 1: Estadistica Basica {-}
+## Sección 1: Estadística básica {-}
 
-<div class="quiz-section" data-section="Estadistica Basica">
+<div class="quiz-section" data-section="Estadística básica">
 
-Esta seccion evalua conceptos fundamentales de estadistica descriptiva e inferencial que son esenciales para el analisis econometrico.
+Esta sección evalúa conceptos fundamentales de estadística descriptiva e inferencial que son esenciales para el análisis econométrico.
 
 <div class="question-box">
 <span class="question-number">Pregunta 1.</span> Si una variable X tiene media 50 y desviación estándar 10, y sigue una distribución normal, ¿qué porcentaje de las observaciones se encuentra entre 30 y 70?
@@ -174,15 +144,15 @@ Esta seccion evalua conceptos fundamentales de estadistica descriptiva e inferen
 <select class='webex-select'><option value='blank'></option><option value=''>68%</option><option value='answer'>95%</option><option value=''>99%</option><option value=''>50%</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-En una distribucion normal:
+En una distribución normal:
 
-- El 68% de los datos esta dentro de 1 desviacion estandar de la media
-- El 95% de los datos esta dentro de 2 desviaciones estandar de la media
-- El 99.7% esta dentro de 3 desviaciones estandar
+- El 68% de los datos está dentro de 1 desviación estándar de la media
+- El 95% de los datos está dentro de 2 desviaciones estándar de la media
+- El 99.7% está dentro de 3 desviaciones estándar
 
-Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones estandar, por lo tanto es el 95%.
+Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones estándar, por lo tanto es el 95%.
 
 </div>
 
@@ -191,27 +161,27 @@ Como 30 = 50 - 2(10) y 70 = 50 + 2(10), estamos hablando de 2 desviaciones estan
 <div class="question-box">
 <span class="question-number">Pregunta 2.</span> El p-value (valor p) representa:
 
-<select class='webex-select'><option value='blank'></option><option value=''>La probabilidad de que la hipotesis nula sea verdadera</option><option value='answer'>La probabilidad de observar datos tan extremos o mas, dado que H0 es verdadera</option><option value=''>La probabilidad de que la hipotesis alternativa sea falsa</option><option value=''>El nivel de significancia del test</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>La probabilidad de que la hipótesis nula sea verdadera</option><option value='answer'>La probabilidad de observar datos tan extremos o más, dado que \(H_0\) es verdadera</option><option value=''>La probabilidad de que la hipótesis alternativa sea falsa</option><option value=''>El nivel de significancia del test</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-El p-value es la probabilidad de obtener un resultado tan extremo o mas extremo que el observado, asumiendo que la hipotesis nula es verdadera.
+El valor p es la probabilidad de obtener un resultado tan extremo o más extremo que el observado, asumiendo que la hipótesis nula es verdadera.
 
 </div>
 
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 3.</span> Rechazar la hipotesis nula cuando en realidad es verdadera se conoce como:
+<span class="question-number">Pregunta 3.</span> Rechazar la hipótesis nula cuando en realidad es verdadera se conoce como:
 
-<select class='webex-select'><option value='blank'></option><option value='answer'>Error Tipo I</option><option value=''>Error Tipo II</option><option value=''>Sesgo de seleccion</option><option value=''>Error estandar</option></select>
+<select class='webex-select'><option value='blank'></option><option value='answer'>Error Tipo I</option><option value=''>Error Tipo II</option><option value=''>Sesgo de selección</option><option value=''>Error estándar</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-- Error Tipo I: Rechazar H0 cuando es verdadera (probabilidad alpha).
-- Error Tipo II: No rechazar H0 cuando es falsa (probabilidad beta).
+- Error Tipo I: Rechazar \(H_0\) cuando es verdadera (probabilidad \(\alpha\)).
+- Error Tipo II: No rechazar \(H_0\) cuando es falsa (probabilidad \(\beta\)).
 
 </div>
 
@@ -220,10 +190,10 @@ El p-value es la probabilidad de obtener un resultado tan extremo o mas extremo 
 <div class="question-box">
 <span class="question-number">Pregunta 4.</span> Un intervalo de confianza del 95% significa que:
 
-<select class='webex-select'><option value='blank'></option><option value=''>Hay 95% de probabilidad de que el par<U+00E1>metro verdadero est<U+00E9> en este intervalo espec<U+00ED>fico</option><option value='answer'>Si construy<U+00E9>ramos 100 intervalos de esta manera, 95 de ellos contendr<U+00ED>an el par<U+00E1>metro verdadero</option><option value=''>El 95% de los datos est<U+00E1> dentro del intervalo</option><option value=''>Estamos 95% seguros de nuestra estimaci<U+00F3>n</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>Hay 95% de probabilidad de que el parámetro verdadero esté en este intervalo específico</option><option value='answer'>En muestreos repetidos, aproximadamente 95% de los intervalos construidos con este procedimiento contendrían el parámetro</option><option value=''>El 95% de los datos está dentro del intervalo</option><option value=''>Estamos 95% seguros de nuestra estimación</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
 Interpretación frecuentista: si repitiéramos el muestreo muchas veces y construyéramos IC del 95% cada vez, cerca del 95% de esos intervalos contendrían el valor verdadero del parámetro.
 
@@ -234,12 +204,12 @@ Interpretación frecuentista: si repitiéramos el muestreo muchas veces y constr
 <div class="question-box">
 <span class="question-number">Pregunta 5.</span> La varianza mide:
 
-<select class='webex-select'><option value='blank'></option><option value=''>La tendencia central de los datos</option><option value='answer'>La dispersion de los datos alrededor de la media</option><option value=''>La relacion entre dos variables</option><option value=''>El valor mas frecuente</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>La tendencia central de los datos</option><option value='answer'>La dispersión de los datos alrededor de la media</option><option value=''>La relación entre dos variables</option><option value=''>El valor más frecuente</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-La varianza mide la dispersion alrededor de la media: Var(X) = E[(X - mu)^2]. La desviacion estandar es la raiz cuadrada de la varianza.
+La varianza mide la dispersión alrededor de la media: \(\operatorname{Var}(X) = E[(X - \mu)^2]\). La desviación estándar es la raíz cuadrada de la varianza.
 
 </div>
 
@@ -249,47 +219,47 @@ La varianza mide la dispersion alrededor de la media: Var(X) = E[(X - mu)^2]. La
 
 ---
 
-## Seccion 2: Regresion Lineal {-}
+## Sección 2: Regresión lineal {-}
 
-<div class="quiz-section" data-section="Regresion Lineal">
+<div class="quiz-section" data-section="Regresión lineal">
 
-Esta seccion evalua tu comprension del modelo de regresion lineal, sus supuestos e interpretacion.
-
-<div class="question-box">
-<span class="question-number">Pregunta 6.</span> En el modelo Y = beta0 + beta1 X + e, el coeficiente beta1 representa:
-
-<select class='webex-select'><option value='blank'></option><option value=''>El valor de Y cuando X = 0</option><option value='answer'>El cambio esperado en Y por cada unidad adicional de X</option><option value=''>La correlacion entre X e Y</option><option value=''>La varianza de Y explicada por X</option></select>
-
-
-<div class='webex-solution'><button>Ver explicacion</button>
-
-beta1 es el cambio esperado en Y asociado con una unidad adicional de X (ceteris paribus).
-
-</div>
-
-</div>
+Esta sección evalúa tu comprensión del modelo de regresión lineal, sus supuestos e interpretación.
 
 <div class="question-box">
-<span class="question-number">Pregunta 7.</span> Si R2 = 0.75, esto significa que:
+<span class="question-number">Pregunta 6.</span> En el modelo \(Y = \beta_0 + \beta_1 X + e\), el coeficiente \(\beta_1\) representa:
 
-<select class='webex-select'><option value='blank'></option><option value=''>El coeficiente de correlacion es 0.75</option><option value=''>El modelo tiene 75% de probabilidad de ser correcto</option><option value='answer'>El 75% de la variacion en Y es explicada por las variables independientes</option><option value=''>El 75% de las observaciones estan correctamente predichas</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>El valor de Y cuando X = 0</option><option value='answer'>El cambio esperado en Y por cada unidad adicional de X</option><option value=''>La correlación entre X e Y</option><option value=''>La varianza de Y explicada por X</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-R2 es la proporcion de la varianza de Y explicada por el modelo.
+\(\beta_1\) es el cambio esperado en \(Y\) asociado con una unidad adicional de \(X\), ceteris paribus.
 
 </div>
 
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 8.</span> Cual de las siguientes NO es un supuesto del modelo clasico de regresion lineal (OLS)?
+<span class="question-number">Pregunta 7.</span> Si \(R^2 = 0.75\), esto significa que:
 
-<select class='webex-select'><option value='blank'></option><option value=''>Los errores tienen media cero</option><option value=''>Los errores son homoced<U+00E1>sticos</option><option value=''>No hay multicolinealidad perfecta</option><option value='answer'>Los errores deben seguir una distribuci<U+00F3>n uniforme</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>El coeficiente de correlación es 0.75</option><option value=''>El modelo tiene 75% de probabilidad de ser correcto</option><option value='answer'>El 75% de la variación en Y es explicada por las variables independientes</option><option value=''>El 75% de las observaciones están correctamente predichas</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
+
+\(R^2\) es la proporción de la varianza de \(Y\) explicada por el modelo.
+
+</div>
+
+</div>
+
+<div class="question-box">
+<span class="question-number">Pregunta 8.</span> ¿Cuál de las siguientes NO es un supuesto del modelo clásico de regresión lineal (MCO)?
+
+<select class='webex-select'><option value='blank'></option><option value=''>Los errores tienen media cero</option><option value=''>Los errores son homocedásticos</option><option value=''>No hay multicolinealidad perfecta</option><option value='answer'>Los errores deben seguir una distribución uniforme</option></select>
+
+
+<div class='webex-solution'><button>Ver explicación</button>
 
 OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suele asumir normalidad.
 
@@ -303,7 +273,7 @@ OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suel
 <select class='webex-select'><option value='blank'></option><option value=''>El coeficiente es significativo al 1%</option><option value='answer'>El coeficiente es significativo al 5%</option><option value=''>El coeficiente no es significativo</option><option value=''>Hay 3% de probabilidad de que el coeficiente sea correcto</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
 0.03 < 0.05 implica significancia al 5% (y al 10%), pero no al 1%.
 
@@ -312,14 +282,14 @@ OLS no requiere errores uniformes. Para inferencia en muestras pequeñas se suel
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 10.</span> En un modelo log(Y) = beta0 + beta1 X + e, el coeficiente beta1 se interpreta aproximadamente como:
+<span class="question-number">Pregunta 10.</span> En un modelo \(\log(Y) = \beta_0 + \beta_1 X + e\), el coeficiente \(\beta_1\) se interpreta aproximadamente como:
 
-<select class='webex-select'><option value='blank'></option><option value=''>El cambio absoluto en Y por unidad de X</option><option value=''>El cambio en log(Y) en terminos absolutos</option><option value='answer'>El cambio porcentual en Y por cada unidad adicional de X</option><option value=''>La elasticidad de Y respecto a X</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>El cambio absoluto en Y por unidad de X</option><option value=''>El cambio en log(Y) en términos absolutos</option><option value='answer'>Aproximadamente \(100\beta_1\)% por una unidad adicional de \(X\)</option><option value=''>La elasticidad de Y respecto a X</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-En un modelo semi-log, beta1 * 100 es el cambio porcentual aproximado en Y por una unidad adicional de X (para cambios pequeños).
+En un modelo semilogarítmico, \(100\beta_1\) es el cambio porcentual aproximado en \(Y\) por una unidad adicional de \(X\), para cambios pequeños.
 
 </div>
 
@@ -329,49 +299,49 @@ En un modelo semi-log, beta1 * 100 es el cambio porcentual aproximado en Y por u
 
 ---
 
-## Seccion 3: Causalidad {-}
+## Sección 3: Causalidad {-}
 
 <div class="quiz-section" data-section="Causalidad">
 
-Esta seccion evalua la diferencia entre correlacion y causalidad, y conceptos basicos de inferencia causal.
+Esta sección evalúa la diferencia entre correlación y causalidad, y conceptos básicos de inferencia causal.
 
 <div class="question-box">
-<span class="question-number">Pregunta 11.</span> La observacion de que "los paises con mayor consumo de chocolate tienen mas premios Nobel per capita" es un ejemplo de:
+<span class="question-number">Pregunta 11.</span> La observación de que "los países con mayor consumo de chocolate tienen más premios Nobel per capita" es un ejemplo de:
 
-<select class='webex-select'><option value='blank'></option><option value=''>Causalidad directa</option><option value=''>Causalidad inversa</option><option value='answer'>Correlacion espuria (correlacion sin causalidad)</option><option value=''>Efecto placebo</option></select>
-
-
-<div class='webex-solution'><button>Ver explicacion</button>
-
-Ejemplo de correlacion espuria: puede haber una tercera variable (p. ej. desarrollo) que explique ambos.
-
-</div>
-
-</div>
-
-<div class="question-box">
-<span class="question-number">Pregunta 12.</span> El sesgo de seleccion ocurre cuando:
-
-<select class='webex-select'><option value='blank'></option><option value=''>La muestra es muy pequena</option><option value=''>Los datos tienen errores de medicion</option><option value='answer'>Los individuos tratados son sistematicamente diferentes de los no tratados</option><option value=''>El modelo tiene muchas variables</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>Causalidad directa</option><option value=''>Causalidad inversa</option><option value='answer'>Correlación espuria (correlación sin causalidad)</option><option value=''>Efecto placebo</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-Sesgo de seleccion: E[Y0|D=1] != E[Y0|D=0].
+Ejemplo de correlación espuria: puede haber una tercera variable (p. ej. desarrollo) que explique ambos.
 
 </div>
 
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 13.</span> La asignacion aleatoria del tratamiento es importante porque:
+<span class="question-number">Pregunta 12.</span> El sesgo de selección ocurre cuando:
 
-<select class='webex-select'><option value='blank'></option><option value=''>Aumenta el tamano de la muestra</option><option value=''>Reduce los costos del estudio</option><option value='answer'>Hace que los grupos de tratamiento y control sean comparables en expectativa</option><option value=''>Elimina los errores de medicion</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>La muestra es muy pequeña</option><option value=''>Los datos tienen errores de medición</option><option value='answer'>Los individuos tratados son sistemáticamente diferentes de los no tratados</option><option value=''>El modelo tiene muchas variables</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-Aleatorizacion: balancea (en expectativa) observables y no observables.
+Sesgo de selección: \(E[Y_0|D=1] \neq E[Y_0|D=0]\).
+
+</div>
+
+</div>
+
+<div class="question-box">
+<span class="question-number">Pregunta 13.</span> La asignación aleatoria del tratamiento es importante porque:
+
+<select class='webex-select'><option value='blank'></option><option value=''>Aumenta el tamaño de la muestra</option><option value=''>Reduce los costos del estudio</option><option value='answer'>Hace que los grupos de tratamiento y control sean comparables en expectativa</option><option value=''>Elimina los errores de medición</option></select>
+
+
+<div class='webex-solution'><button>Ver explicación</button>
+
+Aleatorización: balancea (en expectativa) observables y no observables.
 
 </div>
 
@@ -380,12 +350,12 @@ Aleatorizacion: balancea (en expectativa) observables y no observables.
 <div class="question-box">
 <span class="question-number">Pregunta 14.</span> El contrafactual se refiere a:
 
-<select class='webex-select'><option value='blank'></option><option value=''>Los datos que se perdieron en el estudio</option><option value=''>El grupo de control</option><option value='answer'>Lo que habria ocurrido en ausencia del tratamiento</option><option value=''>Los efectos secundarios del tratamiento</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>Los datos que se perdieron en el estudio</option><option value=''>El grupo de control</option><option value='answer'>Lo que habría ocurrido con la misma unidad bajo la condición alternativa</option><option value=''>Los efectos secundarios del tratamiento</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-Contrafactual: el resultado potencial en el estado no observado.
+El contrafactual es el resultado potencial de la misma unidad bajo la condición alternativa no observada: sin tratamiento si fue tratada, o con tratamiento si no lo fue.
 
 </div>
 
@@ -394,12 +364,12 @@ Contrafactual: el resultado potencial en el estado no observado.
 <div class="question-box">
 <span class="question-number">Pregunta 15.</span> El principal problema al comparar simplemente participantes vs. no participantes es:
 
-<select class='webex-select'><option value='blank'></option><option value=''>La diferencia en tamano de los grupos</option><option value=''>Los errores de medicion en los datos</option><option value='answer'>La autoseleccion (los que participan pueden ser diferentes de los que no)</option><option value=''>La falta de datos</option></select>
+<select class='webex-select'><option value='blank'></option><option value=''>La diferencia en tamaño de los grupos</option><option value=''>Los errores de medición en los datos</option><option value='answer'>La autoselección (los que participan pueden ser diferentes de los que no)</option><option value=''>La falta de datos</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
-Autoseleccion: diferencias previas (motivacion, habilidad, redes) contaminan la comparacion.
+Autoselección: diferencias previas (motivación, habilidad, redes) contaminan la comparación.
 
 </div>
 
@@ -409,19 +379,19 @@ Autoseleccion: diferencias previas (motivacion, habilidad, redes) contaminan la 
 
 ---
 
-## Seccion 4: Stata {-}
+## Sección 4: Stata {-}
 
 <div class="quiz-section" data-section="Stata">
 
-Esta seccion evalua tu familiaridad basica con Stata.
+Esta sección evalúa tu familiaridad básica con Stata.
 
 <div class="question-box">
-<span class="question-number">Pregunta 16.</span> En Stata, cual comando usarias para ver las primeras observaciones de tu base de datos?
+<span class="question-number">Pregunta 16.</span> En Stata, ¿cuál comando usarías para ver las primeras observaciones de tu base de datos?
 
 <select class='webex-select'><option value='blank'></option><option value=''>view</option><option value='answer'>browse o list</option><option value=''>show</option><option value=''>display</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
 `browse` abre el visor de datos. `list` imprime observaciones en Results (por ejemplo: `list in 1/10`).
 
@@ -430,12 +400,12 @@ Esta seccion evalua tu familiaridad basica con Stata.
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 17.</span> En una regresion en Stata, si el coeficiente de x es 2.35, esto significa que:
+<span class="question-number">Pregunta 17.</span> En una regresión en Stata, si el coeficiente de x es 2.35, esto significa que:
 
 <select class='webex-select'><option value='blank'></option><option value=''>La variable x tiene un p-value de 2.35</option><option value='answer'>Por cada unidad adicional de x, Y aumenta en 2.35 unidades (en promedio)</option><option value=''>El R-cuadrado del modelo es 2.35</option><option value=''>Hay 2.35 observaciones con esa variable</option></select>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
 El coeficiente es el cambio promedio en Y asociado con una unidad adicional en X, ceteris paribus.
 
@@ -444,14 +414,42 @@ El coeficiente es el cambio promedio en Y asociado con una unidad adicional en X
 </div>
 
 <div class="question-box">
-<span class="question-number">Pregunta 18.</span> Cual es el comando correcto en Stata para realizar una regresion de Y sobre X1 y X2?
+<span class="question-number">Pregunta 18.</span> ¿Cuál es el comando correcto en Stata para realizar una regresión de Y sobre X1 y X2?
 
-<input class='webex-solveme nospaces ignorecase' size='25' data-answer='["reg Y X1 X2","regress Y X1 X2"]'/>
+<input class='webex-solveme nospaces ignorecase' size='25' data-answer='["regress Y X1 X2"]'/>
 
 
-<div class='webex-solution'><button>Ver explicacion</button>
+<div class='webex-solution'><button>Ver explicación</button>
 
 Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
+
+</div>
+
+</div>
+
+<div class="question-box">
+<span class="question-number">Pregunta 19.</span> ¿Qué comando crea `ingreso_alto` igual a 1 únicamente para observaciones con `ingreso` mayor que 1000?
+
+<select class='webex-select'><option value='blank'></option><option value=''>replace ingreso_alto = 1 if ingreso > 1000</option><option value='answer'>generate ingreso_alto = 1 if ingreso > 1000</option><option value=''>if ingreso > 1000 generate ingreso_alto = 1</option><option value=''>create ingreso_alto where ingreso > 1000</option></select>
+
+
+<div class='webex-solution'><button>Ver explicación</button>
+
+`generate` crea una variable nueva y `if` restringe las observaciones a las que se asigna el valor. Las demás quedarán como valores perdidos hasta que se definan explícitamente.
+
+</div>
+
+</div>
+
+<div class="question-box">
+<span class="question-number">Pregunta 20.</span> Después de ejecutar `summarize salario`, ¿cómo muestra Stata la media almacenada por el comando?
+
+<select class='webex-select'><option value='blank'></option><option value=''>display e(mean)</option><option value='answer'>display r(mean)</option><option value=''>display _b[mean]</option><option value=''>show mean(salario)</option></select>
+
+
+<div class='webex-solution'><button>Ver explicación</button>
+
+`summarize` es un comando de clase `r`; guarda la media en `r(mean)` hasta que otro comando sobrescriba esos resultados.
 
 </div>
 
@@ -463,7 +461,7 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
 
 ---
 
-## Puntaje (automatico) {-}
+## Puntaje (automático) {-}
 
 <div class="scoring-guide">
   <button type="button" id="btn-finalizar" class="btn-score">
@@ -602,21 +600,20 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
     });
 
     const bySection = sections.map(sec => {
-      const name = sec.getAttribute("data-section") || "Seccion";
+      const name = sec.getAttribute("data-section") || "Sección";
       const boxes = Array.from(sec.querySelectorAll(".question-box"));
-      let t = boxes.length, c = 0;
+      let c = 0;
       boxes.forEach(b => { if (scoreQuestionBox(b).correct) c += 1; });
-      return { name, total: t, correct: c };
+      return { name, total: 5, correct: c };
     });
 
-    return { total, correct, answered, bySection };
+    return { total: 20, correct, answered, bySection };
   }
 
-  function levelMessage(nCorrect) {
-    if (nCorrect >= 16) return "Excelente: base muy solida para el curso.";
-    if (nCorrect >= 13) return "Buen nivel: repasa los temas con errores.";
-    if (nCorrect >= 10) return "Nivel aceptable: conviene repasar prerequisitos.";
-    return "Reforzar prerequisitos: revisa los recursos sugeridos.";
+  function recommendation(nCorrect) {
+    if (nCorrect <= 2) return "Repaso prioritario";
+    if (nCorrect === 3) return "Repaso recomendado";
+    return "Preparación suficiente";
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -629,26 +626,34 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
     btn.addEventListener("click", () => {
       const s = computeScores(root);
       const pct = s.total > 0 ? Math.round(100 * s.correct / s.total) : 0;
+      const pending = Array.from(root.querySelectorAll(".question-box"))
+        .map((box, index) => ({ box, number: index + 1 }))
+        .filter(item => !scoreQuestionBox(item.box).answered)
+        .map(item => item.number);
 
       const rows = s.bySection.map(x =>
-        `<tr><td>${x.name}</td><td>${x.correct} / ${x.total}</td></tr>`
+        `<tr><td>${x.name}</td><td>${x.correct} / 5</td><td class="score-recommendation">${recommendation(x.correct)}</td></tr>`
       ).join("");
+
+      const pendingMessage = pending.length > 0
+        ? `<p><strong>Preguntas pendientes (contadas como incorrectas):</strong> ${pending.join(", ")}</p>`
+        : "<p><strong>Preguntas pendientes:</strong> ninguna.</p>";
 
       out.innerHTML = `
         <h3>Resultados</h3>
-        <p><strong>Puntaje total:</strong> ${s.correct} / ${s.total} (${pct}%)</p>
-        <p><strong>Preguntas respondidas:</strong> ${s.answered} / ${s.total}</p>
-        <p><strong>Diagnostico:</strong> ${levelMessage(s.correct)}</p>
+        <p><strong>Puntaje total:</strong> ${s.correct} / 20 (${pct}%)</p>
+        <p><strong>Preguntas respondidas:</strong> ${s.answered} / 20</p>
+        ${pendingMessage}
 
-        <h4>Desglose por seccion</h4>
+        <h4>Desglose por sección</h4>
         <table>
-          <thead><tr><th>Seccion</th><th>Puntaje</th></tr></thead>
+          <thead><tr><th>Sección</th><th>Puntaje</th><th>Recomendación</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
       `;
 
       out.style.display = "block";
-      root.classList.add("show-feedback"); // ahora sí se muestran correct/incorrect y explicaciones
+      root.classList.add("show-feedback");
       out.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
@@ -663,9 +668,9 @@ Comando: `regress Y X1 X2` (abreviado: `reg Y X1 X2`).
 
 <div class="resources-box">
 
-### Si necesitas repasar Estadistica Basica {-}
+### Si necesitas repasar Estadística Básica {-}
 
-- Khan Academy - Estadistica y Probabilidad
+- Khan Academy - Estadística y Probabilidad
 ```text
 https://es.khanacademy.org/math/statistics-probability
 ```
@@ -675,11 +680,11 @@ https://es.khanacademy.org/math/statistics-probability
 https://www.openintro.org/book/os/
 ```
 
-### Si necesitas repasar Regresion Lineal {-}
+### Si necesitas repasar Regresión Lineal {-}
 
 - Wooldridge, "Introductory Econometrics" (Caps 1-4)
 
-- Khan Academy - Regresion
+- Khan Academy - Regresión
 ```text
 https://es.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data
 ```

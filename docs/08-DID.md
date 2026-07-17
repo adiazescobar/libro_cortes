@@ -57,18 +57,18 @@ La **segunda diferencia** (entre filas) elimina la tendencia temporal común.
 
 Formalizamos con la notación de resultados potenciales:
 
-- $Y_{it}(1)$: resultado del individuo $i$ en el periodo $t$ **si es tratado**.
-- $Y_{it}(0)$: resultado del individuo $i$ en el periodo $t$ **si no es tratado**.
+- $Y_{it}(D=1)$: resultado del individuo $i$ en el periodo $t$ **si es tratado**.
+- $Y_{it}(D=0)$: resultado del individuo $i$ en el periodo $t$ **si no es tratado**.
 
 El efecto del tratamiento sobre los tratados (**ATT**) en $t=1$ es:
 
-$$\text{ATT} = E\!\left[Y_{i,1}(1) - Y_{i,1}(0) \mid D_i = 1\right]$$
+$$\text{ATT} = E\!\left[Y_{i,1}(D=1) - Y_{i,1}(D=0) \mid D_i = 1\right]$$
 
-El problema: $Y_{i,1}(0)$ no se observa para los tratados después del tratamiento. Necesitamos un contrafactual.
+El problema: $Y_{i,1}(D=0)$ no se observa para los tratados después del tratamiento. Necesitamos un contrafactual.
 
 DiD propone usar el cambio observado en los controles como estimación del cambio contrafactual en los tratados:
 
-$$E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 1\right] \approx E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 0\right]$$
+$$E\!\left[Y_{i,1}(D=0) - Y_{i,0}(D=0) \mid D_i = 1\right] \approx E\!\left[Y_{i,1}(D=0) - Y_{i,0}(D=0) \mid D_i = 0\right]$$
 
 Esa igualdad es exactamente el **supuesto de tendencias paralelas**.
 
@@ -79,7 +79,7 @@ Esa igualdad es exactamente el **supuesto de tendencias paralelas**.
 ::: {.boxcerebro}
 **Supuesto de tendencias paralelas (formal):**
 
-$$E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 1\right] = E\!\left[Y_{i,1}(0) - Y_{i,0}(0) \mid D_i = 0\right]$$
+$$E\!\left[Y_{i,1}(D=0) - Y_{i,0}(D=0) \mid D_i = 1\right] = E\!\left[Y_{i,1}(D=0) - Y_{i,0}(D=0) \mid D_i = 0\right]$$
 
 En ausencia del tratamiento, la evolución media del resultado en el grupo tratado habría sido **idéntica** a la del grupo de control.
 :::
@@ -115,7 +115,7 @@ $$
 Sustituyendo resultados potenciales y usando independencia e igualdad de tendencias:
 
 $$
-= E[Y(1) - Y(0) \mid D=1] = \text{ATT}
+= E[Y(D=1) - Y(D=0) \mid D=1] = \text{ATT}
 $$
 
 El estimador es insesgado para el ATT **si y solo si** el supuesto de tendencias paralelas se cumple.
@@ -150,7 +150,7 @@ $$\bar{Y}_{C,0} = \hat{\alpha}, \quad \bar{Y}_{T,0} = \hat{\alpha}+\hat{\beta}, 
 
 ## Prueba de tendencias paralelas {-}
 
-El supuesto de tendencias paralelas **no es verificable** en el periodo de tratamiento: el contrafactual $Y_{it}(0)$ para los tratados en $t=1$ no existe. Solo podemos buscar evidencia indirecta.
+El supuesto de tendencias paralelas **no es verificable** en el periodo de tratamiento: el contrafactual $Y_{it}(D=0)$ para los tratados en $t=1$ no existe. Solo podemos buscar evidencia indirecta.
 
 **Con múltiples periodos pre-tratamiento** (y un identificador individual), Stata ofrece dos pruebas formales distintas — y es importante no confundirlas:
 

@@ -193,7 +193,7 @@ DiD identifica el efecto causal $\tau$ bajo el supuesto de **tendencias paralela
 
 > En ausencia de tratamiento, la diferencia entre tratados y controles habría permanecido constante en el tiempo.
 
-Formalmente: $E[Y_{it}(0) - Y_{it-1}(0) \mid D_i = 1] = E[Y_{it}(0) - Y_{it-1}(0) \mid D_i = 0]$
+Formalmente: $E[Y_{it}(D=0) - Y_{it-1}(D=0) \mid D_i = 1] = E[Y_{it}(D=0) - Y_{it-1}(D=0) \mid D_i = 0]$
 
 Si el tratado tenía una **tendencia diferente** (crecía más rápido o más lento) antes del tratamiento, DiD captura $\tau$ **más** esa diferencia de tendencias → **sesgo**.
 

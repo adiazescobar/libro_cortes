@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 /* Ocultar subsecciones pero mantener funcionalidad de enlaces principales */
 .book-summary ul.summary li ul {
   display: none !important;
@@ -67,6 +69,21 @@ pre code {
   border-radius: 4px;
 }
 
+.boxcode,
+.boxoutput,
+.boxkey,
+.boxquestion {
+  border-left: 5px solid var(--accent);
+  border-radius: 5px;
+  margin: 1em 0;
+  padding: 1em;
+}
+
+.boxcode { background-color: #f4ecf7; border-left-color: #9b59b6; }
+.boxoutput { background-color: #e8f8f5; border-left-color: #2ecc71; }
+.boxkey { background-color: #eef6fb; border-left-color: #007ACC; }
+.boxquestion { background-color: #fff6e6; border-left-color: #e67e22; }
+
 .boxsuccess {
   border-left: 5px solid #2ecc71;
   background-color: #e8f8f5;
@@ -123,3 +140,193 @@ pre code {
   accent-color: #6c5ce7;
 }
 
+/* Sistema visual compartido con libro_econometria */
+:root {
+  --paper: #FCFCFB;
+  --ink: #17181A;
+  --muted: #6A6C70;
+  --line: #E7E7E3;
+  --accent: #C0562F;
+  --display: "Fraunces", Georgia, serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.book .book-body,
+.book.color-theme-0 .book-body { background: var(--paper) !important; }
+
+.book .book-body,
+.book.font-family-1,
+.book .book-body .page-wrapper .page-inner section.normal {
+  color: var(--ink) !important;
+  font-family: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif !important;
+}
+
+.book .book-body .page-inner { max-width: 840px; }
+
+.book .book-body .page-inner section h1,
+.book .book-body .page-inner section h2,
+.book .book-body .page-inner section h3,
+.book .book-body .page-inner section h4 {
+  color: var(--ink) !important;
+  font-family: var(--display) !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.012em;
+}
+
+.book .book-body .page-inner section a { color: var(--accent) !important; }
+
+.book .book-body .page-inner section code,
+.book .book-body pre,
+.book .book-body pre code,
+.book .book-summary { font-family: var(--mono) !important; }
+
+.book .book-summary {
+  background: #FBFAF7 !important;
+  border-right: 1px solid var(--line) !important;
+  font-size: 0.78rem;
+}
+
+/* Cajas específicas del flujo Stata -> Colab -> verificación */
+.box-stata,
+.box-colab,
+.box-verificacion,
+.box-cuidado,
+.box-resumen,
+.box-ejercicios {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  line-height: 1.65;
+  margin: 1.5em 0;
+  padding: 1em 1.15em;
+}
+
+.box-stata::before,
+.box-colab::before,
+.box-verificacion::before,
+.box-cuidado::before,
+.box-resumen::before,
+.box-ejercicios::before {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.55em;
+  text-transform: uppercase;
+}
+
+.box-stata { background: #eef4fb; border-left: 5px solid #3d5a80; }
+.box-stata::before { color: #2e4a6b; content: "STATA"; }
+.box-colab { background: #fff8e8; border-left: 5px solid #f9ab00; }
+.box-colab::before { color: #9a6700; content: "PYTHON / COLAB"; }
+.box-verificacion { background: #eef7f4; border-left: 5px solid #2a9d8f; }
+.box-verificacion::before { color: #1f7a6e; content: "VERIFICACIÓN"; }
+.box-cuidado { background: #fff4ed; border-left: 5px solid #e76f51; }
+.box-cuidado::before { color: #C0562F; content: "CUIDADO"; }
+.box-resumen { background: #f7f3ea; border-left: 5px solid #b8860b; }
+.box-resumen::before { color: #8a6f3d; content: "RESUMEN"; }
+.box-ejercicios { background: #fffbe6; border-left: 5px solid #e6ac00; }
+.box-ejercicios::before { color: #9a7600; content: "EJERCICIOS"; }
+
+.box-colab img {
+  height: 20px;
+  margin: 0.4em 0;
+}
+
+.class-materials {
+  background: #f7f3ea;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: 10px;
+  margin: 1.25em 0 1.75em;
+  padding: 1em 1.15em;
+}
+
+.class-materials ul {
+  display: grid;
+  gap: 0.55em 1.2em;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 0.8em 0;
+  padding: 0;
+}
+
+.class-materials li a {
+  display: block;
+  font-weight: 600;
+}
+
+.class-materials .colab-link img { height: 20px; }
+
+/* Prueba de entrada */
+.diagnostic-intro,
+.quiz-section,
+.question-box,
+.scoring-guide {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  margin: 1.25em 0;
+  padding: 1em 1.15em;
+}
+
+.diagnostic-intro,
+.quiz-section,
+.scoring-guide {
+  border-left: 5px solid var(--accent);
+}
+
+.question-box {
+  overflow-wrap: anywhere;
+}
+
+.scoring-guide .btn-score {
+  background: var(--accent);
+  border-color: var(--accent);
+  border-radius: 8px;
+  color: var(--paper);
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  padding: 10px 14px;
+}
+
+.scoring-guide .btn-score:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#score-result table {
+  border-collapse: collapse;
+  margin-top: 10px;
+  width: 100%;
+}
+
+#score-result th,
+#score-result td {
+  border: 1px solid var(--line);
+  padding: 8px;
+  text-align: left;
+}
+
+.score-recommendation {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .book .book-body .page-wrapper .page-inner section.normal table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .class-materials ul { grid-template-columns: 1fr; }
+  .scoring-guide .btn-score { width: 100%; }
+  .question-box .webex-radiogroup,
+  .question-box .webex-radiogroup label,
+  .question-box input,
+  .question-box select { max-width: 100%; }
+}

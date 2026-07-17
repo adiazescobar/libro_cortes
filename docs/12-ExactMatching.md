@@ -17,7 +17,7 @@ En un experimento aleatorizado (RCT), la asignación al tratamiento garantiza qu
 
 En datos **observacionales**, esto no está garantizado. Los individuos se autoseleccionan al tratamiento: las personas que deciden estudiar un posgrado, adoptar una tecnología o participar en un programa social son **sistemáticamente distintas** a quienes no lo hacen. Comparar sus resultados directamente mezcla el efecto del tratamiento con diferencias preexistentes.
 
-$$\underbrace{E[Y_i \mid D_i = 1] - E[Y_i \mid D_i = 0]}_{\text{Diferencia de medias observada}} = \underbrace{ATT}_{\text{Efecto causal}} + \underbrace{E[Y_i(0) \mid D_i = 1] - E[Y_i(0) \mid D_i = 0]}_{\text{Sesgo de selección}}$$
+$$\underbrace{E[Y_i \mid D_i = 1] - E[Y_i \mid D_i = 0]}_{\text{Diferencia de medias observada}} = \underbrace{ATT}_{\text{Efecto causal}} + \underbrace{E[Y_i(D=0) \mid D_i = 1] - E[Y_i(D=0) \mid D_i = 0]}_{\text{Sesgo de selección}}$$
 
 El término de sesgo de selección refleja que los tratados y los controles tendrían resultados distintos **incluso en ausencia del tratamiento**. El objetivo de los métodos de emparejamiento es eliminar este sesgo controlando por las características observables que generan la selección.
 
@@ -30,10 +30,10 @@ La intuición es simple: **construir un clon** para cada individuo tratado.
 Si encontramos, para cada persona tratada $i$, un individuo no tratado $j$ que tiene exactamente las mismas características observables $X$ (edad, educación, género, región, etc.), entonces la única diferencia restante entre $i$ y $j$ es el tratamiento. La comparación de sus resultados aproxima el efecto causal.
 
 ```text
-Tratado i:  X = (35 años, universitario, mujer, Bogotá) → Y_i(1)
-Control j:  X = (35 años, universitario, mujer, Bogotá) → Y_j(0)
+Tratado i:  X = (35 años, universitario, mujer, Bogotá) → Y_i(D=1)
+Control j:  X = (35 años, universitario, mujer, Bogotá) → Y_j(D=0)
 
-ATT ≈ Y_i(1) - Y_j(0)
+ATT ≈ Y_i(D=1) - Y_j(D=0)
 ```
 
 El emparejamiento exacto replica, de forma no paramétrica, el principio del experimento: dentro de cada "celda" definida por los valores de $X$, la asignación al tratamiento es como si fuera aleatoria.
@@ -48,7 +48,7 @@ Para que el emparejamiento exacto sea válido se necesitan tres condiciones:
 
 Todas las variables que determinan simultáneamente la selección al tratamiento **y** el resultado deben ser **observables y medibles**. Esto es el supuesto de **Independencia Condicional (CIA)**:
 
-$$\{Y_i(1), Y_i(0)\} \perp D_i \mid X_i$$
+$$\{Y_i(D=1), Y_i(D=0)\} \perp D_i \mid X_i$$
 
 Una vez controlamos por $X$, el tratamiento es "como si fuera" aleatorio. Si hay variables no observadas que afectan tanto la selección como el resultado (por ejemplo, habilidad no medida, motivación, conexiones sociales), el emparejamiento no resuelve el problema de identificación.
 

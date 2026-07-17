@@ -30,7 +30,9 @@ ssc install lpdensity   // dependencia de rddensity
 
 [Descargar versión R (RDD_simulacion.R)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/19_RDD/RDD_simulacion.R)
 
-Los tres archivos contienen las mismas seis partes (RDN lineal, RDN curvo, ancho de banda, pruebas de robustez, RDB, $Z$ discreta) y producen los mismos resultados.
+[Descargar do-file de clase — Sharp + Fuzzy (05_rdd_stata_CLASSROOM.do)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/19_RDD/05_rdd_stata_CLASSROOM.do)
+
+Los tres primeros archivos contienen las mismas seis partes (RDN lineal, RDN curvo, ancho de banda, pruebas de robustez, RDB, $Z$ discreta) y producen los mismos resultados. El do-file de clase (`05_rdd_stata_CLASSROOM.do`) es la versión pedagógica que se proyecta en clase: simulación paso a paso con DGP conocido (ATE = 4 para Sharp, ATE = 5 para Fuzzy), comparando OLS, regresiones locales, `rdrobust` e `ivreg2`.
 
 ---
 
@@ -90,7 +92,7 @@ reg y D Zt
 
 | Coeficiente | Lectura | Valor esperado |
 |---|---|---|
-| `_b[_cons]` | $E[Y(0) \mid Z = 62]$ | $\approx 1.0$ |
+| `_b[_cons]` | $E[Y(D=0) \mid Z = 62]$ | $\approx 1.0$ |
 | `_b[D]` | **salto $\tau_{RDN}$** | $\approx 2.0$ |
 | `_b[Zt]` | Pendiente común | $\approx 0.10$ |
 

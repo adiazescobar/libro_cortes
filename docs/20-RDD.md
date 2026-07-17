@@ -78,19 +78,19 @@ En la **Regresión Discontinua Nítida (RDN)**, el tratamiento se asigna **deter
 
 $$D_i = \mathbb{1}[Z_i \geq c]$$
 
-Todos los que cruzan el umbral reciben el tratamiento, ninguno por debajo lo recibe. El problema de identificación se plantea sobre los resultados potenciales $Y_i(1), Y_i(0)$.
+Todos los que cruzan el umbral reciben el tratamiento, ninguno por debajo lo recibe. El problema de identificación se plantea sobre los resultados potenciales $Y_i(D=1), Y_i(D=0)$.
 
 ::: {.boxinfo}
 **Supuesto clave — continuidad local (Hahn, Todd & van der Klaauw 2001):**
 
-$$E[Y(d) \mid Z = z] \text{ es continuo en } z = c \text{ para } d = 0, 1$$
+$$E[Y(D=1) \mid Z=z] \text{ y } E[Y(D=0) \mid Z=z] \text{ son continuos en } z=c$$
 
 Es decir, en ausencia del tratamiento, el resultado esperado **no salta** en el umbral. Cualquier discontinuidad observada en $E[Y \mid Z]$ en $c$ es atribuible al tratamiento.
 :::
 
 Bajo continuidad local, el **efecto promedio del tratamiento en el umbral** está identificado como:
 
-$$\tau_{RDN} = E[Y(1) - Y(0) \mid Z = c] = \lim_{z \downarrow c} E[Y \mid Z = z] - \lim_{z \uparrow c} E[Y \mid Z = z]$$
+$$\tau_{RDN} = E[Y(D=1) - Y(D=0) \mid Z = c] = \lim_{z \downarrow c} E[Y \mid Z = z] - \lim_{z \uparrow c} E[Y \mid Z = z]$$
 
 **Lectura:** $\tau_{RDN}$ es el ATE *local en $c$* — el efecto promedio para individuos cuya $Z$ es exactamente $c$. Esta es la principal limitación de validez externa del diseño.
 
@@ -128,19 +128,19 @@ donde $\bar y_{\text{der}}$ es el promedio del resultado para observaciones con 
 
 ### Caso 1 — lineal con la **misma pendiente** a ambos lados {-}
 
-Supongamos que $E[Y(0) \mid Z]$ es lineal en $Z$ y que el efecto del programa $\tau$ **no depende de $Z$**:
+Supongamos que $E[Y(D=0) \mid Z]$ es lineal en $Z$ y que el efecto del programa $\tau$ **no depende de $Z$**:
 
-$$E[Y(0) \mid Z] = \delta + \beta Z$$
-$$E[Y(1) - Y(0) \mid Z] = \tau$$
+$$E[Y(D=0) \mid Z] = \delta + \beta Z$$
+$$E[Y(D=1) - Y(D=0) \mid Z] = \tau$$
 
 Entonces:
 
-$$E[Y(1) \mid Z] = \tau + E[Y(0) \mid Z] = \tau + \delta + \beta Z$$
+$$E[Y(D=1) \mid Z] = \tau + E[Y(D=0) \mid Z] = \tau + \delta + \beta Z$$
 
-Usando $Y = D \cdot Y(1) + (1-D) Y(0)$:
+Usando $Y = D \cdot Y(D=1) + (1-D) Y(D=0)$:
 
 \begin{align*}
-E[Y \mid Z, D] &= D \cdot E[Y(1) \mid Z] + (1-D) \cdot E[Y(0) \mid Z] \\
+E[Y \mid Z, D] &= D \cdot E[Y(D=1) \mid Z] + (1-D) \cdot E[Y(D=0) \mid Z] \\
 &= D \cdot (\tau + \delta + \beta Z) + (1-D)(\delta + \beta Z) \\
 &= \delta + \beta Z + \tau D
 \end{align*}
@@ -153,13 +153,13 @@ donde $\alpha = \delta + \beta c$ es el intercepto al umbral. **El coeficiente d
 
 ### Caso 2 — lineal con **pendientes distintas** a cada lado {-}
 
-Si $E[Y(0) \mid Z]$ y $E[Y(1) \mid Z]$ son lineales pero con pendientes diferentes:
+Si $E[Y(D=0) \mid Z]$ y $E[Y(D=1) \mid Z]$ son lineales pero con pendientes diferentes:
 
-$$E[Y(0) \mid Z] = \delta_0 + \beta_0 Z, \qquad E[Y(1) \mid Z] = \delta_1 + \beta_1 Z$$
+$$E[Y(D=0) \mid Z] = \delta_0 + \beta_0 Z, \qquad E[Y(D=1) \mid Z] = \delta_1 + \beta_1 Z$$
 
 El efecto causal depende de $Z$:
 
-$$\tau(Z) = E[Y(1) - Y(0) \mid Z] = (\delta_1 - \delta_0) + (\beta_1 - \beta_0) Z$$
+$$\tau(Z) = E[Y(D=1) - Y(D=0) \mid Z] = (\delta_1 - \delta_0) + (\beta_1 - \beta_0) Z$$
 
 Combinando como antes:
 

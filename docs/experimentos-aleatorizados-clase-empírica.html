@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 6 Experimentos aleatorizados — Clase empírica | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 6 Experimentos aleatorizados — Clase empírica | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 6 Experimentos aleatorizados — Clase empírica | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 6 Experimentos aleatorizados — Clase empírica | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2026-07-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="experimentos-aleatorizados-clase-teórica.html"/>
+<link rel="next" href="poder-estadistico-teoria.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#antes-de-comenzar"><i class="fa fa-check"></i>Antes de comenzar</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puntaje-autom%C3%A1tico"><i class="fa fa-check"></i>Puntaje (automático)</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="06-RCT2.html"><a href="#introducci%C3%B3n-a-la-inferencia-causal"><i class="fa fa-check"></i><b>1</b> Introducción a la inferencia causal</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#objetivos-y-mapa-del-cap%C3%ADtulo"><i class="fa fa-check"></i>Objetivos y mapa del capítulo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-importa-la-inferencia-causal"><i class="fa fa-check"></i>Por qué importa la inferencia causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-formular-una-pregunta-causal"><i class="fa fa-check"></i>Cómo formular una pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html"><i class="fa fa-check"></i>Contrafactual y resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html#el-problema-fundamental"><i class="fa fa-check"></i>El problema fundamental</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diferencia-observada-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Diferencia observada y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html#comparaciones-que-no-identifican-causalidad"><i class="fa fa-check"></i>Comparaciones que no identifican causalidad</a></li>
+<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html#estrategias-del-curso"><i class="fa fa-check"></i>Estrategias del curso</a></li>
+<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html#mapa-del-libro-y-puente-a-stata"><i class="fa fa-check"></i>Mapa del libro y puente a Stata</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#materiales-para-la-clase"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#preparar-el-entorno-y-modificar-datos"><i class="fa fa-check"></i>Preparar el entorno y modificar datos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html"><i class="fa fa-check"></i><b>3</b> Parámetros Causales (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#objetivos-y-lecturas"><i class="fa fa-check"></i>Objetivos y lecturas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pregunta-causal-y-poblaci%C3%B3n-de-inter%C3%A9s"><i class="fa fa-check"></i>Pregunta causal y población de interés</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#el-problema-fundamental-1"><i class="fa fa-check"></i>El problema fundamental</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#ate-att-atu-y-cate"><i class="fa fa-check"></i>ATE, ATT, ATU y CATE</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diferencia-observada-y-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Diferencia observada y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-antes-despu%C3%A9s"><i class="fa fa-check"></i>Comparación antes-después</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#sutva"><i class="fa fa-check"></i>SUTVA</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#ejercicios"><i class="fa fa-check"></i>Ejercicios</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puente-a-la-pr%C3%A1ctica"><i class="fa fa-check"></i>Puente a la práctica</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#referencias"><i class="fa fa-check"></i>Referencias</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html"><i class="fa fa-check"></i><b>4</b> Parámetros Causales en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#materiales-para-la-clase-1"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#objetivos"><i class="fa fa-check"></i>Objetivos</a></li>
+<li class="chapter" data-level="4.1" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#describir-los-datos-y-construir-el-resultado-observado"><i class="fa fa-check"></i><b>4.1</b> Describir los datos y construir el resultado observado</a></li>
+<li class="chapter" data-level="4.2" data-path="06-RCT2.html"><a href="#relacionar-diferencia-de-medias-y-regresi%C3%B3n"><i class="fa fa-check"></i><b>4.2</b> Relacionar diferencia de medias y regresión</a></li>
+<li class="chapter" data-level="4.3" data-path="06-RCT2.html"><a href="#calcular-par%C3%A1metros-causales-y-heterogeneidad"><i class="fa fa-check"></i><b>4.3</b> Calcular parámetros causales y heterogeneidad</a></li>
+<li class="chapter" data-level="4.4" data-path="06-RCT2.html"><a href="#duplicar-observaciones-no-resuelve-la-selecci%C3%B3n"><i class="fa fa-check"></i><b>4.4</b> Duplicar observaciones no resuelve la selección</a></li>
+<li class="chapter" data-level="4.5" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#reasignar-el-tratamiento-al-azar"><i class="fa fa-check"></i><b>4.5</b> Reasignar el tratamiento al azar</a></li>
+<li class="chapter" data-level="4.6" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#repetir-el-experimento-monte-carlo"><i class="fa fa-check"></i><b>4.6</b> Repetir el experimento: Monte Carlo</a></li>
+<li class="chapter" data-level="4.7" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#ejercicios-1"><i class="fa fa-check"></i><b>4.7</b> Ejercicios</a></li>
+<li class="chapter" data-level="4.8" data-path="06-RCT2.html"><a href="#s%C3%ADntesis-1"><i class="fa fa-check"></i><b>4.8</b> Síntesis</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puente-al-cap%C3%ADtulo-siguiente"><i class="fa fa-check"></i>Puente al capítulo siguiente</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="06-RCT2.html"><a href="#experimentos-aleatorizados-clase-te%C3%B3rica"><i class="fa fa-check"></i><b>5</b> Experimentos aleatorizados — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html"><i class="fa fa-check"></i>Pregunta causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#intuici%C3%B3n-y-motivaci%C3%B3n"><i class="fa fa-check"></i>Intuición y motivación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n-par%C3%A1metros-y-estimandos"><i class="fa fa-check"></i>Notación, parámetros y estimandos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n-1"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#desarrollo-te%C3%B3rico-y-demostraciones"><i class="fa fa-check"></i>Desarrollo teórico y demostraciones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto"><i class="fa fa-check"></i>¿En regresión lineal cómo se ve esto?</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>RCT simple, sin estratos, sin controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>RCT simple, sin estratos, con controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>RCT estratificado (bloques), sin controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>RCT estratificado + controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n-del-estimador"><i class="fa fa-check"></i>Interpretación del estimador</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#supuestos-propiedades-y-condiciones-de-validez"><i class="fa fa-check"></i>Supuestos, propiedades y condiciones de validez</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#amenazas-limitaciones-y-errores-comunes"><i class="fa fa-check"></i>Amenazas, limitaciones y errores comunes</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pr%C3%A1ctica-tipo-parcial"><i class="fa fa-check"></i>Práctica tipo parcial</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#preguntas-para-clase"><i class="fa fa-check"></i>Preguntas para clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puente-a-la-clase-pr%C3%A1ctica"><i class="fa fa-check"></i>Puente a la clase práctica</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#referencias-1"><i class="fa fa-check"></i>Referencias</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="06-RCT2.html"><a href="#experimentos-aleatorizados-clase-emp%C3%ADrica"><i class="fa fa-check"></i><b>6</b> Experimentos aleatorizados — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empírica.html"><a href="experimentos-aleatorizados-clase-empírica.html"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pregunta-emp%C3%ADrica"><i class="fa fa-check"></i>Pregunta empírica</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empírica.html"><a href="experimentos-aleatorizados-clase-empírica.html#datos"><i class="fa fa-check"></i>Datos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empírica.html"><a href="experimentos-aleatorizados-clase-empírica.html#desarrollo-guiado-del-rct"><i class="fa fa-check"></i>Desarrollo guiado del RCT</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html"><i class="fa fa-check"></i><b>7</b> Poder estadístico — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#pregunta-causal-1"><i class="fa fa-check"></i><b>7.1</b> Pregunta causal</a></li>
+<li class="chapter" data-level="7.2" data-path="06-RCT2.html"><a href="#intuici%C3%B3n-y-motivaci%C3%B3n-1"><i class="fa fa-check"></i><b>7.2</b> Intuición y motivación</a></li>
+<li class="chapter" data-level="7.3" data-path="06-RCT2.html"><a href="#notaci%C3%B3n-par%C3%A1metros-y-estimandos-1"><i class="fa fa-check"></i><b>7.3</b> Notación, parámetros y estimandos</a></li>
+<li class="chapter" data-level="7.4" data-path="06-RCT2.html"><a href="#supuestos-de-identificaci%C3%B3n-2"><i class="fa fa-check"></i><b>7.4</b> Supuestos de identificación</a></li>
+<li class="chapter" data-level="7.5" data-path="06-RCT2.html"><a href="#desarrollo-te%C3%B3rico-y-demostraciones-1"><i class="fa fa-check"></i><b>7.5</b> Desarrollo teórico y demostraciones</a></li>
+<li class="chapter" data-level="7.6" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#amenazas-limitaciones-y-errores-comunes-1"><i class="fa fa-check"></i><b>7.6</b> Amenazas, limitaciones y errores comunes</a></li>
+<li class="chapter" data-level="7.7" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#resumen-1"><i class="fa fa-check"></i><b>7.7</b> Resumen</a></li>
+<li class="chapter" data-level="7.8" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#preguntas-para-clase-1"><i class="fa fa-check"></i><b>7.8</b> Preguntas para clase</a></li>
+<li class="chapter" data-level="7.9" data-path="06-RCT2.html"><a href="#puente-a-la-clase-pr%C3%A1ctica-1"><i class="fa fa-check"></i><b>7.9</b> Puente a la clase práctica</a></li>
+<li class="chapter" data-level="7.10" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#referencias-2"><i class="fa fa-check"></i><b>7.10</b> Referencias</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html"><i class="fa fa-check"></i><b>8</b> Poder Estadístico en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#materiales-para-la-clase-3"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#sin-controles"><i class="fa fa-check"></i>Sin controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#resultados-binarios-y-tasas"><i class="fa fa-check"></i>Resultados binarios y tasas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ajustes-por-implementaci%C3%B3n"><i class="fa fa-check"></i>Ajustes por implementación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#casos-aplicados-de-la-clase"><i class="fa fa-check"></i>Casos aplicados de la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-puede-salir-mal-en-un-rct"><i class="fa fa-check"></i>Qué puede salir mal en un RCT</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#ejercicio-aplicado-bertrand-y-mullainathan-2004"><i class="fa fa-check"></i>Ejercicio aplicado: Bertrand y Mullainathan (2004)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pr%C3%A1ctica-evaluada"><i class="fa fa-check"></i>Práctica evaluada</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>9</b> Diferencias en Diferencias</a>
+<ul>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-problema-que-did-resuelve"><i class="fa fa-check"></i>El problema que DiD resuelve</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#la-tabla-22"><i class="fa fa-check"></i>La tabla 2×2</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#resultados-potenciales-y-el-att"><i class="fa fa-check"></i>Resultados potenciales y el ATT</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas"><i class="fa fa-check"></i>Identificación del ATT bajo tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-regresi%C3%B3n-did"><i class="fa fa-check"></i>La regresión DiD</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#prueba-de-tendencias-paralelas"><i class="fa fa-check"></i>Prueba de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis-2"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#ejercicio-con-datos"><i class="fa fa-check"></i>Ejercicio con datos</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>10</b> Malos Controles (Teoría)</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#resultados-potenciales-1"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>La demostración formal: sesgo de agrupación</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>11</b> Malos Controles: Código y Simulaciones</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#la-idea-central-controlar-no-siempre-ayuda"><i class="fa fa-check"></i>La idea central: controlar no siempre ayuda</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#buen-control-vs.-mal-control-la-diferencia-en-una-imagen"><i class="fa fa-check"></i>Buen control vs. mal control: la diferencia en una imagen</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-1-post-tratamiento-mediador"><i class="fa fa-check"></i>Caso 1: Post-tratamiento / mediador</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#caso-2-colisionador-selecci%C3%B3n-end%C3%B3gena"><i class="fa fa-check"></i>Caso 2: Colisionador / selección endógena</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-3-proxy-contaminado"><i class="fa fa-check"></i>Caso 3: Proxy contaminado</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#tabla-resumen-los-tres-casos"><i class="fa fa-check"></i>Tabla resumen: los tres casos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#checklist-antes-de-agregar-un-control-a-la-regresi%C3%B3n"><i class="fa fa-check"></i>Checklist antes de agregar un control a la regresión</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#descarga-los-archivos"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html"><i class="fa fa-check"></i><b>12</b> Datos de Panel, DiD y TWFE en Stata</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n-a-datos-de-panel"><i class="fa fa-check"></i>Introducción a datos de panel</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-twfe-la-equivalencia-en-el-caso-22"><i class="fa fa-check"></i>DiD = FD = TWFE: la equivalencia en el caso 2×2</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#el-supuesto-de-tendencias-paralelas-2"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido-twfe-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Contexto rápido: TWFE con adopción escalonada</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i>¿Qué significa cada fila?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i>¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i>¿Cómo usar esta descomposición en la práctica?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i>Notas prácticas de ejecución</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#descarga-los-archivos-1"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html"><i class="fa fa-check"></i><b>13</b> Emparejamiento Exacto</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#el-problema-identificaci%C3%B3n-sin-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>El problema: identificación sin aleatorización</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#la-idea-del-emparejamiento-exacto"><i class="fa fa-check"></i>La idea del emparejamiento exacto</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#los-tres-requisitos-del-emparejamiento"><i class="fa fa-check"></i>Los tres requisitos del emparejamiento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-maldici%C3%B3n-de-las-dimensiones"><i class="fa fa-check"></i>La maldición de las dimensiones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-del-att-con-emparejamiento-exacto"><i class="fa fa-check"></i>Estimación del ATT con emparejamiento exacto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-la-pr%C3%A1ctica-nnmatch-en-stata"><i class="fa fa-check"></i>En la práctica: <code>nnmatch</code> en Stata</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#resumen-y-limitaciones"><i class="fa fa-check"></i>Resumen y limitaciones</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#lecturas-recomendadas"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="psm.html"><a href="psm.html"><i class="fa fa-check"></i><b>14</b> Propensity Score Matching</a>
+<ul>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#del-emparejamiento-exacto-al-propensity-score"><i class="fa fa-check"></i>Del emparejamiento exacto al propensity score</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-definici%C3%B3n-y-estimaci%C3%B3n"><i class="fa fa-check"></i>El propensity score: definición y estimación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#los-dos-supuestos-de-identificaci%C3%B3n"><i class="fa fa-check"></i>Los dos supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#la-receta-del-psm-en-7-pasos"><i class="fa fa-check"></i>La receta del PSM en 7 pasos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%A9todos-de-emparejamiento-no-param%C3%A9tricos"><i class="fa fa-check"></i>Métodos de emparejamiento no paramétricos</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#att-vs.-ate"><i class="fa fa-check"></i>ATT vs. ATE</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#verificaci%C3%B3n-del-balance"><i class="fa fa-check"></i>Verificación del balance</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#lecturas-recomendadas-1"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="psm-stata.html"><a href="psm-stata.html"><i class="fa fa-check"></i><b>15</b> PSM en Stata: <code>psmatch2</code></a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-y-estructura-del-comando"><i class="fa fa-check"></i>Instalación y estructura del comando</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#variables-auxiliares-que-genera-psmatch2"><i class="fa fa-check"></i>Variables auxiliares que genera <code>psmatch2</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-y-el-soporte-com%C3%BAn"><i class="fa fa-check"></i>El propensity score y el soporte común</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#a.-nn1-sin-reemplazo"><i class="fa fa-check"></i>1a. NN(1) sin reemplazo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#b.-nn1-con-soporte-com%C3%BAn"><i class="fa fa-check"></i>1b. NN(1) con soporte común</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c.-soporte-com%C3%BAn-v%C3%ADa-trimming"><i class="fa fa-check"></i>1c. Soporte común vía trimming</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#verificar-el-balance-pstest"><i class="fa fa-check"></i>Verificar el balance: <code>pstest</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#nn-con-reemplazo-y-errores-est%C3%A1ndar-anal%C3%ADticos"><i class="fa fa-check"></i>2. NN con reemplazo y errores estándar analíticos</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#ate-con-nn1"><i class="fa fa-check"></i>3. ATE con NN(1)</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#caliper-1"><i class="fa fa-check"></i>4. Caliper</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#radio"><i class="fa fa-check"></i>5. Radio</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#kernel-1"><i class="fa fa-check"></i>6. Kernel</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#alternativa-teffects-psmatch-stata-nativo"><i class="fa fa-check"></i>7. Alternativa: <code>teffects psmatch</code> (Stata nativo)</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#resumen-de-la-secuencia-completa"><i class="fa fa-check"></i>Resumen de la secuencia completa</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#lecturas-recomendadas-2"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="ipw.html"><a href="ipw.html"><i class="fa fa-check"></i><b>16</b> Ponderación por Probabilidad Inversa (IPW)</a>
+<ul>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#la-idea-combinar-mco-y-psm"><i class="fa fa-check"></i>La idea: combinar MCO y PSM</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#el-estimador-ipw"><i class="fa fa-check"></i>El estimador IPW</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#los-ponderadores-ipw"><i class="fa fa-check"></i>Los ponderadores IPW</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata-1"><i class="fa fa-check"></i>Implementación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ipw-vs.-psm-cu%C3%A1l-usar"><i class="fa fa-check"></i>IPW vs. PSM: ¿cuál usar?</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#doble-robustez-doubly-robust"><i class="fa fa-check"></i>Doble robustez (<em>Doubly Robust</em>)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ipwra-ipw-con-ajuste-de-regresi%C3%B3n"><i class="fa fa-check"></i>IPWRA: IPW con ajuste de regresión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-estimadores-bajo-cia"><i class="fa fa-check"></i>Comparación de estimadores bajo CIA</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#lecturas-recomendadas-3"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html"><i class="fa fa-check"></i><b>17</b> Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata</a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#psm-sec"><i class="fa fa-check"></i><b>17.1</b> Parte I: Propensity Score Matching (PSM)</a></li>
+<li class="chapter" data-level="17.2" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#ipw-sec"><i class="fa fa-check"></i><b>17.2</b> Parte II: Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="17.3" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#synth-sec"><i class="fa fa-check"></i><b>17.3</b> Parte III: Synthetic Control Method</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#descarga-los-archivos-2"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+<li class="chapter" data-level="17.4" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#resumen-sec"><i class="fa fa-check"></i><b>17.4</b> Resumen comparativo</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#do-files-disponibles"><i class="fa fa-check"></i>Do-files disponibles</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#lecturas-recomendadas-4"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="iv.html"><a href="iv.html"><i class="fa fa-check"></i><b>18</b> Variables Instrumentales y LATE</a>
+<ul>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-problema-de-endogeneidad"><i class="fa fa-check"></i>El problema de endogeneidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-soluci%C3%B3n-una-variable-instrumental"><i class="fa fa-check"></i>La solución: una variable instrumental</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplos-cl%C3%A1sicos"><i class="fa fa-check"></i>Ejemplos clásicos</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#fuentes-de-variables-instrumentales"><i class="fa fa-check"></i>Fuentes de variables instrumentales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-cu%C3%A1ntos-instrumentos-hacen-falta"><i class="fa fa-check"></i>Identificación: ¿cuántos instrumentos hacen falta?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#derivaci%C3%B3n-del-estimador-iv"><i class="fa fa-check"></i>Derivación del estimador IV</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-estimador-de-wald-caso-d-y-z-binarios"><i class="fa fa-check"></i>El estimador de Wald (caso <span class="math inline">\(D\)</span> y <span class="math inline">\(Z\)</span> binarios)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%ADnimos-cuadrados-en-dos-etapas-mco2e"><i class="fa fa-check"></i>Mínimos Cuadrados en Dos Etapas (MCO2E)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-muestra-finita-la-intuici%C3%B3n"><i class="fa fa-check"></i>Sesgo de muestra finita: la intuición</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#instrumentos-d%C3%A9biles"><i class="fa fa-check"></i>Instrumentos débiles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-evaluar-la-validez"><i class="fa fa-check"></i>¿Cómo evaluar la validez?</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-el-efecto-promedio-local-de-tratamiento"><i class="fa fa-check"></i>LATE: el efecto promedio local de tratamiento</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-con-varios-instrumentos"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#variables-de-control"><i class="fa fa-check"></i>Variables de control</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="iv-stata.html"><a href="iv-stata.html"><i class="fa fa-check"></i><b>19</b> IV y LATE en Stata: simulación</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa"><i class="fa fa-check"></i>Instalación previa</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><i class="fa fa-check"></i>Parte A — Muestras finitas: OLS sesgado vs IV consistente</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#el-proceso-generador-de-datos"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#monte-carlo-el-programa"><i class="fa fa-check"></i>Monte Carlo: el programa</a></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#resultados-esperados"><i class="fa fa-check"></i>Resultados esperados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#visualizaci%C3%B3n"><i class="fa fa-check"></i>Visualización</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html"><i class="fa fa-check"></i>Parte B — LATE paso a paso</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#la-idea"><i class="fa fa-check"></i>La idea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#construcci%C3%B3n-del-experimento"><i class="fa fa-check"></i>Construcción del experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-de-los-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Asignación de los efectos heterogéneos</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resultados-potenciales-y-resultado-observado"><i class="fa fa-check"></i>Resultados potenciales y resultado observado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-lo-que-cada-m%C3%A9todo-recupera"><i class="fa fa-check"></i>Estimación: lo que cada método recupera</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#y-si-el-efecto-fuera-homog%C3%A9neo"><i class="fa fa-check"></i>¿Y si el efecto fuera homogéneo?</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#late-con-varios-instrumentos-1"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resumen-2"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#materiales-para-la-clase-4"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#lecturas-recomendadas-6"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="rdd.html"><a href="rdd.html"><i class="fa fa-check"></i><b>20</b> Regresión Discontinua</a>
+<ul>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#la-idea-de-rd"><i class="fa fa-check"></i>La idea de RD</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n"><i class="fa fa-check"></i>Notación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplos-cl%C3%A1sicos-1"><i class="fa fa-check"></i>Ejemplos clásicos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#rdn-identificaci%C3%B3n"><i class="fa fa-check"></i>RDN: identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-receta-c%C3%B3mo-estimar-tau_rdn"><i class="fa fa-check"></i>La receta: cómo estimar <span class="math inline">\(\tau_{RDN}\)</span></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#derivaci%C3%B3n-de-la-forma-de-regresi%C3%B3n"><i class="fa fa-check"></i>Derivación de la forma de regresión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#regresi%C3%B3n-local-lineal-con-kernel"><i class="fa fa-check"></i>Regresión local lineal con kernel</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#selecci%C3%B3n-del-ancho-de-banda-h"><i class="fa fa-check"></i>Selección del ancho de banda <span class="math inline">\(h\)</span></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#rdb-identificaci%C3%B3n"><i class="fa fa-check"></i>RDB: identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#polinomio-global-vs-local-lineal-comparaci%C3%B3n"><i class="fa fa-check"></i>Polinomio global vs local lineal — comparación</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#pruebas-de-robustez"><i class="fa fa-check"></i>Pruebas de robustez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#variable-de-asignaci%C3%B3n-discreta"><i class="fa fa-check"></i>Variable de asignación discreta</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#extensiones"><i class="fa fa-check"></i>Extensiones</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#checklist-final"><i class="fa fa-check"></i>Checklist final</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#lecturas-recomendadas-7"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="rdd-stata.html"><a href="rdd-stata.html"><i class="fa fa-check"></i><b>21</b> RDD en Stata: simulación</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa-1"><i class="fa fa-check"></i>Instalación previa</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-a-rdd.html"><a href="parte-a-rdd.html"><i class="fa fa-check"></i>Parte A — RDN con DGP lineal</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-a-rdd.html"><a href="parte-a-rdd.html#el-proceso-generador-de-datos-1"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#visualizaci%C3%B3n-primero"><i class="fa fa-check"></i>Visualización primero</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-i-polinomio-global-con-interacciones"><i class="fa fa-check"></i>Estimación I — Polinomio global con interacciones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-ii-regresi%C3%B3n-local-lineal-con-kernel"><i class="fa fa-check"></i>Estimación II — Regresión local lineal con kernel</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-r%C3%A1pida"><i class="fa fa-check"></i>Comparación rápida</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-b-rdd.html"><a href="parte-b-rdd.html"><i class="fa fa-check"></i>Parte B — RDN con DGP curvo</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-b-rdd.html"><a href="parte-b-rdd.html#el-problema-con-polinomios-globales"><i class="fa fa-check"></i>El problema con polinomios globales</a></li>
+<li class="chapter" data-level="" data-path="parte-b-rdd.html"><a href="parte-b-rdd.html#el-polinomio-lineal-global-se-equivoca"><i class="fa fa-check"></i>El polinomio lineal global se equivoca</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-polinomio-cuadr%C3%A1tico-global-lo-arregla-pero-es-fr%C3%A1gil"><i class="fa fa-check"></i>El polinomio cuadrático global lo arregla — pero es frágil</a></li>
+<li class="chapter" data-level="" data-path="parte-b-rdd.html"><a href="parte-b-rdd.html#local-lineal-sigue-funcionando"><i class="fa fa-check"></i>Local lineal sigue funcionando</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-c-rdd.html"><a href="parte-c-rdd.html"><i class="fa fa-check"></i>Parte C — Sensibilidad al ancho de banda</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-c-rdd.html"><a href="parte-c-rdd.html#barrido-manual"><i class="fa fa-check"></i>Barrido manual</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ancho-de-banda-autom%C3%A1tico-cct"><i class="fa fa-check"></i>Ancho de banda automático CCT</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html"><i class="fa fa-check"></i>Parte D — Pruebas de robustez</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#sensibilidad-1"><i class="fa fa-check"></i>1. Sensibilidad</a></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#balance-de-covariables"><i class="fa fa-check"></i>2. Balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#placebo-2"><i class="fa fa-check"></i>3. Placebo</a></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#sorting-test-de-mccrary-2008-1"><i class="fa fa-check"></i>4. Sorting (test de McCrary 2008)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-e-rdd.html"><a href="parte-e-rdd.html"><i class="fa fa-check"></i>Parte E — RDB</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-e-rdd.html"><a href="parte-e-rdd.html#dgp-con-cumplimiento-imperfecto"><i class="fa fa-check"></i>DGP con cumplimiento imperfecto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-rdrobust-con-fuzzy"><i class="fa fa-check"></i>Estimación: rdrobust con fuzzy</a></li>
+<li class="chapter" data-level="" data-path="parte-e-rdd.html"><a href="parte-e-rdd.html#equivalencia-con-2sls-local"><i class="fa fa-check"></i>Equivalencia con 2SLS local</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-f-rdd.html"><a href="parte-f-rdd.html"><i class="fa fa-check"></i>Parte F — Variable de asignación discreta</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-f-rdd.html"><a href="parte-f-rdd.html#dgp"><i class="fa fa-check"></i>DGP</a></li>
+<li class="chapter" data-level="" data-path="parte-f-rdd.html"><a href="parte-f-rdd.html#el-problema-de-los-se-convencionales"><i class="fa fa-check"></i>El problema de los SE convencionales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-pragm%C3%A1tica-cluster-en-z-lee-card-2008"><i class="fa fa-check"></i>Solución pragmática: cluster en Z (Lee &amp; Card 2008)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-completa-honest-cis"><i class="fa fa-check"></i>Solución completa: honest CIs</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="sintesis-rdd.html"><a href="sintesis-rdd.html"><i class="fa fa-check"></i>Síntesis: la receta moderna</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#lecturas-complementarias-para-la-pr%C3%A1ctica"><i class="fa fa-check"></i>Lecturas complementarias para la práctica</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="experimentos-aleatorizados-clase-empírica" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Capitulo 6</span> Experimentos aleatorizados — Clase empírica<a href="#experimentos-aleatorizados-clase-emp%C3%ADrica" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="materiales-para-la-clase-2" class="section level2 unnumbered hasAnchor">
+<h2>Materiales para la clase<a href="experimentos-aleatorizados-clase-empírica.html#materiales-para-la-clase-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="class-materials">
+<p><strong>Descarga antes de comenzar</strong></p>
+<ul>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_stata.do">Do-file de Stata</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/data.dta">Base <code>data.dta</code></a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_R.R">Script de R</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_python.ipynb">Notebook de Python</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/results/resultados_stata.csv">Resultados completos de Stata</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/results/verificacion_stata_python.csv">Verificación Stata–Python</a></li>
+</ul>
+<p><a class="colab-link" href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/06_RCT_Stata/clase6_python.ipynb" target="_blank" rel="noopener">
+<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir notebook en Google Colab">
+</a></p>
+</div>
+<div class="box-stata">
+<p><strong>Objetivos de la práctica</strong></p>
+<p>En el capítulo anterior formalizamos la teoría de resultados potenciales, la descomposición del sesgo de selección, su conexión con el sesgo por variable omitida, y los <strong>cuatro escenarios de diseño</strong> experimental. Ahora implementamos todo esto paso a paso en Stata, usando datos reales de un experimento de aula replicado en cuatro semestres.</p>
+<ul>
+<li>Implementar los <strong>cuatro escenarios de regresión</strong> (simple, con controles, estratificado, estratificado + controles).</li>
+<li>Ejecutar <strong>diagnósticos de balance</strong>, <strong>efectos heterogéneos</strong> y el <strong>truco de centrar</strong> de Wooldridge.</li>
+<li>Manejar <strong>inferencia estadística</strong> (SE robustas, clusters, bootstrap).</li>
+<li>Producir <strong>reporte reproducible</strong> exportable a Excel/PDF.</li>
+</ul>
+<div id="lecturas-1" class="section level3 unnumbered hasAnchor">
+<h3>Lecturas<a href="experimentos-aleatorizados-clase-empírica.html#lecturas-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Paper Alert:</strong> <a href="https://www.nber.org/papers/w24003">When Should You Adjust Standard Errors for Clustering? (NBER w24003)</a></li>
+<li><strong>Teoría:</strong> <a href="http://economics.ozier.com/econ626/lec/econ626-L07-handout-2019.pdf">Jakiela &amp; Ozier — Handout</a></li>
+<li><strong>Herramienta:</strong> <a href="https://www.povertyactionlab.org/resource/power-calculations">J-PAL — Power calculations</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="pregunta-empírica" class="section level2 unnumbered hasAnchor">
+<h2>Pregunta empírica<a href="#pregunta-emp%C3%ADrica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>¿Cuál es el efecto causal de recibir definiciones de palabras difíciles, en lugar de un texto crítico de economía, sobre el resultado de un quiz de vocabulario? Además de estimar el efecto promedio, evaluaremos si respetar los estratos del diseño y agregar controles pretratamiento cambia la precisión.</p>
+</div>
+<div id="datos" class="section level2 unnumbered hasAnchor">
+<h2>Datos<a href="experimentos-aleatorizados-clase-empírica.html#datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La práctica usa una única base congelada, <code>data.dta</code>, con 70 observaciones provenientes de un experimento de aula replicado en cuatro semestres. El grupo B recibió las definiciones y constituye el tratamiento; el grupo A recibió el texto crítico y constituye el control. La variable <code>semestre</code> identifica los estratos de asignación.</p>
+<div class="box-cuidado">
+<p>Stata y Python deben leer exactamente esta misma base. Si el archivo no está disponible o le falta alguna variable requerida, ambos flujos se detienen: no se generan datos sustitutos.</p>
+</div>
+</div>
+<div id="recordatorio-teórico-del-capítulo-anterior" class="section level2 unnumbered hasAnchor">
+<h2>Recordatorio teórico (del capítulo anterior)<a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><em>1) Setup</em></p>
+<ul>
+<li>Unidades: <span class="math inline">\(N\)</span>.</li>
+<li>Tratamiento: <span class="math inline">\(D_i \in \{0,1\}\)</span>. Asignado de manera aleatoria.</li>
+<li>Resultados potenciales: <span class="math inline">\(Y_i(D=1),\, Y_i(D=0)\)</span>.</li>
+<li>Resultado observado:
+<span class="math display">\[
+Y_i \;=\; D_i\,Y_i(D=1) \;+\; (1-D_i)\,Y_i(D=0).
+\]</span></li>
+<li>Tamaños de muestra:
+<ul>
+<li>Tratados: <span class="math inline">\(N_1 = \sum_i \mathbb{1}\{D_i=1\}\)</span>.</li>
+<li>Control: <span class="math inline">\(N_0 = \sum_i \mathbb{1}\{D_i=0\}\)</span>.</li>
+</ul></li>
+</ul>
+<p><em>2) Supuestos</em></p>
+<ol style="list-style-type: decimal">
+<li><strong>Asignación aleatoria:</strong> cada unidad <span class="math inline">\(i\)</span> es asignada de manera independiente al tratamiento con probabilidad <span class="math inline">\(p\)</span>.
+<span class="math display">\[
+D_i \;\perp\; \{Y_i(D=1), Y_i(D=0)\}.
+\]</span></li>
+<li><strong>SUTVA</strong> (Stable Unit Treatment Value Assumption): no hay interferencia entre unidades ni versiones del tratamiento.
+En español: no hay externalidades ni efectos de equilibrio general que cambien los resultados potenciales de otros individuos.</li>
+</ol>
+<p><em>3) Parámetros y equivalencias clave</em></p>
+<ul>
+<li><strong>ATE:</strong> <span class="math inline">\(\tau = \mathbb{E}[Y_i(D=1)-Y_i(D=0)]\)</span>.</li>
+<li><strong>ATT:</strong> <span class="math inline">\(\mathbb{E}[Y_i(D=1)-Y_i(D=0) \mid D_i=1]\)</span>.</li>
+<li><strong>ATU:</strong> <span class="math inline">\(\mathbb{E}[Y_i(D=1)-Y_i(D=0) \mid D_i=0]\)</span>.</li>
+</ul>
+<p>Bajo aleatorización: <span class="math inline">\(ATE = ATT = ATU\)</span>, porque los grupos son comparables en todo (observable y no observable).</p>
+<ul>
+<li><strong>Identificación con aleatorización:</strong>
+<span class="math display">\[
+\mathbb{E}[\,Y \mid D=1\,] - \mathbb{E}[\,Y \mid D=0\,] \;=\; \tau.
+\]</span></li>
+<li><strong>Estimador por diferencia de medias:</strong>
+<span class="math display">\[
+\hat{\tau} \;=\; \bar{Y}_{D=1}-\bar{Y}_{D=0}.
+\]</span></li>
+<li><strong>Descomposición (sin aleatorización):</strong>
+<span class="math display">\[
+\underbrace{\mathbb{E}[Y \mid D=1] - \mathbb{E}[Y \mid D=0]}_{\text{naïve}}
+\;=\;
+\underbrace{\tau}_{\text{efecto causal}}
+\;+\;
+\underbrace{\mathbb{E}[Y_i(D=0)\mid D_i=1] - \mathbb{E}[Y_i(D=0)\mid D_i=0]}_{\text{sesgo de selección}}.
+\]</span></li>
+</ul>
+<div class="boxnote">
+<p><strong>Conexión con variable omitida (cap. anterior):</strong> en regresión, el sesgo de selección es exactamente el sesgo por variable omitida: <span class="math inline">\(\text{sesgo} = \gamma \cdot \text{Cov}(D,M)/\text{Var}(D)\)</span>. La aleatorización garantiza <span class="math inline">\(\text{Cov}(D,M)=0\)</span> para <strong>cualquier</strong> variable <span class="math inline">\(M\)</span>, observable o no.</p>
+</div>
+</div>
+<div id="desarrollo-guiado-del-rct" class="section level2 unnumbered hasAnchor">
+<h2>Desarrollo guiado del RCT<a href="experimentos-aleatorizados-clase-empírica.html#desarrollo-guiado-del-rct" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="pregunta-tratamiento-resultado-y-unidad-de-asignación" class="section level3 unnumbered hasAnchor">
+<h3>Pregunta, tratamiento, resultado y unidad de asignación<a href="#pregunta-tratamiento-resultado-y-unidad-de-asignaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La unidad de asignación es el estudiante. El tratamiento es recibir definiciones de palabras difíciles (grupo B), el control es recibir el texto crítico de economía (grupo A) y el resultado es el puntaje del quiz. El estimando principal es el ATE sobre los 70 estudiantes de los cuatro semestres. Antes de recolectar datos, el protocolo fija población objetivo, resultado primario, tamaño de muestra y mínima diferencia detectable.</p>
+<div class="box-intuicion">
+<p><strong>Interpretación:</strong> la unidad de asignación determina qué observaciones pueden considerarse independientes y el nivel correcto de la inferencia. No debe confundirse con la unidad en la que se mide el resultado.</p>
+</div>
+</div>
+<div id="inspección-y-preparación-de-los-datos" class="section level3 unnumbered hasAnchor">
+<h3>Inspección y preparación de los datos<a href="#inspecci%C3%B3n-y-preparaci%C3%B3n-de-los-datos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb63"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb63-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-1" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;data.dta&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb63-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-2" tabindex="-1"></a><span class="kw">describe</span></span>
+<span id="cb63-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-3" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">long</span> student_id = <span class="dt">_n</span></span>
+<span id="cb63-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-4" tabindex="-1"></a><span class="kw">isid</span> student_id</span>
+<span id="cb63-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-5" tabindex="-1"></a><span class="kw">assert</span> <span class="fu">inlist</span>(grupo, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>)</span>
+<span id="cb63-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-6" tabindex="-1"></a><span class="kw">assert</span> !<span class="fu">missing</span>(resultado, semestre, edad, genero, programa, libros)</span>
+<span id="cb63-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-7" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D = (grupo == <span class="st">&quot;B&quot;</span>)</span>
+<span id="cb63-8"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-8" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span> = resultado</span>
+<span id="cb63-9"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-9" tabindex="-1"></a><span class="kw">gen</span> mujer = (genero == <span class="st">&quot;Mujer&quot;</span>)</span>
+<span id="cb63-10"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-10" tabindex="-1"></a><span class="kw">gen</span> pregrado = (programa == <span class="st">&quot;Pregrado&quot;</span>)</span>
+<span id="cb63-11"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-11" tabindex="-1"></a><span class="kw">gen</span> maestria = (programa == <span class="st">&quot;Maestría&quot;</span>)</span>
+<span id="cb63-12"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-12" tabindex="-1"></a><span class="kw">global</span> X edad mujer libros pregrado maestria</span>
+<span id="cb63-13"><a href="experimentos-aleatorizados-clase-empírica.html#cb63-13" tabindex="-1"></a><span class="kw">tab</span> semestre D</span></code></pre></div>
+<div class="box-stata">
+<p><strong>Comando clave:</strong> <code>isid student_id</code> comprueba que cada fila representa una unidad única; los <code>assert</code> detienen el flujo si cambia el contrato de datos.</p>
+</div>
+</div>
+<div id="semilla-y-asignación-aleatoria" class="section level3 unnumbered hasAnchor">
+<h3>Semilla y asignación aleatoria<a href="#semilla-y-asignaci%C3%B3n-aleatoria" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Abajo tienes varias formas de asignar tratamiento en Stata. Incluyo opciones con <code>runiform()</code> (base) y con el comando de SSC <code>randtreat</code> (estratificado, proporciones desiguales, clusters y manejo de <em>misfits</em>).</p>
+<blockquote>
+<p><strong>Regla de oro:</strong> fija una semilla reproducible y <em>guárdala</em> en el log/notas del proyecto.</p>
+</blockquote>
+<div class="sourceCode" id="cb64"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb64-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb64-1" tabindex="-1"></a>* Reproducibilidad</span>
+<span id="cb64-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb64-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20250813</span>
+<span id="cb64-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb64-3" tabindex="-1"></a><span class="kw">local</span> RNGSTATE = c(rngstate)   <span class="co">// guardar estado; opcionalmente escríbelo en tu log</span></span>
+<span id="cb64-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb64-4" tabindex="-1"></a><span class="kw">display</span> <span class="kw">as</span> <span class="bn">text</span> <span class="st">&quot;Seed guardada: `RNGSTATE&#39;&quot;</span></span></code></pre></div>
+<p>La semilla reproduce la secuencia pseudoaleatoria solo si también se conserva el orden de las observaciones y el algoritmo. Por eso se ordena por un identificador estable antes de generar números. En una asignación Bernoulli, cada unidad tiene probabilidad conocida <span class="math inline">\(p\)</span>, pero el número final de tratados es aleatorio.</p>
+<div class="box-cuidado">
+<p><strong>Error frecuente:</strong> fijar la semilla después de <code>runiform()</code> o reordenar la base entre ejecuciones cambia la asignación. Registrar semilla no reemplaza archivar la lista final de asignación.</p>
+</div>
+</div>
+<div id="aleatorización-simple-y-estratificada" class="section level3 unnumbered hasAnchor">
+<h3>Aleatorización simple y estratificada<a href="#aleatorizaci%C3%B3n-simple-y-estratificada" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><em>Bernoulli simple (50/50) con <code>runiform()</code></em></p>
+<p>Asigna tratamiento con probabilidad 0.5 a cada unidad.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb65-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb65-1" tabindex="-1"></a><span class="kw">sort</span> student_id</span>
+<span id="cb65-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb65-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> u_simple50 = runiform()</span>
+<span id="cb65-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb65-3" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D_simple50 = (u_simple50 &lt; 0.5)</span>
+<span id="cb65-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb65-4" tabindex="-1"></a><span class="kw">tab</span> D_simple50</span></code></pre></div>
+<p><strong>Cambio de proporción (p=0.30):</strong></p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb66-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb66-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> u_simple30 = runiform()</span>
+<span id="cb66-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb66-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D_simple30 = (u_simple30 &lt; 0.30)</span>
+<span id="cb66-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb66-3" tabindex="-1"></a><span class="kw">tab</span> D_simple30</span></code></pre></div>
+<p><strong>Asignación con conteo exacto de tratados (p.ej., 40% exacto)</strong></p>
+<p>Asegura exactamente <code>round(N*0.40)</code> tratados.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb67-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb67-1" tabindex="-1"></a><span class="fu">count</span></span>
+<span id="cb67-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb67-2" tabindex="-1"></a><span class="kw">local</span> <span class="kw">N</span>      = <span class="fu">r</span>(<span class="kw">N</span>)</span>
+<span id="cb67-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb67-3" tabindex="-1"></a><span class="kw">local</span> Ntr    = <span class="fu">round</span>(<span class="ot">`N&#39;</span>*0.40)   <span class="co">// número exacto de tratados</span></span>
+<span id="cb67-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb67-4" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> u_exact40 = runiform()</span>
+<span id="cb67-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb67-5" tabindex="-1"></a><span class="kw">sort</span> u_exact40</span>
+<span id="cb67-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb67-6" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D_exact40 = (<span class="dt">_n</span> &lt;= <span class="ot">`Ntr&#39;</span>)</span>
+<span id="cb67-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb67-7" tabindex="-1"></a><span class="kw">tab</span> D_exact40</span>
+<span id="cb67-8"><a href="experimentos-aleatorizados-clase-empírica.html#cb67-8" tabindex="-1"></a><span class="kw">sort</span> student_id</span></code></pre></div>
+<p><strong>Estratificada</strong> (bloques) con <code>runiform()</code></p>
+<p>Mantén la proporción deseada <strong>dentro de cada estrato</strong> (ej., por <code>mujer</code> × <code>programa</code>).</p>
+<blockquote>
+<p>Con <code>round()</code> obtienes conteo <strong>exacto por estrato</strong>; globalmente puede variar levemente si los tamaños de estrato son impares.</p>
+</blockquote>
+<div class="sourceCode" id="cb68"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb68-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb68-1" tabindex="-1"></a><span class="kw">egen</span> <span class="kw">long</span> <span class="kw">strata</span> = <span class="fu">group</span>(mujer programa), <span class="kw">label</span></span>
+<span id="cb68-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb68-2" tabindex="-1"></a><span class="kw">bys</span> <span class="kw">strata</span>: <span class="kw">gen</span> <span class="kw">double</span> u_estrato50 = runiform()</span>
+<span id="cb68-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb68-3" tabindex="-1"></a><span class="kw">bys</span> <span class="kw">strata</span> (u_estrato50): <span class="kw">gen</span> <span class="kw">byte</span> D_estrato50 = (<span class="dt">_n</span> &lt;= <span class="fu">round</span>(_N*0.50))</span>
+<span id="cb68-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb68-4" tabindex="-1"></a><span class="kw">tab</span> D_estrato50</span>
+<span id="cb68-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb68-5" tabindex="-1"></a><span class="kw">by</span> <span class="kw">strata</span>: <span class="kw">tab</span> D_estrato50</span>
+<span id="cb68-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb68-6" tabindex="-1"></a><span class="kw">sort</span> student_id</span></code></pre></div>
+<p><strong>Proporción distinta por estrato (p.ej., 40%):</strong></p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb69-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb69-1" tabindex="-1"></a><span class="kw">bys</span> <span class="kw">strata</span>: <span class="kw">gen</span> <span class="kw">double</span> u_estrato40 = runiform()</span>
+<span id="cb69-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb69-2" tabindex="-1"></a><span class="kw">bys</span> <span class="kw">strata</span> (u_estrato40): <span class="kw">gen</span> <span class="kw">byte</span> D_estrato40 = (<span class="dt">_n</span> &lt;= <span class="fu">round</span>(_N*0.40))</span>
+<span id="cb69-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb69-3" tabindex="-1"></a><span class="kw">by</span> <span class="kw">strata</span>: <span class="kw">tab</span> D_estrato40</span>
+<span id="cb69-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb69-4" tabindex="-1"></a><span class="kw">sort</span> student_id</span></code></pre></div>
+<p><strong>Cluster</strong> (aleatoriza a nivel del cluster y la pasa a individuos)</p>
+<p>Ej.: clusters en <code>escuela</code>.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb70-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-1" tabindex="-1"></a>* Una fila por <span class="kw">cluster</span></span>
+<span id="cb70-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-2" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb70-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-3" tabindex="-1"></a><span class="kw">keep</span> escuela</span>
+<span id="cb70-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-4" tabindex="-1"></a><span class="kw">duplicates</span> <span class="kw">drop</span></span>
+<span id="cb70-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-5" tabindex="-1"></a></span>
+<span id="cb70-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-6" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> u = runiform()</span>
+<span id="cb70-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-7" tabindex="-1"></a><span class="kw">sort</span> u</span>
+<span id="cb70-8"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-8" tabindex="-1"></a>* 50% <span class="kw">de</span> escuelas tratadas</span>
+<span id="cb70-9"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-9" tabindex="-1"></a><span class="fu">count</span></span>
+<span id="cb70-10"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-10" tabindex="-1"></a><span class="kw">local</span> C = <span class="fu">r</span>(<span class="kw">N</span>)</span>
+<span id="cb70-11"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-11" tabindex="-1"></a><span class="kw">local</span> Ctr = <span class="fu">round</span>(<span class="ot">`C&#39;</span>*0.50)</span>
+<span id="cb70-12"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D_cluster = (<span class="dt">_n</span> &lt;= <span class="ot">`Ctr&#39;</span>)</span>
+<span id="cb70-13"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-13" tabindex="-1"></a><span class="kw">tempfile</span> cl</span>
+<span id="cb70-14"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-14" tabindex="-1"></a><span class="kw">save</span> <span class="ot">`cl&#39;</span>, <span class="kw">replace</span></span>
+<span id="cb70-15"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-15" tabindex="-1"></a><span class="kw">restore</span></span>
+<span id="cb70-16"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-16" tabindex="-1"></a></span>
+<span id="cb70-17"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-17" tabindex="-1"></a>* Trae la asignación al nivel individual</span>
+<span id="cb70-18"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-18" tabindex="-1"></a><span class="kw">merge</span> <span class="fu">m</span>:1 escuela <span class="kw">using</span> <span class="ot">`cl&#39;</span>, <span class="kw">keep</span>(<span class="fu">match</span> master) nogen</span>
+<span id="cb70-19"><a href="experimentos-aleatorizados-clase-empírica.html#cb70-19" tabindex="-1"></a><span class="kw">tab</span> D_cluster</span></code></pre></div>
+<p>Usando <strong><code>randtreat</code></strong> (SSC): multi-brazos, proporciones desiguales, estratos y <em>misfits</em></p>
+<p><strong>Instalación</strong></p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb71-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb71-1" tabindex="-1"></a><span class="kw">ssc</span> install randtreat, <span class="kw">replace</span></span></code></pre></div>
+<p><strong>Binario 50/50 (sin estratos)</strong></p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb72-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb72-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(D_rand50) multiple(2) setseed(20250813)</span>
+<span id="cb72-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb72-2" tabindex="-1"></a><span class="kw">tab</span> D_rand50</span></code></pre></div>
+<p><strong>Binario 50/50 dentro de estratos (<code>mujer</code> × <code>programa</code>)</strong></p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb73-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb73-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(D_randestrato) multiple(2) <span class="kw">strata</span>(mujer programa) setseed(20250813)</span>
+<span id="cb73-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb73-2" tabindex="-1"></a><span class="kw">by</span> mujer programa: <span class="kw">tab</span> D_randestrato</span></code></pre></div>
+<p>** Proporciones desiguales (30% tratado, 70% control)**</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb74-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb74-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(D_rand30) multiple(2) unequal(0.30 0.70) setseed(20250813)</span>
+<span id="cb74-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb74-2" tabindex="-1"></a><span class="kw">tab</span> D_rand30</span></code></pre></div>
+<p>** Multi-brazo (T1/T2/C = 0.4/0.4/0.2) con estratos**</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb75-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb75-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(arm) multiple(3) unequal(0.40 0.40 0.20) <span class="co">///</span></span>
+<span id="cb75-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb75-2" tabindex="-1"></a>    <span class="kw">strata</span>(mujer programa) setseed(20250813)</span>
+<span id="cb75-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb75-3" tabindex="-1"></a><span class="kw">tab</span> arm</span>
+<span id="cb75-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb75-4" tabindex="-1"></a><span class="kw">by</span> mujer programa: <span class="kw">tab</span> arm</span></code></pre></div>
+<p><strong>Manejo de <em>misfits</em></strong>
+Cuando el tamaño de estrato no es divisible por los brazos/proporciones, usa <code>misfits()</code>:</p>
+<ul>
+<li><code>misfits(strata)</code> o <code>misfits(wstrata)</code>: resuelve dentro de cada estrato (ponderado o no).</li>
+<li><code>misfits(global)</code> o <code>misfits(wglobal)</code>: resuelve a nivel global priorizando las proporciones totales.</li>
+<li><code>misfits(missing)</code>: deja <em>misfits</em> sin asignar para que los decidas manualmente.</li>
+</ul>
+<div class="sourceCode" id="cb76"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb76-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb76-1" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(arm_misfits) multiple(3) unequal(0.40 0.40 0.20) <span class="co">///</span></span>
+<span id="cb76-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb76-2" tabindex="-1"></a>    <span class="kw">strata</span>(mujer programa) misfits(wstrata) setseed(20250813)</span></code></pre></div>
+<p><strong>Forzar número exacto de tratados totales</strong> (binario)</p>
+<blockquote>
+<p>Útil si necesitas exactamente <code>N_t</code> tratados (no solo proporción).</p>
+</blockquote>
+<div class="sourceCode" id="cb77"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb77-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb77-1" tabindex="-1"></a>* Por ejemplo, exactamente 50 tratados en <span class="kw">total</span>:</span>
+<span id="cb77-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb77-2" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(D_randexacta) multiple(2) ntreated(50) setseed(20250813)</span>
+<span id="cb77-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb77-3" tabindex="-1"></a><span class="kw">tab</span> D_randexacta</span></code></pre></div>
+<p><strong>Cluster + <code>randtreat</code></strong>
+Ejecuta <code>randtreat</code> sobre los <strong>clusters únicos</strong> y luego une a individuos.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb78-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-1" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb78-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-2" tabindex="-1"></a><span class="kw">keep</span> escuela mujer programa</span>
+<span id="cb78-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-3" tabindex="-1"></a><span class="kw">duplicates</span> <span class="kw">drop</span></span>
+<span id="cb78-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-4" tabindex="-1"></a></span>
+<span id="cb78-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-5" tabindex="-1"></a>* 2 brazos 50/50 por estratos <span class="kw">de</span> escuela (<span class="fu">y</span> opcionalmente otras):</span>
+<span id="cb78-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-6" tabindex="-1"></a>randtreat, <span class="kw">generate</span>(Dcl) multiple(2) <span class="kw">strata</span>(mujer programa) setseed(20250813)</span>
+<span id="cb78-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-7" tabindex="-1"></a><span class="kw">tempfile</span> cl</span>
+<span id="cb78-8"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-8" tabindex="-1"></a><span class="kw">save</span> <span class="ot">`cl&#39;</span>, <span class="kw">replace</span></span>
+<span id="cb78-9"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-9" tabindex="-1"></a><span class="kw">restore</span></span>
+<span id="cb78-10"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-10" tabindex="-1"></a></span>
+<span id="cb78-11"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-11" tabindex="-1"></a><span class="kw">merge</span> <span class="fu">m</span>:1 escuela <span class="kw">using</span> <span class="ot">`cl&#39;</span>, nogen</span>
+<span id="cb78-12"><a href="experimentos-aleatorizados-clase-empírica.html#cb78-12" tabindex="-1"></a><span class="kw">tab</span> Dcl</span></code></pre></div>
+<p>La asignación simple da a cada estudiante la misma probabilidad marginal. La estratificada preserva la proporción dentro de grupos definidos antes del tratamiento y debe analizarse incorporando esos estratos. Diferencias basales pueden aparecer por azar aun con una asignación correcta: son balance fortuito, no prueba automática de manipulación.</p>
+<div class="box-resultado">
+<p><strong>Resultado clave:</strong> el protocolo elige simple o estratificada antes de observar resultados. Realeatorizar porque una covariable “salió significativa” altera la distribución de asignación y exige documentar esa regla.</p>
+</div>
+</div>
+<div id="tabla-de-balance" class="section level3 unnumbered hasAnchor">
+<h3>Tabla de balance<a href="experimentos-aleatorizados-clase-empírica.html#tabla-de-balance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Aquí vamos a <strong>Verificar el balance de covariables</strong> con resultados exportados por Stata, no con cifras transcritas.</p>
+<p>Nuestra base <code>data.dta</code> contiene datos de un experimento de aula replicado en <strong>cuatro semestres</strong>. En cada semestre, a un grupo se le entregaron <strong>definiciones de palabras difíciles</strong> (tratamiento) y al otro un <strong>texto crítico de economía</strong> (control), y luego todos presentaron el mismo quiz de vocabulario.</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb79-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-1" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;data.dta&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb79-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-2" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-3" tabindex="-1"></a>* Tratamiento 1=B (definiciones), 0=A (texto crítico)</span>
+<span id="cb79-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-4" tabindex="-1"></a><span class="kw">gen</span> D = (grupo == <span class="st">&quot;B&quot;</span>)</span>
+<span id="cb79-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-5" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> Dlbl 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratado&quot;</span></span>
+<span id="cb79-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-6" tabindex="-1"></a><span class="kw">label</span> <span class="kw">values</span> D Dlbl</span>
+<span id="cb79-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-7" tabindex="-1"></a></span>
+<span id="cb79-8"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-8" tabindex="-1"></a>* Outcome <span class="fu">y</span> controles</span>
+<span id="cb79-9"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>        = resultado</span>
+<span id="cb79-10"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-10" tabindex="-1"></a><span class="kw">gen</span> mujer    = (genero == <span class="st">&quot;Mujer&quot;</span>)</span>
+<span id="cb79-11"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-11" tabindex="-1"></a><span class="kw">gen</span> pregrado = (programa == <span class="st">&quot;Pregrado&quot;</span>)</span>
+<span id="cb79-12"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-12" tabindex="-1"></a><span class="kw">gen</span> maestria = (programa == <span class="st">&quot;Maestría&quot;</span>)</span>
+<span id="cb79-13"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-13" tabindex="-1"></a></span>
+<span id="cb79-14"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-14" tabindex="-1"></a>* Semestre como estrato (<span class="kw">variable</span> clave para escenarios 3 <span class="fu">y</span> 4)</span>
+<span id="cb79-15"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-15" tabindex="-1"></a><span class="kw">tab</span> semestre D</span>
+<span id="cb79-16"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-16" tabindex="-1"></a></span>
+<span id="cb79-17"><a href="experimentos-aleatorizados-clase-empírica.html#cb79-17" tabindex="-1"></a><span class="kw">global</span> X edad mujer libros pregrado maestria</span></code></pre></div>
+<ul>
+<li>Programa de diferencia de medias con t-test y opción de guardar resultados en un archivo .dta**</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><strong>Pruebas univariadas (t‐tests):</strong> comparar medias de cada covariable <span class="math inline">\(X\)</span> entre <span class="math inline">\(D=1\)</span> y <span class="math inline">\(D=0\)</span>.<br />
+Objetivo: <strong>no rechazar</strong> que las medias son iguales.</li>
+<li><strong>Prueba conjunta (F‐test):</strong> regresión de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(X\)</span> (LPM) y test conjunto de significancia de <span class="math inline">\(X\)</span>.</li>
+<li><strong>Modelos binarios:</strong> <code>logit/probit</code> de <span class="math inline">\(D\)</span> sobre <span class="math inline">\(X\)</span>; evaluar razón de verosimilitud o <span class="math inline">\(\chi^2\)</span> conjunta.</li>
+<li><strong>Si se rechaza balance:</strong> revisar procedimiento (bloqueos/estratos, reasignación, control por <span class="math inline">\(X\)</span> pretratamiento en la estimación).</li>
+</ol>
+<div class="sourceCode" id="cb80"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb80-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-1" tabindex="-1"></a>cap <span class="kw">program</span> <span class="kw">drop</span> difmedias</span>
+<span id="cb80-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> difmedias, rclass</span>
+<span id="cb80-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-3" tabindex="-1"></a>    <span class="kw">version</span> 18</span>
+<span id="cb80-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-4" tabindex="-1"></a>    <span class="kw">syntax</span> <span class="kw">varlist</span>(<span class="fu">min</span>=1) [, BY(varname) SAVEPOST(<span class="fu">string</span> asis)]</span>
+<span id="cb80-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-5" tabindex="-1"></a>    <span class="kw">if</span> (<span class="st">&quot;`by&#39;&quot;</span>==<span class="st">&quot;&quot;</span>) {</span>
+<span id="cb80-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-6" tabindex="-1"></a>        <span class="kw">di</span> <span class="kw">as</span> err <span class="st">&quot;Necesitas especificar , by(varname).&quot;</span></span>
+<span id="cb80-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-7" tabindex="-1"></a>        <span class="kw">exit</span> 198</span>
+<span id="cb80-8"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-8" tabindex="-1"></a>    }</span>
+<span id="cb80-9"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-9" tabindex="-1"></a>    <span class="kw">local</span> vars <span class="ot">`varlist&#39;</span></span>
+<span id="cb80-10"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-10" tabindex="-1"></a></span>
+<span id="cb80-11"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-11" tabindex="-1"></a>    <span class="kw">local</span> do_post = 0</span>
+<span id="cb80-12"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-12" tabindex="-1"></a>    <span class="kw">if</span> (<span class="st">&quot;`savepost&#39;&quot;</span>!=<span class="st">&quot;&quot;</span>) <span class="kw">local</span> do_post = 1</span>
+<span id="cb80-13"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-13" tabindex="-1"></a>    <span class="kw">tempname</span> posth</span>
+<span id="cb80-14"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-14" tabindex="-1"></a>    <span class="kw">if</span> <span class="ot">`do_post&#39;</span> {</span>
+<span id="cb80-15"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-15" tabindex="-1"></a>        <span class="kw">postfile</span> <span class="ot">`posth&#39;</span> str32 <span class="kw">variable</span> <span class="co">///</span></span>
+<span id="cb80-16"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-16" tabindex="-1"></a>            <span class="kw">double</span> mean_T mean_C <span class="fu">diff</span> tstat pval se sd_T sd_C N_T N_C <span class="co">///</span></span>
+<span id="cb80-17"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-17" tabindex="-1"></a>            <span class="kw">using</span> <span class="st">&quot;`savepost&#39;&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb80-18"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-18" tabindex="-1"></a>    }</span>
+<span id="cb80-19"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-19" tabindex="-1"></a></span>
+<span id="cb80-20"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-20" tabindex="-1"></a>    <span class="kw">di</span> <span class="kw">as</span> txt <span class="st">&quot;Var{col 22}Mean_T{col 33}Mean_C{col 44}Diff{col 55}t{col 66}p&quot;</span></span>
+<span id="cb80-21"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-21" tabindex="-1"></a>    <span class="kw">foreach</span> v <span class="kw">of</span> <span class="kw">local</span> vars {</span>
+<span id="cb80-22"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-22" tabindex="-1"></a>        <span class="kw">qui</span> <span class="kw">ttest</span> <span class="ot">`v&#39;</span>, <span class="kw">by</span>(<span class="ot">`by&#39;</span>)</span>
+<span id="cb80-23"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-23" tabindex="-1"></a></span>
+<span id="cb80-24"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-24" tabindex="-1"></a>        <span class="kw">local</span> mu1 = <span class="fu">r</span>(mu_1)</span>
+<span id="cb80-25"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-25" tabindex="-1"></a>        <span class="kw">local</span> mu2 = <span class="fu">r</span>(mu_2)</span>
+<span id="cb80-26"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-26" tabindex="-1"></a>        <span class="kw">local</span> sd1 = <span class="fu">r</span>(sd_1)</span>
+<span id="cb80-27"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-27" tabindex="-1"></a>        <span class="kw">local</span> sd2 = <span class="fu">r</span>(sd_2)</span>
+<span id="cb80-28"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-28" tabindex="-1"></a>        <span class="kw">local</span> N1  = <span class="fu">r</span>(N_1)</span>
+<span id="cb80-29"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-29" tabindex="-1"></a>        <span class="kw">local</span> N2  = <span class="fu">r</span>(N_2)</span>
+<span id="cb80-30"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-30" tabindex="-1"></a>        <span class="kw">local</span> t   = <span class="fu">r</span>(t)</span>
+<span id="cb80-31"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-31" tabindex="-1"></a>        <span class="kw">local</span> se  = <span class="fu">r</span>(se)</span>
+<span id="cb80-32"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-32" tabindex="-1"></a>        <span class="kw">local</span> <span class="kw">p</span>   = <span class="fu">r</span>(<span class="kw">p</span>)</span>
+<span id="cb80-33"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-33" tabindex="-1"></a></span>
+<span id="cb80-34"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-34" tabindex="-1"></a>        <span class="kw">local</span> mean_T = <span class="ot">`mu2&#39;</span></span>
+<span id="cb80-35"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-35" tabindex="-1"></a>        <span class="kw">local</span> mean_C = <span class="ot">`mu1&#39;</span></span>
+<span id="cb80-36"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-36" tabindex="-1"></a>        <span class="kw">local</span> <span class="fu">diff</span>   = <span class="ot">`mu2&#39;</span> - <span class="ot">`mu1&#39;</span></span>
+<span id="cb80-37"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-37" tabindex="-1"></a></span>
+<span id="cb80-38"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-38" tabindex="-1"></a>        <span class="kw">di</span> <span class="kw">as</span> res <span class="st">&quot;`v&#39;&quot;</span> <span class="st">&quot;{col 22}&quot;</span> %9.3f <span class="ot">`mean_T&#39;</span> <span class="st">&quot;{col 33}&quot;</span> %9.3f <span class="ot">`mean_C&#39;</span> <span class="st">&quot;{col 44}&quot;</span> %9.3f <span class="ot">`diff&#39;</span> <span class="st">&quot;{col 55}&quot;</span> %9.3f <span class="ot">`t&#39;</span> <span class="st">&quot;{col 66}&quot;</span> %9.3f <span class="ot">`p&#39;</span></span>
+<span id="cb80-39"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-39" tabindex="-1"></a></span>
+<span id="cb80-40"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-40" tabindex="-1"></a>        <span class="kw">if</span> <span class="ot">`do_post&#39;</span> {</span>
+<span id="cb80-41"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-41" tabindex="-1"></a>            <span class="kw">post</span> <span class="ot">`posth&#39;</span> (<span class="st">&quot;`v&#39;&quot;</span>) (<span class="ot">`mean_T&#39;</span>) (<span class="ot">`mean_C&#39;</span>) (<span class="ot">`diff&#39;</span>) (<span class="ot">`t&#39;</span>) (<span class="ot">`p&#39;</span>) (<span class="ot">`se&#39;</span>) (<span class="ot">`sd2&#39;</span>) (<span class="ot">`sd1&#39;</span>) (<span class="ot">`N2&#39;</span>) (<span class="ot">`N1&#39;</span>)</span>
+<span id="cb80-42"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-42" tabindex="-1"></a>        }</span>
+<span id="cb80-43"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-43" tabindex="-1"></a>    }</span>
+<span id="cb80-44"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-44" tabindex="-1"></a>    <span class="kw">if</span> <span class="ot">`do_post&#39;</span> <span class="kw">postclose</span> <span class="ot">`posth&#39;</span></span>
+<span id="cb80-45"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-45" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb80-46"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-46" tabindex="-1"></a></span>
+<span id="cb80-47"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-47" tabindex="-1"></a></span>
+<span id="cb80-48"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-48" tabindex="-1"></a>* Balance <span class="kw">de</span> X</span>
+<span id="cb80-49"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-49" tabindex="-1"></a>difmedias <span class="ot">$X</span>, <span class="kw">by</span>(D) savepost(<span class="st">&quot;Table_Balance_raw.dta&quot;</span>)</span>
+<span id="cb80-50"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-50" tabindex="-1"></a></span>
+<span id="cb80-51"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-51" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;Table_Balance_raw.dta&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb80-52"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-52" tabindex="-1"></a><span class="kw">order</span> <span class="kw">variable</span> mean_T mean_C <span class="fu">diff</span> tstat pval se sd_T sd_C N_T N_C</span>
+<span id="cb80-53"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-53" tabindex="-1"></a><span class="kw">export</span> excel <span class="kw">using</span> <span class="st">&quot;Table_Balance_raw.xlsx&quot;</span>, firstrow(variables) <span class="kw">replace</span></span>
+<span id="cb80-54"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-54" tabindex="-1"></a></span>
+<span id="cb80-55"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-55" tabindex="-1"></a>* ALTERNATIVAS </span>
+<span id="cb80-56"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-56" tabindex="-1"></a>cap which iebaltab</span>
+<span id="cb80-57"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-57" tabindex="-1"></a><span class="kw">if</span> <span class="dt">_rc</span> <span class="kw">ssc</span> install ietoolkit, <span class="kw">replace</span></span>
+<span id="cb80-58"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-58" tabindex="-1"></a></span>
+<span id="cb80-59"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-59" tabindex="-1"></a>iebaltab <span class="ot">$X</span>, grpvar(D) control(0) rowvarlabels ftest <span class="co">///</span></span>
+<span id="cb80-60"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-60" tabindex="-1"></a>     savexlsx(<span class="st">&quot;Table_Balance.xlsx&quot;</span>) <span class="kw">replace</span> <span class="kw">format</span>(%9.3f)</span>
+<span id="cb80-61"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-61" tabindex="-1"></a></span>
+<span id="cb80-62"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-62" tabindex="-1"></a>eststo <span class="kw">clear</span></span>
+<span id="cb80-63"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-63" tabindex="-1"></a>eststo: <span class="kw">reg</span>   D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb80-64"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-64" tabindex="-1"></a><span class="kw">test</span> <span class="ot">$X</span></span>
+<span id="cb80-65"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-65" tabindex="-1"></a>eststo: <span class="kw">logit</span> D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb80-66"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-66" tabindex="-1"></a>eststo: <span class="kw">probit</span> D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb80-67"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-67" tabindex="-1"></a></span>
+<span id="cb80-68"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-68" tabindex="-1"></a>esttab, se <span class="kw">star</span>(* 0.10 ** 0.05 *** 0.01) <span class="co">///</span></span>
+<span id="cb80-69"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-69" tabindex="-1"></a>    <span class="kw">stats</span>(<span class="kw">N</span> r2, fmt(%9.0g %9.3f) labels(<span class="st">&quot;N&quot;</span> <span class="st">&quot;R2&quot;</span>)) <span class="co">///</span></span>
+<span id="cb80-70"><a href="experimentos-aleatorizados-clase-empírica.html#cb80-70" tabindex="-1"></a>    nomtitle <span class="kw">compress</span></span></code></pre></div>
+<p><strong>Resultados del balance (con nuestros datos):</strong></p>
+<p><strong>Balance de covariables — resultados de Stata</strong></p>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+Media tratados
+</th>
+<th style="text-align:right;">
+Media control
+</th>
+<th style="text-align:right;">
+Diferencia
+</th>
+<th style="text-align:right;">
+p-valor
+</th>
+<th style="text-align:right;">
+N tratados
+</th>
+<th style="text-align:right;">
+N control
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+edad
+</td>
+<td style="text-align:right;">
+26.513
+</td>
+<td style="text-align:right;">
+23.548
+</td>
+<td style="text-align:right;">
+2.964
+</td>
+<td style="text-align:right;">
+0.095
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mujer
+</td>
+<td style="text-align:right;">
+0.282
+</td>
+<td style="text-align:right;">
+0.258
+</td>
+<td style="text-align:right;">
+0.024
+</td>
+<td style="text-align:right;">
+0.826
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+libros
+</td>
+<td style="text-align:right;">
+3.674
+</td>
+<td style="text-align:right;">
+2.726
+</td>
+<td style="text-align:right;">
+0.949
+</td>
+<td style="text-align:right;">
+0.264
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pregrado
+</td>
+<td style="text-align:right;">
+0.513
+</td>
+<td style="text-align:right;">
+0.355
+</td>
+<td style="text-align:right;">
+0.158
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+maestria
+</td>
+<td style="text-align:right;">
+0.487
+</td>
+<td style="text-align:right;">
+0.645
+</td>
+<td style="text-align:right;">
+-0.158
+</td>
+<td style="text-align:right;">
+0.191
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+31
+</td>
+</tr>
+</tbody>
+</table>
+<p>Las diferencias son las medias de tratados menos las de control. La tabla permite evaluar tanto su magnitud como su precisión; el balance no debe juzgarse únicamente variable por variable, por lo que complementamos esta lectura con la prueba conjunta.</p>
+<p>Además del p-valor, conviene reportar la diferencia estandarizada: diferencia de medias dividida por una desviación estándar combinada. Esta medida separa magnitud de tamaño muestral. Un p-valor grande no demuestra igualdad y, con muchas pruebas, algún p-valor pequeño puede aparecer por azar. Ante desbalance fortuito se conserva la asignación, se documenta y se ajusta por covariables pretratamiento o por la regla prespecificada.</p>
+<div class="box-salida">
+<p><strong>Salida central:</strong> la tabla canónica presenta medias por brazo, diferencia, p-valor y tamaños de grupo para cada covariable; se lee junto con magnitudes sustantivas y el protocolo.</p>
+</div>
+</div>
+<div id="prueba-conjunta-de-balance" class="section level3 unnumbered hasAnchor">
+<h3>Prueba conjunta de balance<a href="experimentos-aleatorizados-clase-empírica.html#prueba-conjunta-de-balance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Prueba conjunta (LPM):</strong> F = 3.249, p-valor = 0.017. Se rechaza balance conjunto.</p>
+<div class="box-interpretacion">
+<p><strong>Interpretación:</strong> en <code>reg D $X, vce(robust)</code> y <code>test $X</code>, la hipótesis conjunta es que las covariables no predicen la asignación. No rechazar no prueba aleatoriedad; la evidencia principal sigue siendo el mecanismo documentado.</p>
+</div>
+<div class="box-ejercicio">
+<p><strong>RCT-S1 — Aleatorización y balance</strong></p>
+<p>Una base contiene 70 estudiantes, identificados por <code>student_id</code>, distribuidos en cuatro valores de <code>semestre</code>. Use la semilla <code>20250813</code>. Formule y ejecute dos asignaciones: Bernoulli simple con <code>p=0.50</code> y conteo 50/50 dentro de cada <code>semestre</code>. Para la asignación estratificada, evalúe balance de <code>edad</code>, <code>mujer</code> y <code>libros</code> con pruebas individuales y con una prueba conjunta <code>D ~ X</code>. ¿Qué elementos conservaría para que otra persona reproduzca la asignación? ¿Cómo distinguiría desbalance fortuito de un error de implementación?</p>
+<p><strong>Puntaje sugerido:</strong> 5 puntos.</p>
+<p><strong>Comandos permitidos:</strong> <code>sort</code>, <code>generate</code>, <code>isid</code>, <code>set seed</code>, <code>runiform()</code>, <code>bysort</code>, <code>tabulate</code>, <code>list</code>, <code>ttest</code>, <code>reg</code>, <code>test</code>.</p>
+<p><strong>Producto esperado:</strong> dos listas de asignación reproducibles, tabla de balance individual, prueba conjunta y evaluación escrita del balance fortuito.</p>
+</div>
+</div>
+<div id="rct-simple-sin-controles" class="section level3 unnumbered hasAnchor">
+<h3>RCT simple sin controles<a href="experimentos-aleatorizados-clase-empírica.html#rct-simple-sin-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el capítulo anterior derivamos <strong>los cuatro escenarios</strong> según el diseño experimental. Ahora los implementamos en Stata, usando <code>semestre</code> como variable de estrato <span class="math inline">\(S_i\)</span>:</p>
+<div class="table table-bordered table-striped">
+<table>
+<colgroup>
+<col width="38%" />
+<col width="30%" />
+<col width="30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Escenario</th>
+<th align="left">Regresión</th>
+<th align="left">Objetivo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + u_i\)</span></td>
+<td align="left">Identificación pura por aleatorización</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \beta&#39; X_i + u_i\)</span></td>
+<td align="left">+ precisión con controles baseline</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \delta&#39; S_i + u_i\)</span></td>
+<td align="left">Respetar diseño estratificado</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="left"><span class="math inline">\(Y_i = \alpha + \tau D_i + \delta&#39; S_i + \beta&#39; X_i + u_i\)</span></td>
+<td align="left">Diseño + eficiencia (especificación completa)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Con probabilidades de tratamiento iguales entre estratos y una especificación compatible con el diseño, los cuatro coeficientes apuntan al mismo ATE de la población objetivo; los controles pretratamiento y estratos pueden cambiar la precisión. Si las probabilidades difieren entre estratos o los efectos son heterogéneos, la regresión no ponderada puede inducir una ponderación distinta de la población objetivo. En ese caso se debe prespecificar el estimando y usar ponderación por la población objetivo o un promedio explícito de efectos por estrato.</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb81-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb81-1" tabindex="-1"></a>* ── Escenario 1: RCT simple (diferencia <span class="kw">de</span> medias) ──────────────────────</span>
+<span id="cb81-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb81-2" tabindex="-1"></a>eststo <span class="kw">clear</span></span>
+<span id="cb81-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb81-3" tabindex="-1"></a>eststo m1: <span class="kw">reg</span> <span class="fu">y</span> D, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<p>El coeficiente de <code>D</code> coincide con la diferencia de medias. <code>vce(robust)</code> permite varianzas distintas entre brazos.</p>
+</div>
+<div id="rct-simple-con-controles" class="section level3 unnumbered hasAnchor">
+<h3>RCT simple con controles<a href="experimentos-aleatorizados-clase-empírica.html#rct-simple-con-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb82"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb82-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb82-1" tabindex="-1"></a>* ── Escenario 2: RCT simple + controles baseline ────────────────────────</span>
+<span id="cb82-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb82-2" tabindex="-1"></a>eststo m2: <span class="kw">reg</span> <span class="fu">y</span> D <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<p>Los controles pretratamiento no crean identificación; pueden reducir la varianza residual si predicen el resultado.</p>
+</div>
+<div id="rct-estratificado-sin-controles-adicionales" class="section level3 unnumbered hasAnchor">
+<h3>RCT estratificado sin controles adicionales<a href="experimentos-aleatorizados-clase-empírica.html#rct-estratificado-sin-controles-adicionales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb83"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb83-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb83-1" tabindex="-1"></a>* ── Escenario 3: Estratificado por semestre, <span class="fu">sin</span> controles ───────────────</span>
+<span id="cb83-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb83-2" tabindex="-1"></a>eststo m3: <span class="kw">reg</span> <span class="fu">y</span> D i.semestre, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<p>Las dummies de <code>semestre</code> incorporan los bloques usados por el diseño y comparan estudiantes dentro de cohortes.</p>
+</div>
+<div id="rct-estratificado-con-controles-adicionales" class="section level3 unnumbered hasAnchor">
+<h3>RCT estratificado con controles adicionales<a href="experimentos-aleatorizados-clase-empírica.html#rct-estratificado-con-controles-adicionales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb84"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb84-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb84-1" tabindex="-1"></a>* ── Escenario 4: Estratificado + controles (especificación completa) ────</span>
+<span id="cb84-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb84-2" tabindex="-1"></a>eststo m4: <span class="kw">reg</span> <span class="fu">y</span> D i.semestre <span class="ot">$X</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<p>Esta especificación combina la estructura de asignación con covariables basales predictivas.</p>
+</div>
+<div id="comparación-de-las-cuatro-especificaciones" class="section level3 unnumbered hasAnchor">
+<h3>Comparación de las cuatro especificaciones<a href="#comparaci%C3%B3n-de-las-cuatro-especificaciones" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb85"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb85-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb85-1" tabindex="-1"></a>* Comparar los cuatro modelos lado a lado</span>
+<span id="cb85-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb85-2" tabindex="-1"></a>esttab m1 m2 m3 m4, se <span class="kw">star</span>(* 0.10 ** 0.05 *** 0.01) <span class="co">///</span></span>
+<span id="cb85-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb85-3" tabindex="-1"></a>    <span class="kw">stats</span>(<span class="kw">N</span> r2, fmt(%9.0g %9.3f) labels(<span class="st">&quot;N&quot;</span> <span class="st">&quot;R2&quot;</span>)) <span class="co">///</span></span>
+<span id="cb85-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb85-4" tabindex="-1"></a>    b(%9.4f) <span class="kw">compress</span> nonote <span class="co">///</span></span>
+<span id="cb85-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb85-5" tabindex="-1"></a>    mtitle(<span class="st">&quot;Simple&quot;</span> <span class="st">&quot;+Controles&quot;</span> <span class="st">&quot;+Estratos&quot;</span> <span class="st">&quot;Completo&quot;</span>) <span class="co">///</span></span>
+<span id="cb85-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb85-6" tabindex="-1"></a>    <span class="bn">title</span>(<span class="st">&quot;Cuatro escenarios de estimación del ATE&quot;</span>)</span></code></pre></div>
+<p><strong>Resultados (con nuestros datos):</strong></p>
+<p><strong>Cuatro escenarios de estimación del ATE — resultados de Stata</strong></p>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Modelo
+</th>
+<th style="text-align:right;">
+ATE estimado
+</th>
+<th style="text-align:right;">
+Error estándar robusto
+</th>
+<th style="text-align:right;">
+IC 95% inferior
+</th>
+<th style="text-align:right;">
+IC 95% superior
+</th>
+<th style="text-align:right;">
+gl residuales
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:right;">
+R²
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Simple
+</td>
+<td style="text-align:right;">
+4.312
+</td>
+<td style="text-align:right;">
+0.476
+</td>
+<td style="text-align:right;">
+3.362
+</td>
+<td style="text-align:right;">
+5.262
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+0.553
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Con controles
+</td>
+<td style="text-align:right;">
+4.252
+</td>
+<td style="text-align:right;">
+0.464
+</td>
+<td style="text-align:right;">
+3.324
+</td>
+<td style="text-align:right;">
+5.180
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+0.593
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Con estratos
+</td>
+<td style="text-align:right;">
+4.390
+</td>
+<td style="text-align:right;">
+0.429
+</td>
+<td style="text-align:right;">
+3.533
+</td>
+<td style="text-align:right;">
+5.248
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+0.650
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Completo
+</td>
+<td style="text-align:right;">
+4.296
+</td>
+<td style="text-align:right;">
+0.440
+</td>
+<td style="text-align:right;">
+3.415
+</td>
+<td style="text-align:right;">
+5.177
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+0.672
+</td>
+</tr>
+</tbody>
+</table>
+<div class="boxnote">
+<p><strong>Observe cómo cambian los SE de <span class="math inline">\(\hat{\tau}\)</span></strong> entre los cuatro modelos. El punto estimado debe ser similar (la aleatorización garantiza consistencia), pero los errores estándar se reducen al agregar variables que predicen <span class="math inline">\(Y\)</span>. Los estratos (semestre) absorben diferencias de nivel entre cohortes.</p>
+</div>
+<div class="box-ejercicio">
+<p><strong>RCT-S2 — Lectura de modelos y precisión</strong></p>
+<p>Sobre la muestra canónica de 70 estudiantes se obtienen: Simple: coeficiente 4.312, SE 0.476, gl 68; Con controles: coeficiente 4.252, SE 0.464, gl 63; Con estratos: coeficiente 4.390, SE 0.429, gl 65; Completo: coeficiente 4.296, SE 0.440, gl 60. Compare coeficientes, precisión e IC 95% con referencia t y los grados de libertad residuales indicados. ¿Cuál especificación es más precisa en esta muestra? Justifique por qué una SE menor no significa que los controles hayan creado la identificación y explique qué condición de ponderación permite interpretar las cuatro columnas como el mismo ATE objetivo.</p>
+<p><strong>Puntaje sugerido:</strong> 5 puntos.</p>
+<p><strong>Comandos permitidos:</strong> <code>display invttail(gl, 0.025)</code> para obtener cada valor crítico t; calculadora básica para multiplicar y sumar.</p>
+<p><strong>Producto esperado:</strong> cálculos de cuatro IC 95% y una comparación argumentada de estimando, precisión y ponderación.</p>
+</div>
+<div class="boxnote">
+<p>Interpretación según escala de <span class="math inline">\(Y\)</span></p>
+<ol style="list-style-type: decimal">
+<li><strong><span class="math inline">\(Y\)</span> en niveles (continuo):</strong> <span class="math inline">\(\hat{\tau}\)</span> es diferencia de unidades de <span class="math inline">\(Y\)</span> entre tratados y control.</li>
+<li><strong><span class="math inline">\(Y\)</span> en logaritmos:</strong> <span class="math inline">\(\hat{\tau}\)</span> es una <strong>semi-elasticidad</strong>; el efecto porcentual aproximado es <span class="math inline">\(100\times \hat{\tau}\%\)</span>.
+Efecto exacto: <span class="math inline">\(100\times(\exp(\hat{\tau})-1)\%\)</span>.
+<em>Ejemplo:</em> <span class="math inline">\(\hat{\tau}=0.13 \Rightarrow \exp(0.13)-1 \approx 0.139\)</span> → <strong>13.9%</strong>.</li>
+<li><strong><span class="math inline">\(Y\)</span> estandarizado:</strong> media 0 y varianza 1; <span class="math inline">\(\hat{\tau}\)</span> se interpreta en <strong>desviaciones estándar</strong>.</li>
+<li><strong><span class="math inline">\(Y\)</span> binario:</strong> <span class="math inline">\(\hat{\tau}\)</span> es <strong>diferencia de probabilidades</strong> (puntos porcentuales).
+<em>Ejemplo:</em> <span class="math inline">\(p_1=0.30\)</span>, <span class="math inline">\(p_0=0.25\)</span> ⇒ <span class="math inline">\(\hat{\tau}=0.05 = 5\)</span> pp.</li>
+</ol>
+</div>
+</div>
+<div id="inferencia-y-unidad-de-asignación" class="section level3 unnumbered hasAnchor">
+<h3>Inferencia y unidad de asignación<a href="#inferencia-y-unidad-de-asignaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="asignación-a-nivel-individual-dos-muestras-independientes" class="section level3 unnumbered hasAnchor">
+<h3>Asignación a nivel individual (dos muestras independientes)<a href="#asignaci%C3%B3n-a-nivel-individual-dos-muestras-independientes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Varianza del estimador (clásica):</strong>
+<span class="math display">\[
+\operatorname{Var}(\hat{\tau})
+\;\approx\;
+\frac{S_1^2}{N_1} \;+\; \frac{S_0^2}{N_0},
+\]</span>
+donde <span class="math inline">\(S_1^2\)</span> y <span class="math inline">\(S_0^2\)</span> son las varianzas muestrales por grupo.</li>
+<li><strong>Heterocedasticidad:</strong> usar <strong>SE robustas</strong> (HC).<br />
+</li>
+<li><strong>Asignación por clusters:</strong> usar <strong>SE cluster</strong> al nivel de asignación. Con pocos clusters, considerar <strong>wild cluster bootstrap</strong>.</li>
+</ul>
+<p>Con asignación individual, HC1 es coherente con independencia entre estudiantes. Si se asignaran escuelas o salones, <code>vce(cluster escuela)</code> debe reflejar esa unidad, porque los resultados dentro del cluster pueden estar correlacionados. Con pocos clusters, la aproximación asintótica y sus grados de libertad son frágiles; se reporta el número de clusters y se considera inferencia aleatorizada o wild cluster bootstrap.</p>
+</div>
+<div id="pruebas" class="section level3 unnumbered hasAnchor">
+<h3>Pruebas<a href="experimentos-aleatorizados-clase-empírica.html#pruebas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Significancia individual:</strong> <span class="math inline">\(H_0:\,\tau=0\)</span> (t‐test).<br />
+</li>
+<li><strong>Significancia conjunta de <span class="math inline">\(X\)</span>:</strong> en <span class="math inline">\(D \sim X\)</span>, <span class="math inline">\(H_0:\,\beta_X=0\)</span> (F/<span class="math inline">\(\chi^2\)</span>). Queremos <strong>no rechazar</strong>.</li>
+</ul>
+</div>
+<div id="cuándo-incluir-controles" class="section level3 unnumbered hasAnchor">
+<h3>Cuándo incluir controles<a href="#cu%C3%A1ndo-incluir-controles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Identificación:</strong> con aleatorización correcta, <strong>no necesitas</strong> <span class="math inline">\(X\)</span> para identificar <span class="math inline">\(\tau\)</span>.</li>
+<li><strong>Precisión:</strong> incluir <span class="math inline">\(X\)</span> <strong>pretratamiento</strong> que <strong>expliquen <span class="math inline">\(Y\)</span></strong> puede <strong>reducir</strong> <span class="math inline">\(\operatorname{Var}(\hat{\tau})\)</span> (menor varianza residual).<br />
+Si <span class="math inline">\(X\)</span> es irrelevante o colineal, puede <strong>aumentar</strong> la SE de <span class="math inline">\(\hat{\tau}\)</span>.</li>
+<li><strong>Modelo con controles:</strong>
+<span class="math display">\[
+Y_i \;=\; \alpha + \tau D_i + X_i&#39;\beta + u_i.
+\]</span>
+Si <span class="math inline">\(X \perp D\)</span> (por diseño) y <span class="math inline">\(X\)</span> explica <span class="math inline">\(Y\)</span>, esperar <strong>SE(D)</strong> más pequeñas.</li>
+</ul>
+<p>Los controles deben medirse antes del tratamiento. Un control postratamiento puede ser mediador o colisionador: condicionarlo cambia el estimando y puede introducir sesgo. La regla de selección y la especificación principal se fijan antes de mirar impactos.</p>
+<div class="box-cuidado">
+<p><strong>Error frecuente:</strong> añadir asistencia posterior al tratamiento “para mejorar el ajuste” puede bloquear parte del efecto causal. Un R² mayor no garantiza una estimación causal más válida.</p>
+</div>
+<div class="box-ejercicio">
+<p><strong>RCT-S3 — Inferencia y controles</strong></p>
+<p>Diseño A asigna individualmente a 240 estudiantes dentro de salones. Diseño B asigna tratamiento a 24 escuelas y mide a 20 estudiantes por escuela. Para ambos se observan puntaje basal, género, asistencia posterior al tratamiento y puntaje final. Decida el nivel de los errores estándar en cada diseño y si usaría cada covariable como control principal. Explique qué cambia con solo 24 clusters y por qué la asistencia posterior requiere un tratamiento distinto de las covariables basales.</p>
+<p><strong>Puntaje sugerido:</strong> 5 puntos.</p>
+<p><strong>Comandos permitidos:</strong> <code>reg</code>, <code>vce(robust)</code>, <code>vce(cluster ...)</code>, <code>test</code>.</p>
+<p><strong>Producto esperado:</strong> dos especificaciones de inferencia y una clasificación razonada de las cuatro covariables.</p>
+</div>
+</div>
+<div id="heterogeneidad-mediante-interacciones" class="section level3 unnumbered hasAnchor">
+<h3>Heterogeneidad mediante interacciones<a href="experimentos-aleatorizados-clase-empírica.html#heterogeneidad-mediante-interacciones" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Los <strong>Efectos heterogéneos (HET)</strong> permiten preguntar si el impacto cambia con características basales.</p>
+<ul>
+<li><strong>Especificación general:</strong>
+<span class="math display">\[
+Y_i \;=\; \alpha \;+\; \tau D_i \;+\; \gamma W_i \;+\; \delta\, (D_i \times W_i) \;+\; X_i&#39;\beta \;+\; u_i,
+\]</span>
+donde <span class="math inline">\(W\)</span> es el moderador (p. ej., <strong>mujer</strong>, <strong>libros</strong>, <strong>cuartiles de edad</strong>).</li>
+<li><strong>Interpretación:</strong> <span class="math inline">\(\delta\)</span> es el <strong>cambio en el efecto de <span class="math inline">\(D\)</span></strong> al pasar de un nivel de <span class="math inline">\(W\)</span> a otro.
+Usar <code>margins</code>/<code>marginsplot</code> para reportar efectos marginales y perfiles por subgrupo. <code>margins, dydx(D)</code> entrega cambios tratados-control (CATE); otros comandos de <code>margins</code> pueden entregar niveles predichos y no deben rotularse como efectos.</li>
+</ul>
+<div class="sourceCode" id="cb86"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb86-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-1" tabindex="-1"></a>* Por mujer (binaria)</span>
+<span id="cb86-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-2" tabindex="-1"></a>eststo <span class="kw">clear</span></span>
+<span id="cb86-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-3" tabindex="-1"></a>eststo: <span class="kw">reg</span> <span class="fu">y</span> i.D##i.mujer, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb86-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-4" tabindex="-1"></a>margins, <span class="kw">dydx</span>(D)</span>
+<span id="cb86-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-5" tabindex="-1"></a>margins D#mujer</span>
+<span id="cb86-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-6" tabindex="-1"></a></span>
+<span id="cb86-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-7" tabindex="-1"></a>* Por libros (continua)</span>
+<span id="cb86-8"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-8" tabindex="-1"></a>eststo: <span class="kw">reg</span> <span class="fu">y</span> i.D##c.libros, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb86-9"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-9" tabindex="-1"></a>margins, <span class="kw">dydx</span>(D) <span class="fu">at</span>(libros=(0(1)8))</span>
+<span id="cb86-10"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-10" tabindex="-1"></a>marginsplot, <span class="bn">title</span>(<span class="st">&quot;Efecto marginal de D según libros&quot;</span>)</span>
+<span id="cb86-11"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-11" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">&quot;margins_libros.pdf&quot;</span>, <span class="kw">replace</span></span>
+<span id="cb86-12"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-12" tabindex="-1"></a></span>
+<span id="cb86-13"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-13" tabindex="-1"></a>* Por cuartiles <span class="kw">de</span> edad</span>
+<span id="cb86-14"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-14" tabindex="-1"></a><span class="kw">xtile</span> q_edad = edad, nq(4)</span>
+<span id="cb86-15"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-15" tabindex="-1"></a>eststo: <span class="kw">reg</span> <span class="fu">y</span> i.D##i.q_edad, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb86-16"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-16" tabindex="-1"></a>margins D#q_edad</span>
+<span id="cb86-17"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-17" tabindex="-1"></a>marginsplot, <span class="bn">title</span>(<span class="st">&quot;Heterogeneidad por cuartiles de edad&quot;</span>)</span>
+<span id="cb86-18"><a href="experimentos-aleatorizados-clase-empírica.html#cb86-18" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> <span class="st">&quot;margins_qedad.pdf&quot;</span>, <span class="kw">replace</span></span></code></pre></div>
+</div>
+<div id="efecto-base-y-cate" class="section level3 unnumbered hasAnchor">
+<h3>Efecto base y CATE<a href="experimentos-aleatorizados-clase-empírica.html#efecto-base-y-cate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para una moderadora binaria, el coeficiente de <code>D</code> es el efecto base cuando <span class="math inline">\(W=0\)</span>; el CATE cuando <span class="math inline">\(W=1\)</span> es la suma del coeficiente de <code>D</code> y el de la interacción. Para libros o edad, el CATE cambia con el valor del moderador. <code>lincom</code> y <code>margins, dydx(D)</code> calculan esa combinación con su error estándar.</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb87-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb87-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> i.D##i.mujer, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb87-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb87-2" tabindex="-1"></a><span class="kw">lincom</span> 1.D + 1.D#1.mujer</span>
+<span id="cb87-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb87-3" tabindex="-1"></a>margins mujer, <span class="kw">dydx</span>(D)</span>
+<span id="cb87-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb87-4" tabindex="-1"></a></span>
+<span id="cb87-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb87-5" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> i.D##c.libros, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb87-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb87-6" tabindex="-1"></a>margins, <span class="kw">dydx</span>(D) <span class="fu">at</span>(libros=(0(1)8))</span></code></pre></div>
+<p><strong>Resultados (con nuestros datos):</strong></p>
+<p><strong>Heterogeneidad por género — resultado principal de Stata</strong></p>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Moderador
+</th>
+<th style="text-align:left;">
+Término
+</th>
+<th style="text-align:right;">
+Coeficiente
+</th>
+<th style="text-align:right;">
+Error estándar robusto
+</th>
+<th style="text-align:right;">
+N
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Género
+</td>
+<td style="text-align:left;">
+Tratamiento × Mujer
+</td>
+<td style="text-align:right;">
+0.984
+</td>
+<td style="text-align:right;">
+1.059
+</td>
+<td style="text-align:right;">
+70
+</td>
+</tr>
+</tbody>
+</table>
+<p>La interacción es positiva, pero su error estándar es grande en relación con la magnitud estimada. En esta muestra no hay evidencia precisa de que el efecto difiera por género; el gráfico siguiente ayuda a leer los niveles predichos sin convertir una estimación imprecisa en una conclusión de heterogeneidad.</p>
+<p><img src="06-RCT2_files/figure-html/het-mujer-1.png" width="768" /></p>
+<p><img src="06-RCT2_files/figure-html/het-edad-1.png" width="576" /></p>
+</div>
+<div id="centrado-de-covariables" class="section level3 unnumbered hasAnchor">
+<h3>Centrado de covariables<a href="experimentos-aleatorizados-clase-empírica.html#centrado-de-covariables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>El truco de centrar (Wooldridge)</strong></p>
+<p>En el capítulo anterior vimos que si interactuamos <span class="math inline">\(D\)</span> con una covariable <span class="math inline">\(W\)</span>, el coeficiente <span class="math inline">\(\tau\)</span> es el efecto ajustado para <span class="math inline">\(W=0\)</span>. Al centrar la covariable, ese coeficiente pasa a ser el efecto ajustado en la media de <span class="math inline">\(W\)</span>:</p>
+<p><span class="math display">\[
+W_c = W - \bar{W}, \qquad Y_i = \alpha + \tau D_i + \gamma W_{c,i} + \delta (D_i \cdot W_{c,i}) + u_i
+\]</span></p>
+<p>Como <span class="math inline">\(\mathbb{E}[W_c]=0\)</span>, el coeficiente de tratamiento se evalúa en <span class="math inline">\(W=\bar W\)</span>. Solo coincide con el ATE bajo una forma funcional adecuada y una agregación compatible con la población objetivo. En general, el ATE ajustado se obtiene como el promedio de los CATE predichos para las unidades, con los pesos del diseño correspondientes.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb88-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb88-1" tabindex="-1"></a>* ── Sin centrar: τ = efecto solo para libros=0 ──────────────────────────</span>
+<span id="cb88-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb88-2" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> i.D##c.libros, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb88-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb88-3" tabindex="-1"></a></span>
+<span id="cb88-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb88-4" tabindex="-1"></a>* ── Con centrado: efecto ajustado en libros = media ─────────────────────</span>
+<span id="cb88-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb88-5" tabindex="-1"></a><span class="kw">sum</span> libros</span>
+<span id="cb88-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb88-6" tabindex="-1"></a><span class="kw">gen</span> libros_c = libros - <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb88-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb88-7" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">y</span> i.D##c.libros_c, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb88-8"><a href="experimentos-aleatorizados-clase-empírica.html#cb88-8" tabindex="-1"></a>* Para un promedio ajustado, promediar CATE predichos con pesos <span class="kw">de</span> diseño</span></code></pre></div>
+<p><strong>Resultados (con nuestros datos):</strong></p>
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
+
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_suxbu0la8btqtkdsem0k = TinyTable.createTableFunctions("tinytable_suxbu0la8btqtkdsem0k");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '14', j: 2 }, { i: '14', j: 3 } ], css_id: 'tinytable_css_m60zwjl3viygcfzwefy3',}, 
+          { positions: [ { i: '12', j: 2 }, { i: '12', j: 3 } ], css_id: 'tinytable_css_cdjmkn7lt50xkd3yr34i',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '13', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '13', j: 3 } ], css_id: 'tinytable_css_1rgj04i3l6848prpo02k',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_3g6w358udwvze22o3bfv',}, 
+          { positions: [ { i: '14', j: 1 } ], css_id: 'tinytable_css_3kd1tvchn4l15z8qhrha',}, 
+          { positions: [ { i: '12', j: 1 } ], css_id: 'tinytable_css_o0uk8cx8v2n81l46p3j3',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '13', j: 1 } ], css_id: 'tinytable_css_jigunqbdiuujmncq0ks3',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_n0q2x25cmn0u79mg7yn3',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_suxbu0la8btqtkdsem0k.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_suxbu0la8btqtkdsem0k td.tinytable_css_m60zwjl3viygcfzwefy3, #tinytable_suxbu0la8btqtkdsem0k th.tinytable_css_m60zwjl3viygcfzwefy3 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_suxbu0la8btqtkdsem0k td.tinytable_css_cdjmkn7lt50xkd3yr34i, #tinytable_suxbu0la8btqtkdsem0k th.tinytable_css_cdjmkn7lt50xkd3yr34i {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_suxbu0la8btqtkdsem0k td.tinytable_css_1rgj04i3l6848prpo02k, #tinytable_suxbu0la8btqtkdsem0k th.tinytable_css_1rgj04i3l6848prpo02k { text-align: center }
+    #tinytable_suxbu0la8btqtkdsem0k td.tinytable_css_3g6w358udwvze22o3bfv, #tinytable_suxbu0la8btqtkdsem0k th.tinytable_css_3g6w358udwvze22o3bfv {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_suxbu0la8btqtkdsem0k td.tinytable_css_3kd1tvchn4l15z8qhrha, #tinytable_suxbu0la8btqtkdsem0k th.tinytable_css_3kd1tvchn4l15z8qhrha {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_suxbu0la8btqtkdsem0k td.tinytable_css_o0uk8cx8v2n81l46p3j3, #tinytable_suxbu0la8btqtkdsem0k th.tinytable_css_o0uk8cx8v2n81l46p3j3 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_suxbu0la8btqtkdsem0k td.tinytable_css_jigunqbdiuujmncq0ks3, #tinytable_suxbu0la8btqtkdsem0k th.tinytable_css_jigunqbdiuujmncq0ks3 { text-align: left }
+    #tinytable_suxbu0la8btqtkdsem0k td.tinytable_css_n0q2x25cmn0u79mg7yn3, #tinytable_suxbu0la8btqtkdsem0k th.tinytable_css_n0q2x25cmn0u79mg7yn3 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_suxbu0la8btqtkdsem0k" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <caption>Truco de centrar: comparación</caption>
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">Sin centrar</th>
+                <th scope="col" data-row="0" data-col="3">Con centrado</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='3'>* p < 0.1, ** p < 0.05, *** p < 0.01</td></tr>
+<tr><td colspan='3'>Sin centrar: coef(D) = efecto cuando libros = 0.</td></tr>
+<tr><td colspan='3'>Con centrado: coef(D) = efecto ajustado en la media de libros.</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">2.927***</td>
+                  <td data-row="1" data-col="3">3.438***</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.442)</td>
+                  <td data-row="2" data-col="3">(0.363)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">D (tratamiento)</td>
+                  <td data-row="3" data-col="2">4.669***</td>
+                  <td data-row="3" data-col="3">4.221***</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.580)</td>
+                  <td data-row="4" data-col="3">(0.475)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">libros</td>
+                  <td data-row="5" data-col="2">0.157**</td>
+                  <td data-row="5" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.067)</td>
+                  <td data-row="6" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">D x libros</td>
+                  <td data-row="7" data-col="2">-0.138*</td>
+                  <td data-row="7" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(0.082)</td>
+                  <td data-row="8" data-col="3"></td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="1">libros (centrado)</td>
+                  <td data-row="9" data-col="2"></td>
+                  <td data-row="9" data-col="3">0.157**</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="1"></td>
+                  <td data-row="10" data-col="2"></td>
+                  <td data-row="10" data-col="3">(0.067)</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="1">D x libros_c</td>
+                  <td data-row="11" data-col="2"></td>
+                  <td data-row="11" data-col="3">-0.138*</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="1"></td>
+                  <td data-row="12" data-col="2"></td>
+                  <td data-row="12" data-col="3">(0.082)</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="1">Num.Obs.</td>
+                  <td data-row="13" data-col="2">70</td>
+                  <td data-row="13" data-col="3">70</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="1">R2</td>
+                  <td data-row="14" data-col="2">0.563</td>
+                  <td data-row="14" data-col="3">0.563</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+<div class="boxnote">
+<p><strong>Regla práctica:</strong> centrar una variable continua hace interpretable el coeficiente de <span class="math inline">\(D\)</span> en el valor medio; no reemplaza promediar CATE ni aplicar los pesos del diseño para estimar el ATE objetivo.</p>
+</div>
+<div class="box-ejercicio">
+<p><strong>RCT-S4 — Interacción, CATE y concordancia</strong></p>
+<p>En un caso hipotético, tras <code>reg y i.D##i.mujer i.D##c.libros, vce(robust)</code>, el coeficiente de <code>1.D</code> es 3.20, el de <code>1.D#1.mujer</code> es 0.80 y el de <code>1.D#c.libros</code> es 0.15. Calcule el efecto ajustado para el perfil <code>mujer=1</code>, <code>libros=4</code> y escriba el <code>lincom</code> correspondiente. Después, use este <strong>escenario hipotético de diagnóstico</strong>: la referencia canónica de Stata para el modelo completo reporta coeficiente 4.2956, SE 0.4404 y N=70; unos valores Python deliberadamente divergentes, generados para el ejercicio, reportan 4.2156, 0.3964 y N=68. Diagnostique en orden las comprobaciones de muestra, fórmula, codificación de estratos y covarianza que haría antes de atribuir la discrepancia al software. Distinga en su reporte niveles predichos de <code>dydx(D)</code>/CATE.</p>
+<p><strong>Puntaje sugerido:</strong> 5 puntos.</p>
+<p><strong>Comandos permitidos:</strong> <code>reg</code>, <code>lincom</code>, <code>margins</code>, <code>summarize</code>, <code>gen</code>, Python <code>statsmodels</code>.</p>
+<p><strong>Producto esperado:</strong> cálculo y comando del CATE para el perfil, más un diagnóstico secuencial de la discrepancia entre lenguajes.</p>
+</div>
+</div>
+<div id="replicación-en-python-y-colab" class="section level3 unnumbered hasAnchor">
+<h3>Replicación en Python y Colab<a href="#replicaci%C3%B3n-en-python-y-colab" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La sección conserva la <strong>Replicación en Python / Google Colab</strong> del pipeline original.</p>
+<div class="box-colab">
+<p><strong>Google Colab:</strong> el notebook lee la misma <code>data.dta</code>, reconstruye las mismas variables y replica los cuatro modelos con errores estándar HC1.</p>
+<p><a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/06_RCT_Stata/clase6_python.ipynb" target="_blank" rel="noopener">
+<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Abrir en Colab">
+</a></p>
+<p><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_python.ipynb">Descargar directamente el notebook</a></p>
+</div>
+<p>El núcleo de la réplica usa las mismas definiciones y especificaciones:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb89-1"><a href="experimentos-aleatorizados-clase-empírica.html#cb89-1" tabindex="-1"></a>df[<span class="st">&quot;D&quot;</span>] <span class="op">=</span> (df[<span class="st">&quot;grupo&quot;</span>] <span class="op">==</span> <span class="st">&quot;B&quot;</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb89-2"><a href="experimentos-aleatorizados-clase-empírica.html#cb89-2" tabindex="-1"></a>df[<span class="st">&quot;y&quot;</span>] <span class="op">=</span> pd.to_numeric(df[<span class="st">&quot;resultado&quot;</span>], errors<span class="op">=</span><span class="st">&quot;coerce&quot;</span>)</span>
+<span id="cb89-3"><a href="experimentos-aleatorizados-clase-empírica.html#cb89-3" tabindex="-1"></a></span>
+<span id="cb89-4"><a href="experimentos-aleatorizados-clase-empírica.html#cb89-4" tabindex="-1"></a>m1 <span class="op">=</span> smf.ols(<span class="st">&quot;y ~ D&quot;</span>, data<span class="op">=</span>df).fit(cov_type<span class="op">=</span><span class="st">&quot;HC1&quot;</span>)</span>
+<span id="cb89-5"><a href="experimentos-aleatorizados-clase-empírica.html#cb89-5" tabindex="-1"></a>m2 <span class="op">=</span> smf.ols(<span class="st">&quot;y ~ D + edad + mujer + libros + pregrado + maestria&quot;</span>, data<span class="op">=</span>df).fit(cov_type<span class="op">=</span><span class="st">&quot;HC1&quot;</span>)</span>
+<span id="cb89-6"><a href="experimentos-aleatorizados-clase-empírica.html#cb89-6" tabindex="-1"></a>m3 <span class="op">=</span> smf.ols(<span class="st">&quot;y ~ D + C(semestre_f)&quot;</span>, data<span class="op">=</span>df).fit(cov_type<span class="op">=</span><span class="st">&quot;HC1&quot;</span>)</span>
+<span id="cb89-7"><a href="experimentos-aleatorizados-clase-empírica.html#cb89-7" tabindex="-1"></a>m4 <span class="op">=</span> smf.ols(<span class="st">&quot;y ~ D + C(semestre_f) + edad + mujer + libros + pregrado + maestria&quot;</span>, data<span class="op">=</span>df).fit(cov_type<span class="op">=</span><span class="st">&quot;HC1&quot;</span>)</span></code></pre></div>
+<p>El mapeo exige la misma fórmula, codificación de categorías, muestra completa y covarianza HC1. <code>i.semestre</code> corresponde a <code>C(semestre_f)</code>. Si el diseño tuviera probabilidades desiguales, ambos lenguajes tendrían que usar los mismos pesos; los estratos se incluyen explícitamente en ambos. Antes de comparar se verifican N, categorías base y valores faltantes.</p>
+</div>
+<div id="concordancia-statapython" class="section level3 unnumbered hasAnchor">
+<h3>Concordancia Stata–Python<a href="experimentos-aleatorizados-clase-empírica.html#concordancia-statapython" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Esta es la <strong>Verificación Stata vs. Python</strong> de los cuatro modelos.</p>
+<p>Stata y Python exportan un CSV canónico con coeficiente, error estándar, N y <span class="math inline">\(R^2\)</span>. El comparador exige diferencias absolutas menores que <span class="math inline">\(10^{-3}\)</span> para coeficientes y errores estándar, igualdad exacta de N y diferencias menores que <span class="math inline">\(10^{-2}\)</span> para <span class="math inline">\(R^2\)</span>.</p>
+<p><strong>Verificación automática de los cuatro modelos RCT</strong></p>
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Modelo
+</th>
+<th style="text-align:right;">
+Coef. Stata
+</th>
+<th style="text-align:right;">
+Coef. Python
+</th>
+<th style="text-align:right;">
+Dif. coef.
+</th>
+<th style="text-align:right;">
+SE Stata
+</th>
+<th style="text-align:right;">
+SE Python
+</th>
+<th style="text-align:right;">
+Dif. SE
+</th>
+<th style="text-align:center;">
+N igual
+</th>
+<th style="text-align:center;">
+Estado
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+m1_simple
+</td>
+<td style="text-align:right;">
+4.311828
+</td>
+<td style="text-align:right;">
+4.311828
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.476153
+</td>
+<td style="text-align:right;">
+0.476153
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:center;">
+True
+</td>
+<td style="text-align:center;">
+PASS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+m2_controles
+</td>
+<td style="text-align:right;">
+4.251850
+</td>
+<td style="text-align:right;">
+4.251850
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.464408
+</td>
+<td style="text-align:right;">
+0.464408
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:center;">
+True
+</td>
+<td style="text-align:center;">
+PASS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+m3_estratos
+</td>
+<td style="text-align:right;">
+4.390222
+</td>
+<td style="text-align:right;">
+4.390222
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.429350
+</td>
+<td style="text-align:right;">
+0.429350
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:center;">
+True
+</td>
+<td style="text-align:center;">
+PASS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+m4_completo
+</td>
+<td style="text-align:right;">
+4.295554
+</td>
+<td style="text-align:right;">
+4.295554
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.440411
+</td>
+<td style="text-align:right;">
+0.440411
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:center;">
+True
+</td>
+<td style="text-align:center;">
+PASS
+</td>
+</tr>
+</tbody>
+</table>
+<div class="box-verificacion">
+<p><strong>Criterio de publicación:</strong> los cuatro modelos deben aparecer como <code>PASS</code>. Los p-valores se conservan en los archivos fuente, pero no forman parte del criterio porque Stata usa una referencia t finita y <code>statsmodels</code> reporta la aproximación normal para HC1.</p>
+</div>
+<div class="boxejercicio">
+<p><strong>Ejercicios adicionales</strong></p>
+<p>Estas actividades amplían la práctica y no sustituyen las cuatro preguntas tipo parcial anteriores.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Aleatorización (Bernoulli y estratos)</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Con tu <code>data.dta</code>, genera <code>D_practica50</code> con p=0.5 usando <code>runiform()</code>.</li>
+<li>Genera por separado <code>D_practica30</code> con p=0.3.</li>
+<li>Crea estratos por <code>mujer × programa</code> y guarda la asignación 50/50 exacta en <code>D_practica_estrato</code>.</li>
+</ol></li>
+<li><strong><code>randtreat</code> avanzado</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Asigna 3 brazos (T1/T2/C) con proporciones 0.4/0.4/0.2 y estratos <code>mujer × programa</code>.</li>
+<li>Resuelve <em>misfits</em> con <code>misfits(wstrata)</code> y reporta conteos por estrato.</li>
+</ol></li>
+<li><strong>Balance</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Corre <code>difmedias $X, by(D)</code> y exporta a <code>Table_Balance_raw.xlsx</code>.</li>
+<li>Estima <code>D ~ X</code> (LPM/logit/probit) y reporta el test conjunto.</li>
+<li>Interpreta: ¿hay evidencia de desbalance?</li>
+</ol></li>
+<li><strong>Los cuatro escenarios</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Estima los cuatro modelos de la sección <strong>Comparación de las cuatro especificaciones</strong> (simple, +controles, +estratos, completo).</li>
+<li>Compara <span class="math inline">\(\hat{\tau}\)</span> y sus SE entre los cuatro. ¿Cuál tiene menor SE? ¿Por qué?</li>
+<li>¿Cambia mucho el punto estimado al incluir estratos? Discute.</li>
+</ol></li>
+<li><strong>Heterogeneidad y centrado</strong>
+<ol style="list-style-type: lower-alpha">
+<li>Estima <span class="math inline">\(Y \sim D \times \text{mujer}\)</span> y reporta <code>margins</code>.</li>
+<li>Estima <span class="math inline">\(Y \sim D \times \text{libros}\)</span> <strong>sin centrar</strong> y <strong>con centrado</strong>. Compara el coeficiente de <span class="math inline">\(D\)</span> en ambos casos.</li>
+<li>Grafica <code>marginsplot</code> para libros y comenta el perfil.</li>
+</ol></li>
+</ol>
+<p><strong>Bonus (opcional):</strong>
+6. Repite la estimación con <strong>SE cluster</strong> por <code>semestre</code>. Discute diferencias con SE robustas (nota: con solo 4 clusters, ¿qué problema surge?).</p>
+</div>
+<hr />
+<div class="boxvideo green" title="Videos recomendados:">
+<ul>
+<li><a href="https://www.youtube.com/embed/eGRd8jBdNYg">Video 1</a></li>
+<li><a href="https://www.youtube.com/embed/crpuBZv6XtA">Video 2</a></li>
+<li><a href="https://www.youtube.com/embed/xlX3VtuIfQ0">Video 3</a></li>
+</ul>
+<p>Y todos los que encuentres en Google buscando: <strong>RCT Esther Duflo</strong></p>
+</div>
+<div class="boxnote">
+<p><strong>PROMPT DE CHATGPT PARA REFLEXIÓN PROFUNDA</strong></p>
+<p><strong>Instrucciones</strong>: Copia este mensaje en ChatGPT o la IA de tu preferencia. Tu objetivo no es obtener respuestas, sino <strong>reflexionar guiado por preguntas</strong>.</p>
+<hr />
+<p>Hola. Actúa como mi tutor de Stata para diseño experimental. No quiero que me des código directamente. Quiero que me ayudes a pensar paso a paso.</p>
+<p>Tengo un experimento con datos de varios semestres (variable <code>semestre</code>). Ya estimé el modelo simple <span class="math inline">\(Y = \alpha + \tau D + u\)</span>. Ahora quiero entender:</p>
+<p>Por favor, hazme preguntas como:</p>
+<ul>
+<li>¿Qué pasa con mi estimador <span class="math inline">\(\hat{\tau}\)</span> si no incluyo dummies de semestre, sabiendo que la aleatorización fue <strong>dentro</strong> de cada semestre?</li>
+<li>¿Cómo interpreto el coeficiente de <span class="math inline">\(D\)</span> cuando interactúo con una variable continua? ¿Qué pasa si no centro?</li>
+<li>Si tengo solo 4 semestres y quiero hacer cluster SE por semestre, ¿cuántos clusters necesito para que los SE sean confiables?</li>
+<li>¿Por qué el <span class="math inline">\(R^2\)</span> sube al agregar estratos pero <span class="math inline">\(\hat{\tau}\)</span> casi no cambia?</li>
+</ul>
+<p>No me des respuestas. Solo nuevas preguntas que me ayuden a entender mejor la conexión entre diseño y estimación.</p>
+</div>
+<hr />
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="experimentos-aleatorizados-clase-teórica.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="poder-estadistico-teoria.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/06-RCT2.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["econometria-avanzada.pdf", "econometria-avanzada.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection",
+    "scroll_highlight": true,
+    "depth": 2
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
