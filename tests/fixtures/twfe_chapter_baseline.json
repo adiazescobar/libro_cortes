@@ -1,0 +1,34 @@
+{
+  "concepts": [
+    "Introducción a datos de panel",
+    "transformación within",
+    "FE vs. FD con T = 2",
+    "equivalencia en el caso 2×2",
+    "tendencias paralelas",
+    "adopción escalonada",
+    "Las tres familias de comparaciones 2×2",
+    "Goodman-Bacon",
+    "Simulación grande",
+    "estimadores modernos"
+  ],
+  "commands": [
+    "xtset",
+    "xtdes",
+    "xtsum",
+    "xtreg",
+    "hausman",
+    "reghdfe",
+    "bacondecomp",
+    "csdid",
+    "did_imputation",
+    "eventstudyinteract",
+    "did_multiplegt_dyn",
+    "did2s",
+    "event_plot"
+  ],
+  "materials": [
+    "11_stata.do",
+    "11_twfe.R",
+    "11_twfe.py"
+  ]
+}
