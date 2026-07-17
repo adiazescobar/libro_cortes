@@ -1,7 +1,7 @@
 # Corrección DID y estandarización editorial del libro
 
-**Fecha:** 2026-07-17  
-**Estado:** diseño aprobado por Ana María  
+**Fecha:** 2026-07-17
+**Estado:** diseño aprobado por Ana María
 **Repositorio:** `libro_cortes`
 
 ## Objetivo
@@ -85,6 +85,12 @@ Se añadirán contratos para comprobar:
 
 ## Validación y publicación
 
+La prohibición de modificar `docs/` se refiere a artefactos publicados o
+renderizados: HTML, Markdown generado, imágenes, datos y demás assets del sitio.
+Como excepción de proceso expresamente autorizada, esta especificación y su plan
+pueden vivir en `docs/superpowers/specs/` y `docs/superpowers/plans/`. En el
+rango de esta corrección no se permite ningún otro cambio bajo `docs/`.
+
 La entrega requiere:
 
 - ciclo RED→GREEN de los contratos nuevos;
@@ -97,4 +103,3 @@ La entrega requiere:
 
 Los HTML de DID no se copiarán a `docs` ni se publicarán hasta recibir aprobación
 explícita de Ana María sobre la vista previa corregida.
-

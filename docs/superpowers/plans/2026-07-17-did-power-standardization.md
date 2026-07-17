@@ -13,7 +13,11 @@
 - Usar `Tema — Clase teórica` y `Tema — Clase empírica` en las parejas explícitas.
 - Conservar exactamente los anchors existentes y el orden de `_bookdown.yml`.
 - No fabricar identificadores longitudinales para `base3.dta`.
-- No modificar ni publicar `docs/`.
+- No modificar artefactos publicados o renderizados bajo `docs/` (HTML,
+  Markdown generado, imágenes, datos o assets). Se permiten exclusivamente los
+  dos documentos de proceso aprobados:
+  `docs/superpowers/specs/2026-07-17-did-power-standardization-design.md` y
+  `docs/superpowers/plans/2026-07-17-did-power-standardization.md`.
 - Mantener preguntas sin respuestas visibles y la clave externa privada.
 - Escribir contratos RED antes de modificar archivos de producción.
 - Preservar cambios locales ajenos.
@@ -256,7 +260,8 @@ git commit -m "docs: standardize theory and empirical class titles"
 **Files:**
 - Verify: all tracked source files
 - Verify: clean render under `/private/tmp/libro_cortes_standardization_review`
-- Do not modify: `docs/`
+- Do not modify: published/rendered artifacts under `docs/`; the approved
+  spec and plan paths listed in Global Constraints are the only exceptions.
 
 **Interfaces:**
 - Consumes: Tasks 1–3.
@@ -316,11 +321,22 @@ Verificar:
 Run:
 
 ```bash
-git diff --check HEAD~3..HEAD
-git diff --name-only HEAD~3..HEAD -- docs
+git diff --check bfa82fc..HEAD
+unexpected_docs="$(
+  git diff --name-only bfa82fc..HEAD -- docs |
+  while IFS= read -r path; do
+    case "$path" in
+      docs/superpowers/specs/2026-07-17-did-power-standardization-design.md|\
+      docs/superpowers/plans/2026-07-17-did-power-standardization.md) ;;
+      *) printf '%s\n' "$path" ;;
+    esac
+  done
+)"
+test -z "$unexpected_docs"
 ```
 
-Expected: sin errores nuevos y ningún archivo bajo `docs/`.
+Expected: sin errores de whitespace y cero rutas inesperadas bajo `docs/`; el
+diff puede contener únicamente la especificación y el plan de proceso aprobados.
 
 - [ ] **Step 7: Commit de correcciones finales si fueran necesarias**
 
@@ -330,4 +346,3 @@ aplicar la corrección mínima, repetir la validación y comprometer:
 ```bash
 git commit -m "fix: address DID and title standardization review"
 ```
-
