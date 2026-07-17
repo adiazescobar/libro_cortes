@@ -184,6 +184,130 @@ postclose `event'
 use `event_dta', clear
 export delimited using "`root'/results/twfe_eventstudy.csv", replace
 
+gen ci_low=estimate-1.96*se
+gen ci_high=estimate+1.96*se
+twoway (rcap ci_low ci_high horizon, lcolor(navy)) ///
+       (scatter estimate horizon, mcolor(navy) msymbol(O)), ///
+    xline(-1, lpattern(dash) lcolor(gs8)) yline(0, lcolor(gs8)) ///
+    xlabel(-4(1)4) legend(off) ///
+    title("Event study TWFE: pretrends aparentes") ///
+    xtitle("Tiempo relativo") ytitle("Coeficiente")
+graph export "`root'/figures/twfe_eventstudy.png", replace width(1800)
+
+********************************************************************************
+* GRÁFICAS PEDAGÓGICAS
+********************************************************************************
+
+* Adopción simultánea y violación deliberada de tendencias
+clear
+set seed 818
+set obs 2400
+egen id=seq(), block(12)
+bysort id: gen t=_n
+gen byte treated=id>100
+gen byte D=treated & t>=7
+bysort id: gen double alpha_i=rnormal() if _n==1
+bysort id: replace alpha_i=alpha_i[1]
+gen double Y_parallel=alpha_i+.25*t+2*D+rnormal(0,.7)
+gen double Y_violation=Y_parallel+.18*treated*t
+collapse (mean) Y_parallel Y_violation, by(t treated)
+
+twoway (connected Y_parallel t if treated==0, lcolor(navy) mcolor(navy)) ///
+       (connected Y_parallel t if treated==1, lcolor(maroon) mcolor(maroon)), ///
+    xline(6.5, lpattern(dash) lcolor(gs8)) ///
+    legend(order(1 "Control" 2 "Tratado") rows(1)) ///
+    title("Adopción simultánea: tendencias paralelas") ///
+    xtitle("Periodo") ytitle("Media de Y")
+graph export "`root'/figures/panel_simultaneous.png", replace width(1800)
+
+twoway (connected Y_violation t if treated==0, lcolor(navy) mcolor(navy)) ///
+       (connected Y_violation t if treated==1, lcolor(maroon) mcolor(maroon)), ///
+    xline(6.5, lpattern(dash) lcolor(gs8)) ///
+    legend(order(1 "Control" 2 "Tratado") rows(1)) ///
+    title("Violación deliberada de tendencias paralelas") ///
+    note("El grupo tratado ya crece más rápido antes de t=7") ///
+    xtitle("Periodo") ytitle("Media de Y")
+graph export "`root'/figures/panel_parallel_violation.png", replace width(1800)
+
+* Mismo timing, efectos heterogéneos
+clear
+set seed 919
+set obs 3600
+egen id=seq(), block(12)
+bysort id: gen t=_n
+gen cohort=cond(id<=100,0,cond(id<=200,1,2))
+gen byte D=cohort>0 & t>=7
+gen tau=cond(cohort==1,2,cond(cohort==2,4,0))
+gen Y=.25*t+tau*D+rnormal(0,.6)
+collapse (mean) Y, by(t cohort)
+twoway (connected Y t if cohort==0, lcolor(navy) mcolor(navy)) ///
+       (connected Y t if cohort==1, lcolor(maroon) mcolor(maroon)) ///
+       (connected Y t if cohort==2, lcolor(forest_green) mcolor(forest_green)), ///
+    xline(6.5, lpattern(dash) lcolor(gs8)) ///
+    legend(order(1 "Nunca" 2 "Tratada: efecto 2" 3 "Tratada: efecto 4") rows(1)) ///
+    title("Mismo timing, efectos heterogéneos") ///
+    xtitle("Periodo") ytitle("Media de Y")
+graph export "`root'/figures/panel_same_timing_heterogeneity.png", replace width(1800)
+
+* Adopción escalonada dinámica y pesos causales
+clear
+set seed 717
+local N = 900
+local T = 12
+set obs `=`N'*`T''
+egen id=seq(), block(`T')
+bysort id: gen t=_n
+gen cohort=cond(id<=300,5,cond(id<=600,8,0))
+gen byte D=cohort>0 & t>=cohort
+gen event_time=t-cohort if cohort>0
+gen double tau=0
+replace tau=1+.45*event_time if cohort==5 & D
+replace tau=2+.25*event_time if cohort==8 & D
+bysort id: gen double alpha_i=rnormal() if _n==1
+bysort id: replace alpha_i=alpha_i[1]
+gen double Y=alpha_i+.25*t+tau+rnormal()
+
+preserve
+collapse (mean) Y, by(t cohort)
+twoway (connected Y t if cohort==0, lcolor(navy) mcolor(navy)) ///
+       (connected Y t if cohort==5, lcolor(maroon) mcolor(maroon)) ///
+       (connected Y t if cohort==8, lcolor(forest_green) mcolor(forest_green)), ///
+    xline(4.5 7.5, lpattern(dash) lcolor(gs8)) ///
+    legend(order(1 "Nunca tratada" 2 "Cohorte 5" 3 "Cohorte 8") rows(1)) ///
+    title("Adopción escalonada y efectos dinámicos") ///
+    xtitle("Periodo") ytitle("Media de Y")
+graph export "`root'/figures/panel_staggered_dynamic.png", replace width(1800)
+restore
+
+bysort id: egen D_bar_i=mean(D)
+bysort t: egen D_bar_t=mean(D)
+quietly summarize D
+scalar D_bar=r(mean)
+gen double D_tilde=D-D_bar_i-D_bar_t+D_bar
+egen denom=total(D_tilde^2)
+gen double peso_causal=D_tilde/denom if D==1
+collapse (sum) peso_causal, by(cohort t D)
+keep if D==1
+
+* Para visualizar un peso negativo usamos el ejemplo mínimo 2x4 de la teoría.
+clear
+input str10 cohort t peso_causal
+"Temprana" 2  .5
+"Temprana" 3  .5
+"Temprana" 4 -.5
+"Tardía"   4  .5
+end
+encode cohort, gen(cohort_id)
+twoway (connected peso_causal t if cohort_id==2, lcolor(maroon) mcolor(maroon)) ///
+       (scatter peso_causal t if cohort_id==1, mcolor(forest_green) msymbol(D)), ///
+    yline(0, lcolor(gs8)) ///
+    xlabel(2(1)4) ylabel(-.5(.25).5) ///
+    legend(order(1 "Cohorte temprana" 2 "Cohorte tardía") rows(1)) ///
+    title("Peso negativo en una celda ya tratada") ///
+    note("Ejemplo mínimo 2 unidades × 4 periodos; los pesos tratados suman 1") ///
+    xtitle("Periodo") ytitle("Peso agregado de la celda")
+graph export "`root'/figures/twfe_causal_weights.png", replace width(1800)
+
 ********************************************************************************
 * MAPA MÉTODO–PARÁMETRO
 ********************************************************************************

@@ -207,6 +207,83 @@ def test_practice_reads_all_canonical_result_files():
         assert f"dofile/11_TWFE/results/{filename}" in text
 
 
+def test_practice_follows_a_full_classroom_sequence():
+    text = base._read(PRACTICE)
+    headings = base._headings(text, 2) + base._headings(text, 3)
+    required = [
+        "Declarar y auditar la estructura del panel",
+        "Descomponer variación within y between",
+        "Pooled OLS: qué mezcla",
+        "Efectos fijos con xtreg",
+        "Transformación within a mano",
+        "Primeras diferencias",
+        "Efectos aleatorios y Hausman",
+        "Construir el DiD 2×2 desde cuatro medias",
+        "Verificar DiD, FD y TWFE",
+        "Panel largo con adopción simultánea",
+        "Tendencias paralelas y una violación deliberada",
+        "Mismo timing con efectos heterogéneos",
+        "Adopción escalonada con efectos dinámicos",
+        "Leer bacondecomp fila por fila",
+        "Calcular los pesos causales a mano",
+        "Diagnóstico con twowayfeweights",
+        "Event study TWFE contaminado",
+        "Comparar estimadores sin mezclar parámetros",
+    ]
+    positions = []
+    for heading in required:
+        assert heading in headings
+        positions.append(text.index(heading))
+    assert positions == sorted(positions)
+
+
+def test_practice_has_dense_prediction_result_interpretation_blocks():
+    text = base._read(PRACTICE)
+    boxes = base._boxes(text)
+    assert len(boxes) >= 18
+    for marker in [
+        "Predicción antes de correr",
+        "Qué mirar en la salida",
+        "Interpretación",
+        "Error frecuente",
+        "Decisión de diseño",
+    ]:
+        assert marker in text
+
+
+def test_practice_includes_manual_bacon_and_weight_calculations():
+    text = base._read(PRACTICE)
+    for marker in [
+        "Early_v_Late",
+        "Late_v_Early",
+        "Never_v_timing",
+        "aporte ponderado",
+        "gen double D_tilde",
+        "egen D_bar_i",
+        "egen D_bar_t",
+        "peso_causal",
+        "ATT overall",
+    ]:
+        assert marker in text
+
+
+def test_practice_uses_six_canonical_explanatory_graphs():
+    text = base._read(PRACTICE)
+    figures = [
+        "panel_simultaneous.png",
+        "panel_parallel_violation.png",
+        "panel_same_timing_heterogeneity.png",
+        "panel_staggered_dynamic.png",
+        "twfe_causal_weights.png",
+        "twfe_eventstudy.png",
+    ]
+    for filename in figures:
+        path = ROOT / "dofile/11_TWFE/figures" / filename
+        assert path.is_file(), f"Falta la gráfica canónica {filename}"
+        assert path.stat().st_size > 10_000
+        assert f"dofile/11_TWFE/figures/{filename}" in text
+
+
 def test_result_schemas_and_numeric_estimates():
     schemas = {
         "panel_estimators.csv": {
