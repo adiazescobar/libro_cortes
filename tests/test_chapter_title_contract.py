@@ -66,9 +66,11 @@ def _assert_no_manual_heading_numbering(text):
         for heading in base._headings(text, level)
     ]
     prefix = re.compile(
-        r"^(?:(?:PASO|Paso|Etapa)\b(?:\s+\d+)?|\d+(?:\.\d+)*\s*[.):_-]?\s+)"
+        r"^(?:(?:PASO|Paso|Etapa)\b(?:\s+\d+)?|"
+        r"\d{1,2}(?:\.\d{1,2})*[\).:_-]?\s+|"
+        r"\d{1,2}\.\s+)"
     )
-    suffix = re.compile(r"\s+\d+\.\d+(?:\.\d+)*$")
+    suffix = re.compile(r"\s+[1-9]\.\d{1,2}(?:\.\d{1,2})*$")
     assert not any(prefix.search(heading) or suffix.search(heading) for heading in headings)
 
 
@@ -99,6 +101,11 @@ def test_manual_numbering_contract_rejects_a_numbered_subtitle_without_dot():
         _assert_no_manual_heading_numbering("## 1 Subtítulo")
 
 
+def test_manual_numbering_contract_rejects_a_hierarchically_numbered_subtitle():
+    with pytest.raises(AssertionError):
+        _assert_no_manual_heading_numbering("## 7.1 Subtítulo")
+
+
 def test_manual_numbering_contract_rejects_a_trailing_chapter_number():
     with pytest.raises(AssertionError):
         _assert_no_manual_heading_numbering("## Subtítulo 7.1")
@@ -109,7 +116,9 @@ def test_manual_numbering_contract_rejects_a_trailing_chapter_number():
     [
         "## El caso de John Snow (1854)",
         "### Bertrand y Mullainathan (2004)",
-        "#### Muestra de 1.000 observaciones",
+        "## 1.000 observaciones en la muestra",
+        "## 2026 resultados del estudio",
+        "## Compatibilidad con Stata 18.0",
     ],
 )
 def test_manual_numbering_contract_allows_substantive_numbers(heading):
