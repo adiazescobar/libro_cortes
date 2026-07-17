@@ -599,3 +599,17 @@ def test_private_audit_detects_path_and_content_without_returning_token():
             [f"docs/{token}/index.html"], {"temporal.html": token}, [token]
         )
     assert token not in str(failure.value)
+
+
+def test_power_practice_sample_size_formulas_distinguish_arm_from_total():
+    """Con dos brazos balanceados, el factor 2 da el n por brazo y el factor 4 el N total.
+
+    El MDE con N total balanceado usa sqrt(4/N); sqrt(2/N) corresponde a la
+    convencion por brazo y no puede etiquetarse como total (guia 3ie).
+    """
+    text = PRACTICE_PATH.read_text(encoding="utf-8")
+    assert r"\sqrt{\frac{4}{N}}" in text
+    assert r"\sqrt{\frac{2}{N}}" not in text
+    assert r"n_{\text{por brazo}}" in text
+    assert text.count(r"\frac{4\bigl(z_{1-\alpha/2}") >= 2
+    assert r"N = 2 \times \frac{\bigl(z_{1-\alpha/2}" not in text

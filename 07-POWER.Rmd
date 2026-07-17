@@ -36,15 +36,13 @@ Descarga todos los archivos antes de la clase. El *do-file* de Stata, el script 
 library(knitr)
 library(kableExtra)
 
-leer_csv_power <- function(path) {
+read_required_csv <- function(path) {
   if (!file.exists(path)) stop("Falta el resultado canonico de Stata: ", path)
   read.csv(path, check.names = FALSE, fileEncoding = "UTF-8")
 }
 
-power_res   <- read.csv("dofile/07_Power/results/power_resultados.csv",
-                        check.names = FALSE, fileEncoding = "UTF-8")
-power_verif <- read.csv("dofile/07_Power/results/power_verificacion.csv",
-                        check.names = FALSE, fileEncoding = "UTF-8")
+power_res   <- read_required_csv("dofile/07_Power/results/power_resultados.csv")
+power_verif <- read_required_csv("dofile/07_Power/results/power_verificacion.csv")
 
 limpiar_na <- function(df) {
   df[] <- lapply(df, function(x) {
@@ -58,7 +56,7 @@ limpiar_na <- function(df) {
 
 ## Introducción {-}
 
-En esta clase trabajaremos con el comando `power` de Stata para calcular tamaños de muestra, efectos mínimos detectables (MDE) y explorar cómo cambian estos cálculos cuando incorporamos controles consideramos cumplimiento parcial o diseñamos experimentos aleatorizados por conglomerados. Usaremos el *do-file* proporcionado y desglosaremos cada sección con su explicación y las fórmulas subyacentes. Nos basamos en la documentación oficial de Stata sobre el comando `power`: [Stata Power and Sample Size Reference Manual](https://www.stata.com/manuals/pss.pdf). y el do file de Poverty Action Lab desarrollado por Sabhya Gupta with input from Jack Cavanagh, Maya Duru, Mike Gibson, Sarah Kopperud, and Chris Udry: [Poverty Action Lab - Power Calculations in Stata](https://www.povertyactionlab.org/resource/power-calculations). Super recomendado leer el manual y el do file para entender todos los detalles.
+En esta clase trabajaremos con el comando `power` de Stata para calcular tamaños de muestra, efectos mínimos detectables (MDE) y explorar cómo cambian estos cálculos cuando incorporamos controles, consideramos cumplimiento parcial o diseñamos experimentos aleatorizados por conglomerados. Usaremos el *do-file* proporcionado y desglosaremos cada sección con su explicación y las fórmulas subyacentes. Nos basamos en la documentación oficial de Stata sobre el comando `power`: [Stata Power and Sample Size Reference Manual](https://www.stata.com/manuals/pss.pdf). y el do file de Poverty Action Lab desarrollado por Sabhya Gupta with input from Jack Cavanagh, Maya Duru, Mike Gibson, Sarah Kopperud, and Chris Udry: [Poverty Action Lab - Power Calculations in Stata](https://www.povertyactionlab.org/resource/power-calculations). Super recomendado leer el manual y el do file para entender todos los detalles.
 
 Esta clase práctica traduce la derivación teórica a comandos de Stata. Cada bloque declara el estimando, fija los parámetros de diseño y señala explícitamente qué cantidad resuelve `power`: un tamaño de muestra, un efecto mínimo detectable o un número de clústeres. Todas las cifras visibles provienen de los resultados canónicos verificados en `07_stata.do`; ningún valor devuelto se transcribe a mano en el texto.
 
@@ -123,13 +121,15 @@ power twomeans `baseline' `treat', power(`power') sd(`sd') nratio(`nratio') tabl
 power twomeans `baseline', power(`power') sd(`sd') nratio(`nratio') n(4870) table
 ```
 
-**Fórmula utilizada:** Para una prueba bilateral de igualdad de medias con varianzas iguales ($\sigma_1 = \sigma_2$), el tamaño de muestra total $N$ requerido para detectar una diferencia $\delta = \mu_2 - \mu_1$ con poder $1-\beta$ y nivel $\alpha$ es:
+**Fórmula utilizada:** Para una prueba bilateral de igualdad de medias con varianzas iguales ($\sigma_1 = \sigma_2$) y asignación balanceada ($n_1 = n_2$), el tamaño de muestra **por brazo** y el **total** requeridos para detectar una diferencia $\delta = \mu_2 - \mu_1$ con poder $1-\beta$ y nivel $\alpha$ son:
 
 $$
-N = 2 \times \frac{\bigl(z_{1-\alpha/2} + z_{1-\beta}\bigr)^2\,\sigma^2}{\delta^2},
+n_{\text{por brazo}} = \frac{2\bigl(z_{1-\alpha/2} + z_{1-\beta}\bigr)^2\,\sigma^2}{\delta^2},
+\qquad
+N = 2\,n_{\text{por brazo}} = \frac{4\bigl(z_{1-\alpha/2} + z_{1-\beta}\bigr)^2\,\sigma^2}{\delta^2},
 $$
 
-donde $\sigma$ es la desviación estándar común.
+donde $\sigma$ es la desviación estándar común. Distinguir el $n$ por brazo del $N$ total evita subestimar la muestra a la mitad; la tabla de resultados canónicos reporta siempre el total.
 
 En el código, definimos $\delta = 0.3 \times s$ y llamamos a `power twomeans` para que Stata resuelva $N$ usando esta fórmula.
 
@@ -186,10 +186,10 @@ local mde = round(`r(delta)',0.0001)
 di as error "El efecto mínimo detectable es `mde' dado un tamaño de muestra `N', nratio=`nratio' y poder=`power'"
 ```
 
-**Fórmula utilizada:** Con $N$ fijo y asignación balanceada ($n_1=n_2=N/2$), el efecto mínimo detectable es:
+**Fórmula utilizada:** Con $N$ total fijo y asignación balanceada ($n_1=n_2=N/2$), el efecto mínimo detectable es:
 
 $$
-\delta_{\min} = \bigl(z_{1-\alpha/2} + z_{1-\beta}\bigr)\, \sigma\, \sqrt{\frac{2}{N}}.
+\delta_{\min} = \bigl(z_{1-\alpha/2} + z_{1-\beta}\bigr)\, \sigma\, \sqrt{\frac{4}{N}}.
 $$
 
 El código muestra cómo varía el MDE al modificar el tamaño de muestra o la razón de asignación:
@@ -250,7 +250,7 @@ di as error "Se necesita un tamaño de muestra de `samplesize_cov' para detectar
 La desviación residual reemplaza a $\sigma$ en la fórmula de tamaño de muestra:
 
 $$
-N = 2 \times \frac{\bigl(z_{1-\alpha/2}+z_{1-\beta}\bigr)^2\,\sigma_{\text{res}}^2}{\delta^2}.
+N = \frac{4\bigl(z_{1-\alpha/2}+z_{1-\beta}\bigr)^2\,\sigma_{\text{res}}^2}{\delta^2}.
 $$
 
 ::: {.boxsuccess}
@@ -630,7 +630,7 @@ El supuesto de no-interferencia de SUTVA (*Stable Unit Treatment Value Assumptio
 Los RCTs identifican el efecto de un programa a **escala pequeña**. Cuando el programa escala, los precios, salarios y comportamientos de equilibrio cambian — y el efecto puede ser muy distinto:
 
 - Un programa de formación laboral para el 1% de los desempleados puede aumentar sus salarios. Para el 50%, la oferta adicional de trabajo capacitado reduce el salario de equilibrio.
-- Los subsidios de vivienda que funcionan en pilotos elevan los alquiles cuando se universalizan.
+- Los subsidios de vivienda que funcionan en pilotos elevan los alquileres cuando se universalizan.
 
 **Implicación:** el efecto de equilibrio parcial (LATE, estimado en el RCT) puede sobrestimar o subestimar el efecto de equilibrio general relevante para política pública.
 

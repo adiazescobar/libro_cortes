@@ -24,10 +24,10 @@ Si repetimos el muestreo aleatorio, la media muestral cambia. Al crecer el tama�
 
 ## Notación, parámetros y estimandos
 
-Sea $D_i\in\{0,1\}$ la asignación, $Y_i(1)$ y $Y_i(0)$ los resultados potenciales y
+Sea $D_i\in\{0,1\}$ la asignación, $Y_i(D=1)$ y $Y_i(D=0)$ los resultados potenciales y
 
 \[
-\tau=E[Y_i(1)-Y_i(0)]
+\tau=E[Y_i(D=1)-Y_i(D=0)]
 \]
 
 el efecto promedio objetivo. En un RCT con asignación individual estimamos $\widehat\tau=\bar Y_1-\bar Y_0$. Usaremos $\alpha$ para el error tipo I, $\beta$ para el error tipo II, $1-\beta$ para el poder, $\delta$ para el efecto que deseamos detectar, $p=N_1/N$ para la fracción tratada, $\sigma^2$ para la varianza del resultado y $z_q$ para el cuantil $q$ de una normal estándar.
