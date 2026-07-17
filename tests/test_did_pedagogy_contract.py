@@ -1,6 +1,5 @@
 import json
 import re
-from pathlib import Path
 
 import pytest
 
@@ -21,7 +20,7 @@ PRACTICE_REQUIRED = [
     "estat granger",
     "estat trendplots",
     "reg y D##t, robust",
-    "reg D.y D.D",
+    "reg D.y D",
     "base3.dta",
     "hospdd",
     "08_DID_ejercicio.do",

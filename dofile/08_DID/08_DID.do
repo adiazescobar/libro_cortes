@@ -95,10 +95,15 @@ reg y D##t, robust
 * El coeficiente de 1.D#1.t es el estimador DiD (debe coincidir con DD manual)
 
 * ---- Primeras diferencias (equivalente si panel balanceado, 2 periodos) -----
-sort t orden_n
+* El emparejamiento debe preservar el grupo: dentro de cada periodo se ordena
+* primero por D, de modo que cada id ficticio conserva su condición de
+* tratamiento en ambos periodos. Con D invariante en el tiempo, la regresión de
+* la primera diferencia del resultado sobre el NIVEL de D reproduce el DiD.
+* Regresar sobre D.D sería un error: con el emparejamiento correcto D.D = 0.
+sort t D orden_n
 bys t: gen id = _n
 xtset id t
-reg D.y D.D
+reg D.y D
 
 
 ********************************************************************************
@@ -195,3 +200,102 @@ di "2. estat granger  → prueba de ANTICIPACIÓN (efectos antes del tratamiento
 di "3. Ambas requieren ≥ 2 periodos pre-tratamiento (con 2 periodos: imposible)"
 di "4. Un rechazo en ptrends ≠ un rechazo en granger: preguntas distintas"
 di "5. Siempre se necesita argumento teórico para separar los dos casos"
+
+
+********************************************************************************
+* EXPORT CANÓNICO — resultados auditables para el libro
+* Genera results/did_resultados.csv (leído por 08-DIDStata.Rmd) y el insumo
+* no rastreado results/hospdd_verificacion_input.csv para la verificación
+* cruzada en Python. Identificadores estables por escenario, no posiciones.
+********************************************************************************
+
+capture mkdir results
+
+tempname res
+postfile `res' str32 escenario str40 comando str24 cantidad ///
+    double valor_stata double ee double estadistico double p_valor double N ///
+    str16 fuente using "results/did_resultados.dta", replace
+
+* ---- Base 2×2: medias por celda ---------------------------------------------
+use "base3.dta", clear
+
+quietly sum y if D==0 & t==0
+local m_c0 = r(mean)
+post `res' ("media_C0") ("sum") ("media") (r(mean)) (.) (.) (.) (r(N)) ("08_DID.do")
+
+quietly sum y if D==0 & t==1
+local m_c1 = r(mean)
+post `res' ("media_C1") ("sum") ("media") (r(mean)) (.) (.) (.) (r(N)) ("08_DID.do")
+
+quietly sum y if D==1 & t==0
+local m_t0 = r(mean)
+post `res' ("media_T0") ("sum") ("media") (r(mean)) (.) (.) (.) (r(N)) ("08_DID.do")
+
+quietly sum y if D==1 & t==1
+local m_t1 = r(mean)
+post `res' ("media_T1") ("sum") ("media") (r(mean)) (.) (.) (.) (r(N)) ("08_DID.do")
+
+* ---- DiD manual (segunda diferencia de las cuatro medias) -------------------
+local did_manual = (`m_t1' - `m_t0') - (`m_c1' - `m_c0')
+quietly count
+post `res' ("did_manual") ("segunda diferencia") ("DiD") (`did_manual') (.) (.) (.) (r(N)) ("08_DID.do")
+
+* ---- Comando diff -----------------------------------------------------------
+quietly diff y, t(D) p(t)
+local did_diff = r(did)
+local se_diff  = r(se_dd)
+local N_diff   = r(N)
+local p_diff   = 2*ttail(`N_diff' - 4, abs(`did_diff'/`se_diff'))
+post `res' ("did_diff") ("diff y, t(D) p(t)") ("DiD") (`did_diff') (`se_diff') (.) (`p_diff') (`N_diff') ("08_DID.do")
+
+* ---- Regresión DiD con errores robustos -------------------------------------
+quietly reg y D##t, robust
+local b_dd  = _b[1.D#1.t]
+local se_dd = _se[1.D#1.t]
+local p_dd  = 2*ttail(e(df_r), abs(`b_dd'/`se_dd'))
+local N_reg = e(N)
+post `res' ("did_regresion") ("reg y D##t, robust") ("DiD") (`b_dd') (`se_dd') (.) (`p_dd') (`N_reg') ("08_DID.do")
+
+* ---- Primeras diferencias en panel construido -------------------------------
+* Emparejamiento que preserva el grupo (ver nota en la sección homóloga arriba).
+sort t D orden_n
+bys t: gen id_pd = _n
+xtset id_pd t
+quietly reg D.y D
+local b_pd  = _b[D]
+local se_pd = _se[D]
+local p_pd  = 2*ttail(e(df_r), abs(`b_pd'/`se_pd'))
+local N_pd  = e(N)
+post `res' ("did_primeras_diferencias") ("reg D.y D") ("DiD") (`b_pd') (`se_pd') (.) (`p_pd') (`N_pd') ("08_DID.do")
+
+* ---- hospdd: ATET y pruebas formales ----------------------------------------
+webuse hospdd, clear
+xtset hospital
+quietly xtdidregress (satis) (procedure), group(hospital) time(month)
+local atet    = _b[r1vs0.procedure]
+local se_atet = _se[r1vs0.procedure]
+local p_atet  = 2*ttail(e(df_r), abs(`atet'/`se_atet'))
+local N_hosp  = e(N)
+post `res' ("hospdd_atet") ("xtdidregress") ("ATET") (`atet') (`se_atet') (.) (`p_atet') (`N_hosp') ("08_DID.do")
+
+quietly estat ptrends
+post `res' ("ptrends") ("estat ptrends") ("F") (r(F)) (.) (r(F)) (r(p)) (r(N)) ("08_DID.do")
+
+quietly estat granger
+post `res' ("granger") ("estat granger") ("F") (r(F)) (.) (r(F)) (r(p)) (r(N)) ("08_DID.do")
+
+postclose `res'
+
+* ---- Exportar CSV canónico y limpiar el dta intermedio ----------------------
+preserve
+use "results/did_resultados.dta", clear
+export delimited using "results/did_resultados.csv", replace
+restore
+erase "results/did_resultados.dta"
+
+* ---- Insumo para verificación cruzada en Python (no rastreado) --------------
+webuse hospdd, clear
+export delimited hospital month procedure satis ///
+    using "results/hospdd_verificacion_input.csv", replace nolabel
+
+di _n "=== EXPORT CANÓNICO COMPLETO: results/did_resultados.csv ==="

@@ -1,0 +1,4 @@
+escenario,valor_stata,valor_alternativo,diferencia_abs,tolerancia,metodo_alternativo,estado
+did_manual,0.1816249158,0.1816249192,0.00e+00,1e-06,pandas groupby means,PASS
+did_regresion,0.1816249158,0.1816249158,2.86e-14,1e-06,statsmodels OLS HC1,PASS
+hospdd_atet,0.8479878643,0.8479878670,2.70e-09,1e-06,statsmodels TWFE OLS,PASS
