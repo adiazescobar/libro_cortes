@@ -369,7 +369,28 @@ estat grangerplot  * event study: efectos específicos por periodo (pre y post)
 
 ---
 
-## Ejercicio con datos {-}
+## Del diagnóstico al diseño {-}
+
+### Checklist de amenazas para el diseño {-}
+
+Cada amenaza discutida en la teoría tiene un diagnóstico concreto en esta práctica. Antes de defender un DiD, recorre la lista:
+
+| Amenaza | Diagnóstico en esta práctica |
+|---|---|
+| Tendencias no paralelas | `estat ptrends` (requiere ≥ 2 periodos pre); con 2 periodos, solo argumento institucional |
+| Anticipación | `estat granger` y el event study de `estat grangerplot` |
+| Selección por trayectoria (dip de Ashenfelter) | Varios periodos pre-tratamiento en el gráfico de tendencias |
+| Diferencias fijas entre grupos | Se eliminan por construcción; verifica balance con `diff, test cov()` |
+| Políticas simultáneas y spillovers | No hay comando: exige revisión del contexto y de la separación entre grupos |
+| Atrición diferencial | Comparar N por celda de la tabla 2×2 entre periodos |
+
+::: {.boxinfo}
+**Decisión de diseño:** el checklist no es un ritual de robustez — cada fila responde a una historia alternativa que explicaría el mismo número. Un DiD defendible nombra la historia, muestra el diagnóstico y explica por qué la historia alternativa no sobrevive.
+:::
+
+## Evaluación {-}
+
+### Ejercicio aplicado {-}
 
 ::: {.boxejercicio}
 📁 **Do-file del ejercicio**
@@ -423,3 +444,89 @@ Descarga el do-file, córrelo en Stata y reporta tus resultados en el formulario
 </iframe>
 -->
 ```
+
+### Replicación en R y Python {-}
+
+Los archivos de la clase incluyen el script de R y el notebook de Python que reproducen el DiD básico. Además, `verificar_did.py` reestima con `pandas`/`statsmodels` los tres resultados centrales — el DiD manual, el coeficiente de la regresión con errores HC1 y el ATET de `hospdd` con efectos fijos de hospital y mes — y los compara contra los valores de Stata:
+
+```{r did-tabla-verificacion, echo=FALSE, message=FALSE, warning=FALSE}
+ver <- did_verif[, c("escenario", "valor_stata", "valor_alternativo",
+                     "diferencia_abs", "tolerancia", "estado")]
+names(ver) <- c("Escenario", "Stata", "Método alterno", "Dif. abs.", "Tolerancia", "Estado")
+kable(limpiar_na(ver), align = "lrrrrl") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
+```
+
+::: {.boxoutput}
+**Salida central:** que las tres filas estén en estado `PASS` confirma que los números publicados en esta página no dependen del software: Stata y Python llegan al mismo estimando con implementaciones independientes.
+:::
+
+---
+
+## Práctica evaluada {-}
+
+Resuelve las cuatro preguntas siguientes. Cada una es autocontenida: incluye todos los datos necesarios, el puntaje sugerido, los comandos permitidos y el producto esperado. No se entregan respuestas ni pistas; el trabajo se evalúa sobre el procedimiento y la justificación.
+
+::: {.box-ejercicio}
+**Código:** DID-S1
+
+**Tipo:** Tabla 2×2 y DiD manual
+
+**Fuente:** base3.dta (resultados canónicos)
+
+**Enunciado:** Con `base3.dta`, calcule las cuatro medias de la tabla 2×2 (grupo × periodo) de la talla-para-edad, guárdelas como escalares y construya el estimador DiD como segunda diferencia. Verifique que su resultado coincide con la fila `did_manual` de `did_resultados.csv` y explique, en una frase por resta, qué elimina la primera diferencia y qué elimina la segunda.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `sum`, `scalar`, `display`.
+
+**Producto esperado:** las cuatro medias, el DiD manual, la comparación con el valor canónico y la explicación de las dos restas.
+:::
+
+::: {.box-ejercicio}
+**Código:** DID-S2
+
+**Tipo:** Regresión DiD e interpretación
+
+**Fuente:** base3.dta (resultados canónicos)
+
+**Enunciado:** Estime la regresión DiD con interacción y errores robustos sobre `base3.dta`. Reporte los cuatro coeficientes y muestre numéricamente cómo cada uno se corresponde con las medias de la tabla 2×2 de la pregunta anterior. Interprete el coeficiente de la interacción y su error estándar, y explique por qué los coeficientes del indicador de grupo y del indicador de periodo no admiten lectura causal.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `reg` (con `##` y opción `robust`), `display`.
+
+**Producto esperado:** la regresión estimada, la correspondencia coeficiente-a-media verificada con números y la interpretación causal correcta de la interacción.
+:::
+
+::: {.box-ejercicio}
+**Código:** DID-S3
+
+**Tipo:** Balance, tendencias y anticipación
+
+**Fuente:** base3.dta y diseño del capítulo
+
+**Enunciado:** Ejecute la prueba de balance de `diff` usando `orden_n` como covariable sobre `base3.dta` e interprete su resultado. Explique con precisión por qué esa prueba no es una prueba de tendencias paralelas, qué estructura de datos adicional se necesitaría para ejecutar `estat ptrends` en esta base y por qué la prueba falla con un solo periodo pre-tratamiento. Cierre distinguiendo la hipótesis nula de `estat ptrends` de la de `estat granger`.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `diff` (con `test cov()`), `display`.
+
+**Producto esperado:** la prueba de balance interpretada, la distinción conceptual balance/tendencias, el requisito de datos para las pruebas formales y el contraste entre las dos hipótesis nulas.
+:::
+
+::: {.box-ejercicio}
+**Código:** DID-S4
+
+**Tipo:** Múltiples periodos y comparación reproducible
+
+**Fuente:** hospdd (resultados canónicos)
+
+**Enunciado:** Con la base `hospdd`, estime el ATET del nuevo procedimiento de admisión con `xtdidregress`, ejecute las pruebas de tendencias paralelas y de anticipación, e interprete las tres salidas. Después replique el ATET en R o en Python mediante una regresión con efectos fijos de hospital y de mes, y compare su resultado con la fila `hospdd_atet` de `did_verificacion.csv`, comentando la tolerancia empleada y el origen de cualquier diferencia.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Comandos permitidos:** `webuse`, `xtset`, `xtdidregress`, `estat ptrends`, `estat granger`; en R o Python, la librería de regresión que prefiera.
+
+**Producto esperado:** el ATET con su inferencia, las dos pruebas interpretadas, la replicación independiente y la comparación contra el valor canónico.
+:::

@@ -9,7 +9,7 @@
 - Derivar el estimador DiD desde los resultados potenciales.
 - Interpretar cada coeficiente de la regresión DiD.
 - Saber cómo probar (y cómo fallar) el supuesto de tendencias paralelas.
-- Implementar DiD en Stata: manualmente, con `diff`, y con regresión.
+- Reconocer los experimentos naturales clásicos que inauguraron el método.
 :::
 
 ---
@@ -84,6 +84,18 @@ Los clientes de Southwark & Vauxhall — cuyo suministro siguió contaminado —
 
 ::: {.boxkey}
 **Interpretación:** el cambio del tubo de Lambeth es el evento fortuito; los clientes de Southwark & Vauxhall son el grupo de comparación. Para que la comparación sea creíble se necesita mostrar evidencia de que, **antes** del cambio del tubo, las condiciones entre los dos grupos de clientes eran similares — exactamente la lógica que hoy llamamos tendencias paralelas.
+:::
+
+## El caso Mariel: migrantes y mercado laboral {-}
+
+Card (1990) estudió los impactos en el mercado laboral de los flujos de migrantes con el mismo diseño. El **éxodo de Mariel** llevó a Miami una ola de inmigrantes cubanos entre mayo y septiembre de 1980 — un evento fortuito desde la perspectiva del mercado laboral local. Card comparó a Miami con ciudades de altas tasas de migración (Atlanta, Houston, Los Ángeles y Tampa) y miró las condiciones laborales **antes y después** de la llegada.
+
+La tabla clásica del caso (Angrist y Krueger) muestra las tasas de desempleo en Miami frente a las ciudades de comparación, antes y después del flujo — y repite el ejercicio con "el flujo de Mariel que no ocurrió" (1993–1995), un experimento placebo donde no debería encontrarse efecto alguno. El resultado célebre: a pesar del aumento de 7% en la fuerza laboral de Miami, las diferencias en diferencias no muestran deterioro para los trabajadores locales.
+
+**Otros ejemplos con la misma lógica:** cambios en las leyes de salario mínimo (Angrist y Kugler), prohibiciones de fumar en Helena, Montana; cierres de hospitales (Levitt); desastres naturales; ataques terroristas; y variaciones exógenas en el tamaño de la familia (Angrist y Evans). En todos, el evento fortuito puede venir de **asignación aleatoria directa** (loterías: el servicio militar en Vietnam o Argentina, los vales educativos en Colombia) o de asignación **as if random** (la reasignación de policías tras un ataque terrorista, desastres naturales y elecciones, cambios en la ley de maternidad).
+
+::: {.boxinfo}
+**Intuición:** la pregunta operativa nunca es "¿tengo dos grupos y dos periodos?" — casi siempre los hay. Es "¿qué evento fortuito hace creíble que el grupo de comparación revele la tendencia contrafactual del tratado?". Sin ese evento, DiD es solo aritmética.
 :::
 
 ## El ejemplo de aula: dos grupos, dos periodos {-}
@@ -363,6 +375,48 @@ Las principales amenazas a la validez del DiD son: (1) políticas simultáneas q
 :::
 
 ---
+
+---
+
+## Preguntas tipo examen {-}
+
+Resuelve las tres preguntas siguientes. Cada una es autocontenida e incluye el puntaje sugerido y el producto esperado; no se entregan respuestas ni pistas.
+
+::: {.box-ejercicio}
+**Código:** DID-T1
+
+**Tipo:** Contrafactuales falsos y tabla 2×2
+
+**Enunciado:** Un programa municipal de empleo juvenil se implementa en la comuna A y no en la comuna B. La tasa de ocupación juvenil observada es: comuna A, 55% antes y 70% después; comuna B, 35% antes y 44% después. Calcule la comparación con–sin en el periodo final, la comparación antes–después en la comuna tratada y el estimador de diferencias en diferencias. Explique qué problema tiene cada una de las dos comparaciones ingenuas y qué componente elimina cada resta del DiD. Indique el supuesto bajo el cual el DiD es el efecto causal del programa.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Producto esperado:** los tres cálculos numéricos, la identificación del sesgo de cada comparación ingenua y el enunciado preciso del supuesto de identificación.
+:::
+
+::: {.box-ejercicio}
+**Código:** DID-T2
+
+**Tipo:** La regresión DiD y sus coeficientes
+
+**Enunciado:** Considere la regresión $Y_{it} = \alpha + \beta D_i + \gamma t_t + \delta (D_i \times t_t) + \varepsilon_{it}$ estimada con dos grupos y dos periodos. Derive la expresión de cada coeficiente en términos de las cuatro medias de la tabla 2×2 y demuestre que el coeficiente de la interacción reproduce exactamente la doble diferencia. Explique por qué $\beta$ y $\gamma$ no tienen interpretación causal, y qué cambiaría en la lectura de $\delta$ si las tendencias de los dos grupos no fueran paralelas.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Producto esperado:** la correspondencia algebraica completa entre coeficientes y medias, la demostración de la equivalencia y la discusión de la interpretación causal.
+:::
+
+::: {.box-ejercicio}
+**Código:** DID-T3
+
+**Tipo:** Tendencias paralelas, pruebas y amenazas
+
+**Enunciado:** Un programa de capacitación selecciona municipios cuyo empleo venía cayendo en los tres años previos. Un colega propone validar el diseño DiD mostrando que el empleo pre-programa tenía niveles similares entre municipios tratados y de control. Evalúe la propuesta: distinga entre balance en niveles y tendencias paralelas; explique qué patrón esperaría encontrar en una prueba tipo `estat ptrends` y en una tipo `estat granger` dada la regla de selección descrita; y explique por qué un rechazo en la prueba de anticipación es observacionalmente equivalente a tendencias no paralelas. Concluya con la amenaza específica que este diseño enfrenta y una estrategia para mitigarla.
+
+**Puntaje sugerido:** 5 puntos.
+
+**Producto esperado:** la distinción balance/tendencias, la predicción razonada para cada prueba, el argumento de equivalencia observacional y la amenaza identificada con su mitigación.
+:::
 
 ---
 
