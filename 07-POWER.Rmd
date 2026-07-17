@@ -67,8 +67,7 @@ res_view <- power_res[, c("escenario", "comando", "cantidad_solicitada",
                           "valor_stata", "N_total", "alpha", "power")]
 names(res_view) <- c("Escenario", "Comando", "Cantidad resuelta",
                      "Valor Stata", "N total", "alpha", "poder")
-kable(limpiar_na(res_view), align = "lllrrrr",
-      caption = "Insumos y resultados canonicos calculados con Stata (07_stata.do).") %>%
+kable(limpiar_na(res_view), align = "lllrrrr") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
@@ -558,8 +557,7 @@ sens_view <- power_res[, c("escenario", "familia", "delta", "sd", "p0", "p1",
                            "N_total", "N_realizable")]
 names(sens_view) <- c("Escenario", "Familia", "delta", "DE", "p0", "p1",
                       "N total", "N a reclutar")
-kable(limpiar_na(sens_view), align = "llrrrrrr",
-      caption = "Sensibilidad del tamano de muestra a los insumos de diseno entre escenarios canonicos.") %>%
+kable(limpiar_na(sens_view), align = "llrrrrrr") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
@@ -568,8 +566,7 @@ ver_view <- power_verif[, c("escenario", "valor_stata", "valor_alternativo",
                             "diferencia_abs", "tolerancia", "estado")]
 names(ver_view) <- c("Escenario", "Stata", "Método alterno",
                      "Dif. abs.", "Tolerancia", "Estado")
-kable(limpiar_na(ver_view), align = "lrrrrl",
-      caption = "Verificacion cruzada: Stata frente a una aproximacion normal independiente.") %>%
+kable(limpiar_na(ver_view), align = "lrrrrl") %>%
   kable_styling(bootstrap_options = c("striped", "condensed"), full_width = FALSE)
 ```
 
