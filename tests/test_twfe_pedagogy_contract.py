@@ -19,6 +19,21 @@ def _union():
     return base._read(THEORY) + "\n" + practice
 
 
+def _markdown_tables(text):
+    return [
+        lines
+        for lines in (
+            [line.strip() for line in block.splitlines() if line.strip().startswith("|")]
+            for block in re.split(r"\n\s*\n", text)
+        )
+        if len(lines) >= 3
+    ]
+
+
+def _fenced_code_blocks(text):
+    return re.findall(r"(?ms)^```[^\n]*\n(.*?)^```\s*$", text)
+
+
 def test_baseline_units_survive_across_theory_and_practice():
     snapshot = json.loads(base._read(SNAPSHOT))
     combined = _union()
@@ -168,18 +183,20 @@ def test_parallel_trends_theory_uses_untreated_potential_outcomes_and_separates_
             "La teoría debe formular tendencias paralelas sobre resultados "
             f"potenciales no tratados e identificar el límite de {marker!r}."
         )
+    cohort_equation = re.compile(
+        r"(?:\$\$|\\\[)[\s\S]{0,1400}?ATT\s*\(\s*g\s*,\s*t\s*\)"
+        r"[\s\S]{0,1400}?Y[\w_{}\\]*\s*\(\s*(?:D\s*=\s*)?0\s*\)",
+        re.IGNORECASE,
+    )
+    assert cohort_equation.search(text), (
+        "La formulación por cohorte debe mostrar una ecuación para ATT(g,t) "
+        "sobre un resultado potencial no tratado, no solo mencionar cohortes."
+    )
 
 
 def test_parallel_trends_method_matrix_gives_each_estimator_a_complete_row():
     text = _union()
-    tables = [
-        lines
-        for lines in (
-            [line.strip() for line in block.splitlines() if line.strip().startswith("|")]
-            for block in re.split(r"\n\s*\n", text)
-        )
-        if len(lines) >= 3
-    ]
+    tables = _markdown_tables(text)
     expected_methods = [
         "TWFE",
         "csdid",
@@ -201,6 +218,13 @@ def test_parallel_trends_method_matrix_gives_each_estimator_a_complete_row():
     header = matrix[0].casefold()
     for column in ["supuesto", "control", "diagnóstico", "limitación"]:
         assert column in header, f"La matriz debe incluir la columna {column!r}."
+    semantic_markers = {
+        "supuesto": r"tendencia|contrafactual|no tratado|y\s*\(\s*(?:d\s*=\s*)?0\s*\)|primera etapa|modelo",
+        "control": r"nunca|no[- ]aún|cohorte|control|stayer|switcher|no tratado",
+        "diagnóstico": r"pretrat|placebo|lead|prueba conjunta|interval|event study|gráfic|diagnóst",
+        "limitación": r"no (?:corrige|verifica|prueba|elimina|garantiza)|limitaci|potencia|heterogene|extrapol|contaminaci|sostener",
+    }
+    rows_by_method = {}
     for method in expected_methods:
         rows = [line for line in matrix[2:] if method.casefold() in line.casefold()]
         assert rows, f"La matriz debe tener una fila de contenido para {method}."
@@ -210,6 +234,23 @@ def test_parallel_trends_method_matrix_gives_each_estimator_a_complete_row():
             f"La fila de {method} debe declarar método, supuesto, control, "
             "diagnóstico y limitación."
         )
+        rows_by_method[method] = row
+        for label, cell in zip(semantic_markers, cells[1:5]):
+            assert re.search(semantic_markers[label], cell, re.IGNORECASE), (
+                f"La celda {label!r} de {method} debe explicar ese campo, "
+                "no contener texto de relleno."
+            )
+    assert len(set(rows_by_method.values())) == len(expected_methods), (
+        "Cada estimador debe ocupar una fila distinta; una fila que enumera "
+        "varios métodos no satisface la matriz."
+    )
+    assert not re.search(
+        r"\b(?:métodos|estimadores)\s+modernos?\b[^.\n]{0,160}"
+        r"\b(?:eliminan|resuelven|corrigen|garantizan|no requieren)\b"
+        r"[^.\n]{0,120}\btendencias?\s+paralelas?\b",
+        text,
+        re.IGNORECASE,
+    ), "El texto no puede afirmar que los métodos modernos eliminan tendencias paralelas."
 
 
 def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
@@ -234,6 +275,24 @@ def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
         marker in text.casefold()
         for marker in ["magnitud relativa", "suavidad"]
     ), "Rambachan–Roth debe explicar una restricción de magnitud relativa o suavidad."
+    practice = base._read(PRACTICE)
+    assert "ssc install honestdid" in practice.casefold()
+    assert "análisis de sensibilidad" in practice.casefold()
+    compatible_blocks = [
+        block
+        for block in _fenced_code_blocks(practice)
+        if "eventstudyinteract" in block.casefold()
+        and re.search(r"matrix\s+\w+\s*=\s*e\(b\)", block, re.IGNORECASE)
+        and re.search(r"matrix\s+\w+\s*=\s*e\(v\)", block, re.IGNORECASE)
+        and "honestdid" in block.casefold()
+    ]
+    assert compatible_blocks, (
+        "El ejemplo honestdid debe usar en el mismo bloque matrices e(b)/e(V) "
+        "provenientes de eventstudyinteract, no de un event study TWFE contaminado."
+    )
+    assert not any("reghdfe" in block.casefold() for block in compatible_blocks), (
+        "La ruta honestdid compatible no puede estimar el event study con TWFE/reghdfe."
+    )
 
 
 def test_exam_questions_are_exact_and_closed():
