@@ -251,6 +251,27 @@ def test_parallel_trends_method_matrix_gives_each_estimator_a_complete_row():
         text,
         re.IGNORECASE,
     ), "El texto no puede afirmar que los métodos modernos eliminan tendencias paralelas."
+    method_aliases = {
+        "TWFE": ["TWFE", "two-way fixed effects"],
+        "csdid": ["csdid", "Callaway–Sant'Anna", "Callaway-Sant'Anna"],
+        "eventstudyinteract": ["eventstudyinteract", "Sun-Abraham", "Sun–Abraham"],
+        "did_imputation": ["did_imputation", "Borusyak–Jaravel–Spiess", "Borusyak-Jaravel-Spiess"],
+        "did2s": ["did2s", "Gardner"],
+        "did_multiplegt_dyn": [
+            "did_multiplegt_dyn",
+            "de Chaisemartin–D’Haultfœuille",
+            "de Chaisemartin-D'Haultfœuille",
+        ],
+    }
+    for method, aliases in method_aliases.items():
+        alias_pattern = "|".join(re.escape(alias) for alias in aliases)
+        assert not re.search(
+            rf"\b(?:{alias_pattern})\b[^.\n]{{0,160}}"
+            r"\b(?:elimina|resuelve|corrige|garantiza|no requiere)\b"
+            r"[^.\n]{0,120}\btendencias?\s+paralelas?\b",
+            text,
+            re.IGNORECASE,
+        ), f"{method} no puede presentarse como si eliminara tendencias paralelas."
 
 
 def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
@@ -278,21 +299,47 @@ def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
     practice = base._read(PRACTICE)
     assert "ssc install honestdid" in practice.casefold()
     assert "análisis de sensibilidad" in practice.casefold()
-    compatible_blocks = [
-        block
-        for block in _fenced_code_blocks(practice)
-        if "eventstudyinteract" in block.casefold()
-        and re.search(r"matrix\s+\w+\s*=\s*e\(b\)", block, re.IGNORECASE)
-        and re.search(r"matrix\s+\w+\s*=\s*e\(v\)", block, re.IGNORECASE)
-        and "honestdid" in block.casefold()
-    ]
+    compatible_blocks = []
+    for block in _fenced_code_blocks(practice):
+        source = re.search(r"\beventstudyinteract\b", block, re.IGNORECASE)
+        b_matrix = re.search(r"matrix\s+\w+\s*=\s*e\(b\)", block, re.IGNORECASE)
+        v_matrix = re.search(r"matrix\s+\w+\s*=\s*e\(v\)", block, re.IGNORECASE)
+        honest = re.search(r"\bhonestdid\b", block, re.IGNORECASE)
+        if not all([source, b_matrix, v_matrix, honest]):
+            continue
+        assert source.start() < b_matrix.start() < v_matrix.start() < honest.start(), (
+            "eventstudyinteract debe preceder las matrices e(b)/e(V), que a su vez "
+            "deben preceder honestdid."
+        )
+        between_source_and_matrices = block[source.end():v_matrix.start()]
+        assert not re.search(
+            r"\b(?:xtreg|reghdfe|areg|regress|didregress)\b",
+            between_source_and_matrices,
+            re.IGNORECASE,
+        ), "Ninguna estimación TWFE puede sobrescribir e(b)/e(V) antes de honestdid."
+        compatible_blocks.append(block)
     assert compatible_blocks, (
-        "El ejemplo honestdid debe usar en el mismo bloque matrices e(b)/e(V) "
-        "provenientes de eventstudyinteract, no de un event study TWFE contaminado."
+        "El ejemplo honestdid debe conservar el orden eventstudyinteract → e(b)/e(V) "
+        "→ honestdid en un mismo bloque."
     )
-    assert not any("reghdfe" in block.casefold() for block in compatible_blocks), (
-        "La ruta honestdid compatible no puede estimar el event study con TWFE/reghdfe."
-    )
+    assert re.search(
+        r"\bhonestdid\b[^.\n]{0,100}\bno\b[^.\n]{0,100}"
+        r"\b(?:prueba|valida|verifica|repara|elimina)\b",
+        practice,
+        re.IGNORECASE,
+    ), "HonestDiD debe rotularse explícitamente como sensibilidad, no como prueba o reparación."
+    assert not re.search(
+        r"\bhonestdid\b\s+(?!no\b)"
+        r"(?:es|sirve|funciona|constituye|actúa|permite)\b[^.\n]{0,120}"
+        r"\b(?:prueba|validaci\w*|verificaci\w*|reparaci\w*|arregla|elimina)\b",
+        practice,
+        re.IGNORECASE,
+    ), "HonestDiD no puede presentarse como prueba, validación o reparación automática."
+    assert not re.search(
+        r"\bhonestdid\b\s+(?!no\b)\b(?:repara|corrige|arregla|elimina)\b",
+        practice,
+        re.IGNORECASE,
+    ), "HonestDiD no elimina ni repara automáticamente el supuesto."
 
 
 def test_exam_questions_are_exact_and_closed():
