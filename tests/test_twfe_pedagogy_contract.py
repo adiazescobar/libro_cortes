@@ -148,6 +148,94 @@ def test_event_study_and_trend_warnings_are_explicit():
         assert marker in text
 
 
+def test_parallel_trends_theory_uses_untreated_potential_outcomes_and_separates_diagnostics():
+    text = base._read(THEORY)
+    headings = base._headings(text, 2) + base._headings(text, 3)
+    assert any("tendencias paralelas" in heading.casefold() for heading in headings)
+    for marker in [
+        "Y(D=0)",
+        "cohorte",
+        "condicionales",
+        "nunca tratados",
+        "no-aún tratados",
+        "soporte común",
+        "no anticipación",
+        "supuesto causal",
+        "diagnóstico",
+        "no verifican el contrafactual postratamiento",
+    ]:
+        assert marker.casefold() in text.casefold(), (
+            "La teoría debe formular tendencias paralelas sobre resultados "
+            f"potenciales no tratados e identificar el límite de {marker!r}."
+        )
+
+
+def test_parallel_trends_method_matrix_gives_each_estimator_a_complete_row():
+    text = _union()
+    tables = [
+        lines
+        for lines in (
+            [line.strip() for line in block.splitlines() if line.strip().startswith("|")]
+            for block in re.split(r"\n\s*\n", text)
+        )
+        if len(lines) >= 3
+    ]
+    expected_methods = [
+        "TWFE",
+        "csdid",
+        "eventstudyinteract",
+        "did_imputation",
+        "did2s",
+        "did_multiplegt_dyn",
+    ]
+    matching_tables = [
+        table
+        for table in tables
+        if all(method.casefold() in "\n".join(table).casefold() for method in expected_methods)
+    ]
+    assert matching_tables, (
+        "Debe haber una matriz de tendencias paralelas con filas separadas para "
+        "TWFE, csdid, eventstudyinteract, did_imputation, did2s y did_multiplegt_dyn."
+    )
+    matrix = matching_tables[0]
+    header = matrix[0].casefold()
+    for column in ["supuesto", "control", "diagnóstico", "limitación"]:
+        assert column in header, f"La matriz debe incluir la columna {column!r}."
+    for method in expected_methods:
+        rows = [line for line in matrix[2:] if method.casefold() in line.casefold()]
+        assert rows, f"La matriz debe tener una fila de contenido para {method}."
+        row = rows[0]
+        cells = [cell.strip() for cell in row.strip("|").split("|")]
+        assert len(cells) >= 5 and all(cells[:5]), (
+            f"La fila de {method} debe declarar método, supuesto, control, "
+            "diagnóstico y limitación."
+        )
+
+
+def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
+    text = _union()
+    headings = base._headings(text, 2) + base._headings(text, 3) + base._headings(text, 4)
+    assert any(
+        "rambachan" in heading.casefold() and "roth" in heading.casefold()
+        for heading in headings
+    ), "Debe existir un recuadro o sección avanzada Rambachan–Roth."
+    for marker in [
+        "10.1093/restud/rdad018",
+        "parcialmente identificado",
+        "conjuntos de confianza",
+        "análisis de sensibilidad",
+        "TWFE contaminado",
+    ]:
+        assert marker.casefold() in text.casefold(), (
+            "La lectura avanzada Rambachan–Roth debe incluir "
+            f"{marker!r}."
+        )
+    assert any(
+        marker in text.casefold()
+        for marker in ["magnitud relativa", "suavidad"]
+    ), "Rambachan–Roth debe explicar una restricción de magnitud relativa o suavidad."
+
+
 def test_exam_questions_are_exact_and_closed():
     for path, family, expected, labels in [
         (
