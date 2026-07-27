@@ -305,8 +305,31 @@ El DGP tiene 900 unidades, 12 periodos, una cohorte que adopta en \(t=5\), otra 
 gen cohort = cond(id<=300,5,cond(id<=600,8,0))
 gen D = cohort>0 & t>=cohort
 gen event_time = t-cohort if cohort>0
+gen double tau = 0
+replace tau = 1 + .45*event_time if cohort==5 & D
+replace tau = 2 + .25*event_time if cohort==8 & D
+gen double Y0 = alpha_i + .25*t + rnormal()
+gen double Y = Y0 + tau
+
+* Auditar la heterogeneidad antes de estimar
+tabstat tau if D, by(cohort) statistics(n mean min max)
+table cohort event_time if D, statistic(mean tau)
+summarize tau if D
 reghdfe Y D, absorb(id t) vce(cluster id)
 ```
+
+La heterogeneidad no queda implícita: para la cohorte temprana el efecto comienza en 1 y crece 0.45 por periodo de exposición; para la tardía comienza en 2 y crece 0.25. Por tanto, \(\tau_{g,e}\) varía **entre cohortes** y **dentro de cada cohorte a lo largo del tiempo**.
+
+::: {.boxcerebro}
+**Chequeo pedagógico del DGP**
+
+Antes de interpretar TWFE, verifique dos ingredientes distintos:
+
+1. `tab cohort` confirma adopción escalonada: \(g=5\), \(g=8\) y nunca tratados.
+2. `table cohort event_time ...` confirma efectos heterogéneos y dinámicos: las celdas tratadas no comparten el mismo `tau`.
+
+Si cualquiera de los dos ingredientes desaparece, este ejemplo ya no representa el problema central que queremos estudiar.
+:::
 
 ```{r twfe-staggered-table, echo=FALSE}
 knitr::kable(
@@ -446,81 +469,6 @@ Los leads negativos aparecen aunque el DGP no tiene anticipación. Son contamina
 No use un test conjunto de leads TWFE como prueba definitiva de tendencias paralelas en este DGP: los coeficientes ya están contaminados por efectos postratamiento heterogéneos.
 :::
 
-## Tendencias paralelas: del supuesto al diagnóstico {-}
-
-Cambiar el estimador permite evitar comparaciones específicas que contaminan TWFE. La necesidad de justificar tendencias paralelas permanece. La pregunta práctica cambia con el método: ¿qué observaciones construyen el resultado no tratado de cada cohorte y en cada periodo? Esta matriz debe completarse **antes** de comparar coeficientes.
-
-| Método | Supuesto | Control | Diagnóstico | Limitación |
-|---|---|---|---|---|
-| TWFE | Tendencia contrafactual común de \(Y(D=0)\) para las comparaciones implícitas | Nunca tratados, no-aún tratados y, mecánicamente, cohortes ya tratadas | Gráficas pretratamiento, leads y descomposición de comparaciones | No corrige la contaminación cuando una cohorte ya tratada sirve como control y los efectos son heterogéneos |
-| `csdid` | Tendencias paralelas para cada \(ATT(g,t)\), incondicionales o condicionales en covariables pretratamiento | Nunca tratados o no-aún tratados, según la opción declarada | `estat event`, `estat pretrend`, intervalos pretratamiento y placebos por cohorte | No prueba tendencias paralelas; poco soporte común puede volver frágil la reponderación |
-| `eventstudyinteract` | Tendencias contrafactuales paralelas entre cada cohorte y la cohorte de control elegida | Cohorte nunca tratada o última cohorte, todavía no tratada en el horizonte usado | Event study *interaction-weighted*, intervalos de confianza de los leads y prueba conjunta | No garantiza tendencias paralelas y exige revisar soporte y composición por horizonte |
-| `did_imputation` | El modelo del resultado no tratado, estimado únicamente antes del tratamiento, extrapola correctamente a las celdas tratadas | Observaciones nunca tratadas y no-aún tratadas usadas para estimar el modelo no tratado | Opción `pretrend()`, residuales pretratamiento, placebos e intervalos por horizonte | No corrige una extrapolación incorrecta del modelo no tratado ni falta de soporte |
-| `did2s` | La primera etapa modela correctamente \(Y(D=0)\) con observaciones no tratadas y la segunda etapa define el evento de interés | Nunca tratados y no-aún tratados en la primera etapa | Leads de la segunda etapa, intervalos, prueba conjunta y placebos | No elimina el sesgo si la primera etapa extrapola mal o si cambia la composición |
-| `did_multiplegt_dyn` | Los *switchers* y *stayers* pertinentes habrían tenido tendencias contrafactuales paralelas, con no anticipación en el horizonte | *Stayers*, *quasi-stayers* o unidades que aún conservan el *status quo* | Opción `placebo()`, efectos placebo, intervalos y gráficas por horizonte | No verifica el supuesto; pocos *switchers* o cambios reversibles pueden reducir potencia y soporte |
-
-::: {.boxcerebro}
-**Regla de lectura**
-
-Una fila no se elige por el nombre del comando. Primero fije el estimando y la cohorte de control; después pregunte si esa comparación ofrece un contrafactual defendible. Ningún comando vuelve innecesarias las tendencias paralelas.
-:::
-
-### Flujo práctico de diagnóstico {-}
-
-**1. Grafique los resultados observados, sin ajustar.** La figura no identifica el efecto, pero revela escala, composición, fechas de adopción y divergencias que el modelo puede ocultar.
-
-```stata
-preserve
-collapse (mean) Y, by(cohort t)
-twoway (connected Y t if cohort==5) ///
-       (connected Y t if cohort==8) ///
-       (connected Y t if cohort==0), ///
-       xline(5 8, lpattern(dash)) legend(order(1 "g=5" 2 "g=8" 3 "Nunca"))
-restore
-```
-
-**2. Defina explícitamente cohorte y control.** Verifique que `cohort` sea la primera fecha de tratamiento, que cero identifique a los nunca tratados y que las unidades no-aún tratadas solo entren mientras permanezcan sin tratamiento.
-
-```stata
-bysort id (t): assert cohort==cohort[1]
-gen byte never_treat=cohort==0
-tab cohort
-tab cohort t if D==0
-```
-
-**3. Estime un event study compatible con esa comparación.** Para Sun–Abraham, cada interacción cohorte–evento se compara con la cohorte de control declarada; no sustituya esta estimación por el event study TWFE contaminado mostrado arriba.
-
-```stata
-eventstudyinteract Y lead4 lead3 lead2 lag0-lag4, ///
-    absorb(id t) cohort(cohort) control_cohort(never_treat) ///
-    vce(cluster id)
-matrix list e(b_iw)
-matrix list e(V_iw)
-event_plot e(b_iw)#e(V_iw), stub_lead(lead#) stub_lag(lag#) together
-```
-
-**4. Lea los preperiodos con sus intervalos.** Reporte cada estimación y su incertidumbre, además de una prueba conjunta cuando el comando la permita. Un coeficiente pretratamiento impreciso cerca de cero y un coeficiente precisamente estimado cerca de cero aportan evidencia muy distinta.
-
-**5. Ejecute placebos coherentes con el estimador.** Por ejemplo:
-
-```stata
-csdid Y, ivar(id) time(t) gvar(cohort) notyet
-estat event
-estat pretrend
-
-did_multiplegt_dyn Y id t D, effects(4) placebo(4) cluster(id)
-```
-
-**6. Discuta potencia.** La ausencia de rechazo conjunto no demuestra el supuesto. Informe si el diseño habría detectado una desviación económicamente relevante: use el ancho de los intervalos pretratamiento, un efecto mínimo detectable o simulaciones de potencia con el número real de cohortes y clústeres.
-
-**7. Haga sensibilidad.** Pregunte cuánto tendría que desviarse la tendencia contrafactual postratamiento para cambiar la conclusión. Esta etapa complementa —no reemplaza— el argumento institucional, la elección del control y los placebos.
-
-::: {.boxadvertencia}
-**Lo que no puede concluirse**
-
-Que los leads no sean individual o conjuntamente significativos no verifica el contrafactual postratamiento. También puede reflejar pocos preperiodos, pocos clústeres, intervalos anchos o una prueba con baja potencia.
-:::
-
 ## Comparar estimadores sin mezclar parámetros {-}
 
 ```{r twfe-method-map, echo=FALSE}
@@ -595,6 +543,83 @@ Antes de comparar dos curvas, complete para cada método: población, control, p
 **Qué mirar en la salida**
 
 Dos coeficientes con el mismo rótulo “evento \(k\)” pueden promediar cohortes distintas. La comparación válida exige alinear soporte y pesos, no solo el eje horizontal.
+:::
+
+## ¿Qué supone cada estimador? {-}
+
+Ahora que el problema de TWFE y las cinco alternativas ya están sobre la mesa, use esta matriz como **síntesis**. La pregunta no es cuál comando es más moderno, sino qué observaciones construyen el resultado no tratado de cada cohorte y si esa comparación ofrece un contrafactual defendible.
+
+| Método | Supuesto | Control | Diagnóstico | Limitación |
+|---|---|---|---|---|
+| TWFE | Tendencia contrafactual común de \(Y(D=0)\) para las comparaciones implícitas | Nunca tratados, no-aún tratados y, mecánicamente, cohortes ya tratadas | Gráficas pretratamiento, leads y descomposición de comparaciones | No corrige la contaminación cuando una cohorte ya tratada sirve como control y los efectos son heterogéneos |
+| `csdid` | Tendencias paralelas para cada \(ATT(g,t)\), incondicionales o condicionales en covariables pretratamiento | Nunca tratados o no-aún tratados, según la opción declarada | `estat event`, `estat pretrend`, intervalos pretratamiento y placebos por cohorte | No prueba tendencias paralelas; poco soporte común puede volver frágil la reponderación |
+| `eventstudyinteract` | Tendencias contrafactuales paralelas entre cada cohorte y la cohorte de control elegida | Cohorte nunca tratada o última cohorte, todavía no tratada en el horizonte usado | Event study *interaction-weighted*, intervalos de confianza de los leads y prueba conjunta | No garantiza tendencias paralelas y exige revisar soporte y composición por horizonte |
+| `did_imputation` | El modelo del resultado no tratado, estimado únicamente antes del tratamiento, extrapola correctamente a las celdas tratadas | Observaciones nunca tratadas y no-aún tratadas usadas para estimar el modelo no tratado | Opción `pretrend()`, residuales pretratamiento, placebos e intervalos por horizonte | No corrige una extrapolación incorrecta del modelo no tratado ni falta de soporte |
+| `did2s` | La primera etapa modela correctamente \(Y(D=0)\) con observaciones no tratadas y la segunda etapa define el evento de interés | Nunca tratados y no-aún tratados en la primera etapa | Leads de la segunda etapa, intervalos, prueba conjunta y placebos | No elimina el sesgo si la primera etapa extrapola mal o si cambia la composición |
+| `did_multiplegt_dyn` | Los *switchers* y *stayers* pertinentes habrían tenido tendencias contrafactuales paralelas, con no anticipación en el horizonte | *Stayers*, *quasi-stayers* o unidades que aún conservan el *status quo* | Opción `placebo()`, efectos placebo, intervalos y gráficas por horizonte | No verifica el supuesto; pocos *switchers* o cambios reversibles pueden reducir potencia y soporte |
+
+::: {.boxcerebro}
+**Regla de lectura**
+
+Primero fije estimando, población y control; después escoja el comando. Los métodos modernos evitan comparaciones contaminadas específicas, pero ninguno vuelve innecesarias las tendencias paralelas.
+:::
+
+## Tendencias paralelas: del supuesto al diagnóstico {-}
+
+La matriz aclara qué supuesto corresponde a cada solución. El paso siguiente es evaluar cuánta evidencia ofrece el diseño a favor de ese supuesto, sin confundir un diagnóstico con una prueba.
+
+**1. Grafique los resultados observados, sin ajustar.** La figura no identifica el efecto, pero revela escala, composición, fechas de adopción y divergencias que el modelo puede ocultar.
+
+```stata
+preserve
+collapse (mean) Y, by(cohort t)
+twoway (connected Y t if cohort==5) ///
+       (connected Y t if cohort==8) ///
+       (connected Y t if cohort==0), ///
+       xline(5 8, lpattern(dash)) legend(order(1 "g=5" 2 "g=8" 3 "Nunca"))
+restore
+```
+
+**2. Defina explícitamente cohorte y control.** Verifique que `cohort` sea la primera fecha de tratamiento, que cero identifique a los nunca tratados y que las unidades no-aún tratadas solo entren mientras permanezcan sin tratamiento.
+
+```stata
+bysort id (t): assert cohort==cohort[1]
+gen byte never_treat=cohort==0
+tab cohort
+tab cohort t if D==0
+```
+
+**3. Estime un event study compatible con esa comparación.** Para Sun–Abraham, cada interacción cohorte–evento se compara con la cohorte de control declarada; no sustituya esta estimación por el event study TWFE contaminado mostrado arriba.
+
+```stata
+eventstudyinteract Y lead4 lead3 lead2 lag0-lag4, ///
+    absorb(id t) cohort(cohort) control_cohort(never_treat) ///
+    vce(cluster id)
+matrix list e(b_iw)
+matrix list e(V_iw)
+event_plot e(b_iw)#e(V_iw), stub_lead(lead#) stub_lag(lag#) together
+```
+
+**4. Lea los preperiodos con sus intervalos.** Reporte cada estimación y su incertidumbre, además de una prueba conjunta cuando el comando la permita. Un coeficiente impreciso cerca de cero y uno precisamente estimado cerca de cero aportan evidencia muy distinta.
+
+**5. Ejecute placebos coherentes con el estimador.** Por ejemplo:
+
+```stata
+csdid Y, ivar(id) time(t) gvar(cohort) notyet
+estat event
+estat pretrend
+
+did_multiplegt_dyn Y id t D, effects(4) placebo(4) cluster(id)
+```
+
+**6. Discuta potencia.** La ausencia de rechazo conjunto no demuestra el supuesto. Informe si el diseño habría detectado una desviación económicamente relevante mediante intervalos pretratamiento, un efecto mínimo detectable o simulaciones con el número real de cohortes y clústeres.
+
+**7. Haga sensibilidad.** Pregunte cuánto tendría que desviarse la tendencia contrafactual postratamiento para cambiar la conclusión. Esta etapa complementa —no reemplaza— el argumento institucional, la elección del control y los placebos.
+
+::: {.boxadvertencia}
+**Lo que no puede concluirse**
+
+Que los leads no sean individual o conjuntamente significativos no verifica el contrafactual postratamiento. También puede reflejar pocos preperiodos, pocos clústeres, intervalos anchos o una prueba con baja potencia.
 :::
 
 ### Extensión avanzada opcional: HonestDiD {-}
