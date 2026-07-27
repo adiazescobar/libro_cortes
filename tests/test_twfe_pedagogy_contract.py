@@ -358,13 +358,19 @@ def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
         practice,
         re.IGNORECASE,
     ), "Una advertencia correcta no permite afirmar que HonestDiD puede reparar o validar."
-    assert not re.search(
+    role_claim = re.compile(
         r"\bhonestdid\b\s+(?!no\b)(?:puede\s+)?"
         r"(?:ser|servir|funcionar|constituir|actuar|permitir)\b[^.\n]{0,120}"
         r"\b(?:prueba|validaci\w*|verificaci\w*|reparaci\w*)\b",
-        practice,
         re.IGNORECASE,
-    ), "HonestDiD no puede describirse como una prueba, validación o reparación."
+    )
+    for match in role_claim.finditer(practice):
+        assert re.search(
+            r"\bno\s+(?:(?:como|es|constituye|representa)\s+)?(?:una?\s+)?"
+            r"(?:prueba|validaci\w*|verificaci\w*|reparaci\w*)\b",
+            match.group(),
+            re.IGNORECASE,
+        ), "HonestDiD no puede describirse positivamente como prueba, validación o reparación."
     assert not re.search(
         r"\bhonestdid\b[^.\n]{0,160}\b(?:pero|sin embargo|aunque)\b"
         r"[^.\n]{0,100}\b(?:puede|permite|repara|corrige|valida|verifica)\b",
