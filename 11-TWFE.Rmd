@@ -108,6 +108,93 @@ Cuando los efectos varían entre cohortes o con el tiempo desde adopción, un ú
 El problema no es “muchos periodos” por sí mismo. Surge de combinar variación en el momento de adopción con heterogeneidad de efectos.
 :::
 
+## Tendencias paralelas en DiD con adopción escalonada {-}
+
+Los estimadores robustos a heterogeneidad corrigen el problema de las comparaciones contaminadas de TWFE, pero **no eliminan el supuesto causal de tendencias paralelas**. Para ver exactamente qué se supone, conviene escribir el contrafactual que nunca observamos.
+
+Sea \(Y_{it}(D=0)\) el resultado potencial que la unidad \(i\) tendría en \(t\) si permaneciera sin tratamiento. Para una cohorte \(G_i=g\), un grupo de comparación admisible \(C_{g,t}\) puede estar compuesto por **nunca tratados** (\(G_i=\infty\)) o por **no-aún tratados** (\(G_i>t\)). Tomando \(g-1\) como periodo base, tendencias paralelas grupo–tiempo exige
+
+\[
+\begin{aligned}
+&E\!\left[Y_{it}(D=0)-Y_{i,g-1}(D=0)\mid G_i=g\right] \\
+&\qquad =E\!\left[Y_{it}(D=0)-Y_{i,g-1}(D=0)\mid i\in C_{g,t}\right].
+\end{aligned}
+\]
+
+Bajo **no anticipación**, \(Y_{i,g-1}=Y_{i,g-1}(D=0)\), y el efecto grupo–tiempo puede recuperarse como
+
+\[
+\begin{aligned}
+ATT(g,t)
+&=E[Y_{it}(D=1)-Y_{it}(D=0)\mid G_i=g] \\
+&=E[Y_{it}-Y_{i,g-1}\mid G_i=g]
+-E[Y_{it}-Y_{i,g-1}\mid i\in C_{g,t}],\qquad t\ge g.
+\end{aligned}
+\]
+
+La elección del control cambia la comparación. Los nunca tratados ofrecen una referencia estable durante todo el panel, pero pueden ser una población poco comparable. Los no-aún tratados amplían la información disponible, aunque cada cohorte deja de ser control cuando alcanza su propia fecha de adopción. Una cohorte ya tratada no pertenece a \(C_{g,t}\).
+
+::: {.boxadvertencia}
+Tendencias paralelas es un supuesto sobre la evolución de \(Y(D=0)\), no sobre la igualdad de niveles observados. Dos grupos pueden comenzar en niveles distintos y aun así tener tendencias paralelas; también pueden verse similares antes del tratamiento y divergir después por una causa distinta del programa.
+:::
+
+### Tendencias paralelas condicionales y soporte común {-}
+
+Cuando la evolución sin tratamiento depende de covariables pretratamiento \(X_i\), la versión incondicional puede ser demasiado fuerte. Una alternativa es suponer, para cada valor relevante \(x\),
+
+\[
+\begin{aligned}
+&E[Y_{it}(D=0)-Y_{i,g-1}(D=0)\mid G_i=g,X_i=x] \\
+&\qquad =E[Y_{it}(D=0)-Y_{i,g-1}(D=0)\mid i\in C_{g,t},X_i=x].
+\end{aligned}
+\]
+
+El \(ATT(g,t)\) se obtiene primero dentro de cada estrato de \(X\) y luego se integra usando la distribución de covariables de la cohorte tratada:
+
+\[
+ATT(g,t)=
+E_{X\mid G=g}\!\left[
+E[\Delta_{g-1,t}Y\mid G=g,X]
+-E[\Delta_{g-1,t}Y\mid C_{g,t},X]
+\right].
+\]
+
+Esta estrategia requiere **soporte común**: para los valores de \(X\) observados en la cohorte \(g\), debe existir probabilidad positiva de observar controles comparables en \(C_{g,t}\). Ajustar por covariables no crea soporte donde no lo hay. Además, \(X\) debe medirse antes del tratamiento; controlar por variables afectadas por el programa puede introducir sesgo.
+
+### ¿Qué supone cada estimador? {-}
+
+La tabla separa el problema que resuelve cada comando del supuesto que todavía necesita. Ninguna fila convierte un diagnóstico pretratamiento en una prueba de identificación.
+
+| Método | Supuesto | Control | Diagnóstico | Limitación |
+|---|---|---|---|---|
+| TWFE | Tendencia contrafactual común en \(Y(D=0)\); una interpretación agregada simple suele requerir restricciones adicionales sobre heterogeneidad | Nunca, no-aún y, con adopción escalonada, cohortes ya tratadas | Gráficas y *leads* pretratamiento; descomposición de comparaciones | Los *leads* pueden estar contaminados y el coeficiente no garantiza un ATT convexo |
+| `csdid` (Callaway–Sant’Anna) | Tendencias paralelas para cada \(ATT(g,t)\), incondicionales o condicionales en \(X\) | Nunca tratados o no-aún tratados | *Event study*, intervalos pretratamiento y placebos por cohorte | Un placebo no prueba el supuesto y escaso soporte limita la comparación |
+| `eventstudyinteract` (Sun–Abraham) | Tendencias paralelas por cohorte y no anticipación para los efectos cohorte–tiempo relativo | Cohorte nunca tratada o una cohorte de control no expuesta en la ventana pertinente | Coeficientes e intervalos de *leads* de la especificación *interaction-weighted* | Evita contaminación entre horizontes, pero no corrige tendencias contrafactuales divergentes |
+| `did_imputation` (Borusyak–Jaravel–Spiess) | El modelo de \(Y(D=0)\) estimado con observaciones no tratadas está correctamente especificado | Observaciones sin tratamiento, incluidas las no-aún tratadas cuando son elegibles | Placebos de imputación y residuos pretratamiento con intervalos | La imputación extrapola el modelo no tratado; buen ajuste previo no verifica el futuro |
+| `did2s` (Gardner) | La primera etapa modela correctamente el resultado no tratado y sostiene tendencias paralelas | Observaciones no tratadas usadas para estimar la primera etapa | *Leads*, placebos y gráficas de residuos de la primera etapa | La segunda etapa no elimina sesgo por una primera etapa mal especificada |
+| `did_multiplegt_dyn` (de Chaisemartin–D’Haultfœuille) | Tendencias paralelas entre *switchers* y *stayers* con historias de tratamiento pertinentes, más no anticipación | *Stayers* cuyo tratamiento permanece en el *status quo* relevante | Placebos y efectos dinámicos pretratamiento con intervalos | Pocos *stayers* comparables reducen soporte y potencia; el parámetro depende de la historia |
+
+`csdid` construye \(ATT(g,t)\) y luego declara cómo agregarlos. `eventstudyinteract` estima efectos cohorte × tiempo relativo antes de promediarlos y evita usar otros horizontes tratados como si fueran el coeficiente del horizonte de interés. `did_imputation` y `did2s` estiman primero la trayectoria sin tratamiento utilizando observaciones no tratadas, aunque difieren en su construcción y en el objeto de la segunda etapa. `did_multiplegt_dyn` organiza comparaciones entre unidades que cambian tratamiento y unidades que conservan el *status quo*, por lo cual también puede estudiar tratamientos no absorbentes.
+
+::: {.boxcerebro}
+**Supuesto y diagnóstico no son lo mismo.** Gráficas, *leads*, pruebas conjuntas y placebos permiten detectar ciertas contradicciones con el diseño. No rechazar un placebo puede reflejar tendencias realmente similares, pero también poca potencia o intervalos amplios. Estas herramientas **no verifican el contrafactual postratamiento**, precisamente porque \(Y(D=0)\) no se observa para las unidades tratadas después de \(g\).
+:::
+
+### Lectura avanzada: Rambachan–Roth y tendencias paralelas creíbles {-}
+
+::: {.boxinfo}
+Rambachan y Roth (2023), [*A More Credible Approach to Parallel Trends*](https://doi.org/10.1093/restud/rdad018), preguntan cuánto puede desviarse la trayectoria contrafactual de tendencias paralelas sin cambiar la conclusión sustantiva.
+
+El efecto queda **parcialmente identificado** cuando se permiten desviaciones postratamiento sujetas a restricciones transparentes. Dos familias útiles son:
+
+- **Magnitud relativa:** la violación posterior no puede exceder cierto múltiplo \(M\) de las desviaciones observadas antes del tratamiento.
+- **Suavidad:** limita cuánto puede cambiar de un periodo a otro la pendiente de la diferencia contrafactual.
+
+Para cada valor de la restricción se construyen **conjuntos de confianza** robustos. El *breakdown value* es el grado de desviación a partir del cual una conclusión —por ejemplo, que el efecto es positivo— deja de sostenerse. El valor admisible de \(M\) no debe elegirse para obtener significancia: debe justificarse con conocimiento institucional y con la escala de las variaciones pretratamiento.
+
+Esta extensión es un **análisis de sensibilidad**. HonestDiD no prueba ni repara tendencias paralelas. Su insumo debe ser un *event study* compatible con el diseño y con cohortes de control limpias; no deben entregarse coeficientes de un **TWFE contaminado** por efectos heterogéneos.
+:::
+
 ## El problema principal de TWFE {-}
 
 Suponga que algunas unidades se tratan temprano, otras tarde y otras nunca. La regresión
@@ -436,3 +523,5 @@ Comparar métodos exige armonizar población, grupo de control, horizonte, antic
 - Callaway, B. y Sant’Anna, P. H. C. (2021). “Difference-in-Differences with Multiple Time Periods”.
 - Sun, L. y Abraham, S. (2021). “Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects”.
 - Borusyak, K., Jaravel, X. y Spiess, J. (2024). “Revisiting Event-Study Designs”.
+- Gardner, J. (2022). “Two-stage Differences in Differences”.
+- Rambachan, A. y Roth, J. (2023). “A More Credible Approach to Parallel Trends”. *Review of Economic Studies*, 90(5), 2555–2591. [doi:10.1093/restud/rdad018](https://doi.org/10.1093/restud/rdad018).
