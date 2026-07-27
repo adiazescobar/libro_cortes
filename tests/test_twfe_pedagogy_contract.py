@@ -265,13 +265,25 @@ def test_parallel_trends_method_matrix_gives_each_estimator_a_complete_row():
     }
     for method, aliases in method_aliases.items():
         alias_pattern = "|".join(re.escape(alias) for alias in aliases)
-        assert not re.search(
+        false_claims = [
             rf"\b(?:{alias_pattern})\b[^.\n]{{0,160}}"
             r"\b(?:elimina|resuelve|corrige|garantiza|no requiere)\b"
             r"[^.\n]{0,120}\btendencias?\s+paralelas?\b",
-            text,
-            re.IGNORECASE,
-        ), f"{method} no puede presentarse como si eliminara tendencias paralelas."
+            rf"\b(?:{alias_pattern})\b[^.\n]{{0,120}}"
+            r"\b(?:permite|logra|puede)\b[^.\n]{0,80}"
+            r"\b(?:identificar|identifica|estimar|estima|recuperar|recupera)\b"
+            r"[^.\n]{0,80}\bsin\s+tendencias?\s+paralelas?\b",
+            rf"\btendencias?\s+paralelas?\b[^.\n]{{0,100}}"
+            r"\bno\s+(?:son|es|resultan)\s+necesari\w*\b"
+            rf"[^.\n]{{0,100}}\b(?:{alias_pattern})\b",
+            rf"\bsin\s+tendencias?\s+paralelas?\b[^.\n]{{0,100}}"
+            r"\b(?:identificar|identifica|estimar|estima|recuperar|recupera)\b"
+            rf"[^.\n]{{0,100}}\b(?:{alias_pattern})\b",
+        ]
+        assert not any(re.search(pattern, text, re.IGNORECASE) for pattern in false_claims), (
+            f"{method} no puede presentarse como si eliminara o hiciera "
+            "innecesarias las tendencias paralelas."
+        )
 
 
 def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
@@ -311,12 +323,12 @@ def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
             "eventstudyinteract debe preceder las matrices e(b)/e(V), que a su vez "
             "deben preceder honestdid."
         )
-        between_source_and_matrices = block[source.end():v_matrix.start()]
+        between_source_and_honestdid = block[source.end():honest.start()]
         assert not re.search(
-            r"\b(?:xtreg|reghdfe|areg|regress|didregress)\b",
-            between_source_and_matrices,
+            r"\b(?:xtreg|reghdfe|areg|regress|reg|didregress|xtdidregress)\b",
+            between_source_and_honestdid,
             re.IGNORECASE,
-        ), "Ninguna estimación TWFE puede sobrescribir e(b)/e(V) antes de honestdid."
+        ), "Ninguna estimación TWFE puede contaminar la secuencia compatible antes de honestdid."
         compatible_blocks.append(block)
     assert compatible_blocks, (
         "El ejemplo honestdid debe conservar el orden eventstudyinteract → e(b)/e(V) "
@@ -340,6 +352,25 @@ def test_parallel_trends_advanced_box_explains_rambachan_roth_sensitivity():
         practice,
         re.IGNORECASE,
     ), "HonestDiD no elimina ni repara automáticamente el supuesto."
+    assert not re.search(
+        r"\bhonestdid\b\s+(?!no\b)(?:puede\s+)?"
+        r"(?:reparar|corregir|arreglar|eliminar|validar|verificar)\b",
+        practice,
+        re.IGNORECASE,
+    ), "Una advertencia correcta no permite afirmar que HonestDiD puede reparar o validar."
+    assert not re.search(
+        r"\bhonestdid\b\s+(?!no\b)(?:puede\s+)?"
+        r"(?:ser|servir|funcionar|constituir|actuar|permitir)\b[^.\n]{0,120}"
+        r"\b(?:prueba|validaci\w*|verificaci\w*|reparaci\w*)\b",
+        practice,
+        re.IGNORECASE,
+    ), "HonestDiD no puede describirse como una prueba, validación o reparación."
+    assert not re.search(
+        r"\bhonestdid\b[^.\n]{0,160}\b(?:pero|sin embargo|aunque)\b"
+        r"[^.\n]{0,100}\b(?:puede|permite|repara|corrige|valida|verifica)\b",
+        practice,
+        re.IGNORECASE,
+    ), "Una advertencia sobre HonestDiD no puede contradecirse en la misma oración."
 
 
 def test_exam_questions_are_exact_and_closed():
