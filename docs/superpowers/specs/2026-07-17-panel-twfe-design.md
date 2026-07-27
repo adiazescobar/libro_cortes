@@ -53,6 +53,42 @@ La comparación conjunta solo colocará en una misma figura parámetros y horizo
 - Las tendencias específicas por grupo no se presentan como reparación automática de tendencias paralelas; pueden absorber efectos, extrapolar una forma funcional injustificada y cambiar el estimando.
 - La inspección de pretrends se presenta como diagnóstico, no como prueba definitiva de tendencias paralelas.
 
+### Tendencias paralelas en los estimadores modernos
+
+La revisión debe contener una sección propia, anterior al mapa de comandos, con tres niveles:
+
+1. **Supuesto causal:** tendencias paralelas se formula sobre resultados potenciales no tratados; no es una igualdad de resultados observados ni una propiedad que el estimador moderno garantice.
+2. **Grupo de comparación:** el supuesto cambia según se usen nunca tratados, no-aún tratados, una cohorte de control o *stayers* bajo un tratamiento de referencia.
+3. **Diagnóstico:** coeficientes pretratamiento, placebos y pruebas conjuntas informan sobre algunas desviaciones observables, pero no verifican el contrafactual postratamiento y pueden tener poca potencia.
+
+El capítulo debe comparar explícitamente:
+
+| Método | Tendencia paralela relevante | Control y matiz |
+|---|---|---|
+| TWFE 2×2/simultáneo | cambio medio de (Y(D=0)) tratado–control | nunca tratados; requiere además no anticipación |
+| `csdid` | tendencias paralelas para cada (ATT(g,t)), incondicionales o condicionales en covariables pretratamiento | nunca o no-aún tratados; el supuesto debe sostenerse para la comparación elegida |
+| `eventstudyinteract` | evolución contrafactual de cada cohorte respecto de la cohorte de control | nunca o última cohorte; los coeficientes IW corrigen contaminación, no tendencias divergentes |
+| `did_imputation` | modelo correcto para (Y(D=0)) en observaciones no tratadas, típicamente FE de unidad/tiempo y covariables | la extrapolación del modelo no tratado debe ser válida para las celdas tratadas |
+| `did2s` | primera etapa correctamente especificada para el resultado no tratado | estimar la primera etapa solo con no tratadas evita contaminación, pero no corrige una tendencia contrafactual mal modelada |
+| `did_multiplegt_dyn` | tendencias comparables entre *switchers* y controles con tratamiento de referencia estable, condicionadas en historias relevantes | debe considerarse tratamiento reversible, dinámica, no anticipación y soporte de *stayers* |
+
+La práctica debe mostrar para cada método: supuesto, población, grupo de control, comando de diagnóstico/placebo disponible, lectura correcta y limitación.
+
+### Lectura avanzada: Rambachan y Roth
+
+Incluir un recuadro de lectura avanzada sobre Rambachan y Roth (2023), “A More Credible Approach to Parallel Trends”, *Review of Economic Studies*, 90(5), 2555–2591, DOI `10.1093/restud/rdad018`.
+
+El recuadro debe explicar que:
+
+- el método no exige tendencias paralelas exactas;
+- restringe cuánto pueden diferir las violaciones postratamiento de las diferencias de tendencias pretratamiento;
+- bajo esas restricciones el parámetro queda parcialmente identificado;
+- produce conjuntos de confianza robustos y análisis de sensibilidad;
+- el valor de la restricción debe justificarse con conocimiento económico, no elegirse para conservar significancia;
+- no convierte un event study TWFE contaminado en una entrada válida: primero se requiere una estimación dinámica compatible con el diseño.
+
+La práctica puede incluir `honestdid` como extensión opcional, con instalación `ssc install honestdid` y un ejemplo basado en coeficientes/covarianza de un event study compatible. Debe rotularse como análisis de sensibilidad, no como prueba de tendencias paralelas ni como estimador que elimina el supuesto.
+
 ### Código Stata
 
 - Usar `id`, nunca `i`, como identificador del panel y nivel de clustering en el DGP canónico.
