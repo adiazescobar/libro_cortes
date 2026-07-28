@@ -1,0 +1,4 @@
+estimator,estimate,true_effect,max_weight,n_used
+"HT, muestra completa",1.516514856264222,2,329.2190659117931,4000
+"Hajek, muestra completa",1.787955103616307,2,329.2190659117931,4000
+"Hajek, soporte 0.05-0.95",1.935700539376739,2,329.2190659117931,2720

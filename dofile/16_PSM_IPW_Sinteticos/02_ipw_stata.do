@@ -1,226 +1,214 @@
 /*
-Título: IPW (Inverse Probability Weighting) en Stata
-Autor: Ana María Díaz Escobar
-Fecha: 2026-04-23
-
-Objetivos:
-  1. Estimar propensity scores para construir ponderadores IPW.
-  2. Comparar IPW manual con teffects ipw.
-  3. Diagnosticar soporte común y pesos extremos.
-
-Datos requeridos: base6.dta en esta carpeta o en dofile/16_PSM_IPW_Sinteticos/
-Paquetes requeridos: ninguno adicional (teffects viene con Stata 13+)
+IPW en Stata: resultados canónicos para la clase empírica
+Datos: base6.dta
+Semilla: 1298
 */
 
+version 19
 clear all
-set seed 1298
 set more off
-set linesize 100
+set seed 1298
 
-* Resolver ruta de datos sin depender de un computador específico
 capture confirm file "base6.dta"
 if _rc {
     capture confirm file "dofile/16_PSM_IPW_Sinteticos/base6.dta"
     if !_rc cd "dofile/16_PSM_IPW_Sinteticos"
 }
-capture confirm file "base6.dta"
-if _rc {
-    di as error "No se encontró base6.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
-    exit 601
+confirm file "base6.dta"
+capture mkdir "results"
+capture log close
+log using "ipw_demo.log", text replace
+
+use "base6.dta", clear
+global Xmust personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre
+drop if missing(D, y2, personas, orden_n, ocupado_jefe, educa_jefe, ingresos_hogar_jefe, hombre)
+
+quietly count
+scalar N = r(N)
+quietly count if D == 1
+scalar NT = r(N)
+quietly summarize D, meanonly
+scalar pD = r(mean)
+
+quietly summarize y2 if D == 1, meanonly
+scalar raw1 = r(mean)
+quietly summarize y2 if D == 0, meanonly
+scalar raw0 = r(mean)
+scalar rawdiff = raw1 - raw0
+
+logit D $Xmust
+predict double ps, pr
+assert ps > 0 & ps < 1
+
+gen double w_ate = D/ps + (1-D)/(1-ps)
+gen double w_att = D + (1-D)*ps/(1-ps)
+gen double w_ate_stab = D*pD/ps + (1-D)*(1-pD)/(1-ps)
+
+gen double ht1_ate_i = D*y2/ps
+gen double ht0_ate_i = (1-D)*y2/(1-ps)
+quietly summarize ht1_ate_i, meanonly
+scalar ht1_ate = r(mean)
+quietly summarize ht0_ate_i, meanonly
+scalar ht0_ate = r(mean)
+scalar ht_ate = scalar(ht1_ate) - scalar(ht0_ate)
+
+quietly summarize y2 [aw=1/ps] if D == 1, meanonly
+scalar hajek1_ate = r(mean)
+quietly summarize y2 [aw=1/(1-ps)] if D == 0, meanonly
+scalar hajek0_ate = r(mean)
+scalar hajek_ate = hajek1_ate - hajek0_ate
+
+gen double ht1_att_i = D*y2
+gen double ht0_att_i = (1-D)*ps*y2/(1-ps)
+quietly summarize ht1_att_i, meanonly
+scalar ht1_att = r(sum)/NT
+quietly summarize ht0_att_i, meanonly
+scalar ht0_att = r(sum)/NT
+scalar ht_att = scalar(ht1_att) - scalar(ht0_att)
+
+quietly summarize y2 if D == 1, meanonly
+scalar hajek1_att = r(mean)
+quietly summarize y2 [aw=ps/(1-ps)] if D == 0, meanonly
+scalar hajek0_att = r(mean)
+scalar hajek_att = hajek1_att - hajek0_att
+
+tempname estimates
+postfile `estimates' str28 estimator str4 estimand double estimate se using "results/ipw_estimates.dta", replace
+post `estimates' ("Diferencia cruda") ("ATE") (scalar(rawdiff)) (.)
+post `estimates' ("HT manual") ("ATE") (scalar(ht_ate)) (.)
+post `estimates' ("Hajek manual") ("ATE") (scalar(hajek_ate)) (.)
+post `estimates' ("HT manual") ("ATT") (scalar(ht_att)) (.)
+post `estimates' ("Hajek manual") ("ATT") (scalar(hajek_att)) (.)
+
+foreach target in ate atet {
+    local label = cond("`target'" == "ate", "ATE", "ATT")
+    quietly teffects ipw (y2) (D $Xmust, logit), `target'
+    matrix B = e(b)
+    matrix V = e(V)
+    post `estimates' ("teffects ipw") ("`label'") (B[1,1]) (sqrt(V[1,1]))
+
+    quietly teffects aipw (y2 $Xmust) (D $Xmust, logit), `target'
+    matrix B = e(b)
+    matrix V = e(V)
+    post `estimates' ("teffects aipw") ("`label'") (B[1,1]) (sqrt(V[1,1]))
+
+    quietly teffects ipwra (y2 $Xmust) (D $Xmust, logit), `target'
+    matrix B = e(b)
+    matrix V = e(V)
+    post `estimates' ("teffects ipwra") ("`label'") (B[1,1]) (sqrt(V[1,1]))
 }
+postclose `estimates'
+preserve
+use "results/ipw_estimates.dta", clear
+export delimited using "results/ipw_estimates.csv", replace
+restore
 
-* Cargar datos
-use base6.dta, clear
-
-* teffects viene con Stata 13+
-
-* Definir variables
-global X "personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre"
-
-log using ipw_demo.log, replace
-
-***============================================***
-* 1. ESTADÍSTICAS DESCRIPTIVAS
-***============================================***
-
-summ D y2 $X
-tab D
-
-***============================================***
-* 2. ESTIMAR EL PROPENSITY SCORE
-***============================================***
-
-* Método 1: Probit
-probit D $X
-predict double ps_probit, pr
-
-* Método 2: Logit (alternativa)
-logit D $X
-predict double ps_logit, pr
-
-summ ps_probit ps_logit
-
-***============================================***
-* 3. VERIFICAR SOPORTE COMÚN
-***============================================***
-
-* Los pesos IPW pueden explotar si hay poco soporte común
-* Regla: descartar obs donde P(X) < 0.1 o P(X) > 0.9
-
-gen soporte = (ps_probit > 0.1 & ps_probit < 0.9)
-summ soporte
-
-twoway (kdensity ps_probit if D==1, lcolor(blue) lwidth(medium)) ///
-       (kdensity ps_probit if D==0, lcolor(red) lwidth(medium)), ///
-       legend(label(1 "Tratados") label(2 "Controles")) ///
-       title("Propensity Score: Verificar Soporte Común") ///
-       xtitle("P(D=1|X)") ytitle("Densidad") ///
-       xline(0.1, lpattern(dash) lcolor(gray)) ///
-       xline(0.9, lpattern(dash) lcolor(gray))
-
-graph export ipw_support.png, replace
-
-***============================================***
-* 4. CONSTRUIR PESOS IPW (Horvitz-Thompson)
-***============================================***
-
-* IPW para ATT (Average Treatment Effect on the Treated)
-gen double w_att = cond(D==1, 1, ps_probit/(1-ps_probit))
-
-* IPW para ATE (Average Treatment Effect)
-gen double w_ate = cond(D==1, 1/ps_probit, 1/(1-ps_probit))
-
-* IPW normalizado
-bys D: gen double w_att_norm = w_att / sum(w_att)
-bys D: gen double w_ate_norm = w_ate / sum(w_ate)
-
-summ w_att w_ate
-summ w_att if D==0
-summ w_ate if D==0
-
-***============================================***
-* 5. MÉTODOS PARA USAR LOS PESOS IPW EN REGRESIÓN
-***============================================***
-
-***--- 5a. Ponderación en OLS (estimación manual) ---***
-
-* ATT simple: comparación de medias ponderadas
-mean y2 if D==1
-mean y2 if D==0 [pw=w_att]
-
-* Diferencia
-quietly summ y2 if D==1, meanonly
-scalar mu1_att = r(mean)
-quietly summ y2 [aw=w_att] if D==0, meanonly
-scalar mu0_att = r(mean)
-scalar diff_att = mu1_att - mu0_att
-di "ATT manual IPW: " diff_att
-
-***--- 5b. Ponderación en Regresión OLS ---***
-
-* Especificación simple
-reg y2 D [pw=w_att], robust
-estimates store ipw_att_simple
-
-reg y2 D [pw=w_ate], robust
-estimates store ipw_ate_simple
-
-* Con controles adicionales
-reg y2 D $X [pw=w_att], robust
-estimates store ipw_att_controls
-
-reg y2 D $X [pw=w_ate], robust
-estimates store ipw_ate_controls
-
-***--- 5c. Comando nativo: teffects ipw ---***
-
-* teffects ipw es un one-stop-shop para IPW con SE correctos
-* Sintaxis: teffects ipw (outcome) (treatment vars, probit/logit), atet/ate vce(robust)
-
-teffects ipw (y2) (D $X, probit), atet vce(robust)
-estimates store teff_ipw_att
-
-teffects ipw (y2) (D $X, probit), ate vce(robust)
-estimates store teff_ipw_ate
-
-* Guardar pesos generados por teffects
-capture predict double ps_teff, ps
-if _rc != 0 {
-    gen double ps_teff = ps_probit
+tempname diagnostics
+postfile `diagnostics' str16 weight str10 statistic double value using "results/ipw_weight_diagnostics.dta", replace
+foreach w in w_ate w_att w_ate_stab {
+    quietly summarize `w', detail
+    post `diagnostics' ("`w'") ("p1") (r(p1))
+    post `diagnostics' ("`w'") ("p50") (r(p50))
+    post `diagnostics' ("`w'") ("p99") (r(p99))
+    post `diagnostics' ("`w'") ("max") (r(max))
+    quietly summarize `w', meanonly
+    scalar sumw = r(sum)
+    gen double `w'_sq = `w'^2
+    quietly summarize `w'_sq, meanonly
+    scalar ess = sumw^2/r(sum)
+    post `diagnostics' ("`w'") ("sum") (sumw)
+    post `diagnostics' ("`w'") ("ESS") (ess)
+    drop `w'_sq
 }
+postclose `diagnostics'
+preserve
+use "results/ipw_weight_diagnostics.dta", clear
+export delimited using "results/ipw_weight_diagnostics.csv", replace
+restore
 
-***============================================***
-* 6. COMPARAR ESTIMADORES
-***============================================***
+tempname balance
+postfile `balance' str28 covariate double smd_raw smd_weighted using "results/ipw_balance.dta", replace
+foreach x of global Xmust {
+    quietly summarize `x' if D == 1
+    scalar m1 = r(mean)
+    scalar v1 = r(Var)
+    quietly summarize `x' if D == 0
+    scalar m0 = r(mean)
+    scalar v0 = r(Var)
+    scalar denom = sqrt((v1+v0)/2)
+    scalar smdraw = cond(denom > 0, (m1-m0)/denom, 0)
+    quietly summarize `x' [aw=w_ate] if D == 1
+    scalar wm1 = r(mean)
+    quietly summarize `x' [aw=w_ate] if D == 0
+    scalar wm0 = r(mean)
+    scalar smdw = cond(denom > 0, (wm1-wm0)/denom, 0)
+    post `balance' ("`x'") (smdraw) (smdw)
+}
+postclose `balance'
+preserve
+use "results/ipw_balance.dta", clear
+export delimited using "results/ipw_balance.csv", replace
+restore
 
-estimates table ipw_att_simple ipw_ate_simple ipw_att_controls ipw_ate_controls ///
-               teff_ipw_att teff_ipw_ate, b se
+twoway (kdensity ps if D == 1, lcolor(navy) lwidth(medthick)) (kdensity ps if D == 0, lcolor(maroon) lwidth(medthick)), legend(order(1 "Tratados" 2 "Controles")) title("Soporte del propensity score") xtitle("P(D=1|X)") ytitle("Densidad")
+graph export "ipw_support.png", width(1800) replace
 
-***============================================***
-* 7. VERIFICAR BALANCE CON PESOS IPW
-***============================================***
+histogram w_ate, fraction color(navy%55) title("Distribucion de pesos ATE") xtitle("Peso IPW") ytitle("Fraccion")
+graph export "ipw_weights_dist.png", width(1800) replace
 
-* Balance antes de ponderar
-table D, stat(mean $X)
+preserve
+clear
+set obs 4000
+gen double x = rnormal()
+gen double ps_true = invlogit(-0.2 + 3*x)
+gen byte D = runiform() < ps_true
+gen double tau = 2
+gen double y0 = 1 + x + rnormal()
+gen double y = y0 + tau*D
+logit D x
+predict double ps_hat, pr
+gen double w = D/ps_hat + (1-D)/(1-ps_hat)
+gen double h1 = D*y/ps_hat
+gen double h0 = (1-D)*y/(1-ps_hat)
+quietly summarize h1, meanonly
+scalar sim_ht = r(mean)
+quietly summarize h0, meanonly
+scalar sim_ht = sim_ht-r(mean)
+quietly summarize y [aw=1/ps_hat] if D == 1, meanonly
+scalar sim_hajek = r(mean)
+quietly summarize y [aw=1/(1-ps_hat)] if D == 0, meanonly
+scalar sim_hajek = sim_hajek-r(mean)
+quietly count if ps_hat >= .05 & ps_hat <= .95
+scalar n_overlap = r(N)
+quietly summarize y [aw=1/ps_hat] if D == 1 & inrange(ps_hat,.05,.95), meanonly
+scalar sim_trim = r(mean)
+quietly summarize y [aw=1/(1-ps_hat)] if D == 0 & inrange(ps_hat,.05,.95), meanonly
+scalar sim_trim = sim_trim-r(mean)
+quietly summarize w, detail
+scalar sim_wmax = r(max)
 
-* Balance después de ponderar (muestra el balance "esperado")
-table D, stat(sum w_att)
+twoway (scatter w ps_hat if w < 100, msize(tiny) mcolor(navy%25)) (function y=20, range(0 1) lcolor(maroon) lpattern(dash)), legend(off) title("Positividad debil: pesos y propensity score") xtitle("Propensity score estimado") ytitle("Peso ATE (vista hasta 100)")
+graph export "ipw_positivity_weak.png", width(1800) replace
 
-* Calcular pesos standardizados para análisis
-summ w_att, meanonly
-scalar mean_w_att = r(mean)
-gen double w_att_std = w_att / mean_w_att if D==0
-replace w_att_std = 1 if D==1
+clear
+set obs 3
+gen str24 estimator = ""
+gen double estimate = .
+gen double true_effect = 2
+gen double max_weight = sim_wmax
+gen double n_used = 4000
+replace estimator = "HT, muestra completa" in 1
+replace estimate = sim_ht in 1
+replace estimator = "Hajek, muestra completa" in 2
+replace estimate = sim_hajek in 2
+replace estimator = "Hajek, soporte 0.05-0.95" in 3
+replace estimate = sim_trim in 3
+replace n_used = n_overlap in 3
+export delimited using "results/ipw_positivity_simulation.csv", replace
+restore
 
-***============================================***
-* 8. ANÁLISIS DE SENSIBILIDAD: VARIACIÓN DE BANDWIDTH
-***============================================***
-
-* Los pesos IPW pueden ser muy grandes si PS es muy cercano a 0 o 1
-* Opción 1: Trim (descartar observaciones extremas)
-
-gen w_att_trim = w_att if soporte==1
-
-* Opción 2: Capping (limitar el peso máximo)
-gen w_att_cap = min(w_att, 5)
-
-* Opción 3: Stabilized IPW (dividir por P(D=1))
-summ D, meanonly
-scalar p_treated = r(mean)
-gen double w_att_stab = cond(D==1, 1, ps_probit/(1-ps_probit)) / p_treated
-
-summ w_att w_att_trim w_att_cap w_att_stab
-
-***============================================***
-* 9. GRÁFICAS DE LOS PESOS
-***============================================***
-
-histogram w_att if D==0, title("Distribución de Pesos IPW (ATT, D=0)") ///
-          xtitle("Peso") ytitle("Frecuencia")
-graph export ipw_weights_dist.png, replace
-
-***============================================***
-* 10. ESTIMACIONES FINALES CON DIFERENTES ESPECIFICACIONES
-***============================================***
-
-eststo clear
-
-* Naive (sin controlar selección)
-eststo: reg y2 D, robust
-
-* OLS con controles
-eststo: reg y2 D $X, robust
-
-* IPW con pesos ATT
-eststo: reg y2 D $X [pw=w_att], robust
-
-* IPW con pesos ATE
-eststo: reg y2 D $X [pw=w_ate], robust
-
-* Comando integrado teffects
-eststo: teffects ipw (y2) (D $X, probit), atet vce(robust)
-
-esttab, b(%9.4f) se(%9.4f) star(* 0.10 ** 0.05 *** 0.01) ///
-        title("Comparación de Estimadores")
+teffects ipw (y2) (D $Xmust, logit), ate
+tebalance summarize
+tebalance density personas
 
 log close
