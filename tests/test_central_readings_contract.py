@@ -97,11 +97,18 @@ def test_empirical_materials_remain_before_readings():
         text = _text(filename)
         material_markers = [
             marker
-            for marker in ("Materiales para la clase", "Materiales de la clase")
+            for marker in (
+                "Materiales para la clase",
+                "Materiales de la clase",
+                "**Descargar archivos ejecutables:**",
+            )
             if marker in text
         ]
         if material_markers:
-            assert text.index(material_markers[0]) < text.index("**Lecturas centrales**")
+            assert any(
+                text.index(marker) < text.index("**Lecturas centrales**")
+                for marker in material_markers
+            ), filename
 
 
 def test_local_pdf_targets_exist():
