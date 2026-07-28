@@ -7,7 +7,7 @@ ROOT = base.ROOT
 THEORY = ROOT / "15-IPW.Rmd"
 PRACTICE = ROOT / "16-PSM_IPW_SinteticosConsolidado.Rmd"
 DOFILE = ROOT / "dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do"
-PRIVATE_KEY = ROOT / "claves_privadas/15_IPW_clave.md"
+PRIVATE_KEY = ROOT.parent / "claves_privadas/15_IPW_clave.md"
 DRAFT = ROOT / "17-SyntheticControls-DRAFT.Rmd"
 RESULTS = ROOT / "dofile/16_PSM_IPW_Sinteticos/results"
 
@@ -62,7 +62,8 @@ def test_practice_starts_with_materials_then_readings():
     text = _read(PRACTICE)
     materials = text.index("## Materiales para la clase")
     readings = text.index("**Lecturas centrales**")
-    assert materials < readings < 5000
+    goals = text.index("**Metas de aprendizaje**")
+    assert materials < readings < goals < 5000
     assert "02_ipw_stata.do" in text
     assert "base6.dta" in text
 
@@ -105,6 +106,7 @@ def test_public_questions_and_private_key_contract():
     for label in ["IPW-T1", "IPW-T2", "IPW-T3", "IPW-S1", "IPW-S2", "IPW-S3", "IPW-S4"]:
         assert label in key
     assert PRIVATE_KEY.name not in _read(ROOT / "_bookdown.yml")
+    assert ROOT not in PRIVATE_KEY.parents
     assert "solución" not in combined.lower()
 
 
@@ -138,3 +140,22 @@ def test_canonical_result_files_exist():
         "ipw_positivity_simulation.csv",
     ]:
         assert (RESULTS / filename).is_file(), filename
+
+
+def test_positivity_simulation_reports_scenario_specific_precision():
+    import csv
+
+    path = RESULTS / "ipw_positivity_simulation.csv"
+    with path.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert list(rows[0]) == [
+        "estimator",
+        "estimate",
+        "se",
+        "true_effect",
+        "max_weight",
+        "ess",
+        "n_used",
+    ]
+    assert float(rows[2]["max_weight"]) < float(rows[1]["max_weight"])
+    assert float(rows[2]["ess"]) > float(rows[1]["ess"])

@@ -1,15 +1,5 @@
 # Ponderación por probabilidad inversa — Clase empírica {#psm-ipw-sinteticos}
 
-::: {.boxinfo}
-**Metas de aprendizaje**
-
-- Construir manualmente pesos ATE y ATT a partir del propensity score.
-- Distinguir los estimadores Horvitz–Thompson y Hájek en resultados reales.
-- Auditar soporte, balance, concentración de pesos y tamaño efectivo de muestra.
-- Comparar `teffects ipw`, `teffects aipw` y `teffects ipwra`.
-- Reconocer cuándo la positividad débil obliga a cambiar el diseño y la población objetivo.
-:::
-
 ## Materiales para la clase {-}
 
 Descarga estos archivos antes de comenzar:
@@ -23,6 +13,16 @@ Descarga estos archivos antes de comenzar:
 
 - [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
 - [Cunningham — capítulo 5: Matching and Subclassification](https://mixtape.scunning.com/05-matching_and_subclassification)
+:::
+
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Construir manualmente pesos ATE y ATT a partir del propensity score.
+- Distinguir Horvitz–Thompson y Hájek en resultados reales.
+- Auditar soporte, balance, concentración de pesos y tamaño efectivo de muestra.
+- Comparar `teffects ipw`, `teffects aipw` y `teffects ipwra`.
+- Reconocer cuándo la positividad débil obliga a cambiar el diseño y la población objetivo.
 :::
 
 ```{r ipw-load-results, include=FALSE}
@@ -39,7 +39,7 @@ stopifnot(
   identical(names(ipw_est), c("estimator", "estimand", "estimate", "se")),
   identical(names(ipw_diag), c("weight", "statistic", "value")),
   identical(names(ipw_bal), c("covariate", "smd_raw", "smd_weighted")),
-  identical(names(ipw_sim), c("estimator", "estimate", "true_effect", "max_weight", "n_used")),
+  identical(names(ipw_sim), c("estimator", "estimate", "se", "true_effect", "max_weight", "ess", "n_used")),
   nrow(ipw_est) == 11, nrow(ipw_bal) == 6, nrow(ipw_sim) == 3
 )
 ```
@@ -105,10 +105,18 @@ knitr::kable(diag_wide[, c("weight", "p1", "p50", "p99", "max", "sum", "ESS")],
              caption = "Diagnóstico de pesos generado por Stata")
 ```
 
-```text
-Peso ATE: máximo = 3.819; ESS = 3,930 de 4,000
-Peso ATT: máximo = 2.803; ESS = 3,872 de 4,000
-ATE estabilizado: máximo = 1.947; ESS = 3,933 de 4,000
+```{r ipw-diagnostics-output, echo=FALSE, results='asis'}
+cat("```text\n")
+cat(sprintf("Peso ATE: máximo = %.3f; ESS = %s de 4,000\n",
+            diag_wide$max[diag_wide$weight == "w_ate"],
+            format(round(diag_wide$ESS[diag_wide$weight == "w_ate"]), big.mark = ",")))
+cat(sprintf("Peso ATT: máximo = %.3f; ESS = %s de 4,000\n",
+            diag_wide$max[diag_wide$weight == "w_att"],
+            format(round(diag_wide$ESS[diag_wide$weight == "w_att"]), big.mark = ",")))
+cat(sprintf("ATE estabilizado: máximo = %.3f; ESS = %s de 4,000\n",
+            diag_wide$max[diag_wide$weight == "w_ate_stab"],
+            format(round(diag_wide$ESS[diag_wide$weight == "w_ate_stab"]), big.mark = ",")))
+cat("```\n")
 ```
 
 La cercanía entre tamaño nominal y ESS confirma que ninguna observación domina. Los pesos estabilizados cambian la escala, no la concentración relativa dentro de cada brazo ni el soporte disponible.
@@ -151,11 +159,14 @@ knitr::kable(manual[, c("estimator", "estimand", "estimate")],
              caption = "Cálculos manuales exportados por Stata")
 ```
 
-```text
-ATE HT manual       = 0.3277
-ATE Hájek manual    = 0.3278
-ATT HT manual       = 0.3320
-ATT Hájek manual    = 0.3322
+```{r ipw-manual-output, echo=FALSE, results='asis'}
+value_of <- function(method, target) manual$estimate[manual$estimator == method & manual$estimand == target]
+cat("```text\n")
+cat(sprintf("ATE HT manual       = %.4f\n", value_of("HT manual", "ATE")))
+cat(sprintf("ATE Hájek manual    = %.4f\n", value_of("Hajek manual", "ATE")))
+cat(sprintf("ATT HT manual       = %.4f\n", value_of("HT manual", "ATT")))
+cat(sprintf("ATT Hájek manual    = %.4f\n", value_of("Hajek manual", "ATT")))
+cat("```\n")
 ```
 
 Aquí HT y Hájek son casi idénticos porque las sumas de pesos están cerca de sus masas objetivo. Esa coincidencia es un resultado de esta muestra, no una identidad algebraica.
@@ -183,10 +194,12 @@ knitr::kable(bal_show,
              caption = "Balance ATE antes y después de ponderar")
 ```
 
-```text
-Mayor diferencia estandarizada cruda:       0.145
-Mayor diferencia estandarizada ponderada:   0.003
-Observaciones usadas:                       4,000
+```{r ipw-balance-output, echo=FALSE, results='asis'}
+cat("```text\n")
+cat(sprintf("Mayor diferencia estandarizada cruda:       %.3f\n", max(abs(ipw_bal$smd_raw))))
+cat(sprintf("Mayor diferencia estandarizada ponderada:   %.3f\n", max(abs(ipw_bal$smd_weighted))))
+cat("Observaciones usadas:                       4,000\n")
+cat("```\n")
 ```
 
 El balance ponderado es excelente en las seis covariables incluidas. Esto muestra que el modelo logra su objetivo observable; no descarta confusión no observada ni justifica haber omitido un confusor importante.
@@ -241,22 +254,18 @@ El efecto verdadero es 2 para todas las unidades, pero el tratamiento se vuelve 
 ```{r ipw-simulation-table, echo=FALSE}
 sim_show <- ipw_sim
 sim_show$estimate <- round(sim_show$estimate, 3)
+sim_show$se <- round(sim_show$se, 3)
 sim_show$true_effect <- round(sim_show$true_effect, 1)
 sim_show$max_weight <- round(sim_show$max_weight, 1)
+sim_show$ess <- round(sim_show$ess)
 knitr::kable(sim_show,
-             col.names = c("Estimador", "Estimación", "Efecto verdadero", "Peso máximo", "N usado"),
+             col.names = c("Estimador", "Estimación", "EE descriptivo", "Efecto verdadero", "Peso máximo", "ESS", "N usado"),
              caption = "Simulación de positividad débil generada por Stata")
 ```
 
-```text
-Peso máximo ATE                  = 329.2
-HT, muestra completa             = 1.517
-Hájek, muestra completa          = 1.788
-Hájek, soporte [0.05, 0.95]      = 1.936; N = 2,720
-Efecto verdadero                 = 2.000
-```
+La tabla usa errores estándar robustos descriptivos para las regresiones ponderadas de Hájek; el de HT proviene de la dispersión de su contribución observacional tratando el propensity score estimado como fijo. Sirven para mostrar la pérdida de precisión, no para reemplazar la inferencia completa de una aplicación.
 
-La restricción de soporte acerca la estimación al valor verdadero en esta corrida, pero elimina 1,280 observaciones. Por ello la última fila ya describe el efecto para la población con $0.05\leq\hat e(X)\leq0.95$, no automáticamente el ATE original. No escogemos el umbral porque “da mejor”: reportamos el cambio de población y justificamos el diseño.
+La muestra completa tiene un peso máximo de 329.2, ESS de solo 288 y errores estándar grandes. Al restringir soporte, el peso máximo baja a 19.9 y el ESS sube a 1,364, aun cuando quedan 2,720 observaciones. La estimación se acerca al valor verdadero en esta corrida, pero la última fila ya describe el efecto para la población con $0.05\leq\hat e(X)\leq0.95$, no automáticamente el ATE original. No escogemos el umbral porque “da mejor”: reportamos el cambio de población y justificamos el diseño.
 
 ::: {.boxwarning}
 Una estimación más cercana al valor verdadero en una simulación no convierte el trimming en una regla universal. En datos reales no observamos el efecto verdadero y el umbral no debe elegirse mirando el resultado.

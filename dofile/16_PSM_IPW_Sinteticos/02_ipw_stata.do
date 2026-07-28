@@ -170,39 +170,62 @@ predict double ps_hat, pr
 gen double w = D/ps_hat + (1-D)/(1-ps_hat)
 gen double h1 = D*y/ps_hat
 gen double h0 = (1-D)*y/(1-ps_hat)
+gen double ht_score = h1-h0
 quietly summarize h1, meanonly
 scalar sim_ht = r(mean)
 quietly summarize h0, meanonly
-scalar sim_ht = sim_ht-r(mean)
-quietly summarize y [aw=1/ps_hat] if D == 1, meanonly
-scalar sim_hajek = r(mean)
-quietly summarize y [aw=1/(1-ps_hat)] if D == 0, meanonly
-scalar sim_hajek = sim_hajek-r(mean)
-quietly count if ps_hat >= .05 & ps_hat <= .95
-scalar n_overlap = r(N)
-quietly summarize y [aw=1/ps_hat] if D == 1 & inrange(ps_hat,.05,.95), meanonly
-scalar sim_trim = r(mean)
-quietly summarize y [aw=1/(1-ps_hat)] if D == 0 & inrange(ps_hat,.05,.95), meanonly
-scalar sim_trim = sim_trim-r(mean)
+scalar sim_ht = scalar(sim_ht)-r(mean)
+quietly summarize ht_score
+scalar sim_ht_se = r(sd)/sqrt(r(N))
+quietly regress y D [pw=w], vce(robust)
+scalar sim_hajek = _b[D]
+scalar sim_hajek_se = _se[D]
 quietly summarize w, detail
 scalar sim_wmax = r(max)
+scalar sim_sumw = r(sum)
+gen double w_sq = w^2
+quietly summarize w_sq, meanonly
+scalar sim_ess = scalar(sim_sumw)^2/r(sum)
+quietly count if ps_hat >= .05 & ps_hat <= .95
+scalar n_overlap = r(N)
+quietly regress y D [pw=w] if inrange(ps_hat,.05,.95), vce(robust)
+scalar sim_trim = _b[D]
+scalar sim_trim_se = _se[D]
+quietly summarize w if inrange(ps_hat,.05,.95), detail
+scalar sim_trim_wmax = r(max)
+scalar sim_trim_sumw = r(sum)
+quietly summarize w_sq if inrange(ps_hat,.05,.95), meanonly
+scalar sim_trim_ess = scalar(sim_trim_sumw)^2/r(sum)
 
 twoway (scatter w ps_hat if w < 100, msize(tiny) mcolor(navy%25)) (function y=20, range(0 1) lcolor(maroon) lpattern(dash)), legend(off) title("Positividad debil: pesos y propensity score") xtitle("Propensity score estimado") ytitle("Peso ATE (vista hasta 100)")
 graph export "ipw_positivity_weak.png", width(1800) replace
 
 clear
 set obs 3
-gen str24 estimator = ""
+gen str30 estimator = ""
 gen double estimate = .
+gen double se = .
 gen double true_effect = 2
-gen double max_weight = sim_wmax
-gen double n_used = 4000
+gen double max_weight = .
+gen double ess = .
+gen double n_used = .
 replace estimator = "HT, muestra completa" in 1
 replace estimate = sim_ht in 1
+replace se = sim_ht_se in 1
+replace max_weight = sim_wmax in 1
+replace ess = sim_ess in 1
+replace n_used = 4000 in 1
 replace estimator = "Hajek, muestra completa" in 2
 replace estimate = sim_hajek in 2
+replace se = sim_hajek_se in 2
+replace max_weight = sim_wmax in 2
+replace ess = sim_ess in 2
+replace n_used = 4000 in 2
 replace estimator = "Hajek, soporte 0.05-0.95" in 3
 replace estimate = sim_trim in 3
+replace se = sim_trim_se in 3
+replace max_weight = sim_trim_wmax in 3
+replace ess = sim_trim_ess in 3
 replace n_used = n_overlap in 3
 export delimited using "results/ipw_positivity_simulation.csv", replace
 restore
