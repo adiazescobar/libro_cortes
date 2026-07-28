@@ -1,0 +1,89 @@
+# Controles sintéticos — Borrador preservado
+
+::: {.boxwarning}
+**Estado editorial:** material extraído del antiguo capítulo consolidado PSM–IPW–controles sintéticos. No está aprobado académicamente y no debe incluirse en `_bookdown.yml` ni publicarse antes de su revisión.
+:::
+
+## Materiales preservados {-}
+
+- [Do-file de controles sintéticos](dofile/16_PSM_IPW_Sinteticos/03_synthetic_controls_stata.do)
+- [Datos del caso Prop 99](dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta)
+- [Serie original](dofile/16_PSM_IPW_Sinteticos/synth_raw_series.png)
+- [Brecha estimada](dofile/16_PSM_IPW_Sinteticos/synth_effect_gap.png)
+- [Comparación de ventanas](dofile/16_PSM_IPW_Sinteticos/synth_window_comparison.png)
+
+## Motivación preservada {-}
+
+El método de control sintético se usa cuando el tratamiento afecta a una unidad agregada y existe un conjunto de donantes. Ejemplos heredados:
+
+- efecto de Pico y Placa sobre la calidad del aire de Bogotá;
+- efecto de la Proposición 99 sobre el consumo de tabaco en California;
+- efecto del Brexit sobre el PIB del Reino Unido.
+
+Si no existe un control natural suficientemente parecido al tratado durante el periodo pretratamiento, se construye uno como combinación ponderada de unidades no tratadas. Los pesos satisfacen
+
+$$\sum_{j=2}^{J+1}w_j=1,\qquad w_j\geq 0,$$
+
+y el resultado sintético es
+
+$$\widehat Y_{1t}(D=0)=\sum_{j=2}^{J+1}w_jY_{jt}.$$
+
+## Código heredado {-}
+
+```stata
+clear all
+use synth_smoking.dta
+xtset state year
+
+twoway (line y year if state==1, lcolor(blue) lwidth(medium)) ///
+       (line y year if state!=1, lcolor(gray%30)), ///
+       xline(1988, lpattern(dash) lcolor(red)) ///
+       legend(label(1 "California") label(2 "Otros estados"))
+```
+
+La base contiene una unidad tratada, un conjunto de estados donantes, periodos pretratamiento anteriores a 1988 y periodos posteriores. El resultado es consumo de cigarrillos per cápita.
+
+El capítulo antiguo también mostraba una comparación simplificada con el promedio de controles:
+
+```stata
+bys state: egen y_pre = mean(y) if year < 1988
+collapse (mean) y, by(year treated)
+reshape wide y, i(year) j(treated)
+rename y0 y_controls
+rename y1 y_calif
+gen diff = y_calif-y_controls
+gen post = year>=1988
+```
+
+```stata
+twoway (line diff year, lcolor(blue) lwidth(medium)), ///
+       xline(1988, lpattern(dash)) ///
+       title("California frente al control")
+summarize diff if post==1
+```
+
+## Sensibilidad preservada {-}
+
+### Ajuste pretratamiento {-}
+
+El material heredado proponía inspeccionar si la brecha tenía una tendencia anterior a la intervención:
+
+```stata
+reg diff year if year<1988
+```
+
+### Placebos {-}
+
+También proponía reasignar una fecha ficticia:
+
+```stata
+gen placebo_1980 = year>=1980
+reg diff c.year##i.placebo_1980
+```
+
+Estas rutinas se preservan, pero requieren revisión: el capítulo definitivo deberá trabajar con el estimador sintético real, ajuste pretratamiento, placebos *in space* e *in time*, razón RMSPE y sensibilidad al donor pool, no únicamente con el promedio simple de controles.
+
+## Referencias preservadas {-}
+
+- Abadie, A. y Gardeazabal, J. (2003). “The Economic Costs of Conflict: A Case Study of the Basque Country”, *American Economic Review*.
+- Abadie, A., Diamond, A. y Hainmueller, J. (2010). “Synthetic Control Methods for Comparative Case Studies”, *Journal of the American Statistical Association*.
