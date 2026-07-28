@@ -10,6 +10,14 @@
 - Elegir un estimador según el parámetro causal de interés.
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 5 (PDF)](lecturas/bernal-pena/capitulo-05.pdf)
+- [Cunningham — capítulo 8: Panel Data](https://mixtape.scunning.com/08-panel_data)
+- [Cunningham — capítulo 9: Difference-in-Differences](https://mixtape.scunning.com/09-difference_in_differences)
+:::
+
 ## Introducción a datos de panel {-}
 
 Un panel sigue las mismas unidades \(i\) durante varios periodos \(t\):

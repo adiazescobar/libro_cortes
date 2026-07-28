@@ -12,6 +12,13 @@
 - Reconocer los experimentos naturales clásicos que inauguraron el método.
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 5 (PDF)](lecturas/bernal-pena/capitulo-05.pdf)
+- [Cunningham — capítulo 9: Difference-in-Differences](https://mixtape.scunning.com/09-difference_in_differences)
+:::
+
 ---
 
 ## Experimentos naturales {-}
