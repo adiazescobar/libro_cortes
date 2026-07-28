@@ -32,6 +32,13 @@ Descarga todos los archivos antes de la clase. El *do-file* de Stata, el script 
 - [Verificación cruzada (`power_verificacion.csv`)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/07_Power/results/power_verificacion.csv)
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 4 (PDF)](https://www.dropbox.com/s/vxpgxt22pvphwx3/Capitulo%204%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Cunningham — capítulo 4: Potential Outcomes](https://mixtape.scunning.com/04-potential_outcomes)
+:::
+
 ```{r power-setup, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(kableExtra)

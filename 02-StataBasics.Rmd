@@ -29,6 +29,13 @@ Al finalizar este capítulo podrás:
 - descargar y ejecutar los archivos de apoyo del capítulo.
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 2 (PDF)](https://www.dropbox.com/s/zsqa2gcbbgdi5i3/Capitulo%202%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Cunningham — capítulo 2: Probability and Regression Review](https://mixtape.scunning.com/02-probability_and_regression)
+:::
+
 ::: {.boxnote}
 Puedes consultar el **Stata Cheat Sheet** aquí: [https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf](https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf)
 :::

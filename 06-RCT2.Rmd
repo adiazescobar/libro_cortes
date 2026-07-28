@@ -34,6 +34,13 @@ En el capítulo anterior formalizamos la teoría de resultados potenciales, la d
 - **Herramienta:** [J-PAL — Power calculations](https://www.povertyactionlab.org/resource/power-calculations)
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 4 (PDF)](https://www.dropbox.com/s/vxpgxt22pvphwx3/Capitulo%204%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Cunningham — capítulo 4: Potential Outcomes](https://mixtape.scunning.com/04-potential_outcomes)
+:::
+
 ```{r setup-cap6, echo=FALSE, message=FALSE, warning=FALSE}
 library(haven)
 library(dplyr)

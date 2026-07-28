@@ -13,6 +13,15 @@ Al terminar este capítulo, el lector podrá:
 
 El recorrido parte de la motivación, pasa por la formulación de preguntas y el marco de resultados potenciales, y termina con las estrategias que permiten aproximar contrafactuales promedio creíbles.
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 2 (PDF)](https://www.dropbox.com/s/zsqa2gcbbgdi5i3/Capitulo%202%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Bernal y Peña — capítulo 3 (PDF)](https://www.dropbox.com/s/837u3ea36r7t5me/Capitulo%203%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Cunningham — capítulo 1: Introduction](https://mixtape.scunning.com/01-introduction)
+- [Cunningham — capítulo 4: Potential Outcomes](https://mixtape.scunning.com/04-potential_outcomes)
+:::
+
 ## Por qué importa la inferencia causal {-}
 
 En su breve y sugerente cuento *Del rigor en la ciencia*, Jorge Luis Borges relata la historia de un imperio en el que los cartógrafos llevaron su arte a un grado de perfección tal que construyeron un mapa a escala 1:1, tan extenso y detallado como el territorio que pretendía representar. Con el tiempo, ese mapa fue olvidado y sus ruinas se confundieron con las del imperio.

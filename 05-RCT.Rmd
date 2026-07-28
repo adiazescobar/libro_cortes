@@ -8,11 +8,17 @@
 - Traducir resultados potenciales a regresiones lineales en cuatro escenarios de diseño
 - Comprender cuándo y por qué incluir controles y estratos
 
-### Lecturas{-}
+### Lecturas complementarias {-}
 
 - **Paper Alert:** [When Should You Adjust Standard Errors for Clustering? (NBER)](https://www.nber.org/papers/w24003)
-- **Teoría:** [Lectura 4. Capítulo 4 Bernal y Peña (PDF)](https://www.dropbox.com/s/vxpgxt22pvphwx3/Capitulo%204%20Bernal%20y%20Pe%C3%B1a.pdf?dl=0)
 
+:::
+
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 4 (PDF)](https://www.dropbox.com/s/vxpgxt22pvphwx3/Capitulo%204%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Cunningham — capítulo 4: Potential Outcomes](https://mixtape.scunning.com/04-potential_outcomes)
 :::
 
 ## Pregunta causal {-}
