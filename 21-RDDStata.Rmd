@@ -34,6 +34,13 @@ ssc install lpdensity   // dependencia de rddensity
 
 Los tres primeros archivos contienen las mismas seis partes (RDN lineal, RDN curvo, ancho de banda, pruebas de robustez, RDB, $Z$ discreta) y producen los mismos resultados. El do-file de clase (`05_rdd_stata_CLASSROOM.do`) es la versión pedagógica que se proyecta en clase: simulación paso a paso con DGP conocido (ATE = 4 para Sharp, ATE = 5 para Fuzzy), comparando OLS, regresiones locales, `rdrobust` e `ivreg2`.
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 8 (PDF)](lecturas/bernal-pena/capitulo-08.pdf)
+- [Cunningham — capítulo 6: Regression Discontinuity](https://mixtape.scunning.com/06-regression_discontinuity)
+:::
+
 ---
 
 # Parte A — RDN con DGP lineal {#parte-a-rdd -}

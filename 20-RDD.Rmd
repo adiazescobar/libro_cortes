@@ -13,6 +13,13 @@
 - Reconocer extensiones útiles: kink design (RKD), donut RD y geographic RD
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 8 (PDF)](lecturas/bernal-pena/capitulo-08.pdf)
+- [Cunningham — capítulo 6: Regression Discontinuity](https://mixtape.scunning.com/06-regression_discontinuity)
+:::
+
 ---
 
 ## La idea de RD {-}
