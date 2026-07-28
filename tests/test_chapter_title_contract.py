@@ -33,6 +33,8 @@ EXPECTED = {
         "Malos controles — Clase empírica",
         "bad-controls-stata",
     ),
+    "13-PSM.Rmd": ("Propensity score matching — Clase teórica", "psm"),
+    "14-PSMStata.Rmd": ("Propensity score matching — Clase empírica", "psm-stata"),
 }
 
 H1 = re.compile(r"^#\s+(.+?)(?:\s+\{#([^}\s]+)[^}]*\})?\s*$")

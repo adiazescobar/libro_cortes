@@ -1,25 +1,20 @@
 /*
-Título: PSM en Stata: Propensity Score Matching - versión de clase
-Autor: Ana María Díaz Escobar
-Fecha: 2026-04-23
+Propensity score matching — Clase empírica
+Ana María Díaz Escobar, Econometría Avanzada
 
-Objetivos:
-  1. Mostrar una secuencia guiada de PSM para discusión en clase.
-  2. Comparar diferencia cruda, NN y kernel matching.
-  3. Interpretar soporte común y balance.
-
-Datos requeridos: base6.dta en esta carpeta o en dofile/16_PSM_IPW_Sinteticos/
-Paquetes requeridos: psmatch2
-
-Nota: no usa set echo on porque en clase puede ocultar/duplicar salida de forma poco estable.
+Objetivo: psmatch2 como flujo principal; teffects psmatch como verificación;
+telasso como extensión de alta dimensión con confusores obligatorios.
+Datos: base6.dta
+Requiere: psmatch2 (SSC) y Stata 17 o superior para telasso.
 */
 
+version 19
 clear all
-set seed 1298
 set more off
 set linesize 100
+set seed 1298
 
-* Resolver ruta de datos sin depender de un computador específico
+* Resolver la ruta desde la raíz del libro o desde la carpeta del do-file
 capture confirm file "base6.dta"
 if _rc {
     capture confirm file "dofile/16_PSM_IPW_Sinteticos/base6.dta"
@@ -27,194 +22,93 @@ if _rc {
 }
 capture confirm file "base6.dta"
 if _rc {
-    di as error "No se encontró base6.dta. Corre este do-file desde su carpeta o desde la raíz del libro."
+    di as error "No se encontró base6.dta. Ejecute desde la raíz del libro o la carpeta del do-file."
     exit 601
 }
 
-* Cargar datos
-use base6.dta, clear
+capture which psmatch2
+if _rc {
+    di as error "Falta psmatch2. Instálelo una vez con: ssc install psmatch2"
+    exit 199
+}
 
-* Definir variables
-global X "personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre"
+capture log close
+log using "psm_classroom.log", replace text
+use "base6.dta", clear
 
-log using psm_classroom.log, replace text
+global Xmust "personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre"
+global Xflex "c.personas#c.personas c.educa_jefe#c.educa_jefe c.ingresos_hogar_jefe#c.ingresos_hogar_jefe i.ocupado_jefe#i.hombre"
 
-***=====================================================***
-* PARTE 1: ESTADÍSTICAS DESCRIPTIVAS
-* ¿Cuán diferentes son los grupos tratado vs control?
-***=====================================================***
-
-di ""
-di ">>> PASO 1: MIRAR LOS DATOS CRUDOS"
-di "¿Cuántos tratados? ¿Cuántos controles? ¿Cuál es la diferencia bruta?"
-di ""
-
+di as text "PASO 1. Definir estimando: ATT = E[Y(D=1)-Y(D=0)|D=1]"
 tab D
-table D, stat(mean y2 y1)
+table D, statistic(count D) statistic(mean y2 personas ocupado_jefe educa_jefe)
+mean y2, over(D)
+lincom _b[c.y2@1.D] - _b[c.y2@0.D]
+scalar diff_raw = r(estimate)
 
-di ""
-di ">>> OBSERVACIÓN: La diferencia cruda en Y2 es:"
-di "    Diferencia = E[Y|D=1] - E[Y|D=0] = 0.330 (aproximadamente)"
-di "    Pero esto NO es el efecto causal: incluye sesgo de selección"
-di ""
-pause Press any key to continue...
+di as text "PASO 2. Estimar propensity score con confusores pretratamiento"
+logit D $Xmust
+predict double pscore, pr
+summarize pscore, detail
 
-***=====================================================***
-* PARTE 2: ESTIMAR EL PROPENSITY SCORE
-* P(D=1|X) = probabilidad de ser tratado dado características
-***=====================================================***
+twoway (kdensity pscore if D==1, lcolor(navy) lwidth(medthick)) ///
+       (kdensity pscore if D==0, lcolor(maroon) lwidth(medthick)), ///
+       legend(order(1 "Tratados" 2 "Controles")) ///
+       title("Soporte común") xtitle("Propensity score") ytitle("Densidad")
+graph export "pscore_distribution.png", replace width(1800)
 
-di ""
-di ">>> PASO 2: ESTIMAR EL PROPENSITY SCORE"
-di "Modelo: logit D = f(personas, orden_n, ocupado_jefe, educa_jefe, ingresos_hogar_jefe, hombre)"
-di ""
-
-logit D $X
-predict double pscore1, pr
-
-di ""
-di ">>> Propensity Score estimado:"
-summ pscore1, detail
-
-pause Press any key to continue...
-
-***=====================================================***
-* PARTE 3: VERIFICAR SOPORTE COMÚN
-* ¿Hay sobreposición entre dist. PS de tratados y controles?
-***=====================================================***
-
-di ""
-di ">>> PASO 3: VERIFICAR SOPORTE COMÚN"
-di "Si hay good overlap, podemos emparejar. Si no, tenemos un problema."
-di ""
-
-twoway (kdensity pscore1 if D==1, lcolor(blue) lwidth(medium) legend(label(1 "Tratados")) title("Soporte Común: Distribuciones del PS")) ///
-       (kdensity pscore1 if D==0, lcolor(red) lwidth(medium) legend(label(2 "Controles"))) ///
-       , legend(label(1 "Tratados (D=1)") label(2 "Controles (D=0)")) ///
-       xtitle("Propensity Score") ytitle("Densidad")
-
-graph export pscore_distribution.png, replace
-di ">>> Gráfica guardada: pscore_distribution.png"
-
-pause Press any key to continue...
-
-***=====================================================***
-* PARTE 4: NEAREST NEIGHBOR (1) SIN REEMPLAZO + SOPORTE COMÚN
-* Emparejar cada tratado con su vecino más cercano
-***=====================================================***
-
-di ""
-di ">>> PASO 4: NEAREST NEIGHBOR (1) SIN REEMPLAZO"
-di "Cada tratado se empareja con el control más cercano en PS"
-di "common = solo usa observaciones en soporte común"
-di ""
-
-* Necesario para NN sin reemplazo
-drawnorm orden
-sort orden
-
-psmatch2 D $X, outcome(y2) n(1) pscore(pscore1) noreplacement common
-di ""
-di ">>> Resultado NN(1):"
-di "    ATT (unmatched) = diferencia cruda"
-di "    ATT (matched) = efecto después de emparejar"
-di ""
-
+di as text "PASO 3. psmatch2 principal: logit, ATT, NN(1), reemplazo, common, ties"
+psmatch2 D $Xmust, outcome(y2) logit neighbor(1) common ties
+scalar att_psm = r(att)
+scalar se_psm  = r(seatt)
+count if D==1 & _support==0
+scalar offsupport = r(N)
 psgraph
-graph export pscore_nn1.png, replace
-di ">>> Gráficas del matching guardadas"
+graph export "psm_support.png", replace width(1800)
+pstest $Xmust, treated(D) both graph
+graph export "psm_balance.png", replace width(1800)
 
-pstest $X, treated(D) both
-di ""
-di ">>> INTERPRETACIÓN pstest:"
-di "    %Bias < 20% es aceptable (vemos si balanceó bien)"
-di ""
-pause Press any key to continue...
+di as text "PASO 4. Sensibilidad a decisiones de matching"
+psmatch2 D $Xmust, outcome(y2) logit neighbor(5) common ties
+scalar att_nn5 = r(att)
+psmatch2 D $Xmust, outcome(y2) logit kernel kerneltype(epan) bwidth(0.06) common
+scalar att_kernel = r(att)
+psmatch2 D $Xmust, outcome(y2) logit neighbor(1) caliper(0.02) common ties
+scalar att_caliper = r(att)
 
-***=====================================================***
-* PARTE 5: NEAREST NEIGHBOR (5) CON REEMPLAZO
-* Usar múltiples vecinos reduce varianza
-***=====================================================***
+di as text "PASO 5. Verificar ATET con teffects psmatch"
+teffects psmatch (y2) (D $Xmust, logit), atet nneighbor(1)
+matrix b_te = e(b)
+matrix V_te = e(V)
+scalar att_teffects = b_te[1,1]
+scalar se_teffects  = sqrt(V_te[1,1])
+estimates store te_psm
 
-di ""
-di ">>> PASO 5: NEAREST NEIGHBOR (5) CON REEMPLAZO"
-di "Usar 5 vecinos en lugar de 1 (reduce varianza)"
-di "ai(4) = errores estándar analíticos de Abadie-Imbens"
-di ""
+di as text "PASO 6. telasso: confusores obligatorios y candidatos flexibles"
+telasso (y2 $Xflex, ainclude($Xmust)) ///
+        (D  $Xflex, ainclude($Xmust)), ///
+        atet selection(plugin) xfolds(5) resample(3) rseed(1298)
+matrix b_lasso = e(b)
+matrix V_lasso = e(V)
+scalar att_telasso = b_lasso[1,1]
+scalar se_telasso  = sqrt(V_lasso[1,1])
+estimates store te_lasso
 
-psmatch2 D $X, outcome(y2) n(5) common ai(4)
-di ""
-di ">>> Comparar: ¿Cambió mucho el ATT? ¿Es robusto?"
-di ""
-pause Press any key to continue...
+di as result "COMPARACIÓN PEDAGÓGICA"
+di as text   "Diferencia cruda         = " as result %7.3f diff_raw
+di as text   "psmatch2 NN(1), ATT      = " as result %7.3f att_psm ///
+    as text "  ES reportado = " as result %7.3f se_psm
+di as text   "psmatch2 NN(5), ATT      = " as result %7.3f att_nn5
+di as text   "psmatch2 kernel, ATT     = " as result %7.3f att_kernel
+di as text   "psmatch2 caliper, ATT    = " as result %7.3f att_caliper
+di as text   "teffects psmatch, ATET   = " as result %7.3f att_teffects ///
+    as text "  ES ajustado = " as result %7.3f se_teffects
+di as text   "telasso, ATET            = " as result %7.3f att_telasso ///
+    as text "  ES robusto  = " as result %7.3f se_telasso
+di as text   "Tratados fuera soporte  = " as result %7.0f offsupport
 
-***=====================================================***
-* PARTE 6: KERNEL MATCHING
-* Usar TODOS los controles, ponderados por cercanía
-***=====================================================***
-
-di ""
-di ">>> PASO 6: KERNEL MATCHING - EPANECHNIKOV"
-di "Usa todos los controles (ponderados por distancia)"
-di "Reduce varianza vs NN, pero menos transparente"
-di ""
-
-psmatch2 D $X, outcome(y2) kernel kerneltype(epan) bwidth(0.06) common
-psgraph
-pstest $X, treated(D) both
-
-di ""
-di ">>> ¿Cambió mucho el ATT comparado a NN(1)?"
-di ""
-pause Press any key to continue...
-
-***=====================================================***
-* PARTE 7: KERNEL MATCHING GAUSSIANO
-* Alternativa: kernel gaussiano en lugar de Epanechnikov
-***=====================================================***
-
-di ""
-di ">>> PASO 7: KERNEL MATCHING - GAUSSIANO"
-di "Alternativa a Epanechnikov"
-di ""
-
-psmatch2 D $X, outcome(y2) kernel kerneltype(normal) bwidth(0.06) common
-di ""
-di ">>> Resultado similar? (prueba robustez)"
-di ""
-pause Press any key to continue...
-
-***=====================================================***
-* PARTE 8: COMANDO NATIVO: teffects psmatch
-* Alternativa Stata 13+ con SE correctos automáticamente
-***=====================================================***
-
-di ""
-di ">>> PASO 8: COMANDO NATIVO teffects psmatch"
-di "Stata 13+: Calcula PS + matching + SE correctos en un paso"
-di ""
-
-teffects psmatch (y2) (D $X, probit), atet
-estimates store att_nn1
-
-di ""
-di ">>> Ventaja: SE correctos (toma en cuenta estimación del PS)"
-di ">>> Desventaja: Menos control sobre detalles del matching"
-di ""
+di as text "Interpretar cercanía, no exigir igualdad mecánica."
+di as text "Balance observado no demuestra CIA."
 
 log close
-
-di ""
-di "=========================================="
-di "RESUMEN PSM CLASSROOM:"
-di "=========================================="
-di "✓ Diferencia bruta (con sesgo):   ~0.33"
-di "✓ NN(1):                          ~0.33 (similar)"
-di "✓ NN(5):                          ~0.33 (similar)"
-di "✓ Kernel:                         ~0.33 (similar)"
-di ""
-di "→ Si los estimadores son similares, es buena señal (robusto)"
-di "→ Si varían mucho, investigar: ¿Buen soporte común?"
-di ""
-di "Log guardado: psm_classroom.log"
-di "=========================================="
+exit
