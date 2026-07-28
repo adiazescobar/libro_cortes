@@ -35,6 +35,11 @@ EXPECTED = {
     ),
     "13-PSM.Rmd": ("Propensity score matching — Clase teórica", "psm"),
     "14-PSMStata.Rmd": ("Propensity score matching — Clase empírica", "psm-stata"),
+    "15-IPW.Rmd": ("Ponderación por probabilidad inversa — Clase teórica", "ipw"),
+    "16-PSM_IPW_SinteticosConsolidado.Rmd": (
+        "Ponderación por probabilidad inversa — Clase empírica",
+        "psm-ipw-sinteticos",
+    ),
 }
 
 H1 = re.compile(r"^#\s+(.+?)(?:\s+\{#([^}\s]+)[^}]*\})?\s*$")

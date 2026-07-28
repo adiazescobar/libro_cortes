@@ -27,7 +27,7 @@ EXPECTED_READINGS = {
     "15-IPW.Rmd": ([6], ["05-matching_and_subclassification"]),
     "16-PSM_IPW_SinteticosConsolidado.Rmd": (
         [6],
-        ["05-matching_and_subclassification", "10-synthetic_control"],
+        ["05-matching_and_subclassification"],
     ),
     "18-IV.Rmd": ([7], ["07-instrumental_variables"]),
     "19-IVStata.Rmd": ([7], ["07-instrumental_variables"]),
@@ -91,7 +91,12 @@ def test_empirical_materials_remain_before_readings():
     empirical = [
         filename
         for filename in EXPECTED_READINGS
-        if "Stata" in filename or filename in {"06-RCT2.Rmd", "07-POWER.Rmd"}
+        if "Stata" in filename
+        or filename in {
+            "06-RCT2.Rmd",
+            "07-POWER.Rmd",
+            "16-PSM_IPW_SinteticosConsolidado.Rmd",
+        }
     ]
     for filename in empirical:
         text = _text(filename)

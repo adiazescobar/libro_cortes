@@ -68,7 +68,7 @@ $$
 
 La diferencia cruda es $0.3325$, pero no la llamamos efecto causal: los grupos presentan selección observable. IPW busca construir una pseudopoblación donde la distribución de esas covariables sea comparable.
 
-## Paso 1: estimar el propensity score {-}
+## Estimar el propensity score {-}
 
 ```stata
 logit D $Xmust
@@ -82,7 +82,7 @@ La primera auditoría no es el coeficiente del logit. Es la superposición de $\
 
 En esta base hay superposición amplia. Esto anticipa pesos moderados, pero no demuestra CIA: solo indica que existen comparaciones observables razonables.
 
-## Paso 2: construir los pesos {-}
+## Construir los pesos {-}
 
 Para ATE ponderamos ambos brazos hacia la población completa; para ATT dejamos peso uno a los tratados y reponderamos los controles hacia ellos.
 
@@ -119,7 +119,7 @@ La cercanía entre tamaño nominal y ESS confirma que ninguna observación domin
 **IPW-S1.** Suponga que el peso ATE máximo fuera 64 y el ESS fuera 420 con 4,000 observaciones. Explique qué problema empírico revelan conjuntamente esas cifras, qué figura examinaría y por qué reportar únicamente el tamaño nominal sería engañoso.
 :::
 
-## Paso 3: Horvitz–Thompson y Hájek a mano {-}
+## Horvitz–Thompson y Hájek a mano {-}
 
 La mecánica debe quedar visible antes de usar `teffects`. Para ATE, Horvitz–Thompson conserva el denominador $N$:
 
@@ -164,7 +164,7 @@ Aquí HT y Hájek son casi idénticos porque las sumas de pesos están cerca de 
 **IPW-S2.** Un compañero obtiene el mismo valor para HT y Hájek y concluye que son el mismo estimador. Use las fórmulas y las sumas de pesos para evaluar esa afirmación. Describa una muestra en la cual esperaríamos una diferencia mayor.
 :::
 
-## Paso 4: balance antes de interpretar el efecto {-}
+## Balance antes de interpretar el efecto {-}
 
 Después de estimar IPW, `tebalance` evalúa el diseño ponderado:
 
@@ -191,7 +191,7 @@ Observaciones usadas:                       4,000
 
 El balance ponderado es excelente en las seis covariables incluidas. Esto muestra que el modelo logra su objetivo observable; no descarta confusión no observada ni justifica haber omitido un confusor importante.
 
-## Paso 5: estimación integrada y doble robustez {-}
+## Estimación integrada y doble robustez {-}
 
 `teffects` incorpora la estimación del propensity score en la inferencia. Ejecutamos cada método para ATE y ATET:
 
@@ -220,7 +220,7 @@ Los tres métodos producen cerca de $0.328$ para ATE y $0.332$ para ATT, con err
 **IPW-S3.** En otra aplicación, `teffects ipw` y `teffects aipw` difieren sustancialmente. Proponga una secuencia de diagnóstico que separe problemas de estimando, muestra, soporte, modelo de tratamiento y modelo de resultado. Indique qué hallazgo impediría interpretar causalmente ambos resultados.
 :::
 
-## Paso 6: una simulación donde la positividad sí importa {-}
+## Una simulación donde la positividad sí importa {-}
 
 Para evitar repetir el problema del semestre pasado —un ejemplo sin la heterogeneidad necesaria para revelar el método— simulamos selección fuerte:
 
