@@ -9,6 +9,13 @@
 - Entender las limitaciones modernas del PSM y las precauciones de inferencia.
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
+- [Cunningham — capítulo 5: Matching and Subclassification](https://mixtape.scunning.com/05-matching_and_subclassification)
+:::
+
 ---
 
 ## Del emparejamiento exacto a un puntaje escalar {-}

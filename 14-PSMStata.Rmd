@@ -26,6 +26,13 @@ help psmatch2
 
 `pstest` y `psgraph` se instalan con el mismo paquete.
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
+- [Cunningham — capítulo 5: Matching and Subclassification](https://mixtape.scunning.com/05-matching_and_subclassification)
+:::
+
 ## Pregunta causal y estimando {-}
 
 La práctica pregunta: **¿cuál es el efecto del tratamiento sobre quienes efectivamente lo recibieron?** El estimando principal es

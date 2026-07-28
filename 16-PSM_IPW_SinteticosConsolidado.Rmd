@@ -12,6 +12,14 @@
 - Realizar análisis de sensibilidad a variables no observadas
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
+- [Cunningham — capítulo 5: Matching and Subclassification](https://mixtape.scunning.com/05-matching_and_subclassification)
+- [Cunningham — capítulo 10: Synthetic Control](https://mixtape.scunning.com/10-synthetic_control)
+:::
+
 ---
 
 ## Parte I: Propensity Score Matching (PSM) {#psm-sec}
@@ -567,4 +575,3 @@ do "03_synthetic_controls_stata.do"
 ### Synthetic Control
 - **Abadie & Gardeazabal (2003)** — "The economic costs of conflict: the case of the Basque Country", *Journal of International Economics*
 - **Abadie, Diamond & Hainmueller (2010)** — "Synthetic Control Methods for Comparative Case Studies", *Journal of the American Statistical Association*
-

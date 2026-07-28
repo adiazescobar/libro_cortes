@@ -10,6 +10,13 @@
 - Entender por qué la dimensionalidad conduce al propensity score.
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
+- [Cunningham — capítulo 5: Matching and Subclassification](https://mixtape.scunning.com/05-matching_and_subclassification)
+:::
+
 ## De la aleatorización a la selección en observables {-}
 
 En un experimento aleatorizado, la asignación genera grupos comparables en promedio. En un estudio observacional, las personas eligen o reciben el tratamiento por razones que también pueden afectar sus resultados. La diferencia de medias observada mezcla entonces el efecto causal con selección:
