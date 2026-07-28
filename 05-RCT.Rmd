@@ -1,4 +1,4 @@
-# Experimentos aleatorizados — Clase teórica
+# Experimentos aleatorizados — Clase teórica {#experimentos-aleatorizados-clase-teorica}
 
 ::: {.boxinfo}
 **Objetivo del capítulo**

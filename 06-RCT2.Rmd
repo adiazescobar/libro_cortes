@@ -1,4 +1,4 @@
-# Experimentos aleatorizados — Clase empírica
+# Experimentos aleatorizados — Clase empírica {#experimentos-aleatorizados-clase-empirica}
 
 ## Materiales para la clase {-}
 

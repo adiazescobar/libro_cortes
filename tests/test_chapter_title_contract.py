@@ -13,8 +13,14 @@ EXPECTED = {
         "Parámetros causales — Clase empírica",
         "parametros-causales-stata",
     ),
-    "05-RCT.Rmd": ("Experimentos aleatorizados — Clase teórica", None),
-    "06-RCT2.Rmd": ("Experimentos aleatorizados — Clase empírica", None),
+    "05-RCT.Rmd": (
+        "Experimentos aleatorizados — Clase teórica",
+        "experimentos-aleatorizados-clase-teorica",
+    ),
+    "06-RCT2.Rmd": (
+        "Experimentos aleatorizados — Clase empírica",
+        "experimentos-aleatorizados-clase-empirica",
+    ),
     "07-POWER-Teoria.Rmd": (
         "Poder estadístico — Clase teórica",
         "poder-estadistico-teoria",

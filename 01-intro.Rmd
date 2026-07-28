@@ -1,4 +1,4 @@
-# Introducción a la inferencia causal
+# Introducción a la inferencia causal {#introduccion-a-la-inferencia-causal}
 
 ## Objetivos y mapa del capítulo {-}
 
