@@ -221,7 +221,7 @@ Antes del tratamiento, $Y_{1t}=Y_{1t}(D=0)$ bajo no anticipación. El **RMSPE pr
 $$
 RMSPE_{1}^{pre}=
 \sqrt{\frac{1}{T_0}\sum_{t=1}^{T_0}
-\widehat\alpha_{1t}^{,2}}.
+\widehat\alpha_{1t}^{2}}.
 $$
 
 Para $T_1$ periodos posteriores,
@@ -229,7 +229,7 @@ Para $T_1$ periodos posteriores,
 $$
 RMSPE_{1}^{post}=
 \sqrt{\frac{1}{T_1}\sum_{t=T_0+1}^{T_0+T_1}
-\widehat\alpha_{1t}^{,2}}.
+\widehat\alpha_{1t}^{2}}.
 $$
 
 La razón
@@ -253,7 +253,7 @@ Un placebo *in space* reasigna ficticiamente el tratamiento, una por una, a unid
 
 La pregunta es comparativa: ¿la ruptura de la unidad verdaderamente tratada es inusual frente a rupturas obtenidas donde no ocurrió la intervención? Mostrar las brechas placebo ayuda a reconocer si el método produce separaciones grandes de manera generalizada.
 
-### Comparabilidad y la regla (5\times) {-}
+### Comparabilidad y la regla $5\times$ {-}
 
 Una unidad placebo con ajuste anterior extremadamente malo no constituye una comparación informativa para una tratada bien ajustada. Por eso puede presentarse, además del conjunto completo, una comparación restringida a unidades que satisfacen
 
@@ -283,7 +283,7 @@ donde $\mathcal E$ es el conjunto elegible. El “1” cuenta a la unidad tratad
 
 El placebo *in time* fija una fecha ficticia anterior a la intervención real y reestima el diseño usando únicamente información disponible antes de esa fecha ficticia. Si se pretende evaluar 2010 como placebo, los predictores, la selección de $V$ y la estimación de $W$ no pueden usar datos de 2010 en adelante. De lo contrario, el ejercicio contiene fuga de información.
 
-Una brecha importante inmediatamente después de la fecha falsa debilita la interpretación de que la ruptura observada es exclusiva de la intervención real. Una ausencia de brecha es tranquilizadora, pero no prueba no anticipación ni elimina la posibilidad de un shock concurrente en la fecha verdadera. El placebo temporal complementa; no sustituye, los placebos espaciales.
+Una brecha importante inmediatamente después de la fecha falsa debilita la interpretación de que la ruptura observada es exclusiva de la intervención real. Una ausencia de brecha es tranquilizadora, pero no prueba no anticipación ni elimina la posibilidad de un shock concurrente en la fecha verdadera. El placebo temporal complementa; no sustituye a los placebos espaciales.
 
 ### Leave-one-out {-}
 
