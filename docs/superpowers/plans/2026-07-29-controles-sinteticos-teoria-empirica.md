@@ -200,9 +200,9 @@ xtset state_id year
 - [ ] **Step 3: Estimar California sintética con tratamiento desde 1989 y conservar la salida nativa.**
 
 ```stata
-synth cigsale lnincome beer age15to24 retprice ///
+synth cigsale lnincome beer(1984(1)1988) age15to24 retprice ///
     cigsale(1975) cigsale(1980) cigsale(1988), ///
-    trunit(3) trperiod(1989) xperiod(1972(1)1988) ///
+    trunit(3) trperiod(1989) xperiod(1980(1)1988) ///
     keep(results/california_synth_native.dta) replace
 ```
 

@@ -1,8 +1,8 @@
 state_id,state,weight
 1,Alabama,0
 2,Arkansas,0
-4,Colorado,.291
-5,Connecticut,.097
+4,Colorado,.356
+5,Connecticut,.083
 6,Delaware,0
 7,Georgia,0
 8,Idaho,0
@@ -18,7 +18,7 @@ state_id,state,weight
 18,Missouri,0
 19,Montana,0
 20,Nebraska,0
-21,Nevada,.243
+21,Nevada,.217
 22,New Hampshire,0
 23,New Mexico,0
 24,North Carolina,0
@@ -31,7 +31,7 @@ state_id,state,weight
 31,South Dakota,0
 32,Tennessee,0
 33,Texas,0
-34,Utah,.369
+34,Utah,.344
 35,Vermont,0
 36,Virginia,0
 37,West Virginia,0

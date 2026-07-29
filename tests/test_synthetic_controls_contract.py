@@ -72,7 +72,15 @@ def test_theory_covers_identification_support_and_inference():
 
 def test_dofile_uses_real_synth_for_canonical_estimate():
     do = read(DOFILE)
-    for marker in ["synth cigsale", "trunit(3)", "trperiod(1989)", "synth_weights.csv", "synth_predictor_balance.csv", "synth_paths.csv", "synth_rmspe.csv"]:
+    normalized = re.sub(r"\s+", " ", re.sub(r"\s*///\s*", " ", do))
+    canonical_command = (
+        "synth cigsale lnincome beer(1984(1)1988) age15to24 retprice "
+        "cigsale(1975) cigsale(1980) cigsale(1988), trunit(3) "
+        "trperiod(1989) xperiod(1980(1)1988) "
+        "keep(results/california_synth_native.dta) replace"
+    )
+    assert canonical_command in normalized
+    for marker in ["synth_weights.csv", "synth_predictor_balance.csv", "synth_paths.csv", "synth_rmspe.csv"]:
         assert marker in do, marker
 
 
