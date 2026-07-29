@@ -1,6 +1,7 @@
 from pathlib import Path
 import csv
 import math
+import re
 import subprocess
 
 import test_power_pedagogy_contract as base
@@ -21,6 +22,26 @@ def read(path):
 def rows(name):
     with (RESULTS / name).open(encoding="utf-8", newline="") as handle:
         return list(csv.DictReader(handle))
+
+
+def private_answer_phrases(key, labels):
+    phrases = []
+    for label in labels:
+        start = key.index(label)
+        end = min(
+            (key.index(other) for other in labels if key.index(other) > start),
+            default=len(key),
+        )
+        section = key[start:end]
+        answer = re.search(
+            r"(?im)^\\s*(?:[-*]\\s+)?(?:\\*\\*)?Respuesta esperada(?:\\*\\*)?\\s*:\\s*(.+)$",
+            section,
+        )
+        assert answer, label
+        phrase = re.sub(r"\\s+", " ", answer.group(1)).strip()
+        assert len(phrase) >= 20, label
+        phrases.append(phrase)
+    return phrases
 
 
 def test_pair_is_inserted_before_iv_with_stable_anchors():
@@ -70,24 +91,22 @@ def test_private_key_stays_outside_repository():
         assert theory.count(label) == 0, label
         assert key.count(label) == 1, label
 
-    private_markers = [
-        "Uso exclusivo de la profesora y el monitor",
-        "Respuesta esperada",
-        "Criterio de calificación",
-    ]
-    assert all(marker in key for marker in private_markers)
+    assert "Uso exclusivo de la profesora y el monitor" in key
+    assert key.count("Respuesta esperada") == len(theory_labels + practice_labels)
+    assert key.count("Criterio de calificación") == len(theory_labels + practice_labels)
+    private_markers = private_answer_phrases(key, theory_labels + practice_labels)
     tracked = subprocess.run(
         ["git", "ls-files", "-z"], cwd=ROOT, check=True, capture_output=True
     ).stdout.decode("utf-8").split("\0")
-    candidates = [ROOT / "_bookdown.yml", *ROOT.glob("*.Rmd"), *ROOT.glob("*.html")]
-    docs = ROOT / "docs"
-    if docs.exists():
-        candidates.extend(path for path in docs.rglob("*") if path.is_file())
-    contents = {
-        str(path.relative_to(ROOT)): path.read_text(encoding="utf-8", errors="ignore")
-        for path in candidates
-        if path.is_file()
-    }
+    contents = {}
+    for relative in tracked:
+        path = ROOT / relative
+        if not path.is_file():
+            continue
+        try:
+            contents[relative] = path.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
     base._assert_no_private_exposure(
         [path for path in tracked if path], contents, private_markers
     )
