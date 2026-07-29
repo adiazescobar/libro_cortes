@@ -202,7 +202,7 @@ xtset state_id year
 ```stata
 synth cigsale lnincome beer(1984(1)1988) age15to24 retprice ///
     cigsale(1975) cigsale(1980) cigsale(1988), ///
-    trunit(3) trperiod(1989) xperiod(1980(1)1988) ///
+    trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
     keep(results/california_synth_native.dta) replace
 ```
 
@@ -218,7 +218,7 @@ y
 predictor,treated,synthetic
 ```
 
-Añadir aserciones Stata `assert weight >= -1e-10` y `assert abs(sum_weight-1)<1e-6` antes de exportar.
+Añadir aserciones Stata `assert weight >= -1e-10` y `assert abs(sum_weight-1)<0.002` antes de exportar; la segunda tolerancia admite únicamente el redondeo a tres decimales de `e(W_weights)` en la versión SSC de `synth`.
 
 - [ ] **Step 5: Reconstruir la trayectoria con los pesos y verificarla contra la salida nativa.** Combinar los pesos con el panel donante, calcular `manual_synthetic=sum(weight*cigsale)` por año, unir con California y con `_Y_synthetic` de `california_synth_native.dta`, y exigir:
 

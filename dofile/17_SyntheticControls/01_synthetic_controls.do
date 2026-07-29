@@ -53,7 +53,7 @@ graph export "synth_raw_series.png", replace width(1800)
 
 synth cigsale lnincome beer(1984(1)1988) age15to24 retprice ///
     cigsale(1975) cigsale(1980) cigsale(1988), ///
-    trunit(3) trperiod(1989) xperiod(1980(1)1988) ///
+    trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
     keep(results/california_synth_native.dta) replace
 
 tempname weights_mat balance_mat
@@ -72,7 +72,7 @@ preserve
     drop _merge
     assert weight >= -1e-10
     egen double sum_weight = total(weight)
-    assert abs(sum_weight - 1) < 1e-6
+    assert abs(sum_weight - 1) < 0.002
     drop sum_weight
     order state_id state weight
     sort state_id
