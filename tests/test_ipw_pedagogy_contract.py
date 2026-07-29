@@ -9,7 +9,10 @@ ROOT = base.ROOT
 THEORY = ROOT / "15-IPW.Rmd"
 PRACTICE = ROOT / "16-PSM_IPW_SinteticosConsolidado.Rmd"
 DOFILE = ROOT / "dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do"
-PRIVATE_KEY = ROOT.parent / "claves_privadas/15_IPW_clave.md"
+PRIVATE_KEY = (
+    Path.home()
+    / "Dropbox/ClasesR/EconometriaAV/claves_privadas/15_IPW_clave.md"
+)
 DRAFT = ROOT / "17-SyntheticControls-DRAFT.Rmd"
 RESULTS = ROOT / "dofile/16_PSM_IPW_Sinteticos/results"
 BALANCE_GRAPH = ROOT / "dofile/16_PSM_IPW_Sinteticos/ipw_balance_ate_att.png"
