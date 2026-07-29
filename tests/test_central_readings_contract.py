@@ -29,6 +29,8 @@ EXPECTED_READINGS = {
         [6],
         ["05-matching_and_subclassification"],
     ),
+    "17-SyntheticControls.Rmd": ([6], ["10-synthetic_control"]),
+    "17-SyntheticControlsStata.Rmd": ([6], ["10-synthetic_control"]),
     "18-IV.Rmd": ([7], ["07-instrumental_variables"]),
     "19-IVStata.Rmd": ([7], ["07-instrumental_variables"]),
     "20-RDD.Rmd": ([8], ["06-regression_discontinuity"]),
@@ -96,6 +98,7 @@ def test_empirical_materials_remain_before_readings():
             "06-RCT2.Rmd",
             "07-POWER.Rmd",
             "16-PSM_IPW_SinteticosConsolidado.Rmd",
+            "17-SyntheticControlsStata.Rmd",
         }
     ]
     for filename in empirical:

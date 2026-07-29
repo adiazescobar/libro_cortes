@@ -40,6 +40,14 @@ EXPECTED = {
         "Ponderación por probabilidad inversa — Clase empírica",
         "psm-ipw-sinteticos",
     ),
+    "17-SyntheticControls.Rmd": (
+        "Controles sintéticos — Clase teórica",
+        "controles-sinteticos",
+    ),
+    "17-SyntheticControlsStata.Rmd": (
+        "Controles sintéticos — Clase empírica",
+        "controles-sinteticos-stata",
+    ),
 }
 
 H1 = re.compile(r"^#\s+(.+?)(?:\s+\{#([^}\s]+)[^}]*\})?\s*$")
