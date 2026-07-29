@@ -154,3 +154,36 @@ def test_rmspe_and_placebo_filter_are_reproducible():
     placebos = rows("synth_placebos.csv")
     cutoff = 5 * float(ca["pre_rmspe"])
     assert all((r["eligible"] == "1") == (float(r["pre_rmspe"]) <= cutoff) for r in placebos)
+
+
+def test_placebos_cover_donors_and_leave_one_out_covers_positive_weights():
+    placebos = rows("synth_placebos.csv")
+    assert len({r["unit"] for r in placebos}) == 39
+    assert sum(r["unit"] == "California" for r in placebos) == 1
+    assert all(
+        math.isfinite(float(r[field]))
+        for r in placebos
+        for field in ("pre_rmspe", "post_rmspe", "ratio")
+    )
+    fallback = [r for r in placebos if r["optimization"] != "nested"]
+    assert [(r["unit"], r["optimization"]) for r in fallback] == [
+        ("Utah", "default_fallback_after_rc430")
+    ]
+    assert sum(r["optimization"] == "nested" for r in placebos) == 38
+    positive = {
+        r["state"] for r in rows("synth_weights.csv") if float(r["weight"]) > 1e-8
+    }
+    loo = {r["omitted_state"] for r in rows("synth_leave_one_out.csv")}
+    assert loo == positive
+
+
+def test_time_placebo_and_leave_one_out_gaps_are_complete_and_finite():
+    time_placebo = rows("synth_time_placebo.csv")
+    assert [int(r["year"]) for r in time_placebo] == list(range(1970, 1989))
+    assert all(math.isfinite(float(r["gap"])) for r in time_placebo)
+    leave_one_out = rows("synth_leave_one_out.csv")
+    assert all(math.isfinite(float(r["gap"])) for r in leave_one_out)
+    assert all(
+        len([r for r in leave_one_out if r["omitted_state"] == state]) == 31
+        for state in {r["omitted_state"] for r in leave_one_out}
+    )
