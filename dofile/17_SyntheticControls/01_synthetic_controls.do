@@ -51,8 +51,8 @@ xtline cigsale, overlay legend(off) ///
     xtitle("Año") ytitle("Paquetes per cápita")
 graph export "synth_raw_series.png", replace width(1800)
 
-synth cigsale lnincome beer(1984(1)1988) age15to24 retprice ///
-    cigsale(1975) cigsale(1980) cigsale(1988), ///
+synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
+    cigsale(1988) cigsale(1980) cigsale(1975), ///
     trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
     keep(results/california_synth_native.dta) replace
 
@@ -72,7 +72,7 @@ preserve
     drop _merge
     assert weight >= -1e-10
     egen double sum_weight = total(weight)
-    assert abs(sum_weight - 1) < 0.002
+    assert abs(sum_weight - 1) < 1e-6
     drop sum_weight
     order state_id state weight
     sort state_id
