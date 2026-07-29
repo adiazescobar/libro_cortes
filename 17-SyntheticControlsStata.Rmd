@@ -1,0 +1,573 @@
+# Controles sintéticos — Clase empírica {#controles-sinteticos-stata}
+
+## Materiales para la clase {-}
+
+- [Do-file completo](dofile/17_SyntheticControls/01_synthetic_controls.do)
+- [Datos de Prop 99](dofile/17_SyntheticControls/synth_smoking.dta)
+- [Log completo de Stata](dofile/17_SyntheticControls/01_synthetic_controls.log)
+
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
+- [Cunningham — capítulo 10: Synthetic Control](https://mixtape.scunning.com/10-synthetic_control)
+:::
+
+::: {.boxinfo}
+**Metas de aprendizaje**
+
+- Estimar y reconstruir California sintética.
+- Auditar ajuste, placebos y sensibilidad a donantes.
+- Interpretar la brecha como un estimando dinámico bajo los supuestos del diseño.
+:::
+
+```{r sc-import-results, include=FALSE}
+sc_dir <- "dofile/17_SyntheticControls"
+sc_weights <- read.csv(file.path(sc_dir, "results/synth_weights.csv"), check.names = FALSE)
+sc_balance <- read.csv(file.path(sc_dir, "results/synth_predictor_balance.csv"), check.names = FALSE)
+sc_paths <- read.csv(file.path(sc_dir, "results/synth_paths.csv"), check.names = FALSE)
+sc_rmspe <- read.csv(file.path(sc_dir, "results/synth_rmspe.csv"), check.names = FALSE)
+sc_placebos <- read.csv(file.path(sc_dir, "results/synth_placebos.csv"), check.names = FALSE)
+sc_time_placebo <- read.csv(file.path(sc_dir, "results/synth_time_placebo.csv"), check.names = FALSE)
+sc_loo <- read.csv(file.path(sc_dir, "results/synth_leave_one_out.csv"), check.names = FALSE)
+
+sc_require_columns <- function(data, expected) {
+  stopifnot(identical(names(data), expected))
+}
+
+sc_require_columns(sc_weights, c("state_id", "state", "weight"))
+sc_require_columns(sc_balance, c("predictor", "treated", "synthetic"))
+sc_require_columns(
+  sc_paths,
+  c("year", "treated", "synthetic", "manual_synthetic", "gap", "post")
+)
+sc_require_columns(sc_rmspe, c("unit", "pre_rmspe", "post_rmspe", "ratio"))
+sc_require_columns(
+  sc_placebos,
+  c(
+    "unit_id", "unit", "pre_rmspe", "post_rmspe", "ratio", "eligible",
+    "optimization", "ratio_at_least_california",
+    "eligible_share_ge_california"
+  )
+)
+sc_require_columns(sc_time_placebo, c("year", "gap"))
+sc_require_columns(sc_loo, c("omitted_state", "year", "gap"))
+
+sc_ca_placebo <- sc_placebos[sc_placebos$unit == "California", , drop = FALSE]
+sc_cutoff <- 5 * sc_ca_placebo$pre_rmspe
+sc_n_eligible <- sum(sc_placebos$eligible == 1L)
+sc_n_as_extreme <- sum(
+  sc_placebos$ratio_at_least_california == 1L,
+  na.rm = TRUE
+)
+sc_placebo_share <- sc_n_as_extreme / sc_n_eligible
+sc_positive_weights <- sc_weights[sc_weights$weight > 1e-8, , drop = FALSE]
+sc_n_positive <- nrow(sc_positive_weights)
+sc_n_donors <- nrow(sc_weights)
+sc_n_years <- nrow(sc_paths)
+sc_n_placebos <- length(unique(sc_placebos$unit))
+sc_n_nested <- sum(sc_placebos$optimization == "nested")
+sc_n_ineligible <- sc_n_placebos - sc_n_eligible
+sc_reconstruction_error <- max(abs(sc_paths$synthetic - sc_paths$manual_synthetic))
+sc_fallback <- sc_placebos[sc_placebos$optimization != "nested", , drop = FALSE]
+
+sc_figures <- file.path(
+  sc_dir,
+  c(
+    "synth_raw_series.png",
+    "synth_actual_vs_synthetic.png",
+    "synth_gap.png",
+    "synth_placebo_gaps.png",
+    "synth_rmspe_ratios.png",
+    "synth_time_placebo.png",
+    "synth_leave_one_out.png"
+  )
+)
+
+stopifnot(
+  all(is.finite(sc_weights$weight)),
+  abs(sum(sc_weights$weight) - 1) < 1e-6,
+  min(sc_weights$weight) >= -1e-10,
+  sc_reconstruction_error < 1e-8,
+  length(unique(sc_placebos$unit)) == 39L,
+  nrow(sc_ca_placebo) == 1L,
+  all(sc_placebos$eligible == as.integer(sc_placebos$pre_rmspe <= sc_cutoff)),
+  sc_n_eligible == 33L,
+  sc_n_as_extreme == 1L,
+  abs(unique(sc_placebos$eligible_share_ge_california) - sc_placebo_share) < 1e-12,
+  identical(sc_fallback$unit, "Utah"),
+  identical(sc_fallback$optimization, "default_fallback_after_rc430"),
+  identical(sort(unique(sc_time_placebo$year)), 1970:1988),
+  identical(
+    sort(unique(sc_loo$omitted_state)),
+    sort(sc_positive_weights$state)
+  ),
+  sc_n_positive == 6L,
+  all(table(sc_loo$omitted_state) == 31L),
+  length(sc_figures) == 7L,
+  all(file.exists(sc_figures))
+)
+
+sc_fmt <- function(x, digits = 3) {
+  formatC(x, format = "f", digits = digits, big.mark = ".", decimal.mark = ",")
+}
+
+sc_positive_label <- paste(sc_positive_weights$state, collapse = ", ")
+sc_zero_weights <- sum(sc_weights$weight <= 1e-8)
+sc_top_weight <- sc_positive_weights[which.max(sc_positive_weights$weight), , drop = FALSE]
+sc_balance_1988_gap <- with(
+  sc_balance[sc_balance$predictor == "cigsale(1988)", , drop = FALSE],
+  treated - synthetic
+)
+sc_balance_income_gap <- with(
+  sc_balance[sc_balance$predictor == "lnincome", , drop = FALSE],
+  treated - synthetic
+)
+sc_post_mean_gap <- mean(sc_paths$gap[sc_paths$post == 1L])
+sc_post_min_gap <- min(sc_paths$gap[sc_paths$post == 1L])
+sc_post_max_gap <- max(sc_paths$gap[sc_paths$post == 1L])
+sc_time_post <- sc_time_placebo[sc_time_placebo$year >= 1980, , drop = FALSE]
+sc_time_mean_gap <- mean(sc_time_post$gap)
+sc_time_min_gap <- min(sc_time_post$gap)
+sc_time_max_gap <- max(sc_time_post$gap)
+
+sc_loo_summary <- do.call(
+  rbind,
+  lapply(sort(unique(sc_loo$omitted_state)), function(state) {
+    data <- sc_loo[sc_loo$omitted_state == state, , drop = FALSE]
+    data.frame(
+      omitted_state = state,
+      pre_rmspe = sqrt(mean(data$gap[data$year < 1989]^2)),
+      post_rmspe = sqrt(mean(data$gap[data$year >= 1989]^2)),
+      mean_post_gap = mean(data$gap[data$year >= 1989])
+    )
+  })
+)
+sc_loo_min_mean <- min(sc_loo_summary$mean_post_gap)
+sc_loo_max_mean <- max(sc_loo_summary$mean_post_gap)
+```
+
+---
+
+## Pregunta empírica y datos {-}
+
+La Proposición 99 elevó el impuesto a los cigarrillos en California y financió un
+programa amplio de control del tabaco a partir de 1989. La pregunta es concreta:
+**¿qué trayectoria habría seguido el consumo de cigarrillos en California desde
+1989 si la política no se hubiera implementado?** Solo una unidad recibe el
+tratamiento y no hay un estado que sea, por sí mismo, un control natural obvio.
+
+La base `synth_smoking.dta` es un panel estatal anual de 1970 a 2000. El resultado
+`cigsale` mide ventas de paquetes de cigarrillos per cápita. California es la
+unidad 3; las demás unidades forman el conjunto donante. Los predictores son
+consumo de cerveza (`beer`), ingreso por habitante en logaritmos (`lnincome`),
+precio minorista de los cigarrillos (`retprice`), proporción de población de 15 a
+24 años (`age15to24`) y rezagos seleccionados del resultado.
+
+::: {.boxwarning}
+**Diseño antes de cómputo.** La fecha de intervención, el conjunto donante, los
+predictores y las ventanas se fijan antes de estudiar la brecha posterior. Los
+estados donantes deben permanecer sin exposición directa ni indirecta relevante a
+Prop 99. Un promedio simple de estados no tratados no impone comparabilidad y no
+es un control sintético.
+:::
+
+### Inspección de las series brutas {-}
+
+```{r sc-raw-series, echo=FALSE, out.width='95%', fig.align='center', fig.cap='Ventas estatales de cigarrillos antes y después de 1989. Fuente: salida canónica de Stata.'}
+knitr::include_graphics(file.path(sc_dir, "synth_raw_series.png"))
+```
+
+La dispersión de niveles y tendencias deja claro por qué el promedio simple de
+los otros estados sería una elección arbitraria. El método buscará una combinación
+convexa que reproduzca la historia de California; la figura bruta sirve para
+detectar heterogeneidad, cambios comunes y posibles unidades atípicas, no para
+elegir donantes después de ver el efecto.
+
+## Especificación y estimación en Stata {-}
+
+El do-file declara el panel, fija 1989 como primer periodo tratado y ejecuta la
+estimación canónica:
+
+```stata
+use "synth_smoking.dta", clear
+xtset state_id year
+
+synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
+    cigsale(1988) cigsale(1980) cigsale(1975), ///
+    trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
+    keep(`main_native') replace
+```
+
+Los predictores ordinarios se resumen sobre 1980--1988. La especificación añade
+el promedio de `beer` entre 1984 y 1988 y tres valores del resultado que anclan el
+nivel y la dinámica anterior. `nested` realiza la búsqueda anidada de los pesos de
+predictores; `trunit(3)` identifica California, `trperiod(1989)` fija el inicio y
+`keep()` conserva la trayectoria nativa producida por `synth`.
+
+No se usan observaciones posteriores a 1988 para escoger los pesos. Una vez
+estimados, los mismos pesos se aplican a las ventas de los donantes en todo el
+horizonte 1970--2000.
+
+## ¿Quién construye a California sintética? {-}
+
+El archivo `results/synth_weights.csv` contiene los pesos devueltos por Stata para
+las `r sc_n_donors` unidades donantes. La tabla muestra aquellas con peso estrictamente
+positivo; los `r sc_zero_weights` estados restantes reciben peso numéricamente
+cero.
+
+```{r sc-weights-table, echo=FALSE, results='asis'}
+sc_weights_table <- data.frame(
+  Estado = sc_positive_weights$state,
+  `Identificador Stata` = sc_positive_weights$state_id,
+  Peso = sc_fmt(sc_positive_weights$weight, 3),
+  check.names = FALSE
+)
+knitr::kable(
+  sc_weights_table,
+  align = c("l", "r", "r"),
+  caption = "Pesos positivos de California sintética (salida de Stata)"
+)
+```
+
+Los `r sc_n_positive` donantes con peso positivo son `r sc_positive_label`. El
+mayor peso corresponde a `r sc_top_weight$state` (`r sc_fmt(sc_top_weight$weight, 3)`).
+Los pesos son no negativos y suman `r sc_fmt(sum(sc_weights$weight), 3)`, de
+modo que el contrafactual interpola dentro del conjunto donante. La concentración
+es informativa sobre soporte y dependencia; no reparte el efecto de la política
+entre estados.
+
+## Balance de predictores {-}
+
+Los pesos deben evaluarse por lo que logran reproducir, no por su apariencia. La
+tabla importa directamente `results/synth_predictor_balance.csv` y conserva la
+escala original de cada predictor.
+
+```{r sc-balance-table, echo=FALSE, results='asis'}
+sc_balance_table <- data.frame(
+  Predictor = sc_balance$predictor,
+  California = sc_fmt(sc_balance$treated, 3),
+  Sintética = sc_fmt(sc_balance$synthetic, 3),
+  `Diferencia (tratada - sintética)` = sc_fmt(
+    sc_balance$treated - sc_balance$synthetic,
+    3
+  ),
+  check.names = FALSE
+)
+knitr::kable(
+  sc_balance_table,
+  align = c("l", "r", "r", "r"),
+  caption = "Balance de predictores de California y California sintética"
+)
+```
+
+El balance es cercano, pero no exacto. Por ejemplo, la discrepancia en ventas de
+1988 es `r sc_fmt(sc_balance_1988_gap, 3)` paquetes per cápita y la de ingreso es
+`r sc_fmt(sc_balance_income_gap, 3)` puntos logarítmicos. No conviene ordenar la
+calidad por diferencias absolutas entre filas porque las escalas son distintas.
+La prueba decisiva adicional es si la combinación reproduce la trayectoria
+completa previa, incluidos cambios que no entraron como predictores puntuales.
+
+## Reconstrucción manual del resultado de `synth` {-}
+
+Para auditar el estimador, el do-file combina las ventas observadas de cada
+donante con los pesos exportados:
+
+$$
+\widehat Y^{N}_{California,t}
+=\sum_{j\in\mathcal D}\widehat w_jY_{jt},
+\qquad
+\widehat\alpha_t=Y_{California,t}-\widehat Y^{N}_{California,t}.
+$$
+
+Después compara esa suma con `_Y_synthetic`, la serie nativa de `synth`. El error
+máximo en los `r sc_n_years` años es `r format(sc_reconstruction_error, scientific = TRUE, digits = 2)`,
+menor que la tolerancia de $10^{-8}$. Esta coincidencia verifica que
+la trayectoria publicada se deriva de los pesos mostrados y no de otra rutina.
+
+```{r sc-reconstruction-table, echo=FALSE, results='asis'}
+sc_reconstruction_rows <- sc_paths[
+  sc_paths$year %in% c(min(sc_paths$year), 1988, 1989, max(sc_paths$year)),
+  ,
+  drop = FALSE
+]
+sc_reconstruction_table <- data.frame(
+  Año = sc_reconstruction_rows$year,
+  California = sc_fmt(sc_reconstruction_rows$treated, 4),
+  `Sintética de synth` = sc_fmt(sc_reconstruction_rows$synthetic, 4),
+  `Suma manual ponderada` = sc_fmt(
+    sc_reconstruction_rows$manual_synthetic,
+    4
+  ),
+  check.names = FALSE
+)
+knitr::kable(
+  sc_reconstruction_table,
+  align = c("r", "r", "r", "r"),
+  caption = "Comprobación de la reconstrucción en años seleccionados"
+)
+```
+
+## Trayectoria observada y contrafactual {-}
+
+```{r sc-path-figure, echo=FALSE, out.width='95%', fig.align='center', fig.cap='California observada y California sintética. La línea vertical marca el inicio de Prop 99.'}
+knitr::include_graphics(file.path(sc_dir, "synth_actual_vs_synthetic.png"))
+```
+
+Antes de 1989 las dos series siguen niveles y giros parecidos, con discrepancias
+pequeñas pero visibles. Después, las ventas observadas en California se ubican por
+debajo del contrafactual y la separación aumenta. La distancia vertical en cada
+año es un estimado dinámico, no una comparación antes--después con el propio nivel
+de California.
+
+## La brecha anual y su magnitud {-}
+
+```{r sc-gap-figure, echo=FALSE, out.width='95%', fig.align='center', fig.cap='Brecha anual: California menos California sintética.'}
+knitr::include_graphics(file.path(sc_dir, "synth_gap.png"))
+```
+
+La brecha se define siempre como tratada menos sintética. Su promedio entre 1989 y
+2000 es `r sc_fmt(sc_post_mean_gap, 2)` paquetes per cápita; durante ese horizonte
+va de `r sc_fmt(sc_post_min_gap, 2)` a `r sc_fmt(sc_post_max_gap, 2)`. El signo
+negativo indica menores ventas observadas que las estimadas para California sin
+Prop 99. La lectura causal exige que, en ausencia de la política, la relación que
+reconstruyó el periodo previo hubiera permanecido estable.
+
+```{r sc-post-gap-table, echo=FALSE, results='asis'}
+sc_post_paths <- sc_paths[sc_paths$post == 1L, , drop = FALSE]
+sc_post_table <- data.frame(
+  Año = sc_post_paths$year,
+  California = sc_fmt(sc_post_paths$treated, 2),
+  Sintética = sc_fmt(sc_post_paths$synthetic, 2),
+  Brecha = sc_fmt(sc_post_paths$gap, 2),
+  check.names = FALSE
+)
+knitr::kable(
+  sc_post_table,
+  align = c("r", "r", "r", "r"),
+  caption = "Trayectoria posterior y brecha anual, 1989--2000"
+)
+```
+
+## RMSPE: ajuste antes y después {-}
+
+Para una ventana $\mathcal T$ el error cuadrático medio de predicción es
+
+$$
+RMSPE(\mathcal T)=
+\sqrt{\frac{1}{|\mathcal T|}\sum_{t\in\mathcal T}\widehat\alpha_t^2}.
+$$
+
+```{r sc-rmspe-table, echo=FALSE, results='asis'}
+sc_rmspe_table <- data.frame(
+  Unidad = sc_rmspe$unit,
+  `RMSPE pre` = sc_fmt(sc_rmspe$pre_rmspe, 3),
+  `RMSPE post` = sc_fmt(sc_rmspe$post_rmspe, 3),
+  `Razón post/pre` = sc_fmt(sc_rmspe$ratio, 3),
+  check.names = FALSE
+)
+knitr::kable(
+  sc_rmspe_table,
+  align = c("l", "r", "r", "r"),
+  caption = "RMSPE de la especificación principal"
+)
+```
+
+El RMSPE previo cuantifica el error que ya existía donde el tratamiento aún no
+operaba. La razón post/pre muestra cuánto se deteriora el ajuste después de 1989,
+pero no tiene signo, no mide el efecto promedio y no es por sí sola una prueba de
+identificación. Debe leerse junto con la gráfica de brechas, la escala del
+resultado y las amenazas institucionales al contrafactual.
+
+::: {.boxwarning}
+**El buen ajuste previo es necesario, no suficiente.** Aumenta la credibilidad de
+la reconstrucción porque el método reproduce resultados observados sin usar el
+periodo tratado. No descarta anticipación, interferencia, cambios de medición,
+otras políticas simultáneas ni shocks particulares de California o de sus
+donantes con peso positivo.
+:::
+
+## Placebos espaciales {-}
+
+El do-file reasigna ficticiamente el tratamiento de 1989 a cada una de las
+`r sc_n_placebos`
+unidades, excluye a la unidad placebo de su propio conjunto donante y vuelve a
+estimar la misma especificación. California está incluida como la asignación real.
+
+```{r sc-placebo-gaps-figure, echo=FALSE, out.width='95%', fig.align='center', fig.cap=paste0('Brechas de las ', sc_n_placebos, ' asignaciones espaciales. California aparece destacada.')}
+knitr::include_graphics(file.path(sc_dir, "synth_placebo_gaps.png"))
+```
+
+Mostrar todas las asignaciones evita ocultar unidades con mal ajuste o brechas
+grandes. La nube también revela por qué comparar magnitudes posteriores sin mirar
+el error previo puede ser engañoso: algunas trayectorias placebo ya estaban lejos
+de cero antes de 1989.
+
+### Resultados de todas las asignaciones {-}
+
+```{r sc-placebo-table, echo=FALSE, results='asis'}
+sc_placebo_ranked <- sc_placebos[order(-sc_placebos$ratio), , drop = FALSE]
+sc_placebo_table <- data.frame(
+  Unidad = sc_placebo_ranked$unit,
+  `RMSPE pre` = sc_fmt(sc_placebo_ranked$pre_rmspe, 3),
+  `RMSPE post` = sc_fmt(sc_placebo_ranked$post_rmspe, 3),
+  `Razón post/pre` = sc_fmt(sc_placebo_ranked$ratio, 3),
+  `Elegible 5×` = ifelse(sc_placebo_ranked$eligible == 1L, "Sí", "No"),
+  Optimización = ifelse(
+    sc_placebo_ranked$optimization == "nested",
+    "nested",
+    "default tras rc=430"
+  ),
+  check.names = FALSE
+)
+knitr::kable(
+  sc_placebo_table,
+  align = c("l", "r", "r", "r", "c", "l"),
+  caption = "RMSPE y elegibilidad de todas las asignaciones espaciales"
+)
+```
+
+### Comparación restringida por ajuste previo {-}
+
+La regla predeclarada conserva una asignación si
+
+$$
+RMSPE_i^{pre}\leq 5\,RMSPE_{California}^{pre}.
+$$
+
+El umbral calculado desde los CSV es `r sc_fmt(sc_cutoff, 3)`. Lo cumplen
+`r sc_n_eligible` asignaciones y `r sc_n_ineligible` quedan fuera de la comparación
+restringida. Entre las elegibles, `r sc_n_as_extreme` tiene una razón al menos tan
+grande como la de California. Por tanto, la proporción observada es
+`r sc_n_as_extreme`/`r sc_n_eligible` = `r sc_fmt(sc_placebo_share, 4)`.
+
+```{r sc-rmspe-ratio-figure, echo=FALSE, out.width='95%', fig.align='center', fig.cap='Distribución de las razones RMSPE entre asignaciones que cumplen la regla 5×.'}
+knitr::include_graphics(file.path(sc_dir, "synth_rmspe_ratios.png"))
+```
+
+Esta fracción es **descriptiva**: ubica la asignación real dentro de un conjunto
+finito de ejercicios comparables. Su resolución depende de cuántas asignaciones
+superan el filtro. No es automáticamente un p-valor asintótico ni convierte la
+intercambiabilidad de los estados en un hecho.
+
+### Excepción de optimización para Utah {-}
+
+De las `r sc_n_placebos` estimaciones, `r sc_n_nested` completaron la búsqueda
+`nested`. Para
+`r sc_fallback$unit`, Stata devolvió `rc=430`; el do-file autoriza únicamente en ese
+caso un segundo intento con los mismos predictores, fecha y conjunto donante, pero
+con la optimización por defecto, registrado como
+`r sc_fallback$optimization`. La asignación se conserva y se documenta en la
+tabla, pero esta diferencia algorítmica debe permanecer visible al interpretar la
+comparación placebo.
+
+## Placebo temporal de 1980 sin fuga de información {-}
+
+El placebo temporal pregunta si el procedimiento también produce una ruptura
+cuando se finge que el tratamiento comenzó antes de la intervención real. La reestimación es
+nueva; no reutiliza los pesos estimados con datos hasta 1988:
+
+```stata
+synth cigsale lnincome retprice age15to24 ///
+    cigsale(1979) cigsale(1975) cigsale(1970), ///
+    trunit(3) trperiod(1980) xperiod(1972(1)1979) nested ///
+    keep(`time_native') replace
+```
+
+Todos los predictores y resultados empleados para ajustar los pesos terminan en
+1979. `beer` se elimina porque solo está disponible desde 1984; incluirlo filtraría
+información posterior al tratamiento ficticio. Los años 1980--1988 quedan así
+reservados para evaluar la ruptura placebo.
+
+```{r sc-time-placebo-figure, echo=FALSE, out.width='95%', fig.align='center', fig.cap='Placebo temporal con tratamiento ficticio en 1980 y ajuste limitado a información hasta 1979.'}
+knitr::include_graphics(file.path(sc_dir, "synth_time_placebo.png"))
+```
+
+En la ventana placebo posterior, la brecha media es `r sc_fmt(sc_time_mean_gap, 2)`
+y las brechas van de `r sc_fmt(sc_time_min_gap, 2)` a
+`r sc_fmt(sc_time_max_gap, 2)` paquetes per cápita. La figura permite juzgar signo,
+persistencia y escala, no solo una media. Una ruptura anticipada importante sería
+una alerta; una trayectoria relativamente cercana a cero sería evidencia
+tranquilizadora, pero ninguna de las dos posibilidades verifica por sí sola la
+fecha causal verdadera.
+
+## Sensibilidad leave-one-out {-}
+
+El análisis retira por turno cada donante con peso positivo y vuelve a ejecutar
+`synth`; no renormaliza mecánicamente los pesos originales. Como hay
+`r sc_n_positive` donantes positivos, se obtienen `r sc_n_positive` reestimaciones,
+cada una con `r sc_n_years` años de brechas.
+
+```{r sc-loo-figure, echo=FALSE, out.width='95%', fig.align='center', fig.cap=paste0('Brecha principal y ', sc_n_positive, ' reestimaciones leave-one-out.')}
+knitr::include_graphics(file.path(sc_dir, "synth_leave_one_out.png"))
+```
+
+```{r sc-loo-table, echo=FALSE, results='asis'}
+sc_loo_table <- data.frame(
+  `Donante excluido` = sc_loo_summary$omitted_state,
+  `RMSPE pre` = sc_fmt(sc_loo_summary$pre_rmspe, 3),
+  `RMSPE post` = sc_fmt(sc_loo_summary$post_rmspe, 3),
+  `Brecha post media` = sc_fmt(sc_loo_summary$mean_post_gap, 2),
+  check.names = FALSE
+)
+knitr::kable(
+  sc_loo_table,
+  align = c("l", "r", "r", "r"),
+  caption = "Diagnóstico leave-one-out derivado de las brechas reestimadas"
+)
+```
+
+Las brechas posteriores medias de las reestimaciones van de
+`r sc_fmt(sc_loo_min_mean, 2)` a `r sc_fmt(sc_loo_max_mean, 2)`, frente a
+`r sc_fmt(sc_post_mean_gap, 2)` en la especificación principal. La persistencia del
+signo informa que el patrón no depende de una sola unidad positiva. No prueba que
+los donantes sean válidos, que estén libres de spillovers o que no exista un shock
+concurrente; tampoco evalúa sensibilidad a decisiones distintas sobre predictores
+o fecha.
+
+## Lectura conjunta de la evidencia {-}
+
+La evaluación debe conectar cuatro piezas:
+
+1. **Soporte y balance:** los pesos forman una combinación convexa y reproducen
+   razonablemente los predictores y la historia anterior.
+2. **Estimando:** cada brecha anual compara California observada con su
+   contrafactual sintético; el promedio posterior resume esa trayectoria sin
+   reemplazarla.
+3. **Rareza placebo:** la razón RMSPE de California se compara con asignaciones
+   que tenían capacidad de ajuste previo semejante bajo una regla predeclarada.
+4. **Sensibilidad:** el placebo temporal busca quiebres falsos y el leave-one-out
+   detecta dependencia de donantes positivos.
+
+En conjunto, los diagnósticos pueden hacer más o menos creíble el diseño. No
+sustituyen el argumento institucional sobre no anticipación, ausencia de
+interferencia, medición estable y falta de políticas concurrentes.
+
+## Preguntas de trabajo {-}
+
+::: {.boxexam}
+**SC-S1. Pesos y soporte.** Use la tabla de pesos para identificar todos los
+donantes con contribución positiva. Verifique las restricciones convexas y evalúe
+qué dicen la concentración de pesos y el balance de predictores sobre el soporte.
+Explique también qué interpretación de los pesos sería incorrecta.
+:::
+
+::: {.boxexam}
+**SC-S2. Calidad de ajuste.** Compare el RMSPE previo y posterior, calcule la razón
+post/pre y relacione esos tres objetos con la tabla de balance y la trayectoria.
+¿Qué mide cada uno y por qué el deterioro posterior no basta para establecer
+identificación causal?
+:::
+
+::: {.boxexam}
+**SC-S3. Brecha y estimando.** Defina la brecha con el orden correcto, resuma su
+magnitud entre 1989 y 2000 e interprete su signo y evolución. ¿Bajo qué supuestos
+esa secuencia puede leerse como el efecto dinámico de Prop 99 para California?
+:::
+
+::: {.boxexam}
+**SC-S4. Placebos y sensibilidad.** Reconstruya la regla 5× y la proporción de
+asignaciones elegibles con razón al menos tan grande como California. Luego
+evalúe qué añaden —y qué no demuestran— la excepción de Utah, el placebo temporal
+de 1980 y las `r sc_n_positive` reestimaciones leave-one-out.
+:::
