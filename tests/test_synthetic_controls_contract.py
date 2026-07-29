@@ -70,7 +70,13 @@ def test_theory_covers_identification_support_and_inference():
     assert read(THEORY).count("::: {.boxexam}") == 3
 
 
-def test_practice_uses_real_synth_and_complete_diagnostics():
+def test_dofile_uses_real_synth_for_canonical_estimate():
+    do = read(DOFILE)
+    for marker in ["synth cigsale", "trunit(3)", "trperiod(1989)", "synth_weights.csv", "synth_predictor_balance.csv", "synth_paths.csv", "synth_rmspe.csv"]:
+        assert marker in do, marker
+
+
+def test_practice_covers_complete_diagnostics():
     do = read(DOFILE)
     page = read(PRACTICE)
     for marker in ["synth cigsale", "trunit(3)", "trperiod(1989)", "synth_weights.csv", "synth_predictor_balance.csv", "synth_paths.csv", "synth_rmspe.csv", "synth_placebos.csv", "synth_leave_one_out.csv"]:

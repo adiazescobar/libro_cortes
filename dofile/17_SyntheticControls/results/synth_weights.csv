@@ -1,0 +1,39 @@
+state_id,state,weight
+1,Alabama,0
+2,Arkansas,0
+4,Colorado,.291
+5,Connecticut,.097
+6,Delaware,0
+7,Georgia,0
+8,Idaho,0
+9,Illinois,0
+10,Indiana,0
+11,Iowa,0
+12,Kansas,0
+13,Kentucky,0
+14,Louisiana,0
+15,Maine,0
+16,Minnesota,0
+17,Mississippi,0
+18,Missouri,0
+19,Montana,0
+20,Nebraska,0
+21,Nevada,.243
+22,New Hampshire,0
+23,New Mexico,0
+24,North Carolina,0
+25,North Dakota,0
+26,Ohio,0
+27,Oklahoma,0
+28,Pennsylvania,0
+29,Rhode Island,0
+30,South Carolina,0
+31,South Dakota,0
+32,Tennessee,0
+33,Texas,0
+34,Utah,.369
+35,Vermont,0
+36,Virginia,0
+37,West Virginia,0
+38,Wisconsin,0
+39,Wyoming,0
