@@ -63,6 +63,10 @@ ipw_balance_table <- function(target) {
   out[, -1] <- lapply(out[, -1], round, digits = 3)
   out
 }
+ipw_balance_value <- function(target, variable, measure, column = "weighted") {
+  ipw_bal[ipw_bal$estimand == target & ipw_bal$covariate == variable &
+            ipw_bal$metric == measure, column]
+}
 ```
 
 ## Pregunta causal y estimandos {-}
@@ -262,7 +266,7 @@ cat("```\n")
 
 ![Diferencias estandarizadas absolutas antes y después de ponderar, por estimando](dofile/16_PSM_IPW_Sinteticos/ipw_balance_ate_att.png)
 
-Usamos $|\mathrm{SMD}|=0.10$ como referencia descriptiva, no como prueba estadística ni regla automática. Revisamos cada covariable y las razones de varianza, además de las densidades: el balance del propensity score por sí solo no basta. **El balance observable no demuestra CIA** ni descarta confusión no observada.
+Usamos $|\mathrm{SMD}|=0.10$ como referencia descriptiva, no como prueba estadística ni regla automática. IPW logra aquí un balance excelente de **medias**: el mayor $|\mathrm{SMD}|$ ponderado es menor a 0.01. Sin embargo, no todos los segundos momentos quedan igualmente alineados. Para `ingresos_hogar_jefe`, la razón de varianza pasa de `r round(ipw_balance_value("ATE", "ingresos_hogar_jefe", "variance_ratio", "raw"), 3)` sin ponderar a `r round(ipw_balance_value("ATE", "ingresos_hogar_jefe", "variance_ratio"), 3)` con pesos ATE y `r round(ipw_balance_value("ATT", "ingresos_hogar_jefe", "variance_ratio"), 3)` con pesos ATT. Por eso revisamos cada covariable, sus razones de varianza y sus densidades: balancear las medias o el propensity score no garantiza balance distribucional. **El balance observable no demuestra CIA** ni descarta confusión no observada.
 
 Si persiste desequilibrio, el ciclo es: (1) revisar temporalidad y teoría causal de las covariables; (2) añadir no linealidades o interacciones justificadas al modelo de tratamiento; (3) reestimar el propensity score y los pesos; y (4) repetir soporte, distribución de pesos y balance ATE/ATT. Se escoge la especificación por ese razonamiento y diagnósticos de diseño, **sin mirar el efecto** ni buscar el resultado preferido.
 
@@ -289,7 +293,7 @@ knitr::kable(integrated,
              caption = "Estimadores integrados generados por Stata")
 ```
 
-Los tres métodos producen resultados cercanos: `teffects ipw` estima $`r format(round(ipw_estimate("teffects ipw", "ATE"), 4), nsmall = 4)`$ para ATE y $`r format(round(ipw_estimate("teffects ipw", "ATT"), 4), nsmall = 4)`$ para ATT, con errores estándar de $`r format(round(ipw_estimate("teffects ipw", "ATE", "se"), 4), nsmall = 4)`$ y $`r format(round(ipw_estimate("teffects ipw", "ATT", "se"), 4), nsmall = 4)`$. La estabilidad es coherente con el buen soporte y el balance. AIPW e IPWRA protegen contra la mala especificación de uno de los dos componentes bajo sus condiciones de doble robustez; no protegen contra confusión no observada ni falta de positividad.
+Los tres métodos producen resultados cercanos: `teffects ipw` estima $`r format(round(ipw_estimate("teffects ipw", "ATE"), 4), nsmall = 4)`$ para ATE y $`r format(round(ipw_estimate("teffects ipw", "ATT"), 4), nsmall = 4)`$ para ATT, con errores estándar de $`r format(round(ipw_estimate("teffects ipw", "ATE", "se"), 4), nsmall = 4)`$ y $`r format(round(ipw_estimate("teffects ipw", "ATT", "se"), 4), nsmall = 4)`$. La estabilidad es coherente con el buen soporte y el balance de medias, aunque la auditoría de razones de varianza advierte que persisten diferencias de dispersión. AIPW e IPWRA protegen contra la mala especificación de uno de los dos componentes bajo sus condiciones de doble robustez; no protegen contra confusión no observada ni falta de positividad.
 
 ::: {.boxexam}
 **IPW-S3.** En otra aplicación, una covariable pretratamiento conserva $|\mathrm{SMD}|>0.10$ después de IPW. Proponga una secuencia que separe estimando, muestra, soporte y modelo de tratamiento; describa cómo reespecificaría el propensity score y qué diagnósticos repetiría antes de volver a estimar. Explique por qué no debe elegir la especificación mirando el efecto e indique qué hallazgo impediría interpretar causalmente el resultado.

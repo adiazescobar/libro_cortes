@@ -230,6 +230,28 @@ def test_balance_csv_uses_complete_long_ate_att_schema():
         for column in ["raw", "weighted"]:
             assert math.isfinite(float(row[column])), (row, column)
 
+    lookup = {
+        (row["estimand"], row["covariate"], row["metric"]): row
+        for row in rows
+    }
+    for covariate in covariates:
+        for metric in metrics:
+            ate_raw = float(lookup[("ATE", covariate, metric)]["raw"])
+            att_raw = float(lookup[("ATT", covariate, metric)]["raw"])
+            assert abs(ate_raw - att_raw) < 1e-12
+    weighted_smd = [
+        abs(float(row["weighted"])) for row in rows if row["metric"] == "smd"
+    ]
+    assert max(weighted_smd) < 0.02
+    ate_income_vr = float(
+        lookup[("ATE", "ingresos_hogar_jefe", "variance_ratio")]["weighted"]
+    )
+    att_income_vr = float(
+        lookup[("ATT", "ingresos_hogar_jefe", "variance_ratio")]["weighted"]
+    )
+    assert abs(ate_income_vr - 0.7408393) < 1e-6
+    assert abs(att_income_vr - 0.72437853) < 1e-6
+
 
 def test_balance_audit_requires_graph_native_diagnostics_and_safe_respecification():
     dofile = _read(DOFILE)
@@ -243,3 +265,21 @@ def test_balance_audit_requires_graph_native_diagnostics_and_safe_respecificatio
     assert "balance observable no demuestra cia" in practice_lower
     assert "reespecific" in practice_lower
     assert "sin mirar el efecto" in practice_lower
+    assert "balance de medias" in practice_lower
+    assert "diferencias de dispersión" in practice_lower
+
+
+def test_private_key_is_outside_public_source_tree():
+    assert PRIVATE_KEY.is_file()
+    assert ROOT not in PRIVATE_KEY.parents
+    assert not (ROOT / "claves_privadas/15_IPW_clave.md").exists()
+    public = _read(THEORY) + _read(PRACTICE)
+    key = _read(PRIVATE_KEY)
+    distinctive = [
+        "Uso exclusivo de la profesora y el monitor",
+        "La especificación no se escoge mirando cuál efecto gusta más",
+        "HT no normaliza la masa realizada de pesos",
+    ]
+    for phrase in distinctive:
+        assert phrase in key
+        assert phrase not in public
