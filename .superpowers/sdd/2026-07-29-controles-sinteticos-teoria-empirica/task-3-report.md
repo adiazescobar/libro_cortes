@@ -40,4 +40,6 @@ The full `tests/test_synthetic_controls_contract.py` run has five Task 1 failure
 
 ## Worktree note
 
-Running Stata regenerated the tracked `dofile/17_SyntheticControls/results/california_synth_native.dta`. It was deliberately excluded from the Task 3 commit because it is a Task 2 artifact.
+### Reproducibility cleanup (review round 1/5)
+
+The principal `synth, keep()` output now uses the Stata tempfile `main_native` and is consumed only within the same run. The mutable binary `dofile/17_SyntheticControls/results/california_synth_native.dta` was removed from version control and is no longer created in the repository. The contract explicitly rejects any renewed reference to that path.

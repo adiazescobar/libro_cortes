@@ -77,9 +77,10 @@ def test_dofile_uses_real_synth_for_canonical_estimate():
         "synth cigsale beer(1984(1)1988) lnincome retprice age15to24 "
         "cigsale(1988) cigsale(1980) cigsale(1975), trunit(3) "
         "trperiod(1989) xperiod(1980(1)1988) "
-        "nested keep(results/california_synth_native.dta) replace"
+        "nested keep(`main_native') replace"
     )
     assert canonical_command in normalized
+    assert "california_synth_native.dta" not in do
     for marker in ["synth_weights.csv", "synth_predictor_balance.csv", "synth_paths.csv", "synth_rmspe.csv"]:
         assert marker in do, marker
 

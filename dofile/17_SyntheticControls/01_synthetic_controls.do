@@ -33,7 +33,7 @@ else {
 assert state_id == 3 if state_name == "California"
 xtset state_id year
 
-tempfile panel state_map weights_data manual_path native_path paths_data
+tempfile panel state_map weights_data manual_path main_native native_path paths_data
 save `panel'
 
 preserve
@@ -54,7 +54,7 @@ graph export "synth_raw_series.png", replace width(1800)
 synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
     cigsale(1988) cigsale(1980) cigsale(1975), ///
     trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
-    keep(results/california_synth_native.dta) replace
+    keep(`main_native') replace
 
 tempname weights_mat balance_mat
 matrix `weights_mat' = e(W_weights)
@@ -107,7 +107,7 @@ collapse (sum) manual_synthetic=weighted_cigsale, by(year)
 isid year
 save `manual_path'
 
-use "results/california_synth_native.dta", clear
+use `main_native', clear
 keep if !missing(_time)
 rename _time year
 rename _Y_synthetic synthetic
