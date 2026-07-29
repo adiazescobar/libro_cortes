@@ -8,6 +8,8 @@ Complete.
 
 `1cedb5d` — `feat: add synthetic-control placebos and sensitivity`
 
+`6c4530d` — `fix: keep synthetic-control native output temporary`
+
 ## Delivered
 
 - 39 spatial placebo assignments, each excluding its treated unit from its donor pool.
