@@ -1,3 +1,5 @@
+import csv
+import math
 from pathlib import Path
 
 import test_power_pedagogy_contract as base
@@ -10,10 +12,28 @@ DOFILE = ROOT / "dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do"
 PRIVATE_KEY = ROOT.parent / "claves_privadas/15_IPW_clave.md"
 DRAFT = ROOT / "17-SyntheticControls-DRAFT.Rmd"
 RESULTS = ROOT / "dofile/16_PSM_IPW_Sinteticos/results"
+BALANCE_GRAPH = ROOT / "dofile/16_PSM_IPW_Sinteticos/ipw_balance_ate_att.png"
 
 
 def _read(path):
     return path.read_text(encoding="utf-8")
+
+
+def _csv_rows(path):
+    with path.open(encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def _estimate(rows, estimator, estimand):
+    matches = [
+        row
+        for row in rows
+        if row["estimator"] == estimator and row["estimand"] == estimand
+    ]
+    assert len(matches) == 1, (estimator, estimand, matches)
+    estimate = float(matches[0]["estimate"])
+    assert math.isfinite(estimate), (estimator, estimand, estimate)
+    return estimate
 
 
 def test_ipw_pair_has_uniform_titles_and_legacy_anchors():
@@ -143,11 +163,8 @@ def test_canonical_result_files_exist():
 
 
 def test_positivity_simulation_reports_scenario_specific_precision():
-    import csv
-
     path = RESULTS / "ipw_positivity_simulation.csv"
-    with path.open(encoding="utf-8", newline="") as handle:
-        rows = list(csv.DictReader(handle))
+    rows = _csv_rows(path)
     assert list(rows[0]) == [
         "estimator",
         "estimate",
@@ -159,3 +176,70 @@ def test_positivity_simulation_reports_scenario_specific_precision():
     ]
     assert float(rows[2]["max_weight"]) < float(rows[1]["max_weight"])
     assert float(rows[2]["ess"]) > float(rows[1]["ess"])
+
+
+def test_weighted_regression_commands_are_shown_in_dofile_and_practice():
+    commands = [
+        "reg y2 D [pw=w_ate], vce(robust)",
+        "reg y2 D [pw=w_att], vce(robust)",
+    ]
+    for command in commands:
+        assert command in _read(DOFILE), command
+        assert command in _read(PRACTICE), command
+
+
+def test_weighted_regression_estimates_match_hajek_and_teffects_ipw():
+    rows = _csv_rows(RESULTS / "ipw_estimates.csv")
+    for estimand in ["ATE", "ATT"]:
+        reg = _estimate(rows, "reg ponderada", estimand)
+        hajek = _estimate(rows, "Hajek manual", estimand)
+        teffects_ipw = _estimate(rows, "teffects ipw", estimand)
+        assert abs(reg - hajek) < 1e-8, (estimand, reg, hajek)
+        assert abs(reg - teffects_ipw) < 1e-8, (estimand, reg, teffects_ipw)
+
+
+def test_balance_csv_uses_complete_long_ate_att_schema():
+    path = RESULTS / "ipw_balance.csv"
+    rows = _csv_rows(path)
+    assert list(rows[0]) == ["estimand", "covariate", "metric", "raw", "weighted"]
+
+    estimands = {"ATE", "ATT"}
+    covariates = {
+        "personas",
+        "orden_n",
+        "ocupado_jefe",
+        "educa_jefe",
+        "ingresos_hogar_jefe",
+        "hombre",
+    }
+    metrics = {"smd", "variance_ratio"}
+    expected_cells = {
+        (estimand, covariate, metric)
+        for estimand in estimands
+        for covariate in covariates
+        for metric in metrics
+    }
+    observed_cells = {
+        (row["estimand"], row["covariate"], row["metric"]) for row in rows
+    }
+
+    assert len(rows) == 24
+    assert observed_cells == expected_cells
+    assert len(observed_cells) == len(rows)
+    for row in rows:
+        for column in ["raw", "weighted"]:
+            assert math.isfinite(float(row[column])), (row, column)
+
+
+def test_balance_audit_requires_graph_native_diagnostics_and_safe_respecification():
+    dofile = _read(DOFILE)
+    practice = _read(PRACTICE)
+    for marker in ["ipw_balance_ate_att.png", "tebalance summarize", "tebalance density"]:
+        assert marker in dofile, marker
+        assert marker in practice, marker
+    assert BALANCE_GRAPH.is_file()
+
+    practice_lower = practice.lower()
+    assert "balance observable no demuestra cia" in practice_lower
+    assert "reespecific" in practice_lower
+    assert "sin mirar el efecto" in practice_lower
