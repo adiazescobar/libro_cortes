@@ -69,6 +69,26 @@ sc_n_placebos <- length(unique(sc_placebos$unit))
 sc_n_nested <- sum(sc_placebos$optimization == "nested")
 sc_n_ineligible <- sc_n_placebos - sc_n_eligible
 sc_reconstruction_error <- max(abs(sc_paths$synthetic - sc_paths$manual_synthetic))
+# `treated` proviene de un float de Stata; el CSV conserva un error de exportación
+# máximo cercano a 3.1e-6 al reconstruir la resta con las columnas publicadas.
+sc_path_gap_tolerance <- 1e-5
+sc_path_gap_error <- max(
+  abs(sc_paths$gap - (sc_paths$treated - sc_paths$synthetic))
+)
+sc_rmspe_tolerance <- 1e-10
+sc_rmspe_recomputed <- c(
+  pre_rmspe = sqrt(mean(sc_paths$gap[sc_paths$year < 1989]^2)),
+  post_rmspe = sqrt(mean(sc_paths$gap[sc_paths$year >= 1989]^2))
+)
+sc_rmspe_recomputed <- c(
+  sc_rmspe_recomputed,
+  ratio = unname(sc_rmspe_recomputed["post_rmspe"] /
+    sc_rmspe_recomputed["pre_rmspe"])
+)
+sc_rmspe_reported <- unlist(
+  sc_rmspe[1, c("pre_rmspe", "post_rmspe", "ratio")],
+  use.names = TRUE
+)
 sc_fallback <- sc_placebos[sc_placebos$optimization != "nested", , drop = FALSE]
 
 sc_figures <- file.path(
@@ -89,7 +109,14 @@ stopifnot(
   abs(sum(sc_weights$weight) - 1) < 1e-6,
   min(sc_weights$weight) >= -1e-10,
   sc_reconstruction_error < 1e-8,
+  sc_path_gap_error < sc_path_gap_tolerance,
+  all(sc_paths$post == as.integer(sc_paths$year >= 1989)),
+  nrow(sc_rmspe) == 1L,
+  identical(sc_rmspe$unit, "California"),
+  all(abs(sc_rmspe_recomputed - sc_rmspe_reported) < sc_rmspe_tolerance),
   length(unique(sc_placebos$unit)) == 39L,
+  anyDuplicated(sc_placebos$unit) == 0L,
+  anyDuplicated(sc_placebos$unit_id) == 0L,
   nrow(sc_ca_placebo) == 1L,
   all(sc_placebos$eligible == as.integer(sc_placebos$pre_rmspe <= sc_cutoff)),
   sc_n_eligible == 33L,
@@ -189,7 +216,13 @@ elegir donantes después de ver el efecto.
 El do-file declara el panel, fija 1989 como primer periodo tratado y ejecuta la
 estimación canónica:
 
+**Extracto del do-file completo.** No es un script independiente: el preámbulo
+resuelve la ruta de trabajo, construye `state_id` y declara `tempfile main_native`.
+Para reproducir el análisis desde cero debe ejecutarse el
+[do-file completo](dofile/17_SyntheticControls/01_synthetic_controls.do).
+
 ```stata
+* El preámbulo ya creó state_id y declaró tempfile main_native.
 use "synth_smoking.dta", clear
 xtset state_id year
 
@@ -467,7 +500,13 @@ El placebo temporal pregunta si el procedimiento también produce una ruptura
 cuando se finge que el tratamiento comenzó antes de la intervención real. La reestimación es
 nueva; no reutiliza los pesos estimados con datos hasta 1988:
 
+**Extracto del do-file completo.** Este bloque depende del panel temporal `panel`,
+de la lista de donantes `time_donors` y de `tempfile time_native`, creados en líneas
+anteriores del archivo enlazado. Se muestra aquí la llamada que impide la fuga, no
+un programa Stata autocontenido.
+
 ```stata
+* panel, time_donors y tempfile time_native ya fueron creados.
 synth cigsale lnincome retprice age15to24 ///
     cigsale(1979) cigsale(1975) cigsale(1970), ///
     trunit(3) trperiod(1980) xperiod(1972(1)1979) nested ///
@@ -483,13 +522,15 @@ reservados para evaluar la ruptura placebo.
 knitr::include_graphics(file.path(sc_dir, "synth_time_placebo.png"))
 ```
 
-En la ventana placebo posterior, la brecha media es `r sc_fmt(sc_time_mean_gap, 2)`
-y las brechas van de `r sc_fmt(sc_time_min_gap, 2)` a
-`r sc_fmt(sc_time_max_gap, 2)` paquetes per cápita. La figura permite juzgar signo,
-persistencia y escala, no solo una media. Una ruptura anticipada importante sería
-una alerta; una trayectoria relativamente cercana a cero sería evidencia
-tranquilizadora, pero ninguna de las dos posibilidades verifica por sí sola la
-fecha causal verdadera.
+En la ventana 1980--1988, la brecha observada tiene una media de
+`r sc_fmt(sc_time_mean_gap, 2)` paquetes per cápita y alcanza un mínimo de
+`r sc_fmt(sc_time_min_gap, 2)`. La combinación sintética ya se separa de California
+en dirección negativa antes de la intervención real. Este patrón es una **alerta
+para la estabilidad contrafactual**: reduce la confianza en que la relación previa
+se habría mantenido intacta y obliga a interpretar con cautela la brecha posterior
+a 1989. No invalida mecánicamente el diseño —la escala, persistencia y cronología
+de ambas rupturas también importan—, pero impide tratar el placebo temporal como
+evidencia plenamente tranquilizadora.
 
 ## Sensibilidad leave-one-out {-}
 
