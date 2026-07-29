@@ -35,13 +35,34 @@ ipw_bal <- read.csv(file.path(ipw_dir, "results/ipw_balance.csv"),
                     check.names = FALSE)
 ipw_sim <- read.csv(file.path(ipw_dir, "results/ipw_positivity_simulation.csv"),
                     check.names = FALSE)
+ipw_balance_graph <- file.path(ipw_dir, "ipw_balance_ate_att.png")
 stopifnot(
   identical(names(ipw_est), c("estimator", "estimand", "estimate", "se")),
   identical(names(ipw_diag), c("weight", "statistic", "value")),
-  identical(names(ipw_bal), c("covariate", "smd_raw", "smd_weighted")),
+  identical(names(ipw_bal), c("estimand", "covariate", "metric", "raw", "weighted")),
   identical(names(ipw_sim), c("estimator", "estimate", "se", "true_effect", "max_weight", "ess", "n_used")),
-  nrow(ipw_est) == 11, nrow(ipw_bal) == 6, nrow(ipw_sim) == 3
+  nrow(ipw_est) == 13, nrow(ipw_bal) == 24, nrow(ipw_sim) == 3,
+  identical(sort(unique(ipw_bal$estimand)), c("ATE", "ATT")),
+  identical(sort(unique(ipw_bal$metric)), c("smd", "variance_ratio")),
+  all(is.finite(as.matrix(ipw_bal[c("raw", "weighted")]))),
+  file.exists(ipw_balance_graph)
 )
+
+ipw_n <- round(ipw_diag$value[ipw_diag$weight == "w_ate" & ipw_diag$statistic == "sum"] / 2)
+ipw_estimate <- function(method, target, column = "estimate") {
+  ipw_est[ipw_est$estimator == method & ipw_est$estimand == target, column]
+}
+ipw_balance_table <- function(target) {
+  smd <- ipw_bal[ipw_bal$estimand == target & ipw_bal$metric == "smd",
+                 c("covariate", "raw", "weighted")]
+  vr <- ipw_bal[ipw_bal$estimand == target & ipw_bal$metric == "variance_ratio",
+                c("covariate", "raw", "weighted")]
+  names(smd)[2:3] <- c("SMD cruda", "SMD ponderada")
+  names(vr)[2:3] <- c("Razón de varianza cruda", "Razón de varianza ponderada")
+  out <- merge(smd, vr, by = "covariate", sort = FALSE)
+  out[, -1] <- lapply(out[, -1], round, digits = 3)
+  out
+}
 ```
 
 ## Pregunta causal y estimandos {-}
@@ -66,7 +87,7 @@ $$
 ATT=E[Y(D=1)-Y(D=0)\mid D=1].
 $$
 
-La diferencia cruda es $0.3325$, pero no la llamamos efecto causal: los grupos presentan selección observable. IPW busca construir una pseudopoblación donde la distribución de esas covariables sea comparable.
+La diferencia cruda es $`r format(round(ipw_estimate("Diferencia cruda", "ATE"), 4), nsmall = 4)`$, pero no la llamamos efecto causal: los grupos presentan selección observable. IPW busca construir una pseudopoblación donde la distribución de esas covariables sea comparable.
 
 ## Estimar el propensity score {-}
 
@@ -107,15 +128,18 @@ knitr::kable(diag_wide[, c("weight", "p1", "p50", "p99", "max", "sum", "ESS")],
 
 ```{r ipw-diagnostics-output, echo=FALSE, results='asis'}
 cat("```text\n")
-cat(sprintf("Peso ATE: máximo = %.3f; ESS = %s de 4,000\n",
+cat(sprintf("Peso ATE: máximo = %.3f; ESS = %s de %s\n",
             diag_wide$max[diag_wide$weight == "w_ate"],
-            format(round(diag_wide$ESS[diag_wide$weight == "w_ate"]), big.mark = ",")))
-cat(sprintf("Peso ATT: máximo = %.3f; ESS = %s de 4,000\n",
+            format(round(diag_wide$ESS[diag_wide$weight == "w_ate"]), big.mark = ","),
+            format(ipw_n, big.mark = ",")))
+cat(sprintf("Peso ATT: máximo = %.3f; ESS = %s de %s\n",
             diag_wide$max[diag_wide$weight == "w_att"],
-            format(round(diag_wide$ESS[diag_wide$weight == "w_att"]), big.mark = ",")))
-cat(sprintf("ATE estabilizado: máximo = %.3f; ESS = %s de 4,000\n",
+            format(round(diag_wide$ESS[diag_wide$weight == "w_att"]), big.mark = ","),
+            format(ipw_n, big.mark = ",")))
+cat(sprintf("ATE estabilizado: máximo = %.3f; ESS = %s de %s\n",
             diag_wide$max[diag_wide$weight == "w_ate_stab"],
-            format(round(diag_wide$ESS[diag_wide$weight == "w_ate_stab"]), big.mark = ",")))
+            format(round(diag_wide$ESS[diag_wide$weight == "w_ate_stab"]), big.mark = ","),
+            format(ipw_n, big.mark = ",")))
 cat("```\n")
 ```
 
@@ -175,34 +199,72 @@ Aquí HT y Hájek son casi idénticos porque las sumas de pesos están cerca de 
 **IPW-S2.** Un compañero obtiene el mismo valor para HT y Hájek y concluye que son el mismo estimador. Use las fórmulas y las sumas de pesos para evaluar esa afirmación. Describa una muestra en la cual esperaríamos una diferencia mayor.
 :::
 
-## Balance antes de interpretar el efecto {-}
+## El mismo resultado con `reg` {-}
 
-Después de estimar IPW, `tebalance` evalúa el diseño ponderado:
+Con intercepto y un indicador binario de tratamiento, el coeficiente de `D` de una regresión ponderada es la diferencia entre las medias ponderadas. Por eso reproduce puntualmente el Hájek manual de cada población objetivo:
+
+```stata
+reg y2 D [pw=w_ate], vce(robust)
+reg y2 D [pw=w_att], vce(robust)
+```
+
+```{r ipw-reg-equivalence, echo=FALSE}
+equivalence_order <- c("Hajek manual", "reg ponderada", "teffects ipw")
+equivalence <- ipw_est[ipw_est$estimator %in% equivalence_order &
+                       ipw_est$estimand %in% c("ATE", "ATT"), ]
+equivalence$estimator <- factor(equivalence$estimator, levels = equivalence_order)
+equivalence <- equivalence[order(equivalence$estimand, equivalence$estimator), ]
+equivalence$estimate <- round(equivalence$estimate, 8)
+equivalence$se <- round(equivalence$se, 4)
+knitr::kable(equivalence,
+             col.names = c("Estimador", "Estimando", "Efecto", "Error estándar"),
+             caption = "Equivalencia puntual entre Hájek, regresión ponderada y teffects ipw")
+```
+
+La coincidencia se exige para el estimador puntual, no para el error estándar. La opción `vce(robust)` de `reg` trata los pesos como dados, mientras `teffects ipw` incorpora que el propensity score fue estimado; para inferencia usamos el segundo cuando corresponde.
+
+## Postestimación: ¿quedó balanceado? {-}
+
+Antes de interpretar el efecto, auditamos si la ponderación equilibró cada covariable pretratamiento en la población objetivo. El diagnóstico nativo se ejecuta por separado para ATE y ATT:
 
 ```stata
 teffects ipw (y2) (D $Xmust, logit), ate
 tebalance summarize
 tebalance density personas
+
+teffects ipw (y2) (D $Xmust, logit), atet
+tebalance summarize
+tebalance density personas
 ```
 
-```{r ipw-balance-table, echo=FALSE}
-bal_show <- ipw_bal
-bal_show$smd_raw <- round(bal_show$smd_raw, 3)
-bal_show$smd_weighted <- round(bal_show$smd_weighted, 3)
-knitr::kable(bal_show,
-             col.names = c("Covariable", "Dif. estandarizada cruda", "Dif. estandarizada ponderada"),
+```{r ipw-balance-ate-table, echo=FALSE}
+knitr::kable(ipw_balance_table("ATE"),
+             col.names = c("Covariable", "SMD cruda", "SMD ponderada", "RV cruda", "RV ponderada"),
              caption = "Balance ATE antes y después de ponderar")
 ```
 
+```{r ipw-balance-att-table, echo=FALSE}
+knitr::kable(ipw_balance_table("ATT"),
+             col.names = c("Covariable", "SMD cruda", "SMD ponderada", "RV cruda", "RV ponderada"),
+             caption = "Balance ATT antes y después de ponderar")
+```
+
 ```{r ipw-balance-output, echo=FALSE, results='asis'}
+ate_smd <- ipw_bal$weighted[ipw_bal$estimand == "ATE" & ipw_bal$metric == "smd"]
+att_smd <- ipw_bal$weighted[ipw_bal$estimand == "ATT" & ipw_bal$metric == "smd"]
 cat("```text\n")
-cat(sprintf("Mayor diferencia estandarizada cruda:       %.3f\n", max(abs(ipw_bal$smd_raw))))
-cat(sprintf("Mayor diferencia estandarizada ponderada:   %.3f\n", max(abs(ipw_bal$smd_weighted))))
-cat("Observaciones usadas:                       4,000\n")
+cat(sprintf("Mayor |SMD| ponderada ATE: %.3f\n", max(abs(ate_smd))))
+cat(sprintf("Mayor |SMD| ponderada ATT: %.3f\n", max(abs(att_smd))))
+cat(sprintf("Covariables auditadas: %d; observaciones: %s\n",
+            length(unique(ipw_bal$covariate)), format(ipw_n, big.mark = ",")))
 cat("```\n")
 ```
 
-El balance ponderado es excelente en las seis covariables incluidas. Esto muestra que el modelo logra su objetivo observable; no descarta confusión no observada ni justifica haber omitido un confusor importante.
+![Diferencias estandarizadas absolutas antes y después de ponderar, por estimando](dofile/16_PSM_IPW_Sinteticos/ipw_balance_ate_att.png)
+
+Usamos $|\mathrm{SMD}|=0.10$ como referencia descriptiva, no como prueba estadística ni regla automática. Revisamos cada covariable y las razones de varianza, además de las densidades: el balance del propensity score por sí solo no basta. **El balance observable no demuestra CIA** ni descarta confusión no observada.
+
+Si persiste desequilibrio, el ciclo es: (1) revisar temporalidad y teoría causal de las covariables; (2) añadir no linealidades o interacciones justificadas al modelo de tratamiento; (3) reestimar el propensity score y los pesos; y (4) repetir soporte, distribución de pesos y balance ATE/ATT. Se escoge la especificación por ese razonamiento y diagnósticos de diseño, **sin mirar el efecto** ni buscar el resultado preferido.
 
 ## Estimación integrada y doble robustez {-}
 
@@ -227,10 +289,10 @@ knitr::kable(integrated,
              caption = "Estimadores integrados generados por Stata")
 ```
 
-Los tres métodos producen cerca de $0.328$ para ATE y $0.332$ para ATT, con errores estándar cercanos a $0.034$. La estabilidad es coherente con el buen soporte y el balance. AIPW e IPWRA protegen contra la mala especificación de uno de los dos componentes bajo sus condiciones de doble robustez; no protegen contra confusión no observada ni falta de positividad.
+Los tres métodos producen resultados cercanos: `teffects ipw` estima $`r format(round(ipw_estimate("teffects ipw", "ATE"), 4), nsmall = 4)`$ para ATE y $`r format(round(ipw_estimate("teffects ipw", "ATT"), 4), nsmall = 4)`$ para ATT, con errores estándar de $`r format(round(ipw_estimate("teffects ipw", "ATE", "se"), 4), nsmall = 4)`$ y $`r format(round(ipw_estimate("teffects ipw", "ATT", "se"), 4), nsmall = 4)`$. La estabilidad es coherente con el buen soporte y el balance. AIPW e IPWRA protegen contra la mala especificación de uno de los dos componentes bajo sus condiciones de doble robustez; no protegen contra confusión no observada ni falta de positividad.
 
 ::: {.boxexam}
-**IPW-S3.** En otra aplicación, `teffects ipw` y `teffects aipw` difieren sustancialmente. Proponga una secuencia de diagnóstico que separe problemas de estimando, muestra, soporte, modelo de tratamiento y modelo de resultado. Indique qué hallazgo impediría interpretar causalmente ambos resultados.
+**IPW-S3.** En otra aplicación, una covariable pretratamiento conserva $|\mathrm{SMD}|>0.10$ después de IPW. Proponga una secuencia que separe estimando, muestra, soporte y modelo de tratamiento; describa cómo reespecificaría el propensity score y qué diagnósticos repetiría antes de volver a estimar. Explique por qué no debe elegir la especificación mirando el efecto e indique qué hallazgo impediría interpretar causalmente el resultado.
 :::
 
 ## Una simulación donde la positividad sí importa {-}
@@ -265,7 +327,7 @@ knitr::kable(sim_show,
 
 La tabla usa errores estándar robustos descriptivos para las regresiones ponderadas de Hájek; el de HT proviene de la dispersión de su contribución observacional tratando el propensity score estimado como fijo. Sirven para mostrar la pérdida de precisión, no para reemplazar la inferencia completa de una aplicación.
 
-La muestra completa tiene un peso máximo de 329.2, ESS de solo 288 y errores estándar grandes. Al restringir soporte, el peso máximo baja a 19.9 y el ESS sube a 1,364, aun cuando quedan 2,720 observaciones. La estimación se acerca al valor verdadero en esta corrida, pero la última fila ya describe el efecto para la población con $0.05\leq\hat e(X)\leq0.95$, no automáticamente el ATE original. No escogemos el umbral porque “da mejor”: reportamos el cambio de población y justificamos el diseño.
+La muestra completa tiene un peso máximo de `r format(round(ipw_sim$max_weight[1], 1), nsmall = 1)`, ESS de solo `r format(round(ipw_sim$ess[1]), big.mark = ",")` y errores estándar grandes. Al restringir soporte, el peso máximo baja a `r format(round(ipw_sim$max_weight[3], 1), nsmall = 1)` y el ESS sube a `r format(round(ipw_sim$ess[3]), big.mark = ",")`, aun cuando quedan `r format(ipw_sim$n_used[3], big.mark = ",")` observaciones. La estimación se acerca al valor verdadero en esta corrida, pero la última fila ya describe el efecto para la población con $0.05\leq\hat e(X)\leq0.95$, no automáticamente el ATE original. No escogemos el umbral porque “da mejor”: reportamos el cambio de población y justificamos el diseño.
 
 ::: {.boxwarning}
 Una estimación más cercana al valor verdadero en una simulación no convierte el trimming en una regla universal. En datos reales no observamos el efecto verdadero y el umbral no debe elegirse mirando el resultado.
