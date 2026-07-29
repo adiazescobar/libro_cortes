@@ -1,6 +1,7 @@
 from pathlib import Path
 import csv
 import math
+import subprocess
 
 import test_power_pedagogy_contract as base
 
@@ -44,7 +45,7 @@ def test_theory_covers_identification_support_and_inference():
 def test_practice_uses_real_synth_and_complete_diagnostics():
     do = read(DOFILE)
     page = read(PRACTICE)
-    for marker in ["synth cigsale", "trunit(3)", "trperiod(1989)", "synth_weights.csv", "synth_predictor_balance.csv", "synth_rmspe.csv", "synth_placebos.csv", "synth_leave_one_out.csv"]:
+    for marker in ["synth cigsale", "trunit(3)", "trperiod(1989)", "synth_weights.csv", "synth_predictor_balance.csv", "synth_paths.csv", "synth_rmspe.csv", "synth_placebos.csv", "synth_leave_one_out.csv"]:
         assert marker in do, marker
         assert marker in page, marker
     assert "promedio simple" in page.lower()
@@ -55,18 +56,49 @@ def test_private_key_stays_outside_repository():
     assert PRIVATE_KEY.is_file()
     assert ROOT not in PRIVATE_KEY.parents
     assert not (ROOT / "claves_privadas/17_SyntheticControls_clave.md").exists()
-    public = read(THEORY) + read(PRACTICE)
-    for label in ["SC-T1", "SC-T2", "SC-T3", "SC-S1", "SC-S2", "SC-S3", "SC-S4"]:
-        assert label in read(PRIVATE_KEY)
-    assert "Uso exclusivo de la profesora y el monitor" not in public
+    theory_labels = ["SC-T1", "SC-T2", "SC-T3"]
+    practice_labels = ["SC-S1", "SC-S2", "SC-S3", "SC-S4"]
+    theory = read(THEORY)
+    practice = read(PRACTICE)
+    key = read(PRIVATE_KEY)
+    for label in theory_labels:
+        assert theory.count(label) == 1, label
+        assert practice.count(label) == 0, label
+        assert key.count(label) == 1, label
+    for label in practice_labels:
+        assert practice.count(label) == 1, label
+        assert theory.count(label) == 0, label
+        assert key.count(label) == 1, label
+
+    private_markers = [
+        "Uso exclusivo de la profesora y el monitor",
+        "Respuesta esperada",
+        "Criterio de calificación",
+    ]
+    assert all(marker in key for marker in private_markers)
+    tracked = subprocess.run(
+        ["git", "ls-files", "-z"], cwd=ROOT, check=True, capture_output=True
+    ).stdout.decode("utf-8").split("\0")
+    candidates = [ROOT / "_bookdown.yml", *ROOT.glob("*.Rmd"), *ROOT.glob("*.html")]
+    docs = ROOT / "docs"
+    if docs.exists():
+        candidates.extend(path for path in docs.rglob("*") if path.is_file())
+    contents = {
+        str(path.relative_to(ROOT)): path.read_text(encoding="utf-8", errors="ignore")
+        for path in candidates
+        if path.is_file()
+    }
+    base._assert_no_private_exposure(
+        [path for path in tracked if path], contents, private_markers
+    )
 
 
 def test_weights_are_convex_and_reconstruction_matches_synth():
     weights = rows("synth_weights.csv")
-    positive = [float(r["weight"]) for r in weights if float(r["weight"]) > 1e-8]
-    assert positive
-    assert all(w >= 0 for w in positive)
-    assert abs(sum(float(r["weight"]) for r in weights) - 1) < 1e-6
+    values = [float(r["weight"]) for r in weights]
+    assert values
+    assert all(w >= -1e-8 for w in values)
+    assert abs(sum(values) - 1) < 1e-6
     paths = rows("synth_paths.csv")
     assert max(abs(float(r["synthetic"]) - float(r["manual_synthetic"])) for r in paths) < 1e-8
 
