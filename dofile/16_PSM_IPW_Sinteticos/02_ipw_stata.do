@@ -80,6 +80,12 @@ post `estimates' ("Hajek manual") ("ATE") (scalar(hajek_ate)) (.)
 post `estimates' ("HT manual") ("ATT") (scalar(ht_att)) (.)
 post `estimates' ("Hajek manual") ("ATT") (scalar(hajek_att)) (.)
 
+reg y2 D [pw=w_ate], vce(robust)
+post `estimates' ("reg ponderada") ("ATE") (_b[D]) (_se[D])
+
+reg y2 D [pw=w_att], vce(robust)
+post `estimates' ("reg ponderada") ("ATT") (_b[D]) (_se[D])
+
 foreach target in ate atet {
     local label = cond("`target'" == "ate", "ATE", "ATT")
     quietly teffects ipw (y2) (D $Xmust, logit), `target'
@@ -127,27 +133,45 @@ export delimited using "results/ipw_weight_diagnostics.csv", replace
 restore
 
 tempname balance
-postfile `balance' str28 covariate double smd_raw smd_weighted using "results/ipw_balance.dta", replace
-foreach x of global Xmust {
-    quietly summarize `x' if D == 1
-    scalar m1 = r(mean)
-    scalar v1 = r(Var)
-    quietly summarize `x' if D == 0
-    scalar m0 = r(mean)
-    scalar v0 = r(Var)
-    scalar denom = sqrt((v1+v0)/2)
-    scalar smdraw = cond(denom > 0, (m1-m0)/denom, 0)
-    quietly summarize `x' [aw=w_ate] if D == 1
-    scalar wm1 = r(mean)
-    quietly summarize `x' [aw=w_ate] if D == 0
-    scalar wm0 = r(mean)
-    scalar smdw = cond(denom > 0, (wm1-wm0)/denom, 0)
-    post `balance' ("`x'") (smdraw) (smdw)
+postfile `balance' str4 estimand str28 covariate str16 metric double raw weighted using "results/ipw_balance.dta", replace
+foreach target in ate att {
+    local label = upper("`target'")
+    local weight = "w_`target'"
+    foreach x of global Xmust {
+        quietly summarize `x' if D == 1
+        scalar m1 = r(mean)
+        scalar v1 = r(Var)
+        quietly summarize `x' if D == 0
+        scalar m0 = r(mean)
+        scalar v0 = r(Var)
+        scalar denom = sqrt((v1+v0)/2)
+        scalar smdraw = cond(denom > 0, (m1-m0)/denom, 0)
+        scalar vrraw = cond(v0 > 0, v1/v0, 1)
+
+        quietly summarize `x' [aw=`weight'] if D == 1
+        scalar wm1 = r(mean)
+        scalar wv1 = r(Var)
+        quietly summarize `x' [aw=`weight'] if D == 0
+        scalar wm0 = r(mean)
+        scalar wv0 = r(Var)
+        scalar smdw = cond(denom > 0, (wm1-wm0)/denom, 0)
+        scalar vrw = cond(wv0 > 0, wv1/wv0, 1)
+
+        post `balance' ("`label'") ("`x'") ("smd") (scalar(smdraw)) (scalar(smdw))
+        post `balance' ("`label'") ("`x'") ("variance_ratio") (scalar(vrraw)) (scalar(vrw))
+    }
 }
 postclose `balance'
 preserve
 use "results/ipw_balance.dta", clear
 export delimited using "results/ipw_balance.csv", replace
+
+keep if metric == "smd"
+gen double abs_raw = abs(raw)
+gen double abs_weighted = abs(weighted)
+encode covariate, gen(covariate_id)
+twoway (connected abs_raw covariate_id, sort msymbol(O) lcolor(gs8) mcolor(gs8)) (connected abs_weighted covariate_id, sort msymbol(D) lcolor(navy) mcolor(navy)), by(estimand, note("") title("Balance antes y despues de IPW")) yline(.10, lcolor(maroon) lpattern(dash)) ylabel(0(.05).20, angle(horizontal)) xlabel(1(1)6, valuelabel angle(35)) ytitle("Diferencia estandarizada absoluta") xtitle("") legend(order(1 "Cruda" 2 "Ponderada"))
+graph export "ipw_balance_ate_att.png", width(1800) replace
 restore
 
 twoway (kdensity ps if D == 1, lcolor(navy) lwidth(medthick)) (kdensity ps if D == 0, lcolor(maroon) lwidth(medthick)), legend(order(1 "Tratados" 2 "Controles")) title("Soporte del propensity score") xtitle("P(D=1|X)") ytitle("Densidad")
@@ -231,6 +255,10 @@ export delimited using "results/ipw_positivity_simulation.csv", replace
 restore
 
 teffects ipw (y2) (D $Xmust, logit), ate
+tebalance summarize
+tebalance density personas
+
+teffects ipw (y2) (D $Xmust, logit), atet
 tebalance summarize
 tebalance density personas
 
