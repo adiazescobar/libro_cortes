@@ -34,14 +34,21 @@ def private_answer_phrases(key, labels):
         )
         section = key[start:end]
         answer = re.search(
-            r"(?im)^\\s*(?:[-*]\\s+)?(?:\\*\\*)?Respuesta esperada(?:\\*\\*)?\\s*:\\s*(.+)$",
+            r"(?im)^\s*(?:[-*]\s+)?(?:\*\*)?Respuesta esperada(?:\*\*)?\s*:\s*(.+)$",
             section,
         )
         assert answer, label
-        phrase = re.sub(r"\\s+", " ", answer.group(1)).strip()
+        phrase = re.sub(r"\s+", " ", answer.group(1)).strip()
         assert len(phrase) >= 20, label
         phrases.append(phrase)
     return phrases
+
+
+def test_private_answer_parser_reads_a_normal_key_line():
+    key = "SC-T1\nRespuesta esperada: La trayectoria debe mantener ajuste previo sólido.\n"
+    assert private_answer_phrases(key, ["SC-T1"]) == [
+        "La trayectoria debe mantener ajuste previo sólido."
+    ]
 
 
 def test_pair_is_inserted_before_iv_with_stable_anchors():
