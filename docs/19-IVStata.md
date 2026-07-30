@@ -28,6 +28,13 @@ ssc install ranktest
 
 Los tres archivos contienen el mismo experimento (Parte A: muestras finitas; Parte B: LATE paso a paso) y producen los mismos resultados — usen el lenguaje de su preferencia.
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 7 (PDF)](lecturas/bernal-pena/capitulo-07.pdf)
+- [Cunningham — capítulo 7: Instrumental Variables](https://mixtape.scunning.com/07-instrumental_variables)
+:::
+
 ---
 
 # Parte A — Muestras finitas: OLS sesgado vs IV consistente {-}

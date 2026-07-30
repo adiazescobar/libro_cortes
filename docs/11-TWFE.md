@@ -1,929 +1,535 @@
-# Datos de Panel, DiD y TWFE en Stata
+# Datos de panel y TWFE — Clase teórica {#datos-de-panel-did-y-twfe-en-stata}
 
 ::: {.boxinfo}
 **Metas de aprendizaje**
 
-- Reconocer la estructura básica de un panel y declararla en Stata con `xtset`
-- Comparar estimadores pooled OLS, efectos fijos, efectos aleatorios y primeras diferencias
-- Entender por qué TWFE puede fallar con adopción escalonada y efectos heterogéneos
-- Conectar la intuición de DiD con diagnósticos modernos y alternativas recientes
+- Distinguir variación *within* y *between* en datos de panel.
+- Comparar pooled OLS, efectos fijos, primeras diferencias y efectos aleatorios.
+- Separar la equivalencia algebraica 2×2 de la identificación causal.
+- Entender qué comparaciones y pesos produce TWFE con adopción escalonada.
+- Elegir un estimador según el parámetro causal de interés.
 :::
 
----
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 5 (PDF)](lecturas/bernal-pena/capitulo-05.pdf)
+- [Cunningham — capítulo 8: Panel Data](https://mixtape.scunning.com/08-panel_data)
+- [Cunningham — capítulo 9: Difference-in-Differences](https://mixtape.scunning.com/09-difference_in_differences)
+:::
 
 ## Introducción a datos de panel {-}
 
-### ¿Qué es un panel? {-}
+Un panel sigue las mismas unidades \(i\) durante varios periodos \(t\):
 
-Un **panel** (o datos longitudinales) sigue a las **mismas unidades** (individuos, firmas, municipios) a lo largo de **múltiples períodos de tiempo**. La estructura básica es:
+\[
+Y_{it}=\alpha_i+\lambda_t+\beta X_{it}+\varepsilon_{it}.
+\]
 
-$$Y_{it} = \alpha_i + \lambda_t + \beta X_{it} + \varepsilon_{it}$$
+\(\alpha_i\) resume características constantes de la unidad y \(\lambda_t\) choques comunes del periodo. El panel permite separar:
 
-donde $\alpha_i$ es un **efecto fijo individual** (todo lo que es constante para la unidad $i$ y que puede estar correlacionado con $X_{it}$) y $\lambda_t$ es un **efecto fijo temporal** (shocks comunes a todas las unidades en el período $t$).
+| Variación | Pregunta |
+|---|---|
+| *Between* | ¿Por qué unas unidades tienen niveles medios distintos? |
+| *Within* | ¿Qué ocurre cuando una misma unidad cambia \(X_{it}\)? |
+| *Overall* | ¿Qué variación total observamos combinando ambas? |
 
-### Comandos básicos en Stata {-}
+::: {.boxcerebro}
+Los efectos fijos identifican \(\beta\) con cambios dentro de cada unidad. Una variable constante en el tiempo no tiene variación *within* y su coeficiente no se identifica separadamente de \(\alpha_i\).
+:::
 
-```stata
-xtset id t          // declara el panel: id = unidad, t = tiempo
-xtdes               // describe la estructura: ¿balanceado? ¿T mínimo/máximo?
-xtsum Y X           // descompone varianza en within y between
-xtline Y, overlay   // spaghetti plot: trayectoria de Y por unidad
-```
+## Pooled OLS, FE, FD y RE {-}
 
-La descomposición de `xtsum` es fundamental:
+| Estimador | Transformación | Requisito central |
+|---|---|---|
+| Pooled OLS | Ninguna | \(X_{it}\) no está correlacionado con \(\alpha_i\) ni con el error |
+| Efectos fijos (FE) | Resta medias de unidad | Exogeneidad estricta condicional en \(\alpha_i\) |
+| Primeras diferencias (FD) | Resta el periodo anterior | Exogeneidad estricta y estructura apropiada del error |
+| Efectos aleatorios (RE) | Cuasi-demeaning | \(X_{it}\) no está correlacionado con \(\alpha_i\) |
 
-| Variación | Qué mide | La explota... |
-|-----------|----------|---------------|
-| **between** | Diferencias entre las medias de cada unidad | OLS pooled |
-| **within** | Cambios de cada unidad alrededor de su propia media | FE, FD |
-| **overall** | Ambas juntas | — |
+La exogeneidad estricta exige
 
-### Los cuatro estimadores y cuándo usarlos {-}
+\[
+E[\varepsilon_{it}\mid X_{i1},\ldots,X_{iT},\alpha_i]=0.
+\]
 
-| Estimador | Comando Stata | Consistente si... | Observaciones |
-|-----------|--------------|-------------------|---------------|
-| **OLS pooled** | `reg Y X, cluster(id)` | $\text{Cov}(X_{it}, \alpha_i) = 0$ **y** exog. estricta | Ignora estructura de panel |
-| **Efectos fijos (FE)** | `xtreg Y X, fe` | Exog. estricta (aunque $\text{Cov}(X_{it}, \alpha_i) \neq 0$) | Elimina $\alpha_i$ por within; inconsistente si $X_{it}$ endógeno |
-| **Primeras diferencias (FD)** | `reg D.Y D.X` | Exog. estricta (aunque $\text{Cov}(X_{it}, \alpha_i) \neq 0$) | Elimina $\alpha_i$ por diferencia; inconsistente si $X_{it}$ endógeno |
-| **Efectos aleatorios (RE)** | `xtreg Y X, re` | $\text{Cov}(X_{it}, \alpha_i) = 0$ **y** exog. estricta | Más eficiente que FE si supuesto OK |
+FE y FD eliminan heterogeneidad constante, pero no resuelven causalidad inversa, variables omitidas que cambian en el tiempo ni paneles dinámicos por sí solos.
 
-**Exogeneidad estricta**: $E[\varepsilon_{it} \mid X_{i1}, \ldots, X_{iT}, \alpha_i] = 0$ — el error idiosincrático no puede estar correlacionado con $X$ en *ningún* período. Si hay endogeneidad en $X_{it}$ (reverse causality, panel dinámico con $Y_{it-1}$), FE y FD también son inconsistentes.
+### Transformación within {-}
 
-**Test de Hausman** para elegir entre FE y RE:
+Defina \(\bar Y_i=T_i^{-1}\sum_tY_{it}\) y \(\bar X_i=T_i^{-1}\sum_tX_{it}\). Restar las medias produce
 
-```stata
-xtreg Y X i.t, fe
-estimates store fe
-xtreg Y X i.t, re
-hausman fe ., sigmamore
-* p < 0.05 → rechazamos H0 (RE inconsistente) → usar FE
-* p > 0.05 → RE es eficiente (no hay correlación entre X y α_i)
-```
+\[
+Y_{it}-\bar Y_i
+=\beta(X_{it}-\bar X_i)+(\lambda_t-\bar\lambda_i)
++(\varepsilon_{it}-\bar\varepsilon_i).
+\]
 
-### La transformación within a mano {-}
-
-FE funciona restando la media individual de cada variable ("demeaning"):
-
-```stata
-bysort id: egen media_Y = mean(Y)
-bysort id: egen media_X = mean(X)
-gen Y_within = Y - media_Y
-gen X_within = X - media_X
-reg Y_within X_within     // idéntico a xtreg Y X, fe (sin efectos de tiempo)
-```
-
-Esto ilustra por qué FE **elimina** cualquier variable constante en el tiempo (no puedes estimar el efecto de género, país de nacimiento, etc. con FE).
+El término \(\alpha_i\) desaparece. Esta es la **transformación within**.
 
 ### FE vs. FD con T = 2 {-}
 
-Con exactamente **dos períodos**, FE y FD son **algebraicamente idénticos**:
-
-$$\Delta Y_i = \beta \cdot \Delta X_i + \Delta\varepsilon_i$$
-
-es exactamente la regresión within con $T=2$. Esta equivalencia es la base de la conexión entre **DiD y datos de panel** que exploramos a continuación.
-
----
-
-## DiD = FD = TWFE: la equivalencia en el caso 2×2 {-}
-
-### La equivalencia algebraica {-}
-
-En el caso más simple — **2 grupos** (tratado/control) y **2 períodos** (antes/después) — los siguientes cuatro estimadores producen **exactamente el mismo número**:
-
-1. **DiD manual**: $\hat{\tau} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})$
-2. **Regresión DiD**: `reg Y trat post D` — coeficiente de $D$ (interacción)
-3. **Primeras diferencias**: `reg D.Y D.D` — coeficiente de $\Delta D$
-4. **TWFE**: `reghdfe Y D, absorb(id t)` — coeficiente de $D$
-
-No es una aproximación ni un resultado asintótico — es una **identidad algebraica** que se cumple en cada muestra.
-
-```stata
-clear
-set seed 1234
-set obs 400
-
-gen id   = ceil(_n / 2)           // 200 individuos
-gen t    = mod(_n - 1, 2)         // t=0 (antes), t=1 (después)
-gen trat = (id > 100)             // grupo tratado: id 101–200
-gen D    = trat * (t == 1)        // indicador de tratamiento efectivo
-
-gen alpha_i = 2 * id / 200 + rnormal(0, 0.5)
-gen eps     = rnormal(0, 1)
-gen Y = alpha_i + 1.5 * t + 3 * D + eps    // τ = 3
-xtset id t
-
-* ── DiD manual (4 medias) ──────────────────────────────────────────────────────
-quietly sum Y if trat==1 & t==0
-scalar y_t0 = r(mean)
-quietly sum Y if trat==1 & t==1
-scalar y_t1 = r(mean)
-quietly sum Y if trat==0 & t==0
-scalar y_c0 = r(mean)
-quietly sum Y if trat==0 & t==1
-scalar y_c1 = r(mean)
-scalar DiD_manual = (y_t1 - y_t0) - (y_c1 - y_c0)
-
-* ── Regresión DiD clásica: Y = α + βD_i + γt + τ(D_i×t) ──────────────────────
-reg Y trat t D, robust
-scalar DiD_reg = _b[D]
-
-* ── Primeras Diferencias (T=2): ΔY_i = a + τ·ΔD_i + Δε_i ─────────────────────
-reg D.Y D.D, robust
-scalar FD_2x2 = _b[D.D]
-
-* ── TWFE: absorbe efectos fijos individual + temporal ──────────────────────────
-reghdfe Y D, absorb(id t) vce(robust)
-scalar TWFE_2x2 = _b[D]
-
-di "DiD manual    = " %7.4f DiD_manual
-di "Regresión DiD = " %7.4f DiD_reg
-di "FD            = " %7.4f FD_2x2
-di "TWFE          = " %7.4f TWFE_2x2
-* → los cuatro deben ser IDÉNTICOS — equivalencia algebraica ✓
-```
-
-### Panel largo, adopción simultánea {-}
-
-Con **T > 2** períodos pero todos los tratados adoptando **al mismo tiempo** ($t_0$):
-
-- **DiD manual** (media pre vs. post) = **TWFE** — mismo estimador, mismos pesos
-- **FD** ≠ TWFE — FD solo usa las diferencias consecutivas $\Delta Y_t = Y_t - Y_{t-1}$, por lo que solo el período de adopción ($t_0 - 1 \to t_0$) aporta $\Delta D \neq 0$. Con $T$ grande, FD usa mucho menos información y es menos eficiente, aunque sigue siendo consistente para el mismo $\tau$.
-
-```stata
-clear
-set seed 5678
-local inicio = 1980
-local fin    = 1990
-local tiempo = `fin' - `inicio' + 1
-set obs `= 3 * `tiempo''
-
-gen id = ceil(_n / `tiempo')
-gen t  = `inicio' + mod(_n - 1, `tiempo')
-sort id t
-xtset id t
-
-gen D = (id >= 2) * (t >= 1985)   // tratado desde 1985 para id 2 y 3
-gen Y = id + 3 * (t - 1980) + 5 * D + rnormal(0, 0.5)
-
-* DiD manual
-quietly sum Y if id >= 2 & t >= 1985
-scalar post_t = r(mean)
-quietly sum Y if id >= 2 & t <  1985
-scalar pre_t  = r(mean)
-quietly sum Y if id == 1 & t >= 1985
-scalar post_c = r(mean)
-quietly sum Y if id == 1 & t <  1985
-scalar pre_c  = r(mean)
-di "DiD manual = " %6.3f (post_t - pre_t) - (post_c - pre_c)   // ≈ 5
-
-reghdfe Y D, absorb(id t) vce(robust)
-di "TWFE       = " %6.3f _b[D]     // = DiD manual (equivalencia exacta)
-
-reg D.Y D.D, robust
-di "FD         = " %6.3f _b[D.D]   // ≠ TWFE con T>2 (menos eficiente)
-```
-
----
-
-## El supuesto de tendencias paralelas {-}
-
-### ¿Qué dice el supuesto? {-}
-
-DiD identifica el efecto causal $\tau$ bajo el supuesto de **tendencias paralelas**:
-
-> En ausencia de tratamiento, la diferencia entre tratados y controles habría permanecido constante en el tiempo.
-
-Formalmente: $E[Y_{it}(D=0) - Y_{it-1}(D=0) \mid D_i = 1] = E[Y_{it}(D=0) - Y_{it-1}(D=0) \mid D_i = 0]$
-
-Si el tratado tenía una **tendencia diferente** (crecía más rápido o más lento) antes del tratamiento, DiD captura $\tau$ **más** esa diferencia de tendencias → **sesgo**.
-
-### Diagnóstico en Stata {-}
-
-```stata
-* Diagnóstico visual: medias observadas + tendencias lineales pre
-xtdidregress (Y) (D), group(id) time(t)
-estat trendplots          // gráfico con líneas pre-tratamiento
-estat trendplots, omeans  // solo medias observadas
-estat trendplots, ltrends // solo tendencias lineales
-
-* Test formal (H0: pendientes pre-tratamiento son iguales)
-estat ptrends
-* p > 0.05 → no rechazamos H0 → tendencias paralelas plausibles ✓
-* p < 0.05 → evidencia contra el supuesto ✗
-```
-
-### ¿Qué hacer si se viola? {-}
-
-Opciones en orden de menor a mayor complejidad:
-
-1. **Controlar tendencias lineales por grupo**: `reg Y D i.t c.t#i.trat` — asume que las tendencias pre son lineales y extrapolables
-2. **Event study**: estima el efecto en cada período; los coeficientes pre-tratamiento deben ser ≈ 0 si el supuesto se cumple
-3. **Diseño alternativo**: buscar un grupo de control más comparable (matching + DiD)
-
-```stata
-* Controlar tendencias diferenciales (si se viola levemente)
-gen trend = t - t0          // tiempo centrado en adopción
-reghdfe Y D c.trend#i.trat, absorb(id t) vce(cluster id)
-```
-
----
-
-##  Contexto rápido: TWFE con adopción escalonada {-}
-
-* **¿Qué verás?** Cómo se comporta el estimador **TWFE** (two-way fixed effects) en distintos escenarios de DiD: 2×2, panel largo, más de dos unidades con **heterogeneidad de efectos**, y **adopción escalonada**.
-* **¿Por qué importa?** Con heterogeneidad y/o timing escalonado, TWFE puede promediar **mal** (incluso con **pesos negativos**), sesgando el estimador.
-* **¿Cómo lo detectamos?** Con la **descomposición de Bacon** y estudios de eventos.
-* **¿Qué alternativas hay?** Estimadores modernos: **CSDID (Callaway & Sant’Anna)**, **did\_imputation (BJS)**, **eventstudyinteract (Sun & Abraham)**, **did\_multiplegt**, **did2s**, **stackedev**, etc.
-
-> 💡 **Nota de ejecución**: Algunas secciones usan comandos/paquetes de SSC. Debes instalarlos al menos una vez (abajo incluyo la instalación con `ssc install …, replace`).
-
----
-
-## Más unidades, **mismo** año de inicio, **efectos heterogéneos** {-}
-
-* **3 unidades** (id=1 control; id=2 y 3 tratados desde 1985), con **distinto tamaño de efecto**: id=2 → τ=2, id=3 → τ=4.
-* Muestra qué promedia TWFE cuando los efectos difieren entre tratados: el **ATT verdadero** (ponderado por obs. tratadas) = 3, y TWFE coincide porque no hay heterogeneidad dinámica.
-
-```stata
-clear
-local unidades = 3
-local inicio   = 1980
-local fin      = 1989
-local tiempo   = `fin' - `inicio' + 1
-local obs      = `unidades' * `tiempo'
-set obs `obs'
-
-gen id = .
-gen t  = .
-forvalues i = 1/`unidades' {
-    forvalues j = 0/`=`tiempo'-1' {
-        local obsnum = (`i' - 1)*`tiempo' + `j' + 1
-        replace id = `i' in `obsnum'
-        replace t  = `inicio' + `j' in `obsnum'
-    }
-}
-sort id t
-xtset id t
-label variable id "Unidad"
-label variable t  "Año"
-
-gen D = 0
-replace D = 1 if id >= 2 & t >= 1985
-label variable D "Tratamiento desde 1985 (id≥2)"
-
-gen Y = 0
-replace Y = id + t + cond(D==1, 0, 0) if id == 1
-replace Y = id + t + cond(D==1, 2, 0) if id == 2
-replace Y = id + t + cond(D==1, 4, 0) if id == 3
-label variable Y "Variable dependiente"
-
-twoway ///
-    (connected Y t if id==1, msymbol(circle)   lcolor(blue)   lwidth(medium)) ///
-    (connected Y t if id==2, msymbol(triangle)  lcolor(red)    lwidth(medium)) ///
-    (connected Y t if id==3, msymbol(square)    lcolor(orange) lwidth(medium)) ///
-    , xline(1984.5, lpattern(dash) lcolor(gray)) ///
-      xlabel(`inicio'(1)`fin') ///
-      legend(order(1 "id=1 (Control)" 2 "id=2 (Tratado, τ=2)" 3 "id=3 (Tratado, τ=4)") pos(6) row(1)) ///
-      title("Caso 4: heterogeneidad entre tratados, mismo timing") ///
-      xtitle("Año") ytitle("Y") name(g4_hetero, replace)
-
-xtreg Y D i.t, fe
-reghdfe Y D, absorb(id t) vce(robust)
-* ATT verdadero = (5×2 + 5×4) / 10 = 3
-di "ATT verdadero (ponderado) = 3 — TWFE debería dar ≈ 3"
-```
-![Grafico](dofile/11_TWFE/g5.png)
-
-
-
-## Más unidades, **distinto tiempo de tratamiento** (staggered) y **distinto efecto** {-}
-
-* **id=2** se trata desde **1985**; **id=3** desde **1988** (escalonado).
-* Los **tamaños de efecto** difieren (2 vs 4).
-* Estimamos varias especificaciones y usamos **Bacon decomposition** para ver **qué comparaciones** y **con qué peso** componen el β̂ TWFE.
-* Finalmente, estimamos pares 2×2 (id 1–2 e id 1–3) para ver los **componentes** del promedio.
-
-
-```stata
-clear
-local unidades = 3
-local inicio   = 1980
-local fin      = 1989
-local tiempo   = `fin' - `inicio' + 1
-local obs      = `unidades' * `tiempo'
-set obs `obs'
-
-gen id = .
-gen t  = .
-forvalues i = 1/`unidades' {
-    forvalues j = 0/`=`tiempo'-1' {
-        local obsnum = (`i' - 1)*`tiempo' + `j' + 1
-        replace id = `i' in `obsnum'
-        replace t  = `inicio' + `j' in `obsnum'
-    }
-}
-sort id t
-xtset id t
-label variable id "Unidad"
-label variable t  "Año"
-
-* Tratamiento escalonado: id=2 desde 1985 (τ=2), id=3 desde 1988 (τ=4)
-gen D = 0
-replace D = 1 if id==2 & t >= 1985
-replace D = 1 if id==3 & t >= 1988
-label variable D "Tratamiento escalonado"
-
-gen Y = 0
-replace Y = D * 2 if id==2 & D==1   // τ=2 cuando id=2 está tratado
-replace Y = D * 4 if id==3 & D==1   // τ=4 cuando id=3 está tratado
-label variable Y "Variable dependiente (Y=0 sin tratar; Y=τ con tratar)"
-
-twoway ///
-    (connected Y t if id==1, msymbol(circle)   lcolor(blue)   lwidth(medium)) ///
-    (connected Y t if id==2, msymbol(triangle)  lcolor(red)    lwidth(medium)) ///
-    (connected Y t if id==3, msymbol(square)    lcolor(orange) lwidth(medium)) ///
-    , xline(1984.5 1987.5, lpattern(dash) lcolor(gray)) ///
-      xlabel(`inicio'(1)`fin') ///
-      legend(order(1 "id=1 (Control)" 2 "id=2 (trata 1985, τ=2)" 3 "id=3 (trata 1988, τ=4)") pos(6) row(1)) ///
-      title("Caso 5: adopción escalonada") ///
-      xtitle("Año") ytitle("Y") name(g5_staggered, replace)
-
-* TWFE y comparaciones por par
-reghdfe Y D, absorb(id t) vce(robust)
-xtreg Y D i.t if (id==1 | id==2), fe robust   // par 1-2 (limpio)
-xtreg Y D i.t if (id==1 | id==3), fe robust   // par 1-3 (limpio)
-
-* Descomposición de Bacon
-* ssc install bacondecomp, replace   // instalar si no está
-bacondecomp Y D, ddetail
-* Ref: Goodman-Bacon (2021), Journal of Econometrics
-```
-
-![Grafico](dofile/11_TWFE/g6.png)
-
-##Descomposición de Bacon y “efecto real” en DiD con adopción escalonada {-}
-
-Cuando el tratamiento se **adopta en momentos distintos** (staggered DiD), el coeficiente de un modelo **TWFE** (efectos fijos de unidad y tiempo) **no** es un simple DiD clásico.  
-Goodman-Bacon muestra que ese coeficiente es un **promedio ponderado de muchos DiD 2×2** construidos a partir de las comparaciones disponibles en tus datos.
-
-En concreto, TWFE se puede escribir (a nivel intuitivo) como:
+Con dos periodos,
 
 \[
-\widehat\beta^{\text{TWFE}} \;=\; \sum_{k} w_k \,\widehat\beta^{(2\times2)}_k,
+\Delta Y_i=\beta\Delta X_i+\Delta\varepsilon_i,
 \]
 
-donde cada \( \widehat\beta^{(2\times2)}_k \) es un DiD “pequeño” entre dos grupos y dos periodos relevantes, y \( w_k \) es su **peso** (depende de tamaños muestrales y de cuánta variación en tratamiento aporta esa comparación).
+y FE y FD producen el mismo coeficiente. Con \(T>2\), usan combinaciones distintas de la información y su eficiencia relativa depende de la estructura serial del error.
 
+## DiD, FD y TWFE en el caso 2×2 {-}
 
-## Las tres familias de comparaciones 2×2 {-}
+Con dos grupos y dos periodos, en un panel balanceado, coinciden:
 
-1. **Tratados vs. nunca tratados (T vs. U)**  
-   - Comparas una cohorte **tratada** con una **nunca tratada** (usando pre vs. post del tratado).
+1. la diferencia en diferencias de cuatro medias;
+2. el coeficiente de la interacción grupo × post;
+3. la regresión en primeras diferencias;
+4. TWFE con efectos de unidad y periodo.
 
-2. **Tratados temprano vs. tratados tarde (Te vs. Cl)** — *antes* de que los tardíos reciban el tratamiento  
-   - Los **tardíos** (aún no tratados) actúan como **control provisional** para los **tempranos**.
-
-3. **Tratados tarde vs. tratados temprano (Tl vs. Ce)** — *después* de que los tempranos ya están tratados  
-   - Los **tempranos** (ya tratados) sirven como “control” **no válido** para los **tardíos** porque ya tienen efecto del tratamiento.
-
-> **Clave:** En (2) y (3) estás comparando **tratados con tratados** en momentos distintos.  
-> Si el **efecto varía por cohorte** (entre unidades) o **en el tiempo desde la adopción** (dinámico), esas comparaciones **no** miden el efecto causal que normalmente te interesa.
-
-
-## ¿Cuál es “el efecto real” que queremos reportar? {-}
-
-En DiD moderno, el objetivo suele ser el **promedio de efectos entre las observaciones tratadas** en los periodos post, ponderando por su tamaño:
+Esta igualdad es una **identidad algebraica**. No garantiza causalidad. Para interpretar el coeficiente como ATT se requieren tendencias paralelas, consistencia, no anticipación, composición estable y ausencia de interferencia relevante:
 
 \[
-\textbf{ATT}_{\text{overall}}
-\;=\;
-\frac{\displaystyle\sum_{g,t:\,D=1} N_{g,t}\cdot \text{ATT}(g,t)}
-     {\displaystyle\sum_{g,t:\,D=1} N_{g,t}},
+ATT=E[Y_{i1}(D=1)-Y_{i1}(D=0)\mid D_i=1].
 \]
 
-donde:
-- \( g \) es la **cohorte** (grupo que adopta en un mismo momento),
-- \( t \) es el **periodo**,
-- \( \text{ATT}(g,t) \) es el efecto en la cohorte-tiempo,
-- \( N_{g,t} \) es el número de observaciones tratadas en esa celda.
+::: {.boxadvertencia}
+Que cuatro procedimientos entreguen el mismo número no prueba que ese número sea un efecto causal; todos pueden compartir la misma falla de identificación.
+:::
 
-A esto lo llamamos aquí el **“promedio del tratamiento”** (o **ATT overall**).  
-**TWFE** coincide con este promedio **solo si** el efecto **no varía** ni por cohorte ni en el tiempo (homogeneidad).
+## Panel largo y adopción simultánea {-}
 
+Si todas las unidades tratadas adoptan en el mismo periodo, TWFE compara su cambio con el de las unidades nunca tratadas usando todos los periodos. Bajo un efecto constante y los supuestos DiD, esta extensión conserva una interpretación clara.
 
+Con varios periodos, FD y TWFE ya no son idénticos: FD explota cambios consecutivos y \(D_{it}\) solo cambia en la adopción cuando el tratamiento es absorbente; TWFE residualiza \(D_{it}\) respecto de todos los efectos de unidad y tiempo.
 
-## ¿Por qué TWFE puede fallar con heterogeneidad? {-}
+## Adopción escalonada y heterogeneidad {-}
 
-- **Heterogeneidad entre cohortes**: el tamaño del efecto **difiere por unidad/grupo** (p. ej., id=2 tiene +2; id=3 tiene +4).  
-- **Heterogeneidad dinámica**: el efecto **cambia con el tiempo desde la adopción** (p. ej., crece cada periodo post).
-
-En ambos casos, TWFE **mezcla** comparaciones de tipo **Te vs Cl** y **Tl vs Ce**, que **no** capturan el \(\text{ATT}(g,t)\) “puro” porque los “controles” ya tienen (o tendrán) efecto en parte de la ventana.  
-El promedio ponderado resultante puede **alejarse** del **ATT overall** que quieres reportar.
-
-
-## Mini-ejemplos para fijar ideas {-}
-
-### Caso 3 (tu ejemplo con tres unidades, mismo inicio y efecto por cohorte)
-
-- Cohortes tratadas desde 1985:  
-  - id=2 con efecto **+2** (constante post)  
-  - id=3 con efecto **+4** (constante post)  
-- Ambos tienen **el mismo número de periodos post** (1985–1989: 5 cada uno).
-
-**ATT overall (promedio del tratamiento)**  
-Promedio entre todas las **observaciones tratadas post**:
-\[
-\frac{5\cdot 2 \;+\; 5\cdot 4}{5+5} \;=\; \frac{10+20}{10} \;=\; \mathbf{3}.
-\]
-
-> Aquí el promedio “intuitivo” **sí** es 3.  
-> TWFE puede aproximarlo cuando solo hay heterogeneidad entre cohortes pero no dinámica y las ventanas son simétricas. Aun así, **Bacon** te dirá qué pesos están usando tus comparaciones.
-
----
-
-###  Caso con **adopción escalonada** y **efectos dinámicos** {-}
-
-- id=2 adopta en 1985 y su efecto **crece** con \(t-\text{timing}\).  
-- id=3 adopta en 1988 y su efecto también **crece** con \(t-\text{timing}\).
-
-**ATT overall correcto**:  
-haz el promedio de \(\text{ATT}(g,t)\) solo sobre **celdas tratadas** \((g,t)\), ponderado por \(N_{g,t}\).
-
-**TWFE**:  
-promedia **también** comparaciones **tratado vs tratado** (tempranos vs tardíos y viceversa) ⇒ si los efectos crecen, esas comparaciones **miden diferencias de efectos**, no el efecto verdadero, y el promedio puede **sesgarse** (incluso con **pesos negativos** en ciertas descomposiciones).
-
----
-
-## Cómo leer la salida (intuición) {-}
-
-- **`T vs U`**: comparaciones “limpias” (tratados vs nunca tratados).  
-- **`Te vs Cl`** y **`Tl vs Ce`**: comparaciones **entre tratados** en distintos momentos.  
-- Si los pesos se concentran en estas dos últimas y sospechas **heterogeneidad**, **no confíes** en TWFE como estimador del ATT overall.
-
-
-## Buenas prácticas (en una lista corta) {-}
-
-- **Define tu parámetro objetivo**: normalmente, **ATT ** (promedio sobre celdas tratadas).  
-- **Estima \(\text{ATT}(g,t)\)** con métodos modernos (p. ej., Callaway-Sant’Anna, Sun-Abraham, did-imputation, did2s).  
-- **Promedia correctamente**: construye el **ATT ** ponderando por \(N_{g,t}\) solo sobre celdas tratadas.  
-- **Usa Bacon como diagnóstico**: revisa qué comparaciones y pesos aporta TWFE; si domina “tratado vs tratado” y hay heterogeneidad, reporta el estimador moderno.
-
----
-
-
-- **Qué quieres**: el **promedio del tratamiento** entre las observaciones tratadas (ATT overall).  
-- **Qué hace TWFE**: un **promedio ponderado** de múltiples DiD 2×2, incluyendo **tratado vs tratado**.  
-- **Cuándo coincide**: solo con **efectos homogéneos** (sin variación por cohorte ni en el tiempo).  
-- **Qué hacer**: estima \(\text{ATT}(g,t)\) y promedia **sobre tratadas**; usa Bacon para **auditar** a TWFE.
-
-
-
-
-## ¿Cómo interpretar la salida de `bacondecomp`? {-}
-
-
-```
-
-Computing decomposition across 3 timing groups
-including a never-treated group
--------------------------------
-
-```
-       Y | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-         D |   2.709677   .3030118     8.94   0.000     2.115785     3.30357
-```
-
-**Bacon Decomposition:**
-
-| Tipo                | Beta         | TotalWeight   |
-|---------------------|--------------|---------------|
-| Early_v_Late        | 2            | 0.2419354906  |
-| Late_v_Early        | 4            | 0.0967741935  |
-| Never_v_timing      | 2.780487813  | 0.6612903158  |
-
-```
-
----
-
-##  ¿Qué significa cada fila? {-}
-
-- **Early_v_Late (β=2, peso=0.2419)**  
-  Compara **tratados tempranos** vs **tratados tardíos** **en los períodos en que los tardíos aún no están tratados**.  
-  → Identifica el efecto de la cohorte **temprana** (≈ 2 en tu simulación).
-
-- **Late_v_Early (β=4, peso=0.0968)**  
-  Compara **tratados tardíos** vs **tratados tempranos** **cuando los tempranos ya están tratados**.  
-  → Usa **tratados** como “control” (no ideal si hay heterogeneidad). En tu caso rinde ≈ **4** (efecto de la cohorte tardía).
-
-- **Never_v_timing (β≈2.7805, peso=0.6613)**  
-  Compara **cohortes tratadas** (temprana y tardía) vs **nunca tratados**.  
-  → Es un promedio (con pesos internos) de las comparaciones “tratados vs nunca tratados” a través de los distintos timings; por eso el β cae **entre 2 y 4** y está más cerca de 2 porque la cohorte temprana aporta más periodos post.
-
-> **Idea clave**: El coeficiente **TWFE** final es la **media ponderada** de estos DiD 2×2.
-
----
-
-## ¿Cuadra el promedio ponderado con el β de TWFE?  {-}
-
-Sí. Los **pesos** suman 1:
-- 0.2419354906 + 0.0967741935 + 0.6612903158 = **1.0000** (≈)
-
-Promedio ponderado:
-- Aporte Early_v_Late: 2 × 0.2419354906 = **0.483871**
-- Aporte Late_v_Early: 4 × 0.0967741935 = **0.387097**
-- Aporte Never_v_timing: 2.780487813 × 0.6612903158 = **1.838710**
-
-**Suma**: 0.483871 + 0.387097 + 1.838710 = **2.709677**  
-→ Coincide con el **β̂ de TWFE = 2.709677**.
-
----
-
-## ¿Por qué este β̂ puede **no** ser “el efecto real promedio”?  {-}
-
-Lo que normalmente quieres reportar es el **ATT overall**: el **promedio del efecto entre las observaciones tratadas** (cohorte-tiempo) ponderado por su tamaño:
+En adopción escalonada, las cohortes comienzan en fechas distintas. Defina \(G_i=g\) como el primer periodo tratado y
 
 \[
-\text{ATT}_{\text{overall}}
-=
-\frac{\sum_{g,t: D=1} N_{g,t}\cdot \text{ATT}(g,t)}
-     {\sum_{g,t: D=1} N_{g,t}}.
+ATT(g,t)=E[Y_{it}(D=1)-Y_{it}(D=0)\mid G_i=g],\qquad t\ge g.
 \]
 
-- En **adopción escalonada** (tempranos con más años post que tardíos) y/o con **efectos que difieren por cohorte** o en el **tiempo desde el tratamiento**, **TWFE** mezcla **tres tipos de comparaciones** (incluyendo **tratado vs tratado**), y su promedio ponderado **puede alejarse** del **ATT overall**.
+Cuando los efectos varían entre cohortes o con el tiempo desde adopción, un único coeficiente TWFE mezcla objetos causales diferentes. Además, una cohorte ya tratada puede servir como control de otra.
 
-**Ejemplo mental (ilustrativo):**  
-Si la cohorte temprana vale **2** (más años post) y la tardía **4** (menos años post), el **promedio correcto entre celdas tratadas** puede ser algo como  
+::: {.boxcerebro}
+El problema no es “muchos periodos” por sí mismo. Surge de combinar variación en el momento de adopción con heterogeneidad de efectos.
+:::
+
+## Tendencias paralelas en DiD con adopción escalonada {-}
+
+Los estimadores robustos a heterogeneidad corrigen el problema de las comparaciones contaminadas de TWFE, pero **no eliminan el supuesto causal de tendencias paralelas**. Para ver exactamente qué se supone, conviene escribir el contrafactual que nunca observamos.
+
+Sea \(Y_{it}(D=0)\) el resultado potencial que la unidad \(i\) tendría en \(t\) si permaneciera sin tratamiento. Para una cohorte \(G_i=g\), un grupo de comparación admisible \(C_{g,t}\) puede estar compuesto por **nunca tratados** (\(G_i=\infty\)) o por **no-aún tratados** (\(G_i>t\)). Tomando \(g-1\) como periodo base, tendencias paralelas grupo–tiempo exige
+
 \[
-\frac{5\cdot 2 + 2\cdot 4}{5+2} = \frac{18}{7} \approx 2.571,
+\begin{aligned}
+&E\!\left[Y_{it}(D=0)-Y_{i,g-1}(D=0)\mid G_i=g\right] \\
+&\qquad =E\!\left[Y_{it}(D=0)-Y_{i,g-1}(D=0)\mid i\in C_{g,t}\right].
+\end{aligned}
 \]
-mientras que **TWFE** te dio **2.7097** porque **incluye** las comparaciones **Early_v_Late** y **Late_v_Early** con pesos 24% y 9.7%.
 
+Bajo **no anticipación**, \(Y_{i,g-1}=Y_{i,g-1}(D=0)\), y el efecto grupo–tiempo puede recuperarse como
 
+\[
+\begin{aligned}
+ATT(g,t)
+&=E[Y_{it}(D=1)-Y_{it}(D=0)\mid G_i=g] \\
+&=E[Y_{it}-Y_{i,g-1}\mid G_i=g]
+-E[Y_{it}-Y_{i,g-1}\mid i\in C_{g,t}],\qquad t\ge g.
+\end{aligned}
+\]
 
-## ¿Cómo usar esta descomposición en la práctica?  {-}
+La elección del control cambia la comparación. Los nunca tratados ofrecen una referencia estable durante todo el panel, pero pueden ser una población poco comparable. Los no-aún tratados amplían la información disponible, aunque cada cohorte deja de ser control cuando alcanza su propia fecha de adopción. Una cohorte ya tratada no pertenece a \(C_{g,t}\).
 
-- Si **Never_v_timing** concentra **casi todo el peso** y los efectos son **homogéneos**, **TWFE** suele estar cerca del **ATT overall**.  
-- Si hay **peso relevante** en **Early_v_Late** o **Late_v_Early** **y** sospechas **heterogeneidad** (por cohorte o dinámica), **no** confíes en TWFE para el efecto promedio.
+::: {.boxadvertencia}
+Tendencias paralelas es un supuesto sobre la evolución de \(Y(D=0)\), no sobre la igualdad de niveles observados. Dos grupos pueden comenzar en niveles distintos y aun así tener tendencias paralelas; también pueden verse similares antes del tratamiento y divergir después por una causa distinta del programa.
+:::
 
-**Recomendación**: Estima \(\text{ATT}(g,t)\) con métodos modernos (p. ej., **csdid**, **eventstudyinteract**, **did_imputation**, **did2s**) y luego construye el **ATT overall** promediando **solo sobre celdas tratadas** con pesos \(N_{g,t}\).
+### Tendencias paralelas condicionales y soporte común {-}
 
+Cuando la evolución sin tratamiento depende de covariables pretratamiento \(X_i\), la versión incondicional puede ser demasiado fuerte. Una alternativa es suponer, para cada valor relevante \(x\),
 
+\[
+\begin{aligned}
+&E[Y_{it}(D=0)-Y_{i,g-1}(D=0)\mid G_i=g,X_i=x] \\
+&\qquad =E[Y_{it}(D=0)-Y_{i,g-1}(D=0)\mid i\in C_{g,t},X_i=x].
+\end{aligned}
+\]
 
-## Resumen en una línea  {-}
+El \(ATT(g,t)\) se obtiene primero dentro de cada estrato de \(X\) y luego se integra usando la distribución de covariables de la cohorte tratada:
 
-**Tu tabla dice**: el β̂ de TWFE (=**2.7097**) es un **promedio ponderado** de tres DiD 2×2; la mayor parte (66.1%) viene de **tratados vs nunca tratados** (≈2.78), y el resto de **tratados vs tratados** (2 y 4).  
-**Conclusión**: Para reportar “el efecto real promedio”, usa el **ATT overall** (promedio sobre observaciones tratadas), no el β̂ de TWFE cuando hay heterogeneidad o adopción escalonada.
+\[
+ATT(g,t)=
+E_{X\mid G=g}\!\left[
+E[\Delta_{g-1,t}Y\mid G=g,X]
+-E[\Delta_{g-1,t}Y\mid C_{g,t},X]
+\right].
+\]
 
+Esta estrategia requiere **soporte común**: para los valores de \(X\) observados en la cohorte \(g\), debe existir probabilidad positiva de observar controles comparables en \(C_{g,t}\). Ajustar por covariables no crea soporte donde no lo hay. Además, \(X\) debe medirse antes del tratamiento; controlar por variables afectadas por el programa puede introducir sesgo.
 
+### ¿Qué supone cada estimador? {-}
 
-## Simulación grande (30 unidades × 60 periodos) con **timings y efectos crecientes**  {-}
+La tabla separa el problema que resuelve cada comando del supuesto que todavía necesita. Ninguna fila convierte un diagnóstico pretratamiento en una prueba de identificación.
 
+| Método | Supuesto | Control | Diagnóstico | Limitación |
+|---|---|---|---|---|
+| TWFE | Tendencia contrafactual común en \(Y(D=0)\); una interpretación agregada simple suele requerir restricciones adicionales sobre heterogeneidad | Nunca, no-aún y, con adopción escalonada, cohortes ya tratadas | Gráficas y *leads* pretratamiento; descomposición de comparaciones | Los *leads* pueden estar contaminados y el coeficiente no garantiza un ATT convexo |
+| `csdid` (Callaway–Sant’Anna) | Tendencias paralelas para cada \(ATT(g,t)\), incondicionales o condicionales en \(X\) | Nunca tratados o no-aún tratados | *Event study*, intervalos pretratamiento y placebos por cohorte | Un placebo no prueba el supuesto y escaso soporte limita la comparación |
+| `eventstudyinteract` (Sun–Abraham) | Tendencias paralelas por cohorte y no anticipación para los efectos cohorte–tiempo relativo | Cohorte nunca tratada o una cohorte de control no expuesta en la ventana pertinente | Coeficientes e intervalos de *leads* de la especificación *interaction-weighted* | Evita contaminación entre horizontes, pero no corrige tendencias contrafactuales divergentes |
+| `did_imputation` (Borusyak–Jaravel–Spiess) | El modelo de \(Y(D=0)\) estimado con observaciones no tratadas está correctamente especificado | Observaciones sin tratamiento, incluidas las no-aún tratadas cuando son elegibles | Placebos de imputación y residuos pretratamiento con intervalos | La imputación extrapola el modelo no tratado; buen ajuste previo no verifica el futuro |
+| `did2s` (Gardner) | La primera etapa modela correctamente el resultado no tratado y sostiene tendencias paralelas | Controles nunca tratados y no-aún tratados usados para estimar la primera etapa | *Leads*, placebos y gráficas de residuos de la primera etapa | La segunda etapa no elimina sesgo por una primera etapa mal especificada |
+| `did_multiplegt_dyn` (de Chaisemartin–D’Haultfœuille) | Tendencias paralelas entre *switchers* y *stayers* con historias de tratamiento pertinentes, más no anticipación | *Stayers* cuyo tratamiento permanece en el *status quo* relevante | Placebos y efectos dinámicos pretratamiento con intervalos | Pocos *stayers* comparables reducen soporte y potencia; el parámetro depende de la historia |
 
+`csdid` construye \(ATT(g,t)\) y luego declara cómo agregarlos. `eventstudyinteract` estima efectos cohorte × tiempo relativo antes de promediarlos y evita usar otros horizontes tratados como si fueran el coeficiente del horizonte de interés. `did_imputation` y `did2s` estiman primero la trayectoria sin tratamiento utilizando observaciones no tratadas, aunque difieren en su construcción y en el objeto de la segunda etapa. `did_multiplegt_dyn` organiza comparaciones entre unidades que cambian tratamiento y unidades que conservan el *status quo*, por lo cual también puede estudiar tratamientos no absorbentes.
 
-* Asignamos a cada unidad una **cohorte** (0–5), un **timing de adopción** aleatorio, y un **tamaño de efecto** aleatorio.
-* El outcome `Y` crece con el tiempo y **acumula** efecto post-tratamiento: `effect * (t - timing)`.
-* Graficamos las trayectorias y estimamos **TWFE** + **Bacon**.
+::: {.boxcerebro}
+**Supuesto y diagnóstico no son lo mismo.** Gráficas, *leads*, pruebas conjuntas y placebos permiten detectar ciertas contradicciones con el diseño. No rechazar un placebo puede reflejar tendencias realmente similares, pero también poca potencia o intervalos amplios. Estas herramientas **no verifican el contrafactual postratamiento**, precisamente porque \(Y(D=0)\) no se observa para las unidades tratadas después de \(g\).
+:::
 
+### Lectura avanzada: Rambachan–Roth y tendencias paralelas creíbles {-}
 
+::: {.boxinfo}
+Rambachan y Roth (2023), [*A More Credible Approach to Parallel Trends*](https://doi.org/10.1093/restud/rdad018), preguntan cuánto puede desviarse la trayectoria contrafactual de tendencias paralelas sin cambiar la conclusión sustantiva.
 
-```stata
-*********************************************************
+El efecto queda **parcialmente identificado** cuando se permiten desviaciones postratamiento sujetas a restricciones transparentes. Dos familias útiles son:
 
-clear
-local units = 30
-local start = 1
-local end   = 60
+- **Magnitud relativa:** la violación posterior no puede exceder cierto múltiplo \(M\) de las desviaciones observadas antes del tratamiento.
+- **Suavidad:** limita cuánto puede cambiar de un periodo a otro la pendiente de la diferencia contrafactual.
 
-local time = `end' - `start' + 1
-local obsv = `units' * `time'
-set obs `obsv'
+Para cada valor de la restricción se construyen **conjuntos de confianza** robustos. El *breakdown value* es el grado de desviación a partir del cual una conclusión —por ejemplo, que el efecto es positivo— deja de sostenerse. El valor admisible de \(M\) no debe elegirse para obtener significancia: debe justificarse con conocimiento institucional y con la escala de las variaciones pretratamiento.
 
-egen id	   = seq(), b(`time')  
-egen t 	   = seq(), f(`start') t(`end') 	
+Esta extensión es un **análisis de sensibilidad**. HonestDiD no prueba ni repara tendencias paralelas. Su insumo debe ser un *event study* compatible con el diseño y con cohortes de control limpias; no deben entregarse coeficientes de un **TWFE contaminado** por efectos heterogéneos.
+:::
 
-sort  id t
-xtset id t
+## El problema principal de TWFE {-}
 
-lab var id "Panel variable"
-lab var t  "Time  variable"
-set seed 13082021
+Suponga que algunas unidades se tratan temprano, otras tarde y otras nunca. La regresión
 
+\[
+Y_{it}=\alpha_i+\lambda_t+\beta^{TWFE}D_{it}+\varepsilon_{it}
+\]
 
-cap drop Y
-cap drop D
-cap drop cohort
-cap drop effect
-cap drop timing
+usa toda la variación residual de \(D_{it}\) después de retirar efectos de unidad y tiempo. Esa variación no compara únicamente tratadas contra nunca tratadas. También enfrenta cohortes tratadas entre sí.
 
-gen Y 	   = 0		// outcome variable	
-gen D 	   = 0		// intervention variable
-gen cohort = .  	// total treatment variables
-gen effect = .		// treatment effect size
-gen timing = .		// when the treatment happens for each cohort
-levelsof id, local(lvls)
-foreach x of local lvls {
-	local chrt = runiformint(0,5)	
-	replace cohort = `chrt' if id==`x'
-}
+El problema aparece cuando dos condiciones coinciden:
 
-levelsof cohort , local(lvls)  //  let all cohorts be treated for now
-foreach x of local lvls {
-	
-	// (a) effect
-	
-	local eff = runiformint(2,10)
-		replace effect = `eff' if cohort==`x'
-		
-	// (b) timing	
-	
-	local timing = runiformint(`start' + 5,`end' - 5)	
-	replace timing = `timing' if cohort==`x'
-		replace D = 1 if cohort==`x' & t>= `timing' 
-}
+1. el momento de adopción varía;
+2. el efecto cambia entre cohortes o con la duración del tratamiento.
 
-replace Y = id + t + cond(D==1, effect * (t - timing), 0)
+En ese caso, \(\beta^{TWFE}\) puede no representar ni el efecto de una cohorte particular ni el promedio de los efectos entre todas las observaciones tratadas.
 
+::: {.boxcerebro}
+**El mecanismo central:** TWFE puede usar una cohorte que ya recibió el tratamiento como contrafactual de otra cohorte que apenas empieza. Si el efecto de la primera continúa cambiando, su evolución no representa el resultado sin tratamiento de la segunda.
+:::
 
-levelsof cohort
-local items = `r(r)'
+### Una cohorte ya tratada como control {-}
 
-local lines
-levelsof id
+Considere una cohorte temprana \(E\), tratada desde \(g_E\), y una tardía \(L\), tratada desde \(g_L>g_E\).
 
-forval x = 1/`r(r)' {
-	
-	qui summ cohort if id==`x'
-	local color = `r(mean)' + 1
-	colorpalette tableau, nograph
-		
-	local lines `lines' (line Y t if id==`x', lc("`r(p`color')'") lw(vthin))	||
-}
+**Antes de \(g_L\)**, la cohorte tardía aún no está tratada. Puede servir como **control válido antes de su adopción** para estudiar el efecto inicial en la cohorte temprana:
 
-twoway ///
-	`lines', legend(off)
-	
-	
-	xtreg Y i.t D, fe
-	reghdfe Y D, absorb(id t)  
+\[
+\Delta Y_{\text{temprana}}-\Delta Y_{\text{tardía}}.
+\]
 
+**Después de \(g_L\)**, ambas están tratadas. Para estudiar a la tardía, TWFE puede invertir la comparación:
 
-bacondecomp Y D, ddetail
-```
+\[
+\Delta Y_{\text{tardía}}-\Delta Y_{\text{temprana}}.
+\]
 
-> 🔍 **Claves**: Este es el entorno “realista” donde TWFE más sufre: **heterogeneidad + escalonamiento** + **dinámicas** → pesos complicados (a veces negativos).
+Pero ahora la temprana es un **control contaminado después de su adopción**. Escriba
 
+\[
+\Delta Y_{\text{temprana}}
+=\Delta Y_{\text{temprana}}(D=0)
++\underbrace{\Delta ATT_E}_{\text{cambio del efecto de la cohorte temprana}}.
+\]
 
+Entonces el DiD invertido contiene
 
-## “Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento  {-}
+\[
+\underbrace{ATT_L}_{\text{efecto buscado}}
+-\underbrace{\Delta ATT_E}_{\text{efecto ya presente en el control}}.
+\]
 
-### Explicación didáctica  {-}
+Si el efecto temprano crece, \(\Delta ATT_E>0\) y la comparación resta parte de un efecto ajeno. Si decrece, puede inflar el efecto tardío. Solo con efectos constantes en el tiempo la contaminación desaparece en esta comparación particular.
 
-* Simulamos nuevamente con **first\_treat** y **rel\_time** para construir **leads** (`F_#`) y **lags** (`L_#`).
-* Definimos cohortes de **nunca tratados** y variables de **cohorte/gvar** para los métodos que lo requieren.
-* **Instalamos** paquetes (hazlo una sola vez; luego puedes comentar estas líneas).
-* Estimamos:
+### Las tres familias de comparaciones 2×2 {-}
 
-  * **TWFE** (con `reghdfe`),
-  * **csdid**,
-  * **did\_imputation**,
-  * **did\_multiplegt\_dyn**,
-  * **eventstudyinteract**,
-  * **did2s**,
-  * **stackedev**;
-    y graficamos todos juntos con `event_plot`.
+Goodman-Bacon (2021) muestra que TWFE puede escribirse como
 
-> ⚠️ **Detalle técnico**: en `reghdfe Y L_* F_*, absorb(id t) cluster(i)`, tu código agrupa por `i`. Si tu panel es `id`, lo más habitual es `cluster(id)`. **Mantengo tu comando exactamente** (como pediste), pero sugiero revisar el cluster según tu diseño.
+\[
+\widehat\beta^{TWFE}=\sum_k\omega_k\widehat\beta_k^{2\times2},
+\qquad \omega_k>0,\qquad \sum_k\omega_k=1.
+\]
 
+Las **comparaciones 2×2** son:
 
-```stata
-**********************************************************************************************
-*Soluciones
-
-clear
-
-local units = 30
-local start = 1
-local end 	= 60
-
-local time = `end' - `start' + 1
-local obsv = `units' * `time'
-set obs `obsv'
-
-egen id	   = seq(), b(`time')  
-egen t 	   = seq(), f(`start') t(`end') 	
-
-sort  id t
-xtset id t
-
-
-set seed 20211222
-
-gen Y 	   		= 0		// outcome variable	
-gen D 	   		= 0		// intervention variable
-gen cohort      = .  	// treatment cohort
-gen effect      = .		// treatment effect size
-gen first_treat = .		// when the treatment happens for each cohort
-gen rel_time	= .     // time - first_treat
-
-levelsof id, local(lvls)
-foreach x of local lvls {
-	local chrt = runiformint(0,5)	
-	replace cohort = `chrt' if id==`x'
-}
-
-
-levelsof cohort , local(lvls) 
-foreach x of local lvls {
-	
-	local eff = runiformint(2,10)
-		replace effect = `eff' if cohort==`x'
-			
-	local timing = runiformint(`start',`end' + 20)	// 
-	replace first_treat = `timing' if cohort==`x'
-	replace first_treat = . if first_treat > `end'
-		replace D = 1 if cohort==`x' & t>= `timing' 
-}
-
-replace rel_time = t - first_treat
-replace Y = id + t + cond(D==1, effect * rel_time, 0) + rnormal()
-
-
-
-// generate leads and lags (used in some commands)
-
-summ rel_time
-local relmin = abs(r(min))
-local relmax = abs(r(max))
-
-	// leads
-	cap drop F_*
-	forval x = 2/`relmin' {  // drop the first lead
-		gen F_`x' = rel_time == -`x'
-	}
-
-	
-	//lags
-	cap drop L_*
-	forval x = 0/`relmax' {
-		gen L_`x' = rel_time ==  `x'
-	}
-	
-	
-// generate the control_cohort variables  (used in some commands)
-
-gen never_treat = first_treat==.
-
-sum first_treat
-gen last_cohort = first_treat==r(max) // dummy for the latest- or never-treated cohort
-
-
-// generate the gvar variabls (used in some commands)
-gen gvar = first_treat
-recode gvar (. = 0)
-*************************************
-
-*Los colegas creativos
-// supporting packages
-ssc install schemepack, replace
-ssc install avar, replace 
-ssc install reghdfe, replace
-ssc install event_plot, replace
-ssc install palettes, replace
-ssc install colrspace, replace
-
-// DiD packages
-ssc install drdid, replace
-ssc install csdid, replace
-ssc install did_imputation, replace
-ssc install eventstudyinteract, replace
-ssc install did_multiplegt, replace
-ssc install stackedev, replace
-ssc install did2s, replace
-
-
-************
-*** TWFE ***
-************
-
-reghdfe Y L_* F_*, absorb(id t) cluster(i)
-
-estimates store twfe 
-
-*************
-*** csdid ***
-*************
-
-csdid Y, ivar(id) time(t) gvar(gvar) notyet
-
-estat event, window(-10 10) estore(csdd) 
-
-***********************
-*** did_imputation  ***
-***********************
-
-did_imputation Y i t first_treat, horizons(0/10) pretrend(10) minn(0) 
-
-estimates store didimp	
-	
-***********************
-*** did_multiplegt  ***
-***********************
-
-did_multiplegt_dyn Y id t D, effects(10) placebo(10) cluster(id)
-
-matrix didmgt_b = e(estimates) 
-matrix didmgt_v = e(variances)
-
-*****************************
-***  eventstudyinteract   ***
-*****************************
-
-eventstudyinteract Y L_* F_*, vce(cluster id) absorb(id t) cohort(first_treat) control_cohort(never_treat)	
-
-matrix evtstint_b = e(b_iw) 
-matrix evtstint_v = e(V_iw)
-
-***************		
-*** did2s   ***
-***************
-
-did2s Y, first_stage(id t) second_stage(F_* L_*) treatment(D) cluster(id)
-
-matrix did2s_b = e(b)
-matrix did2s_v = e(V)
-
-******************
-*** stackedev  ***
-******************
-
-	
-stackedev Y F_* L_* ref, cohort(first_treat) time(t) never_treat(never_treat) unit_fe(id) clust_unit(id)
-	
-matrix stackedev_b = e(b)
-matrix stackedev_v = e(V)
-
-
-
-colorpalette tableau, nograph	
-
-event_plot    twfe	csdd    didimp  dcdh_b#dcdh_v   sa_b#sa_v   stackedev_b#stackedev_v did2s_b#did2s_v , 	///
-	stub_lag( L_#   Tp#     tau#    Effect_#        L_#         L_#                     L_# 			) 		///
-	stub_lead(F_# 	Tm#     pre#    Placebo_#       F_#         F_#                     F_# 			)		///
-		together perturb(-0.30(0.10)0.30) trimlead(20) trimlag(20) noautolegend 									///
-		plottype(scatter) ciplottype(rspike)  																	    ///
-			lag_opt1(msymbol(+)   msize(1.2) mlwidth(0.3) color(black)) 	lag_ci_opt1(color(black)     lw(0.15)) 	///
-			lag_opt2(msymbol(lgx) msize(1.2) mlwidth(0.3) color("`r(p1)'")) lag_ci_opt2(color("`r(p1)'") lw(0.15)) 	///
-			lag_opt3(msymbol(Dh)  msize(1.2) mlwidth(0.3) color("`r(p2)'")) lag_ci_opt3(color("`r(p2)'") lw(0.15)) 	///
-			lag_opt4(msymbol(Th)  msize(1.2) mlwidth(0.3) color("`r(p3)'")) lag_ci_opt4(color("`r(p3)'") lw(0.15)) 	///
-			lag_opt5(msymbol(Sh)  msize(1.2) mlwidth(0.3) color("`r(p4)'")) lag_ci_opt5(color("`r(p4)'") lw(0.15)) 	///
-			lag_opt6(msymbol(Oh)  msize(1.2) mlwidth(0.3) color("`r(p5)'")) lag_ci_opt6(color("`r(p5)'") lw(0.15)) 	///	 
-			lag_opt7(msymbol(V)   msize(1.2) mlwidth(0.3) color("`r(p6)'")) lag_ci_opt7(color("`r(p6)'") lw(0.15)) 	///		
-					graph_opt(												///
-								title("DiD event study plot") 						///
-								xtitle("") 									///
-								ytitle("Average effect") xlabel(-20(2)20)	///
-								legend(order(1 "TWFE" 3 "csdid (CS 2020)" 5 "did_imputation (BJS 2021)" 7 "did_multiplegt (CD 2020)"  9 "eventstudyinteract (SA 2020)" 11 "stackedev (CDLZ 2019)" 13 "did2s (G 2021)") pos(6) rows(3) region(style(none))) 	///
-								xline(-0.5, lc(gs8) lp(dash)) ///
-								yline(   0, lc(gs8) lp(dash)) ///
-							 ) 
-```
-
-
-
-## Puntos de aprendizaje (resumen)  {-}
-
-* **TWFE** funciona bien en **2×2** simples, pero con **heterogeneidad** y **timing escalonado** puede:
-
-  * Promediar comparaciones no deseadas,
-  * Asignar **pesos negativos**,
-  * Usar como “controles” unidades ya tratadas.
-* La **descomposición de Bacon** ayuda a entender **quién compara con quién** y **con qué peso**.
-* Estimadores modernos (**csdid, eventstudyinteract, did\_imputation, did2s, did\_multiplegt, stackedev**) estiman **ATT(g,t)** y permiten **event studies** consistentes, evitando sesgos típicos de TWFE en estos contextos.
-
----
-
-## Notas prácticas de ejecución {-}
-
-* **Instalación**: Ejecuta una vez las líneas `ssc install …, replace` (están comentadas en el do-file para no reinstalar cada vez).
-* **Clustering**: El cluster correcto es el nivel donde varía el tratamiento — normalmente `cluster(id)` en DiD con unidades de panel.
-* **`xtdidregress`**: En Stata 17/18 el comando oficial es `xtdidregress` (no `xtdidreg`).
-* **Semillas**: Todos los DGPs del do-file incluyen `set seed` para garantizar replicabilidad.
-
----
-
-## Descarga los archivos {-}
-
-Los tres archivos replican los mismos ejemplos con **el mismo DGP** ($Y = \tau \cdot D$, máximo $Y = 4$).
-
-| Lenguaje | Archivo | Descarga |
+| Comparación | Control utilizado | Lectura |
 |---|---|---|
-| **Stata** | `11_stata_v2.do` | [Descargar Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_stata_v2.do) |
-| **R** | `11_twfe.R` | [Descargar R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.R) |
-| **Python** | `11_twfe.py` | [Descargar Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.py) |
+| Tratada vs. nunca tratada | Nunca tratada | Comparación limpia bajo tendencias paralelas |
+| Temprana vs. tardía | Tardía todavía no tratada | Limpia durante la ventana previa a \(g_L\) |
+| Tardía vs. temprana | Temprana ya tratada | Puede estar contaminada por la dinámica de \(ATT_E\) |
 
-**Paquetes necesarios:**
+Los pesos de Bacon son positivos. El problema de esta descomposición no son pesos negativos, sino que algunos DiD que reciben peso pueden utilizar controles ya tratados.
 
-- **Stata:** `ssc install reghdfe bacondecomp csdid drdid eventstudyinteract did_imputation did2s jwdid, replace`
-- **R:** `install.packages(c("fixest", "bacondecomp", "did", "ggplot2", "dplyr"))`
-- **Python:** `pip install pyfixest pandas numpy matplotlib`
+`bacondecomp` permite observar cuánto aporta cada familia al coeficiente final.
+
+## Del estimando deseado al coeficiente TWFE {-}
+
+Un objetivo frecuente es el promedio de los efectos sobre todas las celdas tratadas:
+
+\[
+ATT_{\text{overall}}
+=
+\frac{\sum_{g,t:t\ge g}N_{g,t}ATT(g,t)}
+{\sum_{g,t:t\ge g}N_{g,t}}.
+\]
+
+Este promedio usa pesos proporcionales al número de observaciones tratadas \(N_{g,t}\), todos no negativos. TWFE usa otra ponderación, determinada por la residualización de \(D_{it}\).
+
+### Ejemplo mínimo: dos unidades y cuatro periodos {-}
+
+Considere el siguiente patrón:
+
+| Unidad | \(t=1\) | \(t=2\) | \(t=3\) | \(t=4\) |
+|---|---:|---:|---:|---:|
+| Temprana \(E\) | 0 | 1 | 1 | 1 |
+| Tardía \(L\) | 0 | 0 | 0 | 1 |
+
+La unidad \(E\) tiene efectos \(2,2,2\) en sus tres celdas tratadas. La unidad \(L\) tiene efecto \(4\) al tratarse. Todos los efectos son positivos.
+
+El ATT overall es
+
+\[
+ATT_{\text{overall}}=\frac{2+2+2+4}{4}=2.5.
+\]
+
+### Residualizar el tratamiento paso a paso {-}
+
+TWFE trabaja con
+
+\[
+\widetilde D_{it}=D_{it}-\bar D_i-\bar D_t+\bar D.
+\]
+
+Aquí,
+
+\[
+\bar D_E=\frac34,\qquad
+\bar D_L=\frac14,\qquad
+(\bar D_1,\bar D_2,\bar D_3,\bar D_4)=
+\left(0,\frac12,\frac12,1\right),\qquad
+\bar D=\frac12.
+\]
+
+Por tanto:
+
+| Unidad | \(t=1\) | \(t=2\) | \(t=3\) | \(t=4\) |
+|---|---:|---:|---:|---:|
+| \(E\) | \(-1/4\) | \(+1/4\) | \(+1/4\) | **\(-1/4\)** |
+| \(L\) | \(+1/4\) | \(-1/4\) | \(-1/4\) | \(+1/4\) |
+
+La celda \((E,4)\) está tratada, pero su tratamiento residualizado es negativo. En \(t=4\), todas las unidades están tratadas; el efecto fijo temporal absorbe la exposición común y la cohorte temprana aporta variación residual con signo contrario.
+
+### Pesos implícitos sobre las celdas tratadas {-}
+
+Después de aplicar Frisch–Waugh–Lovell,
+
+\[
+\widehat\beta^{TWFE}
+=
+\frac{\sum_{i,t}\widetilde D_{it}\widetilde Y_{it}}
+{\sum_{i,t}\widetilde D_{it}^2}.
+\]
+
+Como
+
+\[
+\sum_{i,t}\widetilde D_{it}^2
+=8\left(\frac14\right)^2=\frac12,
+\]
+
+el peso causal de una celda tratada es proporcional a
+
+\[
+\pi_{it}=
+\frac{\widetilde D_{it}}
+{\sum_{j,s}\widetilde D_{js}^2}.
+\]
+
+| Celda tratada | \(ATT(g,t)\) | \(\widetilde D_{it}\) | \(\pi_{it}\) | Aporte |
+|---|---:|---:|---:|---:|
+| \((E,2)\) | 2 | \(+1/4\) | \(+1/2\) | 1 |
+| \((E,3)\) | 2 | \(+1/4\) | \(+1/2\) | 1 |
+| \((E,4)\) | 2 | \(-1/4\) | \(-1/2\) | \(-1\) |
+| \((L,4)\) | 4 | \(+1/4\) | \(+1/2\) | 2 |
+
+Los pesos sobre celdas tratadas suman uno, pero no son los pesos \(1/4\) del ATT overall.
+
+### TWFE frente al ATT overall {-}
+
+\[
+TWFE
+=\frac12(2)+\frac12(2)-\frac12(2)+\frac12(4)=3.
+\]
+
+Por tanto,
+
+\[
+\boxed{TWFE=3\neq ATT_{\text{overall}}=2.5}.
+\]
+
+TWFE sobrepondera el efecto alto de la cohorte tardía y asigna peso negativo a una celda de la cohorte temprana. Esta diferencia no es ruido muestral: aparece incluso en el ejemplo determinista.
+
+::: {.boxadvertencia}
+Este ejemplo explica el problema con una tabla que puede calcularse a mano. No basta con afirmar que “TWFE mezcla comparaciones”: hay que observar qué celda tratada recibe signo negativo después de residualizar \(D\).
+:::
+
+### Cuándo importan los pesos negativos {-}
+
+Los pesos negativos no generan distorsión si todos los efectos son idénticos:
+
+\[
+ATT(g,t)=\tau
+\quad\Longrightarrow\quad
+\sum_{g,t}\pi_{g,t}ATT(g,t)
+=\tau\sum_{g,t}\pi_{g,t}=\tau.
+\]
+
+La dificultad es la combinación de pesos no convexos y heterogeneidad. Cuando \(ATT(g,t)\) cambia entre cohortes o periodos, TWFE puede:
+
+- quedar fuera del rango de los efectos;
+- alejarse considerablemente del ATT overall;
+- asignar más influencia a cohortes pequeñas o ventanas particulares;
+- invertir el signo.
+
+### Un caso con signo incorrecto {-}
+
+Mantenga los mismos pesos y suponga que el efecto tardío de la cohorte temprana crece a \(ATT(E,4)=100\), mientras los demás efectos permanecen positivos:
+
+\[
+ATT(E,2)=2,\quad ATT(E,3)=2,\quad ATT(E,4)=100,\quad ATT(L,4)=4.
+\]
+
+Entonces,
+
+\[
+\beta^{TWFE}
+=\frac12(2)+\frac12(2)-\frac12(100)+\frac12(4)
+=-46.
+\]
+
+El **coeficiente TWFE es negativo** aunque **todos los efectos son positivos**. En cambio,
+
+\[
+ATT_{\text{overall}}=\frac{2+2+100+4}{4}=27.
+\]
+
+Este caso extremo muestra por qué el signo del coeficiente no basta para inferir el signo de los efectos causales subyacentes.
+
+## Dos objetos de pesos que no deben confundirse {-}
+
+| Objeto | Representación | ¿Puede ser negativo? | Referencia |
+|---|---|---:|---|
+| Comparaciones Bacon | \(\sum_k\omega_k\widehat\beta_k^{2\times2}\) | No | Goodman-Bacon |
+| Efectos grupo-periodo | \(\sum_{g,t}\pi_{g,t}ATT(g,t)\) | Sí | de Chaisemartin–D’Haultfœuille |
+
+Goodman-Bacon describe la composición en comparaciones 2×2. de Chaisemartin y D’Haultfœuille (2020) estudian los pesos causales sobre **efectos grupo-periodo**. Son diagnósticos relacionados, pero no la misma descomposición.
+
+`twowayfeweights` complementa a `bacondecomp`: permite inspeccionar pesos implícitos y medidas de robustez vinculadas directamente con la heterogeneidad causal.
+
+## Event studies TWFE {-}
+
+Un event study TWFE tradicional incluye indicadores de tiempo relativo:
+
+\[
+Y_{it}=\alpha_i+\lambda_t+
+\sum_{k\ne -1}\beta_k1\{t-G_i=k\}+\varepsilon_{it}.
+\]
+
+Bajo heterogeneidad, cada \(\beta_k\) puede combinar efectos de otros horizontes. Sun y Abraham (2021) muestran que esa contaminación puede generar **pretrends aparentes** aun sin anticipación.
+
+Por tanto, un **event study TWFE tradicional** no es automáticamente un diagnóstico limpio. Incluir tendencias específicas por grupo **no repara automáticamente** tendencias paralelas: puede absorber parte del tratamiento, imponer extrapolación funcional y **puede cambiar el estimando**.
+
+::: {.boxcerebro}
+No rechazar coeficientes pretratamiento iguales a cero es información útil, pero no demuestra tendencias paralelas. Poca potencia y contaminación entre horizontes también pueden ocultar o fabricar patrones.
+:::
+
+## Parámetro primero, comando después {-}
+
+Los métodos heterogeneity-robust no estiman todos el mismo objeto:
+
+| Método | Parámetro y comparación |
+|---|---|
+| `csdid` | Callaway–Sant’Anna: \(ATT(g,t)\) y agregaciones explícitas con nunca o no-aún tratados |
+| `eventstudyinteract` | Sun–Abraham: promedio *interaction-weighted* por tiempo relativo |
+| `did_imputation` | Borusyak–Jaravel–Spiess: efectos de evento por **imputación** de resultados no tratados |
+| `did_multiplegt_dyn` | de Chaisemartin–D’Haultfœuille: efectos dinámicos actuales frente al **status quo**, incluso con tratamientos no absorbentes |
+| `did2s` | Gardner: parámetro definido por la **segunda etapa**, dinámico o agregado según sus variables |
+
+Comparar métodos exige armonizar población, grupo de control, horizonte, anticipación y agregación. No debe forzarse una única gráfica cuando los parámetros no son comparables.
+
+## Checklist antes de escoger estimador {-}
+
+1. ¿El tratamiento es binario, continuo o multivaluado?
+2. ¿Es absorbente o puede prenderse y apagarse?
+3. ¿Hay nunca tratados, no-aún-tratados, *stayers* o *quasi-stayers*?
+4. ¿Interesa ATT global, \(ATT(g,t)\), efecto dinámico, acumulado o actual frente al *status quo*?
+5. ¿Puede existir anticipación?
+6. ¿El resultado depende de rezagos del tratamiento?
+7. ¿Cuál es el nivel de asignación y clustering?
+8. ¿Hay pocos clústeres?
+9. ¿Las covariables son pretratamiento o consecuencias del tratamiento?
+10. ¿Las poblaciones y horizontes son comparables entre métodos?
+
+## Preguntas tipo examen {-}
+
+::: {.boxejercicio}
+**Código:** TWFE-T1
+**Tipo:** Demostración
+**Fuente:** Elaboración propia
+**Enunciado:** Demuestre la equivalencia entre primeras diferencias y efectos fijos con dos periodos. Explique por separado qué supuestos adicionales permiten interpretar el coeficiente como ATT en un DiD 2×2.
+**Puntaje sugerido:** 5 puntos
+**Producto esperado:** Derivación algebraica y argumento causal en máximo 220 palabras.
+:::
+
+::: {.boxejercicio}
+**Código:** TWFE-T2
+**Tipo:** Análisis de adopción escalonada
+**Fuente:** Goodman-Bacon; de Chaisemartin y D’Haultfœuille
+**Enunciado:** En un diseño con una cohorte temprana, una tardía y una nunca tratada, enumere las comparaciones 2×2 y explique por qué una comparación tardía contra temprana puede estar contaminada. Distinga este problema de los pesos sobre efectos grupo-periodo.
+**Puntaje sugerido:** 5 puntos
+**Producto esperado:** Tabla de comparaciones y explicación conceptual.
+:::
+
+::: {.boxejercicio}
+**Código:** TWFE-T3
+**Tipo:** Selección de estimando
+**Fuente:** Elaboración propia
+**Enunciado:** Un programa municipal se adopta en fechas distintas, puede anticiparse un periodo y su efecto crece con exposición. Defina el parámetro que reportaría y escoja una estrategia heterogeneity-robust, justificando grupo de control, horizonte y agregación.
+**Puntaje sugerido:** 5 puntos
+**Producto esperado:** Definición formal del parámetro y justificación de máximo 250 palabras.
+:::
+
+## Síntesis {-}
+
+- FE y FD eliminan heterogeneidad constante, pero requieren supuestos de exogeneidad.
+- DiD, FD y TWFE coinciden algebraicamente en el 2×2 balanceado.
+- La identificación causal depende de supuestos, no de la equivalencia numérica.
+- Con adopción escalonada y heterogeneidad, TWFE mezcla comparaciones y efectos.
+- Goodman-Bacon y los pesos causales responden preguntas distintas.
+- El estimando determina qué método y qué gráfica son apropiados.
+
+## Referencias {-}
+
+- Goodman-Bacon, A. (2021). “Difference-in-Differences with Variation in Treatment Timing”.
+- de Chaisemartin, C. y D’Haultfœuille, X. (2020). “Two-Way Fixed Effects Estimators with Heterogeneous Treatment Effects”.
+- Callaway, B. y Sant’Anna, P. H. C. (2021). “Difference-in-Differences with Multiple Time Periods”.
+- Sun, L. y Abraham, S. (2021). “Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects”.
+- Borusyak, K., Jaravel, X. y Spiess, J. (2024). “Revisiting Event-Study Designs”.
+- Gardner, J. (2022). “Two-stage Differences in Differences”.
+- Rambachan, A. y Roth, J. (2023). “A More Credible Approach to Parallel Trends”. *Review of Economic Studies*, 90(5), 2555–2591. [doi:10.1093/restud/rdad018](https://doi.org/10.1093/restud/rdad018).

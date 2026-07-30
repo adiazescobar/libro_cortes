@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 18 Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 18 Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata | Cortes Transversales" />
+  <title>Capitulo 19 Ponderación por probabilidad inversa — Clase empírica | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 19 Ponderación por probabilidad inversa — Clase empírica | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 18 Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata | Cortes Transversales" />
+  <meta property="og:title" content="Capitulo 19 Ponderación por probabilidad inversa — Clase empírica | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 18 Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata | Cortes Transversales" />
+  <meta name="twitter:title" content="Capitulo 19 Ponderación por probabilidad inversa — Clase empírica | Cortes Transversales" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-07-17" />
+<meta name="date" content="2026-07-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="ipw.html"/>
-<link rel="next" href="iv.html"/>
+<link rel="next" href="controles-sinteticos.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -161,17 +161,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#puntaje-autom%C3%A1tico"><i class="fa fa-check"></i>Puntaje (automático)</a></li>
 <li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="16-PSM_IPW_SinteticosConsolidado.html"><a href="#introducci%C3%B3n-a-la-inferencia-causal"><i class="fa fa-check"></i><b>1</b> Introducción a la inferencia causal</a>
+<li class="chapter" data-level="1" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html"><i class="fa fa-check"></i><b>1</b> Introducción a la inferencia causal</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#objetivos-y-mapa-del-cap%C3%ADtulo"><i class="fa fa-check"></i>Objetivos y mapa del capítulo</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-importa-la-inferencia-causal"><i class="fa fa-check"></i>Por qué importa la inferencia causal</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-formular-una-pregunta-causal"><i class="fa fa-check"></i>Cómo formular una pregunta causal</a></li>
-<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html"><i class="fa fa-check"></i>Contrafactual y resultados potenciales</a></li>
-<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html#el-problema-fundamental"><i class="fa fa-check"></i>El problema fundamental</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#contrafactual-y-resultados-potenciales"><i class="fa fa-check"></i>Contrafactual y resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#el-problema-fundamental"><i class="fa fa-check"></i>El problema fundamental</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#diferencia-observada-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Diferencia observada y sesgo de selección</a></li>
-<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html#comparaciones-que-no-identifican-causalidad"><i class="fa fa-check"></i>Comparaciones que no identifican causalidad</a></li>
-<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html#estrategias-del-curso"><i class="fa fa-check"></i>Estrategias del curso</a></li>
-<li class="chapter" data-level="" data-path="introducción-a-la-inferencia-causal.html"><a href="introducción-a-la-inferencia-causal.html#mapa-del-libro-y-puente-a-stata"><i class="fa fa-check"></i>Mapa del libro y puente a Stata</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#comparaciones-que-no-identifican-causalidad"><i class="fa fa-check"></i>Comparaciones que no identifican causalidad</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#estrategias-del-curso"><i class="fa fa-check"></i>Estrategias del curso</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#mapa-del-libro-y-puente-a-stata"><i class="fa fa-check"></i>Mapa del libro y puente a Stata</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
 <ul>
@@ -219,35 +219,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.8" data-path="16-PSM_IPW_SinteticosConsolidado.html"><a href="#s%C3%ADntesis-1"><i class="fa fa-check"></i><b>4.8</b> Síntesis</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#puente-al-cap%C3%ADtulo-siguiente"><i class="fa fa-check"></i>Puente al capítulo siguiente</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="16-PSM_IPW_SinteticosConsolidado.html"><a href="#experimentos-aleatorizados-clase-te%C3%B3rica"><i class="fa fa-check"></i><b>5</b> Experimentos aleatorizados — Clase teórica</a>
+<li class="chapter" data-level="5" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html"><i class="fa fa-check"></i><b>5</b> Experimentos aleatorizados — Clase teórica</a>
 <ul>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html"><i class="fa fa-check"></i>Pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#pregunta-causal"><i class="fa fa-check"></i>Pregunta causal</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#intuici%C3%B3n-y-motivaci%C3%B3n"><i class="fa fa-check"></i>Intuición y motivación</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n-par%C3%A1metros-y-estimandos"><i class="fa fa-check"></i>Notación, parámetros y estimandos</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n-1"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#desarrollo-te%C3%B3rico-y-demostraciones"><i class="fa fa-check"></i>Desarrollo teórico y demostraciones</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto"><i class="fa fa-check"></i>¿En regresión lineal cómo se ve esto?</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>RCT simple, sin estratos, sin controles</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>RCT simple, sin estratos, con controles</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>RCT estratificado (bloques), sin controles adicionales</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>RCT estratificado + controles adicionales</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>RCT simple, sin estratos, sin controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>RCT simple, sin estratos, con controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>RCT estratificado (bloques), sin controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>RCT estratificado + controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n-del-estimador"><i class="fa fa-check"></i>Interpretación del estimador</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#supuestos-propiedades-y-condiciones-de-validez"><i class="fa fa-check"></i>Supuestos, propiedades y condiciones de validez</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#amenazas-limitaciones-y-errores-comunes"><i class="fa fa-check"></i>Amenazas, limitaciones y errores comunes</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#supuestos-propiedades-y-condiciones-de-validez"><i class="fa fa-check"></i>Supuestos, propiedades y condiciones de validez</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#amenazas-limitaciones-y-errores-comunes"><i class="fa fa-check"></i>Amenazas, limitaciones y errores comunes</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#pr%C3%A1ctica-tipo-parcial"><i class="fa fa-check"></i>Práctica tipo parcial</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#preguntas-para-clase"><i class="fa fa-check"></i>Preguntas para clase</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#preguntas-para-clase"><i class="fa fa-check"></i>Preguntas para clase</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#puente-a-la-clase-pr%C3%A1ctica"><i class="fa fa-check"></i>Puente a la clase práctica</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teórica.html"><a href="experimentos-aleatorizados-clase-teórica.html#referencias-1"><i class="fa fa-check"></i>Referencias</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#referencias-1"><i class="fa fa-check"></i>Referencias</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="16-PSM_IPW_SinteticosConsolidado.html"><a href="#experimentos-aleatorizados-clase-emp%C3%ADrica"><i class="fa fa-check"></i><b>6</b> Experimentos aleatorizados — Clase empírica</a>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-clase-empirica.html"><a href="experimentos-aleatorizados-clase-empirica.html"><i class="fa fa-check"></i><b>6</b> Experimentos aleatorizados — Clase empírica</a>
 <ul>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empírica.html"><a href="experimentos-aleatorizados-clase-empírica.html"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empirica.html"><a href="experimentos-aleatorizados-clase-empirica.html#materiales-para-la-clase-2"><i class="fa fa-check"></i>Materiales para la clase</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#pregunta-emp%C3%ADrica"><i class="fa fa-check"></i>Pregunta empírica</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empírica.html"><a href="experimentos-aleatorizados-clase-empírica.html#datos"><i class="fa fa-check"></i>Datos</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empirica.html"><a href="experimentos-aleatorizados-clase-empirica.html#datos"><i class="fa fa-check"></i>Datos</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
-<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empírica.html"><a href="experimentos-aleatorizados-clase-empírica.html#desarrollo-guiado-del-rct"><i class="fa fa-check"></i>Desarrollo guiado del RCT</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empirica.html"><a href="experimentos-aleatorizados-clase-empirica.html#desarrollo-guiado-del-rct"><i class="fa fa-check"></i>Desarrollo guiado del RCT</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html"><i class="fa fa-check"></i><b>7</b> Poder estadístico — Clase teórica</a>
 <ul>
@@ -307,115 +307,162 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="11" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>11</b> Malos controles — Clase teórica</a>
 <ul>
-<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#el-supuesto-de-tendencias-paralelas-1"><i class="fa fa-check"></i>El supuesto de Tendencias Paralelas</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#resultados-potenciales-1"><i class="fa fa-check"></i>Resultados Potenciales</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primeras-diferencias-y-did"><i class="fa fa-check"></i>Primeras Diferencias y DID</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#controles-en-did"><i class="fa fa-check"></i>Controles en DID</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#supuestos-y-consistencia"><i class="fa fa-check"></i>Supuestos y Consistencia</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-formal-sesgo-de-agrupaci%C3%B3n"><i class="fa fa-check"></i>La demostración formal: sesgo de agrupación</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#moraleja-final"><i class="fa fa-check"></i>Moraleja Final</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primero-el-estimando"><i class="fa fa-check"></i>Primero el estimando</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tres-estructuras-causales-b%C3%A1sicas"><i class="fa fa-check"></i>Tres estructuras causales básicas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#buenos-malos-y-neutrales"><i class="fa fa-check"></i>Buenos, malos y neutrales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-de-angrist-y-pischke"><i class="fa fa-check"></i>La demostración de Angrist y Pischke</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#aplicaci%C3%B3n-a-diferencias-en-diferencias"><i class="fa fa-check"></i>Aplicación a diferencias en diferencias</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#checklist-para-decidir"><i class="fa fa-check"></i>Checklist para decidir</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#preguntas-tipo-examen-1"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#lecturas-1"><i class="fa fa-check"></i>Lecturas</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>12</b> Malos controles — Clase empírica</a>
 <ul>
-<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#la-idea-central-controlar-no-siempre-ayuda"><i class="fa fa-check"></i>La idea central: controlar no siempre ayuda</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#buen-control-vs.-mal-control-la-diferencia-en-una-imagen"><i class="fa fa-check"></i>Buen control vs. mal control: la diferencia en una imagen</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-1-post-tratamiento-mediador"><i class="fa fa-check"></i>Caso 1: Post-tratamiento / mediador</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#caso-2-colisionador-selecci%C3%B3n-end%C3%B3gena"><i class="fa fa-check"></i>Caso 2: Colisionador / selección endógena</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-3-proxy-contaminado"><i class="fa fa-check"></i>Caso 3: Proxy contaminado</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#tabla-resumen-los-tres-casos"><i class="fa fa-check"></i>Tabla resumen: los tres casos</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#checklist-antes-de-agregar-un-control-a-la-regresi%C3%B3n"><i class="fa fa-check"></i>Checklist antes de agregar un control a la regresión</a></li>
-<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#descarga-los-archivos"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#materiales-para-la-clase-5"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#antes-de-abrir-stata"><i class="fa fa-check"></i>Antes de abrir Stata</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-del-mediador"><i class="fa fa-check"></i>Caso del mediador</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-del-colisionador"><i class="fa fa-check"></i>Caso del colisionador</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-del-proxy-postratamiento-contaminado"><i class="fa fa-check"></i>Caso del proxy postratamiento contaminado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-conjunta-y-monte-carlo"><i class="fa fa-check"></i>Comparación conjunta y Monte Carlo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#aplicaci%C3%B3n-a-diferencias-en-diferencias-1"><i class="fa fa-check"></i>Aplicación a diferencias en diferencias</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#preguntas-tipo-examen-2"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#replicaci%C3%B3n-en-r-y-python-1"><i class="fa fa-check"></i>Replicación en R y Python</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html"><i class="fa fa-check"></i><b>13</b> Datos de Panel, DiD y TWFE en Stata</a>
+<li class="chapter" data-level="13" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html"><i class="fa fa-check"></i><b>13</b> Datos de panel y TWFE — Clase teórica</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n-a-datos-de-panel"><i class="fa fa-check"></i>Introducción a datos de panel</a></li>
-<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-twfe-la-equivalencia-en-el-caso-22"><i class="fa fa-check"></i>DiD = FD = TWFE: la equivalencia en el caso 2×2</a></li>
-<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#el-supuesto-de-tendencias-paralelas-2"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#contexto-r%C3%A1pido-twfe-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Contexto rápido: TWFE con adopción escalonada</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-mismo-a%C3%B1o-de-inicio-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Más unidades, <strong>mismo</strong> año de inicio, <strong>efectos heterogéneos</strong></a></li>
-<li class="chapter" data-level="" data-path=""><a href="#m%C3%A1s-unidades-distinto-tiempo-de-tratamiento-staggered-y-distinto-efecto"><i class="fa fa-check"></i>Más unidades, <strong>distinto tiempo de tratamiento</strong> (staggered) y <strong>distinto efecto</strong></a></li>
-<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#las-tres-familias-de-comparaciones-22"><i class="fa fa-check"></i>Las tres familias de comparaciones 2×2</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#cu%C3%A1l-es-el-efecto-real-que-queremos-reportar"><i class="fa fa-check"></i>¿Cuál es “el efecto real” que queremos reportar?</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-twfe-puede-fallar-con-heterogeneidad"><i class="fa fa-check"></i>¿Por qué TWFE puede fallar con heterogeneidad?</a></li>
-<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#mini-ejemplos-para-fijar-ideas"><i class="fa fa-check"></i>Mini-ejemplos para fijar ideas</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-leer-la-salida-intuici%C3%B3n"><i class="fa fa-check"></i>Cómo leer la salida (intuición)</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#buenas-pr%C3%A1cticas-en-una-lista-corta"><i class="fa fa-check"></i>Buenas prácticas (en una lista corta)</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-interpretar-la-salida-de-bacondecomp"><i class="fa fa-check"></i>¿Cómo interpretar la salida de <code>bacondecomp</code>?</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-significa-cada-fila"><i class="fa fa-check"></i>¿Qué significa cada fila?</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#cuadra-el-promedio-ponderado-con-el-%CE%B2-de-twfe"><i class="fa fa-check"></i>¿Cuadra el promedio ponderado con el β de TWFE?</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-este-%CE%B2-puede-no-ser-el-efecto-real-promedio"><i class="fa fa-check"></i>¿Por qué este β̂ puede <strong>no</strong> ser “el efecto real promedio”?</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-usar-esta-descomposici%C3%B3n-en-la-pr%C3%A1ctica"><i class="fa fa-check"></i>¿Cómo usar esta descomposición en la práctica?</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#resumen-en-una-l%C3%ADnea"><i class="fa fa-check"></i>Resumen en una línea</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#simulaci%C3%B3n-grande-30-unidades-60-periodos-con-timings-y-efectos-crecientes"><i class="fa fa-check"></i>Simulación grande (30 unidades × 60 periodos) con <strong>timings y efectos crecientes</strong></a></li>
-<li class="chapter" data-level="" data-path=""><a href="#soluciones-estimadores-modernos-y-gr%C3%A1fico-comparativo-de-estudios-de-evento"><i class="fa fa-check"></i>“Soluciones”: estimadores modernos y gráfico comparativo de estudios de evento</a></li>
-<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#puntos-de-aprendizaje-resumen"><i class="fa fa-check"></i>Puntos de aprendizaje (resumen)</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#notas-pr%C3%A1cticas-de-ejecuci%C3%B3n"><i class="fa fa-check"></i>Notas prácticas de ejecución</a></li>
-<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#descarga-los-archivos-1"><i class="fa fa-check"></i>Descarga los archivos</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#pooled-ols-fe-fd-y-re"><i class="fa fa-check"></i>Pooled OLS, FE, FD y RE</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-y-twfe-en-el-caso-22"><i class="fa fa-check"></i>DiD, FD y TWFE en el caso 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-y-adopci%C3%B3n-simult%C3%A1nea"><i class="fa fa-check"></i>Panel largo y adopción simultánea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#adopci%C3%B3n-escalonada-y-heterogeneidad"><i class="fa fa-check"></i>Adopción escalonada y heterogeneidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tendencias-paralelas-en-did-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Tendencias paralelas en DiD con adopción escalonada</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#el-problema-principal-de-twfe"><i class="fa fa-check"></i>El problema principal de TWFE</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#del-estimando-deseado-al-coeficiente-twfe"><i class="fa fa-check"></i>Del estimando deseado al coeficiente TWFE</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#dos-objetos-de-pesos-que-no-deben-confundirse"><i class="fa fa-check"></i>Dos objetos de pesos que no deben confundirse</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#event-studies-twfe"><i class="fa fa-check"></i>Event studies TWFE</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metro-primero-comando-despu%C3%A9s"><i class="fa fa-check"></i>Parámetro primero, comando después</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#checklist-antes-de-escoger-estimador"><i class="fa fa-check"></i>Checklist antes de escoger estimador</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#preguntas-tipo-examen-3"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis-3"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#referencias-3"><i class="fa fa-check"></i>Referencias</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html"><i class="fa fa-check"></i><b>14</b> Emparejamiento Exacto</a>
+<li class="chapter" data-level="14" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html"><i class="fa fa-check"></i><b>14</b> Datos de panel y TWFE — Clase empírica</a>
 <ul>
-<li class="chapter" data-level="" data-path=""><a href="#el-problema-identificaci%C3%B3n-sin-aleatorizaci%C3%B3n"><i class="fa fa-check"></i>El problema: identificación sin aleatorización</a></li>
-<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#la-idea-del-emparejamiento-exacto"><i class="fa fa-check"></i>La idea del emparejamiento exacto</a></li>
-<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#los-tres-requisitos-del-emparejamiento"><i class="fa fa-check"></i>Los tres requisitos del emparejamiento</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#la-maldici%C3%B3n-de-las-dimensiones"><i class="fa fa-check"></i>La maldición de las dimensiones</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-del-att-con-emparejamiento-exacto"><i class="fa fa-check"></i>Estimación del ATT con emparejamiento exacto</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#en-la-pr%C3%A1ctica-nnmatch-en-stata"><i class="fa fa-check"></i>En la práctica: <code>nnmatch</code> en Stata</a></li>
-<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#resumen-y-limitaciones"><i class="fa fa-check"></i>Resumen y limitaciones</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#materiales-para-la-clase-6"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#declarar-y-auditar-la-estructura-del-panel"><i class="fa fa-check"></i>Declarar y auditar la estructura del panel</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#comparar-pooled-ols-fe-fd-y-re"><i class="fa fa-check"></i>Comparar pooled OLS, FE, FD y RE</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#construir-el-did-22-desde-cuatro-medias"><i class="fa fa-check"></i>Construir el DiD 2×2 desde cuatro medias</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-adopci%C3%B3n-simult%C3%A1nea"><i class="fa fa-check"></i>Panel largo con adopción simultánea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tendencias-paralelas-y-una-violaci%C3%B3n-deliberada"><i class="fa fa-check"></i>Tendencias paralelas y una violación deliberada</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#mismo-timing-con-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Mismo timing con efectos heterogéneos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#adopci%C3%B3n-escalonada-con-efectos-din%C3%A1micos"><i class="fa fa-check"></i>Adopción escalonada con efectos dinámicos</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#leer-bacondecomp-fila-por-fila"><i class="fa fa-check"></i>Leer bacondecomp fila por fila</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#calcular-los-pesos-causales-a-mano"><i class="fa fa-check"></i>Calcular los pesos causales a mano</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diagn%C3%B3stico-con-twowayfeweights"><i class="fa fa-check"></i>Diagnóstico con twowayfeweights</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#event-study-twfe-contaminado"><i class="fa fa-check"></i>Event study TWFE contaminado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparar-estimadores-sin-mezclar-par%C3%A1metros"><i class="fa fa-check"></i>Comparar estimadores sin mezclar parámetros</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-supone-cada-estimador-1"><i class="fa fa-check"></i>¿Qué supone cada estimador?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tendencias-paralelas-del-supuesto-al-diagn%C3%B3stico"><i class="fa fa-check"></i>Tendencias paralelas: del supuesto al diagnóstico</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#checklist-aplicado"><i class="fa fa-check"></i>Checklist aplicado</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#preguntas-tipo-examen-4"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#replicaci%C3%B3n-en-r-y-python-2"><i class="fa fa-check"></i>Replicación en R y Python</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html"><i class="fa fa-check"></i><b>15</b> Emparejamiento exacto — Introducción</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#de-la-aleatorizaci%C3%B3n-a-la-selecci%C3%B3n-en-observables"><i class="fa fa-check"></i>De la aleatorización a la selección en observables</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#la-idea-comparar-dentro-de-celdas"><i class="fa fa-check"></i>La idea: comparar dentro de celdas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n-3"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-manual-qui%C3%A9n-entra-al-estimando"><i class="fa fa-check"></i>Ejemplo manual: quién entra al estimando</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-maldici%C3%B3n-de-la-dimensionalidad"><i class="fa fa-check"></i>La maldición de la dimensionalidad</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#lo-que-el-emparejamiento-no-resuelve"><i class="fa fa-check"></i>Lo que el emparejamiento no resuelve</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#puente-hacia-el-propensity-score"><i class="fa fa-check"></i>Puente hacia el propensity score</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#preguntas-tipo-examen-5"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#para-llevar-a-psm"><i class="fa fa-check"></i>Para llevar a PSM</a></li>
 <li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#lecturas-recomendadas"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="psm.html"><a href="psm.html"><i class="fa fa-check"></i><b>15</b> Propensity Score Matching</a>
+<li class="chapter" data-level="16" data-path="psm.html"><a href="psm.html"><i class="fa fa-check"></i><b>16</b> Propensity score matching — Clase teórica</a>
 <ul>
-<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#del-emparejamiento-exacto-al-propensity-score"><i class="fa fa-check"></i>Del emparejamiento exacto al propensity score</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-definici%C3%B3n-y-estimaci%C3%B3n"><i class="fa fa-check"></i>El propensity score: definición y estimación</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#los-dos-supuestos-de-identificaci%C3%B3n"><i class="fa fa-check"></i>Los dos supuestos de identificación</a></li>
-<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#la-receta-del-psm-en-7-pasos"><i class="fa fa-check"></i>La receta del PSM en 7 pasos</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#m%C3%A9todos-de-emparejamiento-no-param%C3%A9tricos"><i class="fa fa-check"></i>Métodos de emparejamiento no paramétricos</a></li>
-<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#att-vs.-ate"><i class="fa fa-check"></i>ATT vs. ATE</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#verificaci%C3%B3n-del-balance"><i class="fa fa-check"></i>Verificación del balance</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#inferencia-estad%C3%ADstica"><i class="fa fa-check"></i>Inferencia estadística</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#del-emparejamiento-exacto-a-un-puntaje-escalar"><i class="fa fa-check"></i>Del emparejamiento exacto a un puntaje escalar</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-antes-que-algoritmo"><i class="fa fa-check"></i>Identificación antes que algoritmo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-covariables-entran-al-modelo"><i class="fa fa-check"></i>¿Qué covariables entran al modelo?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimando-y-poblaci%C3%B3n-con-soporte"><i class="fa fa-check"></i>Estimando y población con soporte</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#algoritmos-de-emparejamiento"><i class="fa fa-check"></i>Algoritmos de emparejamiento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diagn%C3%B3stico-mirar-m%C3%A1s-que-una-cifra"><i class="fa fa-check"></i>Diagnóstico: mirar más que una cifra</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#el-problema-moderno-del-psm"><i class="fa fa-check"></i>El problema moderno del PSM</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-por-qu%C3%A9-no-basta-un-bootstrap-ingenuo"><i class="fa fa-check"></i>Inferencia: por qué no basta un bootstrap ingenuo</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#preguntas-tipo-examen-6"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
 <li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#lecturas-recomendadas-1"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="psm-stata.html"><a href="psm-stata.html"><i class="fa fa-check"></i><b>16</b> PSM en Stata: <code>psmatch2</code></a>
+<li class="chapter" data-level="17" data-path="psm-stata.html"><a href="psm-stata.html"><i class="fa fa-check"></i><b>17</b> Propensity score matching — Clase empírica</a>
 <ul>
-<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-y-estructura-del-comando"><i class="fa fa-check"></i>Instalación y estructura del comando</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#variables-auxiliares-que-genera-psmatch2"><i class="fa fa-check"></i>Variables auxiliares que genera <code>psmatch2</code></a></li>
-<li class="chapter" data-level="" data-path=""><a href="#el-propensity-score-y-el-soporte-com%C3%BAn"><i class="fa fa-check"></i>El propensity score y el soporte común</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#a.-nn1-sin-reemplazo"><i class="fa fa-check"></i>1a. NN(1) sin reemplazo</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#b.-nn1-con-soporte-com%C3%BAn"><i class="fa fa-check"></i>1b. NN(1) con soporte común</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#c.-soporte-com%C3%BAn-v%C3%ADa-trimming"><i class="fa fa-check"></i>1c. Soporte común vía trimming</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#verificar-el-balance-pstest"><i class="fa fa-check"></i>Verificar el balance: <code>pstest</code></a></li>
-<li class="chapter" data-level="" data-path=""><a href="#nn-con-reemplazo-y-errores-est%C3%A1ndar-anal%C3%ADticos"><i class="fa fa-check"></i>2. NN con reemplazo y errores estándar analíticos</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#ate-con-nn1"><i class="fa fa-check"></i>3. ATE con NN(1)</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#caliper-1"><i class="fa fa-check"></i>4. Caliper</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#radio"><i class="fa fa-check"></i>5. Radio</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#kernel-1"><i class="fa fa-check"></i>6. Kernel</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#alternativa-teffects-psmatch-stata-nativo"><i class="fa fa-check"></i>7. Alternativa: <code>teffects psmatch</code> (Stata nativo)</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#resumen-de-la-secuencia-completa"><i class="fa fa-check"></i>Resumen de la secuencia completa</a></li>
-<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#lecturas-recomendadas-2"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#materiales-de-la-clase"><i class="fa fa-check"></i>Materiales de la clase</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#pregunta-causal-y-estimando"><i class="fa fa-check"></i>Pregunta causal y estimando</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#mirar-la-selecci%C3%B3n-antes-de-corregirla"><i class="fa fa-check"></i>Mirar la selección antes de corregirla</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#visualizar-soporte-com%C3%BAn"><i class="fa fa-check"></i>Visualizar soporte común</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-principal-con-psmatch2"><i class="fa fa-check"></i>Estimación principal con <code>psmatch2</code></a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#decisiones-del-algoritmo-y-sensibilidad"><i class="fa fa-check"></i>Decisiones del algoritmo y sensibilidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#verificaci%C3%B3n-con-teffects-psmatch"><i class="fa fa-check"></i>Verificación con <code>teffects psmatch</code></a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#machine-learning-con-disciplina-causal"><i class="fa fa-check"></i>Machine learning con disciplina causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuando-psm-puede-empeorar-el-dise%C3%B1o"><i class="fa fa-check"></i>Cuando PSM puede empeorar el diseño</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#lista-de-verificaci%C3%B3n-para-entregar"><i class="fa fa-check"></i>Lista de verificación para entregar</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#lecturas-y-ayuda-de-stata"><i class="fa fa-check"></i>Lecturas y ayuda de Stata</a></li>
 </ul></li>
-<li class="chapter" data-level="17" data-path="ipw.html"><a href="ipw.html"><i class="fa fa-check"></i><b>17</b> Ponderación por Probabilidad Inversa (IPW)</a>
+<li class="chapter" data-level="18" data-path="ipw.html"><a href="ipw.html"><i class="fa fa-check"></i><b>18</b> Ponderación por probabilidad inversa — Clase teórica</a>
 <ul>
-<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#la-idea-combinar-mco-y-psm"><i class="fa fa-check"></i>La idea: combinar MCO y PSM</a></li>
-<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#el-estimador-ipw"><i class="fa fa-check"></i>El estimador IPW</a></li>
-<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#los-ponderadores-ipw"><i class="fa fa-check"></i>Los ponderadores IPW</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#implementaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Implementación en Stata</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#ipw-vs.-psm-cu%C3%A1l-usar"><i class="fa fa-check"></i>IPW vs. PSM: ¿cuál usar?</a></li>
-<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#doble-robustez-doubly-robust"><i class="fa fa-check"></i>Doble robustez (<em>Doubly Robust</em>)</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#ipwra-ipw-con-ajuste-de-regresi%C3%B3n"><i class="fa fa-check"></i>IPWRA: IPW con ajuste de regresión</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-de-estimadores-bajo-cia"><i class="fa fa-check"></i>Comparación de estimadores bajo CIA</a></li>
-<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#lecturas-recomendadas-3"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#pregunta-causal-estimandos-y-datos-observados"><i class="fa fa-check"></i>Pregunta causal, estimandos y datos observados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n-4"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-identidad-de-reponderaci%C3%B3n"><i class="fa fa-check"></i>La identidad de reponderación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#horvitzthompson-y-h%C3%A1jek"><i class="fa fa-check"></i>Horvitz–Thompson y Hájek</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diagn%C3%B3sticos-balance-positividad-y-precisi%C3%B3n"><i class="fa fa-check"></i>Diagnósticos: balance, positividad y precisión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#aipw-e-ipwra-doble-robustez-con-l%C3%ADmites"><i class="fa fa-check"></i>AIPW e IPWRA: doble robustez con límites</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#ipw-frente-a-matching"><i class="fa fa-check"></i>IPW frente a matching</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#lecturas-recomendadas-2"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
-<li class="chapter" data-level="18" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html"><i class="fa fa-check"></i><b>18</b> Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata</a>
+<li class="chapter" data-level="19" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html"><i class="fa fa-check"></i><b>19</b> Ponderación por probabilidad inversa — Clase empírica</a>
 <ul>
-<li class="chapter" data-level="18.1" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#psm-sec"><i class="fa fa-check"></i><b>18.1</b> Parte I: Propensity Score Matching (PSM)</a></li>
-<li class="chapter" data-level="18.2" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#ipw-sec"><i class="fa fa-check"></i><b>18.2</b> Parte II: Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="18.3" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#synth-sec"><i class="fa fa-check"></i><b>18.3</b> Parte III: Synthetic Control Method</a></li>
-<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#descarga-los-archivos-2"><i class="fa fa-check"></i>Descarga los archivos</a></li>
-<li class="chapter" data-level="18.4" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#resumen-sec"><i class="fa fa-check"></i><b>18.4</b> Resumen comparativo</a></li>
-<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#do-files-disponibles"><i class="fa fa-check"></i>Do-files disponibles</a></li>
-<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#lecturas-recomendadas-4"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#materiales-para-la-clase-7"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#pregunta-causal-y-estimandos"><i class="fa fa-check"></i>Pregunta causal y estimandos</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#estimar-el-propensity-score"><i class="fa fa-check"></i>Estimar el propensity score</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#construir-los-pesos"><i class="fa fa-check"></i>Construir los pesos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#horvitzthompson-y-h%C3%A1jek-a-mano"><i class="fa fa-check"></i>Horvitz–Thompson y Hájek a mano</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#el-mismo-resultado-con-reg"><i class="fa fa-check"></i>El mismo resultado con <code>reg</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#postestimaci%C3%B3n-qued%C3%B3-balanceado"><i class="fa fa-check"></i>Postestimación: ¿quedó balanceado?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-integrada-y-doble-robustez"><i class="fa fa-check"></i>Estimación integrada y doble robustez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#una-simulaci%C3%B3n-donde-la-positividad-s%C3%AD-importa"><i class="fa fa-check"></i>Una simulación donde la positividad sí importa</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#flujo-de-trabajo-para-una-aplicaci%C3%B3n"><i class="fa fa-check"></i>Flujo de trabajo para una aplicación</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#referencias-y-ayuda-de-stata"><i class="fa fa-check"></i>Referencias y ayuda de Stata</a></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="iv.html"><a href="iv.html"><i class="fa fa-check"></i><b>19</b> Variables Instrumentales y LATE</a>
+<li class="chapter" data-level="20" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html"><i class="fa fa-check"></i><b>20</b> Controles sintéticos — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#una-intervenci%C3%B3n-una-unidad-tratada-y-ning%C3%BAn-control-perfecto"><i class="fa fa-check"></i>Una intervención, una unidad tratada y ningún control perfecto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-soluci%C3%B3n-una-combinaci%C3%B3n-convexa-de-donantes"><i class="fa fa-check"></i>La solución: una combinación convexa de donantes</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-se-eligen-los-pesos-distinguir-w-de-v"><i class="fa fa-check"></i>Cómo se eligen los pesos: distinguir (W) de (V)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soporte-la-geometr%C3%ADa-de-la-envolvente-convexa"><i class="fa fa-check"></i>Soporte: la geometría de la envolvente convexa</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-cre%C3%ADble-al-contrafactual-sint%C3%A9tico"><i class="fa fa-check"></i>¿Qué hace creíble al contrafactual sintético?</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html#medir-el-ajuste-con-rmspe"><i class="fa fa-check"></i>Medir el ajuste con RMSPE</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html#placebos-espaciales-es-excepcional-la-brecha-tratada"><i class="fa fa-check"></i>Placebos espaciales: ¿es excepcional la brecha tratada?</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html#placebo-temporal-y-sensibilidad-al-conjunto-donante"><i class="fa fa-check"></i>Placebo temporal y sensibilidad al conjunto donante</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#protocolo-para-interpretar-una-aplicaci%C3%B3n"><i class="fa fa-check"></i>Protocolo para interpretar una aplicación</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html#lecturas-recomendadas-3"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html"><i class="fa fa-check"></i><b>21</b> Controles sintéticos — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#materiales-para-la-clase-8"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pregunta-emp%C3%ADrica-y-datos"><i class="fa fa-check"></i>Pregunta empírica y datos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#especificaci%C3%B3n-y-estimaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Especificación y estimación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qui%C3%A9n-construye-a-california-sint%C3%A9tica"><i class="fa fa-check"></i>¿Quién construye a California sintética?</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#balance-de-predictores"><i class="fa fa-check"></i>Balance de predictores</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#reconstrucci%C3%B3n-manual-del-resultado-de-synth"><i class="fa fa-check"></i>Reconstrucción manual del resultado de <code>synth</code></a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#trayectoria-observada-y-contrafactual"><i class="fa fa-check"></i>Trayectoria observada y contrafactual</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#la-brecha-anual-y-su-magnitud"><i class="fa fa-check"></i>La brecha anual y su magnitud</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#rmspe-ajuste-antes-y-despu%C3%A9s"><i class="fa fa-check"></i>RMSPE: ajuste antes y después</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#placebos-espaciales"><i class="fa fa-check"></i>Placebos espaciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#placebo-temporal-de-1980-sin-fuga-de-informaci%C3%B3n"><i class="fa fa-check"></i>Placebo temporal de 1980 sin fuga de información</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#sensibilidad-leave-one-out"><i class="fa fa-check"></i>Sensibilidad leave-one-out</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#lectura-conjunta-de-la-evidencia"><i class="fa fa-check"></i>Lectura conjunta de la evidencia</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#preguntas-de-trabajo"><i class="fa fa-check"></i>Preguntas de trabajo</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="iv.html"><a href="iv.html"><i class="fa fa-check"></i><b>22</b> Variables Instrumentales y LATE</a>
 <ul>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-problema-de-endogeneidad"><i class="fa fa-check"></i>El problema de endogeneidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#la-soluci%C3%B3n-una-variable-instrumental"><i class="fa fa-check"></i>La solución: una variable instrumental</a></li>
@@ -431,9 +478,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-el-efecto-promedio-local-de-tratamiento"><i class="fa fa-check"></i>LATE: el efecto promedio local de tratamiento</a></li>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-con-varios-instrumentos"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#variables-de-control"><i class="fa fa-check"></i>Variables de control</a></li>
-<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#lecturas-recomendadas-4"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="iv-stata.html"><a href="iv-stata.html"><i class="fa fa-check"></i><b>20</b> IV y LATE en Stata: simulación</a>
+<li class="chapter" data-level="23" data-path="iv-stata.html"><a href="iv-stata.html"><i class="fa fa-check"></i><b>23</b> IV y LATE en Stata: simulación</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa"><i class="fa fa-check"></i>Instalación previa</a></li>
 </ul></li>
@@ -454,10 +501,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#y-si-el-efecto-fuera-homog%C3%A9neo"><i class="fa fa-check"></i>¿Y si el efecto fuera homogéneo?</a></li>
 <li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#late-con-varios-instrumentos-1"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
 <li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resumen-2"><i class="fa fa-check"></i>Resumen</a></li>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#materiales-para-la-clase-5"><i class="fa fa-check"></i>Materiales para la clase</a></li>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#lecturas-recomendadas-6"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#materiales-para-la-clase-9"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
-<li class="chapter" data-level="21" data-path="rdd.html"><a href="rdd.html"><i class="fa fa-check"></i><b>21</b> Regresión Discontinua</a>
+<li class="chapter" data-level="24" data-path="rdd.html"><a href="rdd.html"><i class="fa fa-check"></i><b>24</b> Regresión Discontinua</a>
 <ul>
 <li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#la-idea-de-rd"><i class="fa fa-check"></i>La idea de RD</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n"><i class="fa fa-check"></i>Notación</a></li>
@@ -473,9 +520,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#variable-de-asignaci%C3%B3n-discreta"><i class="fa fa-check"></i>Variable de asignación discreta</a></li>
 <li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#extensiones"><i class="fa fa-check"></i>Extensiones</a></li>
 <li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#checklist-final"><i class="fa fa-check"></i>Checklist final</a></li>
-<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#lecturas-recomendadas-7"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#lecturas-recomendadas-6"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
-<li class="chapter" data-level="22" data-path="rdd-stata.html"><a href="rdd-stata.html"><i class="fa fa-check"></i><b>22</b> RDD en Stata: simulación</a>
+<li class="chapter" data-level="25" data-path="rdd-stata.html"><a href="rdd-stata.html"><i class="fa fa-check"></i><b>25</b> RDD en Stata: simulación</a>
 <ul>
 <li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa-1"><i class="fa fa-check"></i>Instalación previa</a></li>
 </ul></li>
@@ -503,7 +550,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#sensibilidad-1"><i class="fa fa-check"></i>1. Sensibilidad</a></li>
 <li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#balance-de-covariables"><i class="fa fa-check"></i>2. Balance de covariables</a></li>
-<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#placebo-2"><i class="fa fa-check"></i>3. Placebo</a></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#placebo-1"><i class="fa fa-check"></i>3. Placebo</a></li>
 <li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#sorting-test-de-mccrary-2008-1"><i class="fa fa-check"></i>4. Sorting (test de McCrary 2008)</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="parte-e-rdd.html"><a href="parte-e-rdd.html"><i class="fa fa-check"></i>Parte E — RDB</a>
@@ -543,541 +590,556 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="psm-ipw-sinteticos" class="section level1 hasAnchor" number="18">
-<h1><span class="header-section-number">Capitulo 18</span> Sesión Práctica: PSM, IPW y Controles Sintéticos en Stata<a href="psm-ipw-sinteticos.html#psm-ipw-sinteticos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="psm-ipw-sinteticos" class="section level1 hasAnchor" number="19">
+<h1><span class="header-section-number">Capitulo 19</span> Ponderación por probabilidad inversa — Clase empírica<a href="psm-ipw-sinteticos.html#psm-ipw-sinteticos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="materiales-para-la-clase-7" class="section level2 unnumbered hasAnchor">
+<h2>Materiales para la clase<a href="psm-ipw-sinteticos.html#materiales-para-la-clase-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Descarga estos archivos antes de comenzar:</p>
+<ul>
+<li><a href="dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do">Do-file completo de IPW</a></li>
+<li><a href="dofile/16_PSM_IPW_Sinteticos/base6.dta">Base de datos de la práctica</a></li>
+<li><a href="dofile/16_PSM_IPW_Sinteticos/ipw_demo.log">Log completo de Stata</a></li>
+</ul>
+<div class="boxinfo">
+<p><strong>Lecturas centrales</strong></p>
+<ul>
+<li><a href="lecturas/bernal-pena/capitulo-06.pdf">Bernal y Peña — capítulo 6 (PDF)</a></li>
+<li><a href="https://mixtape.scunning.com/05-matching_and_subclassification">Cunningham — capítulo 5: Matching and Subclassification</a></li>
+</ul>
+</div>
 <div class="boxinfo">
 <p><strong>Metas de aprendizaje</strong></p>
 <ul>
-<li>Implementar Propensity Score Matching (PSM) con cinco algoritmos: NN, caliper, radio, kernel y LLR</li>
-<li>Estimar el propensity score y verificar soporte común</li>
-<li>Interpretar la tabla <code>pstest</code> y los indicadores de balance (Pseudo R², LR chi², %Bias)</li>
-<li>Calcular errores estándar correctos (bootstrap, Abadie-Imbens)</li>
-<li>Usar Inverse Probability Weighting (IPW) como alternativa al matching</li>
-<li>Implementar Synthetic Control Method para evaluaciones con unidades tratadas únicas</li>
-<li>Realizar análisis de sensibilidad a variables no observadas</li>
+<li>Construir manualmente pesos ATE y ATT a partir del propensity score.</li>
+<li>Distinguir Horvitz–Thompson y Hájek en resultados reales.</li>
+<li>Auditar soporte, balance, concentración de pesos y tamaño efectivo de muestra.</li>
+<li>Comparar <code>teffects ipw</code>, <code>teffects aipw</code> y <code>teffects ipwra</code>.</li>
+<li>Reconocer cuándo la positividad débil obliga a cambiar el diseño y la población objetivo.</li>
 </ul>
 </div>
-<hr />
-<div id="psm-sec" class="section level2 hasAnchor" number="18.1">
-<h2><span class="header-section-number">18.1</span> Parte I: Propensity Score Matching (PSM)<a href="psm-ipw-sinteticos.html#psm-sec" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>En este capítulo aplicamos todos los métodos de emparejamiento a una base de datos real. La lógica es siempre la misma: estimar el propensity score, elegir un algoritmo de emparejamiento, verificar el balance, y estimar el efecto del tratamiento. Lo que cambia entre métodos es cómo se construye el grupo de control.</p>
-<p>La base de datos es <code>base6.dta</code>. La variable de tratamiento es <code>D</code>, el resultado de interés es <code>y2</code>, y el vector de covariables es:</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb167-1"><a href="psm-ipw-sinteticos.html#cb167-1" tabindex="-1"></a><span class="kw">global</span> X <span class="st">&quot;personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre&quot;</span></span></code></pre></div>
-<div id="paso-0-preparación" class="section level3 hasAnchor" number="18.1.1">
-<h3><span class="header-section-number">18.1.1</span> Paso 0: Preparación<a href="#paso-0-preparaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb168"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb168-1"><a href="psm-ipw-sinteticos.html#cb168-1" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb168-2"><a href="psm-ipw-sinteticos.html#cb168-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1298</span>
-<span id="cb168-3"><a href="psm-ipw-sinteticos.html#cb168-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">more</span> <span class="kw">off</span></span>
-<span id="cb168-4"><a href="psm-ipw-sinteticos.html#cb168-4" tabindex="-1"></a><span class="kw">use</span> base6.dta</span>
-<span id="cb168-5"><a href="psm-ipw-sinteticos.html#cb168-5" tabindex="-1"></a><span class="fu">log</span> <span class="kw">using</span> <span class="st">&quot;psm_complete.log&quot;</span>, <span class="kw">replace</span></span>
-<span id="cb168-6"><a href="psm-ipw-sinteticos.html#cb168-6" tabindex="-1"></a></span>
-<span id="cb168-7"><a href="psm-ipw-sinteticos.html#cb168-7" tabindex="-1"></a><span class="kw">global</span> X <span class="st">&quot;personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre&quot;</span></span></code></pre></div>
-<hr />
 </div>
-<div id="paso-1-estadísticas-descriptivas" class="section level3 hasAnchor" number="18.1.2">
-<h3><span class="header-section-number">18.1.2</span> Paso 1: Estadísticas descriptivas<a href="#paso-1-estad%C3%ADsticas-descriptivas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Antes de emparejar, conviene conocer la magnitud del problema: ¿cuán diferentes son los grupos?</p>
-<div class="sourceCode" id="cb169"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb169-1"><a href="psm-ipw-sinteticos.html#cb169-1" tabindex="-1"></a><span class="kw">tab</span> D</span>
-<span id="cb169-2"><a href="psm-ipw-sinteticos.html#cb169-2" tabindex="-1"></a><span class="kw">table</span> D, stat(<span class="kw">mean</span> y1 y2)</span></code></pre></div>
-<p>La diferencia cruda entre tratados y controles en <code>y2</code> combina el efecto causal con el sesgo de selección. El objetivo del PSM es aislar el efecto causal.</p>
-<hr />
+<div id="pregunta-causal-y-estimandos" class="section level2 unnumbered hasAnchor">
+<h2>Pregunta causal y estimandos<a href="psm-ipw-sinteticos.html#pregunta-causal-y-estimandos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Usaremos la misma base de PSM para que el cambio sea metodológico, no una historia nueva. El tratamiento es <code>D</code>, el resultado es <code>y2</code> y todas las covariables son pretratamiento:</p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb170-1"><a href="psm-ipw-sinteticos.html#cb170-1" tabindex="-1"></a><span class="kw">use</span> base6.dta, <span class="kw">clear</span></span>
+<span id="cb170-2"><a href="psm-ipw-sinteticos.html#cb170-2" tabindex="-1"></a><span class="kw">global</span> Xmust personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre</span>
+<span id="cb170-3"><a href="psm-ipw-sinteticos.html#cb170-3" tabindex="-1"></a><span class="kw">drop</span> <span class="kw">if</span> <span class="fu">missing</span>(D, y2, <span class="ot">$Xmust</span>)</span></code></pre></div>
+<p>Estudiaremos dos preguntas:</p>
+<p><span class="math display">\[
+ATE=E[Y(D=1)-Y(D=0)]
+\]</span></p>
+<p>y</p>
+<p><span class="math display">\[
+ATT=E[Y(D=1)-Y(D=0)\mid D=1].
+\]</span></p>
+<p>La diferencia cruda es <span class="math inline">\(0.3325\)</span>, pero no la llamamos efecto causal: los grupos presentan selección observable. IPW busca construir una pseudopoblación donde la distribución de esas covariables sea comparable.</p>
 </div>
-<div id="paso-2-el-modelo-de-selección-y-el-propensity-score" class="section level3 hasAnchor" number="18.1.3">
-<h3><span class="header-section-number">18.1.3</span> Paso 2: El modelo de selección y el propensity score<a href="#paso-2-el-modelo-de-selecci%C3%B3n-y-el-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>El propensity score es la probabilidad estimada de recibir el tratamiento dado el vector de covariables. Se estima con un modelo probit o logit:</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb170-1"><a href="psm-ipw-sinteticos.html#cb170-1" tabindex="-1"></a><span class="kw">logit</span> D <span class="ot">$X</span></span>
-<span id="cb170-2"><a href="psm-ipw-sinteticos.html#cb170-2" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> pscore1, pr</span>
-<span id="cb170-3"><a href="psm-ipw-sinteticos.html#cb170-3" tabindex="-1"></a></span>
-<span id="cb170-4"><a href="psm-ipw-sinteticos.html#cb170-4" tabindex="-1"></a>summ pscore1, <span class="kw">detail</span></span></code></pre></div>
-<p><strong>Verificación visual del soporte común:</strong></p>
-<div class="sourceCode" id="cb171"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb171-1"><a href="psm-ipw-sinteticos.html#cb171-1" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">kdensity</span> pscore1 <span class="kw">if</span> D==1, lcolor(<span class="bn">blue</span>) lwidth(medium)) <span class="co">///</span></span>
-<span id="cb171-2"><a href="psm-ipw-sinteticos.html#cb171-2" tabindex="-1"></a>       (<span class="kw">kdensity</span> pscore1 <span class="kw">if</span> D==0, lcolor(<span class="kw">red</span>) lwidth(medium)), <span class="co">///</span></span>
-<span id="cb171-3"><a href="psm-ipw-sinteticos.html#cb171-3" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
-<span id="cb171-4"><a href="psm-ipw-sinteticos.html#cb171-4" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Distribución del Propensity Score&quot;</span>) <span class="co">///</span></span>
-<span id="cb171-5"><a href="psm-ipw-sinteticos.html#cb171-5" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Propensity Score&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Densidad&quot;</span>)</span></code></pre></div>
-<p>El gráfico de densidades superpuestas permite ver visualmente si hay soporte común: necesitamos que las distribuciones del PS para tratados y controles se <strong>solapen</strong> en una región ampla.</p>
-<hr />
+<div id="estimar-el-propensity-score" class="section level2 unnumbered hasAnchor">
+<h2>Estimar el propensity score<a href="psm-ipw-sinteticos.html#estimar-el-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb171"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb171-1"><a href="psm-ipw-sinteticos.html#cb171-1" tabindex="-1"></a><span class="kw">logit</span> D <span class="ot">$Xmust</span></span>
+<span id="cb171-2"><a href="psm-ipw-sinteticos.html#cb171-2" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> ps, pr</span>
+<span id="cb171-3"><a href="psm-ipw-sinteticos.html#cb171-3" tabindex="-1"></a><span class="kw">assert</span> ps &gt; 0 &amp; ps &lt; 1</span></code></pre></div>
+<p>La primera auditoría no es el coeficiente del logit. Es la superposición de <span class="math inline">\(\hat e(X)\)</span> entre tratados y controles.</p>
+<div class="float">
+<img src="dofile/16_PSM_IPW_Sinteticos/ipw_support.png" alt="Soporte del propensity score por grupo de tratamiento" />
+<div class="figcaption">Soporte del propensity score por grupo de tratamiento</div>
 </div>
-<div id="paso-3-preparar-el-orden-aleatorio" class="section level3 hasAnchor" number="18.1.4">
-<h3><span class="header-section-number">18.1.4</span> Paso 3: Preparar el orden aleatorio<a href="psm-ipw-sinteticos.html#paso-3-preparar-el-orden-aleatorio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Para el emparejamiento NN sin reemplazo, el resultado depende del orden en que se procesan los tratados. Fijamos un orden aleatorio antes de emparejar:</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb172-1"><a href="psm-ipw-sinteticos.html#cb172-1" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 1298</span>
-<span id="cb172-2"><a href="psm-ipw-sinteticos.html#cb172-2" tabindex="-1"></a><span class="kw">drawnorm</span> orden</span>
-<span id="cb172-3"><a href="psm-ipw-sinteticos.html#cb172-3" tabindex="-1"></a><span class="kw">sort</span> orden</span></code></pre></div>
-<p>Este paso es <strong>crítico</strong>: sin él, observaciones con el mismo PS pero distinto ID pueden producir resultados distintos en cada corrida.</p>
-<hr />
+<p>En esta base hay superposición amplia. Esto anticipa pesos moderados, pero no demuestra CIA: solo indica que existen comparaciones observables razonables.</p>
 </div>
-<div id="paso-4-opciones-de-emparejamiento" class="section level3 hasAnchor" number="18.1.5">
-<h3><span class="header-section-number">18.1.5</span> Paso 4: Opciones de Emparejamiento<a href="psm-ipw-sinteticos.html#paso-4-opciones-de-emparejamiento" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="a.-nn1-sin-reemplazo-soporte-común" class="section level4 hasAnchor" number="18.1.5.1">
-<h4><span class="header-section-number">18.1.5.1</span> 4a. NN(1) sin reemplazo, soporte común<a href="#a.-nn1-sin-reemplazo-soporte-com%C3%BAn" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>El caso más simple: cada tratado se empareja con su control más cercano en PS, sin que ningún control se use dos veces.</p>
-<div class="sourceCode" id="cb173"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb173-1"><a href="psm-ipw-sinteticos.html#cb173-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) noreplacement common</span>
-<span id="cb173-2"><a href="psm-ipw-sinteticos.html#cb173-2" tabindex="-1"></a>psgraph</span>
-<span id="cb173-3"><a href="psm-ipw-sinteticos.html#cb173-3" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
-<p><strong>Interpretación:</strong>
-- <strong>Unmatched</strong>: diferencia cruda (incluye sesgo de selección)
-- <strong>ATT</strong>: efecto del tratamiento sobre los tratados después del emparejamiento
-- <strong>S.E.</strong>: error estándar (sin ajuste por estimación del PS)</p>
-</div>
-<div id="b.-nn1-con-reemplazo-y-errores-estándar-analíticos" class="section level4 hasAnchor" number="18.1.5.2">
-<h4><span class="header-section-number">18.1.5.2</span> 4b. NN(1) con reemplazo y errores estándar analíticos<a href="#b.-nn1-con-reemplazo-y-errores-est%C3%A1ndar-anal%C3%ADticos" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb174"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb174-1"><a href="psm-ipw-sinteticos.html#cb174-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) common ai(1)</span>
-<span id="cb174-2"><a href="psm-ipw-sinteticos.html#cb174-2" tabindex="-1"></a>psgraph</span>
-<span id="cb174-3"><a href="psm-ipw-sinteticos.html#cb174-3" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
-<p>La opción <code>ai(1)</code> calcula errores estándar analíticos de Abadie &amp; Imbens (2006), que toman en cuenta que el PS es estimado.</p>
-</div>
-<div id="c.-nn-con-múltiples-vecinos" class="section level4 hasAnchor" number="18.1.5.3">
-<h4><span class="header-section-number">18.1.5.3</span> 4c. NN con múltiples vecinos<a href="#c.-nn-con-m%C3%BAltiples-vecinos" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb175"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb175-1"><a href="psm-ipw-sinteticos.html#cb175-1" tabindex="-1"></a>* NN(5): promedio <span class="kw">de</span> los 5 vecinos más cercanos</span>
-<span id="cb175-2"><a href="psm-ipw-sinteticos.html#cb175-2" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(5) common ai(4)</span>
-<span id="cb175-3"><a href="psm-ipw-sinteticos.html#cb175-3" tabindex="-1"></a></span>
-<span id="cb175-4"><a href="psm-ipw-sinteticos.html#cb175-4" tabindex="-1"></a>* NN(10)</span>
-<span id="cb175-5"><a href="psm-ipw-sinteticos.html#cb175-5" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(10) common ai(9)</span></code></pre></div>
-<p>Usar más vecinos reduce la varianza a costa de algo de sesgo (los vecinos adicionales son más lejanos).</p>
-</div>
-<div id="d.-caliper" class="section level4 hasAnchor" number="18.1.5.4">
-<h4><span class="header-section-number">18.1.5.4</span> 4d. Caliper<a href="psm-ipw-sinteticos.html#d.-caliper" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Impone una distancia máxima en PS. Los tratados sin control dentro del caliper se descartan.</p>
-<div class="sourceCode" id="cb176"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb176-1"><a href="psm-ipw-sinteticos.html#cb176-1" tabindex="-1"></a>* Caliper estricto</span>
-<span id="cb176-2"><a href="psm-ipw-sinteticos.html#cb176-2" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) caliper(0.001) common ai(1)</span>
-<span id="cb176-3"><a href="psm-ipw-sinteticos.html#cb176-3" tabindex="-1"></a>psgraph</span>
-<span id="cb176-4"><a href="psm-ipw-sinteticos.html#cb176-4" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
-<p>Un caliper más pequeño mejora el balance pero puede dejar sin emparejar a muchos tratados.</p>
-</div>
-<div id="e.-radio" class="section level4 hasAnchor" number="18.1.5.5">
-<h4><span class="header-section-number">18.1.5.5</span> 4e. Radio<a href="psm-ipw-sinteticos.html#e.-radio" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>El radio empareja con <strong>todos</strong> los controles dentro del caliper, no solo el más cercano.</p>
-<div class="sourceCode" id="cb177"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb177-1"><a href="psm-ipw-sinteticos.html#cb177-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) radius caliper(0.001) common ai(1)</span>
-<span id="cb177-2"><a href="psm-ipw-sinteticos.html#cb177-2" tabindex="-1"></a>psgraph</span>
-<span id="cb177-3"><a href="psm-ipw-sinteticos.html#cb177-3" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
-</div>
-<div id="f.-kernel-matching" class="section level4 hasAnchor" number="18.1.5.6">
-<h4><span class="header-section-number">18.1.5.6</span> 4f. Kernel Matching<a href="psm-ipw-sinteticos.html#f.-kernel-matching" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>El kernel usa <strong>todos</strong> los controles, ponderados por su distancia al tratado. Los controles más cercanos en PS reciben mayor peso.</p>
-<div class="sourceCode" id="cb178"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb178-1"><a href="psm-ipw-sinteticos.html#cb178-1" tabindex="-1"></a>* Kernel Epanechnikov (por defecto)</span>
-<span id="cb178-2"><a href="psm-ipw-sinteticos.html#cb178-2" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) kernel kerneltype(epan) bwidth(0.06) common</span>
-<span id="cb178-3"><a href="psm-ipw-sinteticos.html#cb178-3" tabindex="-1"></a>psgraph</span>
-<span id="cb178-4"><a href="psm-ipw-sinteticos.html#cb178-4" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span>
-<span id="cb178-5"><a href="psm-ipw-sinteticos.html#cb178-5" tabindex="-1"></a></span>
-<span id="cb178-6"><a href="psm-ipw-sinteticos.html#cb178-6" tabindex="-1"></a>* Kernel Gaussiano</span>
-<span id="cb178-7"><a href="psm-ipw-sinteticos.html#cb178-7" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) kernel kerneltype(<span class="fu">normal</span>) bwidth(0.06) common</span></code></pre></div>
-<p>Los kernels disponibles: <code>epan</code> (Epanechnikov), <code>normal</code> (Gaussiano), <code>biweight</code>, <code>uniform</code>, <code>tricube</code>.</p>
-</div>
-<div id="g.-regresión-local-lineal-llr" class="section level4 hasAnchor" number="18.1.5.7">
-<h4><span class="header-section-number">18.1.5.7</span> 4g. Regresión Local Lineal (LLR)<a href="#g.-regresi%C3%B3n-local-lineal-llr" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>El LLR ajusta una regresión lineal local ponderada por el kernel. Reduce el sesgo en las fronteras del soporte.</p>
-<div class="sourceCode" id="cb179"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb179-1"><a href="psm-ipw-sinteticos.html#cb179-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, llr outcome(y2) common</span>
-<span id="cb179-2"><a href="psm-ipw-sinteticos.html#cb179-2" tabindex="-1"></a><span class="kw">bootstrap</span> <span class="fu">r</span>(att), reps(1000) : psmatch2 D <span class="ot">$X</span>, llr outcome(y2) common</span></code></pre></div>
-<hr />
-</div>
-</div>
-<div id="paso-5-verificación-del-balance" class="section level3 hasAnchor" number="18.1.6">
-<h3><span class="header-section-number">18.1.6</span> Paso 5: Verificación del Balance<a href="#paso-5-verificaci%C3%B3n-del-balance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="tabla-pstest" class="section level4 hasAnchor" number="18.1.6.1">
-<h4><span class="header-section-number">18.1.6.1</span> Tabla <code>pstest</code><a href="psm-ipw-sinteticos.html#tabla-pstest" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb180"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb180-1"><a href="psm-ipw-sinteticos.html#cb180-1" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both <span class="kw">graph</span></span></code></pre></div>
-<p>La tabla reporta para cada covariable:</p>
+<div id="construir-los-pesos" class="section level2 unnumbered hasAnchor">
+<h2>Construir los pesos<a href="psm-ipw-sinteticos.html#construir-los-pesos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para ATE ponderamos ambos brazos hacia la población completa; para ATT dejamos peso uno a los tratados y reponderamos los controles hacia ellos.</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb172-1"><a href="psm-ipw-sinteticos.html#cb172-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> w_ate = D/ps + (1-D)/(1-ps)</span>
+<span id="cb172-2"><a href="psm-ipw-sinteticos.html#cb172-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> w_att = D + (1-D)*ps/(1-ps)</span>
+<span id="cb172-3"><a href="psm-ipw-sinteticos.html#cb172-3" tabindex="-1"></a></span>
+<span id="cb172-4"><a href="psm-ipw-sinteticos.html#cb172-4" tabindex="-1"></a>summ D, <span class="kw">meanonly</span></span>
+<span id="cb172-5"><a href="psm-ipw-sinteticos.html#cb172-5" tabindex="-1"></a><span class="fu">scalar</span> pD = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb172-6"><a href="psm-ipw-sinteticos.html#cb172-6" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> w_ate_stab = D*pD/ps + (1-D)*(1-pD)/(1-ps)</span></code></pre></div>
 <table>
+<caption><span id="tab:ipw-diagnostics-table">Table 19.1: </span>Diagnóstico de pesos generado por Stata</caption>
 <thead>
 <tr class="header">
-<th>Columna</th>
-<th>Significado</th>
+<th align="left"></th>
+<th align="left">Peso</th>
+<th align="right">p1</th>
+<th align="right">p50</th>
+<th align="right">p99</th>
+<th align="right">Máximo</th>
+<th align="right">Suma</th>
+<th align="right">ESS</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Unmatched</strong></td>
-<td>Medias antes del emparejamiento</td>
+<td align="left">1</td>
+<td align="left">w_ate</td>
+<td align="right">1.460</td>
+<td align="right">1.977</td>
+<td align="right">2.876</td>
+<td align="right">3.819</td>
+<td align="right">7999.691</td>
+<td align="right">3930.393</td>
 </tr>
 <tr class="even">
-<td><strong>Matched</strong></td>
-<td>Medias después del emparejamiento</td>
+<td align="left">7</td>
+<td align="left">w_att</td>
+<td align="right">0.492</td>
+<td align="right">1.000</td>
+<td align="right">1.495</td>
+<td align="right">2.803</td>
+<td align="right">3903.633</td>
+<td align="right">3872.014</td>
 </tr>
 <tr class="odd">
-<td><strong>%Bias</strong></td>
-<td>Diferencia estandarizada (<span class="math inline">\(\times 100\)</span>)</td>
-</tr>
-<tr class="even">
-<td><strong>t-test</strong></td>
-<td>Significancia de la diferencia de medias</td>
+<td align="left">13</td>
+<td align="left">w_ate_stab</td>
+<td align="right">0.731</td>
+<td align="right">0.988</td>
+<td align="right">1.406</td>
+<td align="right">1.947</td>
+<td align="right">3999.841</td>
+<td align="right">3932.900</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Regla práctica:</strong> <span class="math inline">\(|\text{%Bias}| &lt; 5\%\)</span> es excelente; <span class="math inline">\(&lt; 20\%\)</span> es aceptable.</p>
+<pre class="text"><code>Peso ATE: máximo = 3.819; ESS = 3,930 de 4,000
+Peso ATT: máximo = 2.803; ESS = 3,872 de 4,000
+ATE estabilizado: máximo = 1.947; ESS = 3,933 de 4,000</code></pre>
+<p>La cercanía entre tamaño nominal y ESS confirma que ninguna observación domina. Los pesos estabilizados cambian la escala, no la concentración relativa dentro de cada brazo ni el soporte disponible.</p>
+<div class="float">
+<img src="dofile/16_PSM_IPW_Sinteticos/ipw_weights_dist.png" alt="Distribución de los pesos ATE" />
+<div class="figcaption">Distribución de los pesos ATE</div>
 </div>
-<div id="indicadores-globales-1" class="section level4 hasAnchor" number="18.1.6.2">
-<h4><span class="header-section-number">18.1.6.2</span> Indicadores globales<a href="psm-ipw-sinteticos.html#indicadores-globales-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p><code>pstest</code> reporta:</p>
+<div class="boxexam">
+<p><strong>IPW-S1.</strong> Suponga que el peso ATE máximo fuera 64 y el ESS fuera 420 con 4,000 observaciones. Explique qué problema empírico revelan conjuntamente esas cifras, qué figura examinaría y por qué reportar únicamente el tamaño nominal sería engañoso.</p>
+</div>
+</div>
+<div id="horvitzthompson-y-hájek-a-mano" class="section level2 unnumbered hasAnchor">
+<h2>Horvitz–Thompson y Hájek a mano<a href="#horvitzthompson-y-h%C3%A1jek-a-mano" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La mecánica debe quedar visible antes de usar <code>teffects</code>. Para ATE, Horvitz–Thompson conserva el denominador <span class="math inline">\(N\)</span>:</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb174-1"><a href="psm-ipw-sinteticos.html#cb174-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> ht1_ate_i = D*y2/ps</span>
+<span id="cb174-2"><a href="psm-ipw-sinteticos.html#cb174-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> ht0_ate_i = (1-D)*y2/(1-ps)</span>
+<span id="cb174-3"><a href="psm-ipw-sinteticos.html#cb174-3" tabindex="-1"></a>summ ht1_ate_i, <span class="kw">meanonly</span></span>
+<span id="cb174-4"><a href="psm-ipw-sinteticos.html#cb174-4" tabindex="-1"></a><span class="fu">scalar</span> ht1_ate = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb174-5"><a href="psm-ipw-sinteticos.html#cb174-5" tabindex="-1"></a>summ ht0_ate_i, <span class="kw">meanonly</span></span>
+<span id="cb174-6"><a href="psm-ipw-sinteticos.html#cb174-6" tabindex="-1"></a><span class="fu">scalar</span> ht0_ate = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb174-7"><a href="psm-ipw-sinteticos.html#cb174-7" tabindex="-1"></a><span class="fu">scalar</span> ht_ate = <span class="fu">scalar</span>(ht1_ate) - <span class="fu">scalar</span>(ht0_ate)</span></code></pre></div>
+<p>Hájek normaliza cada media por la suma realizada de pesos:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb175-1"><a href="psm-ipw-sinteticos.html#cb175-1" tabindex="-1"></a>summ y2 [aw=1/ps] <span class="kw">if</span> D==1, <span class="kw">meanonly</span></span>
+<span id="cb175-2"><a href="psm-ipw-sinteticos.html#cb175-2" tabindex="-1"></a><span class="fu">scalar</span> hajek1_ate = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb175-3"><a href="psm-ipw-sinteticos.html#cb175-3" tabindex="-1"></a>summ y2 [aw=1/(1-ps)] <span class="kw">if</span> D==0, <span class="kw">meanonly</span></span>
+<span id="cb175-4"><a href="psm-ipw-sinteticos.html#cb175-4" tabindex="-1"></a><span class="fu">scalar</span> hajek0_ate = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb175-5"><a href="psm-ipw-sinteticos.html#cb175-5" tabindex="-1"></a><span class="fu">scalar</span> hajek_ate = <span class="fu">scalar</span>(hajek1_ate) - <span class="fu">scalar</span>(hajek0_ate)</span></code></pre></div>
 <table>
+<caption><span id="tab:ipw-manual-table">Table 19.2: </span>Cálculos manuales exportados por Stata</caption>
 <thead>
 <tr class="header">
-<th>Indicador</th>
-<th>¿Qué esperar después del matching?</th>
+<th align="left">Estimador</th>
+<th align="left">Estimando</th>
+<th align="right">Efecto</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Pseudo R²</strong></td>
-<td>Debe ser <span class="math inline">\(\approx 0\)</span></td>
+<td align="left">Diferencia cruda</td>
+<td align="left">ATE</td>
+<td align="right">0.3325</td>
 </tr>
 <tr class="even">
-<td><strong>LR chi²</strong></td>
-<td>No debe rechazarse (<span class="math inline">\(p &gt; 0.05\)</span>)</td>
+<td align="left">HT manual</td>
+<td align="left">ATE</td>
+<td align="right">0.3277</td>
 </tr>
 <tr class="odd">
-<td><strong>MeanBias / MedBias</strong></td>
-<td>Deben ser bajos</td>
+<td align="left">Hajek manual</td>
+<td align="left">ATE</td>
+<td align="right">0.3278</td>
+</tr>
+<tr class="even">
+<td align="left">HT manual</td>
+<td align="left">ATT</td>
+<td align="right">0.3320</td>
+</tr>
+<tr class="odd">
+<td align="left">Hajek manual</td>
+<td align="left">ATT</td>
+<td align="right">0.3322</td>
 </tr>
 </tbody>
 </table>
-<p>Si el balance es insuficiente, hay que re-especificar el PS (interacciones, cuadráticos) o cambiar el algoritmo.</p>
-<hr />
+<pre class="text"><code>ATE HT manual       = 0.3277
+ATE Hájek manual    = 0.3278
+ATT HT manual       = 0.3320
+ATT Hájek manual    = 0.3322</code></pre>
+<p>Aquí HT y Hájek son casi idénticos porque las sumas de pesos están cerca de sus masas objetivo. Esa coincidencia es un resultado de esta muestra, no una identidad algebraica.</p>
+<div class="boxexam">
+<p><strong>IPW-S2.</strong> Un compañero obtiene el mismo valor para HT y Hájek y concluye que son el mismo estimador. Use las fórmulas y las sumas de pesos para evaluar esa afirmación. Describa una muestra en la cual esperaríamos una diferencia mayor.</p>
 </div>
 </div>
-<div id="paso-6-errores-estándar-correctos" class="section level3 hasAnchor" number="18.1.7">
-<h3><span class="header-section-number">18.1.7</span> Paso 6: Errores estándar correctos<a href="#paso-6-errores-est%C3%A1ndar-correctos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="bootstrap" class="section level4 hasAnchor" number="18.1.7.1">
-<h4><span class="header-section-number">18.1.7.1</span> Bootstrap<a href="psm-ipw-sinteticos.html#bootstrap" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Los errores estándar de <code>psmatch2</code> (sin opciones adicionales) <strong>no</strong> toman en cuenta que el PS es estimado. La solución más robusta es el bootstrap:</p>
-<div class="sourceCode" id="cb181"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb181-1"><a href="psm-ipw-sinteticos.html#cb181-1" tabindex="-1"></a>* Bootstrap con 1000 réplicas</span>
-<span id="cb181-2"><a href="psm-ipw-sinteticos.html#cb181-2" tabindex="-1"></a><span class="kw">bootstrap</span> <span class="fu">r</span>(att), reps(1000) : psmatch2 D <span class="ot">$X</span>, outcome(y2) common kernel</span></code></pre></div>
-<p>El bootstrap captura correctamente la variabilidad de toda la cadena: PS + emparejamiento + diferencia de medias.</p>
-</div>
-<div id="errores-analíticos-abadie-imbens" class="section level4 hasAnchor" number="18.1.7.2">
-<h4><span class="header-section-number">18.1.7.2</span> Errores analíticos (Abadie-Imbens)<a href="#errores-anal%C3%ADticos-abadie-imbens" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Para matching NN <strong>con reemplazo</strong>, <code>psmatch2</code> ofrece errores estándar analíticos con la opción <code>ai(#)</code>:</p>
-<div class="sourceCode" id="cb182"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb182-1"><a href="psm-ipw-sinteticos.html#cb182-1" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(1) common ai(1)</span>
-<span id="cb182-2"><a href="psm-ipw-sinteticos.html#cb182-2" tabindex="-1"></a>psmatch2 D <span class="ot">$X</span>, outcome(y2) n(5) common ai(4)</span></code></pre></div>
-<hr />
-</div>
-</div>
-<div id="paso-7-alternativa-nativa-teffects-psmatch" class="section level3 hasAnchor" number="18.1.8">
-<h3><span class="header-section-number">18.1.8</span> Paso 7: Alternativa nativa: <code>teffects psmatch</code><a href="psm-ipw-sinteticos.html#paso-7-alternativa-nativa-teffects-psmatch" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Stata 13+ incluye <code>teffects psmatch</code>, que estima el PS y el efecto del tratamiento en un solo paso con SE correctamente calculados:</p>
-<div class="sourceCode" id="cb183"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb183-1"><a href="psm-ipw-sinteticos.html#cb183-1" tabindex="-1"></a>* ATT con NN(1)</span>
-<span id="cb183-2"><a href="psm-ipw-sinteticos.html#cb183-2" tabindex="-1"></a>teffects psmatch (y2) (D <span class="ot">$X</span>, <span class="kw">probit</span>), atet</span>
-<span id="cb183-3"><a href="psm-ipw-sinteticos.html#cb183-3" tabindex="-1"></a></span>
-<span id="cb183-4"><a href="psm-ipw-sinteticos.html#cb183-4" tabindex="-1"></a>* ATE con NN(4)</span>
-<span id="cb183-5"><a href="psm-ipw-sinteticos.html#cb183-5" tabindex="-1"></a>teffects psmatch (y2) (D <span class="ot">$X</span>, <span class="kw">probit</span>), ate nn(4)</span></code></pre></div>
-<hr />
-</div>
-</div>
-<div id="ipw-sec" class="section level2 hasAnchor" number="18.2">
-<h2><span class="header-section-number">18.2</span> Parte II: Inverse Probability Weighting (IPW)<a href="psm-ipw-sinteticos.html#ipw-sec" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>IPW es un estimador alternativo al matching que <strong>re-pondera</strong> la muestra en lugar de descartar observaciones. La idea: en lugar de emparejar, usamos pesos que hacen la muestra parecer como si el tratamiento fuera aleatorio.</p>
-<div id="por-qué-ipw" class="section level3 hasAnchor" number="18.2.1">
-<h3><span class="header-section-number">18.2.1</span> ¿Por qué IPW?<a href="#por-qu%C3%A9-ipw" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li><strong>No descarta observaciones:</strong> usa toda la muestra ponderada</li>
-<li><strong>Más eficiente que matching:</strong> menos pérdida de varianza</li>
-<li><strong>Fácil combinar con otros estimadores:</strong> se puede usar en regresión, DiD, etc.</li>
-</ul>
-<p><strong>Descargar do-file IPW:</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do">Descargar 02_ipw_stata.do</a></p>
-<hr />
-</div>
-<div id="paso-1-estimar-el-propensity-score" class="section level3 hasAnchor" number="18.2.2">
-<h3><span class="header-section-number">18.2.2</span> Paso 1: Estimar el propensity score<a href="psm-ipw-sinteticos.html#paso-1-estimar-el-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb184"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb184-1"><a href="psm-ipw-sinteticos.html#cb184-1" tabindex="-1"></a><span class="kw">probit</span> D <span class="ot">$X</span></span>
-<span id="cb184-2"><a href="psm-ipw-sinteticos.html#cb184-2" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> ps, pr</span>
-<span id="cb184-3"><a href="psm-ipw-sinteticos.html#cb184-3" tabindex="-1"></a></span>
-<span id="cb184-4"><a href="psm-ipw-sinteticos.html#cb184-4" tabindex="-1"></a>summ ps</span></code></pre></div>
-<hr />
-</div>
-<div id="paso-2-verificar-soporte-común" class="section level3 hasAnchor" number="18.2.3">
-<h3><span class="header-section-number">18.2.3</span> Paso 2: Verificar soporte común<a href="#paso-2-verificar-soporte-com%C3%BAn" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Los pesos IPW pueden explotar si hay poco soporte común:</p>
-<div class="sourceCode" id="cb185"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb185-1"><a href="psm-ipw-sinteticos.html#cb185-1" tabindex="-1"></a><span class="kw">gen</span> soporte = (ps &gt; 0.1 &amp; ps &lt; 0.9)</span>
-<span id="cb185-2"><a href="psm-ipw-sinteticos.html#cb185-2" tabindex="-1"></a>summ soporte</span>
-<span id="cb185-3"><a href="psm-ipw-sinteticos.html#cb185-3" tabindex="-1"></a></span>
-<span id="cb185-4"><a href="psm-ipw-sinteticos.html#cb185-4" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">kdensity</span> ps <span class="kw">if</span> D==1, lcolor(<span class="bn">blue</span>)) <span class="co">///</span></span>
-<span id="cb185-5"><a href="psm-ipw-sinteticos.html#cb185-5" tabindex="-1"></a>       (<span class="kw">kdensity</span> ps <span class="kw">if</span> D==0, lcolor(<span class="kw">red</span>)), <span class="co">///</span></span>
-<span id="cb185-6"><a href="psm-ipw-sinteticos.html#cb185-6" tabindex="-1"></a>       <span class="bn">xline</span>(0.1) <span class="bn">xline</span>(0.9) <span class="co">///</span></span>
-<span id="cb185-7"><a href="psm-ipw-sinteticos.html#cb185-7" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;Tratados&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
-<span id="cb185-8"><a href="psm-ipw-sinteticos.html#cb185-8" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Verificar Soporte Común (0.1 &lt; PS &lt; 0.9)&quot;</span>)</span></code></pre></div>
-<hr />
-</div>
-<div id="paso-3-construir-pesos-ipw" class="section level3 hasAnchor" number="18.2.4">
-<h3><span class="header-section-number">18.2.4</span> Paso 3: Construir pesos IPW<a href="psm-ipw-sinteticos.html#paso-3-construir-pesos-ipw" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="ipw-para-att-average-treatment-effect-on-the-treated" class="section level4 hasAnchor" number="18.2.4.1">
-<h4><span class="header-section-number">18.2.4.1</span> IPW para ATT (Average Treatment Effect on the Treated)<a href="psm-ipw-sinteticos.html#ipw-para-att-average-treatment-effect-on-the-treated" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb186"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb186-1"><a href="psm-ipw-sinteticos.html#cb186-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> w_att = <span class="fu">cond</span>(D==1, 1, ps/(1-ps))</span></code></pre></div>
-<p>Interpretación: los controles se ponderan inversamente a la probabilidad de ser control (<span class="math inline">\(1/(1-ps)\)</span>), lo que hace la distribución de <span class="math inline">\(X\)</span> entre controles ponderados igual a la de los tratados.</p>
-</div>
-<div id="ipw-para-ate-average-treatment-effect" class="section level4 hasAnchor" number="18.2.4.2">
-<h4><span class="header-section-number">18.2.4.2</span> IPW para ATE (Average Treatment Effect)<a href="psm-ipw-sinteticos.html#ipw-para-ate-average-treatment-effect" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb187"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb187-1"><a href="psm-ipw-sinteticos.html#cb187-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> w_ate = <span class="fu">cond</span>(D==1, 1/ps, 1/(1-ps))</span></code></pre></div>
-<p>Interpretación: cada observación se pondera inversamente a la probabilidad de estar en su grupo asignado actual.</p>
-<hr />
-</div>
-</div>
-<div id="paso-4-usar-pesos-en-regresión" class="section level3 hasAnchor" number="18.2.5">
-<h3><span class="header-section-number">18.2.5</span> Paso 4: Usar pesos en regresión<a href="#paso-4-usar-pesos-en-regresi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="comparación-simple-de-medias-ponderadas" class="section level4 hasAnchor" number="18.2.5.1">
-<h4><span class="header-section-number">18.2.5.1</span> Comparación simple de medias ponderadas<a href="#comparaci%C3%B3n-simple-de-medias-ponderadas" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb188"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb188-1"><a href="psm-ipw-sinteticos.html#cb188-1" tabindex="-1"></a>* ATT</span>
-<span id="cb188-2"><a href="psm-ipw-sinteticos.html#cb188-2" tabindex="-1"></a><span class="kw">mean</span> y2 <span class="kw">if</span> D==1</span>
-<span id="cb188-3"><a href="psm-ipw-sinteticos.html#cb188-3" tabindex="-1"></a><span class="kw">mean</span> y2 <span class="kw">if</span> D==0 [pw=w_att]</span></code></pre></div>
-</div>
-<div id="regresión-ponderada" class="section level4 hasAnchor" number="18.2.5.2">
-<h4><span class="header-section-number">18.2.5.2</span> Regresión ponderada<a href="#regresi%C3%B3n-ponderada" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb189"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb189-1"><a href="psm-ipw-sinteticos.html#cb189-1" tabindex="-1"></a>* Especificación simple</span>
-<span id="cb189-2"><a href="psm-ipw-sinteticos.html#cb189-2" tabindex="-1"></a><span class="kw">reg</span> y2 D [pw=w_att], <span class="kw">cluster</span>(id) <span class="kw">robust</span></span>
-<span id="cb189-3"><a href="psm-ipw-sinteticos.html#cb189-3" tabindex="-1"></a><span class="kw">reg</span> y2 D [pw=w_ate], <span class="kw">cluster</span>(id) <span class="kw">robust</span></span>
-<span id="cb189-4"><a href="psm-ipw-sinteticos.html#cb189-4" tabindex="-1"></a></span>
-<span id="cb189-5"><a href="psm-ipw-sinteticos.html#cb189-5" tabindex="-1"></a>* Con controles adicionales</span>
-<span id="cb189-6"><a href="psm-ipw-sinteticos.html#cb189-6" tabindex="-1"></a><span class="kw">reg</span> y2 D <span class="ot">$X</span> [pw=w_att], <span class="kw">cluster</span>(id) <span class="kw">robust</span></span></code></pre></div>
-</div>
-<div id="comando-nativo-teffects-ipw" class="section level4 hasAnchor" number="18.2.5.3">
-<h4><span class="header-section-number">18.2.5.3</span> Comando nativo: <code>teffects ipw</code><a href="psm-ipw-sinteticos.html#comando-nativo-teffects-ipw" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Está integrado especialmente para IPW con SEs correctos:</p>
-<div class="sourceCode" id="cb190"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb190-1"><a href="psm-ipw-sinteticos.html#cb190-1" tabindex="-1"></a>teffects ipw (y2) (D <span class="ot">$X</span>, <span class="kw">probit</span>), atet <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
-<span id="cb190-2"><a href="psm-ipw-sinteticos.html#cb190-2" tabindex="-1"></a>teffects ipw (y2) (D <span class="ot">$X</span>, <span class="kw">probit</span>), ate <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
-<hr />
-</div>
-</div>
-<div id="paso-5-sensibilidad-a-pesos-extremos" class="section level3 hasAnchor" number="18.2.6">
-<h3><span class="header-section-number">18.2.6</span> Paso 5: Sensibilidad a pesos extremos<a href="psm-ipw-sinteticos.html#paso-5-sensibilidad-a-pesos-extremos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Los pesos IPW pueden ser muy grandes si PS es muy cercano a 0 o 1:</p>
-<div class="sourceCode" id="cb191"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb191-1"><a href="psm-ipw-sinteticos.html#cb191-1" tabindex="-1"></a>* Opción 1: Trim observaciones extremas</span>
-<span id="cb191-2"><a href="psm-ipw-sinteticos.html#cb191-2" tabindex="-1"></a><span class="kw">gen</span> w_att_trim = w_att <span class="kw">if</span> soporte==1</span>
-<span id="cb191-3"><a href="psm-ipw-sinteticos.html#cb191-3" tabindex="-1"></a></span>
-<span id="cb191-4"><a href="psm-ipw-sinteticos.html#cb191-4" tabindex="-1"></a>* Opción 2: Capping (limitar <span class="fu">el</span> peso máximo)</span>
-<span id="cb191-5"><a href="psm-ipw-sinteticos.html#cb191-5" tabindex="-1"></a><span class="kw">gen</span> w_att_cap = <span class="fu">min</span>(w_att, 5)</span>
-<span id="cb191-6"><a href="psm-ipw-sinteticos.html#cb191-6" tabindex="-1"></a></span>
-<span id="cb191-7"><a href="psm-ipw-sinteticos.html#cb191-7" tabindex="-1"></a>* Comparar resultados</span>
-<span id="cb191-8"><a href="psm-ipw-sinteticos.html#cb191-8" tabindex="-1"></a><span class="kw">reg</span> y2 D [pw=w_att], <span class="kw">robust</span></span>
-<span id="cb191-9"><a href="psm-ipw-sinteticos.html#cb191-9" tabindex="-1"></a><span class="kw">reg</span> y2 D [pw=w_att_trim], <span class="kw">robust</span></span>
-<span id="cb191-10"><a href="psm-ipw-sinteticos.html#cb191-10" tabindex="-1"></a><span class="kw">reg</span> y2 D [pw=w_att_cap], <span class="kw">robust</span></span></code></pre></div>
-<hr />
-</div>
-<div id="paso-6-verificar-balance-con-pesos-ipw" class="section level3 hasAnchor" number="18.2.7">
-<h3><span class="header-section-number">18.2.7</span> Paso 6: Verificar balance con pesos IPW<a href="psm-ipw-sinteticos.html#paso-6-verificar-balance-con-pesos-ipw" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Después de IPW, la distribución de <span class="math inline">\(X\)</span> debe ser similar entre tratados y controles <strong>en la muestra ponderada</strong>:</p>
-<div class="sourceCode" id="cb192"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb192-1"><a href="psm-ipw-sinteticos.html#cb192-1" tabindex="-1"></a><span class="kw">table</span> D, stat(<span class="kw">sum</span> w_att)</span></code></pre></div>
-<hr />
-</div>
-</div>
-<div id="synth-sec" class="section level2 hasAnchor" number="18.3">
-<h2><span class="header-section-number">18.3</span> Parte III: Synthetic Control Method<a href="psm-ipw-sinteticos.html#synth-sec" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El Synthetic Control Method es un estimador para cuando el tratamiento afecta a <strong>una sola unidad agregada</strong> (<span class="math inline">\(N_T = 1\)</span>). Ejemplos:</p>
-<ul>
-<li>¿Cuánto costó el Pico y Placa a la calidad del aire de Bogotá?</li>
-<li>¿Cuál fue el efecto de la Prop 99 (impuesto al tabaco) en California en 1988?</li>
-<li>¿Qué efecto tuvo el Brexit en el PIB del Reino Unido?</li>
-</ul>
-<p><strong>Descargar do-file Controles Sintéticos:</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/03_synthetic_controls_stata.do">Descargar 03_synthetic_controls_stata.do</a></p>
-<p><strong>Descargar datos (caso Prop 99):</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta">synth_smoking.dta</a></p>
-<hr />
-<div id="la-intuición" class="section level3 hasAnchor" number="18.3.1">
-<h3><span class="header-section-number">18.3.1</span> La intuición<a href="#la-intuici%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Si no encuentro un control natural que se parezca exactamente al tratado en el período pre-tratamiento, lo <strong>construyo</strong> como una combinación ponderada de otros controles potenciales (el “donor pool”).</p>
-<p>El sintético es un control “a la medida”: si reproduce bien al tratado en el período pre-tratamiento, podemos asumir razonablemente que también lo habría reproducido en el período post (en ausencia del tratamiento). La brecha post-tratamiento es entonces atribuible al tratamiento.</p>
-<hr />
-</div>
-<div id="paso-1-setup-y-exploración" class="section level3 hasAnchor" number="18.3.2">
-<h3><span class="header-section-number">18.3.2</span> Paso 1: Setup y exploración<a href="#paso-1-setup-y-exploraci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>La base de datos es <code>synth_smoking.dta</code> (consumo de cigarrillos per capita en EE.UU., 1970-2000).</p>
-<div class="sourceCode" id="cb193"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb193-1"><a href="psm-ipw-sinteticos.html#cb193-1" tabindex="-1"></a><span class="kw">clear</span> <span class="ot">all</span></span>
-<span id="cb193-2"><a href="psm-ipw-sinteticos.html#cb193-2" tabindex="-1"></a><span class="kw">use</span> synth_smoking.dta</span>
-<span id="cb193-3"><a href="psm-ipw-sinteticos.html#cb193-3" tabindex="-1"></a></span>
-<span id="cb193-4"><a href="psm-ipw-sinteticos.html#cb193-4" tabindex="-1"></a>xtset state <span class="fu">year</span></span>
-<span id="cb193-5"><a href="psm-ipw-sinteticos.html#cb193-5" tabindex="-1"></a></span>
-<span id="cb193-6"><a href="psm-ipw-sinteticos.html#cb193-6" tabindex="-1"></a>* Gráfica básica</span>
-<span id="cb193-7"><a href="psm-ipw-sinteticos.html#cb193-7" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">line</span> <span class="fu">y</span> <span class="fu">year</span> <span class="kw">if</span> state==1, lcolor(<span class="bn">blue</span>) lwidth(medium)) <span class="co">///</span></span>
-<span id="cb193-8"><a href="psm-ipw-sinteticos.html#cb193-8" tabindex="-1"></a>       (<span class="kw">line</span> <span class="fu">y</span> <span class="fu">year</span> <span class="kw">if</span> state!=1, lcolor(<span class="bn">gray</span>%30)), <span class="co">///</span></span>
-<span id="cb193-9"><a href="psm-ipw-sinteticos.html#cb193-9" tabindex="-1"></a>       <span class="bn">xline</span>(1988, lpattern(<span class="kw">dash</span>) lcolor(<span class="kw">red</span>)) <span class="co">///</span></span>
-<span id="cb193-10"><a href="psm-ipw-sinteticos.html#cb193-10" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">label</span>(1 <span class="st">&quot;California&quot;</span>) <span class="kw">label</span>(2 <span class="st">&quot;Otros Estados&quot;</span>)) <span class="co">///</span></span>
-<span id="cb193-11"><a href="psm-ipw-sinteticos.html#cb193-11" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Consumo de Cigarrillos: California vs. Otros Estados&quot;</span>)</span></code></pre></div>
-<hr />
-</div>
-<div id="paso-2-setup-formal" class="section level3 hasAnchor" number="18.3.3">
-<h3><span class="header-section-number">18.3.3</span> Paso 2: Setup formal<a href="psm-ipw-sinteticos.html#paso-2-setup-formal" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Disponemos de:
-- Una unidad tratada (California, state==1)
-- Un “donor pool” de <span class="math inline">\(J\)</span> controles potenciales (otros 38 estados)
-- Períodos pre-tratamiento (antes de 1988) y post-tratamiento (1988-2000)
-- Outcome: consumo de cigarrillos per capita</p>
-<p><strong>Objetivo:</strong> construir un California <strong>sintético</strong> como combinación ponderada de otros estados:</p>
-<p><span class="math display">\[\hat{Y}_{1t}^{N} = \sum_{j=2}^{J+1} w_j Y_{jt}\]</span></p>
-<p>donde <span class="math inline">\(\sum_j w_j = 1\)</span> y <span class="math inline">\(w_j \geq 0\)</span>.</p>
-<hr />
-</div>
-<div id="paso-3-estimación-simplificada-manual" class="section level3 hasAnchor" number="18.3.4">
-<h3><span class="header-section-number">18.3.4</span> Paso 3: Estimación simplificada (manual)<a href="#paso-3-estimaci%C3%B3n-simplificada-manual" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Si el comando <code>synth</code> no está disponible, podemos hacer una versión simplificada:</p>
-<div class="sourceCode" id="cb194"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb194-1"><a href="psm-ipw-sinteticos.html#cb194-1" tabindex="-1"></a>* Computar medias pre-tratamiento</span>
-<span id="cb194-2"><a href="psm-ipw-sinteticos.html#cb194-2" tabindex="-1"></a><span class="kw">bys</span> state: <span class="kw">egen</span> y_pre = <span class="kw">mean</span>(<span class="fu">y</span>) <span class="kw">if</span> <span class="fu">year</span> &lt; 1988</span>
-<span id="cb194-3"><a href="psm-ipw-sinteticos.html#cb194-3" tabindex="-1"></a></span>
-<span id="cb194-4"><a href="psm-ipw-sinteticos.html#cb194-4" tabindex="-1"></a>* Comparar California contra promedio <span class="kw">de</span> controles</span>
-<span id="cb194-5"><a href="psm-ipw-sinteticos.html#cb194-5" tabindex="-1"></a><span class="kw">collapse</span> (<span class="kw">mean</span>) <span class="fu">y</span>, <span class="kw">by</span>(<span class="fu">year</span> treated)</span>
-<span id="cb194-6"><a href="psm-ipw-sinteticos.html#cb194-6" tabindex="-1"></a><span class="kw">reshape</span> <span class="kw">wide</span> <span class="fu">y</span>, i(<span class="fu">year</span>) j(treated)</span>
-<span id="cb194-7"><a href="psm-ipw-sinteticos.html#cb194-7" tabindex="-1"></a></span>
-<span id="cb194-8"><a href="psm-ipw-sinteticos.html#cb194-8" tabindex="-1"></a><span class="kw">rename</span> y0 y_controls</span>
-<span id="cb194-9"><a href="psm-ipw-sinteticos.html#cb194-9" tabindex="-1"></a><span class="kw">rename</span> y1 y_calif</span>
-<span id="cb194-10"><a href="psm-ipw-sinteticos.html#cb194-10" tabindex="-1"></a></span>
-<span id="cb194-11"><a href="psm-ipw-sinteticos.html#cb194-11" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">diff</span> = y_calif - y_controls</span>
-<span id="cb194-12"><a href="psm-ipw-sinteticos.html#cb194-12" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">post</span> = (<span class="fu">year</span> &gt;= 1988)</span></code></pre></div>
-<hr />
-</div>
-<div id="paso-4-graficar-el-efecto" class="section level3 hasAnchor" number="18.3.5">
-<h3><span class="header-section-number">18.3.5</span> Paso 4: Graficar el efecto<a href="psm-ipw-sinteticos.html#paso-4-graficar-el-efecto" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb195"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb195-1"><a href="psm-ipw-sinteticos.html#cb195-1" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">line</span> <span class="fu">diff</span> <span class="fu">year</span>, lcolor(<span class="bn">blue</span>) lwidth(medium)) <span class="co">///</span></span>
-<span id="cb195-2"><a href="psm-ipw-sinteticos.html#cb195-2" tabindex="-1"></a>       (<span class="bn">xline</span>(1988, lpattern(<span class="kw">dash</span>))), <span class="co">///</span></span>
-<span id="cb195-3"><a href="psm-ipw-sinteticos.html#cb195-3" tabindex="-1"></a>       <span class="bn">title</span>(<span class="st">&quot;Efecto Estimado: California vs. Control&quot;</span>) <span class="co">///</span></span>
-<span id="cb195-4"><a href="psm-ipw-sinteticos.html#cb195-4" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Año&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Brecha&quot;</span>)</span>
-<span id="cb195-5"><a href="psm-ipw-sinteticos.html#cb195-5" tabindex="-1"></a></span>
-<span id="cb195-6"><a href="psm-ipw-sinteticos.html#cb195-6" tabindex="-1"></a>* Efecto promedio <span class="kw">post</span>-tratamiento</span>
-<span id="cb195-7"><a href="psm-ipw-sinteticos.html#cb195-7" tabindex="-1"></a>summ <span class="fu">diff</span> <span class="kw">if</span> <span class="kw">post</span>==1</span></code></pre></div>
-<hr />
-</div>
-<div id="paso-5-análisis-de-sensibilidad" class="section level3 hasAnchor" number="18.3.6">
-<h3><span class="header-section-number">18.3.6</span> Paso 5: Análisis de sensibilidad<a href="#paso-5-an%C3%A1lisis-de-sensibilidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="pre-tendencias" class="section level4 hasAnchor" number="18.3.6.1">
-<h4><span class="header-section-number">18.3.6.1</span> Pre-tendencias<a href="psm-ipw-sinteticos.html#pre-tendencias" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>¿Había tendencias diferentes antes de 1988?</p>
-<div class="sourceCode" id="cb196"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb196-1"><a href="psm-ipw-sinteticos.html#cb196-1" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">diff</span> <span class="fu">year</span> <span class="kw">if</span> <span class="fu">year</span> &lt; 1988</span></code></pre></div>
-<p>Si el coeficiente en <code>year</code> es significativo, hay pre-tendencias que violarían el supuesto de “no cambio en trayectoria contrafactual”.</p>
-</div>
-<div id="placebo" class="section level4 hasAnchor" number="18.3.6.2">
-<h4><span class="header-section-number">18.3.6.2</span> Placebo<a href="psm-ipw-sinteticos.html#placebo" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>¿Habría detectado el método un efecto ficticio si el “tratamiento” hubiera sido en 1980?</p>
-<div class="sourceCode" id="cb197"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb197-1"><a href="psm-ipw-sinteticos.html#cb197-1" tabindex="-1"></a><span class="kw">gen</span> placebo_1980 = (<span class="fu">year</span> &gt;= 1980)</span>
-<span id="cb197-2"><a href="psm-ipw-sinteticos.html#cb197-2" tabindex="-1"></a><span class="kw">reg</span> <span class="fu">diff</span> year##placebo_1980</span></code></pre></div>
-<p>Si el efecto placebo es cercano a cero, el método es creíble.</p>
-<hr />
-</div>
-</div>
-<div id="paso-6-interpretación" class="section level3 hasAnchor" number="18.3.7">
-<h3><span class="header-section-number">18.3.7</span> Paso 6: Interpretación<a href="#paso-6-interpretaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="el-mismo-resultado-con-reg" class="section level2 unnumbered hasAnchor">
+<h2>El mismo resultado con <code>reg</code><a href="psm-ipw-sinteticos.html#el-mismo-resultado-con-reg" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Con intercepto y un indicador binario de tratamiento, el coeficiente de <code>D</code> de una regresión ponderada es la diferencia entre las medias ponderadas. Por eso reproduce puntualmente el Hájek manual de cada población objetivo:</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb177-1"><a href="psm-ipw-sinteticos.html#cb177-1" tabindex="-1"></a><span class="kw">reg</span> y2 D [pw=w_ate], <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb177-2"><a href="psm-ipw-sinteticos.html#cb177-2" tabindex="-1"></a><span class="kw">reg</span> y2 D [pw=w_att], <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
 <table>
+<caption><span id="tab:ipw-reg-equivalence">Table 19.3: </span>Equivalencia puntual entre Hájek, regresión ponderada y teffects ipw</caption>
 <thead>
 <tr class="header">
-<th>Elemento</th>
-<th>Interpretación</th>
+<th align="left"></th>
+<th align="left">Estimador</th>
+<th align="left">Estimando</th>
+<th align="right">Efecto</th>
+<th align="right">Error estándar</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Brecha post-1988</strong></td>
-<td>Efecto estimado de Prop 99</td>
+<td align="left">3</td>
+<td align="left">Hajek manual</td>
+<td align="left">ATE</td>
+<td align="right">0.3277858</td>
+<td align="right">NA</td>
 </tr>
 <tr class="even">
-<td><strong>No pre-tendencias</strong></td>
-<td>Soporte para paralelismo contrafactual</td>
+<td align="left">6</td>
+<td align="left">reg ponderada</td>
+<td align="left">ATE</td>
+<td align="right">0.3277858</td>
+<td align="right">0.0340</td>
 </tr>
 <tr class="odd">
-<td><strong>Placebo cercano a cero</strong></td>
-<td>Validez del método</td>
+<td align="left">8</td>
+<td align="left">teffects ipw</td>
+<td align="left">ATE</td>
+<td align="right">0.3277858</td>
+<td align="right">0.0336</td>
+</tr>
+<tr class="even">
+<td align="left">5</td>
+<td align="left">Hajek manual</td>
+<td align="left">ATT</td>
+<td align="right">0.3322074</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">7</td>
+<td align="left">reg ponderada</td>
+<td align="left">ATT</td>
+<td align="right">0.3322074</td>
+<td align="right">0.0342</td>
+</tr>
+<tr class="even">
+<td align="left">11</td>
+<td align="left">teffects ipw</td>
+<td align="left">ATT</td>
+<td align="right">0.3322074</td>
+<td align="right">0.0338</td>
 </tr>
 </tbody>
 </table>
-<hr />
+<p>La coincidencia se exige para el estimador puntual, no para el error estándar. La opción <code>vce(robust)</code> de <code>reg</code> trata los pesos como dados, mientras <code>teffects ipw</code> incorpora que el propensity score fue estimado; para inferencia usamos el segundo cuando corresponde.</p>
 </div>
-</div>
-<div id="descarga-los-archivos-2" class="section level2 unnumbered hasAnchor">
-<h2>Descarga los archivos<a href="psm-ipw-sinteticos.html#descarga-los-archivos-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Descargar Stata do file (PSM - recomendado para clase):</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/01_psm_stata_CLASSROOM.do">Descargar Stata</a></p>
-<p><strong>Descargar Stata do file (IPW):</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/02_ipw_stata.do">Descargar IPW Stata</a></p>
-<p><strong>Descargar Stata do file (Controles Sintéticos):</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/03_synthetic_controls_stata.do">Descargar Sintéticos Stata</a></p>
-<p><strong>Descargar Python Notebook:</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/04_psm_ipw_python.py">Descargar Python</a></p>
-<p><strong>Descargar base6.dta:</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/base6.dta">Descargar base6.dta</a></p>
-<p><strong>Descargar synth_smoking.dta:</strong>
-<a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta">Descargar synth_smoking.dta</a></p>
-<hr />
-</div>
-<div id="resumen-sec" class="section level2 hasAnchor" number="18.4">
-<h2><span class="header-section-number">18.4</span> Resumen comparativo<a href="psm-ipw-sinteticos.html#resumen-sec" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="postestimación-quedó-balanceado" class="section level2 unnumbered hasAnchor">
+<h2>Postestimación: ¿quedó balanceado?<a href="#postestimaci%C3%B3n-qued%C3%B3-balanceado" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Antes de interpretar el efecto, auditamos si la ponderación equilibró cada covariable pretratamiento en la población objetivo. El diagnóstico nativo se ejecuta por separado para ATE y ATT:</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb178-1"><a href="psm-ipw-sinteticos.html#cb178-1" tabindex="-1"></a>teffects ipw (y2) (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), ate</span>
+<span id="cb178-2"><a href="psm-ipw-sinteticos.html#cb178-2" tabindex="-1"></a>tebalance <span class="kw">summarize</span></span>
+<span id="cb178-3"><a href="psm-ipw-sinteticos.html#cb178-3" tabindex="-1"></a>tebalance density personas</span>
+<span id="cb178-4"><a href="psm-ipw-sinteticos.html#cb178-4" tabindex="-1"></a></span>
+<span id="cb178-5"><a href="psm-ipw-sinteticos.html#cb178-5" tabindex="-1"></a>teffects ipw (y2) (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), atet</span>
+<span id="cb178-6"><a href="psm-ipw-sinteticos.html#cb178-6" tabindex="-1"></a>tebalance <span class="kw">summarize</span></span>
+<span id="cb178-7"><a href="psm-ipw-sinteticos.html#cb178-7" tabindex="-1"></a>tebalance density personas</span></code></pre></div>
 <table>
+<caption><span id="tab:ipw-balance-ate-table">Table 19.4: </span>Balance ATE antes y después de ponderar</caption>
+<thead>
+<tr class="header">
+<th align="left">Covariable</th>
+<th align="right">SMD cruda</th>
+<th align="right">SMD ponderada</th>
+<th align="right">RV cruda</th>
+<th align="right">RV ponderada</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">personas</td>
+<td align="right">-0.130</td>
+<td align="right">0.000</td>
+<td align="right">0.849</td>
+<td align="right">1.060</td>
+</tr>
+<tr class="even">
+<td align="left">orden_n</td>
+<td align="right">0.100</td>
+<td align="right">0.001</td>
+<td align="right">1.477</td>
+<td align="right">1.090</td>
+</tr>
+<tr class="odd">
+<td align="left">ocupado_jefe</td>
+<td align="right">0.145</td>
+<td align="right">0.000</td>
+<td align="right">0.794</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="even">
+<td align="left">educa_jefe</td>
+<td align="right">-0.017</td>
+<td align="right">-0.003</td>
+<td align="right">0.945</td>
+<td align="right">0.962</td>
+</tr>
+<tr class="odd">
+<td align="left">ingresos_hogar_jefe</td>
+<td align="right">0.080</td>
+<td align="right">-0.001</td>
+<td align="right">1.129</td>
+<td align="right">0.741</td>
+</tr>
+<tr class="even">
+<td align="left">hombre</td>
+<td align="right">0.035</td>
+<td align="right">0.002</td>
+<td align="right">0.998</td>
+<td align="right">1.000</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:ipw-balance-att-table">Table 19.5: </span>Balance ATT antes y después de ponderar</caption>
+<thead>
+<tr class="header">
+<th align="left">Covariable</th>
+<th align="right">SMD cruda</th>
+<th align="right">SMD ponderada</th>
+<th align="right">RV cruda</th>
+<th align="right">RV ponderada</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">personas</td>
+<td align="right">-0.130</td>
+<td align="right">-0.009</td>
+<td align="right">0.849</td>
+<td align="right">1.064</td>
+</tr>
+<tr class="even">
+<td align="left">orden_n</td>
+<td align="right">0.100</td>
+<td align="right">0.005</td>
+<td align="right">1.477</td>
+<td align="right">1.106</td>
+</tr>
+<tr class="odd">
+<td align="left">ocupado_jefe</td>
+<td align="right">0.145</td>
+<td align="right">-0.002</td>
+<td align="right">0.794</td>
+<td align="right">1.003</td>
+</tr>
+<tr class="even">
+<td align="left">educa_jefe</td>
+<td align="right">-0.017</td>
+<td align="right">0.003</td>
+<td align="right">0.945</td>
+<td align="right">0.957</td>
+</tr>
+<tr class="odd">
+<td align="left">ingresos_hogar_jefe</td>
+<td align="right">0.080</td>
+<td align="right">-0.009</td>
+<td align="right">1.129</td>
+<td align="right">0.724</td>
+</tr>
+<tr class="even">
+<td align="left">hombre</td>
+<td align="right">0.035</td>
+<td align="right">-0.005</td>
+<td align="right">0.998</td>
+<td align="right">1.000</td>
+</tr>
+</tbody>
+</table>
+<pre class="text"><code>Mayor |SMD| ponderada ATE: 0.003
+Mayor |SMD| ponderada ATT: 0.009
+Covariables auditadas: 6; observaciones: 4,000</code></pre>
+<div class="float">
+<img src="dofile/16_PSM_IPW_Sinteticos/ipw_balance_ate_att.png" alt="Diferencias estandarizadas absolutas antes y después de ponderar, por estimando" />
+<div class="figcaption">Diferencias estandarizadas absolutas antes y después de ponderar, por estimando</div>
+</div>
+<p>Usamos <span class="math inline">\(|\mathrm{SMD}|=0.10\)</span> como referencia descriptiva, no como prueba estadística ni regla automática. IPW logra aquí un balance excelente de <strong>medias</strong>: el mayor <span class="math inline">\(|\mathrm{SMD}|\)</span> ponderado es menor a 0.01. Sin embargo, no todos los segundos momentos quedan igualmente alineados. Para <code>ingresos_hogar_jefe</code>, la razón de varianza pasa de 1.129 sin ponderar a 0.741 con pesos ATE y 0.724 con pesos ATT. Por eso revisamos cada covariable, sus razones de varianza y sus densidades: balancear las medias o el propensity score no garantiza balance distribucional. <strong>El balance observable no demuestra CIA</strong> ni descarta confusión no observada.</p>
+<p>Si persiste desequilibrio, el ciclo es: (1) revisar temporalidad y teoría causal de las covariables; (2) añadir no linealidades o interacciones justificadas al modelo de tratamiento; (3) reestimar el propensity score y los pesos; y (4) repetir soporte, distribución de pesos y balance ATE/ATT. Se escoge la especificación por ese razonamiento y diagnósticos de diseño, <strong>sin mirar el efecto</strong> ni buscar el resultado preferido.</p>
+</div>
+<div id="estimación-integrada-y-doble-robustez" class="section level2 unnumbered hasAnchor">
+<h2>Estimación integrada y doble robustez<a href="#estimaci%C3%B3n-integrada-y-doble-robustez" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><code>teffects</code> incorpora la estimación del propensity score en la inferencia. Ejecutamos cada método para ATE y ATET:</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb180-1"><a href="psm-ipw-sinteticos.html#cb180-1" tabindex="-1"></a>teffects ipw   (y2)        (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), ate</span>
+<span id="cb180-2"><a href="psm-ipw-sinteticos.html#cb180-2" tabindex="-1"></a>teffects aipw  (y2 <span class="ot">$Xmust</span>) (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), ate</span>
+<span id="cb180-3"><a href="psm-ipw-sinteticos.html#cb180-3" tabindex="-1"></a>teffects ipwra (y2 <span class="ot">$Xmust</span>) (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), ate</span>
+<span id="cb180-4"><a href="psm-ipw-sinteticos.html#cb180-4" tabindex="-1"></a></span>
+<span id="cb180-5"><a href="psm-ipw-sinteticos.html#cb180-5" tabindex="-1"></a>teffects ipw   (y2)        (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), atet</span>
+<span id="cb180-6"><a href="psm-ipw-sinteticos.html#cb180-6" tabindex="-1"></a>teffects aipw  (y2 <span class="ot">$Xmust</span>) (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), atet</span>
+<span id="cb180-7"><a href="psm-ipw-sinteticos.html#cb180-7" tabindex="-1"></a>teffects ipwra (y2 <span class="ot">$Xmust</span>) (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), atet</span></code></pre></div>
+<table>
+<caption><span id="tab:ipw-teffects-table">Table 19.6: </span>Estimadores integrados generados por Stata</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Método</th>
+<th align="left">Estimando</th>
+<th align="right">Efecto</th>
+<th align="right">Error estándar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">8</td>
+<td align="left">teffects ipw</td>
+<td align="left">ATE</td>
+<td align="right">0.3278</td>
+<td align="right">0.0336</td>
+</tr>
+<tr class="even">
+<td align="left">9</td>
+<td align="left">teffects aipw</td>
+<td align="left">ATE</td>
+<td align="right">0.3282</td>
+<td align="right">0.0336</td>
+</tr>
+<tr class="odd">
+<td align="left">10</td>
+<td align="left">teffects ipwra</td>
+<td align="left">ATE</td>
+<td align="right">0.3281</td>
+<td align="right">0.0336</td>
+</tr>
+<tr class="even">
+<td align="left">11</td>
+<td align="left">teffects ipw</td>
+<td align="left">ATT</td>
+<td align="right">0.3322</td>
+<td align="right">0.0338</td>
+</tr>
+<tr class="odd">
+<td align="left">12</td>
+<td align="left">teffects aipw</td>
+<td align="left">ATT</td>
+<td align="right">0.3319</td>
+<td align="right">0.0339</td>
+</tr>
+<tr class="even">
+<td align="left">13</td>
+<td align="left">teffects ipwra</td>
+<td align="left">ATT</td>
+<td align="right">0.3318</td>
+<td align="right">0.0338</td>
+</tr>
+</tbody>
+</table>
+<p>Los tres métodos producen resultados cercanos: <code>teffects ipw</code> estima <span class="math inline">\(0.3278\)</span> para ATE y <span class="math inline">\(0.3322\)</span> para ATT, con errores estándar de <span class="math inline">\(0.0336\)</span> y <span class="math inline">\(0.0338\)</span>. La estabilidad es coherente con el buen soporte y el balance de medias, aunque la auditoría de razones de varianza advierte que persisten diferencias de dispersión. AIPW e IPWRA protegen contra la mala especificación de uno de los dos componentes bajo sus condiciones de doble robustez; no protegen contra confusión no observada ni falta de positividad.</p>
+<div class="boxexam">
+<p><strong>IPW-S3.</strong> En otra aplicación, una covariable pretratamiento conserva <span class="math inline">\(|\mathrm{SMD}|&gt;0.10\)</span> después de IPW. Proponga una secuencia que separe estimando, muestra, soporte y modelo de tratamiento; describa cómo reespecificaría el propensity score y qué diagnósticos repetiría antes de volver a estimar. Explique por qué no debe elegir la especificación mirando el efecto e indique qué hallazgo impediría interpretar causalmente el resultado.</p>
+</div>
+</div>
+<div id="una-simulación-donde-la-positividad-sí-importa" class="section level2 unnumbered hasAnchor">
+<h2>Una simulación donde la positividad sí importa<a href="#una-simulaci%C3%B3n-donde-la-positividad-s%C3%AD-importa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para evitar repetir el problema del semestre pasado —un ejemplo sin la heterogeneidad necesaria para revelar el método— simulamos selección fuerte:</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb181-1"><a href="psm-ipw-sinteticos.html#cb181-1" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 4000</span>
+<span id="cb181-2"><a href="psm-ipw-sinteticos.html#cb181-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> x = rnormal()</span>
+<span id="cb181-3"><a href="psm-ipw-sinteticos.html#cb181-3" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> ps_true = <span class="fu">invlogit</span>(-0.2 + 3*x)</span>
+<span id="cb181-4"><a href="psm-ipw-sinteticos.html#cb181-4" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D = runiform() &lt; ps_true</span>
+<span id="cb181-5"><a href="psm-ipw-sinteticos.html#cb181-5" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> tau = 2</span>
+<span id="cb181-6"><a href="psm-ipw-sinteticos.html#cb181-6" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> y0 = 1 + x + rnormal()</span>
+<span id="cb181-7"><a href="psm-ipw-sinteticos.html#cb181-7" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> <span class="fu">y</span> = y0 + tau*D</span></code></pre></div>
+<p>El efecto verdadero es 2 para todas las unidades, pero el tratamiento se vuelve casi determinístico en los extremos de <span class="math inline">\(X\)</span>. El problema no es heterogeneidad del efecto: es la escasez de contrafactuales en algunas regiones.</p>
+<div class="float">
+<img src="dofile/16_PSM_IPW_Sinteticos/ipw_positivity_weak.png" alt="Pesos extremos bajo positividad débil" />
+<div class="figcaption">Pesos extremos bajo positividad débil</div>
+</div>
+<table>
+<caption><span id="tab:ipw-simulation-table">Table 19.7: </span>Simulación de positividad débil generada por Stata</caption>
 <colgroup>
-<col width="25%" />
-<col width="20%" />
-<col width="25%" />
-<col width="29%" />
+<col width="26%" />
+<col width="11%" />
+<col width="16%" />
+<col width="18%" />
+<col width="12%" />
+<col width="5%" />
+<col width="8%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th>Estimador</th>
-<th>Ventaja</th>
-<th>Desventaja</th>
-<th>Cuándo usar</th>
+<th align="left">Estimador</th>
+<th align="right">Estimación</th>
+<th align="right">EE descriptivo</th>
+<th align="right">Efecto verdadero</th>
+<th align="right">Peso máximo</th>
+<th align="right">ESS</th>
+<th align="right">N usado</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>PSM-NN</strong></td>
-<td>Intuitivo, transparente</td>
-<td>Pequeña muestra de matches</td>
-<td>Cuando hay muchos matches buenos</td>
+<td align="left">HT, muestra completa</td>
+<td align="right">1.517</td>
+<td align="right">0.343</td>
+<td align="right">2</td>
+<td align="right">329.2</td>
+<td align="right">288</td>
+<td align="right">4000</td>
 </tr>
 <tr class="even">
-<td><strong>PSM-Kernel</strong></td>
-<td>Usa toda la muestra</td>
-<td>Menos transparente</td>
-<td>Cuando el soporte es amplio</td>
+<td align="left">Hajek, muestra completa</td>
+<td align="right">1.788</td>
+<td align="right">0.218</td>
+<td align="right">2</td>
+<td align="right">329.2</td>
+<td align="right">288</td>
+<td align="right">4000</td>
 </tr>
 <tr class="odd">
-<td><strong>IPW</strong></td>
-<td>Eficiente, flexible</td>
-<td>Pesos extremos posibles</td>
-<td>Cuando hay buen soporte común</td>
-</tr>
-<tr class="even">
-<td><strong>Synthetic</strong></td>
-<td>Para <span class="math inline">\(N_T=1\)</span></td>
-<td>Requiere muchos pre-períodos</td>
-<td>Estudio de caso o política agregada</td>
+<td align="left">Hajek, soporte 0.05-0.95</td>
+<td align="right">1.936</td>
+<td align="right">0.067</td>
+<td align="right">2</td>
+<td align="right">19.9</td>
+<td align="right">1364</td>
+<td align="right">2720</td>
 </tr>
 </tbody>
 </table>
-<hr />
+<p>La tabla usa errores estándar robustos descriptivos para las regresiones ponderadas de Hájek; el de HT proviene de la dispersión de su contribución observacional tratando el propensity score estimado como fijo. Sirven para mostrar la pérdida de precisión, no para reemplazar la inferencia completa de una aplicación.</p>
+<p>La muestra completa tiene un peso máximo de 329.2, ESS de solo 288 y errores estándar grandes. Al restringir soporte, el peso máximo baja a 19.9 y el ESS sube a 1,364, aun cuando quedan 2,720 observaciones. La estimación se acerca al valor verdadero en esta corrida, pero la última fila ya describe el efecto para la población con <span class="math inline">\(0.05\leq\hat e(X)\leq0.95\)</span>, no automáticamente el ATE original. No escogemos el umbral porque “da mejor”: reportamos el cambio de población y justificamos el diseño.</p>
+<div class="boxwarning">
+<p>Una estimación más cercana al valor verdadero en una simulación no convierte el trimming en una regla universal. En datos reales no observamos el efecto verdadero y el umbral no debe elegirse mirando el resultado.</p>
 </div>
-<div id="do-files-disponibles" class="section level2 unnumbered hasAnchor">
-<h2>Do-files disponibles<a href="psm-ipw-sinteticos.html#do-files-disponibles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Los do-files ejecutables están en <code>EjerciciosClase/</code>:</p>
-<ul>
-<li><strong>01_psm_stata.do</strong> — PSM completo: NN, kernel, caliper, radio, LLR</li>
-<li><strong>02_ipw_stata.do</strong> — IPW: construcción de pesos, regresión ponderada, sensibilidad</li>
-<li><strong>03_synthetic_controls_stata.do</strong> — Synthetic Control: simulación, gráficas, pre-tendencias, placebo</li>
-</ul>
-<p><strong>Para ejecutar:</strong></p>
-<div class="sourceCode" id="cb198"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb198-1"><a href="psm-ipw-sinteticos.html#cb198-1" tabindex="-1"></a><span class="kw">do</span> <span class="st">&quot;01_psm_stata.do&quot;</span></span>
-<span id="cb198-2"><a href="psm-ipw-sinteticos.html#cb198-2" tabindex="-1"></a><span class="kw">do</span> <span class="st">&quot;02_ipw_stata.do&quot;</span></span>
-<span id="cb198-3"><a href="psm-ipw-sinteticos.html#cb198-3" tabindex="-1"></a><span class="kw">do</span> <span class="st">&quot;03_synthetic_controls_stata.do&quot;</span></span></code></pre></div>
-<hr />
+<div class="boxexam">
+<p><strong>IPW-S4.</strong> Compare las tres filas de la simulación. Explique por qué el máximo de los pesos afecta de manera diferente a HT y Hájek, qué se gana al restringir soporte y cuál es el nuevo estimando que debería declararse.</p>
 </div>
-<div id="lecturas-recomendadas-4" class="section level2 unnumbered hasAnchor">
-<h2>Lecturas recomendadas<a href="psm-ipw-sinteticos.html#lecturas-recomendadas-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="psm-1" class="section level3 hasAnchor" number="18.4.1">
-<h3><span class="header-section-number">18.4.1</span> PSM<a href="psm-ipw-sinteticos.html#psm-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li><strong>Caliendo &amp; Kopeinig (2008)</strong> — “Some practical guidance for the implementation of propensity score matching”, <em>Journal of Economic Surveys</em></li>
-<li><strong>Abadie &amp; Imbens (2006)</strong> — “Large sample properties of matching estimators for average treatment effects”, <em>Econometrica</em></li>
-</ul>
 </div>
-<div id="ipw-1" class="section level3 hasAnchor" number="18.4.2">
-<h3><span class="header-section-number">18.4.2</span> IPW<a href="psm-ipw-sinteticos.html#ipw-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ul>
-<li><strong>Rotnitzky &amp; Robins (1995)</strong> — Fundamentos teóricos</li>
-<li><strong>Bang &amp; Robins (2005)</strong> — Implementación práctica</li>
-</ul>
+<div id="flujo-de-trabajo-para-una-aplicación" class="section level2 unnumbered hasAnchor">
+<h2>Flujo de trabajo para una aplicación<a href="#flujo-de-trabajo-para-una-aplicaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Definir ATE o ATT y la población objetivo.</li>
+<li>Justificar covariables pretratamiento con razonamiento causal.</li>
+<li>Estimar <span class="math inline">\(e(X)\)</span> y examinar soporte antes de calcular el efecto.</li>
+<li>Construir pesos y reportar cuantiles, máximo, sumas y ESS.</li>
+<li>Verificar balance ponderado covariable por covariable.</li>
+<li>Estimar el efecto con inferencia que reconozca el propensity score estimado.</li>
+<li>Comparar IPW con AIPW/IPWRA sin usar la similitud como prueba de CIA.</li>
+<li>Si se modifica soporte o pesos, declarar la nueva población y repetir diagnósticos.</li>
+</ol>
 </div>
-<div id="synthetic-control" class="section level3 hasAnchor" number="18.4.3">
-<h3><span class="header-section-number">18.4.3</span> Synthetic Control<a href="psm-ipw-sinteticos.html#synthetic-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="referencias-y-ayuda-de-stata" class="section level2 unnumbered hasAnchor">
+<h2>Referencias y ayuda de Stata<a href="psm-ipw-sinteticos.html#referencias-y-ayuda-de-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li><strong>Abadie &amp; Gardeazabal (2003)</strong> — “The economic costs of conflict: the case of the Basque Country”, <em>Journal of International Economics</em></li>
-<li><strong>Abadie, Diamond &amp; Hainmueller (2010)</strong> — “Synthetic Control Methods for Comparative Case Studies”, <em>Journal of the American Statistical Association</em></li>
+<li><code>help teffects ipw</code>, <code>help teffects aipw</code> y <code>help teffects ipwra</code>.</li>
+<li><code>help tebalance summarize</code> y <code>help tebalance density</code>.</li>
+<li>Hirano, Imbens y Ridder (2003), <em>Econometrica</em>.</li>
+<li>Robins, Rotnitzky y Zhao (1994), <em>Journal of the American Statistical Association</em>.</li>
 </ul>
 
-</div>
 </div>
 </div>
             </section>
@@ -1086,7 +1148,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="ipw.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="iv.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="controles-sinteticos.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

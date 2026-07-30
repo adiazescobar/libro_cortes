@@ -1,201 +1,180 @@
-# Propensity Score Matching {#psm}
+# Propensity score matching — Clase teórica {#psm}
 
 ::: {.boxinfo}
 **Metas de aprendizaje**
 
-- Definir el propensity score y su relación con la CIA
-- Verificar soporte común de forma visual y conceptual
-- Comparar algoritmos de emparejamiento no paramétricos
-- Interpretar balance, ATT/ATE y sensibilidad después del matching
+- Explicar qué resuelve —y qué no resuelve— el propensity score.
+- Distinguir identificación causal, estimando y algoritmo de emparejamiento.
+- Evaluar soporte común y balance sin convertir umbrales en pruebas mecánicas.
+- Entender las limitaciones modernas del PSM y las precauciones de inferencia.
+:::
+
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
+- [Cunningham — capítulo 5: Matching and Subclassification](https://mixtape.scunning.com/05-matching_and_subclassification)
 :::
 
 ---
 
-## Del emparejamiento exacto al propensity score {-}
+## Del emparejamiento exacto a un puntaje escalar {-}
 
-El capítulo anterior mostró que el emparejamiento exacto se vuelve impracticable cuando el vector de controles $X$ tiene muchas dimensiones. Rosenbaum y Rubin (1983) demostraron un resultado fundamental que resuelve este problema:
+El emparejamiento exacto busca tratados y controles con el mismo vector de covariables $X$. Cuando $X$ contiene muchas variables, interacciones o categorías, aparecen estratos sin tratados o sin controles. Rosenbaum y Rubin (1983) mostraron que el **propensity score**
 
-> Si $(Y(D=1), Y(D=0)) \perp D \mid X$ (CIA), entonces también se cumple $(Y(D=1), Y(D=0)) \perp D \mid P(X)$, donde $P(X) = P(D=1 \mid X)$.
+$$p(X_i)=P(D_i=1\mid X_i)$$
 
-Es decir: **condicionar en el propensity score es suficiente para eliminar el sesgo de selección**, aunque hayamos colapsado todo el vector $X$ en un único escalar. En lugar de buscar un clon exacto en todas las dimensiones de $X$, buscamos individuos con la misma probabilidad estimada de haber recibido el tratamiento.
+es un *balancing score*: entre unidades con el mismo $p(X)$, la distribución de $X$ es la misma para tratados y controles. Por tanto, si la independencia condicional se cumple dado $X$, también se cumple dado el propensity score verdadero:
 
----
+$$\{Y_i(D=1),Y_i(D=0)\}\perp D_i\mid X_i
+\quad\Longrightarrow\quad
+\{Y_i(D=1),Y_i(D=0)\}\perp D_i\mid p(X_i).$$
 
-## El propensity score: definición y estimación {-}
+::: {.boxwarning}
+**El resultado no crea identificación.** Reducir $X$ a un escalar no elimina confusión no observada ni corrige una mala selección de covariables. La conclusión requiere CIA, superposición, consistencia/SUTVA y un propensity score adecuadamente estimado.
+:::
 
-El **propensity score** es la probabilidad condicional de recibir el tratamiento dado el vector de covariables observadas:
+## Identificación antes que algoritmo {-}
 
-$$p(X_i) \equiv P(D_i = 1 \mid X_i)$$
+### Independencia condicional {-}
 
-### Estimación {-}
+$$\{Y_i(D=1),Y_i(D=0)\}\perp D_i\mid X_i.$$
 
-En la práctica, $p(X)$ no se conoce y debe estimarse. Los modelos estándar son:
+Después de condicionar en covariables **pretratamiento**, la asignación debe ser independiente de los resultados potenciales. Este supuesto no puede verificarse solo con los datos observados.
 
-```stata
-* Logit (más común)
-logit D $X
-predict double pscore, pr
+### Superposición {-}
 
-* Probit (alternativa)
-probit D $X
-predict double pscore, pr
-```
+$$0<p(X_i)<1.$$
 
-La elección entre logit y probit generalmente no cambia los resultados. Lo que importa más es la **especificación**: incluir todas las variables que determinan tanto la selección ($D$) como el resultado ($Y$), posiblemente con términos cuadráticos e interacciones si la relación no es lineal en el índice.
+Para cada perfil relevante debe existir una probabilidad positiva de observar tratamiento y control. Cuando $p(X)$ está cerca de cero o uno, el contrafactual se apoya en muy pocas unidades y la estimación se vuelve frágil.
 
----
+### Consistencia y SUTVA {-}
 
-## Los dos supuestos de identificación {-}
+El resultado observado satisface
 
-### Supuesto 1: CIA (Conditional Independence Assumption) {-}
+$$Y_i=D_iY_i(D=1)+(1-D_i)Y_i(D=0),$$
 
-$$\{Y_i(D=1), Y_i(D=0)\} \perp D_i \mid X_i$$
+el tratamiento está bien definido y el tratamiento de una unidad no altera el resultado potencial de otra.
 
-Una vez controlamos por $X$, el tratamiento es como si fuera aleatorio. Este es el supuesto más fuerte: requiere que no haya variables no observadas que afecten simultáneamente la selección y el resultado.
+::: {.boxkey}
+**Balance no demuestra identificación.** Un algoritmo puede balancear perfectamente las covariables incluidas y seguir sesgado por una variable omitida, una variable postratamiento o falta de comparabilidad sustantiva.
+:::
 
-### Supuesto 2: Soporte común (Overlap) {-}
+## ¿Qué covariables entran al modelo? {-}
 
-$$0 < P(D_i = 1 \mid X_i = x) < 1 \quad \forall x \text{ en el soporte de } X$$
+La selección debe ocurrir antes de mirar cuál especificación produce el efecto “deseado”. El conjunto principal se justifica con teoría, conocimiento institucional y, cuando sea útil, un DAG.
 
-Debe haber individuos tratados y no tratados para cada valor de $X$. En términos del propensity score, esto significa que la distribución de $\hat{p}(X)$ para los tratados y la distribución para los controles deben solaparse.
+| Tipo de variable | Tratamiento recomendado | Razón |
+|---|---|---|
+| Confusor pretratamiento | Incluir obligatoriamente | Afecta tratamiento y resultado potencial |
+| Predictor fuerte del resultado | Generalmente incluir | Puede reducir sesgo y mejorar precisión |
+| Instrumento o predictor casi exclusivo de $D$ | Evitar como regla automática | Puede empeorar overlap y amplificar sesgo residual |
+| Variable postratamiento | Excluir | Puede bloquear parte del efecto o abrir sesgo |
+| Collider | Excluir | Condicionar puede crear una asociación espuria |
 
-```stata
-* Verificar soporte común visualmente
-twoway (kdensity pscore if D==1, lcolor(blue)) ///
-       (kdensity pscore if D==0, lcolor(red)),  ///
-       legend(label(1 "Tratados") label(2 "Controles")) ///
-       title("Distribución del propensity score")
-```
+No basta con maximizar la predicción de $D$. El modelo del propensity score es una herramienta de diseño causal: se evalúa por superposición y balance, no por su tasa de clasificación.
 
-Cuando hay poca superposición (tratados con $\hat{p} > 0.9$ sin controles equivalentes), se restringe el análisis a la región de soporte común: se descartan los tratados con propensity score fuera del rango $[\min(\hat{p}_{D=0}), \max(\hat{p}_{D=0})]$.
+## Estimando y población con soporte {-}
 
----
+Antes de emparejar se define el parámetro:
 
-## La receta del PSM en 7 pasos {-}
+| Estimando | Definición | Pregunta |
+|---|---|---|
+| ATT | $E[Y(D=1)-Y(D=0)\mid D=1]$ | ¿Qué efecto tuvo el programa sobre quienes participaron? |
+| ATE | $E[Y(D=1)-Y(D=0)]$ | ¿Qué ocurriría al asignarlo en la población objetivo? |
+| ATC | $E[Y(D=1)-Y(D=0)\mid D=0]$ | ¿Qué habría ocurrido con quienes no participaron? |
 
-Caliendo & Kopeinig (2008) proponen esta secuencia:
+Si se eliminan observaciones sin comparables, el parámetro cambia: pasa a referirse a la población que conserva soporte. Por ello se debe reportar cuántas unidades se descartan y cómo difieren de las que permanecen. Para el ATT, lo central es encontrar controles comparables para los tratados; para el ATE se necesita comparabilidad en ambas direcciones.
 
-| Paso | Acción | En Stata |
-|------|--------|----------|
-| 1 | Estimar el propensity score (logit/probit) | `logit D $X` + `predict pscore, pr` |
-| 2 | Verificar soporte común | `twoway kdensity` por grupo |
-| 3 | Elegir el algoritmo de matching | (ver sección siguiente) |
-| 4 | Emparejar y calcular ATT/ATE | `psmatch2` |
-| 5 | Verificar el balance post-matching | `pstest` |
-| 6 | Estimar el efecto del tratamiento | resultado del paso 4 |
-| 7 | Pruebas de sensibilidad (Rosenbaum bounds) | `rbounds` |
+## Algoritmos de emparejamiento {-}
 
----
+### Vecino más cercano {-}
 
-## Métodos de emparejamiento no paramétricos {-}
+Para cada tratado $i$, se selecciona el control cuyo puntaje es más cercano:
 
-Una vez estimado $\hat{p}(X_i)$, el siguiente paso es asignar controles a cada tratado. Hay varios algoritmos:
+$$j^*(i)=\arg\min_{j:D_j=0}|\hat p(X_i)-\hat p(X_j)|.$$
 
-### Vecino más cercano (Nearest Neighbour, NN) {-}
+Con reemplazo, un buen control puede servir varias veces: suele reducir sesgo, aunque concentra peso. Sin reemplazo, el resultado puede depender del orden. Usar varios vecinos reduce varianza pero puede aumentar sesgo.
 
-Para cada tratado $i$, se elige el control $j^*$ que minimiza la distancia en el propensity score:
+### Caliper y radio {-}
 
-$$j^*(i) = \arg\min_{j \in \{D=0\}} |\hat{p}(X_i) - \hat{p}(X_j)|$$
+Un caliper impide aceptar emparejamientos demasiado distantes. Una referencia frecuente es $0.2$ desviaciones estándar del **logit del propensity score**, no necesariamente $0.2$ desviaciones del puntaje crudo:
 
-**Con reemplazo**: el mismo control puede ser usado como clon de múltiples tratados. Reduce el sesgo pero puede inflar la varianza si el control es usado muchas veces.
+$$\operatorname{logit}(\hat p)=\log\left(\frac{\hat p}{1-\hat p}\right).$$
 
-**Sin reemplazo**: cada control se usa como máximo una vez. El resultado depende del orden en que se procesen los tratados.
-
-**NN múltiple** ($m$-NN): se usan los $m$ controles más cercanos (promedio). Reduce la varianza a costa de mayor sesgo.
-
-### Caliper {-}
-
-Modifica el NN imponiendo una distancia máxima: si el control más cercano está a más de $\kappa$ unidades de distancia en el PS, el tratado se descarta (fuera del soporte común):
-
-$$j^*(i) = \arg\min_{j: |\hat{p}(X_i) - \hat{p}(X_j)| < \kappa} |\hat{p}(X_i) - \hat{p}(X_j)|$$
-
-La regla empírica de Rosenbaum y Rubin: $\kappa = 0.2 \times \hat{\sigma}_{p(X)}$ (20% de la desviación estándar del PS).
-
-### Radio (*Radius*) {-}
-
-Empareja con **todos** los controles dentro del caliper $\kappa$, no solo el más cercano. Reduce la varianza (más información) pero puede incluir controles más lejanos.
-
-### Estratificación {-}
-
-Divide el soporte de $\hat{p}(X)$ en $K$ intervalos y estima el ATT dentro de cada estrato. El ATT global es el promedio ponderado por la proporción de tratados en cada estrato.
+El matching por radio usa todos los controles que quedan dentro de esa distancia.
 
 ### Kernel {-}
 
-Usa una función kernel para ponderar a todos los controles en función de su distancia al tratado — los más cercanos reciben mayor peso. La estimación del contrafactual para el tratado $i$ es:
+El estimador kernel utiliza varios controles y asigna mayor peso a los más cercanos:
 
-$$\hat{Y}_i(0) = \sum_{j: D_j=0} \frac{K\!\left(\frac{\hat{p}(X_i) - \hat{p}(X_j)}{h}\right)}{\sum_{k: D_k=0} K\!\left(\frac{\hat{p}(X_i) - \hat{p}(X_k)}{h}\right)} Y_j$$
+$$\widehat Y_i(D=0)=
+\sum_{j:D_j=0}
+\frac{K\!\left((\hat p_i-\hat p_j)/h\right)}
+{\sum_{k:D_k=0}K\!\left((\hat p_i-\hat p_k)/h\right)}Y_j.$$
 
-donde $h$ es el ancho de banda (*bandwidth*) y $K(\cdot)$ es la función kernel. Los kernels más usados:
+El ancho de banda $h$ controla el compromiso sesgo-varianza. Ningún algoritmo debe elegirse únicamente porque entrega el efecto más grande o más significativo.
 
-| Kernel | Fórmula $K(u)$ | Característica |
-|--------|----------------|----------------|
-| **Uniforme** | $\frac{1}{2} \cdot \mathbf{1}(|u|<1)$ | Igual peso dentro del caliper |
-| **Triangular** | $(1-|u|) \cdot \mathbf{1}(|u|<1)$ | Peso lineal decreciente |
-| **Epanechnikov** | $\frac{3}{4}(1-u^2) \cdot \mathbf{1}(|u|<1)$ | Óptimo asintótico |
-| **Gaussiano** | $\frac{1}{\sqrt{2\pi}} e^{-u^2/2}$ | Soporte ilimitado, colas pesadas |
+## Diagnóstico: mirar más que una cifra {-}
 
-### ¿Cuál método elegir? {-}
+Después del matching se examina:
 
-No hay una respuesta única. La práctica estándar es:
+- la distribución completa del propensity score por tratamiento;
+- diferencias estandarizadas de medias antes y después;
+- dispersión, colas e interacciones sustantivas;
+- concentración de pesos y reutilización de controles;
+- número y características de las unidades descartadas.
 
-1. Usar NN(1) con caliper como estimación principal
-2. Reportar robustez con kernel Epanechnikov y NN(3)
-3. Si los resultados son sensibles al método, investigar la causa (¿poco soporte común?)
+Para una covariable $X_k$, la diferencia estandarizada es
 
----
+$$SMD_k=100\times
+\frac{\bar X_{k,T}-\bar X_{k,C}}
+{\sqrt{(s^2_{k,T}+s^2_{k,C})/2}}.$$
 
-## ATT vs. ATE {-}
+Como guía descriptiva suele buscarse $|SMD|<10\%$, pero no es una frontera que garantice validez. Tampoco conviene usar el $p$-valor de una prueba t como criterio principal: depende del tamaño de muestra.
 
-El método de matching y la especificación del PS cambian según qué parámetro se quiere estimar:
+## El problema moderno del PSM {-}
 
-| Parámetro | Definición | Cuándo es relevante |
-|-----------|-----------|---------------------|
-| **ATT** | $E[Y(D=1) - Y(D=0) \mid D=1]$ | Efecto sobre quienes *sí* participan — evaluación de programa |
-| **ATE** | $E[Y(D=1) - Y(D=0)]$ | Efecto si se asignara el tratamiento *a todos* — decisión de política |
+King y Nielsen (2019) distinguen dos ideas que no deben confundirse:
 
-Para el **ATT**, el soporte común se define desde la perspectiva de los tratados: $[\min(\hat{p}_{D=1}), \max(\hat{p}_{D=0})]$.
+1. El propensity score verdadero es un balancing score bajo los supuestos adecuados.
+2. El algoritmo habitual de descartar unidades por cercanía en el propensity score estimado no necesariamente mejora el diseño.
 
-Para el **ATE**, el soporte se restringe a la región donde ambas distribuciones se superponen: $[\max(\min\hat{p}_D, \min\hat{p}_C), \min(\max\hat{p}_D, \max\hat{p}_C)]$.
+En algunas muestras, PSM puede descartar observaciones que ya estaban relativamente balanceadas, aumentar el desequilibrio multidimensional y acercar el análisis a una selección aleatoria deficiente. La respuesta no es prohibir toda aplicación, sino exigir un diagnóstico explícito y comparar con alternativas: emparejamiento en Mahalanobis, *coarsened exact matching*, ponderación, regresión ajustada o estimadores doblemente robustos.
 
----
+::: {.boxwarning}
+**Regla de trabajo.** No reportaremos “PSM funcionó” porque el ATT sea significativo. Diremos que el diseño es defendible solo si conserva una población relevante, mejora el balance de covariables sustantivas y los resultados son razonablemente estables frente a decisiones justificadas.
+:::
 
-## Verificación del balance {-}
+## Inferencia: por qué no basta un bootstrap ingenuo {-}
 
-Después del matching, hay que verificar que los grupos tratado y control están **balanceados** en las covariables. El indicador estándar es la diferencia estandarizada (*standardized bias*):
+El matching por vecino más cercano es no suave: pequeñas perturbaciones pueden cambiar discretamente quién es vecino de quién. Abadie e Imbens (2008) muestran que el bootstrap estándar no es, en general, válido para este estimador. Además, los errores estándar simples de `psmatch2` pueden tratar el puntaje como conocido y no incorporar toda la incertidumbre de su estimación.
 
-$$SB_k = \frac{\bar{X}_{kT} - \bar{X}_{kC}}{\sqrt{(\hat{V}_{kT} + \hat{V}_{kC})/2}} \times 100$$
+En la clase empírica distinguiremos:
 
-La regla de Rosenbaum & Rubin: un $|SB_k| < 20\%$ indica balance aceptable; $|SB_k| < 5\%$ es excelente.
+- la estimación transparente y los diagnósticos de `psmatch2`;
+- los errores analíticos disponibles para matching de vecinos;
+- la inferencia ajustada de `teffects psmatch` bajo su implementación;
+- estimadores ortogonales y doblemente robustos como `telasso` para alta dimensión.
 
-```stata
-* pstest verifica el balance antes y después del matching
-pstest $X, treated(D) mweight(_weight) both
-* before: diferencia antes del matching
-* after:  diferencia después del matching
-* %bias:  diferencia estandarizada
-```
+## Preguntas tipo examen {-}
 
-Si el balance es insuficiente, hay que re-especificar el modelo del PS (agregar interacciones, términos cuadráticos) o cambiar el algoritmo de matching.
+::: {.boxexam}
+**Pregunta 1.** Un investigador obtiene $|SMD|<5\%$ para todas las variables incluidas. Afirma que CIA quedó demostrada. Evalúe la afirmación y construya un contraejemplo causal.
+:::
 
----
+::: {.boxexam}
+**Pregunta 2.** Al imponer soporte común se eliminan 35% de los tratados. ¿Sigue estimándose el ATT original? Explique qué parámetro queda identificado y qué información debe reportarse.
+:::
 
-## Inferencia estadística {-}
-
-La inferencia con PSM es **más compleja** que en OLS porque el PS es estimado, no conocido. Ignorar la variabilidad en la estimación del PS produce errores estándar demasiado pequeños.
-
-Opciones prácticas:
-
-1. **Bootstrap** (recomendado): re-estima el PS y el efecto del tratamiento en cada muestra bootstrap
-2. **Errores analíticos de `psmatch2`**: asumen PS conocido — son conservadores (sobreestiman la varianza)
-3. **Inferencia basada en aleatorización** (si $N$ es pequeño)
-
-La implementación en Stata es directa: `psmatch2` con la opción `bwidth()` para bootstrap.
-
----
+::: {.boxexam}
+**Pregunta 3.** Compare NN(1) con reemplazo, NN(5) y kernel en términos de sesgo, varianza, transparencia y dependencia de observaciones con alto peso.
+:::
 
 ## Lecturas recomendadas {-}
 
-- **Rosenbaum & Rubin (1983)** — "The central role of the propensity score in observational studies for causal effects", *Biometrika* — el paper fundacional
-- **Caliendo & Kopeinig (2008)** — "Some practical guidance for the implementation of propensity score matching", *Journal of Economic Surveys* — guía práctica indispensable
-- **Dehejia & Wahba (1999)** — "Causal effects in nonexperimental studies: Reevaluating the evaluation of training programs", *JASA*
-- **Heckman, Ichimura & Todd (1997)** — "Matching as an econometric evaluation estimator", *Review of Economic Studies*
+- Rosenbaum, P. y Rubin, D. (1983). “The Central Role of the Propensity Score in Observational Studies for Causal Effects”, *Biometrika*.
+- Caliendo, M. y Kopeinig, S. (2008). “Some Practical Guidance for the Implementation of Propensity Score Matching”, *Journal of Economic Surveys*.
+- Abadie, A. e Imbens, G. (2006). “Large Sample Properties of Matching Estimators for Average Treatment Effects”, *Econometrica*.
+- Abadie, A. e Imbens, G. (2008). “On the Failure of the Bootstrap for Matching Estimators”, *Econometrica*.
+- King, G. y Nielsen, R. (2019). “Why Propensity Scores Should Not Be Used for Matching”, *Political Analysis*.

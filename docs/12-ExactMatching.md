@@ -1,138 +1,186 @@
-# Emparejamiento Exacto
+# Emparejamiento exacto — Introducción {#emparejamiento-exacto}
 
 ::: {.boxinfo}
 **Metas de aprendizaje**
 
-- Explicar por qué la comparación directa en datos observacionales puede estar sesgada
-- Definir el ATT bajo emparejamiento exacto
-- Identificar los supuestos de observabilidad, soporte común y suficientes controles
-- Entender la maldición de las dimensiones y la motivación para PSM
+- Explicar qué sesgo intenta reducir el emparejamiento.
+- Definir las celdas de comparación usando covariables pretratamiento.
+- Reconocer los supuestos de no confusión condicional, soporte común y SUTVA.
+- Distinguir el ATT original del efecto para la población emparejada.
+- Entender por qué la dimensionalidad conduce al propensity score.
 :::
 
----
+::: {.boxinfo}
+**Lecturas centrales**
 
-## El problema: identificación sin aleatorización {-}
+- [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
+- [Cunningham — capítulo 5: Matching and Subclassification](https://mixtape.scunning.com/05-matching_and_subclassification)
+:::
 
-En un experimento aleatorizado (RCT), la asignación al tratamiento garantiza que los grupos tratado y control son, en promedio, idénticos en todas las características — observables **y no observables**. El estimador de diferencia de medias produce el efecto causal del tratamiento.
+## De la aleatorización a la selección en observables {-}
 
-En datos **observacionales**, esto no está garantizado. Los individuos se autoseleccionan al tratamiento: las personas que deciden estudiar un posgrado, adoptar una tecnología o participar en un programa social son **sistemáticamente distintas** a quienes no lo hacen. Comparar sus resultados directamente mezcla el efecto del tratamiento con diferencias preexistentes.
+En un experimento aleatorizado, la asignación genera grupos comparables en promedio. En un estudio observacional, las personas eligen o reciben el tratamiento por razones que también pueden afectar sus resultados. La diferencia de medias observada mezcla entonces el efecto causal con selección:
 
-$$\underbrace{E[Y_i \mid D_i = 1] - E[Y_i \mid D_i = 0]}_{\text{Diferencia de medias observada}} = \underbrace{ATT}_{\text{Efecto causal}} + \underbrace{E[Y_i(D=0) \mid D_i = 1] - E[Y_i(D=0) \mid D_i = 0]}_{\text{Sesgo de selección}}$$
+\[
+\begin{aligned}
+&E[Y_i\mid D_i=1]-E[Y_i\mid D_i=0] \\
+&=\underbrace{E[Y_i(D=1)-Y_i(D=0)\mid D_i=1]}_{ATT}
++\underbrace{E[Y_i(D=0)\mid D_i=1]-E[Y_i(D=0)\mid D_i=0]}_{\text{sesgo de selección}}.
+\end{aligned}
+\]
 
-El término de sesgo de selección refleja que los tratados y los controles tendrían resultados distintos **incluso en ausencia del tratamiento**. El objetivo de los métodos de emparejamiento es eliminar este sesgo controlando por las características observables que generan la selección.
+El problema es contrafactual: para las unidades tratadas observamos \(Y_i(D=1)\), pero no \(Y_i(D=0)\). El emparejamiento busca controles con covariables pretratamiento comparables para aproximar ese resultado faltante.
 
----
+::: {.boxadvertencia}
+**El método no crea un experimento**
 
-## La idea del emparejamiento exacto {-}
+Encontrar dos unidades con el mismo \(X\) no demuestra que sean iguales en motivación, habilidad u otras características no observadas. La interpretación causal depende de supuestos que deben defenderse con conocimiento institucional.
+:::
 
-La intuición es simple: **construir un clon** para cada individuo tratado.
+## La idea: comparar dentro de celdas {-}
 
-Si encontramos, para cada persona tratada $i$, un individuo no tratado $j$ que tiene exactamente las mismas características observables $X$ (edad, educación, género, región, etc.), entonces la única diferencia restante entre $i$ y $j$ es el tratamiento. La comparación de sus resultados aproxima el efecto causal.
+Suponga que \(X_i\) contiene educación y género, medidos antes del tratamiento. Cada combinación define una celda:
 
 ```text
-Tratado i:  X = (35 años, universitario, mujer, Bogotá) → Y_i(D=1)
-Control j:  X = (35 años, universitario, mujer, Bogotá) → Y_j(D=0)
-
-ATT ≈ Y_i(D=1) - Y_j(D=0)
+Celda A: universitarias
+Celda B: hombres con secundaria
+Celda C: universitarios
+Celda D: mujeres con secundaria
 ```
 
-El emparejamiento exacto replica, de forma no paramétrica, el principio del experimento: dentro de cada "celda" definida por los valores de $X$, la asignación al tratamiento es como si fuera aleatoria.
+El emparejamiento exacto conserva una celda solo cuando contiene al menos una unidad tratada y una de control. Dentro de esa celda, el resultado promedio de los controles aproxima \(E[Y_i(D=0)\mid D_i=1,X_i=x]\), pero únicamente bajo los supuestos de identificación.
 
----
+## Supuestos de identificación {-}
 
-## Los tres requisitos del emparejamiento {-}
+### 1. No confusión condicional {-}
 
-Para que el emparejamiento exacto sea válido se necesitan tres condiciones:
+La **no confusión condicional** —también llamada independencia condicional— exige que, dado el vector de covariables pretratamiento \(X_i\), la asignación no dependa de los resultados potenciales:
 
-### 1. Observabilidad {-}
+\[
+\{Y_i(D=1),Y_i(D=0)\}\perp D_i\mid X_i.
+\]
 
-Todas las variables que determinan simultáneamente la selección al tratamiento **y** el resultado deben ser **observables y medibles**. Esto es el supuesto de **Independencia Condicional (CIA)**:
-
-$$\{Y_i(D=1), Y_i(D=0)\} \perp D_i \mid X_i$$
-
-Una vez controlamos por $X$, el tratamiento es "como si fuera" aleatorio. Si hay variables no observadas que afectan tanto la selección como el resultado (por ejemplo, habilidad no medida, motivación, conexiones sociales), el emparejamiento no resuelve el problema de identificación.
+Para identificar el ATT basta una versión referida al resultado sin tratamiento, pero escribir ambos resultados potenciales ayuda a distinguir este supuesto de una afirmación sobre balance observado. Ningún procedimiento de matching puede comprobar que se midieron todos los factores de confusión.
 
 ### 2. Soporte común {-}
 
-Para cada valor posible de $X$, debe haber individuos tanto en el grupo tratado como en el grupo de control:
+Para estimar el ATT, cada perfil \(x\) presente entre los tratados debe tener probabilidad positiva de permanecer sin tratamiento:
 
-$$0 < P(D_i = 1 \mid X_i = x) < 1 \quad \forall x$$
+\[
+P(D_i=0\mid X_i=x)>0
+\quad\text{para los valores de }x\text{ observados entre tratados}.
+\]
 
-Si hay valores de $X$ donde solo hay tratados (o solo hay controles), no podemos construir el clon y el ATT no está identificado en esa región del soporte.
+La condición de overlap más fuerte, \(0<P(D_i=1\mid X_i=x)<1\), permite considerar efectos para una población más amplia. En una muestra finita, el requisito práctico es concreto: debe existir al menos un control en cada celda tratada que se quiera conservar.
 
-### 3. Suficientes controles {-}
+### 3. SUTVA y temporalidad {-}
 
-El grupo de control debe ser suficientemente grande para encontrar un clon para cada tratado. En la práctica esto significa que necesitamos un grupo de control mucho mayor que el grupo de tratados — la regla general es al menos 5:1.
+SUTVA requiere tratamientos bien definidos y ausencia de interferencia relevante entre unidades. Además, \(X_i\) debe medirse antes del tratamiento. Emparejar por una variable causada por \(D_i\) puede bloquear parte del efecto o introducir sesgo, como vimos en el capítulo de malos controles.
 
----
+::: {.boxcerebro}
+**Tres preguntas antes de emparejar**
 
-## La maldición de las dimensiones {-}
+1. ¿Las covariables capturan causas comunes del tratamiento y del resultado?
+2. ¿Fueron medidas antes del tratamiento?
+3. ¿Hay controles comparables para los perfiles tratados relevantes?
+:::
 
-El emparejamiento exacto enfrenta un problema fundamental cuando el vector $X$ tiene muchas dimensiones: la **maldición de las dimensiones** (*curse of dimensionality*).
+## Ejemplo manual: quién entra al estimando {-}
 
-Considera el siguiente ejemplo. Si cada variable de control tiene solo dos valores posibles (por ejemplo, hombre/mujer, universitario/no universitario, urbano/rural), el número de celdas crece exponencialmente con el número de variables:
+Considere seis personas. Educación y género son pretratamiento.
 
-| Variables de control | Celdas posibles | Observaciones necesarias |
-|---------------------|-----------------|--------------------------|
-| 1 variable binaria  | $2^1 = 2$      | Manejable                |
-| 2 variables binarias| $2^2 = 4$       | Manejable                |
-| 5 variables binarias| $2^5 = 32$      | Manejable                |
-| 10 variables binarias| $2^{10} = 1{,}024$ | Muy exigente          |
-| 20 variables binarias| $2^{20} = 1{,}048{,}576$ | Imposible en la práctica |
+| ID | \(D\) | Educación | Género | Celda | \(Y\) | Estado del match |
+|---|---:|---|---|---|---:|---|
+| T1 | 1 | Universitaria | Mujer | A | 18 | Match con C1 |
+| C1 | 0 | Universitaria | Mujer | A | 12 | Control de T1 |
+| T2 | 1 | Secundaria | Hombre | B | 11 | Match con C2 |
+| C2 | 0 | Secundaria | Hombre | B | 8 | Control de T2 |
+| T3 | 1 | Universitaria | Hombre | C | 20 | **Sin match** |
+| C3 | 0 | Secundaria | Mujer | D | 7 | Celda sin tratados |
 
-Con variables continuas (edad en años, salario, puntaje de prueba) el problema es aún más severo: la probabilidad de encontrar dos individuos con exactamente el mismo valor en todas las dimensiones es prácticamente cero.
+Las celdas A y B pertenecen al soporte común observado. La celda C contiene un tratado sin match y la D no contribuye al ATT porque no contiene tratados.
 
-El resultado es que con muchas variables de control, la mayoría de los individuos tratados **no tienen ningún clon exacto** en el grupo de control, y el método se vuelve inaplicable.
+Para la población emparejada \(\mathcal S=\{A,B\}\), el estimador es
 
-Esta limitación motiva el Propensity Score Matching, que colapsa todas las dimensiones de $X$ en un único número escalar.
+\[
+\widehat{ATT}_{\mathcal S}
+=\frac{1}{N_{T,\mathcal S}}
+\sum_{i:D_i=1,\,X_i\in\mathcal S}
+\left(Y_i-\overline Y_{0,X_i}\right)
+=\frac{(18-12)+(11-8)}{2}=4.5.
+\]
 
----
+Este 4.5 no estima automáticamente el ATT de los tres tratados originales. Estima el efecto promedio para los tratados de la **población emparejada**, es decir, aquellos cuyos perfiles están en el soporte común. Recuperar el efecto para T3 exigiría extrapolación o supuestos adicionales.
 
-## Estimación del ATT con emparejamiento exacto {-}
+::: {.boxadvertencia}
+**Descartar observaciones cambia la pregunta**
 
-Cuando el emparejamiento exacto es viable (pocas variables, discretas), el estimador del efecto promedio sobre los tratados (**ATT**) es:
+La pérdida de una unidad no es solo un problema de precisión. Si los tratados sin match son distintos, el estimando pasa del ATT original a un efecto para la subpoblación con soporte.
+:::
 
-$$\hat{\tau}_{ATT} = \frac{1}{N_T} \sum_{i: D_i=1} \left( Y_i - \frac{1}{|M_i|} \sum_{j \in M_i} Y_j \right)$$
+## La maldición de la dimensionalidad {-}
 
-donde $M_i$ es el conjunto de controles que son "clones exactos" del tratado $i$ (mismo valor de $X$), y $|M_i|$ es el número de controles en ese conjunto.
+Con variables discretas, el número de celdas posibles crece rápidamente. Si cada covariable tiene dos categorías:
 
-La lógica es: para cada tratado, calcula la diferencia entre su resultado y el promedio de sus clones exactos, luego promedia esas diferencias sobre todos los tratados.
+| Covariables binarias | Celdas posibles |
+|---:|---:|
+| 1 | \(2^1=2\) |
+| 2 | \(2^2=4\) |
+| 5 | \(2^5=32\) |
+| 10 | \(2^{10}=1{,}024\) |
+| 20 | \(2^{20}=1{,}048{,}576\) |
 
----
+Con covariables continuas, dos unidades rara vez coinciden exactamente. Aumentar \(X\) puede mejorar la plausibilidad de no confusión, pero también fragmenta el soporte y deja más tratados sin match. No existe una razón universal de controles por tratado que resuelva esta tensión: importa su distribución conjunta dentro de las celdas relevantes.
 
-## En la práctica: `nnmatch` en Stata {-}
+## Lo que el emparejamiento no resuelve {-}
 
-Para emparejamiento exacto (o casi exacto) en Stata, el comando `nnmatch` permite especificar variables de exactitud obligatoria:
+::: {.boxadvertencia}
+**Límites del diseño**
 
-```stata
-* Instalar si no está disponible
-ssc install nnmatch
+- **Confusión no observada:** balancear \(X\) no balancea automáticamente variables omitidas.
+- **Malos controles:** incluir mediadores o variables postratamiento puede cambiar el estimando o crear sesgo.
+- **Falta de soporte:** ninguna técnica fabrica contrafactuales donde no existen controles comparables.
+- **Inferencia:** reutilizar controles, elegir entre empates y estimar distancias afecta la incertidumbre; matching no convierte los errores estándar convencionales en válidos por defecto.
+:::
 
-* Emparejamiento exacto en 'genero' y 'educacion',
-* vecino más cercano en 'edad' e 'ingreso'
-nnmatch outcome treat edad ingreso, ///
-    exact(genero educacion)         ///
-    tc(att)                         ///
-    m(1)
-```
+## Puente hacia el propensity score {-}
 
-La opción `exact()` impone que el emparejamiento sea exacto en las variables listadas, y aproximado (vecino más cercano) en las demás. Cuando no hay ningún control con los valores exactos requeridos, la observación se descarta del análisis.
+Rosenbaum y Rubin (1983) definieron el propensity score
 
----
+\[
+e(X_i)=P(D_i=1\mid X_i)
+\]
 
-## Resumen y limitaciones {-}
+como un **puntaje de balance**: bajo los supuestos apropiados, permite organizar comparaciones usando un escalar en lugar de todas las dimensiones de \(X_i\). Esta reducción motiva el capítulo de PSM, pero no elimina los problemas de diseño. Estimar \(e(X_i)\) no garantiza balance en la muestra y no garantiza identificación causal; ambos aspectos deben evaluarse y justificarse.
 
-El emparejamiento exacto es conceptualmente transparente y no hace supuestos de forma funcional, pero tiene dos limitaciones prácticas importantes:
+La clase empírica posterior comparará el matching exacto o restringido mediante `teffects nnmatch` y `ematch()` con el emparejamiento por propensity score. Aquí basta retener la lógica: **definir primero el estimando y el soporte; escoger después el algoritmo**.
 
-1. **Maldición de las dimensiones**: inviable con muchas variables de control
-2. **Pérdida de muestra**: los tratados sin clon exacto quedan fuera del análisis
+## Preguntas tipo examen {-}
 
-Estas limitaciones motivan el Propensity Score Matching (Capítulo \@ref(psm)), que reduce el vector $X$ a un único escalar — la probabilidad estimada de recibir el tratamiento — preservando las propiedades de identificación del emparejamiento exacto bajo los mismos supuestos (CIA y soporte común).
+::: {.boxpregunta}
+**Código:** EXACT-T1
+**Tipo:** Soporte y estimando
 
----
+Una base contiene cuatro celdas de covariables pretratamiento. Dos tienen tratados y controles, una contiene solo tratados y otra solo controles. Identifique qué observaciones contribuyen al estimador de matching exacto y explique si el resultado corresponde al ATT original o al efecto para una subpoblación.
+:::
+
+::: {.boxpregunta}
+**Código:** EXACT-T2
+**Tipo:** Selección de covariables
+
+Para estimar el efecto de capacitación sobre salarios, una investigadora propone emparejar por edad, educación previa, salario previo y asistencia efectiva al curso. Clasifique las covariables según su temporalidad, identifique el posible mal control y explique qué supuesto seguiría siendo necesario aun si el balance observado fuera perfecto.
+:::
+
+## Para llevar a PSM {-}
+
+- Matching exacto compara unidades dentro de celdas de covariables pretratamiento.
+- La interpretación causal requiere no confusión condicional, soporte común y SUTVA.
+- Excluir tratados sin match cambia la población objetivo.
+- La dimensionalidad hace difícil formar celdas exactas y motiva un puntaje de balance.
+- El capítulo \@ref(psm) estudia cómo construir, diagnosticar y usar ese puntaje sin confundir algoritmo con identificación.
 
 ## Lecturas recomendadas {-}
 
-- **Angrist & Pischke (2009)** — *Mostly Harmless Econometrics*, Cap. 3: covariates and regression
-- **Imbens & Rubin (2015)** — *Causal Inference for Statistics, Social, and Biomedical Sciences*, Cap. 15
-- **Caliendo & Kopeinig (2008)** — "Some practical guidance for the implementation of propensity score matching", *Journal of Economic Surveys* — referencia principal para la implementación práctica
+- **Rosenbaum y Rubin (1983)** — “The Central Role of the Propensity Score in Observational Studies for Causal Effects”, *Biometrika*, 70(1), 41–55.
+- **Imbens y Rubin (2015)** — *Causal Inference for Statistics, Social, and Biomedical Sciences*, capítulo 12.
+- **Angrist y Pischke (2009)** — *Mostly Harmless Econometrics*, capítulo 3.

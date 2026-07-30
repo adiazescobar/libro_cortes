@@ -29,6 +29,13 @@ canónicos verificados que se muestran en las tablas.
 - [Verificación cruzada (`did_verificacion.csv`)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/08_DID/results/did_verificacion.csv)
 :::
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 5 (PDF)](lecturas/bernal-pena/capitulo-05.pdf)
+- [Cunningham — capítulo 9: Difference-in-Differences](https://mixtape.scunning.com/09-difference_in_differences)
+:::
+
 
 
 ## El DiD básico en la base de nutrición {-}

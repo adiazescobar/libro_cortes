@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 21 Controles sintéticos — Clase empírica | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 21 Controles sintéticos — Clase empírica | Cortes Transversales" />
+  <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 21 Controles sintéticos — Clase empírica | Cortes Transversales" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 21 Controles sintéticos — Clase empírica | Cortes Transversales" />
+  
+  
+  
+
+<meta name="author" content="Ana María Díaz" />
+
+
+<meta name="date" content="2026-07-29" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="controles-sinteticos.html"/>
+<link rel="next" href="iv.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Econometría Avanzada</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Programa</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#informaci%C3%B3n-general"><i class="fa fa-check"></i>Información general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#requisitos"><i class="fa fa-check"></i>Requisitos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#bibliograf%C3%ADa"><i class="fa fa-check"></i>Bibliografía</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inclusi%C3%B3n"><i class="fa fa-check"></i>Inclusión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#integridad-acad%C3%A9mica"><i class="fa fa-check"></i>Integridad Académica</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#programa-del-curso"><i class="fa fa-check"></i>Programa del Curso</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html"><i class="fa fa-check"></i>Prueba de Entrada</a>
+<ul>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#antes-de-comenzar"><i class="fa fa-check"></i>Antes de comenzar</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puntaje-autom%C3%A1tico"><i class="fa fa-check"></i>Puntaje (automático)</a></li>
+<li class="chapter" data-level="" data-path="prueba-de-entrada.html"><a href="prueba-de-entrada.html#recursos-para-repasar"><i class="fa fa-check"></i>Recursos para Repasar</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html"><i class="fa fa-check"></i><b>1</b> Introducción a la inferencia causal</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#objetivos-y-mapa-del-cap%C3%ADtulo"><i class="fa fa-check"></i>Objetivos y mapa del capítulo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#por-qu%C3%A9-importa-la-inferencia-causal"><i class="fa fa-check"></i>Por qué importa la inferencia causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-formular-una-pregunta-causal"><i class="fa fa-check"></i>Cómo formular una pregunta causal</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#contrafactual-y-resultados-potenciales"><i class="fa fa-check"></i>Contrafactual y resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#el-problema-fundamental"><i class="fa fa-check"></i>El problema fundamental</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diferencia-observada-y-sesgo-de-selecci%C3%B3n"><i class="fa fa-check"></i>Diferencia observada y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#comparaciones-que-no-identifican-causalidad"><i class="fa fa-check"></i>Comparaciones que no identifican causalidad</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#estrategias-del-curso"><i class="fa fa-check"></i>Estrategias del curso</a></li>
+<li class="chapter" data-level="" data-path="introduccion-a-la-inferencia-causal.html"><a href="introduccion-a-la-inferencia-causal.html#mapa-del-libro-y-puente-a-stata"><i class="fa fa-check"></i>Mapa del libro y puente a Stata</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html"><i class="fa fa-check"></i><b>2</b> Stata para Principiantes</a>
+<ul>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#materiales-para-la-clase"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#preparar-el-entorno-y-modificar-datos"><i class="fa fa-check"></i>Preparar el entorno y modificar datos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#macros-en-stata"><i class="fa fa-check"></i>Macros en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#loops-en-stata"><i class="fa fa-check"></i>Loops en Stata</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#programas-definidos-por-el-usuario"><i class="fa fa-check"></i>Programas definidos por el usuario</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#almacenamiento-de-resultados-con-postfile-y-loops"><i class="fa fa-check"></i>Almacenamiento de resultados con <code>postfile</code> y loops</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#resumen-y-buenas-pr%C3%A1cticas"><i class="fa fa-check"></i>Resumen y buenas prácticas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#y-si-quiero-hacerlo-en-r-o-python"><i class="fa fa-check"></i>¿Y si quiero hacerlo en R o Python?</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#asignar-valores-y-mostrar-texto"><i class="fa fa-check"></i>1. Asignar valores y mostrar texto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#operaciones-b%C3%A1sicas"><i class="fa fa-check"></i>2. Operaciones básicas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#loops-b%C3%A1sicos"><i class="fa fa-check"></i>3. Loops básicos</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#crear-funcionesprogramas"><i class="fa fa-check"></i>4. Crear funciones/programas</a></li>
+<li class="chapter" data-level="" data-path="stata-para-principiantes.html"><a href="stata-para-principiantes.html#guardar-resultados-dentro-de-un-loop"><i class="fa fa-check"></i>5. Guardar resultados dentro de un loop</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html"><i class="fa fa-check"></i><b>3</b> Parámetros causales — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#objetivos-y-lecturas"><i class="fa fa-check"></i>Objetivos y lecturas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pregunta-causal-y-poblaci%C3%B3n-de-inter%C3%A9s"><i class="fa fa-check"></i>Pregunta causal y población de interés</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#resultados-potenciales"><i class="fa fa-check"></i>Resultados potenciales</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#el-problema-fundamental-1"><i class="fa fa-check"></i>El problema fundamental</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#ate-att-atu-y-cate"><i class="fa fa-check"></i>ATE, ATT, ATU y CATE</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diferencia-observada-y-sesgo-de-selecci%C3%B3n-1"><i class="fa fa-check"></i>Diferencia observada y sesgo de selección</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-antes-despu%C3%A9s"><i class="fa fa-check"></i>Comparación antes-después</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#sutva"><i class="fa fa-check"></i>SUTVA</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#ejercicios"><i class="fa fa-check"></i>Ejercicios</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puente-a-la-pr%C3%A1ctica"><i class="fa fa-check"></i>Puente a la práctica</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-teoria.html"><a href="parametros-causales-teoria.html#referencias"><i class="fa fa-check"></i>Referencias</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html"><i class="fa fa-check"></i><b>4</b> Parámetros causales — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#materiales-para-la-clase-1"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#objetivos"><i class="fa fa-check"></i>Objetivos</a></li>
+<li class="chapter" data-level="4.1" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#describir-los-datos-y-construir-el-resultado-observado"><i class="fa fa-check"></i><b>4.1</b> Describir los datos y construir el resultado observado</a></li>
+<li class="chapter" data-level="4.2" data-path="17-SyntheticControlsStata.html"><a href="#relacionar-diferencia-de-medias-y-regresi%C3%B3n"><i class="fa fa-check"></i><b>4.2</b> Relacionar diferencia de medias y regresión</a></li>
+<li class="chapter" data-level="4.3" data-path="17-SyntheticControlsStata.html"><a href="#calcular-par%C3%A1metros-causales-y-heterogeneidad"><i class="fa fa-check"></i><b>4.3</b> Calcular parámetros causales y heterogeneidad</a></li>
+<li class="chapter" data-level="4.4" data-path="17-SyntheticControlsStata.html"><a href="#duplicar-observaciones-no-resuelve-la-selecci%C3%B3n"><i class="fa fa-check"></i><b>4.4</b> Duplicar observaciones no resuelve la selección</a></li>
+<li class="chapter" data-level="4.5" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#reasignar-el-tratamiento-al-azar"><i class="fa fa-check"></i><b>4.5</b> Reasignar el tratamiento al azar</a></li>
+<li class="chapter" data-level="4.6" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#repetir-el-experimento-monte-carlo"><i class="fa fa-check"></i><b>4.6</b> Repetir el experimento: Monte Carlo</a></li>
+<li class="chapter" data-level="4.7" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#ejercicios-1"><i class="fa fa-check"></i><b>4.7</b> Ejercicios</a></li>
+<li class="chapter" data-level="4.8" data-path="17-SyntheticControlsStata.html"><a href="#s%C3%ADntesis-1"><i class="fa fa-check"></i><b>4.8</b> Síntesis</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puente-al-cap%C3%ADtulo-siguiente"><i class="fa fa-check"></i>Puente al capítulo siguiente</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html"><i class="fa fa-check"></i><b>5</b> Experimentos aleatorizados — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#pregunta-causal"><i class="fa fa-check"></i>Pregunta causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#intuici%C3%B3n-y-motivaci%C3%B3n"><i class="fa fa-check"></i>Intuición y motivación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n-par%C3%A1metros-y-estimandos"><i class="fa fa-check"></i>Notación, parámetros y estimandos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n-1"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#desarrollo-te%C3%B3rico-y-demostraciones"><i class="fa fa-check"></i>Desarrollo teórico y demostraciones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#en-regresi%C3%B3n-lineal-c%C3%B3mo-se-ve-esto"><i class="fa fa-check"></i>¿En regresión lineal cómo se ve esto?</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#rct-simple-sin-estratos-sin-controles"><i class="fa fa-check"></i>RCT simple, sin estratos, sin controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#rct-simple-sin-estratos-con-controles"><i class="fa fa-check"></i>RCT simple, sin estratos, con controles</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#rct-estratificado-bloques-sin-controles-adicionales"><i class="fa fa-check"></i>RCT estratificado (bloques), sin controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#rct-estratificado-controles-adicionales"><i class="fa fa-check"></i>RCT estratificado + controles adicionales</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#puente-a-heterogeneidad-efectos-diferenciados-cate"><i class="fa fa-check"></i>Puente a heterogeneidad: efectos diferenciados (CATE)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#interpretaci%C3%B3n-del-estimador"><i class="fa fa-check"></i>Interpretación del estimador</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#supuestos-propiedades-y-condiciones-de-validez"><i class="fa fa-check"></i>Supuestos, propiedades y condiciones de validez</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#amenazas-limitaciones-y-errores-comunes"><i class="fa fa-check"></i>Amenazas, limitaciones y errores comunes</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pr%C3%A1ctica-tipo-parcial"><i class="fa fa-check"></i>Práctica tipo parcial</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#preguntas-para-clase"><i class="fa fa-check"></i>Preguntas para clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puente-a-la-clase-pr%C3%A1ctica"><i class="fa fa-check"></i>Puente a la clase práctica</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html#referencias-1"><i class="fa fa-check"></i>Referencias</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="experimentos-aleatorizados-clase-empirica.html"><a href="experimentos-aleatorizados-clase-empirica.html"><i class="fa fa-check"></i><b>6</b> Experimentos aleatorizados — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empirica.html"><a href="experimentos-aleatorizados-clase-empirica.html#materiales-para-la-clase-2"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pregunta-emp%C3%ADrica"><i class="fa fa-check"></i>Pregunta empírica</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empirica.html"><a href="experimentos-aleatorizados-clase-empirica.html#datos"><i class="fa fa-check"></i>Datos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#recordatorio-te%C3%B3rico-del-cap%C3%ADtulo-anterior"><i class="fa fa-check"></i>Recordatorio teórico (del capítulo anterior)</a></li>
+<li class="chapter" data-level="" data-path="experimentos-aleatorizados-clase-empirica.html"><a href="experimentos-aleatorizados-clase-empirica.html#desarrollo-guiado-del-rct"><i class="fa fa-check"></i>Desarrollo guiado del RCT</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html"><i class="fa fa-check"></i><b>7</b> Poder estadístico — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#pregunta-causal-1"><i class="fa fa-check"></i><b>7.1</b> Pregunta causal</a></li>
+<li class="chapter" data-level="7.2" data-path="17-SyntheticControlsStata.html"><a href="#intuici%C3%B3n-y-motivaci%C3%B3n-1"><i class="fa fa-check"></i><b>7.2</b> Intuición y motivación</a></li>
+<li class="chapter" data-level="7.3" data-path="17-SyntheticControlsStata.html"><a href="#notaci%C3%B3n-par%C3%A1metros-y-estimandos-1"><i class="fa fa-check"></i><b>7.3</b> Notación, parámetros y estimandos</a></li>
+<li class="chapter" data-level="7.4" data-path="17-SyntheticControlsStata.html"><a href="#supuestos-de-identificaci%C3%B3n-2"><i class="fa fa-check"></i><b>7.4</b> Supuestos de identificación</a></li>
+<li class="chapter" data-level="7.5" data-path="17-SyntheticControlsStata.html"><a href="#desarrollo-te%C3%B3rico-y-demostraciones-1"><i class="fa fa-check"></i><b>7.5</b> Desarrollo teórico y demostraciones</a></li>
+<li class="chapter" data-level="7.6" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#amenazas-limitaciones-y-errores-comunes-1"><i class="fa fa-check"></i><b>7.6</b> Amenazas, limitaciones y errores comunes</a></li>
+<li class="chapter" data-level="7.7" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#resumen-1"><i class="fa fa-check"></i><b>7.7</b> Resumen</a></li>
+<li class="chapter" data-level="7.8" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#preguntas-para-clase-1"><i class="fa fa-check"></i><b>7.8</b> Preguntas para clase</a></li>
+<li class="chapter" data-level="7.9" data-path="17-SyntheticControlsStata.html"><a href="#puente-a-la-clase-pr%C3%A1ctica-1"><i class="fa fa-check"></i><b>7.9</b> Puente a la clase práctica</a></li>
+<li class="chapter" data-level="7.10" data-path="poder-estadistico-teoria.html"><a href="poder-estadistico-teoria.html#referencias-2"><i class="fa fa-check"></i><b>7.10</b> Referencias</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html"><i class="fa fa-check"></i><b>8</b> Poder estadístico — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#materiales-para-la-clase-3"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#sin-controles"><i class="fa fa-check"></i>Sin controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#incorporando-controles"><i class="fa fa-check"></i>Incorporando controles</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#resultados-binarios-y-tasas"><i class="fa fa-check"></i>Resultados binarios y tasas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ajustes-por-implementaci%C3%B3n"><i class="fa fa-check"></i>Ajustes por implementación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#dise%C3%B1os-por-conglomerados-o-grupos"><i class="fa fa-check"></i>Diseños por conglomerados o grupos</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#casos-aplicados-de-la-clase"><i class="fa fa-check"></i>Casos aplicados de la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-puede-salir-mal-en-un-rct"><i class="fa fa-check"></i>Qué puede salir mal en un RCT</a></li>
+<li class="chapter" data-level="" data-path="poder-estadistico-stata.html"><a href="poder-estadistico-stata.html#ejercicio-aplicado-bertrand-y-mullainathan-2004"><i class="fa fa-check"></i>Ejercicio aplicado: Bertrand y Mullainathan (2004)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pr%C3%A1ctica-evaluada"><i class="fa fa-check"></i>Práctica evaluada</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="did-teoria.html"><a href="did-teoria.html"><i class="fa fa-check"></i><b>9</b> Diferencias en diferencias — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#experimentos-naturales"><i class="fa fa-check"></i>Experimentos naturales</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#contrafactuales-falsos"><i class="fa fa-check"></i>Contrafactuales falsos</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-problema-que-did-resuelve"><i class="fa fa-check"></i>El problema que DiD resuelve</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-caso-de-john-snow-1854"><i class="fa fa-check"></i>El caso de John Snow (1854)</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-caso-mariel-migrantes-y-mercado-laboral"><i class="fa fa-check"></i>El caso Mariel: migrantes y mercado laboral</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-ejemplo-de-aula-dos-grupos-dos-periodos"><i class="fa fa-check"></i>El ejemplo de aula: dos grupos, dos periodos</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#la-tabla-22"><i class="fa fa-check"></i>La tabla 2×2</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#resultados-potenciales-y-el-att"><i class="fa fa-check"></i>Resultados potenciales y el ATT</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#el-supuesto-de-tendencias-paralelas"><i class="fa fa-check"></i>El supuesto de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-del-att-bajo-tendencias-paralelas"><i class="fa fa-check"></i>Identificación del ATT bajo tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-regresi%C3%B3n-did"><i class="fa fa-check"></i>La regresión DiD</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#prueba-de-tendencias-paralelas"><i class="fa fa-check"></i>Prueba de tendencias paralelas</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#amenazas-adicionales-a-la-validez"><i class="fa fa-check"></i>Amenazas adicionales a la validez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis-2"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="did-teoria.html"><a href="did-teoria.html#preguntas-tipo-examen"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#puente-a-la-clase-pr%C3%A1ctica-2"><i class="fa fa-check"></i>Puente a la clase práctica</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="did-stata.html"><a href="did-stata.html"><i class="fa fa-check"></i><b>10</b> Diferencias en diferencias — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="did-stata.html"><a href="did-stata.html#materiales-para-la-clase-4"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-did-b%C3%A1sico-en-la-base-de-nutrici%C3%B3n"><i class="fa fa-check"></i>El DiD básico en la base de nutrición</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-e-inferencia"><i class="fa fa-check"></i>Estimación e inferencia</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%BAltiples-periodos-y-pruebas-formales"><i class="fa fa-check"></i>Múltiples periodos y pruebas formales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#del-diagn%C3%B3stico-al-dise%C3%B1o"><i class="fa fa-check"></i>Del diagnóstico al diseño</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#evaluaci%C3%B3n-1"><i class="fa fa-check"></i>Evaluación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pr%C3%A1ctica-evaluada-1"><i class="fa fa-check"></i>Práctica evaluada</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html"><i class="fa fa-check"></i><b>11</b> Malos controles — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#primero-el-estimando"><i class="fa fa-check"></i>Primero el estimando</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tres-estructuras-causales-b%C3%A1sicas"><i class="fa fa-check"></i>Tres estructuras causales básicas</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#buenos-malos-y-neutrales"><i class="fa fa-check"></i>Buenos, malos y neutrales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-demostraci%C3%B3n-de-angrist-y-pischke"><i class="fa fa-check"></i>La demostración de Angrist y Pischke</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#aplicaci%C3%B3n-a-diferencias-en-diferencias"><i class="fa fa-check"></i>Aplicación a diferencias en diferencias</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#checklist-para-decidir"><i class="fa fa-check"></i>Checklist para decidir</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#preguntas-tipo-examen-1"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-teoria.html"><a href="bad-controls-teoria.html#lecturas-1"><i class="fa fa-check"></i>Lecturas</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html"><i class="fa fa-check"></i><b>12</b> Malos controles — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#materiales-para-la-clase-5"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#antes-de-abrir-stata"><i class="fa fa-check"></i>Antes de abrir Stata</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-del-mediador"><i class="fa fa-check"></i>Caso del mediador</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-del-colisionador"><i class="fa fa-check"></i>Caso del colisionador</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#caso-del-proxy-postratamiento-contaminado"><i class="fa fa-check"></i>Caso del proxy postratamiento contaminado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-conjunta-y-monte-carlo"><i class="fa fa-check"></i>Comparación conjunta y Monte Carlo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#aplicaci%C3%B3n-a-diferencias-en-diferencias-1"><i class="fa fa-check"></i>Aplicación a diferencias en diferencias</a></li>
+<li class="chapter" data-level="" data-path="bad-controls-stata.html"><a href="bad-controls-stata.html#preguntas-tipo-examen-2"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#replicaci%C3%B3n-en-r-y-python-1"><i class="fa fa-check"></i>Replicación en R y Python</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html"><i class="fa fa-check"></i><b>13</b> Datos de panel y TWFE — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#introducci%C3%B3n-a-datos-de-panel"><i class="fa fa-check"></i>Introducción a datos de panel</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#pooled-ols-fe-fd-y-re"><i class="fa fa-check"></i>Pooled OLS, FE, FD y RE</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#did-fd-y-twfe-en-el-caso-22"><i class="fa fa-check"></i>DiD, FD y TWFE en el caso 2×2</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-y-adopci%C3%B3n-simult%C3%A1nea"><i class="fa fa-check"></i>Panel largo y adopción simultánea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#adopci%C3%B3n-escalonada-y-heterogeneidad"><i class="fa fa-check"></i>Adopción escalonada y heterogeneidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tendencias-paralelas-en-did-con-adopci%C3%B3n-escalonada"><i class="fa fa-check"></i>Tendencias paralelas en DiD con adopción escalonada</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#el-problema-principal-de-twfe"><i class="fa fa-check"></i>El problema principal de TWFE</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#del-estimando-deseado-al-coeficiente-twfe"><i class="fa fa-check"></i>Del estimando deseado al coeficiente TWFE</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#dos-objetos-de-pesos-que-no-deben-confundirse"><i class="fa fa-check"></i>Dos objetos de pesos que no deben confundirse</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#event-studies-twfe"><i class="fa fa-check"></i>Event studies TWFE</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#par%C3%A1metro-primero-comando-despu%C3%A9s"><i class="fa fa-check"></i>Parámetro primero, comando después</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#checklist-antes-de-escoger-estimador"><i class="fa fa-check"></i>Checklist antes de escoger estimador</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#preguntas-tipo-examen-3"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#s%C3%ADntesis-3"><i class="fa fa-check"></i>Síntesis</a></li>
+<li class="chapter" data-level="" data-path="datos-de-panel-did-y-twfe-en-stata.html"><a href="datos-de-panel-did-y-twfe-en-stata.html#referencias-3"><i class="fa fa-check"></i>Referencias</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html"><i class="fa fa-check"></i><b>14</b> Datos de panel y TWFE — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#materiales-para-la-clase-6"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#declarar-y-auditar-la-estructura-del-panel"><i class="fa fa-check"></i>Declarar y auditar la estructura del panel</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#comparar-pooled-ols-fe-fd-y-re"><i class="fa fa-check"></i>Comparar pooled OLS, FE, FD y RE</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#construir-el-did-22-desde-cuatro-medias"><i class="fa fa-check"></i>Construir el DiD 2×2 desde cuatro medias</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#panel-largo-con-adopci%C3%B3n-simult%C3%A1nea"><i class="fa fa-check"></i>Panel largo con adopción simultánea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tendencias-paralelas-y-una-violaci%C3%B3n-deliberada"><i class="fa fa-check"></i>Tendencias paralelas y una violación deliberada</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#mismo-timing-con-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Mismo timing con efectos heterogéneos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#adopci%C3%B3n-escalonada-con-efectos-din%C3%A1micos"><i class="fa fa-check"></i>Adopción escalonada con efectos dinámicos</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#leer-bacondecomp-fila-por-fila"><i class="fa fa-check"></i>Leer bacondecomp fila por fila</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#calcular-los-pesos-causales-a-mano"><i class="fa fa-check"></i>Calcular los pesos causales a mano</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diagn%C3%B3stico-con-twowayfeweights"><i class="fa fa-check"></i>Diagnóstico con twowayfeweights</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#event-study-twfe-contaminado"><i class="fa fa-check"></i>Event study TWFE contaminado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparar-estimadores-sin-mezclar-par%C3%A1metros"><i class="fa fa-check"></i>Comparar estimadores sin mezclar parámetros</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-supone-cada-estimador-1"><i class="fa fa-check"></i>¿Qué supone cada estimador?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#tendencias-paralelas-del-supuesto-al-diagn%C3%B3stico"><i class="fa fa-check"></i>Tendencias paralelas: del supuesto al diagnóstico</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#checklist-aplicado"><i class="fa fa-check"></i>Checklist aplicado</a></li>
+<li class="chapter" data-level="" data-path="panel-twfe-stata.html"><a href="panel-twfe-stata.html#preguntas-tipo-examen-4"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#replicaci%C3%B3n-en-r-y-python-2"><i class="fa fa-check"></i>Replicación en R y Python</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html"><i class="fa fa-check"></i><b>15</b> Emparejamiento exacto — Introducción</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#de-la-aleatorizaci%C3%B3n-a-la-selecci%C3%B3n-en-observables"><i class="fa fa-check"></i>De la aleatorización a la selección en observables</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#la-idea-comparar-dentro-de-celdas"><i class="fa fa-check"></i>La idea: comparar dentro de celdas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n-3"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplo-manual-qui%C3%A9n-entra-al-estimando"><i class="fa fa-check"></i>Ejemplo manual: quién entra al estimando</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-maldici%C3%B3n-de-la-dimensionalidad"><i class="fa fa-check"></i>La maldición de la dimensionalidad</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#lo-que-el-emparejamiento-no-resuelve"><i class="fa fa-check"></i>Lo que el emparejamiento no resuelve</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#puente-hacia-el-propensity-score"><i class="fa fa-check"></i>Puente hacia el propensity score</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#preguntas-tipo-examen-5"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#para-llevar-a-psm"><i class="fa fa-check"></i>Para llevar a PSM</a></li>
+<li class="chapter" data-level="" data-path="emparejamiento-exacto.html"><a href="emparejamiento-exacto.html#lecturas-recomendadas"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="psm.html"><a href="psm.html"><i class="fa fa-check"></i><b>16</b> Propensity score matching — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#del-emparejamiento-exacto-a-un-puntaje-escalar"><i class="fa fa-check"></i>Del emparejamiento exacto a un puntaje escalar</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-antes-que-algoritmo"><i class="fa fa-check"></i>Identificación antes que algoritmo</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-covariables-entran-al-modelo"><i class="fa fa-check"></i>¿Qué covariables entran al modelo?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimando-y-poblaci%C3%B3n-con-soporte"><i class="fa fa-check"></i>Estimando y población con soporte</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#algoritmos-de-emparejamiento"><i class="fa fa-check"></i>Algoritmos de emparejamiento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diagn%C3%B3stico-mirar-m%C3%A1s-que-una-cifra"><i class="fa fa-check"></i>Diagnóstico: mirar más que una cifra</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#el-problema-moderno-del-psm"><i class="fa fa-check"></i>El problema moderno del PSM</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#inferencia-por-qu%C3%A9-no-basta-un-bootstrap-ingenuo"><i class="fa fa-check"></i>Inferencia: por qué no basta un bootstrap ingenuo</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#preguntas-tipo-examen-6"><i class="fa fa-check"></i>Preguntas tipo examen</a></li>
+<li class="chapter" data-level="" data-path="psm.html"><a href="psm.html#lecturas-recomendadas-1"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="psm-stata.html"><a href="psm-stata.html"><i class="fa fa-check"></i><b>17</b> Propensity score matching — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#materiales-de-la-clase"><i class="fa fa-check"></i>Materiales de la clase</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#pregunta-causal-y-estimando"><i class="fa fa-check"></i>Pregunta causal y estimando</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#mirar-la-selecci%C3%B3n-antes-de-corregirla"><i class="fa fa-check"></i>Mirar la selección antes de corregirla</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#visualizar-soporte-com%C3%BAn"><i class="fa fa-check"></i>Visualizar soporte común</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-principal-con-psmatch2"><i class="fa fa-check"></i>Estimación principal con <code>psmatch2</code></a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#decisiones-del-algoritmo-y-sensibilidad"><i class="fa fa-check"></i>Decisiones del algoritmo y sensibilidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#verificaci%C3%B3n-con-teffects-psmatch"><i class="fa fa-check"></i>Verificación con <code>teffects psmatch</code></a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#machine-learning-con-disciplina-causal"><i class="fa fa-check"></i>Machine learning con disciplina causal</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#cuando-psm-puede-empeorar-el-dise%C3%B1o"><i class="fa fa-check"></i>Cuando PSM puede empeorar el diseño</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#lista-de-verificaci%C3%B3n-para-entregar"><i class="fa fa-check"></i>Lista de verificación para entregar</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#lecturas-y-ayuda-de-stata"><i class="fa fa-check"></i>Lecturas y ayuda de Stata</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="ipw.html"><a href="ipw.html"><i class="fa fa-check"></i><b>18</b> Ponderación por probabilidad inversa — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#pregunta-causal-estimandos-y-datos-observados"><i class="fa fa-check"></i>Pregunta causal, estimandos y datos observados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#supuestos-de-identificaci%C3%B3n-4"><i class="fa fa-check"></i>Supuestos de identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-identidad-de-reponderaci%C3%B3n"><i class="fa fa-check"></i>La identidad de reponderación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#horvitzthompson-y-h%C3%A1jek"><i class="fa fa-check"></i>Horvitz–Thompson y Hájek</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diagn%C3%B3sticos-balance-positividad-y-precisi%C3%B3n"><i class="fa fa-check"></i>Diagnósticos: balance, positividad y precisión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#aipw-e-ipwra-doble-robustez-con-l%C3%ADmites"><i class="fa fa-check"></i>AIPW e IPWRA: doble robustez con límites</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#ipw-frente-a-matching"><i class="fa fa-check"></i>IPW frente a matching</a></li>
+<li class="chapter" data-level="" data-path="ipw.html"><a href="ipw.html#lecturas-recomendadas-2"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html"><i class="fa fa-check"></i><b>19</b> Ponderación por probabilidad inversa — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#materiales-para-la-clase-7"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#pregunta-causal-y-estimandos"><i class="fa fa-check"></i>Pregunta causal y estimandos</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#estimar-el-propensity-score"><i class="fa fa-check"></i>Estimar el propensity score</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#construir-los-pesos"><i class="fa fa-check"></i>Construir los pesos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#horvitzthompson-y-h%C3%A1jek-a-mano"><i class="fa fa-check"></i>Horvitz–Thompson y Hájek a mano</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#el-mismo-resultado-con-reg"><i class="fa fa-check"></i>El mismo resultado con <code>reg</code></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#postestimaci%C3%B3n-qued%C3%B3-balanceado"><i class="fa fa-check"></i>Postestimación: ¿quedó balanceado?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-integrada-y-doble-robustez"><i class="fa fa-check"></i>Estimación integrada y doble robustez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#una-simulaci%C3%B3n-donde-la-positividad-s%C3%AD-importa"><i class="fa fa-check"></i>Una simulación donde la positividad sí importa</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#flujo-de-trabajo-para-una-aplicaci%C3%B3n"><i class="fa fa-check"></i>Flujo de trabajo para una aplicación</a></li>
+<li class="chapter" data-level="" data-path="psm-ipw-sinteticos.html"><a href="psm-ipw-sinteticos.html#referencias-y-ayuda-de-stata"><i class="fa fa-check"></i>Referencias y ayuda de Stata</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html"><i class="fa fa-check"></i><b>20</b> Controles sintéticos — Clase teórica</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#una-intervenci%C3%B3n-una-unidad-tratada-y-ning%C3%BAn-control-perfecto"><i class="fa fa-check"></i>Una intervención, una unidad tratada y ningún control perfecto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-soluci%C3%B3n-una-combinaci%C3%B3n-convexa-de-donantes"><i class="fa fa-check"></i>La solución: una combinación convexa de donantes</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-se-eligen-los-pesos-distinguir-w-de-v"><i class="fa fa-check"></i>Cómo se eligen los pesos: distinguir (W) de (V)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soporte-la-geometr%C3%ADa-de-la-envolvente-convexa"><i class="fa fa-check"></i>Soporte: la geometría de la envolvente convexa</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qu%C3%A9-hace-cre%C3%ADble-al-contrafactual-sint%C3%A9tico"><i class="fa fa-check"></i>¿Qué hace creíble al contrafactual sintético?</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html#medir-el-ajuste-con-rmspe"><i class="fa fa-check"></i>Medir el ajuste con RMSPE</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html#placebos-espaciales-es-excepcional-la-brecha-tratada"><i class="fa fa-check"></i>Placebos espaciales: ¿es excepcional la brecha tratada?</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html#placebo-temporal-y-sensibilidad-al-conjunto-donante"><i class="fa fa-check"></i>Placebo temporal y sensibilidad al conjunto donante</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#protocolo-para-interpretar-una-aplicaci%C3%B3n"><i class="fa fa-check"></i>Protocolo para interpretar una aplicación</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos.html"><a href="controles-sinteticos.html#lecturas-recomendadas-3"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html"><i class="fa fa-check"></i><b>21</b> Controles sintéticos — Clase empírica</a>
+<ul>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#materiales-para-la-clase-8"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#pregunta-emp%C3%ADrica-y-datos"><i class="fa fa-check"></i>Pregunta empírica y datos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#especificaci%C3%B3n-y-estimaci%C3%B3n-en-stata"><i class="fa fa-check"></i>Especificación y estimación en Stata</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#qui%C3%A9n-construye-a-california-sint%C3%A9tica"><i class="fa fa-check"></i>¿Quién construye a California sintética?</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#balance-de-predictores"><i class="fa fa-check"></i>Balance de predictores</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#reconstrucci%C3%B3n-manual-del-resultado-de-synth"><i class="fa fa-check"></i>Reconstrucción manual del resultado de <code>synth</code></a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#trayectoria-observada-y-contrafactual"><i class="fa fa-check"></i>Trayectoria observada y contrafactual</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#la-brecha-anual-y-su-magnitud"><i class="fa fa-check"></i>La brecha anual y su magnitud</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#rmspe-ajuste-antes-y-despu%C3%A9s"><i class="fa fa-check"></i>RMSPE: ajuste antes y después</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#placebos-espaciales"><i class="fa fa-check"></i>Placebos espaciales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#placebo-temporal-de-1980-sin-fuga-de-informaci%C3%B3n"><i class="fa fa-check"></i>Placebo temporal de 1980 sin fuga de información</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#sensibilidad-leave-one-out"><i class="fa fa-check"></i>Sensibilidad leave-one-out</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#lectura-conjunta-de-la-evidencia"><i class="fa fa-check"></i>Lectura conjunta de la evidencia</a></li>
+<li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#preguntas-de-trabajo"><i class="fa fa-check"></i>Preguntas de trabajo</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="iv.html"><a href="iv.html"><i class="fa fa-check"></i><b>22</b> Variables Instrumentales y LATE</a>
+<ul>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-problema-de-endogeneidad"><i class="fa fa-check"></i>El problema de endogeneidad</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-soluci%C3%B3n-una-variable-instrumental"><i class="fa fa-check"></i>La solución: una variable instrumental</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplos-cl%C3%A1sicos"><i class="fa fa-check"></i>Ejemplos clásicos</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#fuentes-de-variables-instrumentales"><i class="fa fa-check"></i>Fuentes de variables instrumentales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#identificaci%C3%B3n-cu%C3%A1ntos-instrumentos-hacen-falta"><i class="fa fa-check"></i>Identificación: ¿cuántos instrumentos hacen falta?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#derivaci%C3%B3n-del-estimador-iv"><i class="fa fa-check"></i>Derivación del estimador IV</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-estimador-de-wald-caso-d-y-z-binarios"><i class="fa fa-check"></i>El estimador de Wald (caso <span class="math inline">\(D\)</span> y <span class="math inline">\(Z\)</span> binarios)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#m%C3%ADnimos-cuadrados-en-dos-etapas-mco2e"><i class="fa fa-check"></i>Mínimos Cuadrados en Dos Etapas (MCO2E)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-muestra-finita-la-intuici%C3%B3n"><i class="fa fa-check"></i>Sesgo de muestra finita: la intuición</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#instrumentos-d%C3%A9biles"><i class="fa fa-check"></i>Instrumentos débiles</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-evaluar-la-validez"><i class="fa fa-check"></i>¿Cómo evaluar la validez?</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-el-efecto-promedio-local-de-tratamiento"><i class="fa fa-check"></i>LATE: el efecto promedio local de tratamiento</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-con-varios-instrumentos"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#variables-de-control"><i class="fa fa-check"></i>Variables de control</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#lecturas-recomendadas-4"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="iv-stata.html"><a href="iv-stata.html"><i class="fa fa-check"></i><b>23</b> IV y LATE en Stata: simulación</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa"><i class="fa fa-check"></i>Instalación previa</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><i class="fa fa-check"></i>Parte A — Muestras finitas: OLS sesgado vs IV consistente</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#el-proceso-generador-de-datos"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#monte-carlo-el-programa"><i class="fa fa-check"></i>Monte Carlo: el programa</a></li>
+<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#resultados-esperados"><i class="fa fa-check"></i>Resultados esperados</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#visualizaci%C3%B3n"><i class="fa fa-check"></i>Visualización</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html"><i class="fa fa-check"></i>Parte B — LATE paso a paso</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#la-idea"><i class="fa fa-check"></i>La idea</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#construcci%C3%B3n-del-experimento"><i class="fa fa-check"></i>Construcción del experimento</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-de-los-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Asignación de los efectos heterogéneos</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resultados-potenciales-y-resultado-observado"><i class="fa fa-check"></i>Resultados potenciales y resultado observado</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-lo-que-cada-m%C3%A9todo-recupera"><i class="fa fa-check"></i>Estimación: lo que cada método recupera</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#y-si-el-efecto-fuera-homog%C3%A9neo"><i class="fa fa-check"></i>¿Y si el efecto fuera homogéneo?</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#late-con-varios-instrumentos-1"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resumen-2"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#materiales-para-la-clase-9"><i class="fa fa-check"></i>Materiales para la clase</a></li>
+<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="rdd.html"><a href="rdd.html"><i class="fa fa-check"></i><b>24</b> Regresión Discontinua</a>
+<ul>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#la-idea-de-rd"><i class="fa fa-check"></i>La idea de RD</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#notaci%C3%B3n"><i class="fa fa-check"></i>Notación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ejemplos-cl%C3%A1sicos-1"><i class="fa fa-check"></i>Ejemplos clásicos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#rdn-identificaci%C3%B3n"><i class="fa fa-check"></i>RDN: identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#la-receta-c%C3%B3mo-estimar-tau_rdn"><i class="fa fa-check"></i>La receta: cómo estimar <span class="math inline">\(\tau_{RDN}\)</span></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#derivaci%C3%B3n-de-la-forma-de-regresi%C3%B3n"><i class="fa fa-check"></i>Derivación de la forma de regresión</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#regresi%C3%B3n-local-lineal-con-kernel"><i class="fa fa-check"></i>Regresión local lineal con kernel</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#selecci%C3%B3n-del-ancho-de-banda-h"><i class="fa fa-check"></i>Selección del ancho de banda <span class="math inline">\(h\)</span></a></li>
+<li class="chapter" data-level="" data-path=""><a href="#rdb-identificaci%C3%B3n"><i class="fa fa-check"></i>RDB: identificación</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#polinomio-global-vs-local-lineal-comparaci%C3%B3n"><i class="fa fa-check"></i>Polinomio global vs local lineal — comparación</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#pruebas-de-robustez"><i class="fa fa-check"></i>Pruebas de robustez</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#variable-de-asignaci%C3%B3n-discreta"><i class="fa fa-check"></i>Variable de asignación discreta</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#extensiones"><i class="fa fa-check"></i>Extensiones</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#checklist-final"><i class="fa fa-check"></i>Checklist final</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#lecturas-recomendadas-6"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="rdd-stata.html"><a href="rdd-stata.html"><i class="fa fa-check"></i><b>25</b> RDD en Stata: simulación</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa-1"><i class="fa fa-check"></i>Instalación previa</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-a-rdd.html"><a href="parte-a-rdd.html"><i class="fa fa-check"></i>Parte A — RDN con DGP lineal</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-a-rdd.html"><a href="parte-a-rdd.html#el-proceso-generador-de-datos-1"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#visualizaci%C3%B3n-primero"><i class="fa fa-check"></i>Visualización primero</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-i-polinomio-global-con-interacciones"><i class="fa fa-check"></i>Estimación I — Polinomio global con interacciones</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-ii-regresi%C3%B3n-local-lineal-con-kernel"><i class="fa fa-check"></i>Estimación II — Regresión local lineal con kernel</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#comparaci%C3%B3n-r%C3%A1pida"><i class="fa fa-check"></i>Comparación rápida</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-b-rdd.html"><a href="parte-b-rdd.html"><i class="fa fa-check"></i>Parte B — RDN con DGP curvo</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-b-rdd.html"><a href="parte-b-rdd.html#el-problema-con-polinomios-globales"><i class="fa fa-check"></i>El problema con polinomios globales</a></li>
+<li class="chapter" data-level="" data-path="parte-b-rdd.html"><a href="parte-b-rdd.html#el-polinomio-lineal-global-se-equivoca"><i class="fa fa-check"></i>El polinomio lineal global se equivoca</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#el-polinomio-cuadr%C3%A1tico-global-lo-arregla-pero-es-fr%C3%A1gil"><i class="fa fa-check"></i>El polinomio cuadrático global lo arregla — pero es frágil</a></li>
+<li class="chapter" data-level="" data-path="parte-b-rdd.html"><a href="parte-b-rdd.html#local-lineal-sigue-funcionando"><i class="fa fa-check"></i>Local lineal sigue funcionando</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-c-rdd.html"><a href="parte-c-rdd.html"><i class="fa fa-check"></i>Parte C — Sensibilidad al ancho de banda</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-c-rdd.html"><a href="parte-c-rdd.html#barrido-manual"><i class="fa fa-check"></i>Barrido manual</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#ancho-de-banda-autom%C3%A1tico-cct"><i class="fa fa-check"></i>Ancho de banda automático CCT</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html"><i class="fa fa-check"></i>Parte D — Pruebas de robustez</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#sensibilidad-1"><i class="fa fa-check"></i>1. Sensibilidad</a></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#balance-de-covariables"><i class="fa fa-check"></i>2. Balance de covariables</a></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#placebo-1"><i class="fa fa-check"></i>3. Placebo</a></li>
+<li class="chapter" data-level="" data-path="parte-d-rdd.html"><a href="parte-d-rdd.html#sorting-test-de-mccrary-2008-1"><i class="fa fa-check"></i>4. Sorting (test de McCrary 2008)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-e-rdd.html"><a href="parte-e-rdd.html"><i class="fa fa-check"></i>Parte E — RDB</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-e-rdd.html"><a href="parte-e-rdd.html#dgp-con-cumplimiento-imperfecto"><i class="fa fa-check"></i>DGP con cumplimiento imperfecto</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-rdrobust-con-fuzzy"><i class="fa fa-check"></i>Estimación: rdrobust con fuzzy</a></li>
+<li class="chapter" data-level="" data-path="parte-e-rdd.html"><a href="parte-e-rdd.html#equivalencia-con-2sls-local"><i class="fa fa-check"></i>Equivalencia con 2SLS local</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="parte-f-rdd.html"><a href="parte-f-rdd.html"><i class="fa fa-check"></i>Parte F — Variable de asignación discreta</a>
+<ul>
+<li class="chapter" data-level="" data-path="parte-f-rdd.html"><a href="parte-f-rdd.html#dgp"><i class="fa fa-check"></i>DGP</a></li>
+<li class="chapter" data-level="" data-path="parte-f-rdd.html"><a href="parte-f-rdd.html#el-problema-de-los-se-convencionales"><i class="fa fa-check"></i>El problema de los SE convencionales</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-pragm%C3%A1tica-cluster-en-z-lee-card-2008"><i class="fa fa-check"></i>Solución pragmática: cluster en Z (Lee &amp; Card 2008)</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#soluci%C3%B3n-completa-honest-cis"><i class="fa fa-check"></i>Solución completa: honest CIs</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="sintesis-rdd.html"><a href="sintesis-rdd.html"><i class="fa fa-check"></i>Síntesis: la receta moderna</a>
+<ul>
+<li class="chapter" data-level="" data-path=""><a href="#lecturas-complementarias-para-la-pr%C3%A1ctica"><i class="fa fa-check"></i>Lecturas complementarias para la práctica</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Cortes Transversales</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="controles-sinteticos-stata" class="section level1 hasAnchor" number="21">
+<h1><span class="header-section-number">Capitulo 21</span> Controles sintéticos — Clase empírica<a href="controles-sinteticos-stata.html#controles-sinteticos-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="materiales-para-la-clase-8" class="section level2 unnumbered hasAnchor">
+<h2>Materiales para la clase<a href="controles-sinteticos-stata.html#materiales-para-la-clase-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><a href="dofile/17_SyntheticControls/01_synthetic_controls.do">Do-file completo</a></li>
+<li><a href="dofile/17_SyntheticControls/synth_smoking.dta">Datos de Prop 99</a></li>
+</ul>
+<div class="boxinfo">
+<p><strong>Lecturas centrales</strong></p>
+<ul>
+<li><a href="lecturas/bernal-pena/capitulo-06.pdf">Bernal y Peña — capítulo 6 (PDF)</a></li>
+<li><a href="https://mixtape.scunning.com/10-synthetic_control">Cunningham — capítulo 10: Synthetic Control</a></li>
+<li><a href="https://economics.mit.edu/sites/default/files/publications/Synthetic%20Control%20Methods.pdf">Abadie, Diamond y Hainmueller (2010) — artículo original (PDF)</a></li>
+</ul>
+</div>
+<div class="boxinfo">
+<p><strong>Metas de aprendizaje</strong></p>
+<ul>
+<li>Estimar y reconstruir California sintética.</li>
+<li>Auditar ajuste, placebos y sensibilidad a donantes.</li>
+<li>Interpretar la brecha como un estimando dinámico bajo los supuestos del diseño.</li>
+</ul>
+</div>
+<hr />
+</div>
+<div id="pregunta-empírica-y-datos" class="section level2 unnumbered hasAnchor">
+<h2>Pregunta empírica y datos<a href="#pregunta-emp%C3%ADrica-y-datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La Proposición 99 fue aprobada en noviembre de 1988 y entró en vigor en enero de
+1989. Elevó el impuesto a los cigarrillos en California y financió un programa
+amplio de control del tabaco. Esta cronología justifica fijar 1989 como primer
+periodo tratado. La pregunta es concreta:
+<strong>¿qué trayectoria habría seguido el consumo de cigarrillos en California desde
+1989 si la política no se hubiera implementado?</strong> Solo una unidad recibe el
+tratamiento y no hay un estado que sea, por sí mismo, un control natural obvio.</p>
+<p>La base <code>synth_smoking.dta</code> reproduce la muestra analítica de
+<a href="https://economics.mit.edu/sites/default/files/publications/Synthetic%20Control%20Methods.pdf">Abadie, Diamond y Hainmueller (2010)</a>.
+Esa muestra ya excluye el Distrito de Columbia y los estados que, durante
+1989–2000, adoptaron programas amplios de control del tabaco o aumentos grandes
+del impuesto estatal. Quedan California y 38 donantes. El archivo no permite
+reconstruir por sí solo cada exclusión histórica; el criterio proviene de la
+fuente primaria y la auditoría reproducible verifica el universo observable.</p>
+<p>El panel cubre 1970–2000: ADH comienza en 1970 porque desde ese año el resultado
+está disponible para todos los controles y termina en 2000 antes de que políticas
+posteriores comprometieran más unidades potenciales. <code>cigsale</code> mide ventas de
+paquetes de cigarrillos per cápita. California es la unidad 3. Los predictores son
+consumo de cerveza (<code>beer</code>), ingreso por habitante en logaritmos (<code>lnincome</code>),
+precio minorista de los cigarrillos (<code>retprice</code>), proporción de población de 15 a
+24 años (<code>age15to24</code>) y rezagos seleccionados del resultado.</p>
+<table>
+<caption><span id="tab:sc-sample-audit-table">Table 21.1: </span>Auditoría canónica de muestra y disponibilidad de predictores</caption>
+<colgroup>
+<col width="14%" />
+<col width="17%" />
+<col width="12%" />
+<col width="10%" />
+<col width="12%" />
+<col width="10%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Análisis</th>
+<th align="left">Variable</th>
+<th align="center">Ventana</th>
+<th align="right">Esperadas</th>
+<th align="right">Observadas</th>
+<th align="right">Faltantes</th>
+<th align="center">Auditoría aprobada</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">panel</td>
+<td align="left">states</td>
+<td align="center">1970-2000</td>
+<td align="right">39</td>
+<td align="right">39</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">panel</td>
+<td align="left">years</td>
+<td align="center">1970-2000</td>
+<td align="right">31</td>
+<td align="right">31</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="odd">
+<td align="left">panel</td>
+<td align="left">unit_years</td>
+<td align="center">1970-2000</td>
+<td align="right">1209</td>
+<td align="right">1209</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">donor_pool</td>
+<td align="left">eligible_donors</td>
+<td align="center">1970-2000</td>
+<td align="right">38</td>
+<td align="right">38</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="odd">
+<td align="left">main</td>
+<td align="left">cigsale</td>
+<td align="center">1970-2000</td>
+<td align="right">1209</td>
+<td align="right">1209</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">main</td>
+<td align="left">beer</td>
+<td align="center">1984-1988</td>
+<td align="right">195</td>
+<td align="right">195</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="odd">
+<td align="left">main</td>
+<td align="left">lnincome</td>
+<td align="center">1980-1988</td>
+<td align="right">351</td>
+<td align="right">351</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">main</td>
+<td align="left">retprice</td>
+<td align="center">1980-1988</td>
+<td align="right">351</td>
+<td align="right">351</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="odd">
+<td align="left">main</td>
+<td align="left">age15to24</td>
+<td align="center">1980-1988</td>
+<td align="right">351</td>
+<td align="right">351</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">main</td>
+<td align="left">cigsale</td>
+<td align="center">1975</td>
+<td align="right">39</td>
+<td align="right">39</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="odd">
+<td align="left">main</td>
+<td align="left">cigsale</td>
+<td align="center">1980</td>
+<td align="right">39</td>
+<td align="right">39</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">main</td>
+<td align="left">cigsale</td>
+<td align="center">1988</td>
+<td align="right">39</td>
+<td align="right">39</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="odd">
+<td align="left">time_placebo</td>
+<td align="left">lnincome</td>
+<td align="center">1972-1979</td>
+<td align="right">312</td>
+<td align="right">312</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">time_placebo</td>
+<td align="left">retprice</td>
+<td align="center">1972-1979</td>
+<td align="right">312</td>
+<td align="right">312</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="odd">
+<td align="left">time_placebo</td>
+<td align="left">age15to24</td>
+<td align="center">1972-1979</td>
+<td align="right">312</td>
+<td align="right">312</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">time_placebo</td>
+<td align="left">cigsale</td>
+<td align="center">1970</td>
+<td align="right">39</td>
+<td align="right">39</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="odd">
+<td align="left">time_placebo</td>
+<td align="left">cigsale</td>
+<td align="center">1975</td>
+<td align="right">39</td>
+<td align="right">39</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+<tr class="even">
+<td align="left">time_placebo</td>
+<td align="left">cigsale</td>
+<td align="center">1979</td>
+<td align="right">39</td>
+<td align="right">39</td>
+<td align="right">0</td>
+<td align="center">Sí</td>
+</tr>
+</tbody>
+</table>
+<p>La tabla documenta 39 estados por 31 años, es
+decir, 1209 observaciones en un panel balanceado. <code>cigsale</code> está
+completo en los 1.209 estado-año, y cada predictor está disponible sin faltantes
+en la ventana exacta usada por la especificación principal o el placebo temporal.
+La fila de elegibilidad confirma los 38 donantes que ya contiene
+la muestra ADH; no sustituye la justificación institucional de sus exclusiones.</p>
+<div class="boxwarning">
+<p><strong>Diseño antes de cómputo.</strong> La fecha de intervención, el conjunto donante, los
+predictores y las ventanas se fijan antes de estudiar la brecha posterior. Los
+estados donantes deben permanecer sin exposición directa ni indirecta relevante a
+Prop 99. Un promedio simple de estados no tratados no impone comparabilidad y no
+es un control sintético.</p>
+</div>
+<div id="inspección-de-las-series-brutas" class="section level3 unnumbered hasAnchor">
+<h3>Inspección de las series brutas<a href="#inspecci%C3%B3n-de-las-series-brutas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sc-raw-series"></span>
+<img src="dofile/17_SyntheticControls/synth_raw_series.png" alt="Ventas estatales de cigarrillos antes y después de 1989. Fuente: salida canónica de Stata." width="95%" />
+<p class="caption">
+Figure 21.1: Ventas estatales de cigarrillos antes y después de 1989. Fuente: salida canónica de Stata.
+</p>
+</div>
+<p>La dispersión de niveles y tendencias deja claro por qué el promedio simple de
+los otros estados sería una elección arbitraria. El método buscará una combinación
+convexa que reproduzca la historia de California; la figura bruta sirve para
+detectar heterogeneidad, cambios comunes y posibles unidades atípicas, no para
+elegir donantes después de ver el efecto.</p>
+</div>
+</div>
+<div id="especificación-y-estimación-en-stata" class="section level2 unnumbered hasAnchor">
+<h2>Especificación y estimación en Stata<a href="#especificaci%C3%B3n-y-estimaci%C3%B3n-en-stata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El do-file declara el panel, fija 1989 como primer periodo tratado y ejecuta la
+estimación canónica:</p>
+<p><strong>Extracto del do-file completo.</strong> No es un script independiente: el preámbulo
+resuelve la ruta de trabajo, construye <code>state_id</code> y declara <code>tempfile main_native</code>.
+Para reproducir el análisis desde cero debe ejecutarse el
+<a href="dofile/17_SyntheticControls/01_synthetic_controls.do">do-file completo</a>.</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb182-1"><a href="controles-sinteticos-stata.html#cb182-1" tabindex="-1"></a>* El preámbulo ya creó state_id <span class="fu">y</span> declaró <span class="kw">tempfile</span> main_native.</span>
+<span id="cb182-2"><a href="controles-sinteticos-stata.html#cb182-2" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;synth_smoking.dta&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb182-3"><a href="controles-sinteticos-stata.html#cb182-3" tabindex="-1"></a>xtset state_id <span class="fu">year</span></span>
+<span id="cb182-4"><a href="controles-sinteticos-stata.html#cb182-4" tabindex="-1"></a></span>
+<span id="cb182-5"><a href="controles-sinteticos-stata.html#cb182-5" tabindex="-1"></a>synth cigsale beer(1984(1)1988) lnincome retprice age15to24 <span class="co">///</span></span>
+<span id="cb182-6"><a href="controles-sinteticos-stata.html#cb182-6" tabindex="-1"></a>    cigsale(1988) cigsale(1980) cigsale(1975), <span class="co">///</span></span>
+<span id="cb182-7"><a href="controles-sinteticos-stata.html#cb182-7" tabindex="-1"></a>    trunit(3) trperiod(1989) xperiod(1980(1)1988) <span class="co">///</span></span>
+<span id="cb182-8"><a href="controles-sinteticos-stata.html#cb182-8" tabindex="-1"></a>    mspeperiod(1970(1)1988) nested <span class="co">///</span></span>
+<span id="cb182-9"><a href="controles-sinteticos-stata.html#cb182-9" tabindex="-1"></a>    <span class="kw">keep</span>(<span class="ot">`main_native&#39;</span>) <span class="kw">replace</span></span></code></pre></div>
+<p>Las tres opciones temporales y algorítmicas cumplen funciones distintas:</p>
+<ul>
+<li><code>xperiod(1980(1)1988)</code> define los años sobre los cuales <code>synth</code> promedia los
+predictores ordinarios <code>lnincome</code>, <code>retprice</code> y <code>age15to24</code>. La ventana escrita
+dentro de <code>beer(1984(1)1988)</code> y los tres valores puntuales de <code>cigsale</code> prevalecen
+para esas filas.</li>
+<li><code>mspeperiod(1970(1)1988)</code> define los años del resultado pretratamiento cuyo MSPE
+se minimiza para seleccionar la importancia predictora <span class="math inline">\(V\)</span>.</li>
+<li><code>nested</code> elige el algoritmo de optimización que busca <span class="math inline">\(V\)</span>; no define una ventana
+de datos ni crea una muestra de validación.</li>
+</ul>
+<p>Por tanto, la trayectoria previa completa es un diagnóstico necesario de ajuste
+<em>in-sample</em>. No es una prueba reservada ni una validación <em>out-of-sample</em>.
+<code>trunit(3)</code> identifica California, <code>trperiod(1989)</code> fija el inicio y <code>keep()</code>
+conserva la trayectoria nativa producida por <code>synth</code>.</p>
+<p>No se usan observaciones posteriores a 1988 para escoger los pesos. Una vez
+estimados, los mismos pesos se aplican a las ventas de los donantes en todo el
+horizonte 1970–2000.</p>
+<div class="boxinfo">
+<p><strong>Entorno observado de reproducción.</strong> Los artefactos canónicos se regeneraron con
+StataNow/SE 19.5 para Unix (Intel 64-bit), revisión 15 Apr 2026, y <code>synth 0.0.7</code>
+(26 Jan 2014). La instrucción <code>version 19.0</code> del do-file congela la sintaxis
+interpretada; no reemplaza la versión instalada que se documenta aquí.</p>
+</div>
+</div>
+<div id="quién-construye-a-california-sintética" class="section level2 unnumbered hasAnchor">
+<h2>¿Quién construye a California sintética?<a href="#qui%C3%A9n-construye-a-california-sint%C3%A9tica" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El archivo <code>results/synth_weights.csv</code> contiene los pesos devueltos por Stata para
+las 38 unidades donantes. La tabla muestra aquellas con peso estrictamente
+positivo; los 32 estados restantes reciben peso numéricamente
+cero.</p>
+<table>
+<caption><span id="tab:sc-weights-table">Table 21.2: </span>Pesos positivos de California sintética (salida de Stata)</caption>
+<thead>
+<tr class="header">
+<th align="left">Estado</th>
+<th align="right">Identificador Stata</th>
+<th align="right">Peso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Colorado</td>
+<td align="right">4</td>
+<td align="right">0,160</td>
+</tr>
+<tr class="even">
+<td align="left">Connecticut</td>
+<td align="right">5</td>
+<td align="right">0,068</td>
+</tr>
+<tr class="odd">
+<td align="left">Montana</td>
+<td align="right">19</td>
+<td align="right">0,200</td>
+</tr>
+<tr class="even">
+<td align="left">Nevada</td>
+<td align="right">21</td>
+<td align="right">0,236</td>
+</tr>
+<tr class="odd">
+<td align="left">New Mexico</td>
+<td align="right">23</td>
+<td align="right">0,001</td>
+</tr>
+<tr class="even">
+<td align="left">Utah</td>
+<td align="right">34</td>
+<td align="right">0,335</td>
+</tr>
+</tbody>
+</table>
+<p>Los 6 donantes con peso positivo son Colorado, Connecticut, Montana, Nevada, New Mexico, Utah. El
+mayor peso corresponde a Utah (0,335).
+Los pesos son no negativos y suman 1,000, de
+modo que el contrafactual interpola dentro del conjunto donante. La concentración
+es informativa sobre soporte y dependencia; no reparte el efecto de la política
+entre estados.</p>
+</div>
+<div id="balance-de-predictores" class="section level2 unnumbered hasAnchor">
+<h2>Balance de predictores<a href="controles-sinteticos-stata.html#balance-de-predictores" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los pesos deben evaluarse por lo que logran reproducir, no por su apariencia. La
+tabla combina <code>results/synth_predictor_balance.csv</code> con
+<code>results/synth_v_weights.csv</code>: conserva la escala original de cada predictor y
+muestra la diagonal de <span class="math inline">\(V\)</span> devuelta por <code>synth</code>.</p>
+<table>
+<caption><span id="tab:sc-balance-table">Table 21.3: </span>Balance e importancia de predictores de California sintética</caption>
+<colgroup>
+<col width="20%" />
+<col width="12%" />
+<col width="11%" />
+<col width="38%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Predictor</th>
+<th align="right">California</th>
+<th align="right">Sintética</th>
+<th align="right">Diferencia (tratada - sintética)</th>
+<th align="right">Importancia V</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">beer(1984(1)1988)</td>
+<td align="right">24,280</td>
+<td align="right">24,225</td>
+<td align="right">0,055</td>
+<td align="right">7.465e-06</td>
+</tr>
+<tr class="even">
+<td align="left">lnincome</td>
+<td align="right">10,077</td>
+<td align="right">9,859</td>
+<td align="right">0,218</td>
+<td align="right">1.036e-07</td>
+</tr>
+<tr class="odd">
+<td align="left">retprice</td>
+<td align="right">89,422</td>
+<td align="right">89,427</td>
+<td align="right">-0,005</td>
+<td align="right">9.983e-01</td>
+</tr>
+<tr class="even">
+<td align="left">age15to24</td>
+<td align="right">0,174</td>
+<td align="right">0,174</td>
+<td align="right">-0,000</td>
+<td align="right">7.781e-06</td>
+</tr>
+<tr class="odd">
+<td align="left">cigsale(1988)</td>
+<td align="right">90,100</td>
+<td align="right">91,673</td>
+<td align="right">-1,573</td>
+<td align="right">1.119e-05</td>
+</tr>
+<tr class="even">
+<td align="left">cigsale(1980)</td>
+<td align="right">120,200</td>
+<td align="right">120,482</td>
+<td align="right">-0,282</td>
+<td align="right">5.129e-06</td>
+</tr>
+<tr class="odd">
+<td align="left">cigsale(1975)</td>
+<td align="right">127,100</td>
+<td align="right">127,117</td>
+<td align="right">-0,017</td>
+<td align="right">1.694e-03</td>
+</tr>
+</tbody>
+</table>
+<p>El balance es cercano, pero no exacto. Por ejemplo, la discrepancia en ventas de
+1988 es -1,573 paquetes per cápita y la de ingreso es
+0,218 puntos logarítmicos, cerca de
+24,3% en niveles. Sin embargo, <code>lnincome</code> recibe
+una importancia <span class="math inline">\(V\)</span> de apenas
+1.04e-07, mientras
+retprice concentra
+0,998. <span class="math inline">\(V\)</span> no es un coeficiente causal: indica cuánto
+penaliza el algoritmo cada discrepancia al construir <span class="math inline">\(W\)</span>. Tampoco conviene ordenar
+la calidad por diferencias absolutas entre filas porque las escalas son distintas.
+Revisar la trayectoria completa previa es un diagnóstico necesario de ajuste
+<em>in-sample</em>, incluidos cambios que no entraron como predictores puntuales; no es
+una prueba reservada de validez.</p>
+</div>
+<div id="reconstrucción-manual-del-resultado-de-synth" class="section level2 unnumbered hasAnchor">
+<h2>Reconstrucción manual del resultado de <code>synth</code><a href="#reconstrucci%C3%B3n-manual-del-resultado-de-synth" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para auditar el estimador, el do-file combina las ventas observadas de cada
+donante con los pesos exportados:</p>
+<p><span class="math display">\[
+\widehat Y^{N}_{California,t}
+=\sum_{j\in\mathcal D}\widehat w_jY_{jt},
+\qquad
+\widehat\alpha_t=Y_{California,t}-\widehat Y^{N}_{California,t}.
+\]</span></p>
+<p>Después compara esa suma con <code>_Y_synthetic</code>, la serie nativa de <code>synth</code>. El error
+máximo en los 31 años es 9.9e-14,
+menor que la tolerancia de <span class="math inline">\(10^{-8}\)</span>. Esta coincidencia verifica que
+la trayectoria publicada se deriva de los pesos mostrados y no de otra rutina.</p>
+<table>
+<caption><span id="tab:sc-reconstruction-table">Table 21.4: </span>Comprobación de la reconstrucción en años seleccionados</caption>
+<thead>
+<tr class="header">
+<th align="right">Año</th>
+<th align="right">California</th>
+<th align="right">Sintética de synth</th>
+<th align="right">Suma manual ponderada</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1970</td>
+<td align="right">123,0000</td>
+<td align="right">117,1225</td>
+<td align="right">117,1225</td>
+</tr>
+<tr class="even">
+<td align="right">1988</td>
+<td align="right">90,1000</td>
+<td align="right">91,6735</td>
+<td align="right">91,6735</td>
+</tr>
+<tr class="odd">
+<td align="right">1989</td>
+<td align="right">82,4000</td>
+<td align="right">90,0026</td>
+<td align="right">90,0026</td>
+</tr>
+<tr class="even">
+<td align="right">2000</td>
+<td align="right">41,6000</td>
+<td align="right">67,3187</td>
+<td align="right">67,3187</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="trayectoria-observada-y-contrafactual" class="section level2 unnumbered hasAnchor">
+<h2>Trayectoria observada y contrafactual<a href="controles-sinteticos-stata.html#trayectoria-observada-y-contrafactual" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sc-path-figure"></span>
+<img src="dofile/17_SyntheticControls/synth_actual_vs_synthetic.png" alt="California observada y California sintética. La línea vertical marca el inicio de Prop 99." width="95%" />
+<p class="caption">
+Figure 21.2: California observada y California sintética. La línea vertical marca el inicio de Prop 99.
+</p>
+</div>
+<p>Antes de 1989 las dos series siguen niveles y giros parecidos, con discrepancias
+pequeñas pero visibles. Después, las ventas observadas en California se ubican por
+debajo del contrafactual y la separación aumenta. La distancia vertical en cada
+año es un estimado dinámico, no una comparación antes–después con el propio nivel
+de California.</p>
+</div>
+<div id="la-brecha-anual-y-su-magnitud" class="section level2 unnumbered hasAnchor">
+<h2>La brecha anual y su magnitud<a href="controles-sinteticos-stata.html#la-brecha-anual-y-su-magnitud" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sc-gap-figure"></span>
+<img src="dofile/17_SyntheticControls/synth_gap.png" alt="Brecha anual: California menos California sintética." width="95%" />
+<p class="caption">
+Figure 21.3: Brecha anual: California menos California sintética.
+</p>
+</div>
+<p>La brecha se define siempre como tratada menos sintética. Su promedio entre 1989 y
+2000 es -18,97 paquetes per cápita; durante ese horizonte
+va de -26,33 a -7,60. El signo
+negativo indica menores ventas observadas que las estimadas para California sin
+Prop 99. La lectura causal exige que, en ausencia de la política, la relación que
+reconstruyó el periodo previo hubiera permanecido estable.</p>
+<table>
+<caption><span id="tab:sc-post-gap-table">Table 21.5: </span>Trayectoria posterior y brecha anual, 1989–2000</caption>
+<thead>
+<tr class="header">
+<th align="right">Año</th>
+<th align="right">California</th>
+<th align="right">Sintética</th>
+<th align="right">Brecha</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1989</td>
+<td align="right">82,40</td>
+<td align="right">90,00</td>
+<td align="right">-7,60</td>
+</tr>
+<tr class="even">
+<td align="right">1990</td>
+<td align="right">77,80</td>
+<td align="right">87,51</td>
+<td align="right">-9,71</td>
+</tr>
+<tr class="odd">
+<td align="right">1991</td>
+<td align="right">68,70</td>
+<td align="right">82,16</td>
+<td align="right">-13,46</td>
+</tr>
+<tr class="even">
+<td align="right">1992</td>
+<td align="right">67,50</td>
+<td align="right">81,58</td>
+<td align="right">-14,08</td>
+</tr>
+<tr class="odd">
+<td align="right">1993</td>
+<td align="right">63,40</td>
+<td align="right">81,16</td>
+<td align="right">-17,76</td>
+</tr>
+<tr class="even">
+<td align="right">1994</td>
+<td align="right">58,60</td>
+<td align="right">80,69</td>
+<td align="right">-22,09</td>
+</tr>
+<tr class="odd">
+<td align="right">1995</td>
+<td align="right">56,40</td>
+<td align="right">78,46</td>
+<td align="right">-22,06</td>
+</tr>
+<tr class="even">
+<td align="right">1996</td>
+<td align="right">54,50</td>
+<td align="right">77,44</td>
+<td align="right">-22,94</td>
+</tr>
+<tr class="odd">
+<td align="right">1997</td>
+<td align="right">53,80</td>
+<td align="right">77,67</td>
+<td align="right">-23,87</td>
+</tr>
+<tr class="even">
+<td align="right">1998</td>
+<td align="right">52,30</td>
+<td align="right">74,35</td>
+<td align="right">-22,05</td>
+</tr>
+<tr class="odd">
+<td align="right">1999</td>
+<td align="right">47,20</td>
+<td align="right">73,53</td>
+<td align="right">-26,33</td>
+</tr>
+<tr class="even">
+<td align="right">2000</td>
+<td align="right">41,60</td>
+<td align="right">67,32</td>
+<td align="right">-25,72</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="rmspe-ajuste-antes-y-después" class="section level2 unnumbered hasAnchor">
+<h2>RMSPE: ajuste antes y después<a href="#rmspe-ajuste-antes-y-despu%C3%A9s" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para una ventana <span class="math inline">\(\mathcal T\)</span> el error cuadrático medio de predicción es</p>
+<p><span class="math display">\[
+RMSPE(\mathcal T)=
+\sqrt{\frac{1}{|\mathcal T|}\sum_{t\in\mathcal T}\widehat\alpha_t^2}.
+\]</span></p>
+<table>
+<caption><span id="tab:sc-rmspe-table">Table 21.6: </span>RMSPE de la especificación principal</caption>
+<colgroup>
+<col width="15%" />
+<col width="23%" />
+<col width="25%" />
+<col width="15%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Unidad</th>
+<th align="right">RMSPE pre nativo</th>
+<th align="right">RMSPE pre recomp.</th>
+<th align="right">RMSPE post</th>
+<th align="right">Razón post/pre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">1,756235</td>
+<td align="right">1,754306</td>
+<td align="right">19,913</td>
+<td align="right">11,351</td>
+</tr>
+</tbody>
+</table>
+<p><code>synth</code> reporta un RMSPE pre nativo de 1.756235, calculado durante la optimización
+con su precisión interna. La trayectoria guardada y <code>e(W_weights)</code> exponen pesos
+redondeados a tres decimales; al reconstruir exactamente esa trayectoria publicada
+se obtiene 1.754306. La diferencia es de precisión/redondeo, no de ventana. Todos
+los placebos, el filtro y la razón de esta clase usan de manera consistente el
+RMSPE recomputado desde las brechas exportadas.</p>
+<p>El RMSPE previo cuantifica el error que ya existía donde el tratamiento aún no
+operaba. La razón post/pre muestra cuánto se deteriora el ajuste después de 1989,
+pero no tiene signo, no mide el efecto promedio y no es por sí sola una prueba de
+identificación. Debe leerse junto con la gráfica de brechas, la escala del
+resultado y las amenazas institucionales al contrafactual.</p>
+<div class="boxwarning">
+<p><strong>El buen ajuste previo es necesario, no suficiente.</strong> Aumenta la credibilidad de
+la reconstrucción porque el método reproduce resultados observados sin usar el
+periodo tratado. No descarta anticipación, interferencia, cambios de medición,
+otras políticas simultáneas ni shocks particulares de California o de sus
+donantes con peso positivo.</p>
+</div>
+</div>
+<div id="placebos-espaciales" class="section level2 unnumbered hasAnchor">
+<h2>Placebos espaciales<a href="controles-sinteticos-stata.html#placebos-espaciales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El do-file reasigna ficticiamente el tratamiento de 1989 a cada una de las
+39
+unidades, excluye a la unidad placebo de su propio conjunto donante y vuelve a
+estimar la misma especificación. California está incluida como la asignación real.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sc-placebo-gaps-figure"></span>
+<img src="dofile/17_SyntheticControls/synth_placebo_gaps.png" alt="Brechas de las 39 asignaciones espaciales. California aparece destacada." width="95%" />
+<p class="caption">
+Figure 21.4: Brechas de las 39 asignaciones espaciales. California aparece destacada.
+</p>
+</div>
+<p>Mostrar todas las asignaciones evita ocultar unidades con mal ajuste o brechas
+grandes. La nube también revela por qué comparar magnitudes posteriores sin mirar
+el error previo puede ser engañoso: algunas trayectorias placebo ya estaban lejos
+de cero antes de 1989.</p>
+<div id="resultados-de-todas-las-asignaciones" class="section level3 unnumbered hasAnchor">
+<h3>Resultados de todas las asignaciones<a href="controles-sinteticos-stata.html#resultados-de-todas-las-asignaciones" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<caption><span id="tab:sc-placebo-table">Table 21.7: </span>RMSPE y elegibilidad de todas las asignaciones espaciales</caption>
+<colgroup>
+<col width="15%" />
+<col width="10%" />
+<col width="11%" />
+<col width="15%" />
+<col width="27%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Unidad</th>
+<th align="right">RMSPE pre</th>
+<th align="right">RMSPE post</th>
+<th align="right">Razón post/pre</th>
+<th align="center">Elegible 5× RMSPE (clase)</th>
+<th align="left">Optimización</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">1,754</td>
+<td align="right">19,913</td>
+<td align="right">11,351</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Georgia</td>
+<td align="right">1,187</td>
+<td align="right">11,650</td>
+<td align="right">9,811</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Missouri</td>
+<td align="right">1,044</td>
+<td align="right">8,117</td>
+<td align="right">7,776</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Virginia</td>
+<td align="right">1,923</td>
+<td align="right">14,088</td>
+<td align="right">7,328</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Texas</td>
+<td align="right">2,162</td>
+<td align="right">15,700</td>
+<td align="right">7,263</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Indiana</td>
+<td align="right">3,762</td>
+<td align="right">21,543</td>
+<td align="right">5,727</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Louisiana</td>
+<td align="right">1,493</td>
+<td align="right">8,002</td>
+<td align="right">5,360</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">West Virginia</td>
+<td align="right">2,846</td>
+<td align="right">15,192</td>
+<td align="right">5,339</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Tennessee</td>
+<td align="right">2,281</td>
+<td align="right">11,104</td>
+<td align="right">4,868</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Oklahoma</td>
+<td align="right">2,684</td>
+<td align="right">11,834</td>
+<td align="right">4,409</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">South Carolina</td>
+<td align="right">1,480</td>
+<td align="right">6,414</td>
+<td align="right">4,334</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Wisconsin</td>
+<td align="right">1,723</td>
+<td align="right">7,031</td>
+<td align="right">4,081</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">New Mexico</td>
+<td align="right">2,156</td>
+<td align="right">7,974</td>
+<td align="right">3,699</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Maine</td>
+<td align="right">3,096</td>
+<td align="right">11,292</td>
+<td align="right">3,647</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Delaware</td>
+<td align="right">6,354</td>
+<td align="right">20,958</td>
+<td align="right">3,298</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Montana</td>
+<td align="right">2,300</td>
+<td align="right">7,409</td>
+<td align="right">3,222</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">North Dakota</td>
+<td align="right">2,839</td>
+<td align="right">8,650</td>
+<td align="right">3,047</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Connecticut</td>
+<td align="right">4,039</td>
+<td align="right">12,187</td>
+<td align="right">3,017</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Vermont</td>
+<td align="right">3,757</td>
+<td align="right">11,175</td>
+<td align="right">2,975</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Mississippi</td>
+<td align="right">2,034</td>
+<td align="right">5,533</td>
+<td align="right">2,720</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Idaho</td>
+<td align="right">2,349</td>
+<td align="right">6,159</td>
+<td align="right">2,622</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Illinois</td>
+<td align="right">2,577</td>
+<td align="right">5,778</td>
+<td align="right">2,242</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Nebraska</td>
+<td align="right">2,309</td>
+<td align="right">4,863</td>
+<td align="right">2,106</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">2,052</td>
+<td align="right">4,218</td>
+<td align="right">2,056</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhode Island</td>
+<td align="right">11,218</td>
+<td align="right">22,884</td>
+<td align="right">2,040</td>
+<td align="center">No</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Kentucky</td>
+<td align="right">20,443</td>
+<td align="right">39,867</td>
+<td align="right">1,950</td>
+<td align="center">No</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="right">2,956</td>
+<td align="right">5,734</td>
+<td align="right">1,940</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Ohio</td>
+<td align="right">1,409</td>
+<td align="right">2,533</td>
+<td align="right">1,797</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Iowa</td>
+<td align="right">3,612</td>
+<td align="right">6,486</td>
+<td align="right">1,796</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Pennsylvania</td>
+<td align="right">1,669</td>
+<td align="right">2,708</td>
+<td align="right">1,622</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Nevada</td>
+<td align="right">6,371</td>
+<td align="right">9,136</td>
+<td align="right">1,434</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">4,103</td>
+<td align="right">5,871</td>
+<td align="right">1,431</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">2,286</td>
+<td align="right">2,595</td>
+<td align="right">1,135</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">Minnesota</td>
+<td align="right">3,938</td>
+<td align="right">4,045</td>
+<td align="right">1,027</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Kansas</td>
+<td align="right">3,868</td>
+<td align="right">3,491</td>
+<td align="right">0,902</td>
+<td align="center">Sí</td>
+<td align="left">nested</td>
+</tr>
+<tr class="even">
+<td align="left">North Carolina</td>
+<td align="right">9,023</td>
+<td align="right">7,574</td>
+<td align="right">0,839</td>
+<td align="center">No</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">Utah</td>
+<td align="right">24,367</td>
+<td align="right">14,942</td>
+<td align="right">0,613</td>
+<td align="center">No</td>
+<td align="left">default tras rc=430</td>
+</tr>
+<tr class="even">
+<td align="left">Wyoming</td>
+<td align="right">9,680</td>
+<td align="right">5,264</td>
+<td align="right">0,544</td>
+<td align="center">No</td>
+<td align="left">nested</td>
+</tr>
+<tr class="odd">
+<td align="left">New Hampshire</td>
+<td align="right">59,038</td>
+<td align="right">17,685</td>
+<td align="right">0,300</td>
+<td align="center">No</td>
+<td align="left">nested</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="comparación-restringida-por-ajuste-previo" class="section level3 unnumbered hasAnchor">
+<h3>Comparación restringida por ajuste previo<a href="#comparaci%C3%B3n-restringida-por-ajuste-previo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La regla predeclarada conserva una asignación si</p>
+<p><span class="math display">\[
+RMSPE_i^{pre}\leq 5\,RMSPE_{California}^{pre}.
+\]</span></p>
+<p>Esta es una <strong>convención docente de <span class="math inline">\(5\times RMSPE\)</span></strong>, fijada en el diseño del
+curso. No replica el filtro de ADH (2010), que conserva unidades bajo
+<span class="math inline">\(MSPE_i^{pre}\leq 5\times MSPE_{California}^{pre}\)</span>. Como <span class="math inline">\(MSPE=RMSPE^2\)</span>, la regla
+docente equivale a <span class="math inline">\(25\times MSPE\)</span> y es más laxa. Con estos artefactos conserva
+33 asignaciones; el criterio <span class="math inline">\(5\times MSPE\)</span> de ADH conservaría
+28. La comparación principal de la clase mantiene su regla
+predeclarada y rotula la diferencia.</p>
+<p>El umbral calculado desde los CSV es 8,772. Lo cumplen
+33 asignaciones y 6 quedan fuera de la comparación
+restringida. Entre las elegibles, 1 tiene una razón al menos tan
+grande como la de California. Por tanto, la proporción observada es
+1/33 = 0,0303.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sc-rmspe-ratio-figure"></span>
+<img src="dofile/17_SyntheticControls/synth_rmspe_ratios.png" alt="Distribución de las razones RMSPE entre asignaciones que cumplen la regla 5×." width="95%" />
+<p class="caption">
+Figure 21.5: Distribución de las razones RMSPE entre asignaciones que cumplen la regla 5×.
+</p>
+</div>
+<p>Esta fracción es <strong>descriptiva</strong>: ubica la asignación real dentro de un conjunto
+finito de ejercicios comparables. Su resolución depende de cuántas asignaciones
+superan el filtro. No es automáticamente un p-valor asintótico ni convierte la
+intercambiabilidad de los estados en un hecho.</p>
+</div>
+<div id="regla-portable-de-optimización-para-utah" class="section level3 unnumbered hasAnchor">
+<h3>Regla portable de optimización para Utah<a href="#regla-portable-de-optimizaci%C3%B3n-para-utah" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Las 39 asignaciones intentan primero <code>nested</code>. Cualquier falla de
+otra unidad o cualquier código distinto de <code>rc=430</code> detiene el do-file. Solo si
+Utah falla exactamente con <code>rc=430</code> se repite la misma especificación y el mismo
+<em>donor pool</em> con la optimización por defecto. El contrato admite, por tanto, dos
+resultados reproducibles: 39 corridas <code>nested</code>, o 38 <code>nested</code> más ese único
+fallback de Utah. En la corrida canónica observada, Utah devolvió rc=430 con nested y se reestimó con la optimización por defecto. Utah es inelegible bajo 5× RMSPE (24,367 &gt; 8,772), por lo que su ruta de optimización no entra en el numerador ni en el denominador de 1/33.</p>
+</div>
+</div>
+<div id="placebo-temporal-de-1980-sin-fuga-de-información" class="section level2 unnumbered hasAnchor">
+<h2>Placebo temporal de 1980 sin fuga de información<a href="#placebo-temporal-de-1980-sin-fuga-de-informaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El placebo temporal pregunta si el procedimiento también produce una ruptura
+cuando se finge que el tratamiento comenzó antes de la intervención real. La reestimación es
+nueva; no reutiliza los pesos estimados con datos hasta 1988:</p>
+<p><strong>Extracto del do-file completo.</strong> Este bloque depende del panel temporal <code>panel</code>,
+de la lista de donantes <code>time_donors</code> y de <code>tempfile time_native</code>, creados en líneas
+anteriores del archivo enlazado. Se muestra aquí la llamada que impide la fuga, no
+un programa Stata autocontenido.</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb183-1"><a href="controles-sinteticos-stata.html#cb183-1" tabindex="-1"></a>* panel, time_donors <span class="fu">y</span> <span class="kw">tempfile</span> time_native ya fueron creados.</span>
+<span id="cb183-2"><a href="controles-sinteticos-stata.html#cb183-2" tabindex="-1"></a>synth cigsale lnincome retprice age15to24 <span class="co">///</span></span>
+<span id="cb183-3"><a href="controles-sinteticos-stata.html#cb183-3" tabindex="-1"></a>    cigsale(1979) cigsale(1975) cigsale(1970), <span class="co">///</span></span>
+<span id="cb183-4"><a href="controles-sinteticos-stata.html#cb183-4" tabindex="-1"></a>    trunit(3) trperiod(1980) xperiod(1972(1)1979) <span class="co">///</span></span>
+<span id="cb183-5"><a href="controles-sinteticos-stata.html#cb183-5" tabindex="-1"></a>    mspeperiod(1970(1)1979) counit(<span class="ot">`time_donors&#39;</span>) nested <span class="co">///</span></span>
+<span id="cb183-6"><a href="controles-sinteticos-stata.html#cb183-6" tabindex="-1"></a>    <span class="kw">keep</span>(<span class="ot">`time_native&#39;</span>) <span class="kw">replace</span></span></code></pre></div>
+<p>Todos los predictores y resultados empleados para ajustar los pesos terminan en
+1979. <code>mspeperiod(1970(1)1979)</code> impide además que la selección de <span class="math inline">\(V\)</span> use el
+resultado posterior a la fecha ficticia. <code>beer</code> se elimina porque solo está
+disponible desde 1984; incluirlo filtraría información posterior al tratamiento
+ficticio. Los años 1980–1988 quedan así reservados para evaluar la ruptura
+placebo.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sc-time-placebo-figure"></span>
+<img src="dofile/17_SyntheticControls/synth_time_placebo.png" alt="Placebo temporal con tratamiento ficticio en 1980 y ajuste limitado a información hasta 1979." width="95%" />
+<p class="caption">
+Figure 21.6: Placebo temporal con tratamiento ficticio en 1980 y ajuste limitado a información hasta 1979.
+</p>
+</div>
+<p>En la ventana 1980–1988, la brecha observada tiene una media de
+-2,96 paquetes per cápita y alcanza un mínimo de
+-8,80. La combinación sintética ya se separa de California
+en dirección negativa antes de la intervención real. Este patrón es una <strong>alerta
+para la estabilidad contrafactual</strong>: reduce la confianza en que la relación previa
+se habría mantenido intacta y obliga a interpretar con cautela la brecha posterior
+a 1989. No invalida mecánicamente el diseño —la escala, persistencia y cronología
+de ambas rupturas también importan—, pero impide tratar el placebo temporal como
+evidencia plenamente tranquilizadora.</p>
+</div>
+<div id="sensibilidad-leave-one-out" class="section level2 unnumbered hasAnchor">
+<h2>Sensibilidad leave-one-out<a href="controles-sinteticos-stata.html#sensibilidad-leave-one-out" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El análisis retira por turno cada donante con peso positivo y vuelve a ejecutar
+<code>synth</code>; no renormaliza mecánicamente los pesos originales. Como hay
+6 donantes positivos, se obtienen 6 reestimaciones,
+cada una con 31 años de brechas.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sc-loo-figure"></span>
+<img src="dofile/17_SyntheticControls/synth_leave_one_out.png" alt="Brecha principal y 6 reestimaciones leave-one-out." width="95%" />
+<p class="caption">
+Figure 21.7: Brecha principal y 6 reestimaciones leave-one-out.
+</p>
+</div>
+<table>
+<caption><span id="tab:sc-loo-table">Table 21.8: </span>Diagnóstico leave-one-out derivado de las brechas reestimadas</caption>
+<thead>
+<tr class="header">
+<th align="left">Donante excluido</th>
+<th align="right">RMSPE pre</th>
+<th align="right">RMSPE post</th>
+<th align="right">Brecha post media</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Colorado</td>
+<td align="right">1,917</td>
+<td align="right">21,103</td>
+<td align="right">-19,81</td>
+</tr>
+<tr class="even">
+<td align="left">Connecticut</td>
+<td align="right">1,976</td>
+<td align="right">19,662</td>
+<td align="right">-18,62</td>
+</tr>
+<tr class="odd">
+<td align="left">Montana</td>
+<td align="right">1,923</td>
+<td align="right">18,308</td>
+<td align="right">-17,56</td>
+</tr>
+<tr class="even">
+<td align="left">Nevada</td>
+<td align="right">2,426</td>
+<td align="right">22,484</td>
+<td align="right">-20,69</td>
+</tr>
+<tr class="odd">
+<td align="left">New Mexico</td>
+<td align="right">1,752</td>
+<td align="right">20,047</td>
+<td align="right">-19,09</td>
+</tr>
+<tr class="even">
+<td align="left">Utah</td>
+<td align="right">2,582</td>
+<td align="right">18,233</td>
+<td align="right">-17,53</td>
+</tr>
+</tbody>
+</table>
+<p>Las brechas posteriores medias de las reestimaciones van de
+-20,69 a -17,53, frente a
+-18,97 en la especificación principal. La persistencia del
+signo informa que el patrón no depende de una sola unidad positiva. No prueba que
+los donantes sean válidos, que estén libres de spillovers o que no exista un shock
+concurrente; tampoco evalúa sensibilidad a decisiones distintas sobre predictores
+o fecha.</p>
+</div>
+<div id="lectura-conjunta-de-la-evidencia" class="section level2 unnumbered hasAnchor">
+<h2>Lectura conjunta de la evidencia<a href="controles-sinteticos-stata.html#lectura-conjunta-de-la-evidencia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La evaluación debe conectar cuatro piezas:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Soporte y balance:</strong> los pesos forman una combinación convexa y reproducen
+razonablemente los predictores y la historia anterior.</li>
+<li><strong>Estimando:</strong> cada brecha anual compara California observada con su
+contrafactual sintético; el promedio posterior resume esa trayectoria sin
+reemplazarla.</li>
+<li><strong>Rareza placebo:</strong> la razón RMSPE de California se compara con asignaciones
+que tenían capacidad de ajuste previo semejante bajo una regla predeclarada.</li>
+<li><strong>Sensibilidad:</strong> el placebo temporal busca quiebres falsos y el leave-one-out
+detecta dependencia de donantes positivos.</li>
+</ol>
+<p>En conjunto, los diagnósticos pueden hacer más o menos creíble el diseño. No
+sustituyen el argumento institucional sobre no anticipación, ausencia de
+interferencia, medición estable y falta de políticas concurrentes.</p>
+</div>
+<div id="preguntas-de-trabajo" class="section level2 unnumbered hasAnchor">
+<h2>Preguntas de trabajo<a href="controles-sinteticos-stata.html#preguntas-de-trabajo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="boxexam">
+<p><strong>SC-S1. Pesos y soporte.</strong> Use la tabla de pesos para identificar todos los
+donantes con contribución positiva. Verifique las restricciones convexas y evalúe
+qué dicen la concentración de pesos y el balance de predictores sobre el soporte.
+Explique también qué interpretación de los pesos sería incorrecta.</p>
+</div>
+<div class="boxexam">
+<p><strong>SC-S2. Calidad de ajuste.</strong> Compare el RMSPE previo y posterior, calcule la razón
+post/pre y relacione esos tres objetos con la tabla de balance y la trayectoria.
+¿Qué mide cada uno y por qué el deterioro posterior no basta para establecer
+identificación causal?</p>
+</div>
+<div class="boxexam">
+<p><strong>SC-S3. Brecha y estimando.</strong> Defina la brecha con el orden correcto, resuma su
+magnitud entre 1989 y 2000 e interprete su signo y evolución. ¿Bajo qué supuestos
+esa secuencia puede leerse como el efecto dinámico de Prop 99 para California?</p>
+</div>
+<div class="boxexam">
+<p><strong>SC-S4. Placebos y sensibilidad.</strong> Reconstruya la regla 5× y la proporción de
+asignaciones elegibles con razón al menos tan grande como California. Luego
+evalúe qué añaden —y qué no demuestran— la excepción de Utah, el placebo temporal
+de 1980 y las 6 reestimaciones leave-one-out.</p>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="controles-sinteticos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="iv.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/adiazescobar/libro_cortes/edit/main/17-SyntheticControlsStata.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["econometria-avanzada.pdf", "econometria-avanzada.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection",
+    "scroll_highlight": true,
+    "depth": 2
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

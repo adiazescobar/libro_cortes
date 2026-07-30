@@ -4,10 +4,15 @@
 
 Al finalizar este capítulo, podrá definir resultados potenciales, distinguir ATE, ATT, ATU y CATE, y explicar por qué una diferencia observada no necesariamente tiene una interpretación causal. También podrá reconocer los supuestos que convierten comparaciones observadas en parámetros causales.
 
-Lecturas recomendadas:
+::: {.boxinfo}
+**Lecturas centrales**
 
-- Angrist, J. D. y Pischke, J.-S. (2010), *The Credibility Revolution in Empirical Economics*.
-- Bernal, R. y Peña, X., capítulos 2 y 3.
+- [Bernal y Peña — capítulo 2 (PDF)](https://www.dropbox.com/s/zsqa2gcbbgdi5i3/Capitulo%202%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Bernal y Peña — capítulo 3 (PDF)](https://www.dropbox.com/s/837u3ea36r7t5me/Capitulo%203%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Cunningham — capítulo 4: Potential Outcomes](https://mixtape.scunning.com/04-potential_outcomes)
+:::
+
+Lectura complementaria: Angrist, J. D. y Pischke, J.-S. (2010), *The Credibility Revolution in Empirical Economics*.
 
 ## Pregunta causal y población de interés {-}
 

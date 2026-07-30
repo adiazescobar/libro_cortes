@@ -1,4 +1,4 @@
-# Introducción a la inferencia causal
+# Introducción a la inferencia causal {#introduccion-a-la-inferencia-causal}
 
 ## Objetivos y mapa del capítulo {-}
 
@@ -12,6 +12,15 @@ Al terminar este capítulo, el lector podrá:
 - ubicar las principales estrategias de identificación que se desarrollan en el libro.
 
 El recorrido parte de la motivación, pasa por la formulación de preguntas y el marco de resultados potenciales, y termina con las estrategias que permiten aproximar contrafactuales promedio creíbles.
+
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 2 (PDF)](https://www.dropbox.com/s/zsqa2gcbbgdi5i3/Capitulo%202%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Bernal y Peña — capítulo 3 (PDF)](https://www.dropbox.com/s/837u3ea36r7t5me/Capitulo%203%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Cunningham — capítulo 1: Introduction](https://mixtape.scunning.com/01-introduction)
+- [Cunningham — capítulo 4: Potential Outcomes](https://mixtape.scunning.com/04-potential_outcomes)
+:::
 
 ## Por qué importa la inferencia causal {-}
 

@@ -8,6 +8,13 @@ Al finalizar esta clase podrán definir los errores tipo I y II, interpretar el 
 
 La ruta de aula tiene 19 momentos: pregunta causal; motivación; notación; supuestos; errores tipo I/II; medias muestrales; dos distribuciones; definición de poder; distancia detectable; tamaño de muestra; taller de desempleo; parámetros de diseño; resultado continuo sin controles; continuo con controles; binario sin controles; binario con controles; eventos por exposición; conglomerados; y amenazas y decisiones.
 
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 4 (PDF)](https://www.dropbox.com/s/vxpgxt22pvphwx3/Capitulo%204%20Bernal%20y%20Pe%C3%B1a.pdf?dl=1)
+- [Cunningham — capítulo 4: Potential Outcomes](https://mixtape.scunning.com/04-potential_outcomes)
+:::
+
 :::: {.box-intuicion}
 **Idea central.** “No significativo” no significa “sin efecto”. Puede significar que el experimento no tenía precisión para detectar un efecto que importaba.
 ::::

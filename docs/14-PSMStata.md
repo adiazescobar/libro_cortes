@@ -1,332 +1,242 @@
-# PSM en Stata: `psmatch2` {#psm-stata}
+# Propensity score matching — Clase empírica {#psm-stata}
 
 ::: {.boxinfo}
 **Metas de aprendizaje**
 
-- Instalar y usar `psmatch2`, `psgraph` y `pstest`
-- Estimar el propensity score y restringir el análisis al soporte común
-- Comparar NN, caliper, radio, kernel y LLR en Stata
-- Leer los resultados de `pstest` y discutir errores estándar apropiados
+- Implementar el flujo principal con `psmatch2`.
+- Diagnosticar selección, soporte y balance antes de interpretar el ATT.
+- Replicar el estimando con `teffects psmatch` y explicar diferencias.
+- Usar LASSO como herramienta de alta dimensión sin delegarle la selección causal.
 :::
 
----
+## Materiales de la clase {-}
 
-## Instalación y estructura del comando {-}
+Descarga los archivos antes de comenzar:
 
-El comando estándar para PSM en Stata es `psmatch2`, disponible en SSC:
+- [Do-file guiado de PSM](dofile/16_PSM_IPW_Sinteticos/01_psm_stata_CLASSROOM.do)
+- [Base de datos de la práctica](dofile/16_PSM_IPW_Sinteticos/base6.dta)
+- [Log completo de Stata](dofile/16_PSM_IPW_Sinteticos/psm_classroom.log)
+
+Instala `psmatch2` una sola vez:
 
 ```stata
 ssc install psmatch2
+help psmatch2
 ```
 
-La sintaxis completa es:
+`pstest` y `psgraph` se instalan con el mismo paquete.
+
+::: {.boxinfo}
+**Lecturas centrales**
+
+- [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
+- [Cunningham — capítulo 5: Matching and Subclassification](https://mixtape.scunning.com/05-matching_and_subclassification)
+:::
+
+## Pregunta causal y estimando {-}
+
+La práctica pregunta: **¿cuál es el efecto del tratamiento sobre quienes efectivamente lo recibieron?** El estimando principal es
+
+$$ATT=E[Y(D=1)-Y(D=0)\mid D=1].$$
+
+Antes de ejecutar un comando, clasificamos las variables:
 
 ```stata
-psmatch2 depvar [indepvars] [if exp] [in range] [,
-    outcome(varlist)
-    pscore(varname)   logit odds index
-    neighbor(integer) ties
-    noreplacement descending
-    caliper(real)
-    radius
-    kernel
-    llr
-    kerneltype(type) bwidth(real)
-    spline nknots(integer)
-    mahalanobis(varlist) add pcaliper(real)
-    common trim(real)
-    ate
-    ai(#)]
+global Xmust "personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre"
+global Xflex "c.personas#c.personas c.educa_jefe#c.educa_jefe ///
+              c.ingresos_hogar_jefe#c.ingresos_hogar_jefe ///
+              i.ocupado_jefe#i.hombre"
 ```
 
-Los comandos complementarios son `psgraph` (gráfica del propensity score) y `pstest` (balance de covariables).
+`Xmust` contiene los **confusores obligatorios** justificados antes de estimar. `Xflex` reúne términos pretratamiento candidatos para capturar no linealidades. Ninguna variable postratamiento puede entrar en cualquiera de los dos grupos.
 
----
+::: {.boxwarning}
+LASSO no descubre los confusores. Una variable causalmente necesaria no se vuelve opcional porque su coeficiente predictivo sea pequeño.
+:::
 
-## Variables auxiliares que genera `psmatch2` {-}
-
-Después de correr `psmatch2`, el comando crea las siguientes variables en la base de datos:
-
-| Variable | Descripción |
-|----------|-------------|
-| `_pscore` | Propensity Score estimado |
-| `_treated` | Indicador de asignación al tratamiento |
-| `_support` | Indicador de soporte común |
-| `_weight` | Peso del control emparejado |
-| `_y2` | Valor de `outcome` del match |
-| `_id` | Identificador (ID) |
-| `_n1` | ID del vecino más cercano (vecino 1) |
-| `_nn` | Número de controles emparejados |
-| `_pdif` | $|\hat{p}(\text{pscore}) - \hat{p}(\text{neighbor})|$ |
-
-Para inspeccionar los resultados del emparejamiento:
+## Mirar la selección antes de corregirla {-}
 
 ```stata
-sum pscore1 _pscore
-edit D y2 pscore1 _pscore _treated _support _weight _y2 _id _n1 _nn _pdif
+use base6.dta, clear
+table D, statistic(count D) statistic(mean y2 personas ocupado_jefe educa_jefe)
+logit D $Xmust
+predict double pscore, pr
 ```
 
----
-
-## El propensity score y el soporte común {-}
-
-Antes de emparejar, es útil calcular y guardar el PS con distintas restricciones de soporte común:
-
-| Variable | Descripción |
-|----------|-------------|
-| `pscore1` | PS sin restricción de soporte común |
-| `pscore1_sc` | PS para el ATE (min de tratados y max de controles) |
-| `pscore2_sc` | PS para el ATT (min y max del PS de los controles) |
-
----
-
-## 1a. NN(1) sin reemplazo {-}
-
-El caso más simple: cada tratado se empareja con el control más cercano en PS, sin que ningún control pueda usarse dos veces.
-
-```stata
-* Preparar orden aleatorio (importante para NN sin reemplazo)
-set seed 1298
-drawnorm orden
-sort orden
-
-* NN(1) sin reemplazo
-psmatch2 D $X, outcome(y2) n(1) pscore(pscore1) noreplacement
-psgraph
-pstest $X, treated(D) both graph
-```
-
-**Resultado típico:**
+Salida inicial de la base heredada:
 
 ```text
-Variable   Sample       Treated    Controls   Difference   S.E.    T-stat
-y2         Unmatched   -.6440      -.9765      .3325        .0338    9.84
-           ATT         -.6440      -.9736      .3297        .0342    9.63
+Tratamiento       N       Media de Y
+D=0            2,048       -0.976
+D=1            1,952       -0.644
+Diferencia cruda              0.332
 
-Note: S.E. does not take into account that the propensity score is estimated.
+Logit de D: LR chi2(6) = 64.57; p < 0.001
 ```
 
-La diferencia en la muestra sin emparejar (*Unmatched*) es el sesgo bruto; la diferencia *ATT* es el efecto estimado del tratamiento sobre los tratados después del emparejamiento.
+La prueba conjunta confirma selección observable, pero la diferencia cruda todavía mezcla efecto y composición. No interpretamos $0.332$ como causal.
 
----
-
-## 1b. NN(1) con soporte común {-}
-
-La opción `com` (o `common`) restringe el análisis a la región de soporte común, descartando los tratados cuyo PS cae fuera del rango del PS de los controles.
+## Visualizar soporte común {-}
 
 ```stata
-psmatch2 D $X, outcome(y2) n(1) noreplacement com
+twoway (kdensity pscore if D==1, lcolor(navy) lwidth(medthick)) ///
+       (kdensity pscore if D==0, lcolor(maroon) lwidth(medthick)), ///
+       legend(order(1 "Tratados" 2 "Controles")) ///
+       xtitle("Propensity score") ytitle("Densidad")
+graph export pscore_distribution.png, replace
+```
+
+![Distribución del propensity score por tratamiento](dofile/16_PSM_IPW_Sinteticos/pscore_distribution.png)
+
+La figura muestra superposición amplia. Eso permite construir contrafactuales observables, pero también anticipa que el ajuste puede ser modesto. La clase discutirá por qué un ejemplo con selección estadística no necesariamente tiene gran sesgo en el resultado.
+
+## Estimación principal con `psmatch2` {-}
+
+Usamos logit, ATT, un vecino, reemplazo y soporte común:
+
+```stata
+psmatch2 D $Xmust, outcome(y2) logit neighbor(1) common ties
+scalar att_psm = r(att)
 psgraph
-pstest $X, treated(D) both graph
+pstest $Xmust, treated(D) both graph
+graph export psm_balance.png, replace
 ```
 
----
+```text
+Variable   Muestra       Tratados    Controles    Diferencia
+y2         Sin ajustar    -0.644      -0.976         0.332
+           ATT            -0.643      -0.936         0.294
 
-## 1c. Soporte común vía trimming {-}
+Tratados fuera del soporte: 5 de 1,952
+```
 
-Otra forma de imponer soporte común es `trim(#)`, que descarta el #% de observaciones tratadas con el PS más alto (zona donde hay menos controles disponibles).
+Aquí el ATT cambia poco. Esa es una conclusión sustantiva del ejemplo, no una prueba de que PSM siempre sea innecesario: las covariables predicen participación, pero en esta base explican poca parte de la diferencia en $Y$.
+
+### Diagnóstico de balance {-}
+
+```text
+Muestra       Pseudo R2    MeanBias    MedBias
+Sin ajustar      0.012        8.5         9.0
+Emparejada       0.001        2.3         1.4
+```
+
+<p><img src="dofile/16_PSM_IPW_Sinteticos/psm_balance.png" alt="Balance de covariables antes y después del matching" style="max-width:100%;"></p>
+
+Leemos la tabla covariable por covariable. Buscamos diferencias estandarizadas pequeñas —como guía, menores a 10%— y también revisamos varianzas y distribuciones. No decidimos balance con los $p$-valores de pruebas t.
+
+::: {.boxkey}
+El matching mejora el diseño observado, pero el balance solo se refiere a las covariables medidas e incluidas. No prueba CIA.
+:::
+
+## Decisiones del algoritmo y sensibilidad {-}
 
 ```stata
-psmatch2 D $X, outcome(y2) n(1) noreplacement trim(20)
-psgraph
-pstest $X, treated(D) both graph
+* Cinco vecinos: menor varianza potencial, mayor distancia promedio
+psmatch2 D $Xmust, outcome(y2) logit neighbor(5) common ties
+
+* Kernel: usa más controles con pesos por cercanía
+psmatch2 D $Xmust, outcome(y2) logit kernel kerneltype(epan) ///
+    bwidth(0.06) common
+
+* Caliper expresado en la escala elegida por psmatch2
+psmatch2 D $Xmust, outcome(y2) logit neighbor(1) ///
+    caliper(0.02) common ties
 ```
 
-**Comparación de variantes NN(1):**
+| Especificación | Qué cambia | Diagnóstico obligatorio |
+|---|---|---|
+| NN(1), reemplazo | Prioriza cercanía | Reutilización de controles |
+| NN(5) | Usa más información | Distancia del quinto vecino |
+| Kernel | Suaviza con muchos controles | Sensibilidad al bandwidth |
+| Caliper | Rechaza matches lejanos | Tratados descartados y nuevo estimando |
 
-| Especificación | ATT | Tratados | Controles | Fuera SC | Balanceado |
-|---------------|-----|----------|-----------|----------|------------|
-| nn(1) | 0.330 | 1,952 | 2,048 | 0 | No |
-| nn(1) sc | 0.329 | 1,950 | 2,048 | 2 | No |
-| nn(1) trim | 0.337 | 1,562 | 2,048 | 390 | Casi |
-| nn(1) con reemplazo | 0.353 | 1,952 | 2,048 | 0 | Sí |
+No escogemos la fila con menor $p$-valor. Una especificación es defendible cuando sus decisiones estaban justificadas, conserva una población relevante y mejora el balance.
 
----
+## Verificación con `teffects psmatch` {-}
 
-## Verificar el balance: `pstest` {-}
-
-### Interpretación de la tabla `pstest` {-}
+Para comparar debemos alinear el **mismo estimando**, modelo del tratamiento y número de vecinos:
 
 ```stata
-pstest $X, treated(D) both graph
+teffects psmatch (y2) (D $Xmust, logit), atet nneighbor(1)
+estimates store te_psm
 ```
 
-| Columna | Significado |
-|---------|-------------|
-| **Unmatched** | Medias antes del emparejamiento |
-| **Matched** | Medias después del emparejamiento |
-| **%Bias** | Diferencia estandarizada: $B = \frac{\bar{X}_T - \bar{X}_C}{\sqrt{(\hat{V}_T + \hat{V}_C)/2}} \times 100$ |
-| **t-test** | Prueba t de diferencia de medias antes y después |
-
-**Regla práctica:** $|B| < 5\%$ es excelente; $|B| < 20\%$ es aceptable.
-
-### Indicadores globales {-}
-
-`pstest` también reporta indicadores de balance global:
-
-| Indicador | Descripción |
-|-----------|-------------|
-| **Pseudo R²** | Re-estima el PS en la muestra emparejada — debe ser muy pequeño (idealmente $\approx 0$) |
-| **LR chi²** | Prueba de significancia conjunta de todos los regresores en el probit del PS. **Antes** del matching: debe rechazarse. **Después** del matching: no debe rechazarse |
-| **MeanBias / MedBias** | Sesgo promedio y mediano en las covariables |
-
-Ejemplo de salida:
-
-```
-Sample    Pseudo R2   LR chi2   p>chi2   MeanBias   MedBias
-Raw       0.011       63.52     0.000    9.5        10.0
-Matched   0.005       27.36     0.000    6.2        7.2
+```text
+Estimando: ATET
+Método: propensity-score matching, logit, un vecino
+ATET estimado: 0.288 (frente a 0.294 con psmatch2 alineado)
+Inferencia: errores estándar ajustados por la estimación del propensity score
 ```
 
-Si el balance es insuficiente (Pseudo R² todavía alto, LR chi² significativo), hay que re-especificar el modelo del PS o cambiar el algoritmo.
+No esperamos igualdad mecánica. `psmatch2` y `teffects psmatch` pueden resolver de manera distinta los empates, el soporte, la reutilización de controles y la estimación de la varianza. Si los coeficientes difieren, primero comprobamos estimando, muestra, enlace logit/probit, vecinos, caliper y empates; no concluimos automáticamente que uno está “mal”.
 
----
+::: {.boxexam}
+**Ejercicio tipo examen 1.** `psmatch2` entrega 0.294 y `teffects psmatch` 0.288. Enumere cinco decisiones que debe armonizar antes de interpretar la diferencia. ¿Exigiría que los errores estándar coincidieran? Justifique.
+:::
 
-## 2. NN con reemplazo y errores estándar analíticos {-}
+## Machine learning con disciplina causal {-}
 
-Con reemplazo, el mismo control puede emparejarse con múltiples tratados. La opción `ai(#)` calcula errores estándar analíticos de Abadie & Imbens (2006), donde `#` es el número de vecinos usados para estimar la varianza:
-
-$$\hat{\sigma}^2(X_i, W_i) = \frac{J}{J+1}\left(Y_i - \frac{1}{J}\sum_{m=1}^{J} Y_{\ell_m(i)}\right)^2$$
+### La estrategia incorrecta {-}
 
 ```stata
-* NN(1) con reemplazo, soporte común y ES analíticos
-psmatch2 D $X, outcome(y2) n(1) com ai(1)
-psgraph
-pstest $X, treated(D) both graph
+* NO usar como selector causal automático
+lasso logit D $Xmust $Xflex
 ```
 
-**NN(5) con reemplazo** (reduce varianza a costa de algo de sesgo):
+Esta regresión optimiza predicción de $D$. Puede omitir un predictor importante de $Y(D=0)$ o $Y(D=1)$ y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como si fuera una lista descubierta de confusores.
+
+### Estrategia recomendada: `telasso` {-}
+
+`telasso` estima conjuntamente modelos de resultado y tratamiento con LASSO y construye un estimador ortogonal y doblemente robusto. Los confusores obligatorios permanecen sin penalizar; LASSO opera sobre candidatos pretratamiento de alta dimensión.
 
 ```stata
-psmatch2 D $X, outcome(y2) n(5) com ai(4)
+telasso (y2 $Xflex, ainclude($Xmust)) ///
+        (D  $Xflex, ainclude($Xmust)), ///
+        atet selection(plugin) xfolds(5) resample(3) rseed(1298)
+estimates store te_lasso
 ```
 
-**Comparación con reemplazo:**
-
-| Especificación | ATT | Tratados | Controles | Fuera SC | Balanceado |
-|---------------|-----|----------|-----------|----------|------------|
-| nn(1) sc | 0.356 | 1,950 | 2,048 | 2 | Sí |
-| nn(5) sc | 0.325 | 1,950 | 2,048 | 2 | Sí |
-
----
-
-## 3. ATE con NN(1) {-}
-
-Para estimar el ATE (efecto sobre toda la población, no solo los tratados) se agrega la opción `ate`:
-
-```stata
-psmatch2 D $X, outcome(y2) n(1) noreplacement com ai(1) ate
-psgraph
-pstest $X, treated(D) both graph
+```text
+ATET telasso = 0.335
+Error estándar robusto = 0.034
+Controles candidatos = 7; seleccionados = 6
 ```
 
-El soporte común para el ATE es más estricto: se requiere superposición en ambas colas de la distribución del PS.
+> La sintaxis exacta de las opciones puede variar con la versión de Stata. Antes de la clase se verifica con `help telasso`; el do-file registra la versión utilizada.
 
----
+La comparación tiene tres columnas conceptualmente distintas:
 
-## 4. Caliper {-}
+| Estimador | Función en la clase | Qué no debemos afirmar |
+|---|---|---|
+| `psmatch2` | Diseño visible, soporte y balance | Que el matching elimina confusión no observada |
+| `teffects psmatch` | Verificación nativa e inferencia ajustada | Que replica exactamente cada decisión de `psmatch2` |
+| `telasso` | Benchmark de alta dimensión, ortogonal y doblemente robusto | Que LASSO conoce el DAG o descubre causalidad |
 
-Impone una distancia máxima $\kappa$ en el PS. Los tratados sin un control dentro del caliper se descartan:
+::: {.boxexam}
+**Ejercicio tipo examen 2.** Una estudiante permite que LASSO elimine educación porque su coeficiente en el modelo de tratamiento es pequeño. Educación predice fuertemente el resultado. Explique por qué esa decisión puede aumentar sesgo y proponga una especificación causalmente defendible.
+:::
 
-$$C(i) = \{j \in D=0 \mid |P_i(X) - P_j(X)| < \kappa\}$$
+## Cuando PSM puede empeorar el diseño {-}
 
-```stata
-psmatch2 D $X, outcome(y2) caliper(0.001) com ai(1)
-psgraph
-pstest $X, treated(D) both graph
-```
+King y Nielsen advierten que podar observaciones únicamente por distancia en el propensity score puede aumentar desequilibrios en otras dimensiones de $X$. En el laboratorio repetimos el diagnóstico para cada algoritmo y comparamos la distribución conjunta de covariables, no solo la del puntaje.
 
----
+::: {.boxwarning}
+Si el balance empeora, el soporte se vuelve muy estrecho o el efecto depende fuertemente del algoritmo, el resultado correcto no es ocultar esa especificación. Es reconocer que el diseño observacional no sostiene una conclusión robusta.
+:::
 
-## 5. Radio {-}
+## Lista de verificación para entregar {-}
 
-En lugar de usar solo el vecino más cercano, el radio empareja con **todos** los controles dentro del caliper:
+1. Definir ATT o ATE antes de estimar.
+2. Justificar confusores obligatorios y excluir variables postratamiento.
+3. Mostrar soporte común y describir unidades descartadas.
+4. Reportar balance antes y después, no solo el efecto.
+5. Presentar `psmatch2` como estimación principal y `teffects psmatch` como contraste armonizado.
+6. Si se usa LASSO, separar selección predictiva de razonamiento causal y reportar `telasso` como extensión.
+7. Discutir sensibilidad a algoritmo, vecinos, caliper y población con soporte.
 
-```stata
-psmatch2 D $X, outcome(y2) radius caliper(0.001) com ai(1)
-psgraph
-pstest $X, treated(D) both graph
-```
+## Lecturas y ayuda de Stata {-}
 
-**Comparación caliper vs. radio:**
-
-| Especificación | ATT | Tratados | Controles | Fuera SC | Balanceado |
-|---------------|-----|----------|-----------|----------|------------|
-| nn(1) sc | 0.356 | 1,950 | 2,048 | 2 | Sí |
-| nn(5) sc | 0.325 | 1,950 | 2,048 | 2 | Sí |
-| caliper(0.001) sc | 0.349 | 1,903 | 2,048 | 49 | No |
-| radius(0.001) sc | 0.333 | 1,903 | 2,048 | 49 | Sí |
-
-El radio mejora el balance al usar más información de los controles cercanos.
-
----
-
-## 6. Kernel {-}
-
-El emparejamiento por kernel usa **todos** los controles, ponderados por su distancia al tratado. Los controles más cercanos en PS reciben mayor peso.
-
-```stata
-* Kernel Epanechnikov (por defecto) con bandwidth 0.06
-psmatch2 D $X, outcome(y2) kernel kerneltype(epan) bwidth(0.06) com
-psgraph
-pstest $X, treated(D) both graph
-
-* Kernel Gaussiano
-psmatch2 D $X, outcome(y2) kernel kerneltype(normal) bwidth(0.06) com
-```
-
-Los kernels disponibles en `psmatch2` son: `epan` (Epanechnikov, por defecto), `normal` (Gaussiano), `biweight`, `uniform`, `tricube`.
-
----
-
-## 7. Alternativa: `teffects psmatch` (Stata nativo) {-}
-
-Stata 13+ incluye `teffects psmatch`, que estima el PS y el efecto del tratamiento en un solo paso con errores estándar correctamente calculados:
-
-```stata
-* ATT con NN(1)
-teffects psmatch (y2) (D $X, probit), atet
-
-* ATE con NN(4)
-teffects psmatch (y2) (D $X, probit), ate nn(4)
-```
-
-La ventaja de `teffects` es que los errores estándar toman en cuenta la estimación del PS (a diferencia de `psmatch2` sin `ai()`). La desventaja es que no produce `psgraph` ni `pstest` directamente.
-
----
-
-## Resumen de la secuencia completa {-}
-
-```stata
-* 1. Estimar el PS
-logit D $X
-predict double pscore1, pr
-
-* 2. Verificar soporte común
-twoway (kdensity pscore1 if D==1, lcolor(blue)) ///
-       (kdensity pscore1 if D==0, lcolor(red)), ///
-       legend(label(1 "Tratados") label(2 "Controles")) ///
-       title("Distribución del propensity score")
-
-* 3. Emparejar (especificación principal: NN1 con reemplazo, SC)
-set seed 1298
-psmatch2 D $X, outcome(y2) n(1) com ai(1)
-
-* 4. Verificar balance
-psgraph
-pstest $X, treated(D) both graph
-
-* 5. Robustez: kernel Epanechnikov
-psmatch2 D $X, outcome(y2) kernel kerneltype(epan) bwidth(0.06) com
-
-* 6. Robustez: NN(5) con reemplazo
-psmatch2 D $X, outcome(y2) n(5) com ai(4)
-```
-
----
-
-## Lecturas recomendadas {-}
-
-- **Leuven & Sianesi (2003)** — "PSMATCH2: Stata module to perform full Mahalanobis and propensity score matching, common support graphing, and covariate imbalance testing", SSC
-- **Caliendo & Kopeinig (2008)** — "Some practical guidance for the implementation of propensity score matching", *Journal of Economic Surveys* — referencia principal
-- **Abadie & Imbens (2006)** — "Large sample properties of matching estimators for average treatment effects", *Econometrica* — fundamento teórico de los ES analíticos
+- Leuven, E. y Sianesi, B. (2003). `PSMATCH2`, módulo de Stata disponible en SSC.
+- `help teffects psmatch` y `help tebalance`.
+- `help telasso` y la documentación de Stata sobre *Treatment-effects estimation using lasso*.
+- King, G. y Nielsen, R. (2019). “Why Propensity Scores Should Not Be Used for Matching”, *Political Analysis*.
