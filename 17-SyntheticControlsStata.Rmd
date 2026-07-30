@@ -4,13 +4,13 @@
 
 - [Do-file completo](dofile/17_SyntheticControls/01_synthetic_controls.do)
 - [Datos de Prop 99](dofile/17_SyntheticControls/synth_smoking.dta)
-- [Log completo de Stata](dofile/17_SyntheticControls/01_synthetic_controls.log)
 
 ::: {.boxinfo}
 **Lecturas centrales**
 
 - [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
 - [Cunningham — capítulo 10: Synthetic Control](https://mixtape.scunning.com/10-synthetic_control)
+- [Abadie, Diamond y Hainmueller (2010) — artículo original (PDF)](https://economics.mit.edu/sites/default/files/publications/Synthetic%20Control%20Methods.pdf)
 :::
 
 ::: {.boxinfo}
@@ -25,6 +25,8 @@
 sc_dir <- "dofile/17_SyntheticControls"
 sc_weights <- read.csv(file.path(sc_dir, "results/synth_weights.csv"), check.names = FALSE)
 sc_balance <- read.csv(file.path(sc_dir, "results/synth_predictor_balance.csv"), check.names = FALSE)
+sc_v_weights <- read.csv(file.path(sc_dir, "results/synth_v_weights.csv"), check.names = FALSE)
+sc_sample_audit <- read.csv(file.path(sc_dir, "results/synth_sample_audit.csv"), check.names = FALSE)
 sc_paths <- read.csv(file.path(sc_dir, "results/synth_paths.csv"), check.names = FALSE)
 sc_rmspe <- read.csv(file.path(sc_dir, "results/synth_rmspe.csv"), check.names = FALSE)
 sc_placebos <- read.csv(file.path(sc_dir, "results/synth_placebos.csv"), check.names = FALSE)
@@ -37,11 +39,22 @@ sc_require_columns <- function(data, expected) {
 
 sc_require_columns(sc_weights, c("state_id", "state", "weight"))
 sc_require_columns(sc_balance, c("predictor", "treated", "synthetic"))
+sc_require_columns(sc_v_weights, c("predictor", "importance"))
+sc_require_columns(
+  sc_sample_audit,
+  c("analysis", "variable", "window", "expected", "observed", "missing", "pass")
+)
 sc_require_columns(
   sc_paths,
   c("year", "treated", "synthetic", "manual_synthetic", "gap", "post")
 )
-sc_require_columns(sc_rmspe, c("unit", "pre_rmspe", "post_rmspe", "ratio"))
+sc_require_columns(
+  sc_rmspe,
+  c(
+    "unit", "pre_rmspe", "post_rmspe", "ratio", "native_pre_rmspe",
+    "native_minus_recomputed"
+  )
+)
 sc_require_columns(
   sc_placebos,
   c(
@@ -68,6 +81,9 @@ sc_n_years <- nrow(sc_paths)
 sc_n_placebos <- length(unique(sc_placebos$unit))
 sc_n_nested <- sum(sc_placebos$optimization == "nested")
 sc_n_ineligible <- sc_n_placebos - sc_n_eligible
+sc_adh_mspe_eligible <- sum(
+  sc_placebos$pre_rmspe^2 <= 5 * sc_ca_placebo$pre_rmspe^2
+)
 sc_reconstruction_error <- max(abs(sc_paths$synthetic - sc_paths$manual_synthetic))
 # `treated` proviene de un float de Stata; el CSV conserva un error de exportación
 # máximo cercano a 3.1e-6 al reconstruir la resta con las columnas publicadas.
@@ -90,6 +106,32 @@ sc_rmspe_reported <- unlist(
   use.names = TRUE
 )
 sc_fallback <- sc_placebos[sc_placebos$optimization != "nested", , drop = FALSE]
+sc_utah <- sc_placebos[sc_placebos$unit == "Utah", , drop = FALSE]
+sc_optimization_contract <- (
+  sc_n_nested == 39L && nrow(sc_fallback) == 0L
+) || (
+  sc_n_nested == 38L && nrow(sc_fallback) == 1L &&
+    identical(sc_fallback$unit, "Utah") &&
+    identical(sc_fallback$optimization, "default_fallback_after_rc430")
+)
+
+sc_audit_row <- function(analysis, variable, window) {
+  row <- sc_sample_audit[
+    sc_sample_audit$analysis == analysis &
+      sc_sample_audit$variable == variable &
+      sc_sample_audit$window == window,
+    ,
+    drop = FALSE
+  ]
+  stopifnot(nrow(row) == 1L)
+  row
+}
+sc_panel_units <- sc_audit_row("panel", "states", "1970-2000")$observed
+sc_panel_years <- sc_audit_row("panel", "years", "1970-2000")$observed
+sc_panel_rows <- sc_audit_row("panel", "unit_years", "1970-2000")$observed
+sc_donor_count <- sc_audit_row(
+  "donor_pool", "eligible_donors", "1970-2000"
+)$observed
 
 sc_figures <- file.path(
   sc_dir,
@@ -108,6 +150,18 @@ stopifnot(
   all(is.finite(sc_weights$weight)),
   abs(sum(sc_weights$weight) - 1) < 1e-6,
   min(sc_weights$weight) >= -1e-10,
+  identical(sc_v_weights$predictor, sc_balance$predictor),
+  all(is.finite(sc_v_weights$importance)),
+  min(sc_v_weights$importance) >= 0,
+  abs(sum(sc_v_weights$importance) - 1) < 1e-8,
+  nrow(sc_sample_audit) == 18L,
+  all(sc_sample_audit$expected == sc_sample_audit$observed),
+  all(sc_sample_audit$missing == 0L),
+  all(sc_sample_audit$pass == 1L),
+  sc_panel_units == 39L,
+  sc_panel_years == 31L,
+  sc_panel_rows == 1209L,
+  sc_donor_count == 38L,
   sc_reconstruction_error < 1e-8,
   sc_path_gap_error < sc_path_gap_tolerance,
   all(sc_paths$post == as.integer(sc_paths$year >= 1989)),
@@ -119,11 +173,13 @@ stopifnot(
   anyDuplicated(sc_placebos$unit_id) == 0L,
   nrow(sc_ca_placebo) == 1L,
   all(sc_placebos$eligible == as.integer(sc_placebos$pre_rmspe <= sc_cutoff)),
-  sc_n_eligible == 33L,
-  sc_n_as_extreme == 1L,
+  sc_n_eligible >= 1L,
+  sc_n_eligible <= nrow(sc_placebos),
+  sc_n_as_extreme >= 1L,
+  sc_n_as_extreme <= sc_n_eligible,
   abs(unique(sc_placebos$eligible_share_ge_california) - sc_placebo_share) < 1e-12,
-  identical(sc_fallback$unit, "Utah"),
-  identical(sc_fallback$optimization, "default_fallback_after_rc430"),
+  nrow(sc_utah) == 1L,
+  sc_optimization_contract,
   identical(sort(unique(sc_time_placebo$year)), 1970:1988),
   identical(
     sort(unique(sc_loo$omitted_state)),
@@ -150,6 +206,30 @@ sc_balance_income_gap <- with(
   sc_balance[sc_balance$predictor == "lnincome", , drop = FALSE],
   treated - synthetic
 )
+sc_balance_income_pct <- 100 * (exp(abs(sc_balance_income_gap)) - 1)
+sc_income_importance <- sc_v_weights$importance[
+  sc_v_weights$predictor == "lnincome"
+]
+sc_top_v <- sc_v_weights[which.max(sc_v_weights$importance), , drop = FALSE]
+sc_native_pre_rmspe <- sc_rmspe$native_pre_rmspe
+sc_recomputed_pre_rmspe <- sc_rmspe$pre_rmspe
+sc_utah_note <- if (nrow(sc_fallback) == 1L) {
+  paste0(
+    "En la corrida canónica observada, Utah devolvió rc=430 con nested y se ",
+    "reestimó con la optimización por defecto."
+  )
+} else {
+  "En esta corrida, Utah convergió con nested y no se activó el fallback."
+}
+sc_utah_inference_note <- if (sc_utah$eligible == 0L) {
+  paste0(
+    "Utah es inelegible bajo 5× RMSPE (", sc_fmt(sc_utah$pre_rmspe, 3),
+    " > ", sc_fmt(sc_cutoff, 3), "), por lo que su ruta de optimización no ",
+    "entra en el numerador ni en el denominador de 1/33."
+  )
+} else {
+  "Utah resultó elegible en esta corrida y su ruta de optimización debe considerarse en la comparación restringida."
+}
 sc_post_mean_gap <- mean(sc_paths$gap[sc_paths$post == 1L])
 sc_post_min_gap <- min(sc_paths$gap[sc_paths$post == 1L])
 sc_post_max_gap <- max(sc_paths$gap[sc_paths$post == 1L])
@@ -178,18 +258,54 @@ sc_loo_max_mean <- max(sc_loo_summary$mean_post_gap)
 
 ## Pregunta empírica y datos {-}
 
-La Proposición 99 elevó el impuesto a los cigarrillos en California y financió un
-programa amplio de control del tabaco a partir de 1989. La pregunta es concreta:
+La Proposición 99 fue aprobada en noviembre de 1988 y entró en vigor en enero de
+1989. Elevó el impuesto a los cigarrillos en California y financió un programa
+amplio de control del tabaco. Esta cronología justifica fijar 1989 como primer
+periodo tratado. La pregunta es concreta:
 **¿qué trayectoria habría seguido el consumo de cigarrillos en California desde
 1989 si la política no se hubiera implementado?** Solo una unidad recibe el
 tratamiento y no hay un estado que sea, por sí mismo, un control natural obvio.
 
-La base `synth_smoking.dta` es un panel estatal anual de 1970 a 2000. El resultado
-`cigsale` mide ventas de paquetes de cigarrillos per cápita. California es la
-unidad 3; las demás unidades forman el conjunto donante. Los predictores son
+La base `synth_smoking.dta` reproduce la muestra analítica de
+[Abadie, Diamond y Hainmueller (2010)](https://economics.mit.edu/sites/default/files/publications/Synthetic%20Control%20Methods.pdf).
+Esa muestra ya excluye el Distrito de Columbia y los estados que, durante
+1989--2000, adoptaron programas amplios de control del tabaco o aumentos grandes
+del impuesto estatal. Quedan California y 38 donantes. El archivo no permite
+reconstruir por sí solo cada exclusión histórica; el criterio proviene de la
+fuente primaria y la auditoría reproducible verifica el universo observable.
+
+El panel cubre 1970--2000: ADH comienza en 1970 porque desde ese año el resultado
+está disponible para todos los controles y termina en 2000 antes de que políticas
+posteriores comprometieran más unidades potenciales. `cigsale` mide ventas de
+paquetes de cigarrillos per cápita. California es la unidad 3. Los predictores son
 consumo de cerveza (`beer`), ingreso por habitante en logaritmos (`lnincome`),
 precio minorista de los cigarrillos (`retprice`), proporción de población de 15 a
 24 años (`age15to24`) y rezagos seleccionados del resultado.
+
+```{r sc-sample-audit-table, echo=FALSE, results='asis'}
+sc_sample_table <- data.frame(
+  Análisis = sc_sample_audit$analysis,
+  Variable = sc_sample_audit$variable,
+  Ventana = sc_sample_audit$window,
+  Esperadas = sc_sample_audit$expected,
+  Observadas = sc_sample_audit$observed,
+  Faltantes = sc_sample_audit$missing,
+  `Auditoría aprobada` = ifelse(sc_sample_audit$pass == 1L, "Sí", "No"),
+  check.names = FALSE
+)
+knitr::kable(
+  sc_sample_table,
+  align = c("l", "l", "c", "r", "r", "r", "c"),
+  caption = "Auditoría canónica de muestra y disponibilidad de predictores"
+)
+```
+
+La tabla documenta `r sc_panel_units` estados por `r sc_panel_years` años, es
+decir, `r sc_panel_rows` observaciones en un panel balanceado. `cigsale` está
+completo en los 1.209 estado-año, y cada predictor está disponible sin faltantes
+en la ventana exacta usada por la especificación principal o el placebo temporal.
+La fila de elegibilidad confirma los `r sc_donor_count` donantes que ya contiene
+la muestra ADH; no sustituye la justificación institucional de sus exclusiones.
 
 ::: {.boxwarning}
 **Diseño antes de cómputo.** La fecha de intervención, el conjunto donante, los
@@ -228,19 +344,37 @@ xtset state_id year
 
 synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
     cigsale(1988) cigsale(1980) cigsale(1975), ///
-    trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
+    trunit(3) trperiod(1989) xperiod(1980(1)1988) ///
+    mspeperiod(1970(1)1988) nested ///
     keep(`main_native') replace
 ```
 
-Los predictores ordinarios se resumen sobre 1980--1988. La especificación añade
-el promedio de `beer` entre 1984 y 1988 y tres valores del resultado que anclan el
-nivel y la dinámica anterior. `nested` realiza la búsqueda anidada de los pesos de
-predictores; `trunit(3)` identifica California, `trperiod(1989)` fija el inicio y
-`keep()` conserva la trayectoria nativa producida por `synth`.
+Las tres opciones temporales y algorítmicas cumplen funciones distintas:
+
+- `xperiod(1980(1)1988)` define los años sobre los cuales `synth` promedia los
+  predictores ordinarios `lnincome`, `retprice` y `age15to24`. La ventana escrita
+  dentro de `beer(1984(1)1988)` y los tres valores puntuales de `cigsale` prevalecen
+  para esas filas.
+- `mspeperiod(1970(1)1988)` define los años del resultado pretratamiento cuyo MSPE
+  se minimiza para seleccionar la importancia predictora $V$.
+- `nested` elige el algoritmo de optimización que busca $V$; no define una ventana
+  de datos ni crea una muestra de validación.
+
+Por tanto, la trayectoria previa completa es un diagnóstico necesario de ajuste
+*in-sample*. No es una prueba reservada ni una validación *out-of-sample*.
+`trunit(3)` identifica California, `trperiod(1989)` fija el inicio y `keep()`
+conserva la trayectoria nativa producida por `synth`.
 
 No se usan observaciones posteriores a 1988 para escoger los pesos. Una vez
 estimados, los mismos pesos se aplican a las ventas de los donantes en todo el
 horizonte 1970--2000.
+
+::: {.boxinfo}
+**Entorno observado de reproducción.** Los artefactos canónicos se regeneraron con
+StataNow/SE 19.5 para Unix (Intel 64-bit), revisión 15 Apr 2026, y `synth 0.0.7`
+(26 Jan 2014). La instrucción `version 19.0` del do-file congela la sintaxis
+interpretada; no reemplaza la versión instalada que se documenta aquí.
+:::
 
 ## ¿Quién construye a California sintética? {-}
 
@@ -273,8 +407,9 @@ entre estados.
 ## Balance de predictores {-}
 
 Los pesos deben evaluarse por lo que logran reproducir, no por su apariencia. La
-tabla importa directamente `results/synth_predictor_balance.csv` y conserva la
-escala original de cada predictor.
+tabla combina `results/synth_predictor_balance.csv` con
+`results/synth_v_weights.csv`: conserva la escala original de cada predictor y
+muestra la diagonal de $V$ devuelta por `synth`.
 
 ```{r sc-balance-table, echo=FALSE, results='asis'}
 sc_balance_table <- data.frame(
@@ -285,21 +420,33 @@ sc_balance_table <- data.frame(
     sc_balance$treated - sc_balance$synthetic,
     3
   ),
+  `Importancia V` = format(
+    sc_v_weights$importance,
+    scientific = TRUE,
+    digits = 4
+  ),
   check.names = FALSE
 )
 knitr::kable(
   sc_balance_table,
-  align = c("l", "r", "r", "r"),
-  caption = "Balance de predictores de California y California sintética"
+  align = c("l", "r", "r", "r", "r"),
+  caption = "Balance e importancia de predictores de California sintética"
 )
 ```
 
 El balance es cercano, pero no exacto. Por ejemplo, la discrepancia en ventas de
 1988 es `r sc_fmt(sc_balance_1988_gap, 3)` paquetes per cápita y la de ingreso es
-`r sc_fmt(sc_balance_income_gap, 3)` puntos logarítmicos. No conviene ordenar la
-calidad por diferencias absolutas entre filas porque las escalas son distintas.
-La prueba decisiva adicional es si la combinación reproduce la trayectoria
-completa previa, incluidos cambios que no entraron como predictores puntuales.
+`r sc_fmt(sc_balance_income_gap, 3)` puntos logarítmicos, cerca de
+`r sc_fmt(sc_balance_income_pct, 1)`% en niveles. Sin embargo, `lnincome` recibe
+una importancia $V$ de apenas
+`r format(sc_income_importance, scientific = TRUE, digits = 3)`, mientras
+`r sc_top_v$predictor` concentra
+`r sc_fmt(sc_top_v$importance, 3)`. $V$ no es un coeficiente causal: indica cuánto
+penaliza el algoritmo cada discrepancia al construir $W$. Tampoco conviene ordenar
+la calidad por diferencias absolutas entre filas porque las escalas son distintas.
+Revisar la trayectoria completa previa es un diagnóstico necesario de ajuste
+*in-sample*, incluidos cambios que no entraron como predictores puntuales; no es
+una prueba reservada de validez.
 
 ## Reconstrucción manual del resultado de `synth` {-}
 
@@ -394,17 +541,25 @@ $$
 ```{r sc-rmspe-table, echo=FALSE, results='asis'}
 sc_rmspe_table <- data.frame(
   Unidad = sc_rmspe$unit,
-  `RMSPE pre` = sc_fmt(sc_rmspe$pre_rmspe, 3),
+  `RMSPE pre nativo` = sc_fmt(sc_rmspe$native_pre_rmspe, 6),
+  `RMSPE pre recomp.` = sc_fmt(sc_rmspe$pre_rmspe, 6),
   `RMSPE post` = sc_fmt(sc_rmspe$post_rmspe, 3),
   `Razón post/pre` = sc_fmt(sc_rmspe$ratio, 3),
   check.names = FALSE
 )
 knitr::kable(
   sc_rmspe_table,
-  align = c("l", "r", "r", "r"),
+  align = c("l", "r", "r", "r", "r"),
   caption = "RMSPE de la especificación principal"
 )
 ```
+
+`synth` reporta un RMSPE pre nativo de 1.756235, calculado durante la optimización
+con su precisión interna. La trayectoria guardada y `e(W_weights)` exponen pesos
+redondeados a tres decimales; al reconstruir exactamente esa trayectoria publicada
+se obtiene 1.754306. La diferencia es de precisión/redondeo, no de ventana. Todos
+los placebos, el filtro y la razón de esta clase usan de manera consistente el
+RMSPE recomputado desde las brechas exportadas.
 
 El RMSPE previo cuantifica el error que ya existía donde el tratamiento aún no
 operaba. La razón post/pre muestra cuánto se deteriora el ajuste después de 1989,
@@ -445,7 +600,11 @@ sc_placebo_table <- data.frame(
   `RMSPE pre` = sc_fmt(sc_placebo_ranked$pre_rmspe, 3),
   `RMSPE post` = sc_fmt(sc_placebo_ranked$post_rmspe, 3),
   `Razón post/pre` = sc_fmt(sc_placebo_ranked$ratio, 3),
-  `Elegible 5×` = ifelse(sc_placebo_ranked$eligible == 1L, "Sí", "No"),
+  `Elegible 5× RMSPE (clase)` = ifelse(
+    sc_placebo_ranked$eligible == 1L,
+    "Sí",
+    "No"
+  ),
   Optimización = ifelse(
     sc_placebo_ranked$optimization == "nested",
     "nested",
@@ -468,6 +627,14 @@ $$
 RMSPE_i^{pre}\leq 5\,RMSPE_{California}^{pre}.
 $$
 
+Esta es una **convención docente de $5\times RMSPE$**, fijada en el diseño del
+curso. No replica el filtro de ADH (2010), que conserva unidades bajo
+$MSPE_i^{pre}\leq 5\times MSPE_{California}^{pre}$. Como $MSPE=RMSPE^2$, la regla
+docente equivale a $25\times MSPE$ y es más laxa. Con estos artefactos conserva
+`r sc_n_eligible` asignaciones; el criterio $5\times MSPE$ de ADH conservaría
+`r sc_adh_mspe_eligible`. La comparación principal de la clase mantiene su regla
+predeclarada y rotula la diferencia.
+
 El umbral calculado desde los CSV es `r sc_fmt(sc_cutoff, 3)`. Lo cumplen
 `r sc_n_eligible` asignaciones y `r sc_n_ineligible` quedan fuera de la comparación
 restringida. Entre las elegibles, `r sc_n_as_extreme` tiene una razón al menos tan
@@ -483,16 +650,14 @@ finito de ejercicios comparables. Su resolución depende de cuántas asignacione
 superan el filtro. No es automáticamente un p-valor asintótico ni convierte la
 intercambiabilidad de los estados en un hecho.
 
-### Excepción de optimización para Utah {-}
+### Regla portable de optimización para Utah {-}
 
-De las `r sc_n_placebos` estimaciones, `r sc_n_nested` completaron la búsqueda
-`nested`. Para
-`r sc_fallback$unit`, Stata devolvió `rc=430`; el do-file autoriza únicamente en ese
-caso un segundo intento con los mismos predictores, fecha y conjunto donante, pero
-con la optimización por defecto, registrado como
-`r sc_fallback$optimization`. La asignación se conserva y se documenta en la
-tabla, pero esta diferencia algorítmica debe permanecer visible al interpretar la
-comparación placebo.
+Las `r sc_n_placebos` asignaciones intentan primero `nested`. Cualquier falla de
+otra unidad o cualquier código distinto de `rc=430` detiene el do-file. Solo si
+Utah falla exactamente con `rc=430` se repite la misma especificación y el mismo
+*donor pool* con la optimización por defecto. El contrato admite, por tanto, dos
+resultados reproducibles: 39 corridas `nested`, o 38 `nested` más ese único
+fallback de Utah. `r sc_utah_note` `r sc_utah_inference_note`
 
 ## Placebo temporal de 1980 sin fuga de información {-}
 
@@ -509,14 +674,17 @@ un programa Stata autocontenido.
 * panel, time_donors y tempfile time_native ya fueron creados.
 synth cigsale lnincome retprice age15to24 ///
     cigsale(1979) cigsale(1975) cigsale(1970), ///
-    trunit(3) trperiod(1980) xperiod(1972(1)1979) nested ///
+    trunit(3) trperiod(1980) xperiod(1972(1)1979) ///
+    mspeperiod(1970(1)1979) counit(`time_donors') nested ///
     keep(`time_native') replace
 ```
 
 Todos los predictores y resultados empleados para ajustar los pesos terminan en
-1979. `beer` se elimina porque solo está disponible desde 1984; incluirlo filtraría
-información posterior al tratamiento ficticio. Los años 1980--1988 quedan así
-reservados para evaluar la ruptura placebo.
+1979. `mspeperiod(1970(1)1979)` impide además que la selección de $V$ use el
+resultado posterior a la fecha ficticia. `beer` se elimina porque solo está
+disponible desde 1984; incluirlo filtraría información posterior al tratamiento
+ficticio. Los años 1980--1988 quedan así reservados para evaluar la ruptura
+placebo.
 
 ```{r sc-time-placebo-figure, echo=FALSE, out.width='95%', fig.align='center', fig.cap='Placebo temporal con tratamiento ficticio en 1980 y ajuste limitado a información hasta 1979.'}
 knitr::include_graphics(file.path(sc_dir, "synth_time_placebo.png"))

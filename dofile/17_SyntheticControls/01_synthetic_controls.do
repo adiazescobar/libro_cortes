@@ -33,8 +33,78 @@ else {
 assert state_id == 3 if state_name == "California"
 xtset state_id year
 
-tempfile panel state_map weights_data manual_path main_native native_path paths_data
+tempfile panel state_map weights_data manual_path main_native native_path paths_data sample_audit
 save `panel'
+
+* Auditoría canónica de la muestra y de todas las ventanas de predictores.
+quietly count
+local panel_rows = r(N)
+assert `panel_rows' == 1209
+quietly levelsof state_id, local(panel_units_list)
+local panel_units : word count `panel_units_list'
+assert `panel_units' == 39
+quietly levelsof year, local(panel_years_list)
+local panel_years : word count `panel_years_list'
+assert `panel_years' == 31
+bysort state_id (year): assert _N == 31
+bysort state_id (year): assert year == 1969 + _n
+quietly count if missing(cigsale)
+assert r(N) == 0
+
+tempname sample_audit_handle
+postfile `sample_audit_handle' str20 analysis str20 variable str12 window int expected observed missing byte pass using `sample_audit', replace
+post `sample_audit_handle' ("panel") ("states") ("1970-2000") (39) (`panel_units') (0) (1)
+post `sample_audit_handle' ("panel") ("years") ("1970-2000") (31) (`panel_years') (0) (1)
+post `sample_audit_handle' ("panel") ("unit_years") ("1970-2000") (1209) (`panel_rows') (0) (1)
+local donor_count = `panel_units' - 1
+assert `donor_count' == 38
+post `sample_audit_handle' ("donor_pool") ("eligible_donors") ("1970-2000") (38) (`donor_count') (0) (1)
+
+quietly count if inrange(year, 1970, 2000) & !missing(cigsale)
+local observed = r(N)
+assert `observed' == 1209
+post `sample_audit_handle' ("main") ("cigsale") ("1970-2000") (1209) (`observed') (`=1209-`observed'') (1)
+
+quietly count if inrange(year, 1984, 1988) & !missing(beer)
+local observed = r(N)
+assert `observed' == 195
+post `sample_audit_handle' ("main") ("beer") ("1984-1988") (195) (`observed') (`=195-`observed'') (1)
+
+foreach predictor in lnincome retprice age15to24 {
+    quietly count if inrange(year, 1980, 1988) & !missing(`predictor')
+    local observed = r(N)
+    assert `observed' == 351
+    post `sample_audit_handle' ("main") ("`predictor'") ("1980-1988") (351) (`observed') (`=351-`observed'') (1)
+}
+foreach predictor_year in 1975 1980 1988 {
+    quietly count if year == `predictor_year' & !missing(cigsale)
+    local observed = r(N)
+    assert `observed' == 39
+    post `sample_audit_handle' ("main") ("cigsale") ("`predictor_year'") (39) (`observed') (`=39-`observed'') (1)
+}
+
+foreach predictor in lnincome retprice age15to24 {
+    quietly count if inrange(year, 1972, 1979) & !missing(`predictor')
+    local observed = r(N)
+    assert `observed' == 312
+    post `sample_audit_handle' ("time_placebo") ("`predictor'") ("1972-1979") (312) (`observed') (`=312-`observed'') (1)
+}
+foreach predictor_year in 1970 1975 1979 {
+    quietly count if year == `predictor_year' & !missing(cigsale)
+    local observed = r(N)
+    assert `observed' == 39
+    post `sample_audit_handle' ("time_placebo") ("cigsale") ("`predictor_year'") (39) (`observed') (`=39-`observed'') (1)
+}
+postclose `sample_audit_handle'
+
+preserve
+    use `sample_audit', clear
+    assert expected == observed
+    assert missing == 0
+    assert pass == 1
+    order analysis variable window expected observed missing pass
+    export delimited analysis variable window expected observed missing pass using "results/synth_sample_audit.csv", replace
+restore
 
 preserve
     keep state_id state_name
@@ -53,12 +123,18 @@ graph export "synth_raw_series.png", replace width(1800)
 
 synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
     cigsale(1988) cigsale(1980) cigsale(1975), ///
-    trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
+    trunit(3) trperiod(1989) xperiod(1980(1)1988) ///
+    mspeperiod(1970(1)1988) nested ///
     keep(`main_native') replace
 
-tempname weights_mat balance_mat
+tempname weights_mat balance_mat v_mat native_rmspe_mat
+matrix `native_rmspe_mat' = e(RMSPE)
+assert rowsof(`native_rmspe_mat') == 1
+assert colsof(`native_rmspe_mat') == 1
+scalar native_pre_rmspe = `native_rmspe_mat'[1, 1]
 matrix `weights_mat' = e(W_weights)
 matrix `balance_mat' = e(X_balance)
+matrix `v_mat' = e(V_matrix)
 
 preserve
     clear
@@ -95,6 +171,30 @@ preserve
     }
     order predictor treated synthetic
     export delimited predictor treated synthetic using "results/synth_predictor_balance.csv", replace
+restore
+
+preserve
+    clear
+    local v_names : rownames `v_mat'
+    local v_count : word count `v_names'
+    assert `v_count' == rowsof(`v_mat')
+    assert `v_count' == colsof(`v_mat')
+    set obs `v_count'
+    gen str80 predictor = ""
+    gen double importance = .
+    forvalues row = 1/`v_count' {
+        local predictor : word `row' of `v_names'
+        replace predictor = "`predictor'" in `row'
+        replace importance = `v_mat'[`row', `row'] in `row'
+        forvalues column = 1/`v_count' {
+            if `row' != `column' assert abs(`v_mat'[`row', `column']) < 1e-12
+        }
+    }
+    assert importance >= -1e-12
+    egen double total_importance = total(importance)
+    assert abs(total_importance - 1) < 1e-8
+    drop total_importance
+    export delimited predictor importance using "results/synth_v_weights.csv", replace
 restore
 
 use `panel', clear
@@ -157,7 +257,9 @@ preserve
     gen double pre_rmspe = scalar(pre_rmspe)
     gen double post_rmspe = scalar(post_rmspe)
     gen double ratio = scalar(rmspe_ratio)
-    export delimited unit pre_rmspe post_rmspe ratio using "results/synth_rmspe.csv", replace
+    gen double native_pre_rmspe = scalar(native_pre_rmspe)
+    gen double native_minus_recomputed = native_pre_rmspe - pre_rmspe
+    export delimited unit pre_rmspe post_rmspe ratio native_pre_rmspe native_minus_recomputed using "results/synth_rmspe.csv", replace
 restore
 
 use `paths_data', clear
@@ -203,7 +305,8 @@ foreach treated of local all_units {
     quietly levelsof state_name if state_id == `treated', local(unit_name) clean
     capture quietly synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
         cigsale(1988) cigsale(1980) cigsale(1975), ///
-        trunit(`treated') trperiod(1989) xperiod(1980(1)1988) nested ///
+        trunit(`treated') trperiod(1989) xperiod(1980(1)1988) ///
+        mspeperiod(1970(1)1988) nested ///
         counit(`donors') keep(`placebo_native') replace
     if _rc {
         local first_rc = _rc
@@ -218,6 +321,7 @@ foreach treated of local all_units {
         capture quietly synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
             cigsale(1988) cigsale(1980) cigsale(1975), ///
             trunit(`treated') trperiod(1989) xperiod(1980(1)1988) ///
+            mspeperiod(1970(1)1988) ///
             counit(`donors') keep(`placebo_native') replace
         if _rc {
             local failed_placebos "`failed_placebos' `treated'"
@@ -263,10 +367,12 @@ assert _N == 39
 count if unit == "California"
 assert r(N) == 1
 count if optimization == "nested"
-assert r(N) == 38
+local nested_count = r(N)
 count if unit == "Utah" & optimization == "default_fallback_after_rc430"
-assert r(N) == 1
+local fallback_count = r(N)
+assert (`nested_count' == 39 & `fallback_count' == 0) | (`nested_count' == 38 & `fallback_count' == 1)
 assert optimization == "nested" if unit != "Utah"
+assert inlist(optimization, "nested", "default_fallback_after_rc430") if unit == "Utah"
 quietly summarize pre_rmspe if unit == "California", meanonly
 scalar pre_rmspe_california = r(mean)
 quietly summarize ratio if unit == "California", meanonly
@@ -317,7 +423,8 @@ foreach candidate of local all_units {
 }
 quietly synth cigsale lnincome retprice age15to24 ///
     cigsale(1979) cigsale(1975) cigsale(1970), ///
-    trunit(3) trperiod(1980) xperiod(1972(1)1979) nested ///
+    trunit(3) trperiod(1980) xperiod(1972(1)1979) ///
+    mspeperiod(1970(1)1979) nested ///
     counit(`time_donors') keep(`time_native') replace
 
 use `time_native', clear
@@ -359,7 +466,8 @@ foreach omitted of local positive_ids {
     quietly levelsof state_name if state_id == `omitted', local(omitted_name) clean
     quietly synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
         cigsale(1988) cigsale(1980) cigsale(1975), ///
-        trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
+        trunit(3) trperiod(1989) xperiod(1980(1)1988) ///
+        mspeperiod(1970(1)1988) nested ///
         counit(`loo_donors') keep(`loo_native') replace
     preserve
         use `loo_native', clear

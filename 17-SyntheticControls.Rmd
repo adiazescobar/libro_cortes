@@ -5,6 +5,7 @@
 
 - [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
 - [Cunningham — capítulo 10: Synthetic Control](https://mixtape.scunning.com/10-synthetic_control)
+- [Abadie, Diamond y Hainmueller (2010) — artículo original (PDF)](https://economics.mit.edu/sites/default/files/publications/Synthetic%20Control%20Methods.pdf)
 :::
 
 ::: {.boxinfo}
@@ -110,7 +111,13 @@ Esta expresión contiene dos clases de pesos diferentes:
 | $W$ | $J\times 1$ | Unidades donantes | ¿Cuánto contribuye cada unidad al control sintético? |
 | $V$ | $K\times K$ diagonal | Predictores | ¿Qué discrepancias predictoras son más importantes para reproducir la trayectoria anterior? |
 
-La elección de $V$ orienta la búsqueda de $W$. En implementaciones habituales, $V$ se selecciona para que los pesos resultantes reproduzcan bien el resultado durante periodos pretratamiento reservados o mediante una optimización anidada. Por ello, un predictor con gran peso en $V$ puede ser decisivo para construir $W$, pero no es una unidad donante; y una unidad con gran peso en $W$ no es necesariamente la más parecida en cada predictor por separado.
+La elección de $V$ orienta la búsqueda de $W$. En la implementación `synth` de Stata conviene separar tres objetos que operan simultáneamente:
+
+- `xperiod()` especifica los años sobre los cuales se promedian los predictores que no llevan una ventana propia;
+- `mspeperiod()` especifica los años pretratamiento del resultado usados para minimizar el MSPE y seleccionar $V$;
+- `nested` es el algoritmo de optimización usado para buscar $V$, no una ventana temporal ni una partición de validación.
+
+Así, si `mspeperiod()` incluye toda la trayectoria anterior, reproducir esa trayectoria es ajuste *in-sample*. Es un diagnóstico necesario, pero no una prueba reservada u *out-of-sample*. Un predictor con gran peso en $V$ puede ser decisivo para construir $W$, pero no es una unidad donante; y una unidad con gran peso en $W$ no es necesariamente la más parecida en cada predictor por separado.
 
 La selección de predictores y ventanas temporales debe decidirse por conocimiento sustantivo y capacidad predictiva previa, no probando especificaciones hasta obtener la brecha posterior deseada. Usar resultados posteriores para elegir $V$, $W$ o el conjunto de predictores contaminaría el diseño.
 

@@ -54,6 +54,11 @@ MIXTAPE_URLS = {
     for slug in slugs
 }
 
+ADH_2010_URL = (
+    "https://economics.mit.edu/sites/default/files/publications/"
+    "Synthetic%20Control%20Methods.pdf"
+)
+
 
 def _book_files():
     return base.parse_rmd_files(base.BOOKDOWN)
@@ -81,6 +86,18 @@ def test_each_page_has_both_reference_families():
             assert target in text, filename
         for slug in mixtape_slugs:
             assert f"https://mixtape.scunning.com/{slug}" in text, filename
+
+
+def test_synthetic_control_pair_links_adh_2010_in_the_central_block():
+    for filename in ("17-SyntheticControls.Rmd", "17-SyntheticControlsStata.Rmd"):
+        text = _text(filename)
+        block = text[
+            text.index("**Lecturas centrales**") : text.index(
+                "**Metas de aprendizaje**"
+            )
+        ]
+        assert "Abadie, Diamond y Hainmueller (2010)" in block, filename
+        assert ADH_2010_URL in block, filename
 
 
 def test_reading_block_is_near_the_start_of_each_page():

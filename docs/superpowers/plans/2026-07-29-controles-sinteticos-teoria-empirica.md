@@ -25,6 +25,8 @@
 - No presentar el promedio simple de controles como control sintético ni llamar p-valor convencional a la proporción placebo.
 - No eliminar los materiales heredados en `dofile/16_PSM_IPW_Sinteticos/` durante este ciclo.
 - No actualizar, publicar ni versionar productos nuevos dentro de `docs/`; el preview debe quedar fuera del repositorio.
+- Los materiales descargables de la práctica son únicamente el do-file y la base; el log local permanece ignorado y no se enlaza ni se copia al preview.
+- Hacer explícitos `xperiod()`, `mspeperiod()` y `nested` como decisiones distintas; exportar y mostrar `e(V_matrix)`.
 
 ---
 
@@ -152,6 +154,8 @@ git commit -m "test: define synthetic controls chapter contract"
 - Copy: `dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta` to `dofile/17_SyntheticControls/synth_smoking.dta`
 - Create: `dofile/17_SyntheticControls/results/synth_weights.csv`
 - Create: `dofile/17_SyntheticControls/results/synth_predictor_balance.csv`
+- Create: `dofile/17_SyntheticControls/results/synth_v_weights.csv`
+- Create: `dofile/17_SyntheticControls/results/synth_sample_audit.csv`
 - Create: `dofile/17_SyntheticControls/results/synth_paths.csv`
 - Create: `dofile/17_SyntheticControls/results/synth_rmspe.csv`
 - Create: `dofile/17_SyntheticControls/synth_raw_series.png`
@@ -160,7 +164,7 @@ git commit -m "test: define synthetic controls chapter contract"
 
 **Interfaces:**
 - Consumes: long panel `state year cigsale lnincome beer age15to24 retprice` for 39 states, 1970–2000.
-- Produces: CSV schemas `state_id,state,weight`; `predictor,treated,synthetic`; `year,treated,synthetic,manual_synthetic,gap,post`; `unit,pre_rmspe,post_rmspe,ratio`.
+- Produces: CSV schemas `state_id,state,weight`; `predictor,treated,synthetic`; `predictor,importance`; `analysis,variable,window,expected,observed,missing,pass`; `year,treated,synthetic,manual_synthetic,gap,post`; `unit,pre_rmspe,post_rmspe,ratio,native_pre_rmspe,native_minus_recomputed`; y `unit_id,unit,pre_rmspe,post_rmspe,ratio,eligible,ratio_at_least_california,eligible_share_ge_california,optimization`.
 
 - [ ] **Step 1: Copiar la base sin borrar ni renombrar el original.**
 
@@ -170,7 +174,7 @@ Run: `cp dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta dofile/17_SyntheticContr
 
 Expected: ambos archivos existen y `shasum` informa el mismo hash.
 
-- [ ] **Step 2: Escribir el encabezado defensivo del do-file y auditar la muestra.**
+- [ ] **Step 2: Escribir el encabezado defensivo del do-file y auditar la muestra.** Exigir y exportar 39 estados por 31 años, 1.209 observaciones, panel balanceado, `cigsale` completo, 38 donantes y disponibilidad sin faltantes en cada ventana predictora principal y del placebo temporal.
 
 ```stata
 version 19.0
@@ -200,13 +204,15 @@ xtset state_id year
 - [ ] **Step 3: Estimar California sintética con tratamiento desde 1989 y conservar la salida nativa.**
 
 ```stata
+tempfile main_native
 synth cigsale beer(1984(1)1988) lnincome retprice age15to24 ///
     cigsale(1988) cigsale(1980) cigsale(1975), ///
-    trunit(3) trperiod(1989) xperiod(1980(1)1988) nested ///
-    keep(results/california_synth_native.dta) replace
+    trunit(3) trperiod(1989) xperiod(1980(1)1988) ///
+    mspeperiod(1970(1)1988) nested ///
+    keep(`main_native') replace
 ```
 
-- [ ] **Step 4: Exportar pesos y balance desde las matrices devueltas por `synth`.** Extraer `e(W_weights)` y `e(X_balance)`, combinar los identificadores con las etiquetas de estado y exportar exactamente:
+- [ ] **Step 4: Exportar pesos, balance e importancia predictora desde las matrices devueltas por `synth`.** Extraer `e(W_weights)`, `e(X_balance)` y la diagonal de `e(V_matrix)`, combinar los identificadores con las etiquetas de estado y exportar exactamente:
 
 ```text
 state_id,state,weight
@@ -218,9 +224,11 @@ y
 predictor,treated,synthetic
 ```
 
+y `predictor,importance` para `synth_v_weights.csv`.
+
 Añadir aserciones Stata `assert weight >= -1e-10` y `assert abs(sum_weight-1)<1e-6` antes de exportar.
 
-- [ ] **Step 5: Reconstruir la trayectoria con los pesos y verificarla contra la salida nativa.** Combinar los pesos con el panel donante, calcular `manual_synthetic=sum(weight*cigsale)` por año, unir con California y con `_Y_synthetic` de `california_synth_native.dta`, y exigir:
+- [ ] **Step 5: Reconstruir la trayectoria con los pesos y verificarla contra la salida nativa temporal.** Combinar los pesos con el panel donante, calcular `manual_synthetic=sum(weight*cigsale)` por año, unir con California y con `_Y_synthetic` del `tempfile main_native`, y exigir:
 
 ```stata
 gen double reconstruction_error = abs(synthetic-manual_synthetic)
@@ -307,9 +315,11 @@ assert eligible == (pre_rmspe <= 5*pre_rmspe_california)
 
 El bucle debe registrar fallas de convergencia por unidad y terminar con error si falta cualquiera de las 39 unidades; no debe omitir silenciosamente placebos.
 
+**Regla portable para Utah:** todas las unidades intentan primero `nested`. Si Utah converge, registrar `optimization=nested` y continuar. Solo si Utah falla exactamente con `rc=430`, repetir la misma especificación y el mismo *donor pool* sin `nested`, marcando `optimization=default_fallback_after_rc430`. Cualquier otro código o unidad termina con error. El contrato acepta 39 `nested` o 38 `nested` más ese único fallback; no exige que Utah falle.
+
 - [ ] **Step 4: Calcular la proporción placebo descriptiva.** Crear en el log y el CSV una comparación de la razón de California frente a todas las unidades elegibles. Etiquetarla como `proporción de placebos elegibles con razón al menos tan grande`, no como p-valor convencional.
 
-- [ ] **Step 5: Estimar el placebo temporal de 1980 sin fuga de información.** Reestimar con `trperiod(1980)`, usando `xperiod(1972(1)1979)` y únicamente predictores/resultados observados hasta 1979; exportar la brecha 1970–1988 a `synth_time_placebo.csv` y dibujar `synth_time_placebo.png` con línea en 1980.
+- [ ] **Step 5: Estimar el placebo temporal de 1980 sin fuga de información.** Reestimar con `trperiod(1980)`, `xperiod(1972(1)1979)` y `mspeperiod(1970(1)1979)`, usando únicamente predictores/resultados observados hasta 1979; exportar la brecha 1970–1988 a `synth_time_placebo.csv` y dibujar `synth_time_placebo.png` con línea en 1980.
 
 - [ ] **Step 6: Ejecutar leave-one-out sobre cada donante con peso positivo.** Para cada estado positivo, reestimar California excluyéndolo del donor pool, exportar la brecha anual y verificar que el conjunto de `omitted_state` coincide exactamente con los pesos positivos de `synth_weights.csv`.
 
@@ -350,6 +360,7 @@ git commit -m "feat: add synthetic-control placebos and sensitivity"
 
 - [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
 - [Cunningham — capítulo 10: Synthetic Control](https://mixtape.scunning.com/10-synthetic_control)
+- [Abadie, Diamond y Hainmueller (2010) — artículo original (PDF)](https://economics.mit.edu/sites/default/files/publications/Synthetic%20Control%20Methods.pdf)
 :::
 
 ::: {.boxinfo}
@@ -404,13 +415,13 @@ git commit -m "feat: add synthetic controls theory class"
 
 - [Do-file completo](dofile/17_SyntheticControls/01_synthetic_controls.do)
 - [Datos de Prop 99](dofile/17_SyntheticControls/synth_smoking.dta)
-- [Log completo de Stata](dofile/17_SyntheticControls/01_synthetic_controls.log)
 
 ::: {.boxinfo}
 **Lecturas centrales**
 
 - [Bernal y Peña — capítulo 6 (PDF)](lecturas/bernal-pena/capitulo-06.pdf)
 - [Cunningham — capítulo 10: Synthetic Control](https://mixtape.scunning.com/10-synthetic_control)
+- [Abadie, Diamond y Hainmueller (2010) — artículo original (PDF)](https://economics.mit.edu/sites/default/files/publications/Synthetic%20Control%20Methods.pdf)
 :::
 
 ::: {.boxinfo}
@@ -428,6 +439,8 @@ git commit -m "feat: add synthetic controls theory class"
 sc_dir <- "dofile/17_SyntheticControls"
 sc_weights <- read.csv(file.path(sc_dir, "results/synth_weights.csv"), check.names = FALSE)
 sc_balance <- read.csv(file.path(sc_dir, "results/synth_predictor_balance.csv"), check.names = FALSE)
+sc_v_weights <- read.csv(file.path(sc_dir, "results/synth_v_weights.csv"), check.names = FALSE)
+sc_sample_audit <- read.csv(file.path(sc_dir, "results/synth_sample_audit.csv"), check.names = FALSE)
 sc_paths <- read.csv(file.path(sc_dir, "results/synth_paths.csv"), check.names = FALSE)
 sc_rmspe <- read.csv(file.path(sc_dir, "results/synth_rmspe.csv"), check.names = FALSE)
 sc_placebos <- read.csv(file.path(sc_dir, "results/synth_placebos.csv"), check.names = FALSE)
