@@ -255,3 +255,129 @@ graph export "`figures'/complier_profile.png", width(2000) replace
 restore
 
 display as result "PACES simulado: archivos canonicos creados correctamente."
+
+*===============================================================================
+* PARTE C - INSTRUMENTOS FUERTES Y DEBILES CON EL MISMO TAMANO MUESTRAL
+*===============================================================================
+
+preserve
+
+tempname weakpost
+postfile `weakpost' str8 scenario int n double pi first_stage_F kp_F ols iv ///
+    conventional_ci_low conventional_ci_high str20 robust_ci_low ///
+    str20 robust_ci_high str20 robust_ci_type ///
+    using "`results'/weak_iv_comparison.dta", replace
+
+foreach scenario in weak strong {
+    clear
+    set obs 1000
+    if "`scenario'" == "weak" {
+        local pi = 0.05
+        set seed 71001
+    }
+    else {
+        local pi = 0.70
+        set seed 71002
+    }
+
+    gen double z = rnormal()
+    gen double w = rnormal()
+    gen double eD = rnormal()
+    gen double u = rnormal()
+    gen double D = `pi'*z + w + eD
+    gen double y = 0.50*D + w + u
+
+    quietly regress D z
+    local first_stage_F = e(F)
+
+    quietly regress y D, vce(robust)
+    local ols = _b[D]
+
+    quietly ivreg2 y (D = z), robust first
+    local kp_F = e(widstat)
+
+    quietly ivregress 2sls y (D = z), vce(robust)
+    local iv = _b[D]
+    local iv_se = _se[D]
+    local conventional_ci_low = `iv' - invnormal(0.975)*`iv_se'
+    local conventional_ci_high = `iv' + invnormal(0.975)*`iv_se'
+
+    local robust_ci_low "not available"
+    local robust_ci_high "not available"
+    capture noisily estat weakrobust, ci ar
+    if _rc == 0 {
+        capture matrix ar_ci = r(ar_ci)
+        if _rc == 0 & rowsof(ar_ci) == 1 {
+            if ar_ci[1,1] == .l local robust_ci_low "-inf"
+            else local robust_ci_low = string(ar_ci[1,1], "%12.6f")
+            if ar_ci[1,2] == .u local robust_ci_high "+inf"
+            else local robust_ci_high = string(ar_ci[1,2], "%12.6f")
+        }
+        else if _rc == 0 {
+            local robust_ci_low "disjoint/unbounded"
+            local robust_ci_high "disjoint/unbounded"
+        }
+    }
+
+    post `weakpost' ("`scenario'") (1000) (`pi') (`first_stage_F') ///
+        (`kp_F') (`ols') (`iv') (`conventional_ci_low') ///
+        (`conventional_ci_high') ("`robust_ci_low'") ///
+        ("`robust_ci_high'") ("Anderson-Rubin")
+}
+postclose `weakpost'
+
+use "`results'/weak_iv_comparison.dta", clear
+export delimited using "`results'/weak_iv_comparison.csv", replace
+
+* Monte Carlo pequeno: suficiente para visualizar, sin confundir N con pi.
+capture program drop iv_montecarlo
+program define iv_montecarlo, rclass
+    syntax, PI(real) N(integer)
+    drop _all
+    set obs `n'
+    gen double z = rnormal()
+    gen double w = rnormal()
+    gen double eD = rnormal()
+    gen double u = rnormal()
+    gen double D = `pi'*z + w + eD
+    gen double y = 0.50*D + w + u
+    quietly regress y D
+    return scalar ols = _b[D]
+    quietly ivregress 2sls y (D = z)
+    return scalar iv = _b[D]
+end
+
+tempfile weak_mc strong_mc
+simulate ols=r(ols) iv=r(iv), reps(500) seed(72001): iv_montecarlo, pi(0.05) n(1000)
+gen str8 scenario = "Debil"
+save `weak_mc', replace
+
+simulate ols=r(ols) iv=r(iv), reps(500) seed(72002): iv_montecarlo, pi(0.70) n(1000)
+gen str8 scenario = "Fuerte"
+save `strong_mc', replace
+
+use `weak_mc', clear
+append using `strong_mc'
+
+twoway (kdensity iv if scenario == "Debil" & inrange(iv,-3,3), ///
+        lcolor(orange) lwidth(medthick)), ///
+       xline(0.50, lcolor(black) lpattern(dash)) ///
+       title("Instrumento debil") xtitle("Estimacion IV") ytitle("Densidad") ///
+       xscale(range(-3 3)) xlabel(-3(1)3) legend(off) ///
+       graphregion(color(white)) name(weak_density, replace)
+twoway (kdensity iv if scenario == "Fuerte" & inrange(iv,-3,3), ///
+        lcolor(navy) lwidth(medthick)), ///
+       xline(0.50, lcolor(black) lpattern(dash)) ///
+       title("Instrumento fuerte") xtitle("Estimacion IV") ytitle("Densidad") ///
+       xscale(range(-3 3)) xlabel(-3(1)3) legend(off) ///
+       graphregion(color(white)) name(strong_density, replace)
+graph combine weak_density strong_density, rows(1) ///
+       title("Distribucion del estimador IV") ///
+       subtitle("Mismo N=1,000; cambia solo la relevancia") ///
+       note("500 replicas por escenario; eje recortado a [-3,3]. Efecto verdadero = 0.50.") ///
+       graphregion(color(white))
+graph export "`figures'/weak_iv_distributions.png", width(1800) replace
+
+restore
+
+display as result "Comparacion de instrumentos fuertes y debiles creada."

@@ -42,3 +42,15 @@ def test_complier_profile_has_population_truth_and_estimate():
     variables = {row["variable"] for row in data}
     assert groups == {"Population", "True compliers", "Estimated compliers"}
     assert variables == {"Female", "Baseline score", "Low income"}
+
+
+def test_weak_and_strong_scenarios_vary_relevance_not_n():
+    data = {row["scenario"]: row for row in rows("weak_iv_comparison.csv")}
+    assert set(data) == {"weak", "strong"}
+    assert int(data["weak"]["n"]) == int(data["strong"]["n"])
+    assert float(data["strong"]["first_stage_F"]) > float(
+        data["weak"]["first_stage_F"]
+    )
+    assert float(data["strong"]["pi"]) > float(data["weak"]["pi"])
+    assert data["weak"]["robust_ci_type"] == "Anderson-Rubin"
+    assert data["strong"]["robust_ci_type"] == "Anderson-Rubin"

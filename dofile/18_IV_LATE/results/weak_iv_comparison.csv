@@ -1,0 +1,3 @@
+scenario,n,pi,first_stage_F,kp_F,ols,iv,conventional_ci_low,conventional_ci_high,robust_ci_low,robust_ci_high,robust_ci_type
+weak,1000,.05,.40973189,.39972216,.98796099,.84494096,-1.8355501,3.5254319,-inf,+inf,Anderson-Rubin
+strong,1000,.7,213.4884,217.94206,.87599838,.4272067,.29376474,.56064862,0.282491,0.552457,Anderson-Rubin
