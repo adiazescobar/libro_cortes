@@ -1,193 +1,257 @@
-*===============================================================
-* IV y LATE — Simulación pedagógica
-* Curso: Econometría Avanzada (Javeriana)
+*===============================================================================
+* Variables instrumentales y LATE - clase empirica
+* Datos completamente ficticios para fines pedagogicos
+* Curso: Econometria Avanzada, Pontificia Universidad Javeriana
 *
-* Parte A: Muestras finitas — OLS sesgado vs IV consistente
-* Parte B: LATE paso a paso (Wald = LATE en compliers)
-*===============================================================
+* Este archivo es la fuente canonica de las bases, tablas y figuras publicas.
+* Los datos NO son los microdatos originales de PACES ni de ningun articulo.
+*===============================================================================
 
+version 19
 clear all
 set more off
-capture ssc install ivreg2
-capture ssc install ranktest
-
-*===============================================================
-* PARTE A — MUESTRAS FINITAS: OLS SESGADO vs IV CONSISTENTE
-*===============================================================
-*
-* DGP (instrumento DEBIL: pi=0.2):
-*   z, w, eD, u  ~ iid N(0,1)
-*   D = 0.2*z + eD + w           (z apenas mueve a D)
-*   y = 0.5*D + w + u            (tau verdadero = 0.5; w es confounder)
-*
-* Sesgo OLS:  cov(D,w)/var(D) ~ 0.49 -> plim(OLS) ~ 0.99
-* IV consistente (plim = 0.5) PERO muy sesgado en muestra finita
-* cuando F de la primera etapa es bajo (Bound, Jaeger & Baker 1995).
-*
-* En N=30 esperamos:
-*   - OLS estable cerca de 0.99 (sesgo grande, pero bajo error muestral)
-*   - IV con sesgo enorme HACIA OLS, varianza explosiva, F<2 (instr. debil)
-* En N=10000:
-*   - OLS sigue clavado en 0.99 (inconsistente)
-*   - IV converge a 0.5, F~200 (consistencia visible)
-*---------------------------------------------------------------
-
-* (1) Una sola realizacion para mostrar la mecanica
-clear
-set seed 20260506
-set obs 1000
-gen z  = rnormal()
-gen w  = rnormal()
-gen eD = rnormal()
-gen u  = rnormal()
-gen D  = 0.2*z + eD + w
-gen y  = 0.5*D + w + u
-
-reg y D
-ivreg2 y (D = z), first    // notese el F de primera etapa
-
-*---------------------------------------------------------------
-* (2) Monte Carlo: variar N para ver el sesgo en muestra finita
-*     y la consistencia asintotica del IV
-*---------------------------------------------------------------
-cap program drop monteiv
-program monteiv, rclass
-    syntax, n(integer)
-    drop _all
-    set obs `n'
-    gen z  = rnormal()
-    gen w  = rnormal()
-    gen eD = rnormal()
-    gen u  = rnormal()
-    gen D  = 0.2*z + eD + w
-    gen y  = 0.5*D + w + u
-    qui reg y D
-    return scalar b_ols = _b[D]
-    qui ivreg2 y (D = z)
-    return scalar b_iv  = _b[D]
-    * F de la primera etapa
-    qui reg D z
-    return scalar F1 = e(F)
-end
-
-* Para cada N: media, mediana, p25, p75 y F medio de primera etapa
-* (la mediana y el IQR informan mejor que la media porque con
-*  instrumento debil hay outliers fuertes en el IV)
-
-* N = 30 (instrumento debilisimo: F~1.7, sesgo enorme del IV hacia OLS)
-simulate b_ols=r(b_ols) b_iv=r(b_iv) F1=r(F1), reps(2000) seed(1): monteiv, n(30)
-tabstat b_ols b_iv F1, stat(mean p50 p25 p75) col(stat)
-hist b_iv, width(0.1) xline(0.5 1) ///
-    title("IV en N=30 (verdadero=0.5, OLS~1)") name(h30, replace)
-
-* N = 100
-simulate b_ols=r(b_ols) b_iv=r(b_iv) F1=r(F1), reps(2000) seed(2): monteiv, n(100)
-tabstat b_ols b_iv F1, stat(mean p50 p25 p75) col(stat)
-
-* N = 300
-simulate b_ols=r(b_ols) b_iv=r(b_iv) F1=r(F1), reps(2000) seed(3): monteiv, n(300)
-tabstat b_ols b_iv F1, stat(mean p50 p25 p75) col(stat)
-
-* N = 1000
-simulate b_ols=r(b_ols) b_iv=r(b_iv) F1=r(F1), reps(2000) seed(4): monteiv, n(1000)
-tabstat b_ols b_iv F1, stat(mean p50 p25 p75) col(stat)
-
-* N = 10000 (F~200, IV converge limpio; OLS sigue sesgado)
-simulate b_ols=r(b_ols) b_iv=r(b_iv) F1=r(F1), reps(2000) seed(5): monteiv, n(10000)
-tabstat b_ols b_iv F1, stat(mean p50 p25 p75) col(stat)
-
-* Histograma comparativo en N=10000 (consistencia visual)
-twoway (hist b_ols, color(red%40) width(0.005)) ///
-       (hist b_iv,  color(blue%40) width(0.005)), ///
-       xline(0.5, lcolor(black) lpattern(dash)) ///
-       xline(0.99, lcolor(red) lpattern(dash)) ///
-       legend(order(1 "OLS" 2 "IV") position(2)) ///
-       title("Distribucion de los estimadores, N=10,000") ///
-       xtitle("Estimador") name(g_n10000, replace)
-
-
-*===============================================================
-* PARTE B — LATE PASO A PASO (replica de Clase19.pdf)
-*===============================================================
-*
-* Construccion explicita de los 3 tipos:
-*   never-takers (d00=1):     5,000 individuos -> D=0 siempre
-*   always-takers (d11=1):    5,000 individuos -> D=1 siempre
-*   compliers (d01=1):       10,000 individuos -> D=Z
-*
-* Efectos heterogeneos:
-*   never-takers:  LATE = -0.5
-*   always-takers: LATE =  0
-*   compliers:     LATE = +1   <- lo que IV debe recuperar
-*
-* ATE = 0.25*(-0.5) + 0.25*(0) + 0.50*(1) = 0.375
-*---------------------------------------------------------------
-
-clear
 set seed 54687
+
+local base "dofile/18_IV_LATE"
+local results "`base'/results"
+local figures "`base'/figures"
+local data "`base'/data"
+
+capture mkdir "`results'"
+capture mkdir "`figures'"
+capture mkdir "`data'"
+
+capture which ivreg2
+if _rc {
+    display as error "Falta ivreg2. Instale una vez con: ssc install ivreg2"
+    exit 499
+}
+
+*===============================================================================
+* PARTE A Y B - UNA MISMA SIMULACION TIPO PACES
+*===============================================================================
+
 set obs 20000
+gen long id = _n
 
-* Instrumento aleatorio mitad-mitad
-gen Z = uniform() > 0.5
-tab Z
+* Instrumento: resultado ficticio de una loteria de becas.
+gen byte Z = runiform() < 0.50
+label variable Z "Gano la loteria ficticia"
 
-* Tipos
-gen d00 = (_n <= 5000)                       // never-takers
-gen d11 = (_n >  5000 & _n <= 10000)         // always-takers
-gen d01 = (_n > 10000)                       // compliers
-tab d00
-tab d11
-tab d01
+* Covariables predeterminadas.
+gen byte female = runiform() < 0.52
+gen byte low_income = runiform() < 0.50
+gen double baseline_score = rnormal(50 - 4*low_income + 1.5*female, 10)
+gen double u_type = runiform()
+gen double u_family = rnormal()
 
-* Efecto heterogeneo (LATE individual)
-gen late = -0.5 if d00 == 1
-replace late = 0  if d11 == 1
-replace late = 1  if d01 == 1
-tab late
+* Estratos principales. Las probabilidades dependen de X para que el perfil
+* de los compliers sea informativo, pero Z sigue siendo aleatorio.
+gen double p_always = 0.15 + 0.10*(1-low_income)
+gen double p_complier = 0.45 + 0.15*low_income
+gen byte compliance_type = 2 if u_type < p_always
+replace compliance_type = 3 if missing(compliance_type) & u_type < p_always + p_complier
+replace compliance_type = 1 if missing(compliance_type)
 
-* Resultados potenciales
-gen y0 = 0.25 * invnormal(uniform())
-gen y1 = y0 + late
-sum y0 y1
+label define compliance_lbl 1 "Never-taker" 2 "Always-taker" 3 "Complier"
+label values compliance_type compliance_lbl
+label variable compliance_type "Tipo verdadero, observable solo en la simulacion"
 
-* Tratamiento observado: D = d11 + Z*d01
-gen D = d11 + Z*d01
-tab D
+* Tratamientos potenciales. Monotonicidad se impone por construccion.
+gen byte D0 = compliance_type == 2
+gen byte D1 = inlist(compliance_type, 2, 3)
+assert D1 >= D0
+gen byte D = D0*(1-Z) + D1*Z
+label variable D "Uso la beca ficticia"
 
-* Verificacion: D consistente con tipos
-tab D d00
-tab D d11
-tab D d01
+* Efectos heterogeneos: LATE, ATE y ATT son deliberadamente distintos.
+gen double tau_i = -0.20 if compliance_type == 1
+replace tau_i = 0.20 if compliance_type == 2
+replace tau_i = 1.20 + 0.20*low_income if compliance_type == 3
 
-* Resultado observado
-gen y = D*y1 + (1-D)*y0
+* Resultados potenciales y observado.
+gen double Y0 = 55 + 0.15*baseline_score - 1.5*low_income + 0.5*female + u_family + rnormal(0,1.5)
+gen double Y1 = Y0 + tau_i
+gen double Y = D*Y1 + (1-D)*Y0
+label variable Y "Puntaje final ficticio"
+label variable Y0 "Y(D=0), visible solo en la simulacion"
+label variable Y1 "Y(D=1), visible solo en la simulacion"
 
-* ATE poblacional (no observable en la realidad)
-sum late
+label data "PACES simulado - datos ficticios, no son los datos originales"
 
-* OLS: NO recupera ni el ATE (0.375) ni el LATE (1.0)
-reg y D
+* Guardar la verdad para la profesora y una base publica solo con observables.
+save "`data'/paces_simulada_con_verdad.dta", replace
+preserve
+keep id Z D Y female baseline_score low_income
+label data "PACES simulado - base ficticia para estudiantes"
+save "`data'/paces_simulada_estudiantes.dta", replace
+export delimited using "`data'/paces_simulada_estudiantes.csv", replace
+restore
 
-* IV: recupera el LATE de compliers (= 1.0)
-ivreg2 y (D = Z)
+*-------------------------------------------------------------------------------
+* Verdad poblacional conocida gracias a la simulacion
+*-------------------------------------------------------------------------------
 
-* Wald manual
-sum y if Z==1
-local EyZ1 = r(mean)
-sum y if Z==0
-local EyZ0 = r(mean)
-sum D if Z==1
-local EDZ1 = r(mean)
-sum D if Z==0
-local EDZ0 = r(mean)
-di "Wald = " (`EyZ1' - `EyZ0') / (`EDZ1' - `EDZ0')
+quietly summarize tau_i, meanonly
+local ate_true = r(mean)
+quietly summarize tau_i if D == 1, meanonly
+local att_true = r(mean)
+quietly summarize tau_i if compliance_type == 3, meanonly
+local late_true = r(mean)
 
-*===============================================================
-* RESUMEN ESPERADO
-*  Parte A:  OLS plim ~ 0.99 (sesgado, inconsistente, estable)
-*           IV  plim = 0.50 (consistente PERO sesgado en muestra finita)
-*           - N=30:    F~1.7; mediana(IV)~0.80 (sesgo enorme hacia OLS)
-*           - N=10000: F~200; mediana(IV)~0.50 (consistencia visible)
-*  Parte B:  OLS ~ 0.50 (no es ATE ni LATE)
-*           IV  ~ 1.00 (= LATE de compliers)
-*===============================================================
+quietly count if compliance_type == 1
+local share_never = r(N)/_N
+quietly count if compliance_type == 2
+local share_always = r(N)/_N
+quietly count if compliance_type == 3
+local share_complier = r(N)/_N
+local share_defier = 0
+
+tempname truth
+postfile `truth' str32 metric double value using "`results'/paces_truth.dta", replace
+post `truth' ("ate_true") (`ate_true')
+post `truth' ("att_true") (`att_true')
+post `truth' ("late_true") (`late_true')
+post `truth' ("share_complier") (`share_complier')
+post `truth' ("share_always") (`share_always')
+post `truth' ("share_never") (`share_never')
+post `truth' ("share_defier") (`share_defier')
+postclose `truth'
+
+preserve
+use "`results'/paces_truth.dta", clear
+export delimited using "`results'/paces_truth.csv", replace
+restore
+
+*-------------------------------------------------------------------------------
+* Lo que puede estimar el investigador con las variables observadas
+*-------------------------------------------------------------------------------
+
+quietly regress Y D, vce(robust)
+local ols = _b[D]
+
+quietly regress Y Z, vce(robust)
+local itt = _b[Z]
+local reduced_form = _b[Z]
+
+quietly regress D Z, vce(robust)
+local first_stage = _b[Z]
+local share_complier_estimated = _b[Z]
+
+local wald = `reduced_form'/`first_stage'
+
+quietly ivregress 2sls Y (D = Z), vce(robust)
+local iv_2sls = _b[D]
+
+* La igualdad Wald=2SLS debe cumplirse con un instrumento binario y sin X.
+assert abs(`wald' - `iv_2sls') < 1e-8
+
+tempname estimates
+postfile `estimates' str32 metric double value using "`results'/paces_estimators.dta", replace
+post `estimates' ("ate_true") (`ate_true')
+post `estimates' ("att_true") (`att_true')
+post `estimates' ("late_true") (`late_true')
+post `estimates' ("ols") (`ols')
+post `estimates' ("itt") (`itt')
+post `estimates' ("first_stage") (`first_stage')
+post `estimates' ("reduced_form") (`reduced_form')
+post `estimates' ("wald") (`wald')
+post `estimates' ("iv_2sls") (`iv_2sls')
+post `estimates' ("share_complier_estimated") (`share_complier_estimated')
+postclose `estimates'
+
+preserve
+use "`results'/paces_estimators.dta", clear
+export delimited using "`results'/paces_estimators.csv", replace
+restore
+
+* Salida completa de diagnosticos para uso en clase.
+ivreg2 Y (D = Z), robust first
+
+*-------------------------------------------------------------------------------
+* Perfil de compliers: verdad y estimacion mediante kappa de Abadie
+*-------------------------------------------------------------------------------
+
+quietly summarize Z, meanonly
+local pz = r(mean)
+gen double kappa_manual = 1 - D*(1-Z)/(1-`pz') - (1-D)*Z/`pz'
+quietly summarize kappa_manual, meanonly
+local sum_kappa = r(sum)
+
+tempname profile
+postfile `profile' str24 group str24 variable double mean using "`results'/paces_complier_profile.dta", replace
+
+foreach x in female baseline_score low_income {
+    quietly summarize `x', meanonly
+    local pop_`x' = r(mean)
+    quietly summarize `x' if compliance_type == 3, meanonly
+    local true_`x' = r(mean)
+    gen double kappa_`x' = kappa_manual*`x'
+    quietly summarize kappa_`x', meanonly
+    local estimated_`x' = r(sum)/`sum_kappa'
+    drop kappa_`x'
+}
+
+post `profile' ("Population") ("Female") (`pop_female')
+post `profile' ("True compliers") ("Female") (`true_female')
+post `profile' ("Estimated compliers") ("Female") (`estimated_female')
+post `profile' ("Population") ("Baseline score") (`pop_baseline_score')
+post `profile' ("True compliers") ("Baseline score") (`true_baseline_score')
+post `profile' ("Estimated compliers") ("Baseline score") (`estimated_baseline_score')
+post `profile' ("Population") ("Low income") (`pop_low_income')
+post `profile' ("True compliers") ("Low income") (`true_low_income')
+post `profile' ("Estimated compliers") ("Low income") (`estimated_low_income')
+postclose `profile'
+
+preserve
+use "`results'/paces_complier_profile.dta", clear
+export delimited using "`results'/paces_complier_profile.csv", replace
+restore
+
+* StataNow: estimador LATE y perfil oficial. El calculo manual anterior queda
+* siempre disponible y es la fuente de la tabla pedagogica.
+capture which lateffects
+if _rc == 0 {
+    capture noisily lateffects kappa (Y) (D) (Z female baseline_score low_income)
+    if _rc == 0 {
+        capture noisily estat compliers female baseline_score low_income, genkappa(kappa_statanow)
+    }
+}
+
+*-------------------------------------------------------------------------------
+* Figuras canonicas
+*-------------------------------------------------------------------------------
+
+graph bar (percent), over(compliance_type) ///
+    ytitle("Porcentaje de la poblacion") ///
+    title("Tipos verdaderos de cumplimiento") ///
+    subtitle("Simulacion ficticia tipo PACES") ///
+    note("Los tipos son observables porque conocemos D(0) y D(1).") ///
+    bar(1, color(navy)) graphregion(color(white))
+graph export "`figures'/compliance_types.png", width(1800) replace
+
+preserve
+use "`results'/paces_complier_profile.dta", clear
+encode group, gen(group_id)
+label define group_short 1 "Estimados" 2 "Poblacion" 3 "Verdaderos", replace
+label values group_id group_short
+gen double display_mean = mean
+replace display_mean = 100*mean if inlist(variable, "Female", "Low income")
+graph bar display_mean if variable == "Baseline score", over(group_id, label(angle(20))) ///
+    ytitle("Puntos") title("Puntaje inicial") ///
+    bar(1, color(navy)) graphregion(color(white)) name(profile_score, replace)
+graph bar display_mean if variable == "Female", over(group_id, label(angle(20))) ///
+    ytitle("Porcentaje") title("Mujeres") ///
+    bar(1, color(eltblue)) graphregion(color(white)) name(profile_female, replace)
+graph bar display_mean if variable == "Low income", over(group_id, label(angle(20))) ///
+    ytitle("Porcentaje") title("Ingreso bajo") ///
+    bar(1, color(orange)) graphregion(color(white)) name(profile_income, replace)
+graph combine profile_score profile_female profile_income, rows(1) ///
+    title("Perfil de los compliers") ///
+    subtitle("Poblacion, verdad simulada y estimacion kappa") ///
+    note("Los pesos kappa describen promedios; no identifican personas.") ///
+    graphregion(color(white))
+graph export "`figures'/complier_profile.png", width(2000) replace
+restore
+
+display as result "PACES simulado: archivos canonicos creados correctamente."

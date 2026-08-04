@@ -1,0 +1,10 @@
+group,variable,mean
+Population,Female,.51315
+True compliers,Female,.5166918144096567
+Estimated compliers,Female,.5170560150670086
+Population,Baseline score,48.73220309280384
+True compliers,Baseline score,48.51686650237016
+Estimated compliers,Baseline score,48.49170729695614
+Population,Low income,.5061
+True compliers,Low income,.5804413428894757
+Estimated compliers,Low income,.589917010738089
