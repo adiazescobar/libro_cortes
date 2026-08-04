@@ -54,3 +54,21 @@ def test_weak_and_strong_scenarios_vary_relevance_not_n():
     assert float(data["strong"]["pi"]) > float(data["weak"]["pi"])
     assert data["weak"]["robust_ci_type"] == "Anderson-Rubin"
     assert data["strong"]["robust_ci_type"] == "Anderson-Rubin"
+
+
+def test_divorce_case_is_continuous_iv_and_has_diagnostics():
+    m = metrics("divorce_iv_estimators.csv")
+    required = {
+        "true_causal_effect",
+        "hypothetical_direct_channel",
+        "ols",
+        "iv_2sls",
+        "first_stage_slope",
+        "first_stage_p",
+        "kp_F",
+    }
+    assert required <= set(m)
+    assert m["first_stage_slope"] > 0
+    assert m["first_stage_p"] < 0.01
+    assert m["kp_F"] > 10
+    assert abs(m["iv_2sls"] - m["true_causal_effect"]) > 0.20

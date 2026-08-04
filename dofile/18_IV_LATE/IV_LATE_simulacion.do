@@ -381,3 +381,104 @@ graph export "`figures'/weak_iv_distributions.png", width(1800) replace
 restore
 
 display as result "Comparacion de instrumentos fuertes y debiles creada."
+
+*===============================================================================
+* PARTE D - CASO CRITICO DE DIVORCIO CON INSTRUMENTO CONTINUO
+*===============================================================================
+*
+* Inspirado solamente en la estructura conceptual de Frimmel, Halla y
+* Winter-Ebmer (2024). Los datos y los parametros son completamente ficticios.
+* Se introduce deliberadamente un canal directo hipotetico para mostrar que una
+* primera etapa fuerte no demuestra la restriccion de exclusion.
+*===============================================================================
+
+clear
+set seed 81024
+set obs 12000
+
+gen long child_id = _n
+gen double father_age = rnormal(40,6)
+gen double father_educ = min(max(round(rnormal(12,2.5)),6),20)
+gen double firm_size = round(exp(rnormal(4.5,0.7)))
+gen double industry_female_share = min(max(rnormal(0.45,0.12),0.08),0.85)
+gen double workplace_gender_balance = min(max(industry_female_share + rnormal(0,0.14),0.02),0.98)
+gen double family_conflict = rnormal()
+
+* Tratamiento endogeno: divorcio antes de que el hijo cumpla 18 anos.
+gen double divorce_latent = -1.15 + 2.20*workplace_gender_balance ///
+    + 0.45*family_conflict - 0.035*(father_educ-12) ///
+    + 0.010*(father_age-40) + rnormal()
+gen byte parental_divorce = divorce_latent > 0
+
+* Efecto causal verdadero y canal directo hipotetico de exclusion.
+local divorce_effect = -3.00
+local direct_channel = 1.20
+gen double child_outcome = 70 + `divorce_effect'*parental_divorce ///
+    - 2.00*family_conflict + 0.30*father_educ ///
+    + `direct_channel'*workplace_gender_balance + rnormal(0,3)
+
+label variable workplace_gender_balance "Balance de genero en el trabajo del padre"
+label variable parental_divorce "Divorcio parental"
+label variable child_outcome "Resultado posterior del hijo"
+label data "Divorcio e IV - datos ficticios, no son datos del articulo"
+
+save "`data'/divorcio_iv_simulado_con_verdad.dta", replace
+preserve
+keep child_id workplace_gender_balance parental_divorce child_outcome ///
+    father_age father_educ firm_size industry_female_share
+label data "Divorcio e IV - base ficticia para estudiantes"
+save "`data'/divorcio_iv_simulado_estudiantes.dta", replace
+export delimited using "`data'/divorcio_iv_simulado_estudiantes.csv", replace
+restore
+
+local controls "father_age father_educ firm_size industry_female_share"
+
+quietly regress parental_divorce workplace_gender_balance `controls', vce(robust)
+local first_stage_slope = _b[workplace_gender_balance]
+local first_stage_p = 2*normal(-abs(_b[workplace_gender_balance]/_se[workplace_gender_balance]))
+
+quietly regress child_outcome parental_divorce `controls', vce(robust)
+local divorce_ols = _b[parental_divorce]
+
+quietly ivreg2 child_outcome `controls' ///
+    (parental_divorce = workplace_gender_balance), robust first
+local divorce_iv = _b[parental_divorce]
+local divorce_kp = e(widstat)
+
+* Contraste oficial y CI robusto a debilidad. No soluciona exclusion invalida.
+quietly ivregress 2sls child_outcome `controls' ///
+    (parental_divorce = workplace_gender_balance), vce(robust)
+assert abs(_b[parental_divorce] - `divorce_iv') < 1e-8
+capture noisily estat weakrobust, ci ar
+
+tempname divorcepost
+postfile `divorcepost' str40 metric double value ///
+    using "`results'/divorce_iv_estimators.dta", replace
+post `divorcepost' ("true_causal_effect") (`divorce_effect')
+post `divorcepost' ("hypothetical_direct_channel") (`direct_channel')
+post `divorcepost' ("ols") (`divorce_ols')
+post `divorcepost' ("iv_2sls") (`divorce_iv')
+post `divorcepost' ("first_stage_slope") (`first_stage_slope')
+post `divorcepost' ("first_stage_p") (`first_stage_p')
+post `divorcepost' ("kp_F") (`divorce_kp')
+postclose `divorcepost'
+
+preserve
+use "`results'/divorce_iv_estimators.dta", clear
+export delimited using "`results'/divorce_iv_estimators.csv", replace
+restore
+
+* Primera etapa visual en veinte grupos del instrumento continuo.
+xtile instrument_bin = workplace_gender_balance, nq(20)
+collapse (mean) parental_divorce workplace_gender_balance, by(instrument_bin)
+twoway (connected parental_divorce workplace_gender_balance, ///
+        mcolor(navy) lcolor(navy) msymbol(circle)), ///
+       title("Primera etapa: balance de genero y divorcio") ///
+       subtitle("Datos ficticios inspirados en la estructura del articulo") ///
+       xtitle("Balance de genero en el lugar de trabajo del padre") ///
+       ytitle("Proporcion con divorcio parental") ///
+       note("Promedios en 20 grupos. No son los datos originales.") ///
+       graphregion(color(white))
+graph export "`figures'/divorce_first_stage.png", width(1800) replace
+
+display as result "Caso ficticio de divorcio e IV creado."

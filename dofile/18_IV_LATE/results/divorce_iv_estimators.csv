@@ -1,0 +1,8 @@
+metric,value
+true_causal_effect,-3
+hypothetical_direct_channel,1.2
+ols,-4.238850486483592
+iv_2sls,-1.19873990647141
+first_stage_slope,.7152249554809463
+first_stage_p,8.6805767079e-123
+kp_F,555.3390101466396
