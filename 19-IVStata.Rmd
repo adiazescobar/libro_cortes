@@ -48,9 +48,9 @@ ssc install ranktest, replace
 
 ---
 
-# Parte A — La verdad que solo conocemos en una simulación {-}
+## Parte A — La verdad que solo conocemos en una simulación {-}
 
-## Una lotería ficticia tipo PACES {-}
+### Una lotería ficticia tipo PACES {-}
 
 Construimos una población en la que $Z=1$ significa ganar una lotería ficticia y $D=1$ usar la beca. Para cada persona generamos los dos tratamientos potenciales:
 
@@ -107,13 +107,13 @@ La tabla anterior utiliza variables latentes que un investigador real nunca obse
 
 ---
 
-# Parte B — La misma base desde la perspectiva del investigador {-}
+## Parte B — La misma base desde la perspectiva del investigador {-}
 
 Ahora conservamos únicamente `Z`, `D`, `Y` y covariables predeterminadas. Ya no observamos `D0`, `D1`, `Y0`, `Y1`, `tau_i` ni `compliance_type`.
 
-## Las cuatro piezas de la estimación {-}
+### Las cuatro piezas de la estimación {-}
 
-### ITT {-}
+#### ITT {-}
 
 El efecto de ganar la lotería sobre el resultado es
 
@@ -123,7 +123,7 @@ $$ITT_Y=E[Y\mid Z=1]-E[Y\mid Z=0].$$
 reg Y Z, vce(robust)
 ```
 
-### Primera etapa {-}
+#### Primera etapa {-}
 
 El efecto de ganar sobre el uso de la beca es
 
@@ -133,11 +133,11 @@ $$ITT_D=E[D\mid Z=1]-E[D\mid Z=0].$$
 reg D Z, vce(robust)
 ```
 
-### Wald {-}
+#### Wald {-}
 
 $$\widehat{LATE}_{Wald}=\frac{\widehat{ITT}_Y}{\widehat{ITT}_D}.$$
 
-### 2SLS {-}
+#### 2SLS {-}
 
 ```stata
 ivreg2 Y (D = Z), robust first
@@ -172,7 +172,7 @@ La forma reducida es el numerador y la primera etapa es el denominador. Wald coi
 **IV-S1.** Sin mirar las variables latentes, use la tabla para reconstruir Wald a partir de la forma reducida y la primera etapa. Identifique el estimando recuperado, compárelo con ATE y ATT y explique por qué una coincidencia entre OLS y alguno de ellos podría ser accidental.
 :::
 
-## ¿Quiénes son los compliers? {-}
+### ¿Quiénes son los compliers? {-}
 
 Bajo monotonicidad:
 
@@ -226,9 +226,9 @@ En la simulación podemos comparar la estimación con los compliers verdaderos. 
 
 ---
 
-# Parte C — Instrumentos fuertes, débiles e inferencia {-}
+## Parte C — Instrumentos fuertes, débiles e inferencia {-}
 
-## El experimento correcto: mantener $N$ fijo {-}
+### El experimento correcto: mantener $N$ fijo {-}
 
 Para separar relevancia de tamaño muestral usamos el mismo $N=1{,}000$ y el mismo modelo estructural en dos escenarios. Solo cambia $\pi$, el coeficiente de $Z$ en la primera etapa:
 
@@ -243,6 +243,15 @@ estat weakrobust, ci ar
 ```{r iv-weak-table, echo=FALSE, results='asis'}
 weak_iv <- read.csv("dofile/18_IV_LATE/results/weak_iv_comparison.csv",
                     check.names = FALSE, stringsAsFactors = FALSE)
+format_bound <- function(x) {
+  numeric_x <- suppressWarnings(as.numeric(x))
+  ifelse(
+    is.na(numeric_x), x,
+    ifelse(is.infinite(numeric_x),
+           ifelse(numeric_x < 0, "-Inf", "Inf"),
+           format(round(numeric_x, 3), nsmall = 3, trim = TRUE))
+  )
+}
 weak_table <- data.frame(
   Escenario = ifelse(weak_iv$scenario == "weak", "Débil", "Fuerte"),
   N = weak_iv$n,
@@ -253,8 +262,8 @@ weak_table <- data.frame(
   IV = round(weak_iv$iv, 3),
   `IC convencional` = paste0("[", round(weak_iv$conventional_ci_low, 3), ", ",
                              round(weak_iv$conventional_ci_high, 3), "]"),
-  `IC Anderson–Rubin` = paste0("[", weak_iv$robust_ci_low, ", ",
-                               weak_iv$robust_ci_high, "]"),
+  `IC Anderson–Rubin` = paste0("[", format_bound(weak_iv$robust_ci_low), ", ",
+                               format_bound(weak_iv$robust_ci_high), "]"),
   check.names = FALSE
 )
 knitr::kable(weak_table,
@@ -265,7 +274,7 @@ knitr::kable(weak_table,
 
 En el escenario débil, el intervalo Anderson–Rubin puede ser toda la recta real: los datos no descartan ningún valor del parámetro. Esto no es un error de Stata; es información honesta sobre identificación débil. El intervalo convencional, aunque también amplio aquí, descansa en una aproximación que puede tener tamaño incorrecto.
 
-## Cómo leer los diagnósticos de `ivreg2` {-}
+### Cómo leer los diagnósticos de `ivreg2` {-}
 
 1. **Primera etapa y $R^2$ parcial:** muestran cuánto añaden los instrumentos excluidos después de los controles.
 2. **Kleibergen–Paap rk LM:** evalúa subidentificación bajo errores no homocedásticos.
@@ -286,9 +295,9 @@ Diez es una heurística histórica. El valor 104.7 de Lee, McCrary, Moreira y Po
 
 ---
 
-# Parte D — Divorcio: una primera etapa fuerte no basta {-}
+## Parte D — Divorcio: una primera etapa fuerte no basta {-}
 
-## La pregunta publicada y nuestro ejercicio {-}
+### La pregunta publicada y nuestro ejercicio {-}
 
 Frimmel, Halla y Winter-Ebmer estudian el efecto del divorcio parental sobre resultados posteriores de los hijos y utilizan el balance de género en el lugar de trabajo del padre como fuente de variación. Nuestra segunda base contiene **datos ficticios** inspirados únicamente en esa estructura; no reproduce su muestra ni sus resultados.
 
@@ -335,7 +344,7 @@ knitr::kable(divorce_iv[c("Medida", "Valor")],
 
 La primera etapa es inequívocamente relevante. Sin embargo, 2SLS no recupera el efecto verdadero porque el proceso generador viola exclusión. Anderson–Rubin protege frente a debilidad del instrumento, **no** frente a un instrumento inválido.
 
-## ¿Dónde están los compliers en este caso? {-}
+### ¿Dónde están los compliers en este caso? {-}
 
 Con un instrumento continuo no existe una única comparación $Z=1$ frente a $Z=0$. Personas distintas pueden cambiar su decisión ante movimientos distintos del balance de género. Bajo supuestos adicionales de monotonicidad, el IV resume efectos locales correspondientes a los márgenes inducidos a lo largo del soporte; no debemos presentar ese resultado como el LATE de un único grupo binario observable.
 
