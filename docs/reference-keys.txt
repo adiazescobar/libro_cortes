@@ -36,6 +36,11 @@ fig:sc-rmspe-ratio-figure
 fig:sc-time-placebo-figure
 fig:sc-loo-figure
 tab:sc-loo-table
+tab:iv-truth-table
+tab:iv-paces-estimators
+tab:iv-complier-profile
+tab:iv-weak-table
+tab:iv-divorce-table
 introduccion-a-la-inferencia-causal
 stata-para-principiantes
 parametros-causales-teoria

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capitulo 23 IV y LATE en Stata: simulación | Cortes Transversales</title>
-  <meta name="description" content="Capitulo 23 IV y LATE en Stata: simulación | Cortes Transversales" />
+  <title>Capitulo 23 Variables instrumentales y LATE — Clase empírica | Cortes Transversales</title>
+  <meta name="description" content="Capitulo 23 Variables instrumentales y LATE — Clase empírica | Cortes Transversales" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capitulo 23 IV y LATE en Stata: simulación | Cortes Transversales" />
+  <meta property="og:title" content="Capitulo 23 Variables instrumentales y LATE — Clase empírica | Cortes Transversales" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capitulo 23 IV y LATE en Stata: simulación | Cortes Transversales" />
+  <meta name="twitter:title" content="Capitulo 23 Variables instrumentales y LATE — Clase empírica | Cortes Transversales" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-07-29" />
+<meta name="date" content="2026-08-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="iv.html"/>
-<link rel="next" href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"/>
+<link rel="next" href="rdd.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -462,7 +462,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#lectura-conjunta-de-la-evidencia"><i class="fa fa-check"></i>Lectura conjunta de la evidencia</a></li>
 <li class="chapter" data-level="" data-path="controles-sinteticos-stata.html"><a href="controles-sinteticos-stata.html#preguntas-de-trabajo"><i class="fa fa-check"></i>Preguntas de trabajo</a></li>
 </ul></li>
-<li class="chapter" data-level="22" data-path="iv.html"><a href="iv.html"><i class="fa fa-check"></i><b>22</b> Variables Instrumentales y LATE</a>
+<li class="chapter" data-level="22" data-path="iv.html"><a href="iv.html"><i class="fa fa-check"></i><b>22</b> Variables instrumentales y LATE — Clase teórica</a>
 <ul>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-problema-de-endogeneidad"><i class="fa fa-check"></i>El problema de endogeneidad</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#la-soluci%C3%B3n-una-variable-instrumental"><i class="fa fa-check"></i>La solución: una variable instrumental</a></li>
@@ -472,37 +472,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#derivaci%C3%B3n-del-estimador-iv"><i class="fa fa-check"></i>Derivación del estimador IV</a></li>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#el-estimador-de-wald-caso-d-y-z-binarios"><i class="fa fa-check"></i>El estimador de Wald (caso <span class="math inline">\(D\)</span> y <span class="math inline">\(Z\)</span> binarios)</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#m%C3%ADnimos-cuadrados-en-dos-etapas-mco2e"><i class="fa fa-check"></i>Mínimos Cuadrados en Dos Etapas (MCO2E)</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#sesgo-de-muestra-finita-la-intuici%C3%B3n"><i class="fa fa-check"></i>Sesgo de muestra finita: la intuición</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#muestra-finita-qu%C3%A9-puede-salir-mal"><i class="fa fa-check"></i>Muestra finita: ¿qué puede salir mal?</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#instrumentos-d%C3%A9biles"><i class="fa fa-check"></i>Instrumentos débiles</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#c%C3%B3mo-evaluar-la-validez"><i class="fa fa-check"></i>¿Cómo evaluar la validez?</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#diagn%C3%B3sticos-preguntas-diferentes"><i class="fa fa-check"></i>Diagnósticos: preguntas diferentes</a></li>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-el-efecto-promedio-local-de-tratamiento"><i class="fa fa-check"></i>LATE: el efecto promedio local de tratamiento</a></li>
+<li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#dos-aplicaciones-dos-lecciones"><i class="fa fa-check"></i>Dos aplicaciones, dos lecciones</a></li>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#late-con-varios-instrumentos"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#variables-de-control"><i class="fa fa-check"></i>Variables de control</a></li>
 <li class="chapter" data-level="" data-path="iv.html"><a href="iv.html#lecturas-recomendadas-4"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="iv-stata.html"><a href="iv-stata.html"><i class="fa fa-check"></i><b>23</b> IV y LATE en Stata: simulación</a>
+<li class="chapter" data-level="23" data-path="iv-stata.html"><a href="iv-stata.html"><i class="fa fa-check"></i><b>23</b> Variables instrumentales y LATE — Clase empírica</a>
 <ul>
-<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa"><i class="fa fa-check"></i>Instalación previa</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><i class="fa fa-check"></i>Parte A — Muestras finitas: OLS sesgado vs IV consistente</a>
-<ul>
-<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#el-proceso-generador-de-datos"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
-<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#monte-carlo-el-programa"><i class="fa fa-check"></i>Monte Carlo: el programa</a></li>
-<li class="chapter" data-level="" data-path="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html"><a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html#resultados-esperados"><i class="fa fa-check"></i>Resultados esperados</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#visualizaci%C3%B3n"><i class="fa fa-check"></i>Visualización</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html"><i class="fa fa-check"></i>Parte B — LATE paso a paso</a>
-<ul>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#la-idea"><i class="fa fa-check"></i>La idea</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#construcci%C3%B3n-del-experimento"><i class="fa fa-check"></i>Construcción del experimento</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#asignaci%C3%B3n-de-los-efectos-heterog%C3%A9neos"><i class="fa fa-check"></i>Asignación de los efectos heterogéneos</a></li>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resultados-potenciales-y-resultado-observado"><i class="fa fa-check"></i>Resultados potenciales y resultado observado</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-lo-que-cada-m%C3%A9todo-recupera"><i class="fa fa-check"></i>Estimación: lo que cada método recupera</a></li>
-<li class="chapter" data-level="" data-path=""><a href="#y-si-el-efecto-fuera-homog%C3%A9neo"><i class="fa fa-check"></i>¿Y si el efecto fuera homogéneo?</a></li>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#late-con-varios-instrumentos-1"><i class="fa fa-check"></i>LATE con varios instrumentos</a></li>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#resumen-2"><i class="fa fa-check"></i>Resumen</a></li>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#materiales-para-la-clase-9"><i class="fa fa-check"></i>Materiales para la clase</a></li>
-<li class="chapter" data-level="" data-path="parte-b-late-paso-a-paso.html"><a href="parte-b-late-paso-a-paso.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#antes-de-comenzar-qu%C3%A9-datos-estamos-usando"><i class="fa fa-check"></i>Antes de comenzar: qué datos estamos usando</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#parte-a-la-verdad-que-solo-conocemos-en-una-simulaci%C3%B3n"><i class="fa fa-check"></i>Parte A — La verdad que solo conocemos en una simulación</a></li>
+<li class="chapter" data-level="" data-path="iv-stata.html"><a href="iv-stata.html#parte-b-la-misma-base-desde-la-perspectiva-del-investigador"><i class="fa fa-check"></i>Parte B — La misma base desde la perspectiva del investigador</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#parte-c-instrumentos-fuertes-d%C3%A9biles-e-inferencia"><i class="fa fa-check"></i>Parte C — Instrumentos fuertes, débiles e inferencia</a></li>
+<li class="chapter" data-level="" data-path="iv-stata.html"><a href="iv-stata.html#parte-d-divorcio-una-primera-etapa-fuerte-no-basta"><i class="fa fa-check"></i>Parte D — Divorcio: una primera etapa fuerte no basta</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#lista-de-verificaci%C3%B3n-para-una-aplicaci%C3%B3n-iv"><i class="fa fa-check"></i>Lista de verificación para una aplicación IV</a></li>
+<li class="chapter" data-level="" data-path="iv-stata.html"><a href="iv-stata.html#lecturas-avanzadas"><i class="fa fa-check"></i>Lecturas avanzadas</a></li>
 </ul></li>
 <li class="chapter" data-level="24" data-path="rdd.html"><a href="rdd.html"><i class="fa fa-check"></i><b>24</b> Regresión Discontinua</a>
 <ul>
@@ -520,15 +507,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path=""><a href="#variable-de-asignaci%C3%B3n-discreta"><i class="fa fa-check"></i>Variable de asignación discreta</a></li>
 <li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#extensiones"><i class="fa fa-check"></i>Extensiones</a></li>
 <li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#checklist-final"><i class="fa fa-check"></i>Checklist final</a></li>
-<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#lecturas-recomendadas-6"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
+<li class="chapter" data-level="" data-path="rdd.html"><a href="rdd.html#lecturas-recomendadas-5"><i class="fa fa-check"></i>Lecturas recomendadas</a></li>
 </ul></li>
 <li class="chapter" data-level="25" data-path="rdd-stata.html"><a href="rdd-stata.html"><i class="fa fa-check"></i><b>25</b> RDD en Stata: simulación</a>
 <ul>
-<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa-1"><i class="fa fa-check"></i>Instalación previa</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#instalaci%C3%B3n-previa"><i class="fa fa-check"></i>Instalación previa</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="parte-a-rdd.html"><a href="parte-a-rdd.html"><i class="fa fa-check"></i>Parte A — RDN con DGP lineal</a>
 <ul>
-<li class="chapter" data-level="" data-path="parte-a-rdd.html"><a href="parte-a-rdd.html#el-proceso-generador-de-datos-1"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
+<li class="chapter" data-level="" data-path="parte-a-rdd.html"><a href="parte-a-rdd.html#el-proceso-generador-de-datos"><i class="fa fa-check"></i>El proceso generador de datos</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#visualizaci%C3%B3n-primero"><i class="fa fa-check"></i>Visualización primero</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-i-polinomio-global-con-interacciones"><i class="fa fa-check"></i>Estimación I — Polinomio global con interacciones</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-ii-regresi%C3%B3n-local-lineal-con-kernel"><i class="fa fa-check"></i>Estimación II — Regresión local lineal con kernel</a></li>
@@ -591,34 +578,499 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="iv-stata" class="section level1 hasAnchor" number="23">
-<h1><span class="header-section-number">Capitulo 23</span> IV y LATE en Stata: simulación<a href="iv-stata.html#iv-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div class="boxinfo">
-<p><strong>Metas de aprendizaje</strong></p>
+<h1><span class="header-section-number">Capitulo 23</span> Variables instrumentales y LATE — Clase empírica<a href="iv-stata.html#iv-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="boxdownload">
+<p><strong>Materiales de la clase</strong></p>
 <ul>
-<li>Verificar empíricamente que IV es <strong>sesgado pero consistente</strong> y que OLS es <strong>inconsistente</strong></li>
-<li>Visualizar el sesgo de muestra finita del IV bajo <strong>instrumentos débiles</strong> (Bound, Jaeger &amp; Baker, 1995)</li>
-<li>Construir un experimento controlado donde always-takers, never-takers y compliers tienen <strong>efectos heterogéneos</strong> del tratamiento</li>
-<li>Comprobar que el estimador IV recupera el <strong>LATE de los compliers</strong> y no el ATE poblacional</li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.do">Descargar do-file Stata</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/data/paces_simulada_estudiantes.dta">Descargar base PACES simulada (.dta)</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/data/paces_simulada_estudiantes.csv">Descargar base PACES simulada (.csv)</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/data/divorcio_iv_simulado_estudiantes.dta">Descargar base de divorcio simulada (.dta)</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/data/divorcio_iv_simulado_estudiantes.csv">Descargar base de divorcio simulada (.csv)</a></li>
 </ul>
 </div>
-<hr />
-<div id="instalación-previa" class="section level2 unnumbered hasAnchor">
-<h2>Instalación previa<a href="#instalaci%C3%B3n-previa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb184"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb184-1"><a href="iv-stata.html#cb184-1" tabindex="-1"></a><span class="kw">ssc</span> install ivreg2</span>
-<span id="cb184-2"><a href="iv-stata.html#cb184-2" tabindex="-1"></a><span class="kw">ssc</span> install ranktest</span></code></pre></div>
-<p><strong>Descargar archivos ejecutables:</strong></p>
-<p><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.do">Descargar do-file Stata (IV_LATE_simulacion.do)</a></p>
-<p><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.py">Descargar versión Python (IV_LATE_simulacion.py)</a></p>
-<p><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/18_IV_LATE/IV_LATE_simulacion.R">Descargar versión R (IV_LATE_simulacion.R)</a></p>
-<p>Los tres archivos contienen el mismo experimento (Parte A: muestras finitas; Parte B: LATE paso a paso) y producen los mismos resultados — usen el lenguaje de su preferencia.</p>
 <div class="boxinfo">
 <p><strong>Lecturas centrales</strong></p>
 <ul>
 <li><a href="lecturas/bernal-pena/capitulo-07.pdf">Bernal y Peña — capítulo 7 (PDF)</a></li>
 <li><a href="https://mixtape.scunning.com/07-instrumental_variables">Cunningham — capítulo 7: Instrumental Variables</a></li>
+<li><a href="https://irihs.ihs.ac.at/id/eprint/7056/1/frimmel-halla-winter-ebmer-2024-how-does-parental-divorce-affect-childrens-long-term-outcomes.pdf">Frimmel, Halla &amp; Winter-Ebmer (2024) — artículo sobre divorcio (PDF)</a></li>
+</ul>
+</div>
+<div class="boxinfo">
+<p><strong>Metas de aprendizaje</strong></p>
+<ul>
+<li>Relacionar ITT, primera etapa, forma reducida, Wald y 2SLS</li>
+<li>Comprobar con verdad simulada que IV recupera LATE y no necesariamente ATE o ATT</li>
+<li>Estimar la proporción y el perfil promedio de los compliers sin clasificarlos individualmente</li>
+<li>Leer la salida de <code>ivreg2</code> y distinguir Cragg–Donald, Stock–Yogo y Kleibergen–Paap</li>
+<li>Comparar intervalos convencionales con inferencia Anderson–Rubin robusta a instrumentos débiles</li>
+<li>Evaluar la exclusión en una aplicación con instrumento continuo</li>
 </ul>
 </div>
 <hr />
+<div id="antes-de-comenzar-qué-datos-estamos-usando" class="section level2 unnumbered hasAnchor">
+<h2>Antes de comenzar: qué datos estamos usando<a href="#antes-de-comenzar-qu%C3%A9-datos-estamos-usando" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las dos bases de esta clase contienen <strong>datos ficticios</strong> creados por el do-file. La primera está inspirada en la estructura de una lotería como PACES; la segunda, en la pregunta del artículo sobre divorcio y composición de género del lugar de trabajo. <strong>No son los microdatos originales</strong> de ninguno de esos estudios y no reproducen sus estimaciones publicadas.</p>
+<p>Stata es la fuente canónica de las bases, tablas y gráficas que aparecen aquí. Las versiones anteriores en Python y R pueden servir como extensiones, pero no afirmamos que produzcan resultados idénticos mientras no estén sujetas a las mismas pruebas numéricas.</p>
+<p>Para ejecutar todos los diagnósticos se necesita:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb184-1"><a href="iv-stata.html#cb184-1" tabindex="-1"></a><span class="kw">ssc</span> install ivreg2, <span class="kw">replace</span></span>
+<span id="cb184-2"><a href="iv-stata.html#cb184-2" tabindex="-1"></a><span class="kw">ssc</span> install ranktest, <span class="kw">replace</span></span></code></pre></div>
+<p><code>lateffects</code> y <code>estat compliers</code> pertenecen a StataNow. El do-file conserva un cálculo manual transparente con pesos de Abadie para que el argumento pedagógico no dependa de la disponibilidad del comando.</p>
+<hr />
+</div>
+<div id="parte-a-la-verdad-que-solo-conocemos-en-una-simulación" class="section level2 unnumbered hasAnchor">
+<h2>Parte A — La verdad que solo conocemos en una simulación<a href="#parte-a-la-verdad-que-solo-conocemos-en-una-simulaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="una-lotería-ficticia-tipo-paces" class="section level3 unnumbered hasAnchor">
+<h3>Una lotería ficticia tipo PACES<a href="#una-loter%C3%ADa-ficticia-tipo-paces" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Construimos una población en la que <span class="math inline">\(Z=1\)</span> significa ganar una lotería ficticia y <span class="math inline">\(D=1\)</span> usar la beca. Para cada persona generamos los dos tratamientos potenciales:</p>
+<p><span class="math display">\[D_i(0),\qquad D_i(1),\]</span></p>
+<p>y los dos resultados potenciales:</p>
+<p><span class="math display">\[Y_i(D=0),\qquad Y_i(D=1).\]</span></p>
+<p>En el resto de la clase abreviaremos esta misma convención como <code>Y(D=0)</code> y <code>Y(D=1)</code> cuando no sea necesario escribir el subíndice individual.</p>
+<p>El tratamiento y el resultado observados son</p>
+<p><span class="math display">\[D_i=D_i(0)(1-Z_i)+D_i(1)Z_i,\]</span></p>
+<p><span class="math display">\[Y_i=Y_i(D=0)(1-D_i)+Y_i(D=1)D_i.\]</span></p>
+<p>El do-file impone monotonicidad, <span class="math inline">\(D_i(1)\geq D_i(0)\)</span>, pero permite efectos heterogéneos. Por construcción, ATE, ATT y LATE son distintos. Esta diferencia es indispensable: si todos tuvieran el mismo efecto, la simulación no enseñaría por qué importa el adjetivo <em>local</em>.</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb185-1"><a href="iv-stata.html#cb185-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D0 = compliance_type == 2</span>
+<span id="cb185-2"><a href="iv-stata.html#cb185-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D1 = <span class="fu">inlist</span>(compliance_type, 2, 3)</span>
+<span id="cb185-3"><a href="iv-stata.html#cb185-3" tabindex="-1"></a><span class="kw">assert</span> D1 &gt;= D0</span>
+<span id="cb185-4"><a href="iv-stata.html#cb185-4" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">byte</span> D = D0*(1-Z) + D1*Z</span>
+<span id="cb185-5"><a href="iv-stata.html#cb185-5" tabindex="-1"></a></span>
+<span id="cb185-6"><a href="iv-stata.html#cb185-6" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y1 = Y0 + tau_i</span>
+<span id="cb185-7"><a href="iv-stata.html#cb185-7" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> Y  = D*Y1 + (1-D)*Y0</span></code></pre></div>
+<div class="float">
+<img src="dofile/18_IV_LATE/figures/compliance_types.png" alt="Tipos verdaderos de cumplimiento en la simulación" />
+<div class="figcaption">Tipos verdaderos de cumplimiento en la simulación</div>
+</div>
+<table>
+<caption><span id="tab:iv-truth-table">Table 23.1: </span>Verdad conocida en la simulación tipo PACES</caption>
+<thead>
+<tr class="header">
+<th align="left">Medida</th>
+<th align="right">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ATE verdadero</td>
+<td align="right">0.683</td>
+</tr>
+<tr class="even">
+<td align="left">ATT verdadero</td>
+<td align="right">0.841</td>
+</tr>
+<tr class="odd">
+<td align="left">LATE verdadero</td>
+<td align="right">1.316</td>
+</tr>
+<tr class="even">
+<td align="left">Proporción de compliers</td>
+<td align="right">0.530</td>
+</tr>
+<tr class="odd">
+<td align="left">Proporción de always-takers</td>
+<td align="right">0.198</td>
+</tr>
+<tr class="even">
+<td align="left">Proporción de never-takers</td>
+<td align="right">0.271</td>
+</tr>
+<tr class="odd">
+<td align="left">Proporción de defiers</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<div class="boxinfo">
+<p><strong>Primera distinción</strong></p>
+<p>La tabla anterior utiliza variables latentes que un investigador real nunca observa conjuntamente. Su función es establecer la respuesta correcta antes de ocultar los contrafactuales.</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="parte-b-la-misma-base-desde-la-perspectiva-del-investigador" class="section level2 unnumbered hasAnchor">
+<h2>Parte B — La misma base desde la perspectiva del investigador<a href="iv-stata.html#parte-b-la-misma-base-desde-la-perspectiva-del-investigador" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ahora conservamos únicamente <code>Z</code>, <code>D</code>, <code>Y</code> y covariables predeterminadas. Ya no observamos <code>D0</code>, <code>D1</code>, <code>Y0</code>, <code>Y1</code>, <code>tau_i</code> ni <code>compliance_type</code>.</p>
+<div id="las-cuatro-piezas-de-la-estimación" class="section level3 unnumbered hasAnchor">
+<h3>Las cuatro piezas de la estimación<a href="#las-cuatro-piezas-de-la-estimaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="itt" class="section level4 unnumbered hasAnchor">
+<h4>ITT<a href="iv-stata.html#itt" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>El efecto de ganar la lotería sobre el resultado es</p>
+<p><span class="math display">\[ITT_Y=E[Y\mid Z=1]-E[Y\mid Z=0].\]</span></p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb186-1"><a href="iv-stata.html#cb186-1" tabindex="-1"></a><span class="kw">reg</span> Y Z, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+</div>
+<div id="primera-etapa-1" class="section level4 unnumbered hasAnchor">
+<h4>Primera etapa<a href="iv-stata.html#primera-etapa-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>El efecto de ganar sobre el uso de la beca es</p>
+<p><span class="math display">\[ITT_D=E[D\mid Z=1]-E[D\mid Z=0].\]</span></p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb187-1"><a href="iv-stata.html#cb187-1" tabindex="-1"></a><span class="kw">reg</span> D Z, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+</div>
+<div id="wald" class="section level4 unnumbered hasAnchor">
+<h4>Wald<a href="iv-stata.html#wald" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[\widehat{LATE}_{Wald}=\frac{\widehat{ITT}_Y}{\widehat{ITT}_D}.\]</span></p>
+</div>
+<div id="sls" class="section level4 unnumbered hasAnchor">
+<h4>2SLS<a href="iv-stata.html#sls" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb188"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb188-1"><a href="iv-stata.html#cb188-1" tabindex="-1"></a>ivreg2 Y (D = Z), <span class="kw">robust</span> first</span>
+<span id="cb188-2"><a href="iv-stata.html#cb188-2" tabindex="-1"></a>ivregress 2sls Y (D = Z), <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<p>Con una variable endógena, un instrumento y sin covariables, Wald y 2SLS producen el mismo coeficiente. La equivalencia no autoriza calcular los errores estándar con una segunda regresión OLS manual.</p>
+<table>
+<caption><span id="tab:iv-paces-estimators">Table 23.2: </span>Resultados producidos por Stata: simulación tipo PACES</caption>
+<thead>
+<tr class="header">
+<th align="left">Estimacion</th>
+<th align="right">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ATE verdadero</td>
+<td align="right">0.683</td>
+</tr>
+<tr class="even">
+<td align="left">ATT verdadero</td>
+<td align="right">0.841</td>
+</tr>
+<tr class="odd">
+<td align="left">LATE verdadero</td>
+<td align="right">1.316</td>
+</tr>
+<tr class="even">
+<td align="left">OLS</td>
+<td align="right">0.879</td>
+</tr>
+<tr class="odd">
+<td align="left">ITT sobre Y</td>
+<td align="right">0.664</td>
+</tr>
+<tr class="even">
+<td align="left">Primera etapa</td>
+<td align="right">0.521</td>
+</tr>
+<tr class="odd">
+<td align="left">Forma reducida</td>
+<td align="right">0.664</td>
+</tr>
+<tr class="even">
+<td align="left">Wald</td>
+<td align="right">1.273</td>
+</tr>
+<tr class="odd">
+<td align="left">2SLS</td>
+<td align="right">1.273</td>
+</tr>
+<tr class="even">
+<td align="left">Proporción estimada de compliers</td>
+<td align="right">0.521</td>
+</tr>
+</tbody>
+</table>
+<p>La forma reducida es el numerador y la primera etapa es el denominador. Wald coincide con 2SLS y queda cerca del LATE verdadero, no del ATE ni del ATT. OLS tampoco tiene por qué recuperar alguno de esos tres estimandos.</p>
+<div class="boxexam">
+<p><strong>IV-S1.</strong> Sin mirar las variables latentes, use la tabla para reconstruir Wald a partir de la forma reducida y la primera etapa. Identifique el estimando recuperado, compárelo con ATE y ATT y explique por qué una coincidencia entre OLS y alguno de ellos podría ser accidental.</p>
+</div>
+</div>
+</div>
+<div id="quiénes-son-los-compliers" class="section level3 unnumbered hasAnchor">
+<h3>¿Quiénes son los compliers?<a href="#qui%C3%A9nes-son-los-compliers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Bajo monotonicidad:</p>
+<p><span class="math display">\[\widehat P(AT)=P(D=1\mid Z=0),\]</span></p>
+<p><span class="math display">\[\widehat P(NT)=P(D=0\mid Z=1),\]</span></p>
+<p><span class="math display">\[\widehat P(C)=P(D=1\mid Z=1)-P(D=1\mid Z=0).\]</span></p>
+<p>La última expresión es exactamente la primera etapa. Sin embargo, las celdas observables siguen siendo mezclas:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Celda</th>
+<th>Tipos posibles bajo monotonicidad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(Z=0,D=1\)</span></td>
+<td>Always-takers</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Z=1,D=0\)</span></td>
+<td>Never-takers</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(Z=1,D=1\)</span></td>
+<td>Always-takers y compliers</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Z=0,D=0\)</span></td>
+<td>Never-takers y compliers</td>
+</tr>
+</tbody>
+</table>
+<p>Por tanto, <strong>no podemos identificar</strong> qué personas son compliers. Sí podemos estimar sus características promedio mediante los pesos de Abadie. Si <span class="math inline">\(p(X)=P(Z=1\mid X)\)</span>,</p>
+<p><span class="math display">\[\kappa_i=1-\frac{D_i(1-Z_i)}{1-p(X_i)}-\frac{(1-D_i)Z_i}{p(X_i)}.\]</span></p>
+<p>Entonces, bajo los supuestos,</p>
+<p><span class="math display">\[E[g(X)\mid C]=\frac{E[\kappa g(X)]}{E[\kappa]}.\]</span></p>
+<p>En StataNow:</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb189-1"><a href="iv-stata.html#cb189-1" tabindex="-1"></a>lateffects <span class="kw">kappa</span> (Y) (D) (Z female baseline_score low_income)</span>
+<span id="cb189-2"><a href="iv-stata.html#cb189-2" tabindex="-1"></a><span class="kw">estat</span> compliers female baseline_score low_income, genkappa(kappa_statanow)</span></code></pre></div>
+<p>El valor <code>kappa_statanow</code> no es una etiqueta y no debe interpretarse automáticamente como una probabilidad individual.</p>
+<div class="float">
+<img src="dofile/18_IV_LATE/figures/complier_profile.png" alt="Perfil verdadero y estimado de los compliers" />
+<div class="figcaption">Perfil verdadero y estimado de los compliers</div>
+</div>
+<table>
+<caption><span id="tab:iv-complier-profile">Table 23.3: </span>Perfil de compliers producido por Stata</caption>
+<thead>
+<tr class="header">
+<th align="left">Grupo</th>
+<th align="left">Variable</th>
+<th align="right">Media</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Population</td>
+<td align="left">Female</td>
+<td align="right">0.513</td>
+</tr>
+<tr class="even">
+<td align="left">True compliers</td>
+<td align="left">Female</td>
+<td align="right">0.517</td>
+</tr>
+<tr class="odd">
+<td align="left">Estimated compliers</td>
+<td align="left">Female</td>
+<td align="right">0.517</td>
+</tr>
+<tr class="even">
+<td align="left">Population</td>
+<td align="left">Baseline score</td>
+<td align="right">48.732</td>
+</tr>
+<tr class="odd">
+<td align="left">True compliers</td>
+<td align="left">Baseline score</td>
+<td align="right">48.517</td>
+</tr>
+<tr class="even">
+<td align="left">Estimated compliers</td>
+<td align="left">Baseline score</td>
+<td align="right">48.492</td>
+</tr>
+<tr class="odd">
+<td align="left">Population</td>
+<td align="left">Low income</td>
+<td align="right">0.506</td>
+</tr>
+<tr class="even">
+<td align="left">True compliers</td>
+<td align="left">Low income</td>
+<td align="right">0.580</td>
+</tr>
+<tr class="odd">
+<td align="left">Estimated compliers</td>
+<td align="left">Low income</td>
+<td align="right">0.590</td>
+</tr>
+</tbody>
+</table>
+<p>En la simulación podemos comparar la estimación con los compliers verdaderos. En una aplicación real solo tendríamos las columnas de población y estimación.</p>
+<div class="boxexam">
+<p><strong>IV-S2.</strong> La proporción estimada de compliers no coincide exactamente con la proporción verdadera de la simulación. Explique por qué esto no contradice la identidad poblacional. Después compare el perfil estimado con el verdadero y evalúe la afirmación: “una observación con peso kappa alto es definitivamente complier”.</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="parte-c-instrumentos-fuertes-débiles-e-inferencia" class="section level2 unnumbered hasAnchor">
+<h2>Parte C — Instrumentos fuertes, débiles e inferencia<a href="#parte-c-instrumentos-fuertes-d%C3%A9biles-e-inferencia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="el-experimento-correcto-mantener-n-fijo" class="section level3 unnumbered hasAnchor">
+<h3>El experimento correcto: mantener <span class="math inline">\(N\)</span> fijo<a href="iv-stata.html#el-experimento-correcto-mantener-n-fijo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para separar relevancia de tamaño muestral usamos el mismo <span class="math inline">\(N=1{,}000\)</span> y el mismo modelo estructural en dos escenarios. Solo cambia <span class="math inline">\(\pi\)</span>, el coeficiente de <span class="math inline">\(Z\)</span> en la primera etapa:</p>
+<p><span class="math display">\[D=\pi Z+W+e_D,\qquad Y=0.5D+W+u.\]</span></p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb190-1"><a href="iv-stata.html#cb190-1" tabindex="-1"></a>ivreg2 <span class="fu">y</span> (D = z), <span class="kw">robust</span> first</span>
+<span id="cb190-2"><a href="iv-stata.html#cb190-2" tabindex="-1"></a>ivregress 2sls <span class="fu">y</span> (D = z), <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb190-3"><a href="iv-stata.html#cb190-3" tabindex="-1"></a><span class="kw">estat</span> weakrobust, <span class="kw">ci</span> ar</span></code></pre></div>
+<table style="width:100%;">
+<caption><span id="tab:iv-weak-table">Table 23.4: </span>Resultados de Stata con el mismo N y distinta relevancia</caption>
+<colgroup>
+<col width="9%" />
+<col width="4%" />
+<col width="4%" />
+<col width="15%" />
+<col width="17%" />
+<col width="5%" />
+<col width="5%" />
+<col width="15%" />
+<col width="17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Escenario</th>
+<th align="right">N</th>
+<th align="right">pi</th>
+<th align="right">F primera etapa</th>
+<th align="right">Kleibergen–Paap F</th>
+<th align="right">OLS</th>
+<th align="right">IV</th>
+<th align="left">IC convencional</th>
+<th align="left">IC Anderson–Rubin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Débil</td>
+<td align="right">1000</td>
+<td align="right">0.05</td>
+<td align="right">0.41</td>
+<td align="right">0.40</td>
+<td align="right">0.988</td>
+<td align="right">0.845</td>
+<td align="left">[-1.836, 3.525]</td>
+<td align="left">[-Inf, Inf]</td>
+</tr>
+<tr class="even">
+<td align="left">Fuerte</td>
+<td align="right">1000</td>
+<td align="right">0.70</td>
+<td align="right">213.49</td>
+<td align="right">217.94</td>
+<td align="right">0.876</td>
+<td align="right">0.427</td>
+<td align="left">[0.294, 0.561]</td>
+<td align="left">[0.282, 0.552]</td>
+</tr>
+</tbody>
+</table>
+<div class="float">
+<img src="dofile/18_IV_LATE/figures/weak_iv_distributions.png" alt="Distribuciones del IV con distinta relevancia y el mismo tamaño muestral" />
+<div class="figcaption">Distribuciones del IV con distinta relevancia y el mismo tamaño muestral</div>
+</div>
+<p>En el escenario débil, el intervalo Anderson–Rubin puede ser toda la recta real: los datos no descartan ningún valor del parámetro. Esto no es un error de Stata; es información honesta sobre identificación débil. El intervalo convencional, aunque también amplio aquí, descansa en una aproximación que puede tener tamaño incorrecto.</p>
+</div>
+<div id="cómo-leer-los-diagnósticos-de-ivreg2" class="section level3 unnumbered hasAnchor">
+<h3>Cómo leer los diagnósticos de <code>ivreg2</code><a href="#c%C3%B3mo-leer-los-diagn%C3%B3sticos-de-ivreg2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Primera etapa y <span class="math inline">\(R^2\)</span> parcial:</strong> muestran cuánto añaden los instrumentos excluidos después de los controles.</li>
+<li><strong>Kleibergen–Paap rk LM:</strong> evalúa subidentificación bajo errores no homocedásticos.</li>
+<li><strong>Kleibergen–Paap rk Wald <span class="math inline">\(F\)</span>:</strong> resume fuerza de primera etapa de forma robusta.</li>
+<li><strong>Cragg–Donald:</strong> pertenece al marco homocedástico donde se derivan los valores críticos de Stock–Yogo.</li>
+<li><strong>Hansen J:</strong> solo existe con sobreidentificación; un no rechazo no prueba validez.</li>
+<li><strong><code>endog(D)</code>:</strong> contrasta exogeneidad de <span class="math inline">\(D\)</span> suponiendo instrumentos válidos.</li>
+</ol>
+<div class="boxwarning">
+<p><strong><span class="math inline">\(F&gt;10\)</span> y 104.7 no son reglas intercambiables</strong></p>
+<p>Diez es una heurística histórica. El valor 104.7 de Lee, McCrary, Moreira y Porter corresponde al test t convencional sin ajuste, al 5%, en un caso específico con un instrumento y una variable endógena. No es un umbral universal y no se aplica mecánicamente al Kleibergen–Paap <span class="math inline">\(F\)</span>. Cuando preocupa la debilidad, la respuesta es reportar diagnósticos y usar inferencia robusta como Anderson–Rubin o CLR.</p>
+</div>
+<div class="boxexam">
+<p><strong>IV-S3.</strong> Compare los dos escenarios de la tabla. Explique por qué el mismo <span class="math inline">\(N\)</span> es importante, por qué el escenario débil produce un intervalo Anderson–Rubin no acotado y por qué sería incorrecto concluir que el instrumento fuerte es válido únicamente porque su <span class="math inline">\(F\)</span> es grande.</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="parte-d-divorcio-una-primera-etapa-fuerte-no-basta" class="section level2 unnumbered hasAnchor">
+<h2>Parte D — Divorcio: una primera etapa fuerte no basta<a href="iv-stata.html#parte-d-divorcio-una-primera-etapa-fuerte-no-basta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="la-pregunta-publicada-y-nuestro-ejercicio" class="section level3 unnumbered hasAnchor">
+<h3>La pregunta publicada y nuestro ejercicio<a href="iv-stata.html#la-pregunta-publicada-y-nuestro-ejercicio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Frimmel, Halla y Winter-Ebmer estudian el efecto del divorcio parental sobre resultados posteriores de los hijos y utilizan el balance de género en el lugar de trabajo del padre como fuente de variación. Nuestra segunda base contiene <strong>datos ficticios</strong> inspirados únicamente en esa estructura; no reproduce su muestra ni sus resultados.</p>
+<p>El instrumento <code>workplace_gender_balance</code> es continuo y el tratamiento <code>parental_divorce</code> es binario. Generamos deliberadamente:</p>
+<ul>
+<li>un efecto causal verdadero del divorcio;</li>
+<li>confusión no observada entre divorcio y resultados;</li>
+<li>una primera etapa fuerte;</li>
+<li>un canal directo hipotético desde la composición del trabajo hacia el resultado.</li>
+</ul>
+<p>El último elemento viola exclusión. Permite comprobar que una salida estadística impecable no puede sustituir el argumento causal.</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb191-1"><a href="iv-stata.html#cb191-1" tabindex="-1"></a><span class="kw">local</span> controls <span class="st">&quot;father_age father_educ firm_size industry_female_share&quot;</span></span>
+<span id="cb191-2"><a href="iv-stata.html#cb191-2" tabindex="-1"></a></span>
+<span id="cb191-3"><a href="iv-stata.html#cb191-3" tabindex="-1"></a><span class="kw">reg</span> child_outcome parental_divorce <span class="ot">`controls&#39;</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb191-4"><a href="iv-stata.html#cb191-4" tabindex="-1"></a></span>
+<span id="cb191-5"><a href="iv-stata.html#cb191-5" tabindex="-1"></a>ivreg2 child_outcome <span class="ot">`controls&#39;</span> <span class="co">///</span></span>
+<span id="cb191-6"><a href="iv-stata.html#cb191-6" tabindex="-1"></a>    (parental_divorce = workplace_gender_balance), <span class="kw">robust</span> first</span>
+<span id="cb191-7"><a href="iv-stata.html#cb191-7" tabindex="-1"></a></span>
+<span id="cb191-8"><a href="iv-stata.html#cb191-8" tabindex="-1"></a>ivregress 2sls child_outcome <span class="ot">`controls&#39;</span> <span class="co">///</span></span>
+<span id="cb191-9"><a href="iv-stata.html#cb191-9" tabindex="-1"></a>    (parental_divorce = workplace_gender_balance), <span class="kw">vce</span>(<span class="kw">robust</span>)</span>
+<span id="cb191-10"><a href="iv-stata.html#cb191-10" tabindex="-1"></a><span class="kw">estat</span> weakrobust, <span class="kw">ci</span> ar</span></code></pre></div>
+<div class="float">
+<img src="dofile/18_IV_LATE/figures/divorce_first_stage.png" alt="Primera etapa en los datos ficticios de divorcio" />
+<div class="figcaption">Primera etapa en los datos ficticios de divorcio</div>
+</div>
+<table>
+<caption><span id="tab:iv-divorce-table">Table 23.5: </span>Resultados de Stata: caso ficticio de divorcio</caption>
+<thead>
+<tr class="header">
+<th align="left">Medida</th>
+<th align="right">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Efecto causal verdadero</td>
+<td align="right">-3.0000</td>
+</tr>
+<tr class="even">
+<td align="left">Canal directo hipotético por unidad de Z</td>
+<td align="right">1.2000</td>
+</tr>
+<tr class="odd">
+<td align="left">OLS</td>
+<td align="right">-4.2390</td>
+</tr>
+<tr class="even">
+<td align="left">2SLS</td>
+<td align="right">-1.1990</td>
+</tr>
+<tr class="odd">
+<td align="left">Pendiente de primera etapa</td>
+<td align="right">0.7152</td>
+</tr>
+<tr class="even">
+<td align="left">p de primera etapa</td>
+<td align="right">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">Kleibergen–Paap F</td>
+<td align="right">555.3000</td>
+</tr>
+</tbody>
+</table>
+<p>La primera etapa es inequívocamente relevante. Sin embargo, 2SLS no recupera el efecto verdadero porque el proceso generador viola exclusión. Anderson–Rubin protege frente a debilidad del instrumento, <strong>no</strong> frente a un instrumento inválido.</p>
+</div>
+<div id="dónde-están-los-compliers-en-este-caso" class="section level3 unnumbered hasAnchor">
+<h3>¿Dónde están los compliers en este caso?<a href="#d%C3%B3nde-est%C3%A1n-los-compliers-en-este-caso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Con un instrumento continuo no existe una única comparación <span class="math inline">\(Z=1\)</span> frente a <span class="math inline">\(Z=0\)</span>. Personas distintas pueden cambiar su decisión ante movimientos distintos del balance de género. Bajo supuestos adicionales de monotonicidad, el IV resume efectos locales correspondientes a los márgenes inducidos a lo largo del soporte; no debemos presentar ese resultado como el LATE de un único grupo binario observable.</p>
+<p>La discusión de exclusión debe considerar, como mínimo, salarios, horas, estabilidad laboral, redes, movilidad ocupacional y cambios de comportamiento familiar. Ningún valor de <span class="math inline">\(F\)</span> elimina esos canales.</p>
+<div class="boxexam">
+<p><strong>IV-S4.</strong> La tabla reporta una primera etapa muy fuerte y un intervalo Anderson–Rubin que excluye cero, pero 2SLS no coincide con el efecto verdadero. Identifique la razón usando el proceso generador. Después traslade la lección al artículo real: proponga dos argumentos o ejercicios que fortalecerían la exclusión y dos hallazgos que la debilitarían, sin afirmar que un test puede demostrarla.</p>
+</div>
+<hr />
+</div>
+</div>
+<div id="lista-de-verificación-para-una-aplicación-iv" class="section level2 unnumbered hasAnchor">
+<h2>Lista de verificación para una aplicación IV<a href="#lista-de-verificaci%C3%B3n-para-una-aplicaci%C3%B3n-iv" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Antes de interpretar un coeficiente:</p>
+<ol style="list-style-type: decimal">
+<li>defina tratamiento, instrumento, resultado y estimando;</li>
+<li>muestre la primera etapa y su incertidumbre;</li>
+<li>argumente independencia y exclusión por separado;</li>
+<li>explique la monotonicidad que necesita;</li>
+<li>describa qué margen y qué población generan el efecto local;</li>
+<li>reporte diagnósticos compatibles con la VCE utilizada;</li>
+<li>use inferencia robusta a debilidad cuando corresponda;</li>
+<li>no convierta un no rechazo en prueba de validez;</li>
+<li>explore sensibilidad a canales directos con conocimiento sustantivo;</li>
+<li>declare con precisión qué no identifica el diseño.</li>
+</ol>
+</div>
+<div id="lecturas-avanzadas" class="section level2 unnumbered hasAnchor">
+<h2>Lecturas avanzadas<a href="iv-stata.html#lecturas-avanzadas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><a href="https://www.aeaweb.org/articles?id=10.1257/aer.20211063">Lee, McCrary, Moreira &amp; Porter (2022), “Valid t-Ratio Inference for IV”</a></li>
+<li><a href="https://onlinelibrary.wiley.com/doi/pdf/10.3982/ECTA11974">Kitagawa (2015), “A Test for Instrument Validity”</a></li>
+<li><a href="https://www.stata.com/manuals/causallateffects.pdf">Documentación de Stata: <code>lateffects</code></a></li>
+<li><a href="https://www.stata.com/manuals/causallateffectspostestimation.pdf">Documentación de Stata: <code>estat compliers</code></a></li>
+<li><a href="https://www.stata.com/new-in-stata/inference-robust-to-weak-instruments/">Documentación de Stata 19: inferencia robusta a instrumentos débiles</a></li>
+</ul>
+
 </div>
 </div>
             </section>
@@ -627,7 +1079,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="iv.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="parte-a-muestras-finitas-ols-sesgado-vs-iv-consistente.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="rdd.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
