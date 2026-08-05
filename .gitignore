@@ -43,3 +43,6 @@ NA
 *creds*.json
 *.credentials
 preview/
+
+# Worktrees aislados de Codex
+.worktrees/
