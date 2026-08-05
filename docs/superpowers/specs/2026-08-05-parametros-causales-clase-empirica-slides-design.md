@@ -4,6 +4,8 @@
 
 Convertir el capítulo existente `04-ParametrosStata.Rmd` en una presentación Xaringan autocontenida para una sesión de 1 hora y 45 minutos. La profesora debe poder dictar toda la clase sin abrir Stata. La presentación conservará el orden, los ejemplos, las variables, los comandos, los resultados y las conclusiones del libro.
 
+La copia local de Canvas aporta dos actividades asociadas a esta unidad: `Pausa 1` y la tarea `ATE`. Se integrarán como práctica guiada sin introducir ejemplos econométricos nuevos.
+
 ## Alcance
 
 El trabajo producirá:
@@ -27,7 +29,9 @@ La presentación seguirá exclusivamente:
 - `dofile/04_ParametrosStata/results/parameters_results.csv`;
 - `dofile/04_ParametrosStata/results/monte_carlo_summary.csv`;
 - las tres figuras generadas por el do-file;
-- las explicaciones e interpretaciones ya incluidas en el capítulo.
+- las explicaciones e interpretaciones ya incluidas en el capítulo;
+- `teams_migration_ready/06_quizzes_and_assessments/008_Pausa_1.md`;
+- `teams_migration_ready/07_assignments/001_ATE/instructions.md`, corrigiendo el error algebraico identificado en la exportación.
 
 No se agregarán estimadores, aplicaciones ni extensiones conceptuales externas.
 
@@ -59,7 +63,8 @@ La presentación tendrá aproximadamente 48–55 diapositivas. La secuencia segu
 9. una asignación aleatoria;
 10. Monte Carlo con selección y aleatorización;
 11. síntesis causal;
-12. implementación en Google Colab.
+12. taller guiado recuperado de Canvas;
+13. implementación en Google Colab.
 
 Cada procedimiento seguirá, cuando la densidad lo requiera, esta secuencia:
 
@@ -70,6 +75,26 @@ Cada procedimiento seguirá, cuando la densidad lo requiera, esta secuencia:
 5. conclusión permitida y conclusión no permitida.
 
 Se incluirán preguntas breves para estudiantes. La respuesta aparecerá en la diapositiva siguiente, nunca en la misma.
+
+## Actividad recuperada de Canvas
+
+La `Pausa 1` se convertirá en un taller guiado de 10–12 minutos dentro de la presentación. Se conservará la tabla original de ocho individuos y se preguntará por:
+
+1. ATE;
+2. ATT;
+3. ATU;
+4. estimador naïve;
+5. sesgo de selección.
+
+Primero se mostrará la tabla y las preguntas sin respuestas. Después se revelarán los cálculos paso a paso y los resultados verificados: ATE = 0.75, ATT = 0.75, ATU = 0.75, naïve = 6.75 y sesgo de selección = 6.00.
+
+La tarea `ATE` se incorporará como ejercicio algebraico final. La exportación de Canvas contiene `(1+\pi)(ATT-ATU)`, que es incorrecto. La presentación utilizará y demostrará la identidad correcta:
+
+$$
+\text{Naïve} = ATE + \text{sesgo de selección} + (1-\pi)(ATT-ATU).
+$$
+
+El PDF etiquetado externamente como `Taller 1` no se incorporará porque internamente corresponde al Taller 2 y desarrolla RCT, balance, heterogeneidad y poder estadístico.
 
 ## Tratamiento de los outputs de Stata
 
@@ -133,5 +158,7 @@ Antes de entregar:
 - Todos los comandos y resultados relevantes de Stata incorporados.
 - Outputs legibles y numéricamente verificados.
 - Notebook reproducible desde Google Colab.
+- Taller guiado de Canvas incluido con respuestas reveladas en diapositivas posteriores.
+- Demostración ATE incluida con el signo algebraico corregido.
 - HTML y PDF sin errores de renderizado ni desbordamientos.
 - Ninguna modificación a presentaciones existentes o materiales de RDD.
