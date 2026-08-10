@@ -32,21 +32,21 @@ resultado_original <- calcular_estimandos(datos)
 print(datos[c("X", "D", "yd0", "yd1", "y", "tau")])
 print(resultado_original)
 
-cat("\n=== 2. MISMA SELECCIÓN CON N = 10.000 ===\n")
-datos_n10000 <- datos[rep(seq_len(nrow(datos)), each = 1250), ]
-row.names(datos_n10000) <- NULL
-resultado_n10000 <- calcular_estimandos(datos_n10000)
-stopifnot(nrow(datos_n10000) == 10000)
+cat("\n=== 2. MISMA SELECCIÓN CON N = 80.000 ===\n")
+datos_n80000 <- datos[rep(seq_len(nrow(datos)), each = 10000), ]
+row.names(datos_n80000) <- NULL
+resultado_n80000 <- calcular_estimandos(datos_n80000)
+stopifnot(nrow(datos_n80000) == 80000)
 stopifnot(isTRUE(all.equal(
   resultado_original[c("NAIVE", "SESGO_ATT")],
-  resultado_n10000[c("NAIVE", "SESGO_ATT")],
+  resultado_n80000[c("NAIVE", "SESGO_ATT")],
   tolerance = 1e-12
 )))
-print(resultado_n10000)
+print(resultado_n80000)
 
 cat("\n=== 3. UNA ASIGNACIÓN ALEATORIA ===\n")
 set.seed(87634)
-datos_aleatorios <- datos_n10000
+datos_aleatorios <- datos_n80000
 datos_aleatorios$D <- as.numeric(runif(nrow(datos_aleatorios)) < 0.5)
 datos_aleatorios <- construir_resultados(datos_aleatorios)
 resultado_aleatorio <- calcular_estimandos(datos_aleatorios)
@@ -57,8 +57,8 @@ set.seed(87634)
 n_repeticiones <- 1000
 estimadores_mc <- numeric(n_repeticiones)
 for (repeticion in seq_len(n_repeticiones)) {
-  D_nuevo <- as.numeric(runif(nrow(datos_n10000)) < 0.5)
-  y_nuevo <- D_nuevo * datos_n10000$yd1 + (1 - D_nuevo) * datos_n10000$yd0
+  D_nuevo <- as.numeric(runif(nrow(datos_n80000)) < 0.5)
+  y_nuevo <- D_nuevo * datos_n80000$yd1 + (1 - D_nuevo) * datos_n80000$yd0
   estimadores_mc[repeticion] <- mean(y_nuevo[D_nuevo == 1]) -
     mean(y_nuevo[D_nuevo == 0])
 }

@@ -210,7 +210,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#materiales-para-la-clase-1"><i class="fa fa-check"></i>Materiales para la clase</a></li>
 <li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#objetivos"><i class="fa fa-check"></i>Objetivos</a></li>
 <li class="chapter" data-level="4.1" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#ejercicio-manual-identificar-los-estimandos"><i class="fa fa-check"></i><b>4.1</b> Ejercicio manual: identificar los estimandos</a></li>
-<li class="chapter" data-level="4.2" data-path="04-ParametrosStata.html"><a href="#misma-selecci%C3%B3n-con-n-10.000"><i class="fa fa-check"></i><b>4.2</b> Misma selección con N = 10.000</a></li>
+<li class="chapter" data-level="4.2" data-path="04-ParametrosStata.html"><a href="#misma-selecci%C3%B3n-con-n-80.000"><i class="fa fa-check"></i><b>4.2</b> Misma selección con N = 80.000</a></li>
 <li class="chapter" data-level="4.3" data-path="04-ParametrosStata.html"><a href="#una-asignaci%C3%B3n-aleatoria"><i class="fa fa-check"></i><b>4.3</b> Una asignación aleatoria</a></li>
 <li class="chapter" data-level="4.4" data-path="04-ParametrosStata.html"><a href="#monte-carlo-un-d-nuevo-en-cada-repetici%C3%B3n"><i class="fa fa-check"></i><b>4.4</b> Monte Carlo: un D nuevo en cada repetición</a></li>
 <li class="chapter" data-level="4.5" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#ejercicios-1"><i class="fa fa-check"></i><b>4.5</b> Ejercicios</a></li>
@@ -775,10 +775,10 @@ comparación seleccionada en un efecto causal.</p>
 </div>
 </div>
 </div>
-<div id="misma-selección-con-n-10.000" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Misma selección con N = 10.000<a href="#misma-selecci%C3%B3n-con-n-10.000" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="misma-selección-con-n-80.000" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Misma selección con N = 80.000<a href="#misma-selecci%C3%B3n-con-n-80.000" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Ahora repetimos proporcionalmente los mismos ocho perfiles hasta obtener
-exactamente 10.000 filas. No tocamos <code>D</code>: las mismas clases de personas siguen
+exactamente 80.000 filas. No tocamos <code>D</code>: las mismas clases de personas siguen
 tratadas y no tratadas.</p>
 <div class="boxcode">
 <p><strong>Comando clave</strong></p>
@@ -786,15 +786,15 @@ tratadas y no tratadas.</p>
 <span id="cb53-2"><a href="parametros-causales-stata.html#cb53-2" tabindex="-1"></a><span class="kw">generate</span> X = (<span class="dt">_n</span> &gt; 4)</span>
 <span id="cb53-3"><a href="parametros-causales-stata.html#cb53-3" tabindex="-1"></a><span class="kw">generate</span> tau = yd1-yd0</span>
 <span id="cb53-4"><a href="parametros-causales-stata.html#cb53-4" tabindex="-1"></a><span class="kw">generate</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb53-5"><a href="parametros-causales-stata.html#cb53-5" tabindex="-1"></a>expand 1250</span>
-<span id="cb53-6"><a href="parametros-causales-stata.html#cb53-6" tabindex="-1"></a><span class="kw">assert</span> _N == 10000</span>
+<span id="cb53-5"><a href="parametros-causales-stata.html#cb53-5" tabindex="-1"></a>expand 10000</span>
+<span id="cb53-6"><a href="parametros-causales-stata.html#cb53-6" tabindex="-1"></a><span class="kw">assert</span> _N == 80000</span>
 <span id="cb53-7"><a href="parametros-causales-stata.html#cb53-7" tabindex="-1"></a></span>
 <span id="cb53-8"><a href="parametros-causales-stata.html#cb53-8" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
-<span id="cb53-9"><a href="parametros-causales-stata.html#cb53-9" tabindex="-1"></a><span class="fu">scalar</span> media_y1_n10000 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb53-9"><a href="parametros-causales-stata.html#cb53-9" tabindex="-1"></a><span class="fu">scalar</span> media_y1_n80000 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
 <span id="cb53-10"><a href="parametros-causales-stata.html#cb53-10" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
-<span id="cb53-11"><a href="parametros-causales-stata.html#cb53-11" tabindex="-1"></a><span class="fu">scalar</span> NAIVE_n10000 = media_y1_n10000-<span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb53-11"><a href="parametros-causales-stata.html#cb53-11" tabindex="-1"></a><span class="fu">scalar</span> NAIVE_n80000 = media_y1_n80000-<span class="fu">r</span>(<span class="kw">mean</span>)</span>
 <span id="cb53-12"><a href="parametros-causales-stata.html#cb53-12" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> D == 1</span>
-<span id="cb53-13"><a href="parametros-causales-stata.html#cb53-13" tabindex="-1"></a><span class="fu">scalar</span> SESGO_n10000 = NAIVE_n10000-<span class="fu">r</span>(<span class="kw">mean</span>)</span></code></pre></div>
+<span id="cb53-13"><a href="parametros-causales-stata.html#cb53-13" tabindex="-1"></a><span class="fu">scalar</span> SESGO_n80000 = NAIVE_n80000-<span class="fu">r</span>(<span class="kw">mean</span>)</span></code></pre></div>
 </div>
 <div class="boxoutput">
 <p><strong>Salida central</strong></p>
@@ -840,37 +840,37 @@ tratadas y no tratadas.</p>
 </tr>
 <tr class="odd">
 <td align="left">41</td>
-<td align="left">Misma selección, N = 10.000</td>
+<td align="left">Misma selección, N = 80.000</td>
 <td align="left">ATE</td>
 <td align="right">0.75</td>
-<td align="right">10000</td>
+<td align="right">80000</td>
 </tr>
 <tr class="even">
 <td align="left">42</td>
-<td align="left">Misma selección, N = 10.000</td>
+<td align="left">Misma selección, N = 80.000</td>
 <td align="left">ATT</td>
 <td align="right">0.75</td>
-<td align="right">10000</td>
+<td align="right">80000</td>
 </tr>
 <tr class="odd">
 <td align="left">55</td>
-<td align="left">Misma selección, N = 10.000</td>
+<td align="left">Misma selección, N = 80.000</td>
 <td align="left">Naïve</td>
 <td align="right">6.75</td>
-<td align="right">10000</td>
+<td align="right">80000</td>
 </tr>
 <tr class="even">
 <td align="left">58</td>
-<td align="left">Misma selección, N = 10.000</td>
+<td align="left">Misma selección, N = 80.000</td>
 <td align="left">Naïve − ATT</td>
 <td align="right">6.00</td>
-<td align="right">10000</td>
+<td align="right">80000</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="boxkey">
-<p><strong>Resultado clave.</strong> Con N=10.000, NAIVE continúa en 6.75 y
+<p><strong>Resultado clave.</strong> Con N=80.000, NAIVE continúa en 6.75 y
 NAIVE−ATT continúa en 6. El estimador no se acerca al parámetro:
 repetimos la misma selección con más filas.</p>
 </div>
@@ -883,7 +883,7 @@ una propiedad de la comparación, no una consecuencia de una muestra pequeña.</
 </div>
 <div id="una-asignación-aleatoria" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Una asignación aleatoria<a href="#una-asignaci%C3%B3n-aleatoria" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Conservamos las mismas 10.000 filas, <code>yd0</code>, <code>yd1</code>, <code>X</code> y <code>tau</code>. Eliminamos el
+<p>Conservamos las mismas 80.000 filas, <code>yd0</code>, <code>yd1</code>, <code>X</code> y <code>tau</code>. Eliminamos el
 <code>D</code> observacional y generamos un tratamiento independiente de los resultados
 potenciales.</p>
 <div class="boxcode">
@@ -900,7 +900,7 @@ potenciales.</p>
 </div>
 <div class="boxoutput">
 <p><strong>Salida central.</strong> En la realización reproducible del do-file, la diferencia
-de medias es 0.801, frente a un ATE de 0.75.</p>
+de medias es 0.751, frente a un ATE de 0.75.</p>
 </div>
 <div class="boxinfo">
 <p><strong>Interpretación.</strong> La aleatorización elimina la asociación sistemática entre
@@ -911,7 +911,7 @@ produzca exactamente el ATE: todavía existe variación de asignación.</p>
 <div id="monte-carlo-un-d-nuevo-en-cada-repetición" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> Monte Carlo: un D nuevo en cada repetición<a href="#monte-carlo-un-d-nuevo-en-cada-repetici%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Para verificar la afirmación de insesgadez repetimos únicamente la asignación.
-En cada repetición los 10.000 perfiles son idénticos, pero cada persona recibe
+En cada repetición los 80.000 perfiles son idénticos, pero cada persona recibe
 un <code>D</code> nuevo e independiente.</p>
 <div class="boxcode">
 <p><strong>Comando clave</strong></p>
@@ -933,7 +933,7 @@ un <code>D</code> nuevo e independiente.</p>
 <div class="boxoutput">
 <p><strong>Salida central.</strong> En 1.000
 asignaciones, el promedio del estimador es 0.75 y su desviación
-estándar es 0.065. El ATE fijo es 0.75.</p>
+estándar es 0.022. El ATE fijo es 0.75.</p>
 </div>
 <div class="float">
 <img src="dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png" alt="Distribución de la diferencia de medias cuando en cada repetición se genera un D nuevo." />
@@ -1006,7 +1006,7 @@ unidades incluidas.</p>
 </div>
 <div class="boxquestion">
 <p><strong>S-P3 (6 puntos). Aumentar N sin cambiar la selección.</strong> Parta de
-<code>04_data.dta</code>, replique proporcionalmente los perfiles hasta N=10.000 y
+<code>04_data.dta</code>, replique proporcionalmente los perfiles hasta N=80.000 y
 demuestre que NAIVE y NAIVE−ATT no cambian. Explique por qué este resultado
 contradice la afirmación “una muestra grande corrige el sesgo”.</p>
 <p><strong>Comandos permitidos:</strong> <code>use</code>, <code>generate</code>, <code>expand</code>, <code>assert</code>, <code>summarize</code> y

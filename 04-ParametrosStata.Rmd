@@ -54,13 +54,13 @@ tabla_manual$valor <- round(tabla_manual$valor, 3)
 names(tabla_manual) <- c("Estimando", "Valor", "N")
 
 tabla_n <- point[
-  point$escenario %in% c("datos_originales", "seleccion_n10000") &
+  point$escenario %in% c("datos_originales", "seleccion_n80000") &
     point$estimando %in% c("ATE", "ATT", "NAIVE", "SESGO_ATT"),
   c("escenario", "estimando", "valor", "N")
 ]
 tabla_n$escenario <- c(
   datos_originales = "Datos originales",
-  seleccion_n10000 = "Misma selección, N = 10.000"
+  seleccion_n80000 = "Misma selección, N = 80.000"
 )[tabla_n$escenario]
 tabla_n$estimando <- c(
   ATE = "ATE", ATT = "ATT", NAIVE = "Naïve", SESGO_ATT = "Naïve − ATT"
@@ -197,10 +197,10 @@ de medias. Los errores robustos cambian la inferencia, pero no convierten una
 comparación seleccionada en un efecto causal.
 :::
 
-## Misma selección con N = 10.000
+## Misma selección con N = 80.000
 
 Ahora repetimos proporcionalmente los mismos ocho perfiles hasta obtener
-exactamente 10.000 filas. No tocamos `D`: las mismas clases de personas siguen
+exactamente 80.000 filas. No tocamos `D`: las mismas clases de personas siguen
 tratadas y no tratadas.
 
 ::: {.boxcode}
@@ -211,15 +211,15 @@ use "04_data.dta", clear
 generate X = (_n > 4)
 generate tau = yd1-yd0
 generate y = D*yd1 + (1-D)*yd0
-expand 1250
-assert _N == 10000
+expand 10000
+assert _N == 80000
 
 summarize y if D == 1
-scalar media_y1_n10000 = r(mean)
+scalar media_y1_n80000 = r(mean)
 summarize y if D == 0
-scalar NAIVE_n10000 = media_y1_n10000-r(mean)
+scalar NAIVE_n80000 = media_y1_n80000-r(mean)
 summarize tau if D == 1
-scalar SESGO_n10000 = NAIVE_n10000-r(mean)
+scalar SESGO_n80000 = NAIVE_n80000-r(mean)
 ```
 :::
 
@@ -232,7 +232,7 @@ knitr::kable(tabla_n, caption = "La misma asignación observacional con dos tama
 :::
 
 ::: {.boxkey}
-**Resultado clave.** Con N=10.000, NAIVE continúa en `r fmt(naive)` y
+**Resultado clave.** Con N=80.000, NAIVE continúa en `r fmt(naive)` y
 NAIVE−ATT continúa en `r fmt(sesgo)`. El estimador no se acerca al parámetro:
 repetimos la misma selección con más filas.
 :::
@@ -246,7 +246,7 @@ una propiedad de la comparación, no una consecuencia de una muestra pequeña.
 
 ## Una asignación aleatoria
 
-Conservamos las mismas 10.000 filas, `yd0`, `yd1`, `X` y `tau`. Eliminamos el
+Conservamos las mismas 80.000 filas, `yd0`, `yd1`, `X` y `tau`. Eliminamos el
 `D` observacional y generamos un tratamiento independiente de los resultados
 potenciales.
 
@@ -280,7 +280,7 @@ produzca exactamente el ATE: todavía existe variación de asignación.
 ## Monte Carlo: un D nuevo en cada repetición
 
 Para verificar la afirmación de insesgadez repetimos únicamente la asignación.
-En cada repetición los 10.000 perfiles son idénticos, pero cada persona recibe
+En cada repetición los 80.000 perfiles son idénticos, pero cada persona recibe
 un `D` nuevo e independiente.
 
 ::: {.boxcode}
@@ -350,7 +350,7 @@ unidades incluidas.
 
 ::: {.boxquestion}
 **S-P3 (6 puntos). Aumentar N sin cambiar la selección.** Parta de
-`04_data.dta`, replique proporcionalmente los perfiles hasta N=10.000 y
+`04_data.dta`, replique proporcionalmente los perfiles hasta N=80.000 y
 demuestre que NAIVE y NAIVE−ATT no cambian. Explique por qué este resultado
 contradice la afirmación “una muestra grande corrige el sesgo”.
 

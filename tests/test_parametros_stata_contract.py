@@ -98,7 +98,7 @@ def test_page_contains_complete_executable_stata_workflow():
         "diferencia de medias": r"(?im)^\s*ttest\s+\w+\s*,\s*by\s*\(",
         "regresión": r"(?im)^\s*regress\s+",
         "medias por condición": r"(?im)^\s*summarize\s+\w+\s+if\s+",
-        "muestra de diez mil": r"(?im)^\s*expand\s+1250\b",
+        "muestra de ochenta mil": r"(?im)^\s*expand\s+10000\b",
         "semilla": r"(?im)^\s*set\s+seed\s+\d+\b",
         "simulación": r"(?im)^\s*simulate\s+",
     }
@@ -179,7 +179,7 @@ def test_practice_has_objectives_prerequisites_sequence_and_bridge():
         "## Materiales para la clase {-}",
         "## Objetivos {-}",
             "## Ejercicio manual: identificar los estimandos",
-            "## Misma selección con N = 10.000",
+            "## Misma selección con N = 80.000",
             "## Una asignación aleatoria",
             "## Monte Carlo: un D nuevo en cada repetición",
             "## Ejercicios",
@@ -246,23 +246,23 @@ def test_randomization_graph_exists():
     assert graph.is_file() and graph.stat().st_size > 0
 
 
-def test_point_scenarios_preserve_selection_at_exactly_ten_thousand():
+def test_point_scenarios_preserve_selection_at_exactly_eighty_thousand():
     with (BASE / "results/parameters_results.csv").open(
         newline="", encoding="utf-8-sig"
     ) as handle:
         rows = list(csv.DictReader(handle))
     scenarios = {row["escenario"] for row in rows}
     assert scenarios == {
-        "datos_originales", "seleccion_n10000", "aleatorizacion_unica"
+        "datos_originales", "seleccion_n80000", "aleatorizacion_unica"
     }
-    expanded = [row for row in rows if row["escenario"] == "seleccion_n10000"]
-    assert expanded and {int(row["N"]) for row in expanded} == {10000}
+    expanded = [row for row in rows if row["escenario"] == "seleccion_n80000"]
+    assert expanded and {int(row["N"]) for row in expanded} == {80000}
     lookup = {
         (row["escenario"], row["estimando"]): float(row["valor"])
         for row in rows
     }
     for estimand in ["NAIVE", "SESGO_ATT"]:
-        assert lookup[("datos_originales", estimand)] == lookup[("seleccion_n10000", estimand)]
+        assert lookup[("datos_originales", estimand)] == lookup[("seleccion_n80000", estimand)]
 
 
 def test_three_language_sources_follow_the_same_four_stages():
@@ -271,7 +271,7 @@ def test_three_language_sources_follow_the_same_four_stages():
         "R": (BASE / "04_R.R").read_text(encoding="utf-8"),
         "Python": (BASE / "04_phyton.ipynb").read_text(encoding="utf-8"),
     }
-    markers = ["EJERCICIO MANUAL", "N = 10.000", "ASIGNACIÓN ALEATORIA", "MONTE CARLO"]
+    markers = ["EJERCICIO MANUAL", "N = 80.000", "ASIGNACIÓN ALEATORIA", "MONTE CARLO"]
     for language, source in sources.items():
         normalized = source.upper().replace("\\U00F3", "Ó").replace("\\U00D3", "Ó")
         for marker in markers:

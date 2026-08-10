@@ -98,20 +98,20 @@ postfile `pointpost' str24 escenario str32 estimando double valor long N using "
 post_estimands, postname(`pointpost') scenario("datos_originales")
 
 * ================================================================
-* 2. MISMA SELECCIÓN CON N = 10.000: más N no elimina el sesgo
+* 2. MISMA SELECCIÓN CON N = 80.000: más N no elimina el sesgo
 * ================================================================
-expand 1250
-assert _N == 10000
-post_estimands, postname(`pointpost') scenario("seleccion_n10000")
+expand 10000
+assert _N == 80000
+post_estimands, postname(`pointpost') scenario("seleccion_n80000")
 
 quietly summarize y if D == 1
-scalar media_y1_n10000 = r(mean)
+scalar media_y1_n80000 = r(mean)
 quietly summarize y if D == 0
-scalar NAIVE_n10000 = media_y1_n10000-r(mean)
+scalar NAIVE_n80000 = media_y1_n80000-r(mean)
 quietly summarize tau if D == 1
-scalar SESGO_n10000 = NAIVE_n10000-r(mean)
-assert abs(NAIVE_n10000-NAIVE_original) < 1e-10
-assert abs(SESGO_n10000-SESGO_original) < 1e-10
+scalar SESGO_n80000 = NAIVE_n80000-r(mean)
+assert abs(NAIVE_n80000-NAIVE_original) < 1e-10
+assert abs(SESGO_n80000-SESGO_original) < 1e-10
 
 drop y D
 save `population', replace
@@ -169,7 +169,7 @@ use "results/monte_carlo_summary.dta", clear
 export delimited using "results/monte_carlo_summary.csv", replace
 restore
 
-histogram estimador, fraction color(forest_green%70) xline(`=ATE_original', lcolor(navy) lwidth(medthick)) title("Estimador bajo asignación aleatoria") subtitle("1.000 asignaciones nuevas; N = 10.000") xtitle("Diferencia de medias") ytitle("Fracción") note("Línea azul: ATE = `=string(ATE_original, "%5.2f")'") name(g_aleatorizacion, replace)
+histogram estimador, fraction color(forest_green%70) xline(`=ATE_original', lcolor(navy) lwidth(medthick)) title("Estimador bajo asignación aleatoria") subtitle("1.000 asignaciones nuevas; N = 80.000") xtitle("Diferencia de medias") ytitle("Fracción") note("Línea azul: ATE = `=string(ATE_original, "%5.2f")'") name(g_aleatorizacion, replace)
 graph export "sesgo_con_aleatorizacion.png", replace width(1800)
 
 use `original', clear

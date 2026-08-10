@@ -141,10 +141,10 @@ de medias. Los errores robustos cambian la inferencia, pero no convierten una
 comparación seleccionada en un efecto causal.
 :::
 
-## Misma selección con N = 10.000
+## Misma selección con N = 80.000
 
 Ahora repetimos proporcionalmente los mismos ocho perfiles hasta obtener
-exactamente 10.000 filas. No tocamos `D`: las mismas clases de personas siguen
+exactamente 80.000 filas. No tocamos `D`: las mismas clases de personas siguen
 tratadas y no tratadas.
 
 ::: {.boxcode}
@@ -155,15 +155,15 @@ use "04_data.dta", clear
 generate X = (_n > 4)
 generate tau = yd1-yd0
 generate y = D*yd1 + (1-D)*yd0
-expand 1250
-assert _N == 10000
+expand 10000
+assert _N == 80000
 
 summarize y if D == 1
-scalar media_y1_n10000 = r(mean)
+scalar media_y1_n80000 = r(mean)
 summarize y if D == 0
-scalar NAIVE_n10000 = media_y1_n10000-r(mean)
+scalar NAIVE_n80000 = media_y1_n80000-r(mean)
 summarize tau if D == 1
-scalar SESGO_n10000 = NAIVE_n10000-r(mean)
+scalar SESGO_n80000 = NAIVE_n80000-r(mean)
 ```
 :::
 
@@ -179,14 +179,14 @@ Table: (\#tab:tabla-n)La misma asignación observacional con dos tamaños nomina
 |22 |Datos originales            |ATT         |  0.75|     8|
 |35 |Datos originales            |Naïve       |  6.75|     8|
 |38 |Datos originales            |Naïve − ATT |  6.00|     8|
-|41 |Misma selección, N = 10.000 |ATE         |  0.75| 10000|
-|42 |Misma selección, N = 10.000 |ATT         |  0.75| 10000|
-|55 |Misma selección, N = 10.000 |Naïve       |  6.75| 10000|
-|58 |Misma selección, N = 10.000 |Naïve − ATT |  6.00| 10000|
+|41 |Misma selección, N = 80.000 |ATE         |  0.75| 80000|
+|42 |Misma selección, N = 80.000 |ATT         |  0.75| 80000|
+|55 |Misma selección, N = 80.000 |Naïve       |  6.75| 80000|
+|58 |Misma selección, N = 80.000 |Naïve − ATT |  6.00| 80000|
 :::
 
 ::: {.boxkey}
-**Resultado clave.** Con N=10.000, NAIVE continúa en 6.75 y
+**Resultado clave.** Con N=80.000, NAIVE continúa en 6.75 y
 NAIVE−ATT continúa en 6. El estimador no se acerca al parámetro:
 repetimos la misma selección con más filas.
 :::
@@ -200,7 +200,7 @@ una propiedad de la comparación, no una consecuencia de una muestra pequeña.
 
 ## Una asignación aleatoria
 
-Conservamos las mismas 10.000 filas, `yd0`, `yd1`, `X` y `tau`. Eliminamos el
+Conservamos las mismas 80.000 filas, `yd0`, `yd1`, `X` y `tau`. Eliminamos el
 `D` observacional y generamos un tratamiento independiente de los resultados
 potenciales.
 
@@ -222,7 +222,7 @@ display "Diferencia aleatoria = " media_y1_aleatoria-r(mean)
 
 ::: {.boxoutput}
 **Salida central.** En la realización reproducible del do-file, la diferencia
-de medias es 0.801, frente a un ATE de 0.75.
+de medias es 0.751, frente a un ATE de 0.75.
 :::
 
 ::: {.boxinfo}
@@ -234,7 +234,7 @@ produzca exactamente el ATE: todavía existe variación de asignación.
 ## Monte Carlo: un D nuevo en cada repetición
 
 Para verificar la afirmación de insesgadez repetimos únicamente la asignación.
-En cada repetición los 10.000 perfiles son idénticos, pero cada persona recibe
+En cada repetición los 80.000 perfiles son idénticos, pero cada persona recibe
 un `D` nuevo e independiente.
 
 ::: {.boxcode}
@@ -261,7 +261,7 @@ summarize estimador, detail
 ::: {.boxoutput}
 **Salida central.** En 1.000
 asignaciones, el promedio del estimador es 0.75 y su desviación
-estándar es 0.065. El ATE fijo es 0.75.
+estándar es 0.022. El ATE fijo es 0.75.
 :::
 
 ![Distribución de la diferencia de medias cuando en cada repetición se genera un D nuevo.](dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png)
@@ -308,7 +308,7 @@ unidades incluidas.
 
 ::: {.boxquestion}
 **S-P3 (6 puntos). Aumentar N sin cambiar la selección.** Parta de
-`04_data.dta`, replique proporcionalmente los perfiles hasta N=10.000 y
+`04_data.dta`, replique proporcionalmente los perfiles hasta N=80.000 y
 demuestre que NAIVE y NAIVE−ATT no cambian. Explique por qué este resultado
 contradice la afirmación “una muestra grande corrige el sesgo”.
 
