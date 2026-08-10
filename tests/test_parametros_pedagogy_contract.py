@@ -97,20 +97,12 @@ def test_theory_has_exactly_three_exam_questions_without_answers():
         _assert_no_answer_markers(block)
 
 
-def test_practice_restores_twelve_guided_stages():
+def test_practice_uses_the_four_aligned_guided_stages():
     stages = [
-        "Preparación de los datos",
-        "Descripción por grupos",
-        "Diferencia de medias",
-        "Regresión simple",
-        "Programa `estimadores`",
-        "ATE, ATT, ATU y CATE",
-        "Descomposición del sesgo",
-        "Duplicación de observaciones",
-        "Asignación aleatoria",
-        "Monte Carlo con selección",
-        "Monte Carlo con aleatorización",
-        "Comparación gráfica",
+        "Ejercicio manual",
+        "Misma selección con N = 10.000",
+        "Una asignación aleatoria",
+        "Monte Carlo: un D nuevo en cada repetición",
     ]
     headings = re.findall(r"^### (.+)$", PRACTICE, re.MULTILINE)
     assert [heading for heading in headings if heading in stages] == stages
@@ -149,13 +141,14 @@ def test_each_practice_question_states_allowed_commands_and_expected_product():
         assert block.index("Comandos permitidos:") < block.index("Producto esperado:")
 
 
-def test_s_p4_specifies_the_rule_that_the_private_rubric_grades():
+def test_s_p4_explains_randomization_in_one_draw_and_in_repetition():
     questions = _assert_exact_question_codes(
         PRACTICE, "S-", ["S-P1", "S-P2", "S-P3", "S-P4"]
     )
     s_p4 = questions[-1][0]
-    assert "complemento exacto de la regla canónica" in s_p4
-    assert "invlogit(-(yd0-r(mean))/2)" in s_p4
+    assert "una asignación" in s_p4.casefold()
+    assert "repetición" in s_p4.casefold()
+    assert "ATE" in s_p4
     assert "código Stata ejecutable" in s_p4
     assert "pseudocódigo" not in s_p4.casefold()
 

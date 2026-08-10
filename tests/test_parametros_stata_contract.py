@@ -59,10 +59,15 @@ def _has_random_half_assignment(code):
 def test_downloads_are_first_and_complete():
     h2_headings = re.findall(r"^##\s+[^\n]+", TEXT, re.MULTILINE)
     assert h2_headings[0] == "## Materiales para la clase {-}"
+    assert "::: {.class-materials}" in TEXT
+    assert "Descarga antes de comenzar" in TEXT
     assert all((BASE / path).is_file() for path in REQUIRED_DOWNLOADS)
-    for path in REQUIRED_DOWNLOADS:
-        linked_path = f"dofile/04_ParametrosStata/{path}"
-        assert re.search(rf"\[[^]]+]\((?:<[^>]*|[^)]*){re.escape(linked_path)}(?:[^>]*>|[^)]*)\)", TEXT)
+    for path in ["04_stata.do", "04_data.dta", "04_R.R", "04_phyton.ipynb"]:
+        raw = (
+            "https://raw.githubusercontent.com/adiazescobar/libro_cortes/"
+            f"main/dofile/04_ParametrosStata/{path}"
+        )
+        assert raw in TEXT
 
 
 def test_canonical_do_file_exports_exactly_the_page_artifacts():
@@ -73,9 +78,7 @@ def test_canonical_do_file_exports_exactly_the_page_artifacts():
         "results/monte_carlo_summary.csv",
     }
     assert graph_exports == {
-        "sesgo_con_seleccion.png",
         "sesgo_con_aleatorizacion.png",
-        "comparacion_escenarios.png",
     }
 
 
@@ -94,9 +97,8 @@ def test_page_contains_complete_executable_stata_workflow():
         "creación de X": r"(?im)^\s*generate\s+X\s*=",
         "diferencia de medias": r"(?im)^\s*ttest\s+\w+\s*,\s*by\s*\(",
         "regresión": r"(?im)^\s*regress\s+",
-        "programa estimadores": r"(?im)^\s*program\s+define\s+estimadores\b",
         "medias por condición": r"(?im)^\s*summarize\s+\w+\s+if\s+",
-        "duplicación": r"(?im)^\s*expand\s+10000\b",
+        "muestra de diez mil": r"(?im)^\s*expand\s+1250\b",
         "semilla": r"(?im)^\s*set\s+seed\s+\d+\b",
         "simulación": r"(?im)^\s*simulate\s+",
     }
@@ -104,15 +106,13 @@ def test_page_contains_complete_executable_stata_workflow():
     assert not missing, f"Faltan comandos ejecutables para: {', '.join(missing)}"
 
 
-def test_page_contains_both_executable_assignment_rules():
+def test_page_contains_only_the_original_and_random_assignment_rules():
     code = _executable_stata_text()
-    assert _has_selection_assignment(code), (
-        "Falta una regla ejecutable donde la selección dependa de X o yd0 "
-        "mediante una condición o probabilidad"
-    )
     assert _has_random_half_assignment(code), (
         "Falta la regla ejecutable de asignación aleatoria runiform() < .5"
     )
+    assert "invlogit" not in code.casefold()
+    assert not _has_selection_assignment(code)
 
 
 def test_assignment_rule_matchers_reject_superficial_mentions():
@@ -178,12 +178,10 @@ def test_practice_has_objectives_prerequisites_sequence_and_bridge():
     headings = [
         "## Materiales para la clase {-}",
         "## Objetivos {-}",
-            "## Describir los datos y construir el resultado observado",
-            "## Relacionar diferencia de medias y regresión",
-            "## Calcular parámetros causales y heterogeneidad",
-            "## Duplicar observaciones no resuelve la selección",
-            "## Reasignar el tratamiento al azar",
-            "## Repetir el experimento: Monte Carlo",
+            "## Ejercicio manual: identificar los estimandos",
+            "## Misma selección con N = 10.000",
+            "## Una asignación aleatoria",
+            "## Monte Carlo: un D nuevo en cada repetición",
             "## Ejercicios",
             "## Síntesis",
         "## Puente al capítulo siguiente {-}",
@@ -223,27 +221,54 @@ def test_monte_carlo_outputs_have_complete_scenarios():
     with (BASE / "results/monte_carlo_summary.csv").open(newline="", encoding="utf-8-sig") as handle:
         summary = list(csv.DictReader(handle))
     assert {"escenario", "N", "media", "desv_est", "p5", "mediana", "p95"} <= set(summary[0])
-    assert {row["escenario"] for row in summary} == {"seleccion", "aleatorizacion"}
+    assert {row["escenario"] for row in summary} == {"aleatorizacion"}
     assert {int(row["N"]) for row in summary} == {1000}
 
     draws = BASE / "results/monte_carlo_draws.dta"
     assert draws.is_file() and draws.stat().st_size > 0
     draws_df = pd.read_stata(draws, convert_categoricals=False)
     assert list(draws_df.columns) == ["escenario", "rep", "sesgo"]
-    assert len(draws_df) == 2000
+    assert len(draws_df) == 1000
     assert not draws_df.isna().any().any()
-    for scenario in ["seleccion", "aleatorizacion"]:
-        scenario_draws = draws_df.loc[draws_df["escenario"] == scenario]
-        assert len(scenario_draws) == 1000
-        assert scenario_draws["rep"].is_unique
-        assert set(scenario_draws["rep"]) == set(range(1, 1001))
+    scenario_draws = draws_df.loc[draws_df["escenario"] == "aleatorizacion"]
+    assert len(scenario_draws) == 1000
+    assert scenario_draws["rep"].is_unique
+    assert set(scenario_draws["rep"]) == set(range(1, 1001))
 
 
-def test_all_three_stata_graphs_exist():
-    for name in [
-        "sesgo_con_seleccion.png",
-        "sesgo_con_aleatorizacion.png",
-        "comparacion_escenarios.png",
-    ]:
-        graph = BASE / name
-        assert graph.is_file() and graph.stat().st_size > 0
+def test_randomization_graph_exists():
+    graph = BASE / "sesgo_con_aleatorizacion.png"
+    assert graph.is_file() and graph.stat().st_size > 0
+
+
+def test_point_scenarios_preserve_selection_at_exactly_ten_thousand():
+    with (BASE / "results/parameters_results.csv").open(
+        newline="", encoding="utf-8-sig"
+    ) as handle:
+        rows = list(csv.DictReader(handle))
+    scenarios = {row["escenario"] for row in rows}
+    assert scenarios == {
+        "datos_originales", "seleccion_n10000", "aleatorizacion_unica"
+    }
+    expanded = [row for row in rows if row["escenario"] == "seleccion_n10000"]
+    assert expanded and {int(row["N"]) for row in expanded} == {10000}
+    lookup = {
+        (row["escenario"], row["estimando"]): float(row["valor"])
+        for row in rows
+    }
+    for estimand in ["NAIVE", "SESGO_ATT"]:
+        assert lookup[("datos_originales", estimand)] == lookup[("seleccion_n10000", estimand)]
+
+
+def test_three_language_sources_follow_the_same_four_stages():
+    sources = {
+        "Stata": DO_TEXT,
+        "R": (BASE / "04_R.R").read_text(encoding="utf-8"),
+        "Python": (BASE / "04_phyton.ipynb").read_text(encoding="utf-8"),
+    }
+    markers = ["EJERCICIO MANUAL", "N = 10.000", "ASIGNACIÓN ALEATORIA", "MONTE CARLO"]
+    for language, source in sources.items():
+        normalized = source.upper().replace("\\U00F3", "Ó").replace("\\U00D3", "Ó")
+        for marker in markers:
+            assert marker in normalized, f"{language} no contiene la etapa {marker}"
+        assert "INVLOGIT" not in normalized
