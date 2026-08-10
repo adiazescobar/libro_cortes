@@ -194,6 +194,11 @@ def test_practice_has_objectives_prerequisites_sequence_and_bridge():
 
 def test_download_label_says_python_and_iframes_have_titles():
     assert "[Notebook de Python (`04_phyton.ipynb`)]" in TEXT
+    assert "https://colab.research.google.com/assets/colab-badge.svg" in TEXT
+    assert (
+        "https://colab.research.google.com/github/adiazescobar/libro_cortes/"
+        "blob/main/dofile/04_ParametrosStata/04_phyton.ipynb"
+    ) in TEXT
     assert "Notebook histórico" not in TEXT
     for iframe in re.findall(r"<iframe\b[^>]*>", TEXT, re.IGNORECASE):
         assert re.search(r'\btitle="[^"]+"', iframe, re.IGNORECASE)

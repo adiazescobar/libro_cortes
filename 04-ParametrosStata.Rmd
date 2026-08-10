@@ -9,7 +9,8 @@
 - [Base `04_data.dta`](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_data.dta)
 - [Script de R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_R.R)
 - [Notebook de Python (`04_phyton.ipynb`)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_phyton.ipynb)
-- [Abrir el notebook en Colab](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/04_ParametrosStata/04_phyton.ipynb)
+
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/04_ParametrosStata/04_phyton.ipynb)
 :::
 
 El *do-file*, el script de R y el notebook de Python siguen la misma secuencia.
