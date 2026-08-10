@@ -99,12 +99,12 @@ def test_theory_has_exactly_three_exam_questions_without_answers():
 
 def test_practice_uses_the_four_aligned_guided_stages():
     stages = [
-        "Ejercicio manual",
+        "Ejercicio manual: identificar los estimandos",
         "Misma selección con N = 10.000",
         "Una asignación aleatoria",
         "Monte Carlo: un D nuevo en cada repetición",
     ]
-    headings = re.findall(r"^### (.+)$", PRACTICE, re.MULTILINE)
+    headings = re.findall(r"^## (?!#)(.+)$", PRACTICE, re.MULTILINE)
     assert [heading for heading in headings if heading in stages] == stages
 
 

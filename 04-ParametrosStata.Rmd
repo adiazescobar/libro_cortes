@@ -2,17 +2,22 @@
 
 ## Materiales para la clase {-}
 
-- [Do-file de Stata](dofile/04_ParametrosStata/04_stata.do)
-- [Base de datos](dofile/04_ParametrosStata/04_data.dta)
-- [Script de R](dofile/04_ParametrosStata/04_R.R)
-- [Notebook de Python (`04_phyton.ipynb`)](dofile/04_ParametrosStata/04_phyton.ipynb)
+::: {.class-materials}
+**Descarga antes de comenzar**
+
+- [Do-file de Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_stata.do)
+- [Base `04_data.dta`](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_data.dta)
+- [Script de R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_R.R)
+- [Notebook de Python (`04_phyton.ipynb`)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_phyton.ipynb)
 - [Abrir el notebook en Colab](https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/04_ParametrosStata/04_phyton.ipynb)
+:::
+
+El *do-file*, el script de R y el notebook de Python siguen la misma secuencia.
+Todos parten de los mismos ocho perfiles y mantienen fijos `yd0` y `yd1`.
+
 - [Log de Stata](dofile/04_ParametrosStata/04_stata.log)
-- [Resultados puntuales (CSV)](dofile/04_ParametrosStata/results/parameters_results.csv)
-- [Resumen Monte Carlo (CSV)](dofile/04_ParametrosStata/results/monte_carlo_summary.csv)
-- [Histograma con selección](dofile/04_ParametrosStata/sesgo_con_seleccion.png)
-- [Histograma con aleatorización](dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png)
-- [Comparación de escenarios](dofile/04_ParametrosStata/comparacion_escenarios.png)
+- [Resultados puntuales](dofile/04_ParametrosStata/results/parameters_results.csv)
+- [Resumen Monte Carlo](dofile/04_ParametrosStata/results/monte_carlo_summary.csv)
 
 ::: {.boxinfo}
 **Lecturas centrales**
@@ -28,194 +33,137 @@ mc <- read.csv("dofile/04_ParametrosStata/results/monte_carlo_summary.csv", chec
 stopifnot(all(c("escenario", "estimando", "valor", "N") %in% names(point)))
 stopifnot(all(c("escenario", "N", "media", "desv_est", "p5", "mediana", "p95") %in% names(mc)))
 
-etiquetas_estimando <- c(
-  ATE = "ATE", ATT = "ATT", ATU = "ATU",
-  CATE_X0 = "CATE(0)", CATE_X1 = "CATE(1)",
-  NAIVE = "Naïve", SESGO_ATT = "Sesgo (Naïve − ATT)"
-)
+valor <- function(escenario, estimando) {
+  fila <- point$escenario == escenario & point$estimando == estimando
+  stopifnot(sum(fila) == 1L)
+  point$valor[fila]
+}
+fmt <- function(x, digits = 3) format(round(x, digits), trim = TRUE, scientific = FALSE)
 
-tabla_puntual <- point[
-  point$escenario == "datos_originales" & point$estimando %in% names(etiquetas_estimando),
+etiquetas <- c(
+  ATE = "ATE", ATT = "ATT", ATU = "ATU", CATE_X0 = "CATE(0)",
+  CATE_X1 = "CATE(1)", NAIVE = "Naïve", SESGO_ATT = "Naïve − ATT"
+)
+tabla_manual <- point[
+  point$escenario == "datos_originales" & point$estimando %in% names(etiquetas),
   c("estimando", "valor", "N")
 ]
-tabla_puntual$estimando <- unname(etiquetas_estimando[tabla_puntual$estimando])
-tabla_puntual$valor <- round(tabla_puntual$valor, 3)
-names(tabla_puntual) <- c("Estimando", "Valor", "N")
+tabla_manual$estimando <- unname(etiquetas[tabla_manual$estimando])
+tabla_manual$valor <- round(tabla_manual$valor, 3)
+names(tabla_manual) <- c("Estimando", "Valor", "N")
 
-estimandos_regresion <- data.frame(
-  Término = c("Constante", "D"),
+tabla_n <- point[
+  point$escenario %in% c("datos_originales", "seleccion_n10000") &
+    point$estimando %in% c("ATE", "ATT", "NAIVE", "SESGO_ATT"),
+  c("escenario", "estimando", "valor", "N")
+]
+tabla_n$escenario <- c(
+  datos_originales = "Datos originales",
+  seleccion_n10000 = "Misma selección, N = 10.000"
+)[tabla_n$escenario]
+tabla_n$estimando <- c(
+  ATE = "ATE", ATT = "ATT", NAIVE = "Naïve", SESGO_ATT = "Naïve − ATT"
+)[tabla_n$estimando]
+tabla_n$valor <- round(tabla_n$valor, 3)
+names(tabla_n) <- c("Escenario", "Estimando", "Valor", "N")
+
+claves_reg <- data.frame(
+  termino = c("Constante", "D"),
   coeficiente = c("COEF_REG_CONSTANTE", "COEF_REG_D"),
   error = c("SE_ROBUST_REG_CONSTANTE", "SE_ROBUST_REG_D"),
   inferior = c("IC95_INF_REG_CONSTANTE", "IC95_INF_REG_D"),
   superior = c("IC95_SUP_REG_CONSTANTE", "IC95_SUP_REG_D")
 )
-extraer_regresion <- function(clave) {
-  filas <- point$escenario == "datos_originales" & point$estimando %in% clave
-  lookup <- setNames(point$valor[filas], point$estimando[filas])
-  stopifnot(length(lookup) == length(clave), all(clave %in% names(lookup)))
-  unname(lookup[clave])
-}
+extraer <- function(claves) vapply(claves, function(x) valor("datos_originales", x), numeric(1))
 tabla_regresion <- data.frame(
-  Término = estimandos_regresion$Término,
-  Coeficiente = extraer_regresion(estimandos_regresion$coeficiente),
-  `Error estándar robusto` = extraer_regresion(estimandos_regresion$error),
-  `IC 95%: límite inferior` = extraer_regresion(estimandos_regresion$inferior),
-  `IC 95%: límite superior` = extraer_regresion(estimandos_regresion$superior),
+  Término = claves_reg$termino,
+  Coeficiente = extraer(claves_reg$coeficiente),
+  `Error estándar robusto` = extraer(claves_reg$error),
+  `IC 95% inferior` = extraer(claves_reg$inferior),
+  `IC 95% superior` = extraer(claves_reg$superior),
   check.names = FALSE
 )
-tabla_regresion[, -1] <- round(tabla_regresion[, -1], 3)
+tabla_regresion[-1] <- round(tabla_regresion[-1], 3)
 
-tabla_escenarios <- point[
-  point$escenario %in% c("datos_duplicados", "aleatorizacion_unica") &
-    point$estimando %in% c("ATE", "ATT", "ATU", "NAIVE", "SESGO_ATT"),
-  c("escenario", "estimando", "valor", "N")
-]
-tabla_escenarios$escenario <- c(
-  datos_duplicados = "Duplicación",
-  aleatorizacion_unica = "Aleatorización"
-)[tabla_escenarios$escenario]
-tabla_escenarios$estimando <- c(
-  ATE = "ATE", ATT = "ATT", ATU = "ATU", NAIVE = "Naïve",
-  SESGO_ATT = "Sesgo (Naïve − ATT)"
-)[tabla_escenarios$estimando]
-tabla_escenarios$valor <- round(tabla_escenarios$valor, 3)
-names(tabla_escenarios) <- c("Escenario", "Estimando", "Valor", "N")
-
-tabla_mc <- mc[, c("escenario", "N", "media", "desv_est", "p5", "mediana", "p95")]
-tabla_mc$escenario <- c(
-  seleccion = "Selección", aleatorizacion = "Aleatorización"
-)[tabla_mc$escenario]
-tabla_mc[, c("media", "desv_est", "p5", "mediana", "p95")] <- round(
-  tabla_mc[, c("media", "desv_est", "p5", "mediana", "p95")], 3
-)
-names(tabla_mc) <- c("Escenario", "Repeticiones", "Media", "Desv. est.", "p5", "p50", "p95")
-
-valor_puntual <- function(escenario, estimando) {
-  fila <- point$escenario == escenario & point$estimando == estimando
-  stopifnot(sum(fila) == 1L)
-  point$valor[fila]
-}
-n_escenario <- function(escenario) {
-  valores <- unique(point$N[point$escenario == escenario])
-  stopifnot(length(valores) == 1L)
-  valores
-}
-fmt <- function(x, digits = 3) format(round(x, digits), trim = TRUE, scientific = FALSE)
-
-n_original <- n_escenario("datos_originales")
-n_duplicado <- n_escenario("datos_duplicados")
-n_d0 <- valor_puntual("datos_originales", "N_D0")
-n_d1 <- valor_puntual("datos_originales", "N_D1")
-media_y_d0 <- valor_puntual("datos_originales", "MEDIA_Y_D0")
-media_y_d1 <- valor_puntual("datos_originales", "MEDIA_Y_D1")
-ate_original <- valor_puntual("datos_originales", "ATE")
-att_original <- valor_puntual("datos_originales", "ATT")
-atu_original <- valor_puntual("datos_originales", "ATU")
-cate_x0 <- valor_puntual("datos_originales", "CATE_X0")
-cate_x1 <- valor_puntual("datos_originales", "CATE_X1")
-naive_original <- valor_puntual("datos_originales", "NAIVE")
-sesgo_original <- valor_puntual("datos_originales", "SESGO_ATT")
-naive_aleatorio <- valor_puntual("aleatorizacion_unica", "NAIVE")
-sesgo_aleatorio <- valor_puntual("aleatorizacion_unica", "SESGO_ATT")
-mc_reps <- unique(mc$N)
-stopifnot(length(mc_reps) == 1L)
-mc_media_seleccion <- mc$media[mc$escenario == "seleccion"]
-mc_fila <- function(escenario, columna) {
-  fila <- mc$escenario == escenario
-  stopifnot(sum(fila) == 1L)
-  mc[[columna]][fila]
-}
-mc_media_aleatoria <- mc_fila("aleatorizacion", "media")
-mc_sd_seleccion <- mc_fila("seleccion", "desv_est")
-mc_sd_aleatoria <- mc_fila("aleatorizacion", "desv_est")
-mc_p5_seleccion <- mc_fila("seleccion", "p5")
-mc_p95_seleccion <- mc_fila("seleccion", "p95")
-mc_p5_aleatoria <- mc_fila("aleatorizacion", "p5")
-mc_p95_aleatoria <- mc_fila("aleatorizacion", "p95")
+ate <- valor("datos_originales", "ATE")
+att <- valor("datos_originales", "ATT")
+atu <- valor("datos_originales", "ATU")
+cate0 <- valor("datos_originales", "CATE_X0")
+cate1 <- valor("datos_originales", "CATE_X1")
+naive <- valor("datos_originales", "NAIVE")
+sesgo <- valor("datos_originales", "SESGO_ATT")
+naive_random <- valor("aleatorizacion_unica", "NAIVE")
+mc_media <- mc$media[mc$escenario == "aleatorizacion"]
+mc_sd <- mc$desv_est[mc$escenario == "aleatorizacion"]
+mc_reps <- mc$N[mc$escenario == "aleatorizacion"]
 ```
 
 ## Objetivos {-}
 
-Al terminar este capítulo podrá:
+Al terminar esta clase podrá:
 
-1. construir el resultado observado y el efecto individual a partir de resultados potenciales;
-2. estimar e interpretar ATE, ATT, ATU, CATE y la comparación naïve;
-3. separar precisión, sesgo de selección e identificación mediante simulaciones; y
-4. contrastar selección y aleatorización en una realización y en repetición.
+1. reproducir en Stata los estimandos calculados a mano con ocho personas;
+2. distinguir aumento de N, precisión, sesgo e identificación;
+3. mostrar qué cambia cuando solo la asignación `D` se vuelve aleatoria; y
+4. explicar por qué la aleatorización elimina el sesgo en repetición, no
+   necesariamente en una realización particular.
 
 **Conocimientos previos.** Se requiere manejar `use`, `generate`, `summarize`,
-`ttest` y regresión lineal básica en Stata, además de las definiciones del
-capítulo anterior sobre resultados potenciales y parámetros causales.
+`ttest` y `regress`, además de las definiciones de ATE, ATT, ATU y CATE.
 
-::: {.boxinfo}
-El objetivo es distinguir **parámetros causales** —ATE, ATT, ATU y CATE— de la
-diferencia observada entre tratados y controles. Los resultados que aparecen en
-esta página se leen directamente de los archivos producidos por el do-file.
+::: {.boxkey}
+**Hilo conductor.** No cambiaremos los resultados potenciales ni inventaremos
+otro proceso de datos. La clase modifica una cosa a la vez: primero N y después
+la asignación `D`.
 :::
 
-## Describir los datos y construir el resultado observado
+## Ejercicio manual: identificar los estimandos
 
-### Preparación de los datos
+Partimos de la tabla de ocho personas del capítulo teórico. Como es una base
+didáctica, contiene ambos resultados potenciales. En datos reales solo se
+observaría uno.
 
 ::: {.boxnote}
-**Comando clave**
+**Ejercicio manual**
 
-```stata
-use "04_data.dta", clear
-describe
-generate X = (_n > 4)
-generate y = D*yd1 + (1-D)*yd0
-generate tau = yd1 - yd0
-label variable X "Grupo pretratamiento"
-label variable y "Resultado observado"
-label variable tau "Efecto individual"
-label define tratamiento 0 "Control" 1 "Tratados"
-label values D tratamiento
-label define grupo_pre 0 "Grupo A" 1 "Grupo B"
-label values X grupo_pre
-list, clean noobs
-```
+Antes de correr el código, identifique qué filas entran en ATE, ATT, ATU,
+CATE(0) y CATE(1). Después calcule el resultado observado y la diferencia de
+medias entre tratados y controles.
 :::
-
-::: {.boxsuccess}
-**Salida central.** Se cargan `r fmt(n_original, 0)` unidades. `y` selecciona el
-resultado potencial compatible con `D`; `tau` conserva la diferencia causal
-individual, observable aquí porque la base es didáctica.
-:::
-
-::: {.boxinfo}
-**Interpretación.** `describe` revela estructura y etiquetas; `list` permite
-auditar la construcción fila por fila. En datos reales nunca observamos a la
-vez `yd0` y `yd1` para una misma persona.
-:::
-
-### Descripción por grupos
 
 ::: {.boxcode}
 **Comando clave**
 
 ```stata
-tabulate D
-tabulate X D, row
-summarize y yd0 yd1 tau
-bysort D: summarize y yd0 yd1 tau
+use "04_data.dta", clear
+generate X = (_n > 4)
+generate tau = yd1-yd0
+generate y = D*yd1 + (1-D)*yd0
+list X D yd0 yd1 y tau, clean noobs
+
+summarize tau
+summarize tau if D == 1
+summarize tau if D == 0
+summarize tau if X == 0
+summarize tau if X == 1
 ```
 :::
 
 ::: {.boxoutput}
-**Salida central.** Hay `r fmt(n_d1, 0)` unidades tratadas y `r fmt(n_d0, 0)`
-controles. Las medias de `y` son `r fmt(media_y_d1)` y `r fmt(media_y_d0)`,
-respectivamente.
+**Salida central**
+
+```{r tabla-manual, echo=FALSE}
+knitr::kable(tabla_manual, caption = "Estimandos del ejercicio manual")
+```
 :::
 
 ::: {.boxinfo}
-**Interpretación.** La descripción muestra diferencias observadas; por sí sola
-no establece qué habría ocurrido al mismo conjunto de personas sin tratamiento.
+**Interpretación.** ATE, ATT y ATU son `r fmt(ate)`, `r fmt(att)` y
+`r fmt(atu)`. CATE(0) y CATE(1) son `r fmt(cate0)` y `r fmt(cate1)`. Stata
+reproduce los mismos promedios que se calcularon fila por fila.
 :::
 
-## Relacionar diferencia de medias y regresión
-
-### Diferencia de medias
+### Diferencia observada, regresión y sesgo {-}
 
 ::: {.boxcode}
 **Comando clave**
@@ -223,420 +171,220 @@ no establece qué habría ocurrido al mismo conjunto de personas sin tratamiento
 ```stata
 ttest y, by(D)
 summarize y if D == 1
-scalar media_tratados = r(mean)
+scalar media_y1 = r(mean)
 summarize y if D == 0
-scalar media_controles = r(mean)
-display "Tratados - controles = " media_tratados-media_controles
+scalar NAIVE = media_y1-r(mean)
+summarize tau if D == 1
+scalar ATT = r(mean)
+scalar SESGO_ATT = NAIVE-ATT
+regress y D, robust
 ```
 :::
 
 ::: {.boxoutput}
-**Salida central.** Stata reporta `mean(0)-mean(1)`; la comparación causal que
-usaremos, tratados menos controles, vale `r fmt(naive_original)`.
+**Salida central.** La comparación naïve es `r fmt(naive)` y su diferencia
+respecto del ATT es `r fmt(sesgo)`.
+
+```{r tabla-regresion, echo=FALSE}
+knitr::kable(tabla_regresion, caption = "Regresión equivalente a la diferencia de medias")
+```
 :::
 
 ::: {.boxwarning}
-**Error frecuente.** Leer el renglón `diff` de `ttest` como tratados menos
-controles. Con `by(D)`, Stata muestra `mean(0)-mean(1)`, cuyo signo es el opuesto
-del coeficiente de `D` en la regresión con constante.
+**Error frecuente.** El coeficiente de `D` reproduce exactamente una diferencia
+de medias. Los errores robustos cambian la inferencia, pero no convierten una
+comparación seleccionada en un efecto causal.
 :::
 
-### Regresión simple
+## Misma selección con N = 10.000
+
+Ahora repetimos proporcionalmente los mismos ocho perfiles hasta obtener
+exactamente 10.000 filas. No tocamos `D`: las mismas clases de personas siguen
+tratadas y no tratadas.
 
 ::: {.boxcode}
 **Comando clave**
 
 ```stata
-regress y D, robust
-display "Media controles = " _b[_cons]
-display "Tratados - controles = " _b[D]
-display "Error estándar robusto = " _se[D]
-lincom D
-```
-:::
+use "04_data.dta", clear
+generate X = (_n > 4)
+generate tau = yd1-yd0
+generate y = D*yd1 + (1-D)*yd0
+expand 1250
+assert _N == 10000
 
-::: {.boxoutput}
-**Salida central.** `_b[_cons]` reproduce `r fmt(media_y_d0)` y `_b[D]`
-reproduce `r fmt(naive_original)`. `_se[D]` y `lincom D` entregan el error
-estándar robusto y el intervalo de confianza sin transcribirlos manualmente.
-:::
-
-::: {.boxinfo}
-**Interpretación.** La equivalencia con la diferencia de medias es algebraica.
-Ni `robust` ni un intervalo estrecho convierten el coeficiente en causal cuando
-existe selección.
-:::
-
-## Calcular parámetros causales y heterogeneidad
-
-### Programa `estimadores`
-
-::: {.boxcode}
-**Comando clave**
-
-```stata
-capture program drop estimadores
-program define estimadores
-    syntax varlist(min=3 max=3)
-    tokenize `varlist'
-    local tau `1'
-    local y `2'
-    local d `3'
-    quietly summarize `tau'
-    scalar ATE = r(mean)
-    quietly summarize `tau' if `d' == 1
-    scalar ATT = r(mean)
-    quietly summarize `tau' if `d' == 0
-    scalar ATU = r(mean)
-    display "ATE = " ATE
-    display "ATT = " ATT
-    display "ATU = " ATU
-end
-
-estimadores tau y D
-```
-:::
-
-::: {.boxinfo}
-**Interpretación.** `program define` encapsula una tarea; `syntax` exige tres
-variables; `tokenize` las numera; los `local` guardan sus nombres. Cada
-`summarize` deja la media en `r(mean)`, que se copia a un escalar para no perderla
-cuando se ejecuta el siguiente comando. El argumento `y` mantiene una interfaz
-pedagógica común, aunque estos tres estimandos se calculan con `tau` y `D`.
-:::
-
-### ATE, ATT, ATU y CATE
-
-::: {.boxcode}
-**Comando clave**
-
-```stata
-summarize tau
-scalar ATE_directo = r(mean)
+summarize y if D == 1
+scalar media_y1_n10000 = r(mean)
+summarize y if D == 0
+scalar NAIVE_n10000 = media_y1_n10000-r(mean)
 summarize tau if D == 1
-scalar ATT_directo = r(mean)
-summarize tau if D == 0
-scalar ATU_directo = r(mean)
-summarize tau if X == 0
-scalar CATE_X0 = r(mean)
-summarize tau if X == 1
-scalar CATE_X1 = r(mean)
-display ATE_directo ATT_directo ATU_directo CATE_X0 CATE_X1
+scalar SESGO_n10000 = NAIVE_n10000-r(mean)
 ```
 :::
 
 ::: {.boxoutput}
 **Salida central**
 
-```{r tabla-resultados-puntuales, echo=FALSE}
-knitr::kable(tabla_puntual, align = c("l", "r", "r"),
-             caption = "Parámetros y contrastes en los datos originales")
+```{r tabla-n, echo=FALSE}
+knitr::kable(tabla_n, caption = "La misma asignación observacional con dos tamaños nominales")
 ```
-:::
-
-::: {.boxinfo}
-**Interpretación.** ATE, ATT y ATU son `r fmt(ate_original)`,
-`r fmt(att_original)` y `r fmt(atu_original)`. CATE(0) y CATE(1) son
-`r fmt(cate_x0)` y `r fmt(cate_x1)`: el promedio agregado oculta heterogeneidad.
-Además, $ATE=P(D=1)ATT+P(D=0)ATU$.
-:::
-
-### Descomposición del sesgo
-
-::: {.boxcode}
-**Comando clave**
-
-```stata
-summarize y if D == 1
-scalar media_y1 = r(mean)
-summarize y if D == 0
-scalar media_y0 = r(mean)
-scalar NAIVE = media_y1-media_y0
-summarize tau if D == 1
-scalar ATT_comparacion = r(mean)
-scalar SESGO_ATT = NAIVE-ATT_comparacion
-display "NAIVE = " NAIVE
-display "NAIVE - ATT = " SESGO_ATT
-```
-:::
-
-::: {.boxoutput}
-**Salida central.** NAIVE es `r fmt(naive_original)` y NAIVE−ATT es
-`r fmt(sesgo_original)`.
 :::
 
 ::: {.boxkey}
-**Resultado clave.** El sesgo aparece porque tratados y controles difieren en
-resultados potenciales, no porque falten observaciones ni porque la resta esté
-mal calculada.
-:::
-
-## Duplicar observaciones no resuelve la selección
-
-### Duplicación de observaciones
-
-::: {.boxcode}
-**Comando clave**
-
-```stata
-use "04_data.dta", clear
-generate byte X = (_n > 4)
-generate double y = D*yd1 + (1-D)*yd0
-generate double tau = yd1-yd0
-expand 10000
-estimadores tau y D
-regress y D, robust
-```
-:::
-
-::: {.boxoutput}
-**Salida central**
-
-```{r tabla-duplicacion-aleatorizacion, echo=FALSE}
-knitr::kable(tabla_escenarios, align = c("l", "l", "r", "r"),
-             caption = "Duplicación y una asignación aleatoria")
-```
+**Resultado clave.** Con N=10.000, NAIVE continúa en `r fmt(naive)` y
+NAIVE−ATT continúa en `r fmt(sesgo)`. El estimador no se acerca al parámetro:
+repetimos la misma selección con más filas.
 :::
 
 ::: {.boxwarning}
-**Error frecuente.** Confundir el tamaño nominal, que pasa de
-`r format(n_original, big.mark = ",", scientific = FALSE)` a
-`r format(n_duplicado, big.mark = ",", scientific = FALSE)`, con información
-independiente. Las copias no aportan variación nueva: el sesgo permanece en
-`r fmt(valor_puntual("datos_duplicados", "SESGO_ATT"))`.
+**Precisión no es identificación.** Aumentar N puede estrechar un intervalo
+alrededor del valor equivocado. Además, copiar filas no crea información
+independiente; aquí se usa deliberadamente para hacer visible que el sesgo es
+una propiedad de la comparación, no una consecuencia de una muestra pequeña.
 :::
 
-## Reasignar el tratamiento al azar
+## Una asignación aleatoria
 
-### Asignación aleatoria
+Conservamos las mismas 10.000 filas, `yd0`, `yd1`, `X` y `tau`. Eliminamos el
+`D` observacional y generamos un tratamiento independiente de los resultados
+potenciales.
 
 ::: {.boxcode}
 **Comando clave**
 
 ```stata
-use "04_data.dta", clear
-generate byte X = (_n > 4)
-expand 10000
-drop D
+drop D y
 set seed 87634
-generate byte D = (runiform() < .5)
-generate double y = D*yd1 + (1-D)*yd0
-generate double tau = yd1-yd0
-estimadores tau y D
-regress y D, robust
+generate D = (runiform() < .5)
+generate y = D*yd1 + (1-D)*yd0
+
+summarize y if D == 1
+scalar media_y1_aleatoria = r(mean)
+summarize y if D == 0
+display "Diferencia aleatoria = " media_y1_aleatoria-r(mean)
 ```
 :::
 
 ::: {.boxoutput}
-**Salida central.** Esta realización produce NAIVE igual a
-`r fmt(naive_aleatorio)` y NAIVE−ATT igual a `r fmt(sesgo_aleatorio)`.
+**Salida central.** En la realización reproducible del do-file, la diferencia
+de medias es `r fmt(naive_random)`, frente a un ATE de `r fmt(ate)`.
 :::
 
 ::: {.boxinfo}
-**Interpretación.** La semilla hace reproducible la realización. La
-aleatorización implica insesgadez al repetir el procedimiento; no exige que una
-muestra finita reproduzca exactamente el ATE `r fmt(ate_original)`.
+**Interpretación.** La aleatorización elimina la asociación sistemática entre
+`D` y los resultados potenciales. No obliga a que una realización finita
+produzca exactamente el ATE: todavía existe variación de asignación.
 :::
 
-## Repetir el experimento: Monte Carlo
+## Monte Carlo: un D nuevo en cada repetición
 
-La población simulada contiene `r format(n_duplicado, big.mark = ",", scientific = FALSE)`
-perfiles. Cada llamada vuelve a asignar tratamiento, construye `y` y devuelve
-NAIVE−ATT.
-
-### Monte Carlo con selección
+Para verificar la afirmación de insesgadez repetimos únicamente la asignación.
+En cada repetición los 10.000 perfiles son idénticos, pero cada persona recibe
+un `D` nuevo e independiente.
 
 ::: {.boxcode}
 **Comando clave**
 
 ```stata
-capture program drop one_rep
-program define one_rep, rclass
-    syntax, POPulation(string) SCENario(string)
+capture program drop one_random_assignment
+program define one_random_assignment, rclass
+    syntax, POPulation(string)
     use "`population'", clear
-    drop D
-    if "`scenario'" == "seleccion" {
-        quietly summarize yd0
-        generate D = (runiform() < invlogit((yd0-r(mean))/2))
-    }
-    else {
-        generate D = (runiform() < .5)
-    }
-    generate double y = D*yd1 + (1-D)*yd0
-    generate double tau = yd1-yd0
-    quietly summarize tau if D == 1
-    local att = r(mean)
+    generate D = (runiform() < .5)
+    generate y = D*yd1 + (1-D)*yd0
     quietly summarize y if D == 1
     local y1 = r(mean)
     quietly summarize y if D == 0
-    return scalar sesgo = `y1'-r(mean)-`att'
+    return scalar estimador = `y1'-r(mean)
 end
 
-use "04_data.dta", clear
-generate byte X = (_n > 4)
-expand 10000
-generate double y = D*yd1 + (1-D)*yd0
-generate double tau = yd1-yd0
-drop y tau
-tempfile poblacion
-save `poblacion', replace
-simulate sesgo=r(sesgo), reps(1000) seed(12345) nodots: one_rep, population("`poblacion'") scenario("seleccion")
-summarize sesgo, detail
+simulate estimador=r(estimador), reps(1000) seed(87634) nodots: one_random_assignment, population("`population'")
+summarize estimador, detail
 ```
 :::
 
-::: {.boxinfo}
-**Interpretación.** `invlogit((yd0-r(mean))/2)` convierte el resultado potencial
-sin tratamiento en una probabilidad entre cero y uno. Por eso `D` depende de
-`yd0`. `simulate` guarda el escalar devuelto en cada una de
-`r format(mc_reps, big.mark = ",", scientific = FALSE)` repeticiones; la semilla
-fija la secuencia pseudoaleatoria.
+::: {.boxoutput}
+**Salida central.** En `r format(mc_reps, big.mark = ".", decimal.mark = ",", scientific = FALSE)`
+asignaciones, el promedio del estimador es `r fmt(mc_media)` y su desviación
+estándar es `r fmt(mc_sd)`. El ATE fijo es `r fmt(ate)`.
 :::
 
-### Monte Carlo con aleatorización
-
-::: {.boxcode}
-**Comando clave**
-
-```stata
-simulate sesgo=r(sesgo), reps(1000) seed(87634) nodots: one_rep, population("`poblacion'") scenario("aleatorizacion")
-summarize sesgo, detail
-```
-:::
+![Distribución de la diferencia de medias cuando en cada repetición se genera un D nuevo.](dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png)
 
 ::: {.boxkey}
-**Resultado clave.** Bajo selección, el centro del sesgo es
-`r fmt(mc_media_seleccion)`; bajo aleatorización es
-`r fmt(mc_media_aleatoria)`. La regla `runiform()<.5` hace a `D` independiente
-de los resultados potenciales, en expectativa.
-:::
-
-### Comparación gráfica
-
-```{r tabla-monte-carlo, echo=FALSE}
-knitr::kable(tabla_mc, align = c("l", rep("r", 6)),
-             caption = paste("Distribución del sesgo Naïve − ATT en", mc_reps, "repeticiones"))
-```
-
-![Sesgo bajo selección: examine centro, dispersión y masa respecto de cero.](dofile/04_ParametrosStata/sesgo_con_seleccion.png)
-
-::: {.boxinfo}
-**Lectura guiada.** El centro es `r fmt(mc_media_seleccion)`, la desviación
-estándar `r fmt(mc_sd_seleccion)` y el intervalo entre cuantiles va de
-`r fmt(mc_p5_seleccion)` a `r fmt(mc_p95_seleccion)`. ¿Qué proporción visual de
-la masa queda a cada lado de cero? ¿Qué indica eso sobre sesgo sistemático?
-:::
-
-![Sesgo bajo aleatorización: examine centro, dispersión y masa respecto de cero.](dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png)
-
-::: {.boxinfo}
-**Lectura guiada.** El centro es `r fmt(mc_media_aleatoria)`, la desviación
-estándar `r fmt(mc_sd_aleatoria)` y los cuantiles son
-`r fmt(mc_p5_aleatoria)` y `r fmt(mc_p95_aleatoria)`. ¿Por qué aparece masa a
-ambos lados de cero aunque cada realización no tenga sesgo exactamente nulo?
-:::
-
-![Comparación de las distribuciones bajo selección y aleatorización.](dofile/04_ParametrosStata/comparacion_escenarios.png)
-
-::: {.boxkey}
-**Resultado clave.** Compare centro, dispersión, cuantiles y masa a cada lado
-de cero. La selección desplaza la distribución; la aleatorización la centra sin
-eliminar la variación muestral. ¿Cuál escenario es más disperso según las
-desviaciones estándar canónicas y por cuánto?
+**Resultado clave.** Una asignación puede quedar por encima o por debajo del
+ATE. Al repetir el mecanismo aleatorio, esos desbalances no tienen una dirección
+sistemática y el promedio de los estimadores se centra en el ATE.
 :::
 
 ## Ejercicios
 
 ::: {.boxquestion}
-**S-P1 (5 puntos). Regresión y diferencia de medias.** Considere el output de
-`regress y D, robust` del capítulo. Interprete `_b[_cons]`, `_b[D]`, `_se[D]` y
-el intervalo de confianza de `lincom D`. Explique la relación exacta entre
-`_b[D]` y las dos medias de grupo, e indique por qué el coeficiente no tiene
-automáticamente interpretación causal.
+**S-P1 (5 puntos). Regresión y diferencia de medias.** Interprete `_b[_cons]`,
+`_b[D]`, `_se[D]` y el intervalo de confianza de `regress y D, robust`. Explique
+por qué la equivalencia algebraica entre `_b[D]` y la diferencia de medias no
+garantiza interpretación causal.
 
 ```{r tabla-output-s-p1, echo=FALSE}
-knitr::kable(tabla_regresion, caption = "Output canónico de la regresión con errores estándar robustos")
+knitr::kable(tabla_regresion, caption = "Output canónico de la regresión")
 ```
 
-**Comandos permitidos:** `regress y D, robust`, `lincom D` y operaciones
-aritméticas con las medias de los dos grupos.
+**Comandos permitidos:** `summarize`, `regress` y operaciones con las medias.
 
-**Producto esperado:** interpretación escrita de los cuatro componentes
-solicitados y una igualdad que conecte el coeficiente de `D` con las medias.
+**Producto esperado:** interpretación escrita y la igualdad que conecta el
+coeficiente de `D` con las dos medias.
 :::
 
 ::: {.boxquestion}
-**S-P2 (6 puntos). Parámetros en seis unidades.** Use la siguiente población
-didáctica. Calcule ATE, ATT, ATU, CATE(0), CATE(1), la comparación NAIVE y
-NAIVE−ATT. Muestre las fórmulas y las unidades que entran en cada promedio.
+**S-P2 (6 puntos). Parámetros en seis unidades.** Para la tabla entregada en
+clase, calcule ATE, ATT, ATU, CATE(0), CATE(1), NAIVE y NAIVE−ATT. Muestre qué
+unidades entran en cada promedio.
 
-| id | X | D | $Y_i(D=0)$ | $Y_i(D=1)$ |
-|---:|---:|---:|-----:|-----:|
-| 1 | 0 | 0 | 2 | 3 |
-| 2 | 0 | 1 | 4 | 6 |
-| 3 | 0 | 1 | 5 | 6 |
-| 4 | 1 | 0 | 7 | 8 |
-| 5 | 1 | 0 | 8 | 10 |
-| 6 | 1 | 1 | 10 | 13 |
+**Comandos permitidos:** `generate`, `summarize` con `if` y operaciones
+aritméticas.
 
-**Comandos permitidos:** `generate`, `summarize` con condiciones `if` y
-operaciones aritméticas; también puede resolver los promedios a mano.
-
-**Producto esperado:** tabla con los siete estimandos solicitados, sus fórmulas
-y las unidades incluidas en cada promedio.
+**Producto esperado:** tabla con los siete estimandos, sus fórmulas y las
+unidades incluidas.
 :::
 
 ::: {.boxquestion}
-**S-P3 (6 puntos). Depuración de un programa.** El siguiente código contiene
-cuatro errores que impiden calcular correctamente ATE, ATT y ATU. Identifique
-cada error, explique su consecuencia y escriba una versión ejecutable corregida.
+**S-P3 (6 puntos). Aumentar N sin cambiar la selección.** Parta de
+`04_data.dta`, replique proporcionalmente los perfiles hasta N=10.000 y
+demuestre que NAIVE y NAIVE−ATT no cambian. Explique por qué este resultado
+contradice la afirmación “una muestra grande corrige el sesgo”.
 
-```stata
-program define estimadores
-    syntax varlist(min=2 max=3)
-    tokenize varlist
-    quietly summarize `1' if `3' == 1
-    scalar ATE = r(mean)
-    quietly summarize `1' if `3' == 1
-    scalar ATT = r(mean)
-    quietly summarize `1' if `3' == 1
-    scalar ATU = r(mean)
-end
-```
+**Comandos permitidos:** `use`, `generate`, `expand`, `assert`, `summarize` y
+escalares.
 
-**Comandos permitidos:** `program define`, `syntax`, `tokenize`, locales,
-`summarize`, escalares y `display`.
-
-**Producto esperado:** listado numerado de los cuatro errores, explicación de
-su consecuencia y un programa Stata completo que ejecute sin errores.
+**Producto esperado:** código ejecutable, los valores antes y después y una
+interpretación sobre consistencia.
 :::
 
 ::: {.boxquestion}
-**S-P4 (7 puntos). Nueva regla de selección.** Diseñe una regla donde la
-probabilidad de tratamiento sea el complemento exacto de la regla canónica,
-`invlogit(-(yd0-r(mean))/2)`, y por tanto disminuya con `yd0`. Anticipe el signo
-y el centro aproximado de NAIVE−ATT, y razone cómo cambiaría su dispersión frente
-a la regla canónica. Escriba código Stata ejecutable que modifique `one_rep`, fije
-una semilla, ejecute `simulate` y resuma la distribución.
+**S-P4 (7 puntos). Una asignación y la repetición del experimento.** Genere una
+asignación aleatoria y compare su estimador con el ATE. Luego escriba código
+Stata ejecutable que produzca un D nuevo en cada repetición y explique por qué
+el promedio Monte Carlo puede coincidir con el ATE aunque una asignación no lo
+haga exactamente.
 
-**Comandos permitidos:** comandos del programa `one_rep`, `invlogit()`,
-`runiform()`, `set seed`, `simulate` y `summarize, detail`.
+**Comandos permitidos:** `runiform()`, `set seed`, un programa `rclass`,
+`simulate` y `summarize`.
 
-**Producto esperado:** código Stata ejecutable y un párrafo que anticipe signo,
-centro y dispersión de la distribución frente a la regla canónica.
+**Producto esperado:** código Stata ejecutable, resultado de una realización,
+resumen de la distribución y explicación de insesgadez en repetición.
 :::
 
 ## Síntesis
 
-1. **Identificación:** más datos no eliminan el sesgo de selección.
-2. **Heterogeneidad:** un ATE puede ocultar CATE distintos entre grupos.
-3. **Precisión frente a sesgo:** aumentar $N$ puede reducir variabilidad sin
-   acercar el estimador al parámetro causal.
-4. **Aleatorización en expectativa:** el sesgo promedio se centra cerca de cero,
-   aunque cada realización conserve variabilidad muestral.
+1. Los comandos reproducen exactamente los estimandos calculados a mano.
+2. Aumentar N sin cambiar la selección no corrige el sesgo ni genera
+   consistencia.
+3. La asignación aleatoria cambia `D`, no los resultados potenciales.
+4. La aleatorización produce insesgadez en repetición; una realización conserva
+   variación de asignación.
 
 ## Puente al capítulo siguiente {-}
 
-El capítulo [Experimentos aleatorios controlados](05-RCT.Rmd) usa esta misma
-lógica para mostrar cómo un diseño experimental identifica efectos causales y
-cómo se diagnostica el balance antes de estimarlos.
+El capítulo [Experimentos aleatorios controlados](05-RCT.Rmd) desarrolla esta
+misma lógica como diseño de investigación y estudia balance, cumplimiento e
+inferencia experimental.

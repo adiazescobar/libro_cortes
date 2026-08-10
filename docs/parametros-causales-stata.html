@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-08-05" />
+<meta name="date" content="2026-08-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -209,14 +209,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#materiales-para-la-clase-1"><i class="fa fa-check"></i>Materiales para la clase</a></li>
 <li class="chapter" data-level="" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#objetivos"><i class="fa fa-check"></i>Objetivos</a></li>
-<li class="chapter" data-level="4.1" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#describir-los-datos-y-construir-el-resultado-observado"><i class="fa fa-check"></i><b>4.1</b> Describir los datos y construir el resultado observado</a></li>
-<li class="chapter" data-level="4.2" data-path="04-ParametrosStata.html"><a href="#relacionar-diferencia-de-medias-y-regresi%C3%B3n"><i class="fa fa-check"></i><b>4.2</b> Relacionar diferencia de medias y regresión</a></li>
-<li class="chapter" data-level="4.3" data-path="04-ParametrosStata.html"><a href="#calcular-par%C3%A1metros-causales-y-heterogeneidad"><i class="fa fa-check"></i><b>4.3</b> Calcular parámetros causales y heterogeneidad</a></li>
-<li class="chapter" data-level="4.4" data-path="04-ParametrosStata.html"><a href="#duplicar-observaciones-no-resuelve-la-selecci%C3%B3n"><i class="fa fa-check"></i><b>4.4</b> Duplicar observaciones no resuelve la selección</a></li>
-<li class="chapter" data-level="4.5" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#reasignar-el-tratamiento-al-azar"><i class="fa fa-check"></i><b>4.5</b> Reasignar el tratamiento al azar</a></li>
-<li class="chapter" data-level="4.6" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#repetir-el-experimento-monte-carlo"><i class="fa fa-check"></i><b>4.6</b> Repetir el experimento: Monte Carlo</a></li>
-<li class="chapter" data-level="4.7" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#ejercicios-1"><i class="fa fa-check"></i><b>4.7</b> Ejercicios</a></li>
-<li class="chapter" data-level="4.8" data-path="04-ParametrosStata.html"><a href="#s%C3%ADntesis-1"><i class="fa fa-check"></i><b>4.8</b> Síntesis</a></li>
+<li class="chapter" data-level="4.1" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#ejercicio-manual-identificar-los-estimandos"><i class="fa fa-check"></i><b>4.1</b> Ejercicio manual: identificar los estimandos</a></li>
+<li class="chapter" data-level="4.2" data-path="04-ParametrosStata.html"><a href="#misma-selecci%C3%B3n-con-n-10.000"><i class="fa fa-check"></i><b>4.2</b> Misma selección con N = 10.000</a></li>
+<li class="chapter" data-level="4.3" data-path="04-ParametrosStata.html"><a href="#una-asignaci%C3%B3n-aleatoria"><i class="fa fa-check"></i><b>4.3</b> Una asignación aleatoria</a></li>
+<li class="chapter" data-level="4.4" data-path="04-ParametrosStata.html"><a href="#monte-carlo-un-d-nuevo-en-cada-repetici%C3%B3n"><i class="fa fa-check"></i><b>4.4</b> Monte Carlo: un D nuevo en cada repetición</a></li>
+<li class="chapter" data-level="4.5" data-path="parametros-causales-stata.html"><a href="parametros-causales-stata.html#ejercicios-1"><i class="fa fa-check"></i><b>4.5</b> Ejercicios</a></li>
+<li class="chapter" data-level="4.6" data-path="04-ParametrosStata.html"><a href="#s%C3%ADntesis-1"><i class="fa fa-check"></i><b>4.6</b> Síntesis</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#puente-al-cap%C3%ADtulo-siguiente"><i class="fa fa-check"></i>Puente al capítulo siguiente</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="experimentos-aleatorizados-clase-teorica.html"><a href="experimentos-aleatorizados-clase-teorica.html"><i class="fa fa-check"></i><b>5</b> Experimentos aleatorizados — Clase teórica</a>
@@ -581,18 +579,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Capitulo 4</span> Parámetros causales — Clase empírica<a href="parametros-causales-stata.html#parametros-causales-stata" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="materiales-para-la-clase-1" class="section level2 unnumbered hasAnchor">
 <h2>Materiales para la clase<a href="parametros-causales-stata.html#materiales-para-la-clase-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="class-materials">
+<p><strong>Descarga antes de comenzar</strong></p>
 <ul>
-<li><a href="dofile/04_ParametrosStata/04_stata.do">Do-file de Stata</a></li>
-<li><a href="dofile/04_ParametrosStata/04_data.dta">Base de datos</a></li>
-<li><a href="dofile/04_ParametrosStata/04_R.R">Script de R</a></li>
-<li><a href="dofile/04_ParametrosStata/04_phyton.ipynb">Notebook de Python (<code>04_phyton.ipynb</code>)</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_stata.do">Do-file de Stata</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_data.dta">Base <code>04_data.dta</code></a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_R.R">Script de R</a></li>
+<li><a href="https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/04_ParametrosStata/04_phyton.ipynb">Notebook de Python (<code>04_phyton.ipynb</code>)</a></li>
 <li><a href="https://colab.research.google.com/github/adiazescobar/libro_cortes/blob/main/dofile/04_ParametrosStata/04_phyton.ipynb">Abrir el notebook en Colab</a></li>
+</ul>
+</div>
+<p>El <em>do-file</em>, el script de R y el notebook de Python siguen la misma secuencia.
+Todos parten de los mismos ocho perfiles y mantienen fijos <code>yd0</code> y <code>yd1</code>.</p>
+<ul>
 <li><a href="dofile/04_ParametrosStata/04_stata.log">Log de Stata</a></li>
-<li><a href="dofile/04_ParametrosStata/results/parameters_results.csv">Resultados puntuales (CSV)</a></li>
-<li><a href="dofile/04_ParametrosStata/results/monte_carlo_summary.csv">Resumen Monte Carlo (CSV)</a></li>
-<li><a href="dofile/04_ParametrosStata/sesgo_con_seleccion.png">Histograma con selección</a></li>
-<li><a href="dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png">Histograma con aleatorización</a></li>
-<li><a href="dofile/04_ParametrosStata/comparacion_escenarios.png">Comparación de escenarios</a></li>
+<li><a href="dofile/04_ParametrosStata/results/parameters_results.csv">Resultados puntuales</a></li>
+<li><a href="dofile/04_ParametrosStata/results/monte_carlo_summary.csv">Resumen Monte Carlo</a></li>
 </ul>
 <div class="boxinfo">
 <p><strong>Lecturas centrales</strong></p>
@@ -605,172 +607,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="objetivos" class="section level2 unnumbered hasAnchor">
 <h2>Objetivos<a href="parametros-causales-stata.html#objetivos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Al terminar este capítulo podrá:</p>
+<p>Al terminar esta clase podrá:</p>
 <ol style="list-style-type: decimal">
-<li>construir el resultado observado y el efecto individual a partir de resultados potenciales;</li>
-<li>estimar e interpretar ATE, ATT, ATU, CATE y la comparación naïve;</li>
-<li>separar precisión, sesgo de selección e identificación mediante simulaciones; y</li>
-<li>contrastar selección y aleatorización en una realización y en repetición.</li>
+<li>reproducir en Stata los estimandos calculados a mano con ocho personas;</li>
+<li>distinguir aumento de N, precisión, sesgo e identificación;</li>
+<li>mostrar qué cambia cuando solo la asignación <code>D</code> se vuelve aleatoria; y</li>
+<li>explicar por qué la aleatorización elimina el sesgo en repetición, no
+necesariamente en una realización particular.</li>
 </ol>
 <p><strong>Conocimientos previos.</strong> Se requiere manejar <code>use</code>, <code>generate</code>, <code>summarize</code>,
-<code>ttest</code> y regresión lineal básica en Stata, además de las definiciones del
-capítulo anterior sobre resultados potenciales y parámetros causales.</p>
-<div class="boxinfo">
-<p>El objetivo es distinguir <strong>parámetros causales</strong> —ATE, ATT, ATU y CATE— de la
-diferencia observada entre tratados y controles. Los resultados que aparecen en
-esta página se leen directamente de los archivos producidos por el do-file.</p>
+<code>ttest</code> y <code>regress</code>, además de las definiciones de ATE, ATT, ATU y CATE.</p>
+<div class="boxkey">
+<p><strong>Hilo conductor.</strong> No cambiaremos los resultados potenciales ni inventaremos
+otro proceso de datos. La clase modifica una cosa a la vez: primero N y después
+la asignación <code>D</code>.</p>
 </div>
 </div>
-<div id="describir-los-datos-y-construir-el-resultado-observado" class="section level2 hasAnchor" number="4.1">
-<h2><span class="header-section-number">4.1</span> Describir los datos y construir el resultado observado<a href="parametros-causales-stata.html#describir-los-datos-y-construir-el-resultado-observado" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="preparación-de-los-datos" class="section level3 hasAnchor" number="4.1.1">
-<h3><span class="header-section-number">4.1.1</span> Preparación de los datos<a href="#preparaci%C3%B3n-de-los-datos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="ejercicio-manual-identificar-los-estimandos" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Ejercicio manual: identificar los estimandos<a href="parametros-causales-stata.html#ejercicio-manual-identificar-los-estimandos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Partimos de la tabla de ocho personas del capítulo teórico. Como es una base
+didáctica, contiene ambos resultados potenciales. En datos reales solo se
+observaría uno.</p>
 <div class="boxnote">
+<p><strong>Ejercicio manual</strong></p>
+<p>Antes de correr el código, identifique qué filas entran en ATE, ATT, ATU,
+CATE(0) y CATE(1). Después calcule el resultado observado y la diferencia de
+medias entre tratados y controles.</p>
+</div>
+<div class="boxcode">
 <p><strong>Comando clave</strong></p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb51-1"><a href="parametros-causales-stata.html#cb51-1" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;04_data.dta&quot;</span>, <span class="kw">clear</span></span>
-<span id="cb51-2"><a href="parametros-causales-stata.html#cb51-2" tabindex="-1"></a><span class="kw">describe</span></span>
-<span id="cb51-3"><a href="parametros-causales-stata.html#cb51-3" tabindex="-1"></a><span class="kw">generate</span> X = (<span class="dt">_n</span> &gt; 4)</span>
+<span id="cb51-2"><a href="parametros-causales-stata.html#cb51-2" tabindex="-1"></a><span class="kw">generate</span> X = (<span class="dt">_n</span> &gt; 4)</span>
+<span id="cb51-3"><a href="parametros-causales-stata.html#cb51-3" tabindex="-1"></a><span class="kw">generate</span> tau = yd1-yd0</span>
 <span id="cb51-4"><a href="parametros-causales-stata.html#cb51-4" tabindex="-1"></a><span class="kw">generate</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb51-5"><a href="parametros-causales-stata.html#cb51-5" tabindex="-1"></a><span class="kw">generate</span> tau = yd1 - yd0</span>
-<span id="cb51-6"><a href="parametros-causales-stata.html#cb51-6" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> X <span class="st">&quot;Grupo pretratamiento&quot;</span></span>
-<span id="cb51-7"><a href="parametros-causales-stata.html#cb51-7" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> <span class="fu">y</span> <span class="st">&quot;Resultado observado&quot;</span></span>
-<span id="cb51-8"><a href="parametros-causales-stata.html#cb51-8" tabindex="-1"></a><span class="kw">label</span> <span class="kw">variable</span> tau <span class="st">&quot;Efecto individual&quot;</span></span>
-<span id="cb51-9"><a href="parametros-causales-stata.html#cb51-9" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> tratamiento 0 <span class="st">&quot;Control&quot;</span> 1 <span class="st">&quot;Tratados&quot;</span></span>
-<span id="cb51-10"><a href="parametros-causales-stata.html#cb51-10" tabindex="-1"></a><span class="kw">label</span> <span class="kw">values</span> D tratamiento</span>
-<span id="cb51-11"><a href="parametros-causales-stata.html#cb51-11" tabindex="-1"></a><span class="kw">label</span> <span class="kw">define</span> grupo_pre 0 <span class="st">&quot;Grupo A&quot;</span> 1 <span class="st">&quot;Grupo B&quot;</span></span>
-<span id="cb51-12"><a href="parametros-causales-stata.html#cb51-12" tabindex="-1"></a><span class="kw">label</span> <span class="kw">values</span> X grupo_pre</span>
-<span id="cb51-13"><a href="parametros-causales-stata.html#cb51-13" tabindex="-1"></a><span class="ot">list</span>, <span class="kw">clean</span> <span class="kw">noobs</span></span></code></pre></div>
-</div>
-<div class="boxsuccess">
-<p><strong>Salida central.</strong> Se cargan 8 unidades. <code>y</code> selecciona el
-resultado potencial compatible con <code>D</code>; <code>tau</code> conserva la diferencia causal
-individual, observable aquí porque la base es didáctica.</p>
-</div>
-<div class="boxinfo">
-<p><strong>Interpretación.</strong> <code>describe</code> revela estructura y etiquetas; <code>list</code> permite
-auditar la construcción fila por fila. En datos reales nunca observamos a la
-vez <code>yd0</code> y <code>yd1</code> para una misma persona.</p>
-</div>
-</div>
-<div id="descripción-por-grupos" class="section level3 hasAnchor" number="4.1.2">
-<h3><span class="header-section-number">4.1.2</span> Descripción por grupos<a href="#descripci%C3%B3n-por-grupos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb52-1"><a href="parametros-causales-stata.html#cb52-1" tabindex="-1"></a><span class="kw">tabulate</span> D</span>
-<span id="cb52-2"><a href="parametros-causales-stata.html#cb52-2" tabindex="-1"></a><span class="kw">tabulate</span> X D, <span class="ot">row</span></span>
-<span id="cb52-3"><a href="parametros-causales-stata.html#cb52-3" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> yd0 yd1 tau</span>
-<span id="cb52-4"><a href="parametros-causales-stata.html#cb52-4" tabindex="-1"></a><span class="kw">bysort</span> D: <span class="kw">summarize</span> <span class="fu">y</span> yd0 yd1 tau</span></code></pre></div>
-</div>
-<div class="boxoutput">
-<p><strong>Salida central.</strong> Hay 4 unidades tratadas y 4
-controles. Las medias de <code>y</code> son 11 y 4.25,
-respectivamente.</p>
-</div>
-<div class="boxinfo">
-<p><strong>Interpretación.</strong> La descripción muestra diferencias observadas; por sí sola
-no establece qué habría ocurrido al mismo conjunto de personas sin tratamiento.</p>
-</div>
-</div>
-</div>
-<div id="relacionar-diferencia-de-medias-y-regresión" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Relacionar diferencia de medias y regresión<a href="#relacionar-diferencia-de-medias-y-regresi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="diferencia-de-medias" class="section level3 hasAnchor" number="4.2.1">
-<h3><span class="header-section-number">4.2.1</span> Diferencia de medias<a href="parametros-causales-stata.html#diferencia-de-medias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb53-1"><a href="parametros-causales-stata.html#cb53-1" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span>, <span class="kw">by</span>(D)</span>
-<span id="cb53-2"><a href="parametros-causales-stata.html#cb53-2" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
-<span id="cb53-3"><a href="parametros-causales-stata.html#cb53-3" tabindex="-1"></a><span class="fu">scalar</span> media_tratados = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb53-4"><a href="parametros-causales-stata.html#cb53-4" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
-<span id="cb53-5"><a href="parametros-causales-stata.html#cb53-5" tabindex="-1"></a><span class="fu">scalar</span> media_controles = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb53-6"><a href="parametros-causales-stata.html#cb53-6" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;Tratados - controles = &quot;</span> media_tratados-media_controles</span></code></pre></div>
-</div>
-<div class="boxoutput">
-<p><strong>Salida central.</strong> Stata reporta <code>mean(0)-mean(1)</code>; la comparación causal que
-usaremos, tratados menos controles, vale 6.75.</p>
-</div>
-<div class="boxwarning">
-<p><strong>Error frecuente.</strong> Leer el renglón <code>diff</code> de <code>ttest</code> como tratados menos
-controles. Con <code>by(D)</code>, Stata muestra <code>mean(0)-mean(1)</code>, cuyo signo es el opuesto
-del coeficiente de <code>D</code> en la regresión con constante.</p>
-</div>
-</div>
-<div id="regresión-simple" class="section level3 hasAnchor" number="4.2.2">
-<h3><span class="header-section-number">4.2.2</span> Regresión simple<a href="#regresi%C3%B3n-simple" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb54-1"><a href="parametros-causales-stata.html#cb54-1" tabindex="-1"></a><span class="kw">regress</span> <span class="fu">y</span> D, <span class="kw">robust</span></span>
-<span id="cb54-2"><a href="parametros-causales-stata.html#cb54-2" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;Media controles = &quot;</span> _b[<span class="dt">_cons</span>]</span>
-<span id="cb54-3"><a href="parametros-causales-stata.html#cb54-3" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;Tratados - controles = &quot;</span> _b[D]</span>
-<span id="cb54-4"><a href="parametros-causales-stata.html#cb54-4" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;Error estándar robusto = &quot;</span> _se[D]</span>
-<span id="cb54-5"><a href="parametros-causales-stata.html#cb54-5" tabindex="-1"></a><span class="kw">lincom</span> D</span></code></pre></div>
-</div>
-<div class="boxoutput">
-<p><strong>Salida central.</strong> <code>_b[_cons]</code> reproduce 4.25 y <code>_b[D]</code>
-reproduce 6.75. <code>_se[D]</code> y <code>lincom D</code> entregan el error
-estándar robusto y el intervalo de confianza sin transcribirlos manualmente.</p>
-</div>
-<div class="boxinfo">
-<p><strong>Interpretación.</strong> La equivalencia con la diferencia de medias es algebraica.
-Ni <code>robust</code> ni un intervalo estrecho convierten el coeficiente en causal cuando
-existe selección.</p>
-</div>
-</div>
-</div>
-<div id="calcular-parámetros-causales-y-heterogeneidad" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> Calcular parámetros causales y heterogeneidad<a href="#calcular-par%C3%A1metros-causales-y-heterogeneidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="programa-estimadores" class="section level3 hasAnchor" number="4.3.1">
-<h3><span class="header-section-number">4.3.1</span> Programa <code>estimadores</code><a href="parametros-causales-stata.html#programa-estimadores" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb55-1"><a href="parametros-causales-stata.html#cb55-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> estimadores</span>
-<span id="cb55-2"><a href="parametros-causales-stata.html#cb55-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> estimadores</span>
-<span id="cb55-3"><a href="parametros-causales-stata.html#cb55-3" tabindex="-1"></a>    <span class="kw">syntax</span> <span class="kw">varlist</span>(<span class="fu">min</span>=3 <span class="fu">max</span>=3)</span>
-<span id="cb55-4"><a href="parametros-causales-stata.html#cb55-4" tabindex="-1"></a>    <span class="kw">tokenize</span> <span class="ot">`varlist&#39;</span></span>
-<span id="cb55-5"><a href="parametros-causales-stata.html#cb55-5" tabindex="-1"></a>    <span class="kw">local</span> tau <span class="ot">`1&#39;</span></span>
-<span id="cb55-6"><a href="parametros-causales-stata.html#cb55-6" tabindex="-1"></a>    <span class="kw">local</span> <span class="fu">y</span> <span class="ot">`2&#39;</span></span>
-<span id="cb55-7"><a href="parametros-causales-stata.html#cb55-7" tabindex="-1"></a>    <span class="kw">local</span> <span class="kw">d</span> <span class="ot">`3&#39;</span></span>
-<span id="cb55-8"><a href="parametros-causales-stata.html#cb55-8" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`tau&#39;</span></span>
-<span id="cb55-9"><a href="parametros-causales-stata.html#cb55-9" tabindex="-1"></a>    <span class="fu">scalar</span> ATE = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb55-10"><a href="parametros-causales-stata.html#cb55-10" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`tau&#39;</span> <span class="kw">if</span> <span class="ot">`d&#39;</span> == 1</span>
-<span id="cb55-11"><a href="parametros-causales-stata.html#cb55-11" tabindex="-1"></a>    <span class="fu">scalar</span> ATT = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb55-12"><a href="parametros-causales-stata.html#cb55-12" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`tau&#39;</span> <span class="kw">if</span> <span class="ot">`d&#39;</span> == 0</span>
-<span id="cb55-13"><a href="parametros-causales-stata.html#cb55-13" tabindex="-1"></a>    <span class="fu">scalar</span> ATU = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb55-14"><a href="parametros-causales-stata.html#cb55-14" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;ATE = &quot;</span> ATE</span>
-<span id="cb55-15"><a href="parametros-causales-stata.html#cb55-15" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;ATT = &quot;</span> ATT</span>
-<span id="cb55-16"><a href="parametros-causales-stata.html#cb55-16" tabindex="-1"></a>    <span class="kw">display</span> <span class="st">&quot;ATU = &quot;</span> ATU</span>
-<span id="cb55-17"><a href="parametros-causales-stata.html#cb55-17" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb55-18"><a href="parametros-causales-stata.html#cb55-18" tabindex="-1"></a></span>
-<span id="cb55-19"><a href="parametros-causales-stata.html#cb55-19" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span></code></pre></div>
-</div>
-<div class="boxinfo">
-<p><strong>Interpretación.</strong> <code>program define</code> encapsula una tarea; <code>syntax</code> exige tres
-variables; <code>tokenize</code> las numera; los <code>local</code> guardan sus nombres. Cada
-<code>summarize</code> deja la media en <code>r(mean)</code>, que se copia a un escalar para no perderla
-cuando se ejecuta el siguiente comando. El argumento <code>y</code> mantiene una interfaz
-pedagógica común, aunque estos tres estimandos se calculan con <code>tau</code> y <code>D</code>.</p>
-</div>
-</div>
-<div id="ate-att-atu-y-cate-1" class="section level3 hasAnchor" number="4.3.2">
-<h3><span class="header-section-number">4.3.2</span> ATE, ATT, ATU y CATE<a href="parametros-causales-stata.html#ate-att-atu-y-cate-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb56-1"><a href="parametros-causales-stata.html#cb56-1" tabindex="-1"></a><span class="kw">summarize</span> tau</span>
-<span id="cb56-2"><a href="parametros-causales-stata.html#cb56-2" tabindex="-1"></a><span class="fu">scalar</span> ATE_directo = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb56-3"><a href="parametros-causales-stata.html#cb56-3" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> D == 1</span>
-<span id="cb56-4"><a href="parametros-causales-stata.html#cb56-4" tabindex="-1"></a><span class="fu">scalar</span> ATT_directo = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb56-5"><a href="parametros-causales-stata.html#cb56-5" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> D == 0</span>
-<span id="cb56-6"><a href="parametros-causales-stata.html#cb56-6" tabindex="-1"></a><span class="fu">scalar</span> ATU_directo = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb56-7"><a href="parametros-causales-stata.html#cb56-7" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> X == 0</span>
-<span id="cb56-8"><a href="parametros-causales-stata.html#cb56-8" tabindex="-1"></a><span class="fu">scalar</span> CATE_X0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb56-9"><a href="parametros-causales-stata.html#cb56-9" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> X == 1</span>
-<span id="cb56-10"><a href="parametros-causales-stata.html#cb56-10" tabindex="-1"></a><span class="fu">scalar</span> CATE_X1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb56-11"><a href="parametros-causales-stata.html#cb56-11" tabindex="-1"></a><span class="kw">display</span> ATE_directo ATT_directo ATU_directo CATE_X0 CATE_X1</span></code></pre></div>
+<span id="cb51-5"><a href="parametros-causales-stata.html#cb51-5" tabindex="-1"></a><span class="ot">list</span> X D yd0 yd1 <span class="fu">y</span> tau, <span class="kw">clean</span> <span class="kw">noobs</span></span>
+<span id="cb51-6"><a href="parametros-causales-stata.html#cb51-6" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="parametros-causales-stata.html#cb51-7" tabindex="-1"></a><span class="kw">summarize</span> tau</span>
+<span id="cb51-8"><a href="parametros-causales-stata.html#cb51-8" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> D == 1</span>
+<span id="cb51-9"><a href="parametros-causales-stata.html#cb51-9" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> D == 0</span>
+<span id="cb51-10"><a href="parametros-causales-stata.html#cb51-10" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> X == 0</span>
+<span id="cb51-11"><a href="parametros-causales-stata.html#cb51-11" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> X == 1</span></code></pre></div>
 </div>
 <div class="boxoutput">
 <p><strong>Salida central</strong></p>
 <table>
-<caption><span id="tab:tabla-resultados-puntuales">Table 4.1: </span>Parámetros y contrastes en los datos originales</caption>
+<caption><span id="tab:tabla-manual">Table 4.1: </span>Estimandos del ejercicio manual</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -781,44 +662,44 @@ pedagógica común, aunque estos tres estimandos se calculan con <code>tau</code
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">41</td>
+<td align="left">21</td>
 <td align="left">ATE</td>
 <td align="right">0.75</td>
 <td align="right">8</td>
 </tr>
 <tr class="even">
-<td align="left">42</td>
+<td align="left">22</td>
 <td align="left">ATT</td>
 <td align="right">0.75</td>
 <td align="right">8</td>
 </tr>
 <tr class="odd">
-<td align="left">43</td>
+<td align="left">23</td>
 <td align="left">ATU</td>
 <td align="right">0.75</td>
 <td align="right">8</td>
 </tr>
 <tr class="even">
-<td align="left">44</td>
+<td align="left">24</td>
 <td align="left">CATE(0)</td>
 <td align="right">1.25</td>
 <td align="right">8</td>
 </tr>
 <tr class="odd">
-<td align="left">45</td>
+<td align="left">25</td>
 <td align="left">CATE(1)</td>
 <td align="right">0.25</td>
 <td align="right">8</td>
 </tr>
 <tr class="even">
-<td align="left">55</td>
+<td align="left">35</td>
 <td align="left">Naïve</td>
 <td align="right">6.75</td>
 <td align="right">8</td>
 </tr>
 <tr class="odd">
-<td align="left">58</td>
-<td align="left">Sesgo (Naïve − ATT)</td>
+<td align="left">38</td>
+<td align="left">Naïve − ATT</td>
 <td align="right">6.00</td>
 <td align="right">8</td>
 </tr>
@@ -826,336 +707,50 @@ pedagógica común, aunque estos tres estimandos se calculan con <code>tau</code
 </table>
 </div>
 <div class="boxinfo">
-<p><strong>Interpretación.</strong> ATE, ATT y ATU son 0.75,
-0.75 y 0.75. CATE(0) y CATE(1) son
-1.25 y 0.25: el promedio agregado oculta heterogeneidad.
-Además, <span class="math inline">\(ATE=P(D=1)ATT+P(D=0)ATU\)</span>.</p>
+<p><strong>Interpretación.</strong> ATE, ATT y ATU son 0.75, 0.75 y
+0.75. CATE(0) y CATE(1) son 1.25 y 0.25. Stata
+reproduce los mismos promedios que se calcularon fila por fila.</p>
 </div>
-</div>
-<div id="descomposición-del-sesgo" class="section level3 hasAnchor" number="4.3.3">
-<h3><span class="header-section-number">4.3.3</span> Descomposición del sesgo<a href="#descomposici%C3%B3n-del-sesgo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="diferencia-observada-regresión-y-sesgo" class="section level3 unnumbered hasAnchor">
+<h3>Diferencia observada, regresión y sesgo<a href="#diferencia-observada-regresi%C3%B3n-y-sesgo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="boxcode">
 <p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb57-1"><a href="parametros-causales-stata.html#cb57-1" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
-<span id="cb57-2"><a href="parametros-causales-stata.html#cb57-2" tabindex="-1"></a><span class="fu">scalar</span> media_y1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb57-3"><a href="parametros-causales-stata.html#cb57-3" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
-<span id="cb57-4"><a href="parametros-causales-stata.html#cb57-4" tabindex="-1"></a><span class="fu">scalar</span> media_y0 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb57-5"><a href="parametros-causales-stata.html#cb57-5" tabindex="-1"></a><span class="fu">scalar</span> NAIVE = media_y1-media_y0</span>
-<span id="cb57-6"><a href="parametros-causales-stata.html#cb57-6" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> D == 1</span>
-<span id="cb57-7"><a href="parametros-causales-stata.html#cb57-7" tabindex="-1"></a><span class="fu">scalar</span> ATT_comparacion = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb57-8"><a href="parametros-causales-stata.html#cb57-8" tabindex="-1"></a><span class="fu">scalar</span> SESGO_ATT = NAIVE-ATT_comparacion</span>
-<span id="cb57-9"><a href="parametros-causales-stata.html#cb57-9" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;NAIVE = &quot;</span> NAIVE</span>
-<span id="cb57-10"><a href="parametros-causales-stata.html#cb57-10" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;NAIVE - ATT = &quot;</span> SESGO_ATT</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb52-1"><a href="parametros-causales-stata.html#cb52-1" tabindex="-1"></a><span class="kw">ttest</span> <span class="fu">y</span>, <span class="kw">by</span>(D)</span>
+<span id="cb52-2"><a href="parametros-causales-stata.html#cb52-2" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
+<span id="cb52-3"><a href="parametros-causales-stata.html#cb52-3" tabindex="-1"></a><span class="fu">scalar</span> media_y1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb52-4"><a href="parametros-causales-stata.html#cb52-4" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
+<span id="cb52-5"><a href="parametros-causales-stata.html#cb52-5" tabindex="-1"></a><span class="fu">scalar</span> NAIVE = media_y1-<span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb52-6"><a href="parametros-causales-stata.html#cb52-6" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> D == 1</span>
+<span id="cb52-7"><a href="parametros-causales-stata.html#cb52-7" tabindex="-1"></a><span class="fu">scalar</span> ATT = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb52-8"><a href="parametros-causales-stata.html#cb52-8" tabindex="-1"></a><span class="fu">scalar</span> SESGO_ATT = NAIVE-ATT</span>
+<span id="cb52-9"><a href="parametros-causales-stata.html#cb52-9" tabindex="-1"></a><span class="kw">regress</span> <span class="fu">y</span> D, <span class="kw">robust</span></span></code></pre></div>
 </div>
 <div class="boxoutput">
-<p><strong>Salida central.</strong> NAIVE es 6.75 y NAIVE−ATT es
-6.</p>
-</div>
-<div class="boxkey">
-<p><strong>Resultado clave.</strong> El sesgo aparece porque tratados y controles difieren en
-resultados potenciales, no porque falten observaciones ni porque la resta esté
-mal calculada.</p>
-</div>
-</div>
-</div>
-<div id="duplicar-observaciones-no-resuelve-la-selección" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Duplicar observaciones no resuelve la selección<a href="#duplicar-observaciones-no-resuelve-la-selecci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="duplicación-de-observaciones" class="section level3 hasAnchor" number="4.4.1">
-<h3><span class="header-section-number">4.4.1</span> Duplicación de observaciones<a href="#duplicaci%C3%B3n-de-observaciones" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb58-1"><a href="parametros-causales-stata.html#cb58-1" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;04_data.dta&quot;</span>, <span class="kw">clear</span></span>
-<span id="cb58-2"><a href="parametros-causales-stata.html#cb58-2" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">byte</span> X = (<span class="dt">_n</span> &gt; 4)</span>
-<span id="cb58-3"><a href="parametros-causales-stata.html#cb58-3" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">double</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb58-4"><a href="parametros-causales-stata.html#cb58-4" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">double</span> tau = yd1-yd0</span>
-<span id="cb58-5"><a href="parametros-causales-stata.html#cb58-5" tabindex="-1"></a>expand 10000</span>
-<span id="cb58-6"><a href="parametros-causales-stata.html#cb58-6" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span>
-<span id="cb58-7"><a href="parametros-causales-stata.html#cb58-7" tabindex="-1"></a><span class="kw">regress</span> <span class="fu">y</span> D, <span class="kw">robust</span></span></code></pre></div>
-</div>
-<div class="boxoutput">
-<p><strong>Salida central</strong></p>
-<table>
-<caption><span id="tab:tabla-duplicacion-aleatorizacion">Table 4.2: </span>Duplicación y una asignación aleatoria</caption>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="left">Escenario</th>
-<th align="left">Estimando</th>
-<th align="right">Valor</th>
-<th align="right">N</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">Aleatorización</td>
-<td align="left">ATE</td>
-<td align="right">0.750</td>
-<td align="right">80000</td>
-</tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="left">Aleatorización</td>
-<td align="left">ATT</td>
-<td align="right">0.751</td>
-<td align="right">80000</td>
-</tr>
-<tr class="odd">
-<td align="left">3</td>
-<td align="left">Aleatorización</td>
-<td align="left">ATU</td>
-<td align="right">0.749</td>
-<td align="right">80000</td>
-</tr>
-<tr class="even">
-<td align="left">15</td>
-<td align="left">Aleatorización</td>
-<td align="left">Naïve</td>
-<td align="right">0.751</td>
-<td align="right">80000</td>
-</tr>
-<tr class="odd">
-<td align="left">18</td>
-<td align="left">Aleatorización</td>
-<td align="left">Sesgo (Naïve − ATT)</td>
-<td align="right">0.000</td>
-<td align="right">80000</td>
-</tr>
-<tr class="even">
-<td align="left">21</td>
-<td align="left">Duplicación</td>
-<td align="left">ATE</td>
-<td align="right">0.750</td>
-<td align="right">80000</td>
-</tr>
-<tr class="odd">
-<td align="left">22</td>
-<td align="left">Duplicación</td>
-<td align="left">ATT</td>
-<td align="right">0.750</td>
-<td align="right">80000</td>
-</tr>
-<tr class="even">
-<td align="left">23</td>
-<td align="left">Duplicación</td>
-<td align="left">ATU</td>
-<td align="right">0.750</td>
-<td align="right">80000</td>
-</tr>
-<tr class="odd">
-<td align="left">35</td>
-<td align="left">Duplicación</td>
-<td align="left">Naïve</td>
-<td align="right">6.750</td>
-<td align="right">80000</td>
-</tr>
-<tr class="even">
-<td align="left">38</td>
-<td align="left">Duplicación</td>
-<td align="left">Sesgo (Naïve − ATT)</td>
-<td align="right">6.000</td>
-<td align="right">80000</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="boxwarning">
-<p><strong>Error frecuente.</strong> Confundir el tamaño nominal, que pasa de
-8 a
-80,000, con información
-independiente. Las copias no aportan variación nueva: el sesgo permanece en
-6.</p>
-</div>
-</div>
-</div>
-<div id="reasignar-el-tratamiento-al-azar" class="section level2 hasAnchor" number="4.5">
-<h2><span class="header-section-number">4.5</span> Reasignar el tratamiento al azar<a href="parametros-causales-stata.html#reasignar-el-tratamiento-al-azar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="asignación-aleatoria" class="section level3 hasAnchor" number="4.5.1">
-<h3><span class="header-section-number">4.5.1</span> Asignación aleatoria<a href="#asignaci%C3%B3n-aleatoria" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb59-1"><a href="parametros-causales-stata.html#cb59-1" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;04_data.dta&quot;</span>, <span class="kw">clear</span></span>
-<span id="cb59-2"><a href="parametros-causales-stata.html#cb59-2" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">byte</span> X = (<span class="dt">_n</span> &gt; 4)</span>
-<span id="cb59-3"><a href="parametros-causales-stata.html#cb59-3" tabindex="-1"></a>expand 10000</span>
-<span id="cb59-4"><a href="parametros-causales-stata.html#cb59-4" tabindex="-1"></a><span class="kw">drop</span> D</span>
-<span id="cb59-5"><a href="parametros-causales-stata.html#cb59-5" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 87634</span>
-<span id="cb59-6"><a href="parametros-causales-stata.html#cb59-6" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">byte</span> D = (runiform() &lt; .5)</span>
-<span id="cb59-7"><a href="parametros-causales-stata.html#cb59-7" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">double</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb59-8"><a href="parametros-causales-stata.html#cb59-8" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">double</span> tau = yd1-yd0</span>
-<span id="cb59-9"><a href="parametros-causales-stata.html#cb59-9" tabindex="-1"></a>estimadores tau <span class="fu">y</span> D</span>
-<span id="cb59-10"><a href="parametros-causales-stata.html#cb59-10" tabindex="-1"></a><span class="kw">regress</span> <span class="fu">y</span> D, <span class="kw">robust</span></span></code></pre></div>
-</div>
-<div class="boxoutput">
-<p><strong>Salida central.</strong> Esta realización produce NAIVE igual a
-0.751 y NAIVE−ATT igual a 0.</p>
-</div>
-<div class="boxinfo">
-<p><strong>Interpretación.</strong> La semilla hace reproducible la realización. La
-aleatorización implica insesgadez al repetir el procedimiento; no exige que una
-muestra finita reproduzca exactamente el ATE 0.75.</p>
-</div>
-</div>
-</div>
-<div id="repetir-el-experimento-monte-carlo" class="section level2 hasAnchor" number="4.6">
-<h2><span class="header-section-number">4.6</span> Repetir el experimento: Monte Carlo<a href="parametros-causales-stata.html#repetir-el-experimento-monte-carlo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>La población simulada contiene 80,000
-perfiles. Cada llamada vuelve a asignar tratamiento, construye <code>y</code> y devuelve
-NAIVE−ATT.</p>
-<div id="monte-carlo-con-selección" class="section level3 hasAnchor" number="4.6.1">
-<h3><span class="header-section-number">4.6.1</span> Monte Carlo con selección<a href="#monte-carlo-con-selecci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb60-1"><a href="parametros-causales-stata.html#cb60-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> one_rep</span>
-<span id="cb60-2"><a href="parametros-causales-stata.html#cb60-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> one_rep, rclass</span>
-<span id="cb60-3"><a href="parametros-causales-stata.html#cb60-3" tabindex="-1"></a>    <span class="kw">syntax</span>, POPulation(<span class="fu">string</span>) SCENario(<span class="fu">string</span>)</span>
-<span id="cb60-4"><a href="parametros-causales-stata.html#cb60-4" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">&quot;`population&#39;&quot;</span>, <span class="kw">clear</span></span>
-<span id="cb60-5"><a href="parametros-causales-stata.html#cb60-5" tabindex="-1"></a>    <span class="kw">drop</span> D</span>
-<span id="cb60-6"><a href="parametros-causales-stata.html#cb60-6" tabindex="-1"></a>    <span class="kw">if</span> <span class="st">&quot;`scenario&#39;&quot;</span> == <span class="st">&quot;seleccion&quot;</span> {</span>
-<span id="cb60-7"><a href="parametros-causales-stata.html#cb60-7" tabindex="-1"></a>        <span class="kw">quietly</span> <span class="kw">summarize</span> yd0</span>
-<span id="cb60-8"><a href="parametros-causales-stata.html#cb60-8" tabindex="-1"></a>        <span class="kw">generate</span> D = (runiform() &lt; <span class="fu">invlogit</span>((yd0-<span class="fu">r</span>(<span class="kw">mean</span>))/2))</span>
-<span id="cb60-9"><a href="parametros-causales-stata.html#cb60-9" tabindex="-1"></a>    }</span>
-<span id="cb60-10"><a href="parametros-causales-stata.html#cb60-10" tabindex="-1"></a>    <span class="kw">else</span> {</span>
-<span id="cb60-11"><a href="parametros-causales-stata.html#cb60-11" tabindex="-1"></a>        <span class="kw">generate</span> D = (runiform() &lt; .5)</span>
-<span id="cb60-12"><a href="parametros-causales-stata.html#cb60-12" tabindex="-1"></a>    }</span>
-<span id="cb60-13"><a href="parametros-causales-stata.html#cb60-13" tabindex="-1"></a>    <span class="kw">generate</span> <span class="kw">double</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb60-14"><a href="parametros-causales-stata.html#cb60-14" tabindex="-1"></a>    <span class="kw">generate</span> <span class="kw">double</span> tau = yd1-yd0</span>
-<span id="cb60-15"><a href="parametros-causales-stata.html#cb60-15" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> tau <span class="kw">if</span> D == 1</span>
-<span id="cb60-16"><a href="parametros-causales-stata.html#cb60-16" tabindex="-1"></a>    <span class="kw">local</span> att = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb60-17"><a href="parametros-causales-stata.html#cb60-17" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
-<span id="cb60-18"><a href="parametros-causales-stata.html#cb60-18" tabindex="-1"></a>    <span class="kw">local</span> y1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb60-19"><a href="parametros-causales-stata.html#cb60-19" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
-<span id="cb60-20"><a href="parametros-causales-stata.html#cb60-20" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> sesgo = <span class="ot">`y1&#39;</span>-<span class="fu">r</span>(<span class="kw">mean</span>)-<span class="ot">`att&#39;</span></span>
-<span id="cb60-21"><a href="parametros-causales-stata.html#cb60-21" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb60-22"><a href="parametros-causales-stata.html#cb60-22" tabindex="-1"></a></span>
-<span id="cb60-23"><a href="parametros-causales-stata.html#cb60-23" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;04_data.dta&quot;</span>, <span class="kw">clear</span></span>
-<span id="cb60-24"><a href="parametros-causales-stata.html#cb60-24" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">byte</span> X = (<span class="dt">_n</span> &gt; 4)</span>
-<span id="cb60-25"><a href="parametros-causales-stata.html#cb60-25" tabindex="-1"></a>expand 10000</span>
-<span id="cb60-26"><a href="parametros-causales-stata.html#cb60-26" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">double</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
-<span id="cb60-27"><a href="parametros-causales-stata.html#cb60-27" tabindex="-1"></a><span class="kw">generate</span> <span class="kw">double</span> tau = yd1-yd0</span>
-<span id="cb60-28"><a href="parametros-causales-stata.html#cb60-28" tabindex="-1"></a><span class="kw">drop</span> <span class="fu">y</span> tau</span>
-<span id="cb60-29"><a href="parametros-causales-stata.html#cb60-29" tabindex="-1"></a><span class="kw">tempfile</span> poblacion</span>
-<span id="cb60-30"><a href="parametros-causales-stata.html#cb60-30" tabindex="-1"></a><span class="kw">save</span> <span class="ot">`poblacion&#39;</span>, <span class="kw">replace</span></span>
-<span id="cb60-31"><a href="parametros-causales-stata.html#cb60-31" tabindex="-1"></a><span class="kw">simulate</span> sesgo=<span class="fu">r</span>(sesgo), reps(1000) <span class="dv">seed</span>(12345) <span class="kw">nodots</span>: one_rep, population(<span class="st">&quot;`poblacion&#39;&quot;</span>) scenario(<span class="st">&quot;seleccion&quot;</span>)</span>
-<span id="cb60-32"><a href="parametros-causales-stata.html#cb60-32" tabindex="-1"></a><span class="kw">summarize</span> sesgo, <span class="kw">detail</span></span></code></pre></div>
-</div>
-<div class="boxinfo">
-<p><strong>Interpretación.</strong> <code>invlogit((yd0-r(mean))/2)</code> convierte el resultado potencial
-sin tratamiento en una probabilidad entre cero y uno. Por eso <code>D</code> depende de
-<code>yd0</code>. <code>simulate</code> guarda el escalar devuelto en cada una de
-1,000 repeticiones; la semilla
-fija la secuencia pseudoaleatoria.</p>
-</div>
-</div>
-<div id="monte-carlo-con-aleatorización" class="section level3 hasAnchor" number="4.6.2">
-<h3><span class="header-section-number">4.6.2</span> Monte Carlo con aleatorización<a href="#monte-carlo-con-aleatorizaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="boxcode">
-<p><strong>Comando clave</strong></p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb61-1"><a href="parametros-causales-stata.html#cb61-1" tabindex="-1"></a><span class="kw">simulate</span> sesgo=<span class="fu">r</span>(sesgo), reps(1000) <span class="dv">seed</span>(87634) <span class="kw">nodots</span>: one_rep, population(<span class="st">&quot;`poblacion&#39;&quot;</span>) scenario(<span class="st">&quot;aleatorizacion&quot;</span>)</span>
-<span id="cb61-2"><a href="parametros-causales-stata.html#cb61-2" tabindex="-1"></a><span class="kw">summarize</span> sesgo, <span class="kw">detail</span></span></code></pre></div>
-</div>
-<div class="boxkey">
-<p><strong>Resultado clave.</strong> Bajo selección, el centro del sesgo es
-3.941; bajo aleatorización es
-0. La regla <code>runiform()&lt;.5</code> hace a <code>D</code> independiente
-de los resultados potenciales, en expectativa.</p>
-</div>
-</div>
-<div id="comparación-gráfica" class="section level3 hasAnchor" number="4.6.3">
-<h3><span class="header-section-number">4.6.3</span> Comparación gráfica<a href="#comparaci%C3%B3n-gr%C3%A1fica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<table>
-<caption><span id="tab:tabla-monte-carlo">Table 4.3: </span>Distribución del sesgo Naïve − ATT en 1000 repeticiones</caption>
-<thead>
-<tr class="header">
-<th align="left">Escenario</th>
-<th align="right">Repeticiones</th>
-<th align="right">Media</th>
-<th align="right">Desv. est.</th>
-<th align="right">p5</th>
-<th align="right">p50</th>
-<th align="right">p95</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Aleatorización</td>
-<td align="right">1000</td>
-<td align="right">0.000</td>
-<td align="right">0.022</td>
-<td align="right">-0.038</td>
-<td align="right">0.000</td>
-<td align="right">0.035</td>
-</tr>
-<tr class="even">
-<td align="left">Selección</td>
-<td align="right">1000</td>
-<td align="right">3.941</td>
-<td align="right">0.016</td>
-<td align="right">3.915</td>
-<td align="right">3.941</td>
-<td align="right">3.966</td>
-</tr>
-</tbody>
-</table>
-<div class="float">
-<img src="dofile/04_ParametrosStata/sesgo_con_seleccion.png" alt="Sesgo bajo selección: examine centro, dispersión y masa respecto de cero." />
-<div class="figcaption">Sesgo bajo selección: examine centro, dispersión y masa respecto de cero.</div>
-</div>
-<div class="boxinfo">
-<p><strong>Lectura guiada.</strong> El centro es 3.941, la desviación
-estándar 0.016 y el intervalo entre cuantiles va de
-3.915 a 3.966. ¿Qué proporción visual de
-la masa queda a cada lado de cero? ¿Qué indica eso sobre sesgo sistemático?</p>
-</div>
-<div class="float">
-<img src="dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png" alt="Sesgo bajo aleatorización: examine centro, dispersión y masa respecto de cero." />
-<div class="figcaption">Sesgo bajo aleatorización: examine centro, dispersión y masa respecto de cero.</div>
-</div>
-<div class="boxinfo">
-<p><strong>Lectura guiada.</strong> El centro es 0, la desviación
-estándar 0.022 y los cuantiles son
--0.038 y 0.035. ¿Por qué aparece masa a
-ambos lados de cero aunque cada realización no tenga sesgo exactamente nulo?</p>
-</div>
-<div class="float">
-<img src="dofile/04_ParametrosStata/comparacion_escenarios.png" alt="Comparación de las distribuciones bajo selección y aleatorización." />
-<div class="figcaption">Comparación de las distribuciones bajo selección y aleatorización.</div>
-</div>
-<div class="boxkey">
-<p><strong>Resultado clave.</strong> Compare centro, dispersión, cuantiles y masa a cada lado
-de cero. La selección desplaza la distribución; la aleatorización la centra sin
-eliminar la variación muestral. ¿Cuál escenario es más disperso según las
-desviaciones estándar canónicas y por cuánto?</p>
-</div>
-</div>
-</div>
-<div id="ejercicios-1" class="section level2 hasAnchor" number="4.7">
-<h2><span class="header-section-number">4.7</span> Ejercicios<a href="parametros-causales-stata.html#ejercicios-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="boxquestion">
-<p><strong>S-P1 (5 puntos). Regresión y diferencia de medias.</strong> Considere el output de
-<code>regress y D, robust</code> del capítulo. Interprete <code>_b[_cons]</code>, <code>_b[D]</code>, <code>_se[D]</code> y
-el intervalo de confianza de <code>lincom D</code>. Explique la relación exacta entre
-<code>_b[D]</code> y las dos medias de grupo, e indique por qué el coeficiente no tiene
-automáticamente interpretación causal.</p>
-<table>
-<caption><span id="tab:tabla-output-s-p1">Table 4.4: </span>Output canónico de la regresión con errores estándar robustos</caption>
+<p><strong>Salida central.</strong> La comparación naïve es 6.75 y su diferencia
+respecto del ATT es 6.</p>
+<table style="width:100%;">
+<caption><span id="tab:tabla-regresion">Table 4.2: </span>Regresión equivalente a la diferencia de medias</caption>
 <colgroup>
+<col width="19%" />
 <col width="10%" />
 <col width="12%" />
-<col width="24%" />
-<col width="25%" />
-<col width="25%" />
+<col width="23%" />
+<col width="16%" />
+<col width="16%" />
 </colgroup>
 <thead>
 <tr class="header">
+<th align="left"></th>
 <th align="left">Término</th>
 <th align="right">Coeficiente</th>
 <th align="right">Error estándar robusto</th>
-<th align="right">IC 95%: límite inferior</th>
-<th align="right">IC 95%: límite superior</th>
+<th align="right">IC 95% inferior</th>
+<th align="right">IC 95% superior</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">COEF_REG_CONSTANTE</td>
 <td align="left">Constante</td>
 <td align="right">4.25</td>
 <td align="right">0.479</td>
@@ -1163,6 +758,7 @@ automáticamente interpretación causal.</p>
 <td align="right">5.421</td>
 </tr>
 <tr class="even">
+<td align="left">COEF_REG_D</td>
 <td align="left">D</td>
 <td align="right">6.75</td>
 <td align="right">0.629</td>
@@ -1171,123 +767,281 @@ automáticamente interpretación causal.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Comandos permitidos:</strong> <code>regress y D, robust</code>, <code>lincom D</code> y operaciones
-aritméticas con las medias de los dos grupos.</p>
-<p><strong>Producto esperado:</strong> interpretación escrita de los cuatro componentes
-solicitados y una igualdad que conecte el coeficiente de <code>D</code> con las medias.</p>
 </div>
-<div class="boxquestion">
-<p><strong>S-P2 (6 puntos). Parámetros en seis unidades.</strong> Use la siguiente población
-didáctica. Calcule ATE, ATT, ATU, CATE(0), CATE(1), la comparación NAIVE y
-NAIVE−ATT. Muestre las fórmulas y las unidades que entran en cada promedio.</p>
+<div class="boxwarning">
+<p><strong>Error frecuente.</strong> El coeficiente de <code>D</code> reproduce exactamente una diferencia
+de medias. Los errores robustos cambian la inferencia, pero no convierten una
+comparación seleccionada en un efecto causal.</p>
+</div>
+</div>
+</div>
+<div id="misma-selección-con-n-10.000" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Misma selección con N = 10.000<a href="#misma-selecci%C3%B3n-con-n-10.000" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ahora repetimos proporcionalmente los mismos ocho perfiles hasta obtener
+exactamente 10.000 filas. No tocamos <code>D</code>: las mismas clases de personas siguen
+tratadas y no tratadas.</p>
+<div class="boxcode">
+<p><strong>Comando clave</strong></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb53-1"><a href="parametros-causales-stata.html#cb53-1" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;04_data.dta&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb53-2"><a href="parametros-causales-stata.html#cb53-2" tabindex="-1"></a><span class="kw">generate</span> X = (<span class="dt">_n</span> &gt; 4)</span>
+<span id="cb53-3"><a href="parametros-causales-stata.html#cb53-3" tabindex="-1"></a><span class="kw">generate</span> tau = yd1-yd0</span>
+<span id="cb53-4"><a href="parametros-causales-stata.html#cb53-4" tabindex="-1"></a><span class="kw">generate</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
+<span id="cb53-5"><a href="parametros-causales-stata.html#cb53-5" tabindex="-1"></a>expand 1250</span>
+<span id="cb53-6"><a href="parametros-causales-stata.html#cb53-6" tabindex="-1"></a><span class="kw">assert</span> _N == 10000</span>
+<span id="cb53-7"><a href="parametros-causales-stata.html#cb53-7" tabindex="-1"></a></span>
+<span id="cb53-8"><a href="parametros-causales-stata.html#cb53-8" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
+<span id="cb53-9"><a href="parametros-causales-stata.html#cb53-9" tabindex="-1"></a><span class="fu">scalar</span> media_y1_n10000 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb53-10"><a href="parametros-causales-stata.html#cb53-10" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
+<span id="cb53-11"><a href="parametros-causales-stata.html#cb53-11" tabindex="-1"></a><span class="fu">scalar</span> NAIVE_n10000 = media_y1_n10000-<span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb53-12"><a href="parametros-causales-stata.html#cb53-12" tabindex="-1"></a><span class="kw">summarize</span> tau <span class="kw">if</span> D == 1</span>
+<span id="cb53-13"><a href="parametros-causales-stata.html#cb53-13" tabindex="-1"></a><span class="fu">scalar</span> SESGO_n10000 = NAIVE_n10000-<span class="fu">r</span>(<span class="kw">mean</span>)</span></code></pre></div>
+</div>
+<div class="boxoutput">
+<p><strong>Salida central</strong></p>
 <table>
+<caption><span id="tab:tabla-n">Table 4.3: </span>La misma asignación observacional con dos tamaños nominales</caption>
 <thead>
 <tr class="header">
-<th align="right">id</th>
-<th align="right">X</th>
-<th align="right">D</th>
-<th align="right"><span class="math inline">\(Y_i(D=0)\)</span></th>
-<th align="right"><span class="math inline">\(Y_i(D=1)\)</span></th>
+<th align="left"></th>
+<th align="left">Escenario</th>
+<th align="left">Estimando</th>
+<th align="right">Valor</th>
+<th align="right">N</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">3</td>
+<td align="left">21</td>
+<td align="left">Datos originales</td>
+<td align="left">ATE</td>
+<td align="right">0.75</td>
+<td align="right">8</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">6</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">7</td>
+<td align="left">22</td>
+<td align="left">Datos originales</td>
+<td align="left">ATT</td>
+<td align="right">0.75</td>
 <td align="right">8</td>
 </tr>
 <tr class="odd">
-<td align="right">5</td>
-<td align="right">1</td>
-<td align="right">0</td>
+<td align="left">35</td>
+<td align="left">Datos originales</td>
+<td align="left">Naïve</td>
+<td align="right">6.75</td>
 <td align="right">8</td>
-<td align="right">10</td>
 </tr>
 <tr class="even">
-<td align="right">6</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="right">13</td>
+<td align="left">38</td>
+<td align="left">Datos originales</td>
+<td align="left">Naïve − ATT</td>
+<td align="right">6.00</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">41</td>
+<td align="left">Misma selección, N = 10.000</td>
+<td align="left">ATE</td>
+<td align="right">0.75</td>
+<td align="right">10000</td>
+</tr>
+<tr class="even">
+<td align="left">42</td>
+<td align="left">Misma selección, N = 10.000</td>
+<td align="left">ATT</td>
+<td align="right">0.75</td>
+<td align="right">10000</td>
+</tr>
+<tr class="odd">
+<td align="left">55</td>
+<td align="left">Misma selección, N = 10.000</td>
+<td align="left">Naïve</td>
+<td align="right">6.75</td>
+<td align="right">10000</td>
+</tr>
+<tr class="even">
+<td align="left">58</td>
+<td align="left">Misma selección, N = 10.000</td>
+<td align="left">Naïve − ATT</td>
+<td align="right">6.00</td>
+<td align="right">10000</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Comandos permitidos:</strong> <code>generate</code>, <code>summarize</code> con condiciones <code>if</code> y
-operaciones aritméticas; también puede resolver los promedios a mano.</p>
-<p><strong>Producto esperado:</strong> tabla con los siete estimandos solicitados, sus fórmulas
-y las unidades incluidas en cada promedio.</p>
+</div>
+<div class="boxkey">
+<p><strong>Resultado clave.</strong> Con N=10.000, NAIVE continúa en 6.75 y
+NAIVE−ATT continúa en 6. El estimador no se acerca al parámetro:
+repetimos la misma selección con más filas.</p>
+</div>
+<div class="boxwarning">
+<p><strong>Precisión no es identificación.</strong> Aumentar N puede estrechar un intervalo
+alrededor del valor equivocado. Además, copiar filas no crea información
+independiente; aquí se usa deliberadamente para hacer visible que el sesgo es
+una propiedad de la comparación, no una consecuencia de una muestra pequeña.</p>
+</div>
+</div>
+<div id="una-asignación-aleatoria" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Una asignación aleatoria<a href="#una-asignaci%C3%B3n-aleatoria" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Conservamos las mismas 10.000 filas, <code>yd0</code>, <code>yd1</code>, <code>X</code> y <code>tau</code>. Eliminamos el
+<code>D</code> observacional y generamos un tratamiento independiente de los resultados
+potenciales.</p>
+<div class="boxcode">
+<p><strong>Comando clave</strong></p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb54-1"><a href="parametros-causales-stata.html#cb54-1" tabindex="-1"></a><span class="kw">drop</span> D <span class="fu">y</span></span>
+<span id="cb54-2"><a href="parametros-causales-stata.html#cb54-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 87634</span>
+<span id="cb54-3"><a href="parametros-causales-stata.html#cb54-3" tabindex="-1"></a><span class="kw">generate</span> D = (runiform() &lt; .5)</span>
+<span id="cb54-4"><a href="parametros-causales-stata.html#cb54-4" tabindex="-1"></a><span class="kw">generate</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
+<span id="cb54-5"><a href="parametros-causales-stata.html#cb54-5" tabindex="-1"></a></span>
+<span id="cb54-6"><a href="parametros-causales-stata.html#cb54-6" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
+<span id="cb54-7"><a href="parametros-causales-stata.html#cb54-7" tabindex="-1"></a><span class="fu">scalar</span> media_y1_aleatoria = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb54-8"><a href="parametros-causales-stata.html#cb54-8" tabindex="-1"></a><span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
+<span id="cb54-9"><a href="parametros-causales-stata.html#cb54-9" tabindex="-1"></a><span class="kw">display</span> <span class="st">&quot;Diferencia aleatoria = &quot;</span> media_y1_aleatoria-<span class="fu">r</span>(<span class="kw">mean</span>)</span></code></pre></div>
+</div>
+<div class="boxoutput">
+<p><strong>Salida central.</strong> En la realización reproducible del do-file, la diferencia
+de medias es 0.801, frente a un ATE de 0.75.</p>
+</div>
+<div class="boxinfo">
+<p><strong>Interpretación.</strong> La aleatorización elimina la asociación sistemática entre
+<code>D</code> y los resultados potenciales. No obliga a que una realización finita
+produzca exactamente el ATE: todavía existe variación de asignación.</p>
+</div>
+</div>
+<div id="monte-carlo-un-d-nuevo-en-cada-repetición" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Monte Carlo: un D nuevo en cada repetición<a href="#monte-carlo-un-d-nuevo-en-cada-repetici%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para verificar la afirmación de insesgadez repetimos únicamente la asignación.
+En cada repetición los 10.000 perfiles son idénticos, pero cada persona recibe
+un <code>D</code> nuevo e independiente.</p>
+<div class="boxcode">
+<p><strong>Comando clave</strong></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb55-1"><a href="parametros-causales-stata.html#cb55-1" tabindex="-1"></a><span class="kw">capture</span> <span class="kw">program</span> <span class="kw">drop</span> one_random_assignment</span>
+<span id="cb55-2"><a href="parametros-causales-stata.html#cb55-2" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> one_random_assignment, rclass</span>
+<span id="cb55-3"><a href="parametros-causales-stata.html#cb55-3" tabindex="-1"></a>    <span class="kw">syntax</span>, POPulation(<span class="fu">string</span>)</span>
+<span id="cb55-4"><a href="parametros-causales-stata.html#cb55-4" tabindex="-1"></a>    <span class="kw">use</span> <span class="st">&quot;`population&#39;&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb55-5"><a href="parametros-causales-stata.html#cb55-5" tabindex="-1"></a>    <span class="kw">generate</span> D = (runiform() &lt; .5)</span>
+<span id="cb55-6"><a href="parametros-causales-stata.html#cb55-6" tabindex="-1"></a>    <span class="kw">generate</span> <span class="fu">y</span> = D*yd1 + (1-D)*yd0</span>
+<span id="cb55-7"><a href="parametros-causales-stata.html#cb55-7" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 1</span>
+<span id="cb55-8"><a href="parametros-causales-stata.html#cb55-8" tabindex="-1"></a>    <span class="kw">local</span> y1 = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb55-9"><a href="parametros-causales-stata.html#cb55-9" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="fu">y</span> <span class="kw">if</span> D == 0</span>
+<span id="cb55-10"><a href="parametros-causales-stata.html#cb55-10" tabindex="-1"></a>    <span class="fu">return</span> <span class="fu">scalar</span> estimador = <span class="ot">`y1&#39;</span>-<span class="fu">r</span>(<span class="kw">mean</span>)</span>
+<span id="cb55-11"><a href="parametros-causales-stata.html#cb55-11" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb55-12"><a href="parametros-causales-stata.html#cb55-12" tabindex="-1"></a></span>
+<span id="cb55-13"><a href="parametros-causales-stata.html#cb55-13" tabindex="-1"></a><span class="kw">simulate</span> estimador=<span class="fu">r</span>(estimador), reps(1000) <span class="dv">seed</span>(87634) <span class="kw">nodots</span>: one_random_assignment, population(<span class="st">&quot;`population&#39;&quot;</span>)</span>
+<span id="cb55-14"><a href="parametros-causales-stata.html#cb55-14" tabindex="-1"></a><span class="kw">summarize</span> estimador, <span class="kw">detail</span></span></code></pre></div>
+</div>
+<div class="boxoutput">
+<p><strong>Salida central.</strong> En 1.000
+asignaciones, el promedio del estimador es 0.75 y su desviación
+estándar es 0.065. El ATE fijo es 0.75.</p>
+</div>
+<div class="float">
+<img src="dofile/04_ParametrosStata/sesgo_con_aleatorizacion.png" alt="Distribución de la diferencia de medias cuando en cada repetición se genera un D nuevo." />
+<div class="figcaption">Distribución de la diferencia de medias cuando en cada repetición se genera un D nuevo.</div>
+</div>
+<div class="boxkey">
+<p><strong>Resultado clave.</strong> Una asignación puede quedar por encima o por debajo del
+ATE. Al repetir el mecanismo aleatorio, esos desbalances no tienen una dirección
+sistemática y el promedio de los estimadores se centra en el ATE.</p>
+</div>
+</div>
+<div id="ejercicios-1" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Ejercicios<a href="parametros-causales-stata.html#ejercicios-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="boxquestion">
+<p><strong>S-P1 (5 puntos). Regresión y diferencia de medias.</strong> Interprete <code>_b[_cons]</code>,
+<code>_b[D]</code>, <code>_se[D]</code> y el intervalo de confianza de <code>regress y D, robust</code>. Explique
+por qué la equivalencia algebraica entre <code>_b[D]</code> y la diferencia de medias no
+garantiza interpretación causal.</p>
+<table style="width:100%;">
+<caption><span id="tab:tabla-output-s-p1">Table 4.4: </span>Output canónico de la regresión</caption>
+<colgroup>
+<col width="19%" />
+<col width="10%" />
+<col width="12%" />
+<col width="23%" />
+<col width="16%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Término</th>
+<th align="right">Coeficiente</th>
+<th align="right">Error estándar robusto</th>
+<th align="right">IC 95% inferior</th>
+<th align="right">IC 95% superior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">COEF_REG_CONSTANTE</td>
+<td align="left">Constante</td>
+<td align="right">4.25</td>
+<td align="right">0.479</td>
+<td align="right">3.079</td>
+<td align="right">5.421</td>
+</tr>
+<tr class="even">
+<td align="left">COEF_REG_D</td>
+<td align="left">D</td>
+<td align="right">6.75</td>
+<td align="right">0.629</td>
+<td align="right">5.211</td>
+<td align="right">8.289</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Comandos permitidos:</strong> <code>summarize</code>, <code>regress</code> y operaciones con las medias.</p>
+<p><strong>Producto esperado:</strong> interpretación escrita y la igualdad que conecta el
+coeficiente de <code>D</code> con las dos medias.</p>
 </div>
 <div class="boxquestion">
-<p><strong>S-P3 (6 puntos). Depuración de un programa.</strong> El siguiente código contiene
-cuatro errores que impiden calcular correctamente ATE, ATT y ATU. Identifique
-cada error, explique su consecuencia y escriba una versión ejecutable corregida.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb62-1"><a href="parametros-causales-stata.html#cb62-1" tabindex="-1"></a><span class="kw">program</span> <span class="kw">define</span> estimadores</span>
-<span id="cb62-2"><a href="parametros-causales-stata.html#cb62-2" tabindex="-1"></a>    <span class="kw">syntax</span> <span class="kw">varlist</span>(<span class="fu">min</span>=2 <span class="fu">max</span>=3)</span>
-<span id="cb62-3"><a href="parametros-causales-stata.html#cb62-3" tabindex="-1"></a>    <span class="kw">tokenize</span> <span class="kw">varlist</span></span>
-<span id="cb62-4"><a href="parametros-causales-stata.html#cb62-4" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`1&#39;</span> <span class="kw">if</span> <span class="ot">`3&#39;</span> == 1</span>
-<span id="cb62-5"><a href="parametros-causales-stata.html#cb62-5" tabindex="-1"></a>    <span class="fu">scalar</span> ATE = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb62-6"><a href="parametros-causales-stata.html#cb62-6" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`1&#39;</span> <span class="kw">if</span> <span class="ot">`3&#39;</span> == 1</span>
-<span id="cb62-7"><a href="parametros-causales-stata.html#cb62-7" tabindex="-1"></a>    <span class="fu">scalar</span> ATT = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb62-8"><a href="parametros-causales-stata.html#cb62-8" tabindex="-1"></a>    <span class="kw">quietly</span> <span class="kw">summarize</span> <span class="ot">`1&#39;</span> <span class="kw">if</span> <span class="ot">`3&#39;</span> == 1</span>
-<span id="cb62-9"><a href="parametros-causales-stata.html#cb62-9" tabindex="-1"></a>    <span class="fu">scalar</span> ATU = <span class="fu">r</span>(<span class="kw">mean</span>)</span>
-<span id="cb62-10"><a href="parametros-causales-stata.html#cb62-10" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
-<p><strong>Comandos permitidos:</strong> <code>program define</code>, <code>syntax</code>, <code>tokenize</code>, locales,
-<code>summarize</code>, escalares y <code>display</code>.</p>
-<p><strong>Producto esperado:</strong> listado numerado de los cuatro errores, explicación de
-su consecuencia y un programa Stata completo que ejecute sin errores.</p>
+<p><strong>S-P2 (6 puntos). Parámetros en seis unidades.</strong> Para la tabla entregada en
+clase, calcule ATE, ATT, ATU, CATE(0), CATE(1), NAIVE y NAIVE−ATT. Muestre qué
+unidades entran en cada promedio.</p>
+<p><strong>Comandos permitidos:</strong> <code>generate</code>, <code>summarize</code> con <code>if</code> y operaciones
+aritméticas.</p>
+<p><strong>Producto esperado:</strong> tabla con los siete estimandos, sus fórmulas y las
+unidades incluidas.</p>
 </div>
 <div class="boxquestion">
-<p><strong>S-P4 (7 puntos). Nueva regla de selección.</strong> Diseñe una regla donde la
-probabilidad de tratamiento sea el complemento exacto de la regla canónica,
-<code>invlogit(-(yd0-r(mean))/2)</code>, y por tanto disminuya con <code>yd0</code>. Anticipe el signo
-y el centro aproximado de NAIVE−ATT, y razone cómo cambiaría su dispersión frente
-a la regla canónica. Escriba código Stata ejecutable que modifique <code>one_rep</code>, fije
-una semilla, ejecute <code>simulate</code> y resuma la distribución.</p>
-<p><strong>Comandos permitidos:</strong> comandos del programa <code>one_rep</code>, <code>invlogit()</code>,
-<code>runiform()</code>, <code>set seed</code>, <code>simulate</code> y <code>summarize, detail</code>.</p>
-<p><strong>Producto esperado:</strong> código Stata ejecutable y un párrafo que anticipe signo,
-centro y dispersión de la distribución frente a la regla canónica.</p>
+<p><strong>S-P3 (6 puntos). Aumentar N sin cambiar la selección.</strong> Parta de
+<code>04_data.dta</code>, replique proporcionalmente los perfiles hasta N=10.000 y
+demuestre que NAIVE y NAIVE−ATT no cambian. Explique por qué este resultado
+contradice la afirmación “una muestra grande corrige el sesgo”.</p>
+<p><strong>Comandos permitidos:</strong> <code>use</code>, <code>generate</code>, <code>expand</code>, <code>assert</code>, <code>summarize</code> y
+escalares.</p>
+<p><strong>Producto esperado:</strong> código ejecutable, los valores antes y después y una
+interpretación sobre consistencia.</p>
+</div>
+<div class="boxquestion">
+<p><strong>S-P4 (7 puntos). Una asignación y la repetición del experimento.</strong> Genere una
+asignación aleatoria y compare su estimador con el ATE. Luego escriba código
+Stata ejecutable que produzca un D nuevo en cada repetición y explique por qué
+el promedio Monte Carlo puede coincidir con el ATE aunque una asignación no lo
+haga exactamente.</p>
+<p><strong>Comandos permitidos:</strong> <code>runiform()</code>, <code>set seed</code>, un programa <code>rclass</code>,
+<code>simulate</code> y <code>summarize</code>.</p>
+<p><strong>Producto esperado:</strong> código Stata ejecutable, resultado de una realización,
+resumen de la distribución y explicación de insesgadez en repetición.</p>
 </div>
 </div>
-<div id="síntesis-1" class="section level2 hasAnchor" number="4.8">
-<h2><span class="header-section-number">4.8</span> Síntesis<a href="#s%C3%ADntesis-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="síntesis-1" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Síntesis<a href="#s%C3%ADntesis-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
-<li><strong>Identificación:</strong> más datos no eliminan el sesgo de selección.</li>
-<li><strong>Heterogeneidad:</strong> un ATE puede ocultar CATE distintos entre grupos.</li>
-<li><strong>Precisión frente a sesgo:</strong> aumentar <span class="math inline">\(N\)</span> puede reducir variabilidad sin
-acercar el estimador al parámetro causal.</li>
-<li><strong>Aleatorización en expectativa:</strong> el sesgo promedio se centra cerca de cero,
-aunque cada realización conserve variabilidad muestral.</li>
+<li>Los comandos reproducen exactamente los estimandos calculados a mano.</li>
+<li>Aumentar N sin cambiar la selección no corrige el sesgo ni genera
+consistencia.</li>
+<li>La asignación aleatoria cambia <code>D</code>, no los resultados potenciales.</li>
+<li>La aleatorización produce insesgadez en repetición; una realización conserva
+variación de asignación.</li>
 </ol>
 </div>
 <div id="puente-al-capítulo-siguiente" class="section level2 unnumbered hasAnchor">
 <h2>Puente al capítulo siguiente<a href="#puente-al-cap%C3%ADtulo-siguiente" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El capítulo <a href="05-RCT.Rmd">Experimentos aleatorios controlados</a> usa esta misma
-lógica para mostrar cómo un diseño experimental identifica efectos causales y
-cómo se diagnostica el balance antes de estimarlos.</p>
+<p>El capítulo <a href="05-RCT.Rmd">Experimentos aleatorios controlados</a> desarrolla esta
+misma lógica como diseño de investigación y estudia balance, cumplimiento e
+inferencia experimental.</p>
 
 </div>
 </div>
