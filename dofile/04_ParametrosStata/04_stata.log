@@ -1,9 +1,10 @@
 -------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/dof
-> ile/04_ParametrosStata/04_stata.log
+       log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/.wo
+> rktrees/parametros-empiricos-alineacion/dofile/04_ParametrosStata/04_stata.lo
+> g
   log type:  text
- opened on:  15 Jul 2026, 14:58:50
+ opened on:  10 Aug 2026, 09:26:13
 
 . 
 . capture mkdir "results"
@@ -21,75 +22,200 @@
   6.     post `postname' ("`scenario'") ("N_D1") (r(N)) (`n')
   7. 
 .     quietly summarize y if D == 0
-  8.     post `postname' ("`scenario'") ("MEDIA_Y_D0") (r(mean)) (`n')
-  9.     quietly summarize y if D == 1
- 10.     post `postname' ("`scenario'") ("MEDIA_Y_D1") (r(mean)) (`n')
- 11. 
+  8.     local y0 = r(mean)
+  9.     post `postname' ("`scenario'") ("MEDIA_Y_D0") (`y0') (`n')
+ 10.     quietly summarize y if D == 1
+ 11.     local y1 = r(mean)
+ 12.     post `postname' ("`scenario'") ("MEDIA_Y_D1") (`y1') (`n')
+ 13. 
 .     quietly summarize tau
- 12.     local ate = r(mean)
- 13.     post `postname' ("`scenario'") ("ATE") (`ate') (`n')
- 14. 
-.     quietly summarize tau if D == 1
- 15.     local att = r(mean)
- 16.     post `postname' ("`scenario'") ("ATT") (`att') (`n')
- 17. 
-.     quietly summarize tau if D == 0
- 18.     local atu = r(mean)
- 19.     post `postname' ("`scenario'") ("ATU") (`atu') (`n')
- 20. 
-.     quietly summarize tau if X == 0
- 21.     post `postname' ("`scenario'") ("CATE_X0") (r(mean)) (`n')
- 22. 
-.     quietly summarize tau if X == 1
- 23.     post `postname' ("`scenario'") ("CATE_X1") (r(mean)) (`n')
- 24. 
-.     quietly summarize y if D == 1
- 25.     local y1 = r(mean)
- 26.     quietly summarize y if D == 0
- 27.     local naive = `y1' - r(mean)
- 28.     post `postname' ("`scenario'") ("NAIVE") (`naive') (`n')
- 29.     post `postname' ("`scenario'") ("SESGO_ATT") (`naive' - `att') (`n')
- 30.     post `postname' ("`scenario'") ("DESV_NAIVE_ATE") (`naive' - `ate') (`
+ 14.     local ate = r(mean)
+ 15.     post `postname' ("`scenario'") ("ATE") (`ate') (`n')
+ 16.     quietly summarize tau if D == 1
+ 17.     local att = r(mean)
+ 18.     post `postname' ("`scenario'") ("ATT") (`att') (`n')
+ 19.     quietly summarize tau if D == 0
+ 20.     post `postname' ("`scenario'") ("ATU") (r(mean)) (`n')
+ 21.     quietly summarize tau if X == 0
+ 22.     post `postname' ("`scenario'") ("CATE_X0") (r(mean)) (`n')
+ 23.     quietly summarize tau if X == 1
+ 24.     post `postname' ("`scenario'") ("CATE_X1") (r(mean)) (`n')
+ 25. 
+.     local naive = `y1' - `y0'
+ 26.     post `postname' ("`scenario'") ("NAIVE") (`naive') (`n')
+ 27.     post `postname' ("`scenario'") ("SESGO_ATT") (`naive' - `att') (`n')
+ 28.     post `postname' ("`scenario'") ("DESV_NAIVE_ATE") (`naive' - `ate') (`
 > n')
- 31. 
+ 29. 
 .     quietly regress y D, vce(robust)
- 32.     post `postname' ("`scenario'") ("COEF_REG_D") (_b[D]) (`n')
- 33.     post `postname' ("`scenario'") ("SE_ROBUST_REG_D") (_se[D]) (`n')
- 34.     local tcrit = invttail(e(df_r), 0.025)
- 35.     post `postname' ("`scenario'") ("IC95_INF_REG_D") (_b[D] - `tcrit'*_se
+ 30.     local tcrit = invttail(e(df_r), 0.025)
+ 31.     post `postname' ("`scenario'") ("COEF_REG_D") (_b[D]) (`n')
+ 32.     post `postname' ("`scenario'") ("SE_ROBUST_REG_D") (_se[D]) (`n')
+ 33.     post `postname' ("`scenario'") ("IC95_INF_REG_D") (_b[D] - `tcrit'*_se
 > [D]) (`n')
- 36.     post `postname' ("`scenario'") ("IC95_SUP_REG_D") (_b[D] + `tcrit'*_se
+ 34.     post `postname' ("`scenario'") ("IC95_SUP_REG_D") (_b[D] + `tcrit'*_se
 > [D]) (`n')
- 37.     post `postname' ("`scenario'") ("COEF_REG_CONSTANTE") (_b[_cons]) (`n'
+ 35.     post `postname' ("`scenario'") ("COEF_REG_CONSTANTE") (_b[_cons]) (`n'
 > )
- 38.     post `postname' ("`scenario'") ("SE_ROBUST_REG_CONSTANTE") (_se[_cons]
+ 36.     post `postname' ("`scenario'") ("SE_ROBUST_REG_CONSTANTE") (_se[_cons]
 > ) (`n')
- 39.     post `postname' ("`scenario'") ("IC95_INF_REG_CONSTANTE") (_b[_cons] -
+ 37.     post `postname' ("`scenario'") ("IC95_INF_REG_CONSTANTE") (_b[_cons] -
 >  `tcrit'*_se[_cons]) (`n')
- 40.     post `postname' ("`scenario'") ("IC95_SUP_REG_CONSTANTE") (_b[_cons] +
+ 38.     post `postname' ("`scenario'") ("IC95_SUP_REG_CONSTANTE") (_b[_cons] +
 >  `tcrit'*_se[_cons]) (`n')
- 41. end
+ 39. end
 
 . 
+. * ================================================================
+. * 1. EJERCICIO MANUAL: los mismos ocho perfiles del capítulo teórico
+. * ================================================================
 . use "04_data.dta", clear
 
 . generate byte X = (_n > 4)
 
-. label define grupo_pre 0 "Grupo A" 1 "Grupo B"
-
-. label values X grupo_pre
+. generate double tau = yd1 - yd0
 
 . generate double y = D*yd1 + (1-D)*yd0
 
-. generate double tau = yd1 - yd0
+. label define tratamiento 0 "Control" 1 "Tratados"
+
+. label values D tratamiento
+
+. list X D yd0 yd1 y tau, clean noobs
+
+    X          D   yd0   yd1    y   tau  
+    0   Tratados    10    12   12     2  
+    0    Control     4     5    4     1  
+    0   Tratados     9    10   10     1  
+    0   Tratados    10    11   11     1  
+    1    Control     5     6    5     1  
+    1    Control     3     2    3    -1  
+    1   Tratados    12    11   11    -1  
+    1    Control     5     7    5     2  
+
+. 
+. ttest y, by(D)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. err.   Std. dev.   [95% conf. interval]
+---------+--------------------------------------------------------------------
+ Control |       4        4.25    .4787136    .9574271     2.72652     5.77348
+Tratados |       4          11    .4082483    .8164966    9.700772    12.29923
+---------+--------------------------------------------------------------------
+Combined |       8       7.625    1.308455    3.700869    4.530996      10.719
+---------+--------------------------------------------------------------------
+    diff |               -6.75    .6291529               -8.289482   -5.210518
+------------------------------------------------------------------------------
+    diff = mean(Control) - mean(Tratados)                         t = -10.7287
+H0: diff = 0                                     Degrees of freedom =        6
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.0000         Pr(|T| > |t|) = 0.0000          Pr(T > t) = 1.0000
+
+. regress y D, robust
+
+Linear regression                               Number of obs     =          8
+                                                F(1, 6)           =     115.11
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.9505
+                                                Root MSE          =     .88976
+
+------------------------------------------------------------------------------
+             |               Robust
+           y | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+           D |       6.75   .6291529    10.73   0.000     5.210518    8.289482
+       _cons |       4.25   .4787136     8.88   0.000      3.07863     5.42137
+------------------------------------------------------------------------------
+
+. summarize tau
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         tau |          8         .75    1.164965         -1          2
+
+. scalar ATE_original = r(mean)
+
+. summarize tau if D == 1
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         tau |          4         .75    1.258306         -1          2
+
+. scalar ATT_original = r(mean)
+
+. summarize tau if D == 0
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         tau |          4         .75    1.258306         -1          2
+
+. scalar ATU_original = r(mean)
+
+. summarize tau if X == 0
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         tau |          4        1.25          .5          1          2
+
+. scalar CATE_X0_original = r(mean)
+
+. summarize tau if X == 1
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+         tau |          4         .25         1.5         -1          2
+
+. scalar CATE_X1_original = r(mean)
+
+. summarize y if D == 1
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+           y |          4          11    .8164966         10         12
+
+. scalar media_y1_original = r(mean)
+
+. summarize y if D == 0
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+           y |          4        4.25    .9574271          3          5
+
+. scalar NAIVE_original = media_y1_original-r(mean)
+
+. scalar SESGO_original = NAIVE_original-ATT_original
+
+. 
+. display "ATE = " ATE_original
+ATE = .75
+
+. display "ATT = " ATT_original
+ATT = .75
+
+. display "ATU = " ATU_original
+ATU = .75
+
+. display "CATE(0) = " CATE_X0_original
+CATE(0) = 1.25
+
+. display "CATE(1) = " CATE_X1_original
+CATE(1) = .25
+
+. display "NAIVE = " NAIVE_original
+NAIVE = 6.75
+
+. display "NAIVE - ATT = " SESGO_original
+NAIVE - ATT = 6
 
 . 
 . tempfile original population
 
 . save `original', replace
-(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000001 not
+(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St97234.000001 not
     found)
-file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000001 saved
+file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St97234.000001 saved
     as .dta format
 
 . 
@@ -101,37 +227,58 @@ file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000001 saved
 . post_estimands, postname(`pointpost') scenario("datos_originales")
 
 . 
-. * Se replican perfiles idénticos. El N nominal aumenta, pero no la informació
-> n
-. * independiente; por construcción, los estimandos y el sesgo no cambian.
-. expand 10000
-(79,992 observations created)
+. * ================================================================
+. * 2. MISMA SELECCIÓN CON N = 10.000: más N no elimina el sesgo
+. * ================================================================
+. expand 1250
+(9,992 observations created)
 
-. post_estimands, postname(`pointpost') scenario("datos_duplicados")
+. assert _N == 10000
 
-. drop y tau
+. post_estimands, postname(`pointpost') scenario("seleccion_n10000")
+
+. 
+. quietly summarize y if D == 1
+
+. scalar media_y1_n10000 = r(mean)
+
+. quietly summarize y if D == 0
+
+. scalar NAIVE_n10000 = media_y1_n10000-r(mean)
+
+. quietly summarize tau if D == 1
+
+. scalar SESGO_n10000 = NAIVE_n10000-r(mean)
+
+. assert abs(NAIVE_n10000-NAIVE_original) < 1e-10
+
+. assert abs(SESGO_n10000-SESGO_original) < 1e-10
+
+. 
+. drop y D
 
 . save `population', replace
-(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000002 not
+(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St97234.000002 not
     found)
-file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000002 saved
+file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St97234.000002 saved
     as .dta format
 
 . 
-. drop D
-
+. * ================================================================
+. * 3. UNA ASIGNACIÓN ALEATORIA: solo cambia D
+. * ================================================================
 . set seed 87634
 
-. generate byte D = (runiform() < 0.5)
+. generate byte D = (runiform() < .5)
 
 . generate double y = D*yd1 + (1-D)*yd0
-
-. generate double tau = yd1 - yd0
 
 . post_estimands, postname(`pointpost') scenario("aleatorizacion_unica")
 
 . 
 . postclose `pointpost'
+
+. preserve
 
 . use "results/parameters_results.dta", clear
 
@@ -140,70 +287,40 @@ file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000002 saved
 . export delimited using "results/parameters_results.csv", replace
 file results/parameters_results.csv saved
 
-. 
-. capture program drop one_rep
+. restore
 
-. program define one_rep, rclass
-  1.     syntax, POPulation(string) SCENario(string)
+. 
+. * ================================================================
+. * 4. MONTE CARLO: un D nuevo en cada repetición
+. * ================================================================
+. capture program drop one_random_assignment
+
+. program define one_random_assignment, rclass
+  1.     syntax, POPulation(string)
   2.     use "`population'", clear
-  3.     drop D
-  4.     if "`scenario'" == "seleccion" {
-  5.         quietly summarize yd0
-  6.         generate double p = invlogit((yd0-r(mean))/2)
-  7.         generate byte D = (runiform() < p)
-  8.     }
-  9.     else {
- 10.         generate byte D = (runiform() < 0.5)
- 11.     }
- 12.     generate double y = D*yd1 + (1-D)*yd0
- 13.     generate double tau = yd1-yd0
- 14.     quietly summarize tau if D == 1
- 15.     local att = r(mean)
- 16.     quietly summarize y if D == 1
- 17.     local y1 = r(mean)
- 18.     quietly summarize y if D == 0
- 19.     return scalar sesgo = `y1' - r(mean) - `att'
- 20. end
+  3.     generate byte D = (runiform() < .5)
+  4.     generate double y = D*yd1 + (1-D)*yd0
+  5.     quietly summarize y if D == 1
+  6.     local y1 = r(mean)
+  7.     quietly summarize y if D == 0
+  8.     return scalar estimador = `y1'-r(mean)
+  9. end
 
 . 
-. simulate sesgo=r(sesgo), reps(1000) seed(12345) nodots: one_rep, population("
-> `population'") scenario("seleccion")
+. simulate estimador=r(estimador), reps(1000) seed(87634) nodots: one_random_as
+> signment, population("`population'")
 
-      Command: one_rep,
+      Command: one_random_assignment,
                    population("/var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn
-                   > /T//St87874.000002") scenario("seleccion")
-        sesgo: r(sesgo)
-
-
-. generate str16 escenario = "seleccion"
-
-. generate long rep = _n
-
-. tempfile seleccion
-
-. save `seleccion', replace
-(file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000003 not
-    found)
-file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000003 saved
-    as .dta format
-
-. 
-. simulate sesgo=r(sesgo), reps(1000) seed(87634) nodots: one_rep, population("
-> `population'") scenario("aleatorizacion")
-
-      Command: one_rep,
-                   population("/var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn
-                   > /T//St87874.000002") scenario("aleatorizacion")
-        sesgo: r(sesgo)
+                   > /T//St97234.000002")
+    estimador: r(estimador)
 
 
 . generate str16 escenario = "aleatorizacion"
 
 . generate long rep = _n
 
-. append using `seleccion'
-
-. order escenario rep sesgo
+. order escenario rep estimador
 
 . sort escenario rep
 
@@ -211,16 +328,24 @@ file /var/folders/_b/6m74tr516wjf3mps793mlkwm0000gn/T//St87874.000003 saved
 file results/monte_carlo_draws.dta saved
 
 . 
+. quietly summarize estimador, detail
+
+. scalar mc_media = r(mean)
+
+. scalar mc_sd = r(sd)
+
+. scalar mc_se_media = r(sd)/sqrt(r(N))
+
+. assert abs(mc_media-ATE_original) < 3*mc_se_media
+
+. 
 . tempname summarypost
 
 . postfile `summarypost' str16 escenario long N double media desv_est p5 median
 > a p95 using "results/monte_carlo_summary.dta", replace
 
-. foreach s in seleccion aleatorizacion {
-  2.     quietly summarize sesgo if escenario == "`s'", detail
-  3.     post `summarypost' ("`s'") (r(N)) (r(mean)) (r(sd)) (r(p5)) (r(p50)) (
-> r(p95))
-  4. }
+. post `summarypost' ("aleatorizacion") (r(N)) (r(mean)) (r(sd)) (r(p5)) (r(p50
+> )) (r(p95))
 
 . postclose `summarypost'
 
@@ -229,53 +354,21 @@ file results/monte_carlo_draws.dta saved
 
 . use "results/monte_carlo_summary.dta", clear
 
-. sort escenario
-
 . export delimited using "results/monte_carlo_summary.csv", replace
 file results/monte_carlo_summary.csv saved
 
 . restore
 
 . 
-. quietly summarize sesgo
-
-. local xmin = floor(r(min)*10)/10
-
-. local xmax = ceil(r(max)*10)/10
-
-. 
-. histogram sesgo if escenario == "seleccion", width(.01) start(`xmin') fractio
-> n color(navy%70) xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xmin
-> ' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Sesgo con selección") subtitle("1
-> .000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitle("Fracción") name
-> (g_seleccion, replace)
-(bin=410, start=-.1, width=.01)
-
-. graph export "sesgo_con_seleccion.png", replace width(1800)
-file sesgo_con_seleccion.png written in PNG format
-
-. 
-. histogram sesgo if escenario == "aleatorizacion", width(.01) start(`xmin') fr
-> action color(forest_green%70) xline(0, lcolor(maroon) lwidth(medthick)) xscal
-> e(range(`xmin' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Sesgo con aleatoriza
-> ción") subtitle("1.000 repeticiones; N = 80.000") xtitle("NAIVE - ATT") ytitl
-> e("Fracción") name(g_aleatorizacion, replace)
-(bin=17, start=-.1, width=.01)
+. histogram estimador, fraction color(forest_green%70) xline(`=ATE_original', l
+> color(navy) lwidth(medthick)) title("Estimador bajo asignación aleatoria") su
+> btitle("1.000 asignaciones nuevas; N = 10.000") xtitle("Diferencia de medias"
+> ) ytitle("Fracción") note("Línea azul: ATE = `=string(ATE_original, "%5.2f")'
+> ") name(g_aleatorizacion, replace)
+(bin=29, start=.56668407, width=.01371934)
 
 . graph export "sesgo_con_aleatorizacion.png", replace width(1800)
 file sesgo_con_aleatorizacion.png written in PNG format
-
-. 
-. twoway (kdensity sesgo if escenario == "seleccion", lcolor(navy) lwidth(medth
-> ick)) (kdensity sesgo if escenario == "aleatorizacion", lcolor(forest_green) 
-> lwidth(medthick)), xline(0, lcolor(maroon) lwidth(medthick)) xscale(range(`xm
-> in' `xmax')) xlabel(`xmin' 0(1)`xmax') title("Comparación de escenarios") sub
-> title("Distribución del sesgo en 1.000 repeticiones") xtitle("NAIVE - ATT") y
-> title("Densidad") legend(order(1 "Selección" 2 "Aleatorización")) name(g_comp
-> aracion, replace)
-
-. graph export "comparacion_escenarios.png", replace width(1800)
-file comparacion_escenarios.png written in PNG format
 
 . 
 . use `original', clear
@@ -285,8 +378,9 @@ Pipeline canónico completado
 
 . log close
       name:  <unnamed>
-       log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/dof
-> ile/04_ParametrosStata/04_stata.log
+       log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/.wo
+> rktrees/parametros-empiricos-alineacion/dofile/04_ParametrosStata/04_stata.lo
+> g
   log type:  text
- closed on:  15 Jul 2026, 15:00:53
+ closed on:  10 Aug 2026, 09:26:23
 -------------------------------------------------------------------------------

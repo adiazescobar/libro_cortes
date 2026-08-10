@@ -227,7 +227,7 @@ def test_monte_carlo_outputs_have_complete_scenarios():
     draws = BASE / "results/monte_carlo_draws.dta"
     assert draws.is_file() and draws.stat().st_size > 0
     draws_df = pd.read_stata(draws, convert_categoricals=False)
-    assert list(draws_df.columns) == ["escenario", "rep", "sesgo"]
+    assert list(draws_df.columns) == ["escenario", "rep", "estimador"]
     assert len(draws_df) == 1000
     assert not draws_df.isna().any().any()
     scenario_draws = draws_df.loc[draws_df["escenario"] == "aleatorizacion"]
