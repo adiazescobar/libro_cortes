@@ -5,6 +5,7 @@
 ::: {.class-materials}
 **Descarga antes de comenzar**
 
+- **[Participar en el experimento de vocabulario (estudiantes)](https://experimento-vocabulario-clase6.web.app/)**
 - [Do-file de Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_stata.do)
 - [Base `data.dta`](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/data.dta)
 - [Script de R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/06_RCT_Stata/clase6_R.R)
