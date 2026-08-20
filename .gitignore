@@ -8,6 +8,11 @@ _bookdown_files/
 .RData
 .Ruserdata
 *.Rproj.user
+*.rds
+
+# Cachés de Python
+__pycache__/
+*.py[cod]
 
 # Archivos de log
 *.log
@@ -38,6 +43,17 @@ Thumbs.db
 *.tmp
 *~
 NA
+* (1).md
+* (2).md
+
+# Resultados intermedios reproducibles que no se publican
+dofile/06_RCT_Stata/Table_Balance_raw.xlsx
+dofile/06_RCT_Stata/het_efectos.png
+dofile/08_DID/results/hospdd_verificacion_input.csv
+dofile/16_PSM_IPW_Sinteticos/psm_support.png
+dofile/16_PSM_IPW_Sinteticos/results/*.dta
+dofile/18_IV_LATE/data/*_con_verdad.dta
+dofile/18_IV_LATE/results/*.dta
 
 # Credenciales (nunca subir)
 *creds*.json
