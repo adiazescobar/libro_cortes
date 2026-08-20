@@ -2,7 +2,7 @@
 title: "Cortes Transversales"
 subtitle: " Curso Avanzado de Microeconometría Aplicada"
 author: "Ana María Díaz"
-date: "2026-08-05"
+date: "2026-08-20"
 site: bookdown::bookdown_site
 documentclass: book
 output:
@@ -67,13 +67,22 @@ También se busca familiarizar a los estudiantes con herramientas computacionale
 4. Baker (2000). *Evaluating the Impact of Development Projects on Poverty*. World Bank.  
 5. Heckman et al. (2000). *The Economics and Econometrics of Active Labor Market Programs*.  
 
+## Recursos adicionales {-}
+
+- [Ben Lambert – Econometrics on YouTube](https://www.youtube.com/playlist?list=PLwJRxp3blEvZyQBTTOMFRP_TDaSdly3gU)
+- [Mastering Econometrics (MRU)](https://mru.org/mastering-econometrics)
+- [AEA Journal of Economic Perspectives – Classroom](https://www.aeaweb.org/journals/jep/classroom)
+- [Google Dataset Search](https://toolbox.google.com/datasetsearch)
+- [Stata Cheat Sheets](https://geocenter.github.io/StataTraining/pdf/AllCheatSheets.pdf)
+- [Seeing Theory – Visual Probability](https://seeing-theory.brown.edu/)
+
 ## Inclusión {-}
 
-Este curso da la bienvenida a personas de todas las edades, géneros, orientaciones, etnias, creencias y capacidades. Se espera un ambiente respetuoso, acogedor e inclusivo.
+Este curso da la bienvenida a personas de todas las edades, orígenes, creencias, etnias, géneros, identidades, orientaciones sexuales y capacidades. Se espera un ambiente respetuoso e inclusivo.
 
-## Integridad Académica {-}
+## Integridad académica {-}
 
-No se permite el uso de inteligencia artificial, internet o ayudas externas en evaluaciones. El incumplimiento será sancionado conforme al reglamento de la Universidad.
+La Universidad Javeriana fomenta la honestidad y establece sanciones por fraude o plagio según el reglamento de estudiantes. Cualquier uso no autorizado de materiales durante evaluaciones se considera falta grave.
 
 ## Programa del Curso {-}
 
