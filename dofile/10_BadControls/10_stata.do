@@ -1,15 +1,20 @@
 ********************************************************************************
 * Malos controles — clase empirica
 * Tres DGP: mediador, colisionador y proxy postratamiento contaminado
+*
+* Corre desde cualquier carpeta. Dentro del repositorio del libro escribe los
+* resultados canonicos en dofile/10_BadControls/results; fuera de el, en una
+* subcarpeta results de la carpeta de trabajo actual.
 ********************************************************************************
 
-version 19
+version 16
 clear all
 set more off
 
-local root "dofile/10_BadControls"
+local root "."
+capture confirm file "dofile/10_BadControls/10_stata.do"
+if _rc == 0 local root "dofile/10_BadControls"
 capture mkdir "`root'/results"
-capture mkdir "`root'/figures"
 
 tempname estimates
 tempfile estimates_dta
@@ -25,10 +30,12 @@ gen byte D = runiform() < .5
 gen double M = 2*D + rnormal()
 gen double Y = M + rnormal()
 
-quietly regress Y D, vce(robust)
+di as text _n "=== CASO 1: sin mediador (efecto total = 2) ==="
+regress Y D, vce(robust)
 post `estimates' ("mediator") ("without_mediator") ("total effect") ///
     (_b[D]) (_se[D]) (2)
-quietly regress Y D M, vce(robust)
+di as text _n "=== CASO 1: con mediador ==="
+regress Y D M, vce(robust)
 post `estimates' ("mediator") ("with_mediator") ("not the total effect") ///
     (_b[D]) (_se[D]) (2)
 
@@ -43,10 +50,12 @@ gen double U = rnormal()
 gen double C = 2*D - .5*U + rnormal()
 gen double Y = U + rnormal()
 
-quietly regress Y D, vce(robust)
+di as text _n "=== CASO 2: sin colisionador (efecto verdadero = 0) ==="
+regress Y D, vce(robust)
 post `estimates' ("collider") ("without_collider") ("total effect") ///
     (_b[D]) (_se[D]) (0)
-quietly regress Y D C, vce(robust)
+di as text _n "=== CASO 2: con colisionador ==="
+regress Y D C, vce(robust)
 post `estimates' ("collider") ("with_collider") ("noncausal coefficient") ///
     (_b[D]) (_se[D]) (0)
 
@@ -62,26 +71,30 @@ gen double U = rnormal()
 gen double L = .8*D + 1.2*U + rnormal()
 gen double Y = 2*D + 1.5*U + rnormal()
 
-quietly regress Y D, vce(robust)
+di as text _n "=== CASO 3: sin proxy (efecto total = 2) ==="
+regress Y D, vce(robust)
 post `estimates' ("contaminated_proxy") ("without_proxy") ("total effect") ///
     (_b[D]) (_se[D]) (2)
-quietly regress Y D L, vce(robust)
+di as text _n "=== CASO 3: con proxy postratamiento ==="
+regress Y D L, vce(robust)
 post `estimates' ("contaminated_proxy") ("with_post_proxy") ("noncausal coefficient") ///
     (_b[D]) (_se[D]) (2)
-quietly regress Y D U, vce(robust)
+di as text _n "=== CASO 3: con U (referencia, no observable) ==="
+regress Y D U, vce(robust)
 post `estimates' ("contaminated_proxy") ("with_true_U") ("total effect conditional on U") ///
     (_b[D]) (_se[D]) (2)
 
 postclose `estimates'
 use `estimates_dta', clear
 export delimited using "`root'/results/bad_controls_estimates.csv", replace
+list case specification estimate se truth, noobs sepby(case) abbreviate(16)
 
 ********************************************************************************
 * MONTE CARLO
 ********************************************************************************
 capture program drop mc_bad_controls
 program define mc_bad_controls, rclass
-    version 19
+    version 16
     syntax, Case(integer)
     clear
     set obs 1500
@@ -125,6 +138,8 @@ postfile `mc' str24 case str28 specification double mean_estimate truth ///
 forvalues c = 1/3 {
     quietly simulate correct=r(correct) bad=r(bad), reps(300) seed(`=7000+`c''): ///
         mc_bad_controls, case(`c')
+    di as text _n "=== MONTE CARLO, CASO `c': correct = sin mal control; bad = con mal control ==="
+    summarize correct bad
     quietly summarize correct
     local good_mean = r(mean)
     quietly summarize bad
@@ -146,5 +161,6 @@ forvalues c = 1/3 {
 postclose `mc'
 use `mc_dta', clear
 export delimited using "`root'/results/bad_controls_montecarlo.csv", replace
+list case specification mean_estimate truth, noobs sepby(case) abbreviate(16)
 
 di as result "Resultados exportados en `root'/results/"
