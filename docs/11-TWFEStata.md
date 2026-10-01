@@ -5,6 +5,7 @@
 ::: {.class-materials}
 **Descargue antes de comenzar**
 
+- [Do-file auxiliar · réplica divorcio unilateral (Goodman-Bacon 2021)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_divorcio_auxiliar.do)
 - [Do-file de Stata](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_stata.do)
 - [Script de R](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.R)
 - [Script de Python](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/11_TWFE/11_twfe.py)
