@@ -9,7 +9,7 @@ Objetivos:
   3. Comparar algoritmos de matching en Stata.
   4. Verificar soporte común y balance post-matching.
   5. Seleccionar términos del propensity score con LASSO sin soltar
-     los confusores obligatorios (bloque 11).
+     las variables de control de la focalización (bloque 11).
 
 Datos requeridos: base6.dta en esta carpeta o en dofile/16_PSM_IPW_Sinteticos/
 Paquetes requeridos: psmatch2 (incluye pstest y psgraph)
@@ -184,8 +184,8 @@ estimates table att_nn1 ate_nn1, b se
 * 11. SELECCIÓN DE VARIABLES CON LASSO
 ***============================================***
 
-* Regla de la clase: los confusores obligatorios se escogen con teoría
-* y LASSO no puede sacarlos. LASSO solo decide qué términos adicionales
+* Regla de la clase: las variables de control (las que se emplearon en
+* la focalización) se escogen con teoría y LASSO no puede sacarlas. LASSO solo decide qué términos adicionales
 * (cuadrados e interacciones) entran al propensity score.
 * psmatch2 no acepta notación de factores, así que creamos los términos.
 
@@ -197,8 +197,8 @@ gen double educa_ingr = educa_jefe*ingresos_hogar_jefe
 
 global Xflex "personas2 educa2 ingresos2 ocup_hom educa_ingr"
 
-* (a) Lo que NO hacemos: dejar que LASSO escoja todo, incluidos
-* los confusores. Sirve para ver qué sacaría si lo dejáramos.
+* (a) Lo que NO hacemos: dejar que LASSO escoja todo, incluidas
+* las variables de control. Sirve para ver qué sacaría si lo dejáramos.
 lasso probit D $X $Xflex, selection(cv) rseed(1298)
 lassocoef
 
