@@ -3,6 +3,7 @@
 ::: {.boxinfo}
 **Metas de aprendizaje**
 
+- Interpretar logit y probit con efectos marginales (`margins`).
 - Implementar el flujo principal con `psmatch2`.
 - Diagnosticar selección, soporte y balance antes de interpretar el ATT.
 - Replicar el estimando con `teffects psmatch` y explicar diferencias.
@@ -13,9 +14,10 @@
 
 Descarga los archivos antes de comenzar:
 
-- [Do-file guiado de PSM](dofile/16_PSM_IPW_Sinteticos/01_psm_stata_CLASSROOM.do)
+- [Do-file de la clase del 15 de octubre, con `margins` y LASSO](dofile/16_PSM_IPW_Sinteticos/01_psm_stata.do)
+- [Log completo de ese do-file](dofile/16_PSM_IPW_Sinteticos/psm_demo.log)
 - [Base de datos de la práctica](dofile/16_PSM_IPW_Sinteticos/base6.dta)
-- [Log completo de Stata](dofile/16_PSM_IPW_Sinteticos/psm_classroom.log)
+- [Do-file guiado alternativo](dofile/16_PSM_IPW_Sinteticos/01_psm_stata_CLASSROOM.do) y [su log](dofile/16_PSM_IPW_Sinteticos/psm_classroom.log)
 
 Instala `psmatch2` una sola vez:
 
@@ -75,6 +77,37 @@ Logit de D: LR chi2(6) = 64.57; p < 0.001
 ```
 
 La prueba conjunta confirma selección observable, pero la diferencia cruda todavía mezcla efecto y composición. No interpretamos $0.332$ como causal.
+
+## Probit, logit y efectos marginales {-}
+
+El propensity score es $P(D=1\mid X)=G(X\beta)$. En el probit $G$ es la normal acumulada y en el logit es $\exp(X\beta)/(1+\exp(X\beta))$. Los coeficientes no son efectos sobre la probabilidad. Para una $x_1$ continua el efecto es
+
+$$\frac{\partial P(D=1\mid X)}{\partial x_1}=g(X\beta)\,\beta_1,$$
+
+que cambia de hogar en hogar. `margins, dydx(*)` reporta el promedio $\frac{1}{n}\sum_i g(x_i\hat\beta)\hat\beta_1$ (efecto marginal promedio). Para una $x_2$ binaria el efecto es la diferencia $G(X\beta)\vert_{x_2=1}-G(X\beta)\vert_{x_2=0}$; por eso las binarias se escriben con `i.`. `margins` reemplaza al viejo `dprobit`.
+
+```stata
+probit D personas orden_n i.ocupado_jefe educa_jefe ingresos_hogar_jefe i.hombre
+predict double xb_probit, xb
+margins, dydx(*)              // promedio de g(x_i b)*b
+margins, dydx(*) atmeans      // evaluado en las medias de X
+
+* Verificación a mano
+gen double em_educa = normalden(xb_probit) * _b[educa_jefe]
+summ em_educa
+```
+
+```text
+                    Probit coef.   AME (margins)   AME a mano   MEM (atmeans)
+personas              -0.0546        -0.0215                       -0.0218
+orden_n                0.2289         0.0901                        0.0913
+1.ocupado_jefe         0.2054         0.0807                        0.0814
+educa_jefe            -0.0151        -0.0059        -0.0059         -0.0060
+ingresos_hogar_jefe    0.0008         0.0003                        0.0003
+1.hombre               0.0413         0.0163         0.0163         0.0165
+```
+
+Un año más de educación del jefe reduce la probabilidad de tratamiento en 0.6 puntos porcentuales en promedio. El cálculo a mano coincide con `margins` hasta el séptimo decimal, también para `hombre` con la diferencia $G(\cdot\mid hombre=1)-G(\cdot\mid hombre=0)$. El logit da coeficientes distintos (por ejemplo $-0.024$ para educación) pero efectos marginales casi iguales ($-0.0059$), y la correlación entre los dos propensity scores es 1.000.
 
 ## Visualizar soporte común {-}
 
@@ -180,29 +213,52 @@ No esperamos igualdad mecánica. `psmatch2` y `teffects psmatch` pueden resolver
 
 ```stata
 * NO usar como selector causal automático
-lasso logit D $Xmust $Xflex
+lasso probit D $X $Xflex, selection(cv) rseed(1298)
+lassocoef
 ```
 
-Esta regresión optimiza predicción de $D$. Puede omitir un predictor importante de $Y(D=0)$ o $Y(D=1)$ y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como si fuera una lista descubierta de confusores.
+Esta regresión optimiza predicción de $D$. En `base6` LASSO saca `educa_jefe` y deja `educa2`: el confusor que justificamos con teoría sale del modelo por razones puramente predictivas. Puede omitir un predictor importante de $Y(0)$ o $Y(1)$ y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como una lista descubierta de confusores.
 
-### Estrategia recomendada: `telasso` {-}
+### Estrategia de la clase: LASSO solo sobre los términos flexibles {-}
 
-`telasso` estima conjuntamente modelos de resultado y tratamiento con LASSO y construye un estimador ortogonal y doblemente robusto. Los confusores obligatorios permanecen sin penalizar; LASSO opera sobre candidatos pretratamiento de alta dimensión.
+Los confusores obligatorios van entre paréntesis y LASSO no puede sacarlos. LASSO solo decide qué cuadrados e interacciones entran al propensity score. Como `psmatch2` no acepta notación de factores, creamos los términos a mano.
 
 ```stata
-telasso (y2 $Xflex, ainclude($Xmust)) ///
-        (D  $Xflex, ainclude($Xmust)), ///
-        atet selection(plugin) xfolds(5) resample(3) rseed(1298)
-estimates store te_lasso
+gen double personas2  = personas^2
+gen double educa2     = educa_jefe^2
+gen double ingresos2  = ingresos_hogar_jefe^2
+gen double ocup_hom   = ocupado_jefe*hombre
+gen double educa_ingr = educa_jefe*ingresos_hogar_jefe
+global Xflex "personas2 educa2 ingresos2 ocup_hom educa_ingr"
+
+lasso probit D ($X) $Xflex, selection(cv) rseed(1298)
+lassocoef
+global Xsel "`e(allvars_sel)'"
+
+psmatch2 D $Xsel, outcome(y2) n(1) common ai(1)
+pstest $X, treated(D) both
 ```
 
 ```text
-ATET telasso = 0.335
-Error estándar robusto = 0.034
-Controles candidatos = 7; seleccionados = 6
+LASSO (validación cruzada, 10 folds) mantiene las 6 de $X y agrega ingresos2
+ATT psmatch2 con $Xsel = 0.282 (EE 0.047); 6 tratados fuera de soporte
+MeanBias: 8.5 sin emparejar, 1.8 emparejado
 ```
 
-> La sintaxis exacta de las opciones puede variar con la versión de Stata. Antes de la clase se verifica con `help telasso`; el do-file registra la versión utilizada.
+### Benchmark doblemente robusto: `telasso` {-}
+
+`telasso` estima con LASSO el modelo del resultado y el del tratamiento y construye un estimador ortogonal y doblemente robusto. `ainclude()` deja fijos los confusores obligatorios.
+
+```stata
+telasso (y2 $X $Xflex, ainclude($X)) (D $X $Xflex, ainclude($X)), ///
+        atet rseed(1298)
+lassocoef (., for(D)) (., for(y2) tlevel(0)) (., for(y2) tlevel(1))
+```
+
+```text
+ATET telasso = 0.332 (EE robusto 0.034)
+Controles candidatos = 11; con el método plugin no entra ningún término de $Xflex
+```
 
 La comparación tiene tres columnas conceptualmente distintas:
 

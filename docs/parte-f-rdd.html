@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-08-20" />
+<meta name="date" content="2026-10-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -397,6 +397,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#materiales-de-la-clase"><i class="fa fa-check"></i>Materiales de la clase</a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#pregunta-causal-y-estimando"><i class="fa fa-check"></i>Pregunta causal y estimando</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#mirar-la-selecci%C3%B3n-antes-de-corregirla"><i class="fa fa-check"></i>Mirar la selección antes de corregirla</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#probit-logit-y-efectos-marginales"><i class="fa fa-check"></i>Probit, logit y efectos marginales</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#visualizar-soporte-com%C3%BAn"><i class="fa fa-check"></i>Visualizar soporte común</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-principal-con-psmatch2"><i class="fa fa-check"></i>Estimación principal con <code>psmatch2</code></a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#decisiones-del-algoritmo-y-sensibilidad"><i class="fa fa-check"></i>Decisiones del algoritmo y sensibilidad</a></li>
@@ -581,25 +582,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="dgp" class="section level2 unnumbered hasAnchor">
 <h2>DGP<a href="parte-f-rdd.html#dgp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><span class="math inline">\(Z\)</span> ahora toma solo valores enteros (puntaje de un examen redondeado), con umbral <span class="math inline">\(c = 50\)</span>.</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb208-1"><a href="parte-f-rdd.html#cb208-1" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb208-2"><a href="parte-f-rdd.html#cb208-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
-<span id="cb208-3"><a href="parte-f-rdd.html#cb208-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 3000</span>
-<span id="cb208-4"><a href="parte-f-rdd.html#cb208-4" tabindex="-1"></a><span class="kw">gen</span> Z  = <span class="fu">floor</span>(runiform()*101)          <span class="co">// 0 a 100, enteros</span></span>
-<span id="cb208-5"><a href="parte-f-rdd.html#cb208-5" tabindex="-1"></a><span class="kw">gen</span> D  = (Z &gt;= 50)</span>
-<span id="cb208-6"><a href="parte-f-rdd.html#cb208-6" tabindex="-1"></a><span class="kw">gen</span> Zt = Z - 50</span>
-<span id="cb208-7"><a href="parte-f-rdd.html#cb208-7" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>  = 1 + 0.05*Zt + 2.0*D + rnormal()</span>
-<span id="cb208-8"><a href="parte-f-rdd.html#cb208-8" tabindex="-1"></a><span class="kw">tab</span> Z <span class="kw">if</span> Z &gt; 45 &amp; Z &lt; 55                <span class="co">// confirmar discreto</span></span></code></pre></div>
+<div class="sourceCode" id="cb212"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb212-1"><a href="parte-f-rdd.html#cb212-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb212-2"><a href="parte-f-rdd.html#cb212-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
+<span id="cb212-3"><a href="parte-f-rdd.html#cb212-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 3000</span>
+<span id="cb212-4"><a href="parte-f-rdd.html#cb212-4" tabindex="-1"></a><span class="kw">gen</span> Z  = <span class="fu">floor</span>(runiform()*101)          <span class="co">// 0 a 100, enteros</span></span>
+<span id="cb212-5"><a href="parte-f-rdd.html#cb212-5" tabindex="-1"></a><span class="kw">gen</span> D  = (Z &gt;= 50)</span>
+<span id="cb212-6"><a href="parte-f-rdd.html#cb212-6" tabindex="-1"></a><span class="kw">gen</span> Zt = Z - 50</span>
+<span id="cb212-7"><a href="parte-f-rdd.html#cb212-7" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>  = 1 + 0.05*Zt + 2.0*D + rnormal()</span>
+<span id="cb212-8"><a href="parte-f-rdd.html#cb212-8" tabindex="-1"></a><span class="kw">tab</span> Z <span class="kw">if</span> Z &gt; 45 &amp; Z &lt; 55                <span class="co">// confirmar discreto</span></span></code></pre></div>
 <hr />
 </div>
 <div id="el-problema-de-los-se-convencionales" class="section level2 unnumbered hasAnchor">
 <h2>El problema de los SE convencionales<a href="parte-f-rdd.html#el-problema-de-los-se-convencionales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb209"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb209-1"><a href="parte-f-rdd.html#cb209-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50)</span></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb213-1"><a href="parte-f-rdd.html#cb213-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50)</span></code></pre></div>
 <p>Reporta un SE — pero como advirtieron Kolesár &amp; Rothe (2018), <strong>subcubre</strong>. La cobertura nominal del 95% es en realidad &lt;90% en simulaciones con pocos valores distintos de <span class="math inline">\(Z\)</span>.</p>
 <hr />
 </div>
 <div id="solución-pragmática-cluster-en-z-lee-card-2008" class="section level2 unnumbered hasAnchor">
 <h2>Solución pragmática: cluster en Z (Lee &amp; Card 2008)<a href="#soluci%C3%B3n-pragm%C3%A1tica-cluster-en-z-lee-card-2008" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb210"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb210-1"><a href="parte-f-rdd.html#cb210-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50) <span class="kw">cluster</span>(Z)</span></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb214-1"><a href="parte-f-rdd.html#cb214-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50) <span class="kw">cluster</span>(Z)</span></code></pre></div>
 <p>El SE se <strong>infla</strong> — es más conservador, refleja mejor la incertidumbre real cuando <span class="math inline">\(Z\)</span> tiene soporte discreto. Esta es la solución mínima que se debe reportar.</p>
 <hr />
 </div>

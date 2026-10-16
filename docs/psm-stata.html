@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-08-20" />
+<meta name="date" content="2026-10-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -397,6 +397,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#materiales-de-la-clase"><i class="fa fa-check"></i>Materiales de la clase</a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#pregunta-causal-y-estimando"><i class="fa fa-check"></i>Pregunta causal y estimando</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#mirar-la-selecci%C3%B3n-antes-de-corregirla"><i class="fa fa-check"></i>Mirar la selección antes de corregirla</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#probit-logit-y-efectos-marginales"><i class="fa fa-check"></i>Probit, logit y efectos marginales</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#visualizar-soporte-com%C3%BAn"><i class="fa fa-check"></i>Visualizar soporte común</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-principal-con-psmatch2"><i class="fa fa-check"></i>Estimación principal con <code>psmatch2</code></a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#decisiones-del-algoritmo-y-sensibilidad"><i class="fa fa-check"></i>Decisiones del algoritmo y sensibilidad</a></li>
@@ -581,6 +582,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="boxinfo">
 <p><strong>Metas de aprendizaje</strong></p>
 <ul>
+<li>Interpretar logit y probit con efectos marginales (<code>margins</code>).</li>
 <li>Implementar el flujo principal con <code>psmatch2</code>.</li>
 <li>Diagnosticar selección, soporte y balance antes de interpretar el ATT.</li>
 <li>Replicar el estimando con <code>teffects psmatch</code> y explicar diferencias.</li>
@@ -591,9 +593,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2>Materiales de la clase<a href="psm-stata.html#materiales-de-la-clase" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Descarga los archivos antes de comenzar:</p>
 <ul>
-<li><a href="dofile/16_PSM_IPW_Sinteticos/01_psm_stata_CLASSROOM.do">Do-file guiado de PSM</a></li>
+<li><a href="dofile/16_PSM_IPW_Sinteticos/01_psm_stata.do">Do-file de la clase del 15 de octubre, con <code>margins</code> y LASSO</a></li>
+<li><a href="dofile/16_PSM_IPW_Sinteticos/psm_demo.log">Log completo de ese do-file</a></li>
 <li><a href="dofile/16_PSM_IPW_Sinteticos/base6.dta">Base de datos de la práctica</a></li>
-<li><a href="dofile/16_PSM_IPW_Sinteticos/psm_classroom.log">Log completo de Stata</a></li>
+<li><a href="dofile/16_PSM_IPW_Sinteticos/01_psm_stata_CLASSROOM.do">Do-file guiado alternativo</a> y <a href="dofile/16_PSM_IPW_Sinteticos/psm_classroom.log">su log</a></li>
 </ul>
 <p>Instala <code>psmatch2</code> una sola vez:</p>
 <div class="sourceCode" id="cb149"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb149-1"><a href="psm-stata.html#cb149-1" tabindex="-1"></a><span class="kw">ssc</span> install psmatch2</span>
@@ -636,13 +639,35 @@ Diferencia cruda              0.332
 Logit de D: LR chi2(6) = 64.57; p &lt; 0.001</code></pre>
 <p>La prueba conjunta confirma selección observable, pero la diferencia cruda todavía mezcla efecto y composición. No interpretamos <span class="math inline">\(0.332\)</span> como causal.</p>
 </div>
+<div id="probit-logit-y-efectos-marginales" class="section level2 unnumbered hasAnchor">
+<h2>Probit, logit y efectos marginales<a href="psm-stata.html#probit-logit-y-efectos-marginales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El propensity score es <span class="math inline">\(P(D=1\mid X)=G(X\beta)\)</span>. En el probit <span class="math inline">\(G\)</span> es la normal acumulada y en el logit es <span class="math inline">\(\exp(X\beta)/(1+\exp(X\beta))\)</span>. Los coeficientes no son efectos sobre la probabilidad. Para una <span class="math inline">\(x_1\)</span> continua el efecto es</p>
+<p><span class="math display">\[\frac{\partial P(D=1\mid X)}{\partial x_1}=g(X\beta)\,\beta_1,\]</span></p>
+<p>que cambia de hogar en hogar. <code>margins, dydx(*)</code> reporta el promedio <span class="math inline">\(\frac{1}{n}\sum_i g(x_i\hat\beta)\hat\beta_1\)</span> (efecto marginal promedio). Para una <span class="math inline">\(x_2\)</span> binaria el efecto es la diferencia <span class="math inline">\(G(X\beta)\vert_{x_2=1}-G(X\beta)\vert_{x_2=0}\)</span>; por eso las binarias se escriben con <code>i.</code>. <code>margins</code> reemplaza al viejo <code>dprobit</code>.</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb153-1"><a href="psm-stata.html#cb153-1" tabindex="-1"></a><span class="kw">probit</span> D personas orden_n i.ocupado_jefe educa_jefe ingresos_hogar_jefe i.hombre</span>
+<span id="cb153-2"><a href="psm-stata.html#cb153-2" tabindex="-1"></a><span class="kw">predict</span> <span class="kw">double</span> xb_probit, <span class="kw">xb</span></span>
+<span id="cb153-3"><a href="psm-stata.html#cb153-3" tabindex="-1"></a>margins, <span class="kw">dydx</span>(*)              <span class="co">// promedio de g(x_i b)*b</span></span>
+<span id="cb153-4"><a href="psm-stata.html#cb153-4" tabindex="-1"></a>margins, <span class="kw">dydx</span>(*) atmeans      <span class="co">// evaluado en las medias de X</span></span>
+<span id="cb153-5"><a href="psm-stata.html#cb153-5" tabindex="-1"></a></span>
+<span id="cb153-6"><a href="psm-stata.html#cb153-6" tabindex="-1"></a>* Verificación a mano</span>
+<span id="cb153-7"><a href="psm-stata.html#cb153-7" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> em_educa = <span class="fu">normalden</span>(xb_probit) * _b[educa_jefe]</span>
+<span id="cb153-8"><a href="psm-stata.html#cb153-8" tabindex="-1"></a>summ em_educa</span></code></pre></div>
+<pre class="text"><code>                    Probit coef.   AME (margins)   AME a mano   MEM (atmeans)
+personas              -0.0546        -0.0215                       -0.0218
+orden_n                0.2289         0.0901                        0.0913
+1.ocupado_jefe         0.2054         0.0807                        0.0814
+educa_jefe            -0.0151        -0.0059        -0.0059         -0.0060
+ingresos_hogar_jefe    0.0008         0.0003                        0.0003
+1.hombre               0.0413         0.0163         0.0163         0.0165</code></pre>
+<p>Un año más de educación del jefe reduce la probabilidad de tratamiento en 0.6 puntos porcentuales en promedio. El cálculo a mano coincide con <code>margins</code> hasta el séptimo decimal, también para <code>hombre</code> con la diferencia <span class="math inline">\(G(\cdot\mid hombre=1)-G(\cdot\mid hombre=0)\)</span>. El logit da coeficientes distintos (por ejemplo <span class="math inline">\(-0.024\)</span> para educación) pero efectos marginales casi iguales (<span class="math inline">\(-0.0059\)</span>), y la correlación entre los dos propensity scores es 1.000.</p>
+</div>
 <div id="visualizar-soporte-común" class="section level2 unnumbered hasAnchor">
 <h2>Visualizar soporte común<a href="#visualizar-soporte-com%C3%BAn" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb153"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb153-1"><a href="psm-stata.html#cb153-1" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">kdensity</span> pscore <span class="kw">if</span> D==1, lcolor(<span class="bn">navy</span>) lwidth(<span class="bn">medthick</span>)) <span class="co">///</span></span>
-<span id="cb153-2"><a href="psm-stata.html#cb153-2" tabindex="-1"></a>       (<span class="kw">kdensity</span> pscore <span class="kw">if</span> D==0, lcolor(<span class="bn">maroon</span>) lwidth(<span class="bn">medthick</span>)), <span class="co">///</span></span>
-<span id="cb153-3"><a href="psm-stata.html#cb153-3" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Tratados&quot;</span> 2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
-<span id="cb153-4"><a href="psm-stata.html#cb153-4" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Propensity score&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Densidad&quot;</span>)</span>
-<span id="cb153-5"><a href="psm-stata.html#cb153-5" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> pscore_distribution.png, <span class="kw">replace</span></span></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb155-1"><a href="psm-stata.html#cb155-1" tabindex="-1"></a><span class="kw">twoway</span> (<span class="kw">kdensity</span> pscore <span class="kw">if</span> D==1, lcolor(<span class="bn">navy</span>) lwidth(<span class="bn">medthick</span>)) <span class="co">///</span></span>
+<span id="cb155-2"><a href="psm-stata.html#cb155-2" tabindex="-1"></a>       (<span class="kw">kdensity</span> pscore <span class="kw">if</span> D==0, lcolor(<span class="bn">maroon</span>) lwidth(<span class="bn">medthick</span>)), <span class="co">///</span></span>
+<span id="cb155-3"><a href="psm-stata.html#cb155-3" tabindex="-1"></a>       <span class="bn">legend</span>(<span class="kw">order</span>(1 <span class="st">&quot;Tratados&quot;</span> 2 <span class="st">&quot;Controles&quot;</span>)) <span class="co">///</span></span>
+<span id="cb155-4"><a href="psm-stata.html#cb155-4" tabindex="-1"></a>       <span class="bn">xtitle</span>(<span class="st">&quot;Propensity score&quot;</span>) <span class="bn">ytitle</span>(<span class="st">&quot;Densidad&quot;</span>)</span>
+<span id="cb155-5"><a href="psm-stata.html#cb155-5" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> pscore_distribution.png, <span class="kw">replace</span></span></code></pre></div>
 <div class="float">
 <img src="dofile/16_PSM_IPW_Sinteticos/pscore_distribution.png" alt="Distribución del propensity score por tratamiento" />
 <div class="figcaption">Distribución del propensity score por tratamiento</div>
@@ -652,11 +677,11 @@ Logit de D: LR chi2(6) = 64.57; p &lt; 0.001</code></pre>
 <div id="estimación-principal-con-psmatch2" class="section level2 unnumbered hasAnchor">
 <h2>Estimación principal con <code>psmatch2</code><a href="#estimaci%C3%B3n-principal-con-psmatch2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Usamos logit, ATT, un vecino, reemplazo y soporte común:</p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb154-1"><a href="psm-stata.html#cb154-1" tabindex="-1"></a>psmatch2 D <span class="ot">$Xmust</span>, outcome(y2) <span class="kw">logit</span> neighbor(1) common ties</span>
-<span id="cb154-2"><a href="psm-stata.html#cb154-2" tabindex="-1"></a><span class="fu">scalar</span> att_psm = <span class="fu">r</span>(att)</span>
-<span id="cb154-3"><a href="psm-stata.html#cb154-3" tabindex="-1"></a>psgraph</span>
-<span id="cb154-4"><a href="psm-stata.html#cb154-4" tabindex="-1"></a>pstest <span class="ot">$Xmust</span>, treated(D) both <span class="kw">graph</span></span>
-<span id="cb154-5"><a href="psm-stata.html#cb154-5" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> psm_balance.png, <span class="kw">replace</span></span></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb156-1"><a href="psm-stata.html#cb156-1" tabindex="-1"></a>psmatch2 D <span class="ot">$Xmust</span>, outcome(y2) <span class="kw">logit</span> neighbor(1) common ties</span>
+<span id="cb156-2"><a href="psm-stata.html#cb156-2" tabindex="-1"></a><span class="fu">scalar</span> att_psm = <span class="fu">r</span>(att)</span>
+<span id="cb156-3"><a href="psm-stata.html#cb156-3" tabindex="-1"></a>psgraph</span>
+<span id="cb156-4"><a href="psm-stata.html#cb156-4" tabindex="-1"></a>pstest <span class="ot">$Xmust</span>, treated(D) both <span class="kw">graph</span></span>
+<span id="cb156-5"><a href="psm-stata.html#cb156-5" tabindex="-1"></a><span class="kw">graph</span> <span class="kw">export</span> psm_balance.png, <span class="kw">replace</span></span></code></pre></div>
 <pre class="text"><code>Variable   Muestra       Tratados    Controles    Diferencia
 y2         Sin ajustar    -0.644      -0.976         0.332
            ATT            -0.643      -0.936         0.294
@@ -679,16 +704,16 @@ Emparejada       0.001        2.3         1.4</code></pre>
 </div>
 <div id="decisiones-del-algoritmo-y-sensibilidad" class="section level2 unnumbered hasAnchor">
 <h2>Decisiones del algoritmo y sensibilidad<a href="psm-stata.html#decisiones-del-algoritmo-y-sensibilidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb157"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb157-1"><a href="psm-stata.html#cb157-1" tabindex="-1"></a>* Cinco vecinos: menor varianza potencial, mayor distancia promedio</span>
-<span id="cb157-2"><a href="psm-stata.html#cb157-2" tabindex="-1"></a>psmatch2 D <span class="ot">$Xmust</span>, outcome(y2) <span class="kw">logit</span> neighbor(5) common ties</span>
-<span id="cb157-3"><a href="psm-stata.html#cb157-3" tabindex="-1"></a></span>
-<span id="cb157-4"><a href="psm-stata.html#cb157-4" tabindex="-1"></a>* Kernel: usa más controles con pesos por cercanía</span>
-<span id="cb157-5"><a href="psm-stata.html#cb157-5" tabindex="-1"></a>psmatch2 D <span class="ot">$Xmust</span>, outcome(y2) <span class="kw">logit</span> kernel kerneltype(epan) <span class="co">///</span></span>
-<span id="cb157-6"><a href="psm-stata.html#cb157-6" tabindex="-1"></a>    bwidth(0.06) common</span>
-<span id="cb157-7"><a href="psm-stata.html#cb157-7" tabindex="-1"></a></span>
-<span id="cb157-8"><a href="psm-stata.html#cb157-8" tabindex="-1"></a>* Caliper expresado en la escala elegida por psmatch2</span>
-<span id="cb157-9"><a href="psm-stata.html#cb157-9" tabindex="-1"></a>psmatch2 D <span class="ot">$Xmust</span>, outcome(y2) <span class="kw">logit</span> neighbor(1) <span class="co">///</span></span>
-<span id="cb157-10"><a href="psm-stata.html#cb157-10" tabindex="-1"></a>    caliper(0.02) common ties</span></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb159-1"><a href="psm-stata.html#cb159-1" tabindex="-1"></a>* Cinco vecinos: menor varianza potencial, mayor distancia promedio</span>
+<span id="cb159-2"><a href="psm-stata.html#cb159-2" tabindex="-1"></a>psmatch2 D <span class="ot">$Xmust</span>, outcome(y2) <span class="kw">logit</span> neighbor(5) common ties</span>
+<span id="cb159-3"><a href="psm-stata.html#cb159-3" tabindex="-1"></a></span>
+<span id="cb159-4"><a href="psm-stata.html#cb159-4" tabindex="-1"></a>* Kernel: usa más controles con pesos por cercanía</span>
+<span id="cb159-5"><a href="psm-stata.html#cb159-5" tabindex="-1"></a>psmatch2 D <span class="ot">$Xmust</span>, outcome(y2) <span class="kw">logit</span> kernel kerneltype(epan) <span class="co">///</span></span>
+<span id="cb159-6"><a href="psm-stata.html#cb159-6" tabindex="-1"></a>    bwidth(0.06) common</span>
+<span id="cb159-7"><a href="psm-stata.html#cb159-7" tabindex="-1"></a></span>
+<span id="cb159-8"><a href="psm-stata.html#cb159-8" tabindex="-1"></a>* Caliper expresado en la escala elegida por psmatch2</span>
+<span id="cb159-9"><a href="psm-stata.html#cb159-9" tabindex="-1"></a>psmatch2 D <span class="ot">$Xmust</span>, outcome(y2) <span class="kw">logit</span> neighbor(1) <span class="co">///</span></span>
+<span id="cb159-10"><a href="psm-stata.html#cb159-10" tabindex="-1"></a>    caliper(0.02) common ties</span></code></pre></div>
 <table>
 <colgroup>
 <col width="33%" />
@@ -730,8 +755,8 @@ Emparejada       0.001        2.3         1.4</code></pre>
 <div id="verificación-con-teffects-psmatch" class="section level2 unnumbered hasAnchor">
 <h2>Verificación con <code>teffects psmatch</code><a href="#verificaci%C3%B3n-con-teffects-psmatch" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Para comparar debemos alinear el <strong>mismo estimando</strong>, modelo del tratamiento y número de vecinos:</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb158-1"><a href="psm-stata.html#cb158-1" tabindex="-1"></a>teffects psmatch (y2) (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), atet nneighbor(1)</span>
-<span id="cb158-2"><a href="psm-stata.html#cb158-2" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> te_psm</span></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb160-1"><a href="psm-stata.html#cb160-1" tabindex="-1"></a>teffects psmatch (y2) (D <span class="ot">$Xmust</span>, <span class="kw">logit</span>), atet nneighbor(1)</span>
+<span id="cb160-2"><a href="psm-stata.html#cb160-2" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> te_psm</span></code></pre></div>
 <pre class="text"><code>Estimando: ATET
 Método: propensity-score matching, logit, un vecino
 ATET estimado: 0.288 (frente a 0.294 con psmatch2 alineado)
@@ -745,23 +770,39 @@ Inferencia: errores estándar ajustados por la estimación del propensity score<
 <h2>Machine learning con disciplina causal<a href="psm-stata.html#machine-learning-con-disciplina-causal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="la-estrategia-incorrecta" class="section level3 unnumbered hasAnchor">
 <h3>La estrategia incorrecta<a href="psm-stata.html#la-estrategia-incorrecta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb160"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb160-1"><a href="psm-stata.html#cb160-1" tabindex="-1"></a>* NO usar como selector causal automático</span>
-<span id="cb160-2"><a href="psm-stata.html#cb160-2" tabindex="-1"></a>lasso <span class="kw">logit</span> D <span class="ot">$Xmust</span> <span class="ot">$Xflex</span></span></code></pre></div>
-<p>Esta regresión optimiza predicción de <span class="math inline">\(D\)</span>. Puede omitir un predictor importante de <span class="math inline">\(Y(D=0)\)</span> o <span class="math inline">\(Y(D=1)\)</span> y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como si fuera una lista descubierta de confusores.</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb162-1"><a href="psm-stata.html#cb162-1" tabindex="-1"></a>* NO usar como selector causal automático</span>
+<span id="cb162-2"><a href="psm-stata.html#cb162-2" tabindex="-1"></a>lasso <span class="kw">probit</span> D <span class="ot">$X</span> <span class="ot">$Xflex</span>, selection(cv) rseed(1298)</span>
+<span id="cb162-3"><a href="psm-stata.html#cb162-3" tabindex="-1"></a>lassocoef</span></code></pre></div>
+<p>Esta regresión optimiza predicción de <span class="math inline">\(D\)</span>. En <code>base6</code> LASSO saca <code>educa_jefe</code> y deja <code>educa2</code>: el confusor que justificamos con teoría sale del modelo por razones puramente predictivas. Puede omitir un predictor importante de <span class="math inline">\(Y(0)\)</span> o <span class="math inline">\(Y(1)\)</span> y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como una lista descubierta de confusores.</p>
 </div>
-<div id="estrategia-recomendada-telasso" class="section level3 unnumbered hasAnchor">
-<h3>Estrategia recomendada: <code>telasso</code><a href="psm-stata.html#estrategia-recomendada-telasso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><code>telasso</code> estima conjuntamente modelos de resultado y tratamiento con LASSO y construye un estimador ortogonal y doblemente robusto. Los confusores obligatorios permanecen sin penalizar; LASSO opera sobre candidatos pretratamiento de alta dimensión.</p>
-<div class="sourceCode" id="cb161"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb161-1"><a href="psm-stata.html#cb161-1" tabindex="-1"></a>telasso (y2 <span class="ot">$Xflex</span>, ainclude(<span class="ot">$Xmust</span>)) <span class="co">///</span></span>
-<span id="cb161-2"><a href="psm-stata.html#cb161-2" tabindex="-1"></a>        (D  <span class="ot">$Xflex</span>, ainclude(<span class="ot">$Xmust</span>)), <span class="co">///</span></span>
-<span id="cb161-3"><a href="psm-stata.html#cb161-3" tabindex="-1"></a>        atet selection(plugin) xfolds(5) resample(3) rseed(1298)</span>
-<span id="cb161-4"><a href="psm-stata.html#cb161-4" tabindex="-1"></a><span class="kw">estimates</span> <span class="kw">store</span> te_lasso</span></code></pre></div>
-<pre class="text"><code>ATET telasso = 0.335
-Error estándar robusto = 0.034
-Controles candidatos = 7; seleccionados = 6</code></pre>
-<blockquote>
-<p>La sintaxis exacta de las opciones puede variar con la versión de Stata. Antes de la clase se verifica con <code>help telasso</code>; el do-file registra la versión utilizada.</p>
-</blockquote>
+<div id="estrategia-de-la-clase-lasso-solo-sobre-los-términos-flexibles" class="section level3 unnumbered hasAnchor">
+<h3>Estrategia de la clase: LASSO solo sobre los términos flexibles<a href="#estrategia-de-la-clase-lasso-solo-sobre-los-t%C3%A9rminos-flexibles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Los confusores obligatorios van entre paréntesis y LASSO no puede sacarlos. LASSO solo decide qué cuadrados e interacciones entran al propensity score. Como <code>psmatch2</code> no acepta notación de factores, creamos los términos a mano.</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb163-1"><a href="psm-stata.html#cb163-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> personas2  = personas^2</span>
+<span id="cb163-2"><a href="psm-stata.html#cb163-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> educa2     = educa_jefe^2</span>
+<span id="cb163-3"><a href="psm-stata.html#cb163-3" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> ingresos2  = ingresos_hogar_jefe^2</span>
+<span id="cb163-4"><a href="psm-stata.html#cb163-4" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> ocup_hom   = ocupado_jefe*hombre</span>
+<span id="cb163-5"><a href="psm-stata.html#cb163-5" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> educa_ingr = educa_jefe*ingresos_hogar_jefe</span>
+<span id="cb163-6"><a href="psm-stata.html#cb163-6" tabindex="-1"></a><span class="kw">global</span> Xflex <span class="st">&quot;personas2 educa2 ingresos2 ocup_hom educa_ingr&quot;</span></span>
+<span id="cb163-7"><a href="psm-stata.html#cb163-7" tabindex="-1"></a></span>
+<span id="cb163-8"><a href="psm-stata.html#cb163-8" tabindex="-1"></a>lasso <span class="kw">probit</span> D (<span class="ot">$X</span>) <span class="ot">$Xflex</span>, selection(cv) rseed(1298)</span>
+<span id="cb163-9"><a href="psm-stata.html#cb163-9" tabindex="-1"></a>lassocoef</span>
+<span id="cb163-10"><a href="psm-stata.html#cb163-10" tabindex="-1"></a><span class="kw">global</span> Xsel <span class="st">&quot;`e(allvars_sel)&#39;&quot;</span></span>
+<span id="cb163-11"><a href="psm-stata.html#cb163-11" tabindex="-1"></a></span>
+<span id="cb163-12"><a href="psm-stata.html#cb163-12" tabindex="-1"></a>psmatch2 D <span class="ot">$Xsel</span>, outcome(y2) n(1) common ai(1)</span>
+<span id="cb163-13"><a href="psm-stata.html#cb163-13" tabindex="-1"></a>pstest <span class="ot">$X</span>, treated(D) both</span></code></pre></div>
+<pre class="text"><code>LASSO (validación cruzada, 10 folds) mantiene las 6 de $X y agrega ingresos2
+ATT psmatch2 con $Xsel = 0.282 (EE 0.047); 6 tratados fuera de soporte
+MeanBias: 8.5 sin emparejar, 1.8 emparejado</code></pre>
+</div>
+<div id="benchmark-doblemente-robusto-telasso" class="section level3 unnumbered hasAnchor">
+<h3>Benchmark doblemente robusto: <code>telasso</code><a href="psm-stata.html#benchmark-doblemente-robusto-telasso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>telasso</code> estima con LASSO el modelo del resultado y el del tratamiento y construye un estimador ortogonal y doblemente robusto. <code>ainclude()</code> deja fijos los confusores obligatorios.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb165-1"><a href="psm-stata.html#cb165-1" tabindex="-1"></a>telasso (y2 <span class="ot">$X</span> <span class="ot">$Xflex</span>, ainclude(<span class="ot">$X</span>)) (D <span class="ot">$X</span> <span class="ot">$Xflex</span>, ainclude(<span class="ot">$X</span>)), <span class="co">///</span></span>
+<span id="cb165-2"><a href="psm-stata.html#cb165-2" tabindex="-1"></a>        atet rseed(1298)</span>
+<span id="cb165-3"><a href="psm-stata.html#cb165-3" tabindex="-1"></a>lassocoef (., <span class="kw">for</span>(D)) (., <span class="kw">for</span>(y2) tlevel(0)) (., <span class="kw">for</span>(y2) tlevel(1))</span></code></pre></div>
+<pre class="text"><code>ATET telasso = 0.332 (EE robusto 0.034)
+Controles candidatos = 11; con el método plugin no entra ningún término de $Xflex</code></pre>
 <p>La comparación tiene tres columnas conceptualmente distintas:</p>
 <table>
 <colgroup>

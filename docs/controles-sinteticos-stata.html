@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-08-20" />
+<meta name="date" content="2026-10-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -397,6 +397,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#materiales-de-la-clase"><i class="fa fa-check"></i>Materiales de la clase</a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#pregunta-causal-y-estimando"><i class="fa fa-check"></i>Pregunta causal y estimando</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#mirar-la-selecci%C3%B3n-antes-de-corregirla"><i class="fa fa-check"></i>Mirar la selección antes de corregirla</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#probit-logit-y-efectos-marginales"><i class="fa fa-check"></i>Probit, logit y efectos marginales</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#visualizar-soporte-com%C3%BAn"><i class="fa fa-check"></i>Visualizar soporte común</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-principal-con-psmatch2"><i class="fa fa-check"></i>Estimación principal con <code>psmatch2</code></a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#decisiones-del-algoritmo-y-sensibilidad"><i class="fa fa-check"></i>Decisiones del algoritmo y sensibilidad</a></li>
@@ -848,15 +849,15 @@ estimación canónica:</p>
 resuelve la ruta de trabajo, construye <code>state_id</code> y declara <code>tempfile main_native</code>.
 Para reproducir el análisis desde cero debe ejecutarse el
 <a href="dofile/17_SyntheticControls/01_synthetic_controls.do">do-file completo</a>.</p>
-<div class="sourceCode" id="cb175"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb175-1"><a href="controles-sinteticos-stata.html#cb175-1" tabindex="-1"></a>* El preámbulo ya creó state_id <span class="fu">y</span> declaró <span class="kw">tempfile</span> main_native.</span>
-<span id="cb175-2"><a href="controles-sinteticos-stata.html#cb175-2" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;synth_smoking.dta&quot;</span>, <span class="kw">clear</span></span>
-<span id="cb175-3"><a href="controles-sinteticos-stata.html#cb175-3" tabindex="-1"></a>xtset state_id <span class="fu">year</span></span>
-<span id="cb175-4"><a href="controles-sinteticos-stata.html#cb175-4" tabindex="-1"></a></span>
-<span id="cb175-5"><a href="controles-sinteticos-stata.html#cb175-5" tabindex="-1"></a>synth cigsale beer(1984(1)1988) lnincome retprice age15to24 <span class="co">///</span></span>
-<span id="cb175-6"><a href="controles-sinteticos-stata.html#cb175-6" tabindex="-1"></a>    cigsale(1988) cigsale(1980) cigsale(1975), <span class="co">///</span></span>
-<span id="cb175-7"><a href="controles-sinteticos-stata.html#cb175-7" tabindex="-1"></a>    trunit(3) trperiod(1989) xperiod(1980(1)1988) <span class="co">///</span></span>
-<span id="cb175-8"><a href="controles-sinteticos-stata.html#cb175-8" tabindex="-1"></a>    mspeperiod(1970(1)1988) nested <span class="co">///</span></span>
-<span id="cb175-9"><a href="controles-sinteticos-stata.html#cb175-9" tabindex="-1"></a>    <span class="kw">keep</span>(<span class="ot">`main_native&#39;</span>) <span class="kw">replace</span></span></code></pre></div>
+<div class="sourceCode" id="cb179"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb179-1"><a href="controles-sinteticos-stata.html#cb179-1" tabindex="-1"></a>* El preámbulo ya creó state_id <span class="fu">y</span> declaró <span class="kw">tempfile</span> main_native.</span>
+<span id="cb179-2"><a href="controles-sinteticos-stata.html#cb179-2" tabindex="-1"></a><span class="kw">use</span> <span class="st">&quot;synth_smoking.dta&quot;</span>, <span class="kw">clear</span></span>
+<span id="cb179-3"><a href="controles-sinteticos-stata.html#cb179-3" tabindex="-1"></a>xtset state_id <span class="fu">year</span></span>
+<span id="cb179-4"><a href="controles-sinteticos-stata.html#cb179-4" tabindex="-1"></a></span>
+<span id="cb179-5"><a href="controles-sinteticos-stata.html#cb179-5" tabindex="-1"></a>synth cigsale beer(1984(1)1988) lnincome retprice age15to24 <span class="co">///</span></span>
+<span id="cb179-6"><a href="controles-sinteticos-stata.html#cb179-6" tabindex="-1"></a>    cigsale(1988) cigsale(1980) cigsale(1975), <span class="co">///</span></span>
+<span id="cb179-7"><a href="controles-sinteticos-stata.html#cb179-7" tabindex="-1"></a>    trunit(3) trperiod(1989) xperiod(1980(1)1988) <span class="co">///</span></span>
+<span id="cb179-8"><a href="controles-sinteticos-stata.html#cb179-8" tabindex="-1"></a>    mspeperiod(1970(1)1988) nested <span class="co">///</span></span>
+<span id="cb179-9"><a href="controles-sinteticos-stata.html#cb179-9" tabindex="-1"></a>    <span class="kw">keep</span>(<span class="ot">`main_native&#39;</span>) <span class="kw">replace</span></span></code></pre></div>
 <p>Las tres opciones temporales y algorítmicas cumplen funciones distintas:</p>
 <ul>
 <li><code>xperiod(1980(1)1988)</code> define los años sobre los cuales <code>synth</code> promedia los
@@ -1649,12 +1650,12 @@ nueva; no reutiliza los pesos estimados con datos hasta 1988:</p>
 de la lista de donantes <code>time_donors</code> y de <code>tempfile time_native</code>, creados en líneas
 anteriores del archivo enlazado. Se muestra aquí la llamada que impide la fuga, no
 un programa Stata autocontenido.</p>
-<div class="sourceCode" id="cb176"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb176-1"><a href="controles-sinteticos-stata.html#cb176-1" tabindex="-1"></a>* panel, time_donors <span class="fu">y</span> <span class="kw">tempfile</span> time_native ya fueron creados.</span>
-<span id="cb176-2"><a href="controles-sinteticos-stata.html#cb176-2" tabindex="-1"></a>synth cigsale lnincome retprice age15to24 <span class="co">///</span></span>
-<span id="cb176-3"><a href="controles-sinteticos-stata.html#cb176-3" tabindex="-1"></a>    cigsale(1979) cigsale(1975) cigsale(1970), <span class="co">///</span></span>
-<span id="cb176-4"><a href="controles-sinteticos-stata.html#cb176-4" tabindex="-1"></a>    trunit(3) trperiod(1980) xperiod(1972(1)1979) <span class="co">///</span></span>
-<span id="cb176-5"><a href="controles-sinteticos-stata.html#cb176-5" tabindex="-1"></a>    mspeperiod(1970(1)1979) counit(<span class="ot">`time_donors&#39;</span>) nested <span class="co">///</span></span>
-<span id="cb176-6"><a href="controles-sinteticos-stata.html#cb176-6" tabindex="-1"></a>    <span class="kw">keep</span>(<span class="ot">`time_native&#39;</span>) <span class="kw">replace</span></span></code></pre></div>
+<div class="sourceCode" id="cb180"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb180-1"><a href="controles-sinteticos-stata.html#cb180-1" tabindex="-1"></a>* panel, time_donors <span class="fu">y</span> <span class="kw">tempfile</span> time_native ya fueron creados.</span>
+<span id="cb180-2"><a href="controles-sinteticos-stata.html#cb180-2" tabindex="-1"></a>synth cigsale lnincome retprice age15to24 <span class="co">///</span></span>
+<span id="cb180-3"><a href="controles-sinteticos-stata.html#cb180-3" tabindex="-1"></a>    cigsale(1979) cigsale(1975) cigsale(1970), <span class="co">///</span></span>
+<span id="cb180-4"><a href="controles-sinteticos-stata.html#cb180-4" tabindex="-1"></a>    trunit(3) trperiod(1980) xperiod(1972(1)1979) <span class="co">///</span></span>
+<span id="cb180-5"><a href="controles-sinteticos-stata.html#cb180-5" tabindex="-1"></a>    mspeperiod(1970(1)1979) counit(<span class="ot">`time_donors&#39;</span>) nested <span class="co">///</span></span>
+<span id="cb180-6"><a href="controles-sinteticos-stata.html#cb180-6" tabindex="-1"></a>    <span class="kw">keep</span>(<span class="ot">`time_native&#39;</span>) <span class="kw">replace</span></span></code></pre></div>
 <p>Todos los predictores y resultados empleados para ajustar los pesos terminan en
 1979. <code>mspeperiod(1970(1)1979)</code> impide además que la selección de <span class="math inline">\(V\)</span> use el
 resultado posterior a la fecha ficticia. <code>beer</code> se elimina porque solo está

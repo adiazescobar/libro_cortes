@@ -1,0 +1,543 @@
+----------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/dofile/16_PSM_IPW_Sintet
+> icos/psm_classroom.log
+  log type:  text
+ opened on:  28 Jul 2026, 14:53:04
+
+. use "base6.dta", clear
+
+. 
+. global Xmust "personas orden_n ocupado_jefe educa_jefe ingresos_hogar_jefe hombre"
+
+. global Xflex "c.personas#c.personas c.educa_jefe#c.educa_jefe c.ingresos_hogar_jefe#c.ingresos_hog
+> ar_jefe i.ocupado_jefe#i.hombre"
+
+. 
+. di as text "PASO 1. Definir estimando: ATT = E[Y(D=1)-Y(D=0)|D=1]"
+PASO 1. Definir estimando: ATT = E[Y(D=1)-Y(D=0)|D=1]
+
+. tab D
+
+       1 si |
+ tratado, 0 |
+       caso |
+  contrario |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,048       51.20       51.20
+          1 |      1,952       48.80      100.00
+------------+-----------------------------------
+      Total |      4,000      100.00
+
+. table D, statistic(count D) statistic(mean y2 personas ocupado_jefe educa_jefe)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+> -------------------------
+                               |     Number of nonmissing values                                                                                Mean                                                    
+>                          
+                               |  1 si tratado, 0 caso contrario   Talla para la edad post-tratamiento   Personas que viven en el hogar   Indica si el jefe del hogar cuenta con un empleo   A�os de edu
+> caci�n del jefe del hogar
+-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+> -------------------------
+1 si tratado, 0 caso contrario |                                                                                                                                                                        
+>                          
+  0                            |                           2,048                             -.9764538                         5.174316                                             .78125              
+>                  6.608887
+  1                            |                           1,952                             -.6439568                         4.909836                                           .8381148              
+>                  6.540984
+  Total                        |                           4,000                             -.8141953                          5.04525                                               .809              
+>                   6.57575
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+> -------------------------
+
+. mean y2, over(D)
+
+Mean estimation                          Number of obs = 4,000
+
+--------------------------------------------------------------
+             |       Mean   Std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+      c.y2@D |
+          0  |  -.9764538    .023802     -1.023119   -.9297886
+          1  |  -.6439568   .0239792     -.6909695   -.5969441
+--------------------------------------------------------------
+
+. lincom _b[c.y2@1.D] - _b[c.y2@0.D]
+
+ ( 1)  - c.y2@0bn.D + c.y2@1.D = 0
+
+------------------------------------------------------------------------------
+        Mean | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         (1) |    .332497   .0337867     9.84   0.000     .2662563    .3987378
+------------------------------------------------------------------------------
+
+. scalar diff_raw = r(estimate)
+
+. 
+. di as text "PASO 2. Estimar propensity score con confusores pretratamiento"
+PASO 2. Estimar propensity score con confusores pretratamiento
+
+. logit D $Xmust
+
+Iteration 0:  Log likelihood = -2771.4366  
+Iteration 1:  Log likelihood = -2739.1739  
+Iteration 2:  Log likelihood = -2739.1509  
+Iteration 3:  Log likelihood = -2739.1509  
+
+Logistic regression                                     Number of obs =  4,000
+                                                        LR chi2(6)    =  64.57
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -2739.1509                             Pseudo R2     = 0.0116
+
+-------------------------------------------------------------------------------------
+                  D | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+           personas |  -.0877553   .0173153    -5.07   0.000    -.1216927   -.0538179
+            orden_n |   .3665863    .099304     3.69   0.000      .171954    .5612185
+       ocupado_jefe |   .3288618   .0840225     3.91   0.000     .1641806    .4935429
+         educa_jefe |  -.0240645   .0087182    -2.76   0.006    -.0411518   -.0069772
+ingresos_hogar_jefe |   .0012478   .0003923     3.18   0.001     .0004789    .0020167
+             hombre |   .0653864   .0637975     1.02   0.305    -.0596544    .1904271
+              _cons |  -.2442872   .1711683    -1.43   0.154    -.5797709    .0911964
+-------------------------------------------------------------------------------------
+
+. predict double pscore, pr
+
+. summarize pscore, detail
+
+                            Pr(D)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .3176397       .2063744
+ 5%     .3790855       .2237817
+10%     .4057382        .227325       Obs               4,000
+25%     .4523237       .2518196       Sum of wgt.       4,000
+
+50%     .4928597                      Mean               .488
+                        Largest       Std. dev.      .0631162
+75%     .5248827       .7421678
+90%     .5574216       .7430411       Variance       .0039837
+95%     .5854625       .7467729       Skewness      -.1732627
+99%     .6454116       .7596988       Kurtosis       4.380905
+
+. 
+. twoway (kdensity pscore if D==1, lcolor(navy) lwidth(medthick)) ///
+>        (kdensity pscore if D==0, lcolor(maroon) lwidth(medthick)), ///
+>        legend(order(1 "Tratados" 2 "Controles")) ///
+>        title("Soporte común") xtitle("Propensity score") ytitle("Densidad")
+
+. graph export "pscore_distribution.png", replace width(1800)
+file pscore_distribution.png written in PNG format
+
+. 
+. di as text "PASO 3. psmatch2 principal: logit, ATT, NN(1), reemplazo, common, ties"
+PASO 3. psmatch2 principal: logit, ATT, NN(1), reemplazo, common, ties
+
+. psmatch2 D $Xmust, outcome(y2) logit neighbor(1) common ties
+
+Logistic regression                                     Number of obs =  4,000
+                                                        LR chi2(6)    =  64.57
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -2739.1509                             Pseudo R2     = 0.0116
+
+-------------------------------------------------------------------------------------
+                  D | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+           personas |  -.0877553   .0173153    -5.07   0.000    -.1216927   -.0538179
+            orden_n |   .3665863    .099304     3.69   0.000      .171954    .5612185
+       ocupado_jefe |   .3288618   .0840225     3.91   0.000     .1641806    .4935429
+         educa_jefe |  -.0240645   .0087182    -2.76   0.006    -.0411518   -.0069772
+ingresos_hogar_jefe |   .0012478   .0003923     3.18   0.001     .0004789    .0020167
+             hombre |   .0653864   .0637975     1.02   0.305    -.0596544    .1904271
+              _cons |  -.2442872   .1711683    -1.43   0.154    -.5797709    .0911964
+-------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+        Variable     Sample |    Treated     Controls   Difference         S.E.   T-stat
+----------------------------+-----------------------------------------------------------
+              y2  Unmatched |-.643956823  -.976453845   .332497022    .03380015     9.84
+                        ATT |-.642832576  -.936353729   .293521153   .045235774     6.49
+----------------------------+-----------------------------------------------------------
+Note: S.E. does not take into account that the propensity score is estimated.
+
+ psmatch2: |   psmatch2: Common
+ Treatment |        support
+assignment | Off suppo  On suppor |     Total
+-----------+----------------------+----------
+ Untreated |         0      2,048 |     2,048 
+   Treated |         5      1,947 |     1,952 
+-----------+----------------------+----------
+     Total |         5      3,995 |     4,000 
+
+. scalar att_psm = r(att)
+
+. scalar se_psm  = r(seatt)
+
+. count if D==1 & _support==0
+  5
+
+. scalar offsupport = r(N)
+
+. psgraph
+
+. graph export "psm_support.png", replace width(1800)
+file psm_support.png written in PNG format
+
+. pstest $Xmust, treated(D) both graph
+
+----------------------------------------------------------------------------------------
+                Unmatched |       Mean               %reduct |     t-test    |  V(T)/
+Variable          Matched | Treated Control    %bias  |bias| |    t    p>|t| |  V(C)
+--------------------------+----------------------------------+---------------+----------
+personas               U  | 4.9098   5.1743    -13.0         |  -4.12  0.000 |  0.85*
+                       M  | 4.9122   4.9666     -2.7    79.4 |  -0.88  0.380 |  1.02
+                          |                                  |               |
+orden_n                U  | 1.1235   1.0908     10.0         |   3.16  0.002 |  1.48*
+                       M  | 1.1238   1.1202      1.1    89.0 |   0.32  0.749 |  1.08
+                          |                                  |               |
+ocupado_jefe           U  | .83811   .78125     14.5         |   4.58  0.000 |     .
+                       M  |  .8377   .83462      0.8    94.6 |   0.26  0.795 |     .
+                          |                                  |               |
+educa_jefe             U  |  6.541   6.6089     -1.7         |  -0.55  0.582 |  0.94
+                       M  | 6.5485   6.5768     -0.7    58.4 |  -0.23  0.822 |  0.93
+                          |                                  |               |
+ingresos_hogar_jefe    U  | 76.558   69.502      8.0         |   2.54  0.011 |  1.13*
+                       M  | 74.673   80.453     -6.6    18.1 |  -1.70  0.089 |  0.43*
+                          |                                  |               |
+hombre                 U  | .51998   .50244      3.5         |   1.11  0.267 |     .
+                       M  | .51926   .52748     -1.6    53.1 |  -0.51  0.608 |     .
+                          |                                  |               |
+----------------------------------------------------------------------------------------
+* if variance ratio outside [0.92; 1.09] for U and [0.91; 1.09] for M
+
+-----------------------------------------------------------------------------------
+ Sample    | Ps R2   LR chi2   p>chi2   MeanBias   MedBias      B      R     %Var
+-----------+-----------------------------------------------------------------------
+ Unmatched | 0.012     64.60    0.000      8.5       9.0      25.5*   0.96     75
+ Matched   | 0.001      3.79    0.705      2.3       1.4       6.2    0.52     25
+-----------------------------------------------------------------------------------
+* if B>25%, R outside [0.5; 2]
+
+. graph export "psm_balance.png", replace width(1800)
+file psm_balance.png written in PNG format
+
+. 
+. di as text "PASO 4. Sensibilidad a decisiones de matching"
+PASO 4. Sensibilidad a decisiones de matching
+
+. psmatch2 D $Xmust, outcome(y2) logit neighbor(5) common ties
+
+Logistic regression                                     Number of obs =  4,000
+                                                        LR chi2(6)    =  64.57
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -2739.1509                             Pseudo R2     = 0.0116
+
+-------------------------------------------------------------------------------------
+                  D | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+           personas |  -.0877553   .0173153    -5.07   0.000    -.1216927   -.0538179
+            orden_n |   .3665863    .099304     3.69   0.000      .171954    .5612185
+       ocupado_jefe |   .3288618   .0840225     3.91   0.000     .1641806    .4935429
+         educa_jefe |  -.0240645   .0087182    -2.76   0.006    -.0411518   -.0069772
+ingresos_hogar_jefe |   .0012478   .0003923     3.18   0.001     .0004789    .0020167
+             hombre |   .0653864   .0637975     1.02   0.305    -.0596544    .1904271
+              _cons |  -.2442872   .1711683    -1.43   0.154    -.5797709    .0911964
+-------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+        Variable     Sample |    Treated     Controls   Difference         S.E.   T-stat
+----------------------------+-----------------------------------------------------------
+              y2  Unmatched |-.643956823  -.976453845   .332497022    .03380015     9.84
+                        ATT |-.642832576  -.971424515   .328591939   .037412257     8.78
+----------------------------+-----------------------------------------------------------
+Note: S.E. does not take into account that the propensity score is estimated.
+
+ psmatch2: |   psmatch2: Common
+ Treatment |        support
+assignment | Off suppo  On suppor |     Total
+-----------+----------------------+----------
+ Untreated |         0      2,048 |     2,048 
+   Treated |         5      1,947 |     1,952 
+-----------+----------------------+----------
+     Total |         5      3,995 |     4,000 
+
+. scalar att_nn5 = r(att)
+
+. psmatch2 D $Xmust, outcome(y2) logit kernel kerneltype(epan) bwidth(0.06) common
+
+Logistic regression                                     Number of obs =  4,000
+                                                        LR chi2(6)    =  64.57
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -2739.1509                             Pseudo R2     = 0.0116
+
+-------------------------------------------------------------------------------------
+                  D | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+           personas |  -.0877553   .0173153    -5.07   0.000    -.1216927   -.0538179
+            orden_n |   .3665863    .099304     3.69   0.000      .171954    .5612185
+       ocupado_jefe |   .3288618   .0840225     3.91   0.000     .1641806    .4935429
+         educa_jefe |  -.0240645   .0087182    -2.76   0.006    -.0411518   -.0069772
+ingresos_hogar_jefe |   .0012478   .0003923     3.18   0.001     .0004789    .0020167
+             hombre |   .0653864   .0637975     1.02   0.305    -.0596544    .1904271
+              _cons |  -.2442872   .1711683    -1.43   0.154    -.5797709    .0911964
+-------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+        Variable     Sample |    Treated     Controls   Difference         S.E.   T-stat
+----------------------------+-----------------------------------------------------------
+              y2  Unmatched |-.643956823  -.976453845   .332497022    .03380015     9.84
+                        ATT |-.642832576  -.967774838   .324942262   .034288882     9.48
+----------------------------+-----------------------------------------------------------
+Note: S.E. does not take into account that the propensity score is estimated.
+
+ psmatch2: |   psmatch2: Common
+ Treatment |        support
+assignment | Off suppo  On suppor |     Total
+-----------+----------------------+----------
+ Untreated |         0      2,048 |     2,048 
+   Treated |         5      1,947 |     1,952 
+-----------+----------------------+----------
+     Total |         5      3,995 |     4,000 
+
+. scalar att_kernel = r(att)
+
+. psmatch2 D $Xmust, outcome(y2) logit neighbor(1) caliper(0.02) common ties
+
+Logistic regression                                     Number of obs =  4,000
+                                                        LR chi2(6)    =  64.57
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -2739.1509                             Pseudo R2     = 0.0116
+
+-------------------------------------------------------------------------------------
+                  D | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+           personas |  -.0877553   .0173153    -5.07   0.000    -.1216927   -.0538179
+            orden_n |   .3665863    .099304     3.69   0.000      .171954    .5612185
+       ocupado_jefe |   .3288618   .0840225     3.91   0.000     .1641806    .4935429
+         educa_jefe |  -.0240645   .0087182    -2.76   0.006    -.0411518   -.0069772
+ingresos_hogar_jefe |   .0012478   .0003923     3.18   0.001     .0004789    .0020167
+             hombre |   .0653864   .0637975     1.02   0.305    -.0596544    .1904271
+              _cons |  -.2442872   .1711683    -1.43   0.154    -.5797709    .0911964
+-------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+        Variable     Sample |    Treated     Controls   Difference         S.E.   T-stat
+----------------------------+-----------------------------------------------------------
+              y2  Unmatched |-.643956823  -.976453845   .332497022    .03380015     9.84
+                        ATT |-.642832576  -.936353729   .293521153   .045235774     6.49
+----------------------------+-----------------------------------------------------------
+Note: S.E. does not take into account that the propensity score is estimated.
+
+ psmatch2: |   psmatch2: Common
+ Treatment |        support
+assignment | Off suppo  On suppor |     Total
+-----------+----------------------+----------
+ Untreated |         0      2,048 |     2,048 
+   Treated |         5      1,947 |     1,952 
+-----------+----------------------+----------
+     Total |         5      3,995 |     4,000 
+
+. scalar att_caliper = r(att)
+
+. 
+. di as text "PASO 5. Verificar ATET con teffects psmatch"
+PASO 5. Verificar ATET con teffects psmatch
+
+. teffects psmatch (y2) (D $Xmust, logit), atet nneighbor(1)
+
+Treatment-effects estimation                   Number of obs      =      4,000
+Estimator      : propensity-score matching     Matches: requested =          1
+Outcome model  : matching                                     min =          1
+Treatment model: logit                                        max =          7
+------------------------------------------------------------------------------
+             |              AI robust
+          y2 | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ATET         |
+           D |
+   (1 vs 0)  |   .2883488   .0470364     6.13   0.000     .1961592    .3805384
+------------------------------------------------------------------------------
+
+. matrix b_te = e(b)
+
+. matrix V_te = e(V)
+
+. scalar att_teffects = b_te[1,1]
+
+. scalar se_teffects  = sqrt(V_te[1,1])
+
+. estimates store te_psm
+
+. 
+. di as text "PASO 6. telasso: confusores obligatorios y candidatos flexibles"
+PASO 6. telasso: confusores obligatorios y candidatos flexibles
+
+. telasso (y2 $Xflex, ainclude($Xmust)) ///
+>         (D  $Xflex, ainclude($Xmust)), ///
+>         atet selection(plugin) xfolds(5) resample(3) rseed(1298)
+
+Resample 1 of 3 ...
+Cross-fit fold 1 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 1 of 3 ...
+Cross-fit fold 2 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 1 of 3 ...
+Cross-fit fold 3 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 1 of 3 ...
+Cross-fit fold 4 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 1 of 3 ...
+Cross-fit fold 5 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+Estimating ATET ...
+
+Resample 2 of 3 ...
+Cross-fit fold 1 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 2 of 3 ...
+Cross-fit fold 2 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 2 of 3 ...
+Cross-fit fold 3 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 2 of 3 ...
+Cross-fit fold 4 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 2 of 3 ...
+Cross-fit fold 5 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+Estimating ATET ...
+
+Resample 3 of 3 ...
+Cross-fit fold 1 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 3 of 3 ...
+Cross-fit fold 2 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 3 of 3 ...
+Cross-fit fold 3 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 3 of 3 ...
+Cross-fit fold 4 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+
+Resample 3 of 3 ...
+Cross-fit fold 5 of 5 ...
+Estimating lasso for outcome y2 if D = 0 using plugin method ...
+Estimating lasso for outcome y2 if D = 1 using plugin method ...
+Estimating lasso for treatment D using plugin method ...
+Estimating ATET ...
+
+Treatment-effects lasso estimation    Number of observations       =     4,000
+                                      Number of controls           =         7
+                                      Number of selected controls  =         6
+Outcome model:   linear               Number of folds in cross-fit =         5
+Treatment model: logit                Number of resamples          =         3
+
+------------------------------------------------------------------------------
+             |               Robust
+          y2 | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ATET         |
+           D |
+   (1 vs 0)  |   .3348455   .0343075     9.76   0.000     .2676041     .402087
+-------------+----------------------------------------------------------------
+POmean       |
+           D |
+          0  |  -.9788023   .0250983   -39.00   0.000    -1.027994   -.9296106
+------------------------------------------------------------------------------
+
+. matrix b_lasso = e(b)
+
+. matrix V_lasso = e(V)
+
+. scalar att_telasso = b_lasso[1,1]
+
+. scalar se_telasso  = sqrt(V_lasso[1,1])
+
+. estimates store te_lasso
+
+. 
+. di as result "COMPARACIÓN PEDAGÓGICA"
+COMPARACIÓN PEDAGÓGICA
+
+. di as text   "Diferencia cruda         = " as result %7.3f diff_raw
+Diferencia cruda         =   0.332
+
+. di as text   "psmatch2 NN(1), ATT      = " as result %7.3f att_psm ///
+>     as text "  ES reportado = " as result %7.3f se_psm
+psmatch2 NN(1), ATT      =   0.294  ES reportado =   0.045
+
+. di as text   "psmatch2 NN(5), ATT      = " as result %7.3f att_nn5
+psmatch2 NN(5), ATT      =   0.329
+
+. di as text   "psmatch2 kernel, ATT     = " as result %7.3f att_kernel
+psmatch2 kernel, ATT     =   0.325
+
+. di as text   "psmatch2 caliper, ATT    = " as result %7.3f att_caliper
+psmatch2 caliper, ATT    =   0.294
+
+. di as text   "teffects psmatch, ATET   = " as result %7.3f att_teffects ///
+>     as text "  ES ajustado = " as result %7.3f se_teffects
+teffects psmatch, ATET   =   0.288  ES ajustado =   0.047
+
+. di as text   "telasso, ATET            = " as result %7.3f att_telasso ///
+>     as text "  ES robusto  = " as result %7.3f se_telasso
+telasso, ATET            =   0.335  ES robusto  =   0.034
+
+. di as text   "Tratados fuera soporte  = " as result %7.0f offsupport
+Tratados fuera soporte  =       5
+
+. 
+. di as text "Interpretar cercanía, no exigir igualdad mecánica."
+Interpretar cercanía, no exigir igualdad mecánica.
+
+. di as text "Balance observado no demuestra CIA."
+Balance observado no demuestra CIA.
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/adiazescobar/Dropbox/ClasesR/EconometriaAV/libro_cortes/dofile/16_PSM_IPW_Sintet
+> icos/psm_classroom.log
+  log type:  text
+ closed on:  28 Jul 2026, 14:53:37
+----------------------------------------------------------------------------------------------------

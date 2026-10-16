@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-08-20" />
+<meta name="date" content="2026-10-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -397,6 +397,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#materiales-de-la-clase"><i class="fa fa-check"></i>Materiales de la clase</a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#pregunta-causal-y-estimando"><i class="fa fa-check"></i>Pregunta causal y estimando</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#mirar-la-selecci%C3%B3n-antes-de-corregirla"><i class="fa fa-check"></i>Mirar la selección antes de corregirla</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#probit-logit-y-efectos-marginales"><i class="fa fa-check"></i>Probit, logit y efectos marginales</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#visualizar-soporte-com%C3%BAn"><i class="fa fa-check"></i>Visualizar soporte común</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-principal-con-psmatch2"><i class="fa fa-check"></i>Estimación principal con <code>psmatch2</code></a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#decisiones-del-algoritmo-y-sensibilidad"><i class="fa fa-check"></i>Decisiones del algoritmo y sensibilidad</a></li>
@@ -584,30 +585,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[W_i = \mathbb{1}[Z_i \geq 62]\]</span>
 <span class="math display">\[P(D_i = 1 \mid Z_i, W_i) = 0.20 + 0.60 \cdot W_i\]</span>
 <span class="math display">\[y_i = 1 + 0.10 \tilde Z_i + 2.0 \, D_i + \varepsilon_i\]</span></p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb205-1"><a href="parte-e-rdd.html#cb205-1" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb205-2"><a href="parte-e-rdd.html#cb205-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
-<span id="cb205-3"><a href="parte-e-rdd.html#cb205-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 5000</span>
-<span id="cb205-4"><a href="parte-e-rdd.html#cb205-4" tabindex="-1"></a><span class="kw">gen</span> Z  = runiform()*24 + 50</span>
-<span id="cb205-5"><a href="parte-e-rdd.html#cb205-5" tabindex="-1"></a><span class="kw">gen</span> W  = (Z &gt;= 62)</span>
-<span id="cb205-6"><a href="parte-e-rdd.html#cb205-6" tabindex="-1"></a><span class="kw">gen</span> Zt = Z - 62</span>
-<span id="cb205-7"><a href="parte-e-rdd.html#cb205-7" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">p</span>  = 0.20 + 0.60*W</span>
-<span id="cb205-8"><a href="parte-e-rdd.html#cb205-8" tabindex="-1"></a><span class="kw">gen</span> D  = runiform() &lt; <span class="kw">p</span></span>
-<span id="cb205-9"><a href="parte-e-rdd.html#cb205-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>  = 1 + 0.10*Zt + 2.0*D + rnormal()</span></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb209-1"><a href="parte-e-rdd.html#cb209-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb209-2"><a href="parte-e-rdd.html#cb209-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
+<span id="cb209-3"><a href="parte-e-rdd.html#cb209-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 5000</span>
+<span id="cb209-4"><a href="parte-e-rdd.html#cb209-4" tabindex="-1"></a><span class="kw">gen</span> Z  = runiform()*24 + 50</span>
+<span id="cb209-5"><a href="parte-e-rdd.html#cb209-5" tabindex="-1"></a><span class="kw">gen</span> W  = (Z &gt;= 62)</span>
+<span id="cb209-6"><a href="parte-e-rdd.html#cb209-6" tabindex="-1"></a><span class="kw">gen</span> Zt = Z - 62</span>
+<span id="cb209-7"><a href="parte-e-rdd.html#cb209-7" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">p</span>  = 0.20 + 0.60*W</span>
+<span id="cb209-8"><a href="parte-e-rdd.html#cb209-8" tabindex="-1"></a><span class="kw">gen</span> D  = runiform() &lt; <span class="kw">p</span></span>
+<span id="cb209-9"><a href="parte-e-rdd.html#cb209-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>  = 1 + 0.10*Zt + 2.0*D + rnormal()</span></code></pre></div>
 <p>El <strong>efecto causal verdadero del tratamiento</strong> es <span class="math inline">\(\tau = 2\)</span>. El <strong>salto en el resultado</strong> en <span class="math inline">\(c\)</span> es <span class="math inline">\(2.0 \times (0.80 - 0.20) = 1.2\)</span> (numerador). El <strong>salto en la toma del tratamiento</strong> es <span class="math inline">\(0.60\)</span> (denominador). El cociente Wald local es <span class="math inline">\(1.2 / 0.60 = 2.0\)</span> — eso es lo que RDB debe recuperar.</p>
 <hr />
 </div>
 <div id="estimación-rdrobust-con-fuzzy" class="section level2 unnumbered hasAnchor">
 <h2>Estimación: rdrobust con fuzzy<a href="#estimaci%C3%B3n-rdrobust-con-fuzzy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb206"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb206-1"><a href="parte-e-rdd.html#cb206-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(62) fuzzy(D)</span></code></pre></div>
+<div class="sourceCode" id="cb210"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb210-1"><a href="parte-e-rdd.html#cb210-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(62) fuzzy(D)</span></code></pre></div>
 <p>Output principal: <code>Coef.</code> (Robust) <span class="math inline">\(\approx 2.0\)</span>.</p>
 <hr />
 </div>
 <div id="equivalencia-con-2sls-local" class="section level2 unnumbered hasAnchor">
 <h2>Equivalencia con 2SLS local<a href="parte-e-rdd.html#equivalencia-con-2sls-local" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Aplicando la receta de RDB paso a paso:</p>
-<div class="sourceCode" id="cb207"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb207-1"><a href="parte-e-rdd.html#cb207-1" tabindex="-1"></a><span class="kw">local</span> <span class="kw">h</span> = 5</span>
-<span id="cb207-2"><a href="parte-e-rdd.html#cb207-2" tabindex="-1"></a><span class="kw">gen</span> WZt = W*Zt</span>
-<span id="cb207-3"><a href="parte-e-rdd.html#cb207-3" tabindex="-1"></a>ivregress 2sls <span class="fu">y</span> Zt WZt (D = W) <span class="kw">if</span> <span class="fu">abs</span>(Zt) &lt; <span class="ot">`h&#39;</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb211-1"><a href="parte-e-rdd.html#cb211-1" tabindex="-1"></a><span class="kw">local</span> <span class="kw">h</span> = 5</span>
+<span id="cb211-2"><a href="parte-e-rdd.html#cb211-2" tabindex="-1"></a><span class="kw">gen</span> WZt = W*Zt</span>
+<span id="cb211-3"><a href="parte-e-rdd.html#cb211-3" tabindex="-1"></a>ivregress 2sls <span class="fu">y</span> Zt WZt (D = W) <span class="kw">if</span> <span class="fu">abs</span>(Zt) &lt; <span class="ot">`h&#39;</span>, <span class="kw">vce</span>(<span class="kw">robust</span>)</span></code></pre></div>
 <p>El coeficiente de <code>D</code> debe estar muy cerca de <code>rdrobust ... fuzzy(D)</code>. La diferencia: <code>rdrobust</code> usa kernel triangular y ancho de banda óptimo + corrección de sesgo; el 2SLS manual usa kernel uniforme con <span class="math inline">\(h = 5\)</span> fijado.</p>
 <hr />
 </div>

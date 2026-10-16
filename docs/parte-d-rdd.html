@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-08-20" />
+<meta name="date" content="2026-10-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -397,6 +397,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#materiales-de-la-clase"><i class="fa fa-check"></i>Materiales de la clase</a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#pregunta-causal-y-estimando"><i class="fa fa-check"></i>Pregunta causal y estimando</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#mirar-la-selecci%C3%B3n-antes-de-corregirla"><i class="fa fa-check"></i>Mirar la selección antes de corregirla</a></li>
+<li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#probit-logit-y-efectos-marginales"><i class="fa fa-check"></i>Probit, logit y efectos marginales</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#visualizar-soporte-com%C3%BAn"><i class="fa fa-check"></i>Visualizar soporte común</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#estimaci%C3%B3n-principal-con-psmatch2"><i class="fa fa-check"></i>Estimación principal con <code>psmatch2</code></a></li>
 <li class="chapter" data-level="" data-path="psm-stata.html"><a href="psm-stata.html#decisiones-del-algoritmo-y-sensibilidad"><i class="fa fa-check"></i>Decisiones del algoritmo y sensibilidad</a></li>
@@ -582,55 +583,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sensibilidad-1" class="section level2 unnumbered hasAnchor">
 <h2>1. Sensibilidad<a href="parte-d-rdd.html#sensibilidad-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Ya cubierta en Parte C (barrido manual de <span class="math inline">\(h\)</span>). Adicionalmente, comparen el resultado con distintos órdenes de polinomio:</p>
-<div class="sourceCode" id="cb199"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb199-1"><a href="parte-d-rdd.html#cb199-1" tabindex="-1"></a>* Recargamos <span class="fu">el</span> DGP base</span>
-<span id="cb199-2"><a href="parte-d-rdd.html#cb199-2" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb199-3"><a href="parte-d-rdd.html#cb199-3" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
-<span id="cb199-4"><a href="parte-d-rdd.html#cb199-4" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 2000</span>
-<span id="cb199-5"><a href="parte-d-rdd.html#cb199-5" tabindex="-1"></a><span class="kw">gen</span> Z  = runiform()*24 + 50</span>
-<span id="cb199-6"><a href="parte-d-rdd.html#cb199-6" tabindex="-1"></a><span class="kw">gen</span> D  = (Z &gt;= 62)</span>
-<span id="cb199-7"><a href="parte-d-rdd.html#cb199-7" tabindex="-1"></a><span class="kw">gen</span> Zt = Z - 62</span>
-<span id="cb199-8"><a href="parte-d-rdd.html#cb199-8" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>  = 1 + 0.10*Zt + 2.0*D + rnormal()</span>
-<span id="cb199-9"><a href="parte-d-rdd.html#cb199-9" tabindex="-1"></a></span>
-<span id="cb199-10"><a href="parte-d-rdd.html#cb199-10" tabindex="-1"></a><span class="kw">di</span> <span class="dt">_newline</span> <span class="st">&quot;*** Sensibilidad al orden del polinomio ***&quot;</span></span>
-<span id="cb199-11"><a href="parte-d-rdd.html#cb199-11" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(62) <span class="kw">p</span>(1)</span>
-<span id="cb199-12"><a href="parte-d-rdd.html#cb199-12" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(62) <span class="kw">p</span>(2)</span></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb203-1"><a href="parte-d-rdd.html#cb203-1" tabindex="-1"></a>* Recargamos <span class="fu">el</span> DGP base</span>
+<span id="cb203-2"><a href="parte-d-rdd.html#cb203-2" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb203-3"><a href="parte-d-rdd.html#cb203-3" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
+<span id="cb203-4"><a href="parte-d-rdd.html#cb203-4" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 2000</span>
+<span id="cb203-5"><a href="parte-d-rdd.html#cb203-5" tabindex="-1"></a><span class="kw">gen</span> Z  = runiform()*24 + 50</span>
+<span id="cb203-6"><a href="parte-d-rdd.html#cb203-6" tabindex="-1"></a><span class="kw">gen</span> D  = (Z &gt;= 62)</span>
+<span id="cb203-7"><a href="parte-d-rdd.html#cb203-7" tabindex="-1"></a><span class="kw">gen</span> Zt = Z - 62</span>
+<span id="cb203-8"><a href="parte-d-rdd.html#cb203-8" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>  = 1 + 0.10*Zt + 2.0*D + rnormal()</span>
+<span id="cb203-9"><a href="parte-d-rdd.html#cb203-9" tabindex="-1"></a></span>
+<span id="cb203-10"><a href="parte-d-rdd.html#cb203-10" tabindex="-1"></a><span class="kw">di</span> <span class="dt">_newline</span> <span class="st">&quot;*** Sensibilidad al orden del polinomio ***&quot;</span></span>
+<span id="cb203-11"><a href="parte-d-rdd.html#cb203-11" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(62) <span class="kw">p</span>(1)</span>
+<span id="cb203-12"><a href="parte-d-rdd.html#cb203-12" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(62) <span class="kw">p</span>(2)</span></code></pre></div>
 </div>
 <div id="balance-de-covariables" class="section level2 unnumbered hasAnchor">
 <h2>2. Balance de covariables<a href="parte-d-rdd.html#balance-de-covariables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>¿Alguna covariable predeterminada salta en el umbral? Generamos dos covariables — una balanceada y otra contaminada por el tratamiento — para verlo:</p>
-<div class="sourceCode" id="cb200"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb200-1"><a href="parte-d-rdd.html#cb200-1" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb200-2"><a href="parte-d-rdd.html#cb200-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
-<span id="cb200-3"><a href="parte-d-rdd.html#cb200-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 2000</span>
-<span id="cb200-4"><a href="parte-d-rdd.html#cb200-4" tabindex="-1"></a><span class="kw">gen</span> Z     = runiform()*24 + 50</span>
-<span id="cb200-5"><a href="parte-d-rdd.html#cb200-5" tabindex="-1"></a><span class="kw">gen</span> D     = (Z &gt;= 62)</span>
-<span id="cb200-6"><a href="parte-d-rdd.html#cb200-6" tabindex="-1"></a><span class="kw">gen</span> Zt    = Z - 62</span>
-<span id="cb200-7"><a href="parte-d-rdd.html#cb200-7" tabindex="-1"></a><span class="kw">gen</span> sexo  = runiform() &lt; 0.5            <span class="co">// covariable balanceada (predeterminada)</span></span>
-<span id="cb200-8"><a href="parte-d-rdd.html#cb200-8" tabindex="-1"></a><span class="kw">gen</span> ingre = 100 + 5*D + rnormal()*10    <span class="co">// contaminada (depende de D)</span></span>
-<span id="cb200-9"><a href="parte-d-rdd.html#cb200-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>     = 1 + 0.10*Zt + 2.0*D + rnormal()</span></code></pre></div>
+<div class="sourceCode" id="cb204"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb204-1"><a href="parte-d-rdd.html#cb204-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb204-2"><a href="parte-d-rdd.html#cb204-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
+<span id="cb204-3"><a href="parte-d-rdd.html#cb204-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 2000</span>
+<span id="cb204-4"><a href="parte-d-rdd.html#cb204-4" tabindex="-1"></a><span class="kw">gen</span> Z     = runiform()*24 + 50</span>
+<span id="cb204-5"><a href="parte-d-rdd.html#cb204-5" tabindex="-1"></a><span class="kw">gen</span> D     = (Z &gt;= 62)</span>
+<span id="cb204-6"><a href="parte-d-rdd.html#cb204-6" tabindex="-1"></a><span class="kw">gen</span> Zt    = Z - 62</span>
+<span id="cb204-7"><a href="parte-d-rdd.html#cb204-7" tabindex="-1"></a><span class="kw">gen</span> sexo  = runiform() &lt; 0.5            <span class="co">// covariable balanceada (predeterminada)</span></span>
+<span id="cb204-8"><a href="parte-d-rdd.html#cb204-8" tabindex="-1"></a><span class="kw">gen</span> ingre = 100 + 5*D + rnormal()*10    <span class="co">// contaminada (depende de D)</span></span>
+<span id="cb204-9"><a href="parte-d-rdd.html#cb204-9" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>     = 1 + 0.10*Zt + 2.0*D + rnormal()</span></code></pre></div>
 <p>Probamos cada covariable como “resultado” en el RD:</p>
-<div class="sourceCode" id="cb201"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb201-1"><a href="parte-d-rdd.html#cb201-1" tabindex="-1"></a>rdrobust sexo Z, c(62)         <span class="co">// debe dar coef ≈ 0, no significativo</span></span>
-<span id="cb201-2"><a href="parte-d-rdd.html#cb201-2" tabindex="-1"></a>rdrobust ingre Z, c(62)        <span class="co">// saltará +5: NO es covariable válida</span></span></code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb205-1"><a href="parte-d-rdd.html#cb205-1" tabindex="-1"></a>rdrobust sexo Z, c(62)         <span class="co">// debe dar coef ≈ 0, no significativo</span></span>
+<span id="cb205-2"><a href="parte-d-rdd.html#cb205-2" tabindex="-1"></a>rdrobust ingre Z, c(62)        <span class="co">// saltará +5: NO es covariable válida</span></span></code></pre></div>
 <p><code>sexo</code> no debe saltar — bien. <code>ingre</code> salta porque depende de <span class="math inline">\(D\)</span> — <strong>mal</strong>: no puede usarse como control.</p>
 </div>
 <div id="placebo-1" class="section level2 unnumbered hasAnchor">
 <h2>3. Placebo<a href="parte-d-rdd.html#placebo-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Estimar el “salto” en umbrales <strong>falsos</strong>:</p>
-<div class="sourceCode" id="cb202"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb202-1"><a href="parte-d-rdd.html#cb202-1" tabindex="-1"></a><span class="kw">foreach</span> c_fake <span class="kw">in</span> 58 60 64 66 {</span>
-<span id="cb202-2"><a href="parte-d-rdd.html#cb202-2" tabindex="-1"></a>    <span class="kw">qui</span> rdrobust <span class="fu">y</span> Z, c(<span class="ot">`c_fake&#39;</span>)</span>
-<span id="cb202-3"><a href="parte-d-rdd.html#cb202-3" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">&quot;Umbral placebo `c_fake&#39;   coef = &quot;</span> %5.3f <span class="fu">e</span>(tau_cl) <span class="co">///</span></span>
-<span id="cb202-4"><a href="parte-d-rdd.html#cb202-4" tabindex="-1"></a>       <span class="st">&quot;   robust p = &quot;</span> %5.3f <span class="fu">e</span>(pv_rb)</span>
-<span id="cb202-5"><a href="parte-d-rdd.html#cb202-5" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb206-1"><a href="parte-d-rdd.html#cb206-1" tabindex="-1"></a><span class="kw">foreach</span> c_fake <span class="kw">in</span> 58 60 64 66 {</span>
+<span id="cb206-2"><a href="parte-d-rdd.html#cb206-2" tabindex="-1"></a>    <span class="kw">qui</span> rdrobust <span class="fu">y</span> Z, c(<span class="ot">`c_fake&#39;</span>)</span>
+<span id="cb206-3"><a href="parte-d-rdd.html#cb206-3" tabindex="-1"></a>    <span class="kw">di</span> <span class="st">&quot;Umbral placebo `c_fake&#39;   coef = &quot;</span> %5.3f <span class="fu">e</span>(tau_cl) <span class="co">///</span></span>
+<span id="cb206-4"><a href="parte-d-rdd.html#cb206-4" tabindex="-1"></a>       <span class="st">&quot;   robust p = &quot;</span> %5.3f <span class="fu">e</span>(pv_rb)</span>
+<span id="cb206-5"><a href="parte-d-rdd.html#cb206-5" tabindex="-1"></a>}</span></code></pre></div>
 <p>Ninguno de los umbrales falsos debe arrojar un efecto significativo. Si alguno lo hace, sospechar que la forma funcional está mal especificada.</p>
 </div>
 <div id="sorting-test-de-mccrary-2008-1" class="section level2 unnumbered hasAnchor">
 <h2>4. Sorting (test de McCrary 2008)<a href="parte-d-rdd.html#sorting-test-de-mccrary-2008-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>¿Hay manipulación de la variable de asignación? Test con <code>rddensity</code>:</p>
-<div class="sourceCode" id="cb203"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb203-1"><a href="parte-d-rdd.html#cb203-1" tabindex="-1"></a>rddensity Z, c(62)</span></code></pre></div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb207-1"><a href="parte-d-rdd.html#cb207-1" tabindex="-1"></a>rddensity Z, c(62)</span></code></pre></div>
 <p>Con nuestro DGP (sin manipulación), debe <strong>no rechazar</strong> (<span class="math inline">\(p &gt; 0.10\)</span>). Para verlo en un caso patológico, manipulemos artificialmente:</p>
-<div class="sourceCode" id="cb204"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb204-1"><a href="parte-d-rdd.html#cb204-1" tabindex="-1"></a><span class="kw">preserve</span></span>
-<span id="cb204-2"><a href="parte-d-rdd.html#cb204-2" tabindex="-1"></a>    <span class="kw">replace</span> Z = 62.5 <span class="kw">if</span> Z &gt;= 61.5 &amp; Z &lt; 62 &amp; runiform() &lt; 0.5</span>
-<span id="cb204-3"><a href="parte-d-rdd.html#cb204-3" tabindex="-1"></a>    rddensity Z, c(62)</span>
-<span id="cb204-4"><a href="parte-d-rdd.html#cb204-4" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div>
+<div class="sourceCode" id="cb208"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb208-1"><a href="parte-d-rdd.html#cb208-1" tabindex="-1"></a><span class="kw">preserve</span></span>
+<span id="cb208-2"><a href="parte-d-rdd.html#cb208-2" tabindex="-1"></a>    <span class="kw">replace</span> Z = 62.5 <span class="kw">if</span> Z &gt;= 61.5 &amp; Z &lt; 62 &amp; runiform() &lt; 0.5</span>
+<span id="cb208-3"><a href="parte-d-rdd.html#cb208-3" tabindex="-1"></a>    rddensity Z, c(62)</span>
+<span id="cb208-4"><a href="parte-d-rdd.html#cb208-4" tabindex="-1"></a><span class="kw">restore</span></span></code></pre></div>
 <p>Ahora la mitad de los individuos en <span class="math inline">\([61.5, 62)\)</span> “saltan” a <span class="math inline">\(62.5\)</span> — <code>rddensity</code> debería rechazar fuerte (p &lt; 0.01).</p>
 <hr />
 </div>
