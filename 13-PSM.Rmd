@@ -66,7 +66,7 @@ La selección debe ocurrir antes de mirar cuál especificación produce el efect
 
 | Tipo de variable | Tratamiento recomendado | Razón |
 |---|---|---|
-| Confusor pretratamiento | Incluir obligatoriamente | Afecta tratamiento y resultado potencial |
+| Variable de control pretratamiento | Incluir obligatoriamente | Afecta tratamiento y resultado potencial |
 | Predictor fuerte del resultado | Generalmente incluir | Puede reducir sesgo y mejorar precisión |
 | Instrumento o predictor casi exclusivo de $D$ | Evitar como regla automática | Puede empeorar overlap y amplificar sesgo residual |
 | Variable postratamiento | Excluir | Puede bloquear parte del efecto o abrir sesgo |

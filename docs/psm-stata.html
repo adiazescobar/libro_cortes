@@ -619,9 +619,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb150-2"><a href="psm-stata.html#cb150-2" tabindex="-1"></a><span class="kw">global</span> Xflex <span class="st">&quot;c.personas#c.personas c.educa_jefe#c.educa_jefe ///</span></span>
 <span id="cb150-3"><a href="psm-stata.html#cb150-3" tabindex="-1"></a><span class="st">              c.ingresos_hogar_jefe#c.ingresos_hogar_jefe ///</span></span>
 <span id="cb150-4"><a href="psm-stata.html#cb150-4" tabindex="-1"></a><span class="st">              i.ocupado_jefe#i.hombre&quot;</span></span></code></pre></div>
-<p><code>Xmust</code> contiene los <strong>confusores obligatorios</strong> justificados antes de estimar. <code>Xflex</code> reúne términos pretratamiento candidatos para capturar no linealidades. Ninguna variable postratamiento puede entrar en cualquiera de los dos grupos.</p>
+<p><code>Xmust</code> contiene las <strong>variables de control</strong>, las que se emplearon en la focalización, justificadas antes de estimar. <code>Xflex</code> reúne términos pretratamiento candidatos para capturar no linealidades. Ninguna variable postratamiento puede entrar en cualquiera de los dos grupos.</p>
 <div class="boxwarning">
-<p>LASSO no descubre los confusores. Una variable causalmente necesaria no se vuelve opcional porque su coeficiente predictivo sea pequeño.</p>
+<p>LASSO no descubre las variables de control. Una variable causalmente necesaria no se vuelve opcional porque su coeficiente predictivo sea pequeño.</p>
 </div>
 </div>
 <div id="mirar-la-selección-antes-de-corregirla" class="section level2 unnumbered hasAnchor">
@@ -773,11 +773,11 @@ Inferencia: errores estándar ajustados por la estimación del propensity score<
 <div class="sourceCode" id="cb162"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb162-1"><a href="psm-stata.html#cb162-1" tabindex="-1"></a>* NO usar como selector causal automático</span>
 <span id="cb162-2"><a href="psm-stata.html#cb162-2" tabindex="-1"></a>lasso <span class="kw">probit</span> D <span class="ot">$X</span> <span class="ot">$Xflex</span>, selection(cv) rseed(1298)</span>
 <span id="cb162-3"><a href="psm-stata.html#cb162-3" tabindex="-1"></a>lassocoef</span></code></pre></div>
-<p>Esta regresión optimiza predicción de <span class="math inline">\(D\)</span>. En <code>base6</code> LASSO saca <code>educa_jefe</code> y deja <code>educa2</code>: el confusor que justificamos con teoría sale del modelo por razones puramente predictivas. Puede omitir un predictor importante de <span class="math inline">\(Y(0)\)</span> o <span class="math inline">\(Y(1)\)</span> y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como una lista descubierta de confusores.</p>
+<p>Esta regresión optimiza predicción de <span class="math inline">\(D\)</span>. En <code>base6</code> LASSO saca <code>educa_jefe</code> y deja <code>educa2</code>: la variable de control que justificamos con teoría sale del modelo por razones puramente predictivas. Puede omitir un predictor importante de <span class="math inline">\(Y(0)\)</span> o <span class="math inline">\(Y(1)\)</span> y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como una lista descubierta de variables de control.</p>
 </div>
 <div id="estrategia-de-la-clase-lasso-solo-sobre-los-términos-flexibles" class="section level3 unnumbered hasAnchor">
 <h3>Estrategia de la clase: LASSO solo sobre los términos flexibles<a href="#estrategia-de-la-clase-lasso-solo-sobre-los-t%C3%A9rminos-flexibles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Los confusores obligatorios van entre paréntesis y LASSO no puede sacarlos. LASSO solo decide qué cuadrados e interacciones entran al propensity score. Como <code>psmatch2</code> no acepta notación de factores, creamos los términos a mano.</p>
+<p>Las variables de control de la focalización van entre paréntesis y LASSO no puede sacarlas. LASSO solo decide qué cuadrados e interacciones entran al propensity score. Como <code>psmatch2</code> no acepta notación de factores, creamos los términos a mano.</p>
 <div class="sourceCode" id="cb163"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb163-1"><a href="psm-stata.html#cb163-1" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> personas2  = personas^2</span>
 <span id="cb163-2"><a href="psm-stata.html#cb163-2" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> educa2     = educa_jefe^2</span>
 <span id="cb163-3"><a href="psm-stata.html#cb163-3" tabindex="-1"></a><span class="kw">gen</span> <span class="kw">double</span> ingresos2  = ingresos_hogar_jefe^2</span>
@@ -797,7 +797,7 @@ MeanBias: 8.5 sin emparejar, 1.8 emparejado</code></pre>
 </div>
 <div id="benchmark-doblemente-robusto-telasso" class="section level3 unnumbered hasAnchor">
 <h3>Benchmark doblemente robusto: <code>telasso</code><a href="psm-stata.html#benchmark-doblemente-robusto-telasso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><code>telasso</code> estima con LASSO el modelo del resultado y el del tratamiento y construye un estimador ortogonal y doblemente robusto. <code>ainclude()</code> deja fijos los confusores obligatorios.</p>
+<p><code>telasso</code> estima con LASSO el modelo del resultado y el del tratamiento y construye un estimador ortogonal y doblemente robusto. <code>ainclude()</code> deja fijas las variables de control.</p>
 <div class="sourceCode" id="cb165"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb165-1"><a href="psm-stata.html#cb165-1" tabindex="-1"></a>telasso (y2 <span class="ot">$X</span> <span class="ot">$Xflex</span>, ainclude(<span class="ot">$X</span>)) (D <span class="ot">$X</span> <span class="ot">$Xflex</span>, ainclude(<span class="ot">$X</span>)), <span class="co">///</span></span>
 <span id="cb165-2"><a href="psm-stata.html#cb165-2" tabindex="-1"></a>        atet rseed(1298)</span>
 <span id="cb165-3"><a href="psm-stata.html#cb165-3" tabindex="-1"></a>lassocoef (., <span class="kw">for</span>(D)) (., <span class="kw">for</span>(y2) tlevel(0)) (., <span class="kw">for</span>(y2) tlevel(1))</span></code></pre></div>
@@ -851,7 +851,7 @@ Controles candidatos = 11; con el método plugin no entra ningún término de $X
 <h2>Lista de verificación para entregar<a href="#lista-de-verificaci%C3%B3n-para-entregar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
 <li>Definir ATT o ATE antes de estimar.</li>
-<li>Justificar confusores obligatorios y excluir variables postratamiento.</li>
+<li>Justificar las variables de control (las que se emplearon en la focalización) y excluir variables postratamiento.</li>
 <li>Mostrar soporte común y describir unidades descartadas.</li>
 <li>Reportar balance antes y después, no solo el efecto.</li>
 <li>Presentar <code>psmatch2</code> como estimación principal y <code>teffects psmatch</code> como contraste armonizado.</li>

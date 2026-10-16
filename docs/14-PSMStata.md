@@ -50,10 +50,10 @@ global Xflex "c.personas#c.personas c.educa_jefe#c.educa_jefe ///
               i.ocupado_jefe#i.hombre"
 ```
 
-`Xmust` contiene los **confusores obligatorios** justificados antes de estimar. `Xflex` reúne términos pretratamiento candidatos para capturar no linealidades. Ninguna variable postratamiento puede entrar en cualquiera de los dos grupos.
+`Xmust` contiene las **variables de control**, las que se emplearon en la focalización, justificadas antes de estimar. `Xflex` reúne términos pretratamiento candidatos para capturar no linealidades. Ninguna variable postratamiento puede entrar en cualquiera de los dos grupos.
 
 ::: {.boxwarning}
-LASSO no descubre los confusores. Una variable causalmente necesaria no se vuelve opcional porque su coeficiente predictivo sea pequeño.
+LASSO no descubre las variables de control. Una variable causalmente necesaria no se vuelve opcional porque su coeficiente predictivo sea pequeño.
 :::
 
 ## Mirar la selección antes de corregirla {-}
@@ -217,11 +217,11 @@ lasso probit D $X $Xflex, selection(cv) rseed(1298)
 lassocoef
 ```
 
-Esta regresión optimiza predicción de $D$. En `base6` LASSO saca `educa_jefe` y deja `educa2`: el confusor que justificamos con teoría sale del modelo por razones puramente predictivas. Puede omitir un predictor importante de $Y(0)$ o $Y(1)$ y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como una lista descubierta de confusores.
+Esta regresión optimiza predicción de $D$. En `base6` LASSO saca `educa_jefe` y deja `educa2`: la variable de control que justificamos con teoría sale del modelo por razones puramente predictivas. Puede omitir un predictor importante de $Y(0)$ o $Y(1)$ y seleccionar un predictor casi exclusivo del tratamiento que empeore la superposición. Por eso no usamos el conjunto seleccionado como una lista descubierta de variables de control.
 
 ### Estrategia de la clase: LASSO solo sobre los términos flexibles {-}
 
-Los confusores obligatorios van entre paréntesis y LASSO no puede sacarlos. LASSO solo decide qué cuadrados e interacciones entran al propensity score. Como `psmatch2` no acepta notación de factores, creamos los términos a mano.
+Las variables de control de la focalización van entre paréntesis y LASSO no puede sacarlas. LASSO solo decide qué cuadrados e interacciones entran al propensity score. Como `psmatch2` no acepta notación de factores, creamos los términos a mano.
 
 ```stata
 gen double personas2  = personas^2
@@ -247,7 +247,7 @@ MeanBias: 8.5 sin emparejar, 1.8 emparejado
 
 ### Benchmark doblemente robusto: `telasso` {-}
 
-`telasso` estima con LASSO el modelo del resultado y el del tratamiento y construye un estimador ortogonal y doblemente robusto. `ainclude()` deja fijos los confusores obligatorios.
+`telasso` estima con LASSO el modelo del resultado y el del tratamiento y construye un estimador ortogonal y doblemente robusto. `ainclude()` deja fijas las variables de control.
 
 ```stata
 telasso (y2 $X $Xflex, ainclude($X)) (D $X $Xflex, ainclude($X)), ///
@@ -283,7 +283,7 @@ Si el balance empeora, el soporte se vuelve muy estrecho o el efecto depende fue
 ## Lista de verificación para entregar {-}
 
 1. Definir ATT o ATE antes de estimar.
-2. Justificar confusores obligatorios y excluir variables postratamiento.
+2. Justificar las variables de control (las que se emplearon en la focalización) y excluir variables postratamiento.
 3. Mostrar soporte común y describir unidades descartadas.
 4. Reportar balance antes y después, no solo el efecto.
 5. Presentar `psmatch2` como estimación principal y `teffects psmatch` como contraste armonizado.

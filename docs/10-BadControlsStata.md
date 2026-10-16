@@ -164,7 +164,7 @@ Table: (\#tab:bad-controls-table-proxy)Proxy postratamiento: comparación de esp
 |7  |contaminated_proxy |with_true_U     |total effect conditional on U |       1.985| 0.010|      2|
 
 ::: {.boxadvertencia}
-Un proxy pretratamiento imperfecto de un confusor y un proxy postratamiento afectado por \(D\) son problemas distintos. El primero puede reducir confusión residual; el segundo puede crearla.
+Un proxy pretratamiento imperfecto de una variable de control omitida y un proxy postratamiento afectado por \(D\) son problemas distintos. El primero puede reducir confusión residual; el segundo puede crearla.
 :::
 
 ## Comparación conjunta y Monte Carlo {-}
