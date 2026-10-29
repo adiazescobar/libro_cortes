@@ -8,6 +8,12 @@ Descarga estos archivos antes de comenzar:
 - [Base de datos de la práctica](dofile/16_PSM_IPW_Sinteticos/base6.dta)
 - [Log completo de Stata](dofile/16_PSM_IPW_Sinteticos/ipw_demo.log)
 
+**Clase del 29 de octubre: IPW y control sintético en Stata**
+
+- [Do-file de la clase: IPW con 8 personas y control sintético de la Proposición 99](dofile/16_PSM_IPW_Sinteticos/05_ipw_sinteticos.do)
+- [Datos de la Proposición 99](dofile/16_PSM_IPW_Sinteticos/synth_smoking.dta)
+- [Log de Stata de esa clase](dofile/16_PSM_IPW_Sinteticos/05_ipw_sinteticos.log)
+
 ::: {.boxinfo}
 **Lecturas centrales**
 
