@@ -17,6 +17,9 @@ local results "`base'/results"
 local figures "`base'/figures"
 local data "`base'/data"
 
+* Crea las carpetas si no existen (por ejemplo, si se corre desde una carpeta vacía)
+capture mkdir "dofile"
+capture mkdir "`base'"
 capture mkdir "`results'"
 capture mkdir "`figures'"
 capture mkdir "`data'"
