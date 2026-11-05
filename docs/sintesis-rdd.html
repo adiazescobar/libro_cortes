@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-10-16" />
+<meta name="date" content="2026-11-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -589,7 +589,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><strong>Balance:</strong> covariables predeterminadas no deben saltar en <span class="math inline">\(c\)</span>.</li>
 <li><strong>Placebo:</strong> umbrales falsos no deben dar efectos.</li>
 <li><strong>Sorting:</strong> <code>rddensity</code> no debe rechazar.</li>
-<li><strong>Si <span class="math inline">\(Z\)</span> es discreta:</strong> <code>cluster(Z)</code> siempre; honest CIs si hay tiempo.</li>
+<li><strong>Si <span class="math inline">\(Z\)</span> es discreta:</strong> <code>vce(cluster Z)</code> siempre; honest CIs si hay tiempo.</li>
 <li><strong>RDB:</strong> reportar primera etapa (salto en <span class="math inline">\(D\)</span>) y forma reducida (salto en <span class="math inline">\(y\)</span>) además del ratio.</li>
 <li><strong>Interpretación:</strong> efecto <strong>local en el umbral</strong>, LATE de cooperadores si es RDB. No extrapolar a poblaciones lejanas de <span class="math inline">\(c\)</span>.</li>
 </ol>

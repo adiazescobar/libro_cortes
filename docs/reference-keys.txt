@@ -41,6 +41,7 @@ tab:iv-paces-estimators
 tab:iv-complier-profile
 tab:iv-weak-table
 tab:iv-divorce-table
+fig:rdd-anchos-curvatura
 introduccion-a-la-inferencia-causal
 stata-para-principiantes
 parametros-causales-teoria

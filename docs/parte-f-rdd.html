@@ -23,7 +23,7 @@
 <meta name="author" content="Ana María Díaz" />
 
 
-<meta name="date" content="2026-10-16" />
+<meta name="date" content="2026-11-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -582,33 +582,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="dgp" class="section level2 unnumbered hasAnchor">
 <h2>DGP<a href="parte-f-rdd.html#dgp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><span class="math inline">\(Z\)</span> ahora toma solo valores enteros (puntaje de un examen redondeado), con umbral <span class="math inline">\(c = 50\)</span>.</p>
-<div class="sourceCode" id="cb212"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb212-1"><a href="parte-f-rdd.html#cb212-1" tabindex="-1"></a><span class="kw">clear</span></span>
-<span id="cb212-2"><a href="parte-f-rdd.html#cb212-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
-<span id="cb212-3"><a href="parte-f-rdd.html#cb212-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 3000</span>
-<span id="cb212-4"><a href="parte-f-rdd.html#cb212-4" tabindex="-1"></a><span class="kw">gen</span> Z  = <span class="fu">floor</span>(runiform()*101)          <span class="co">// 0 a 100, enteros</span></span>
-<span id="cb212-5"><a href="parte-f-rdd.html#cb212-5" tabindex="-1"></a><span class="kw">gen</span> D  = (Z &gt;= 50)</span>
-<span id="cb212-6"><a href="parte-f-rdd.html#cb212-6" tabindex="-1"></a><span class="kw">gen</span> Zt = Z - 50</span>
-<span id="cb212-7"><a href="parte-f-rdd.html#cb212-7" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>  = 1 + 0.05*Zt + 2.0*D + rnormal()</span>
-<span id="cb212-8"><a href="parte-f-rdd.html#cb212-8" tabindex="-1"></a><span class="kw">tab</span> Z <span class="kw">if</span> Z &gt; 45 &amp; Z &lt; 55                <span class="co">// confirmar discreto</span></span></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb214-1"><a href="parte-f-rdd.html#cb214-1" tabindex="-1"></a><span class="kw">clear</span></span>
+<span id="cb214-2"><a href="parte-f-rdd.html#cb214-2" tabindex="-1"></a><span class="kw">set</span> <span class="dv">seed</span> 20260511</span>
+<span id="cb214-3"><a href="parte-f-rdd.html#cb214-3" tabindex="-1"></a><span class="kw">set</span> <span class="kw">obs</span> 3000</span>
+<span id="cb214-4"><a href="parte-f-rdd.html#cb214-4" tabindex="-1"></a><span class="kw">gen</span> Z  = <span class="fu">floor</span>(runiform()*101)          <span class="co">// 0 a 100, enteros</span></span>
+<span id="cb214-5"><a href="parte-f-rdd.html#cb214-5" tabindex="-1"></a><span class="kw">gen</span> D  = (Z &gt;= 50)</span>
+<span id="cb214-6"><a href="parte-f-rdd.html#cb214-6" tabindex="-1"></a><span class="kw">gen</span> Zt = Z - 50</span>
+<span id="cb214-7"><a href="parte-f-rdd.html#cb214-7" tabindex="-1"></a><span class="kw">gen</span> <span class="fu">y</span>  = 1 + 0.05*Zt + 2.0*D + rnormal()</span>
+<span id="cb214-8"><a href="parte-f-rdd.html#cb214-8" tabindex="-1"></a><span class="kw">tab</span> Z <span class="kw">if</span> Z &gt; 45 &amp; Z &lt; 55                <span class="co">// confirmar discreto</span></span></code></pre></div>
 <hr />
 </div>
 <div id="el-problema-de-los-se-convencionales" class="section level2 unnumbered hasAnchor">
 <h2>El problema de los SE convencionales<a href="parte-f-rdd.html#el-problema-de-los-se-convencionales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb213"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb213-1"><a href="parte-f-rdd.html#cb213-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50)</span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb215-1"><a href="parte-f-rdd.html#cb215-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50)</span></code></pre></div>
 <p>Reporta un SE — pero como advirtieron Kolesár &amp; Rothe (2018), <strong>subcubre</strong>. La cobertura nominal del 95% es en realidad &lt;90% en simulaciones con pocos valores distintos de <span class="math inline">\(Z\)</span>.</p>
 <hr />
 </div>
 <div id="solución-pragmática-cluster-en-z-lee-card-2008" class="section level2 unnumbered hasAnchor">
 <h2>Solución pragmática: cluster en Z (Lee &amp; Card 2008)<a href="#soluci%C3%B3n-pragm%C3%A1tica-cluster-en-z-lee-card-2008" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb214"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb214-1"><a href="parte-f-rdd.html#cb214-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50) <span class="kw">cluster</span>(Z)</span></code></pre></div>
-<p>El SE se <strong>infla</strong> — es más conservador, refleja mejor la incertidumbre real cuando <span class="math inline">\(Z\)</span> tiene soporte discreto. Esta es la solución mínima que se debe reportar.</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb216-1"><a href="parte-f-rdd.html#cb216-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50) <span class="kw">vce</span>(<span class="kw">cluster</span> Z)</span></code></pre></div>
+<p>La idea de Lee &amp; Card (2008) es tratar cada valor de <span class="math inline">\(Z\)</span> como un cluster. Pero el SE por clusters <strong>no siempre es más conservador</strong>. Con estos datos, <code>rdrobust</code> con <code>vce(cluster Z)</code> elige otro ancho de banda (<span class="math inline">\(h \approx 10\)</span> en vez de 4.7) y reporta un SE de 0.23, frente a 0.27 del convencional. Con el mismo ancho de banda la comparación depende de cuántos valores de <span class="math inline">\(Z\)</span> caen en la ventana:</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb217-1"><a href="parte-f-rdd.html#cb217-1" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50) <span class="kw">h</span>(5)</span>
+<span id="cb217-2"><a href="parte-f-rdd.html#cb217-2" tabindex="-1"></a>rdrobust <span class="fu">y</span> Z, c(50) <span class="kw">h</span>(5) <span class="kw">vce</span>(<span class="kw">cluster</span> Z)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right"><span class="math inline">\(h\)</span></th>
+<th align="center">SE convencional</th>
+<th align="center">SE cluster en <span class="math inline">\(Z\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5</td>
+<td align="center">0.263</td>
+<td align="center">0.164</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="center">0.176</td>
+<td align="center">0.240</td>
+</tr>
+</tbody>
+</table>
+<p>Con <span class="math inline">\(h = 5\)</span> hay solo 5 valores de <span class="math inline">\(Z\)</span> por lado, es decir, 5 clusters. Con tan pocos clusters el SE por clusters se subestima. Kolesár &amp; Rothe (2018) muestran que los intervalos con SE por clusters en <span class="math inline">\(Z\)</span> pueden cubrir incluso peor que los convencionales.</p>
 <hr />
 </div>
 <div id="solución-completa-honest-cis" class="section level2 unnumbered hasAnchor">
 <h2>Solución completa: honest CIs<a href="#soluci%C3%B3n-completa-honest-cis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><code>RDHonest</code> (R) implementa los CIs de Kolesár &amp; Rothe que cubren uniformemente sobre una clase de funciones con segunda derivada acotada. No hay versión Stata oficial; la práctica es:</p>
 <ul>
-<li>Reportar <code>rdrobust</code> con <code>cluster(Z)</code> como principal.</li>
+<li>Reportar <code>rdrobust</code> con <code>vce(cluster Z)</code> como principal.</li>
 <li>En el apéndice de robustez, reportar <code>RDHonest</code> desde R y mostrar que las conclusiones son las mismas (o no).</li>
 </ul>
 <hr />
