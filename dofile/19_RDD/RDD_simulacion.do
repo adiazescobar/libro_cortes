@@ -113,6 +113,37 @@ rdrobust y Z, c(62) bwselect(mserd)
 di _newline "*** Bandwidth Coverage-error-rate óptimo ***"
 rdrobust y Z, c(62) bwselect(cerrd)
 
+* C.3 Con este DGP lineal, h grande no genera sesgo: solo baja la varianza.
+* El sesgo aparece cuando la relación es curva. Agregamos curvatura
+* solo a la derecha del umbral y graficamos estimado e IC por h.
+preserve
+    clear
+    set seed 20260511
+    set obs 2000
+    gen Z  = runiform()*24 + 50
+    gen D  = (Z >= 62)
+    gen Zt = Z - 62
+    gen y  = 1 + 0.10*Zt + 2.0*D + 0.03*D*Zt^2 + rnormal()
+
+    tempname res
+    tempfile anchos
+    postfile `res' h b li ls using `anchos'
+    foreach h in 1 2 3 5 8 12 {
+        qui rdrobust y Z, c(62) h(`h') p(1) kernel(triangular)
+        post `res' (`h') (e(tau_cl)) (e(tau_cl) - 1.96*e(se_tau_cl)) ///
+                  (e(tau_cl) + 1.96*e(se_tau_cl))
+    }
+    postclose `res'
+
+    use `anchos', clear
+    list, noobs clean
+    twoway (rcap li ls h, lcolor(navy)) (scatter b h, mcolor(navy)),   ///
+           yline(2, lcolor(maroon) lpattern(dash))                      ///
+           xtitle("Ancho de banda h") ytitle("Salto estimado e IC 95 %") ///
+           legend(off) name(g_anchos, replace)
+    graph export "RDD_anchos_curvatura.png", width(1600) replace
+restore
+
 *===============================================================
 * PARTE D — Tests de validez
 *===============================================================
@@ -126,6 +157,28 @@ preserve
     replace Z = 62.5 if Z >= 61.5 & Z < 62 & runiform() < 0.5
     di _newline "*** rddensity — con manipulación artificial (debería rechazar) ***"
     rddensity Z, c(62)
+restore
+
+* D.1b ¿Por qué importa? Manipulación con selección.
+* Quienes quedaron entre 60 y 62 y están motivados logran subir a 62
+* (80 % de ellos). La motivación también sube y.
+preserve
+    clear
+    set seed 20260511
+    set obs 2000
+    gen Z  = runiform()*24 + 50
+    gen motivacion = rnormal()
+    gen reclama = Z >= 60 & Z < 62 & motivacion > 0 & runiform() < 0.8
+    replace Z = 62 + runiform()*0.5 if reclama
+    gen D  = (Z >= 62)
+    gen Zt = Z - 62
+    gen y  = 1 + 0.10*Zt + 2.0*D + 1.0*motivacion + rnormal()
+
+    count if reclama
+    di _newline "*** rddensity — manipulación con selección (debería rechazar) ***"
+    rddensity Z, c(62)
+    di _newline "*** rdrobust — el salto ya no es 2 ***"
+    rdrobust y Z, c(62)
 restore
 
 * D.2 Continuidad de covariables predeterminadas
@@ -146,9 +199,12 @@ di _newline "*** Covariable contaminada (ingre) — sí salta: NO usar como cont
 rdrobust ingre Z, c(62)
 
 * D.3 Placebos en cutoffs falsos
+* Cada placebo usa solo un lado del umbral verdadero. Si no, la ventana
+* alrededor de 60 o 64 alcanza el salto real en 62 y contamina la prueba.
 di _newline "*** Placebos en cutoffs falsos — ninguno debe ser significativo ***"
 foreach c_fake in 58 60 64 66 {
-    qui rdrobust y Z, c(`c_fake')
+    if `c_fake' < 62 qui rdrobust y Z if Z < 62,  c(`c_fake')
+    else             qui rdrobust y Z if Z >= 62, c(`c_fake')
     di "Cutoff falso " %-3.0f `c_fake' "   coef = " %6.3f e(tau_cl) ///
        "   robust p = " %5.3f e(pv_rb)
 }
@@ -202,8 +258,14 @@ gen y  = 1 + 0.05*Zt + 2.0*D + rnormal()
 di _newline "*** SE convencionales (subcubren cuando Z es discreta) ***"
 rdrobust y Z, c(50)
 
-di _newline "*** SE clusterizados en Z (Lee & Card 2008) — más conservadores ***"
-rdrobust y Z, c(50) cluster(Z)
+di _newline "*** SE clusterizados en Z (Lee & Card 2008) ***"
+rdrobust y Z, c(50) vce(cluster Z)
+
+* Ojo: el SE por clusters no siempre es mayor. Con el mismo h = 5
+* hay solo 5 valores de Z por lado (5 clusters) y el SE se achica.
+di _newline "*** Mismo h = 5: convencional vs cluster ***"
+rdrobust y Z, c(50) h(5)
+rdrobust y Z, c(50) h(5) vce(cluster Z)
 
 * Nota: honest CIs (Kolesár & Rothe 2018) requieren el paquete R RDHonest;
 * no hay implementación oficial en Stata.

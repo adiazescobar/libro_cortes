@@ -137,8 +137,10 @@ print(summary(rdrobust(ingre, Z, c = 62)))
 
 # D.3 Placebos en cutoffs falsos
 cat("\n--- Placebos en cutoffs falsos: ninguno debe ser significativo ---\n")
+# Cada placebo usa solo un lado del umbral verdadero (62) para no contaminarse con el salto real.
 for (c_fake in c(58, 60, 64, 66)) {
-  r <- rdrobust(y, Z, c = c_fake)
+  lado <- if (c_fake < 62) Z < 62 else Z >= 62
+  r <- rdrobust(y[lado], Z[lado], c = c_fake)
   cat(sprintf("Cutoff falso %3d   coef = %6.3f   robust p = %5.3f\n",
               c_fake, r$coef[1], r$pv[3, 1]))
 }
