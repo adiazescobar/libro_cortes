@@ -34,6 +34,8 @@ ssc install lpdensity   // dependencia de rddensity
 
 [Descargar do-file de clase 2026-2 — LATE y RD nítida (14_late_rd_nitida.do)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/19_RDD/14_late_rd_nitida.do)
 
+[Descargar do-file de clase 2026-2 — Datos para RD nítida y difusa (15_rd_datos.do)](https://raw.githubusercontent.com/adiazescobar/libro_cortes/main/dofile/19_RDD/15_rd_datos.do)
+
 Los tres primeros archivos contienen las mismas seis partes (RDN lineal, RDN curvo, ancho de banda, pruebas de robustez, RDB, $Z$ discreta) y producen los mismos resultados. Dos ejemplos adicionales están solo en la versión Stata: el gráfico de ancho de banda con curvatura (Parte C) y la manipulación con selección (Parte D). El do-file de clase (`05_rdd_stata_CLASSROOM.do`) es la versión pedagógica que se proyecta en clase: simulación paso a paso con DGP conocido (ATE = 4 para Sharp, ATE = 5 para Fuzzy), comparando OLS, regresiones locales, `rdrobust` e `ivreg2`.
 
 ::: {.boxinfo}
