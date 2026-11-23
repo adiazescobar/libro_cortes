@@ -62,3 +62,6 @@ preview/
 
 # Worktrees aislados de Codex
 .worktrees/
+
+# Claves de ejercicios (solo locales)
+claves_privadas/
